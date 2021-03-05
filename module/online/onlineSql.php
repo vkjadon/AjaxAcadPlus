@@ -117,10 +117,11 @@ if (isset($_POST['action'])) {
 		$output = array();
 		$folder = '../../' . $myFolder . '/test/' . $test_id;
 		$fileName = $folder . '/instructions_test.txt';
-		if (file_exists($fileName)) $content = file_get_contents($fileName);
-		else $content = "No File Found";
-		$output["content"] = $content;
-		//echo json_encode($output);
+		echo $fileName;
+		// if (file_exists($fileName)) $content = file_get_contents($fileName);
+		// else $content = "No File Found";
+		// $output["content"] = $content;
+		// echo json_encode($output);
 	}
 } elseif ($_POST['instructionId'] == 'T' || $_POST['instructionId'] == 'S') {
 	$test_id = $_POST['testId'];

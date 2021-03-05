@@ -172,15 +172,12 @@ require('../../php_function.php');
 
     $(document).on('click', '.testInstruction', function() {
       var id = $(this).attr("data-test")
-      var section = $(this).attr("data-section")
-      $.alert("Section Instruction " + id + " Section " + section);
+      //var section = $(this).attr("data-section")
+      $.alert("Test Instruction " + id);
       $.post("onlineSql.php", {
         testId: id,
-        sectionId : section,
         action: "fetchInstruction"
-      }, function() {
-        //$.alert("Fecth" + mydata);
-      }, "text").done(function(data,status) {
+      }, function() {}, "text").done(function(data,status) {
         //tinyMCE.get('content').setContent(data.content)
         $.alert("Fecth" + data);
       }).fail(function() {
