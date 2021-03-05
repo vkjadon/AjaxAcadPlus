@@ -113,15 +113,15 @@ if (isset($_POST['action'])) {
 		//$id = $_POST['id'];
 		//echo "Jai ho";
 	} elseif ($_POST['action'] == 'fetchInstruction') {
-		$test_id = $_POST['testId'];
-		$output = array();
+		/*$test_id = $_POST['testId'];
 		$folder = '../../' . $myFolder . '/test/' . $test_id;
 		$fileName = $folder . '/instructions_test.txt';
-		echo $fileName;
-		// if (file_exists($fileName)) $content = file_get_contents($fileName);
-		// else $content = "No File Found";
-		// $output["content"] = $content;
-		// echo json_encode($output);
+		//echo $fileName;
+		if (file_exists($fileName)) $content = file_get_contents($fileName);
+		else $content = "No File Found";
+		//echo $content;*/
+		$output = array("file"=>"fileName", "content"=>"content");
+		echo json_encode($output);
 	}
 } elseif ($_POST['instructionId'] == 'T' || $_POST['instructionId'] == 'S') {
 	$test_id = $_POST['testId'];

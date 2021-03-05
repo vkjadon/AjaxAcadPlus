@@ -150,11 +150,11 @@ require('../../php_function.php');
       $.alert("Section Instruction " + id + " Section " + section);
       $.post("onlineSql.php", {
         testId: id,
-        sectionId : section,
+        sectionId: section,
         action: "fetchInstruction"
       }, function() {
         //$.alert("Fecth" + mydata);
-      }, "text").done(function(data,status) {
+      }, "text").done(function(data, status) {
         //tinyMCE.get('content').setContent(data.content)
         $.alert("Fecth" + data);
       }).fail(function() {
@@ -177,10 +177,10 @@ require('../../php_function.php');
       $.post("onlineSql.php", {
         testId: id,
         action: "fetchInstruction"
-      }, function() {}, "text").done(function(data,status) {
-        //tinyMCE.get('content').setContent(data.content)
+      }, function(data, success) {
         $.alert("Fecth" + data);
-      }).fail(function() {
+        //tinyMCE.get('content').setContent(data.content)
+      }, "text").fail(function() {
         $.alert("Error !!");
       })
       $("#instructionForm").show()
