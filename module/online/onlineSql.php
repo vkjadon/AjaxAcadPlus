@@ -4,7 +4,7 @@ include('../../config_database.php');
 include('../../config_variable.php');
 include('../../php_function.php');
 include('../../phpFunction/onlineFunction.php');
-echo $_POST['action'];
+//echo $_POST['action'];
 if (isset($_POST['action'])) {
 	if ($_POST['action'] == 'addTest') {
 		if (!$_POST['test_name'] == NULL) {
@@ -116,11 +116,12 @@ if (isset($_POST['action'])) {
 		$test_id = $_POST['testId'];
 		$output = array();
 		$folder = '../../' . $myFolder . '/test/' . $test_id;
-		$fileName = $folder . '/text-' . $_POST["noticeId"] . '.txt';
-		if (file_exists($fileName)) $content = file_get_contents($fileName);
-		else $content = "No File Found";
-		$output["content"] = $content;
-		echo json_encode($output);
+		$fileName = $folder . '/instructions_test.txt';
+		echo $fileName;
+		// if (file_exists($fileName)) $content = file_get_contents($fileName);
+		// else $content = "No File Found";
+		// $output["content"] = $content;
+		// echo json_encode($output);
 	}
 } elseif ($_POST['instructionId'] == 'T' || $_POST['instructionId'] == 'S') {
 	$test_id = $_POST['testId'];

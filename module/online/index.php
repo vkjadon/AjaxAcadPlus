@@ -147,15 +147,17 @@ require('../../php_function.php');
     $(document).on('click', '.sectionInstruction', function() {
       var id = $(this).attr("data-test")
       var section = $(this).attr("data-section")
-      //$.alert("Section Instruction");
+      $.alert("Section Instruction " + id + " Section " + section);
       $.post("onlineSql.php", {
         testId: id,
         sectionId : section,
         action: "fetchInstruction"
-      }, function(mydata, mystatus) {
+      }, function() {
         //$.alert("Fecth" + mydata);
-        tinyMCE.get('content').setContent(mydata.content)
-      }, "json").fail(function() {
+      }, "text").done(function(data,status) {
+        //tinyMCE.get('content').setContent(data.content)
+        $.alert("Fecth" + data);
+      }).fail(function() {
         $.alert("Error !!");
       })
 
@@ -170,7 +172,17 @@ require('../../php_function.php');
 
     $(document).on('click', '.testInstruction', function() {
       var id = $(this).attr("data-test")
-      //$.alert("Instruction");
+      //var section = $(this).attr("data-section")
+      $.alert("Test Instruction " + id);
+      $.post("onlineSql.php", {
+        testId: id,
+        action: "fetchInstruction"
+      }, function() {}, "text").done(function(data,status) {
+        //tinyMCE.get('content').setContent(data.content)
+        $.alert("Fecth" + data);
+      }).fail(function() {
+        $.alert("Error !!");
+      })
       $("#instructionForm").show()
       $("#instructionHeading").html("<h5>Instructions : Test </h5>")
       $("#instructionId").val("T")
