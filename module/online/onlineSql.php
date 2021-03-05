@@ -4,7 +4,7 @@ include('../../config_database.php');
 include('../../config_variable.php');
 include('../../php_function.php');
 include('../../phpFunction/onlineFunction.php');
-//echo $_POST['action'];
+echo $_POST['action'];
 if (isset($_POST['action'])) {
 	if ($_POST['action'] == 'addTest') {
 		if (!$_POST['test_name'] == NULL) {
