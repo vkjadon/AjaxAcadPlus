@@ -25,7 +25,9 @@ require('../../php_function.php');
       <div class="col-2">
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active mt" id="list-mt-list" data-toggle="list" href="#list-mt" role="tab" aria-controls="mt"> Manage Test </a>
+          <a class="list-group-item list-group-item-action ti" id="list-ti-list" data-toggle="list" href="#list-ti" role="tab" aria-controls="ti"> Test Instructions </a>
           <a class="list-group-item list-group-item-action aq" id="list-aq-list" data-toggle="list" href="#list-aq" role="tab" aria-controls="aq"> Add Question </a>
+          <a class="list-group-item list-group-item-action pt" id="list-pt-list" data-toggle="list" href="#list-pt" role="tab" aria-controls="pt"> Preview Test </a>
           <a class="list-group-item list-group-item-action mu" id="list-mu-list" data-toggle="list" href="#list-mu" role="tab" aria-controls="mu"> Manage Users </a>
           <a class="list-group-item list-group-item-action at" id="list-at-list" data-toggle="list" href="#list-at" role="tab" aria-controls="at"> Announce Test </a>
           <a class="list-group-item list-group-item-action tr" id="list-tr-list" data-toggle="list" href="#list-tr" role="tab" aria-controls="tr"> Test Report</a>
@@ -58,11 +60,12 @@ require('../../php_function.php');
               </div>
             </div>
           </div>
-
-          <div class="tab-pane fade" id="list-aq" role="tabpanel" aria-labelledby="list-aq-list">
+          <div class="tab-pane fade" id="list-ti" role="tabpanel" aria-labelledby="list-ti-list">
             <div class="row">
-              <div class="col-6 mt-1 mb-1">
+              <div class="col-5 mt-1 mb-1">
                 <p id="testHeading"></p>
+              </div>
+              <div class="col-7 mt-1 mb-1">
                 <p id="instructionHeading"></p>
                 <form class="instructionForm" id="instructionForm">
                   <div class="form-group row">
@@ -75,10 +78,30 @@ require('../../php_function.php');
                   <input type="hidden" id="sectionId" name="sectionId">
                   <button class="btn btn-secondary btn-square-sm saveNotice">Save</button>
                 </form>
+
               </div>
-              <div class="col-6 mt-1 mb-1">
-                <p id="questionList"></p>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="list-aq" role="tabpanel" aria-labelledby="list-aq-list">
+            <div class="row">
+              <div class="col-7 mt-1 mb-1">
+                <p id="questionHeading"></p>
+                <h5>Section :  <span id="selectedSection">1</span></h5>
+                  <div class="form-group row">
+                    <div class="col-sm-12">
+                      <textarea class="content" id="question" name="question"></textarea>
+                    </div>
+                  </div>
+                  <input type="hidden" id="actionQuestion" name="action">
+                  <input type="hidden" id="testIdQuestion" name="testId">
+                  <input type="hidden" id="sectionIdQuestion" name="sectionId">
+                  <button class="btn btn-primary btn-square-sm questionImageButton">Upload Image</button>
+                  <button class="btn btn-secondary btn-square-sm addQuestion">Save Question</button>
               </div>
+              <div class="col-5 mt-1 mb-1">
+              </div>
+              <p id="showTest"></p>
             </div>
           </div>
 
@@ -121,20 +144,74 @@ require('../../php_function.php');
       else $('.scb').prop('checked', false);
 
     });
-    //$('[data-toggle="popover"]').popover();
-
+    $('[data-toggle="popover"]').popover();
+    $('[data-toggle="tooltip"]').tooltip();
     $(".topBarTitle").text("Examination");
     $(".selectPanel").show();
     $("#panelId").hide();
     $("#addTestDiv").hide();
+    //$("#questionForm").hide()
     testList();
 
-    $(".aq").click(function() {
+    $(".ti").click(function() {
       //$.alert("Add Question");
       $("#instructionForm").hide()
+      $("#questionForm").hide()
       testHeading()
     });
 
+    $(".aq").click(function() {
+      //$.alert("Add Question");
+      $("#questionForm").show()
+      questionHeading()
+    });
+
+    $(document).on("submit", "#questionForm", function() {
+      event.preventDefault(this);
+      var formData = $(this).serialize();
+      $.alert("Form Submitted " + formData)
+      $.post("onlineSql.php", formData, function() {}, "text").done(function(data, success) {
+        $.alert(data)
+        $('#questionForm')[0].reset();
+      })
+    });
+
+    $(document).on('click', '.defaultSection', function() {
+      var id = $(this).attr('data-section');
+      var value = $("#defaultSection" + id).text();
+      //$.alert("Decrement " + id + "Value" + value);
+      $("#selectedSection").html(value);
+    });
+
+    $(document).on('click', '.defaultMarks, .defaultNMarks', function() {
+      var id = $(this).attr('id');
+      var value = $("." + id).text();
+      //$.alert("Decrement " + id + "Value" + value);
+      var newValue = Number(value) + 1;
+      if (newValue > 0) $("." + id).html(newValue);
+      else $("." + id).html(value);
+    });
+
+    $(document).on('click', ".newQuestionButton", function() {
+      //$.alert("New Question")
+      $("#questionForm").toggle();
+      var id = $(this).attr("data-test")
+      var section = $(this).attr("data-section")
+      $.alert("Fetch Question  " + id + " Section " + section);
+      $.post("onlineSql.php", {
+        testId: id,
+        sectionId: section,
+        action: "fetchQuestion"
+      }, function() {
+        //$.alert("Fecth" + mydata);
+      }, "json").done(function(data, status) {
+        tinyMCE.get('question').setContent(data.qb_text)
+        //$.alert("Fecth" + data.content);
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+      //$("#action").val("addTest")
+    });
     $(document).on("submit", "#instructionForm", function() {
       event.preventDefault(this);
       var formData = $(this).serialize();
@@ -143,20 +220,38 @@ require('../../php_function.php');
         $.alert(data)
       })
     });
+    $(document).on('click', '.showTest', function() {
+      var id = $(this).attr("data-test")
+      //$.alert("Section Instruction " + id + " Section " + section);
+      $.post("onlineSql.php", {
+        testId: id,
+        action: "showTest"
+      }, function() {
+        //$.alert("Fecth" + mydata);
+      }, "text").done(function(data, status) {
+        //$.alert("Fecth" + data.content);
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+      $("#instructionHeading").html("<h5>Test Question List/Details</h5>")
+      $("#instructionForm").hide()
+      $("#questionForm").hide()
+
+    });
 
     $(document).on('click', '.sectionInstruction', function() {
       var id = $(this).attr("data-test")
       var section = $(this).attr("data-section")
-      $.alert("Section Instruction " + id + " Section " + section);
+      //$.alert("Section Instruction " + id + " Section " + section);
       $.post("onlineSql.php", {
         testId: id,
         sectionId: section,
         action: "fetchInstruction"
       }, function() {
         //$.alert("Fecth" + mydata);
-      }, "text").done(function(data, status) {
-        //tinyMCE.get('content').setContent(data.content)
-        $.alert("Fecth" + data);
+      }, "json").done(function(data, status) {
+        tinyMCE.get('instruction').setContent(data.content)
+        //$.alert("Fecth" + data.content);
       }).fail(function() {
         $.alert("Error !!");
       })
@@ -165,30 +260,36 @@ require('../../php_function.php');
       $("#instructionId").val("S")
       $("#action").val("addInstruction")
       $("#instructionForm").show()
+      //$("#questionForm").show()
       $("#testId").val(id)
+      $("#testIdQuestion").val(id)
       $("#sectionId").val(section)
-
+      $("#sectionIdQuestion").val(section)
+      $("#actionQuestion").val("addQuestion")
+      questionHeading(section)
     });
 
     $(document).on('click', '.testInstruction', function() {
       var id = $(this).attr("data-test")
-      //var section = $(this).attr("data-section")
-      $.alert("Test Instruction " + id);
+      //$.alert("Test Instruction " + id);
       $.post("onlineSql.php", {
         testId: id,
         action: "fetchInstruction"
-      }, function(data, success) {
-        $.alert("Fecth" + data);
-        //tinyMCE.get('content').setContent(data.content)
-      }, "text").fail(function() {
+      }, function(data, status) {
+        //$.alert("Fecth" + data.content);
+        tinyMCE.get('instruction').setContent(data.content)
+      }, "json").fail(function() {
         $.alert("Error !!");
       })
       $("#instructionForm").show()
       $("#instructionHeading").html("<h5>Instructions : Test </h5>")
       $("#instructionId").val("T")
       $("#testId").val(id)
+      $("#questionForm").hide()
+      $("#questionHeading").hide()
       $("#sectionId").val("-")
     });
+
 
     $(".addTestButton").click(function() {
       $("#addTestDiv").toggle();
@@ -278,6 +379,19 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     });
+
+    function questionHeading(section) {
+      //$.alert("In SAS Claim List");
+      $.post("onlineSql.php", {
+        action: "questionHeading"
+      }, function(data, status) {
+        //$.alert("Success " + data);
+        $("#questionHeading").show()
+        $("#questionHeading").html(data);
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+    }
 
     function testHeading() {
       //$.alert("In SAS Claim List");
