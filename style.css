@@ -54,6 +54,14 @@ div.minWidth100{
   font-style: italic;
   font-size: small;
 }
+.testQuestion {
+  font-style: italic;
+  font-size: small;
+}
+.questionOption {
+  font-style: italic;
+  font-size: small;
+}
 .topBarText {
   text-align: center;
   font-style: italic;

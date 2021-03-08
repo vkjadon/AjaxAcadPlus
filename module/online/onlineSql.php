@@ -117,20 +117,120 @@ if (isset($_POST['action'])) {
 			}
 		}
 	} elseif ($_POST['action'] == 'addQuestion') {
-		$test_id = $_POST['testId'];
+		$sql = "select * from test where test_status='0' and submit_id='$myId'";
+		$result = $conn->query($sql);
+		if ($result) {
+			$array = $result->fetch_assoc();
+			$test_id = $array["test_id"];
+		}
 		$sectionId = $_POST['sectionId'];
 		$question = $_POST['question'];
-		$sql = "insert into question_bank (qb_level, qb_base, qb_text, submit_id, qb_status) values('1', '1', '" . $question . "','$myId', '0')";
+		$tq_marks = $_POST['defaultMarks'];
+		$tq_nmarks = $_POST['defaultNMarks'];
+		$sql = "insert into question_bank (qb_level, qb_base, qb_text, submit_id, qb_status) values('1', '1', '" . $question . "','$myId', '1')";
 		$result = $conn->query($sql);
 		if ($result) {
 			echo "Added Successfully";
 			$insertId = $conn->insert_id;
-			$sql = "insert into test_question (test_id, test_section, qb_id, tq_marks, tq_nmarks) values('$test_id', '$sectionId', '$insertId', '4', '0')";
+			$sql = "insert into test_question (test_id, test_section, qb_id, tq_marks, tq_nmarks, tq_status) values('$test_id', '$sectionId', '$insertId', '$tq_marks', '$tq_nmarks', '1')";
 			$result = $conn->query($sql);
 			if (!$result) echo $conn->error;
 		} else {
 			$error = $conn->errno;
 			if ($error == "1062") echo "Duplicate Found !!!";
+		}
+	} elseif ($_POST['action'] == 'addOption') {
+		$sql = "select * from question_bank where qb_status='0' and submit_id='$myId'";
+		$result = $conn->query($sql);
+		if ($result) {
+			$array = $result->fetch_assoc();
+			$qb_id = $array["qb_id"];
+		}
+		$qo_text = $_POST['content'];
+		$sql = "select max(qo_code) as max from question_option where qb_id='$qb_id'";
+		$max_sno = getMaxValue($conn, $sql) + 1;
+
+		$sql = "insert into question_option (qb_id, qo_text, qo_code) values('$qb_id','$qo_text', '$max_sno')";
+		$result = $conn->query($sql);
+		if ($result) {
+			echo "Added Successfully";
+		} else {
+			$error = $conn->errno;
+			if ($error == "1062") echo "Duplicate Found !!!";
+		}
+	} elseif ($_POST['action'] == 'activeQuestion') {
+		$sql = "select * from test where test_status='0' and submit_id='$myId'";
+		$result = $conn->query($sql);
+		if ($result) {
+			$array = $result->fetch_assoc();
+			$test_id = $array["test_id"];
+		}
+		$qb_id = $_POST['qb_id'];
+		//echo "Jai ho $test_id";
+		$sql = "update question_bank set qb_status='1' where qb_id IN (select qb_id from test_question where test_id='$test_id')";
+		$result = $conn->query($sql);
+
+		$sql = "update question_bank set qb_status='0' where qb_id='$qb_id'";
+		$result = $conn->query($sql);
+		if ($result) echo "Updated Successfully";
+	} elseif ($_POST['action'] == 'sectionQuestionList') {
+		$sql = "select * from test where test_status='0' and submit_id='$myId'";
+		$result = $conn->query($sql);
+		if ($result) {
+			$array = $result->fetch_assoc();
+			$test_id = $array["test_id"];
+		}
+		$sectionId = $_POST['sectionId'];
+		$json = get_sectionQuestionListJson($conn, $test_id, $sectionId);
+		//echo $json;
+		$array = json_decode($json, true);
+		//echo $array;
+		for ($i = 0; $i < count($array["data"]); $i++) {
+			$id = $array["data"][$i]["qb_id"];
+			$qb_text = $array["data"][$i]["qb_text"];
+			$tq_marks = $array["data"][$i]["tq_marks"];
+			$tq_nmarks = $array["data"][$i]["tq_nmarks"];
+			$qb_status = $array["data"][$i]["qb_status"];
+			if ($qb_status == "0") {
+				echo '<div class="card bg-light">
+      	<div class="card-body mt-0 py-1">
+				<div class="row">
+				<div class="col">
+				<span class="testQuestion">' . $qb_text . '</span>';
+				echo '</div></div>';
+				$sqlOption = "select * from question_option where qb_id='$id'";
+				$resultOption = $conn->query($sqlOption);
+				while ($rows = $resultOption->fetch_assoc()) {
+					echo '<div class="row"><div class="col-9"><div class="card">
+      	<div class="card-body mt-0 py-1">
+				<span class="questionOption">' . $rows["qo_text"] . '</span></div>';
+					echo '</div>';
+					echo '</div>';
+					echo '<div class="col-3">--</div>';
+					echo '</div>';
+				}
+				echo '<div class="row">
+				<div class="col">';
+				echo '<button class="btn btn-secondary btn-square-sm mt-0 editQuestion" data-test="' . $id . '" data-section="' . $i . '">Edit</button>
+				<button class="btn btn-danger btn-square-sm mt-0 dropOption" data-qb="' . $id . '"><span class="badge badge-light"><i class="fa fa-times"></i></span></button>';
+				echo '</div>';
+				echo '</div>';
+
+				echo '</div></div>';
+			} else {
+				echo '<div class="card">
+      	<div class="card-body mt-0 py-1">
+				<div class="row">
+				<div class="col">
+				<span class="testQuestion">' . $qb_text . '</span>
+				</div></div>
+				<div class="row">
+				<div class="col">
+				<button class="btn btn-secondary btn-square-sm mt-0 activeQuestion" data-qb="' . $id . '">Active</button>
+				<button class="btn btn-danger btn-square-sm mt-0 dropQuestion" data-qb="' . $id . '">Drop From Test</button>
+				</div></div>
+				</div></div>';
+			}
 		}
 	} elseif ($_POST['action'] == 'fetchInstruction') {
 		$test_id = $_POST['testId'];
@@ -156,19 +256,19 @@ if (isset($_POST['action'])) {
 			$test_name = $array["test_name"];
 			$test_section = $array["test_section"];
 			$test_status = $array["test_status"];
-			if(isset($_POST['section']))$section=$_POST['section'];
-			else $section='1';
-			if(isset($_POST['marks']))$marks=$_POST['marks'];
-			else $marks='0';
-			if(isset($_POST['nmarks']))$nmarks=$_POST['nmarks'];
-			else $nmarks='0';
+			if (isset($_POST['section'])) $section = $_POST['section'];
+			else $section = '1';
+			if (isset($_POST['marks'])) $marks = $_POST['marks'];
+			else $marks = '0';
+			if (isset($_POST['nmarks'])) $nmarks = $_POST['nmarks'];
+			else $nmarks = '0';
 			echo '<div class="card">
       	<div class="card-body mt-0 py-1">
 				<div class="row">';
 			echo '<div class="col"><h6>' . $test_name . '[' . $id . ']</h6>';
 			echo 'Section : ';
-			for($i=1; $i<=$test_section;$i++){
-				echo '<button class="btn btn-warning btn-square-sm mt-0 defaultSection" id="defaultSection'.$i.'" data-section="' . $i . '">'.$i.'</button>';
+			for ($i = 1; $i <= $test_section; $i++) {
+				echo '<button class="btn btn-warning btn-square-sm mt-0 defaultSection" id="defaultSection' . $i . '" data-section="' . $i . '">' . $i . '</button>';
 			}
 			echo '</div>';
 			echo '<div class="col-2"><span class="topBarText">Marks(+)</span><input type="text" class="form-control form-control-sm defaultMarks w-50" id="defaultMarks" name="marks" value="4"></div>';

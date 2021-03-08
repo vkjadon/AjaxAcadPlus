@@ -82,26 +82,23 @@ require('../../php_function.php');
               </div>
             </div>
           </div>
-
           <div class="tab-pane fade" id="list-aq" role="tabpanel" aria-labelledby="list-aq-list">
             <div class="row">
-              <div class="col-7 mt-1 mb-1">
+              <div class="col-6 mt-1 mb-1">
                 <p id="questionHeading"></p>
-                <h5>Section :  <span id="selectedSection">1</span></h5>
-                  <div class="form-group row">
-                    <div class="col-sm-12">
-                      <textarea class="content" id="question" name="question"></textarea>
-                    </div>
+                <h5>Section : <span id="selectedSection">1</span></h5>
+                <div class="form-group row">
+                  <div class="col-sm-12">
+                    <textarea class="content" id="question" name="question"></textarea>
                   </div>
-                  <input type="hidden" id="actionQuestion" name="action">
-                  <input type="hidden" id="testIdQuestion" name="testId">
-                  <input type="hidden" id="sectionIdQuestion" name="sectionId">
-                  <button class="btn btn-primary btn-square-sm questionImageButton">Upload Image</button>
-                  <button class="btn btn-secondary btn-square-sm addQuestion">Save Question</button>
+                </div>
+                <!-- <button class="btn btn-primary btn-square-sm questionImageButton">Upload Image</button> -->
+                <button class="btn btn-secondary btn-square-sm addQuestion">Save Question</button>
+                <button class="btn btn-warning btn-square-sm addOption">Option<span class="badge"><i class="fa fa-plus"></i></span></button>
               </div>
-              <div class="col-5 mt-1 mb-1">
+              <div class="col-6 mt-1 mb-1">
+                <p id="sectionQuestionList"></p>
               </div>
-              <p id="showTest"></p>
             </div>
           </div>
 
@@ -164,23 +161,65 @@ require('../../php_function.php');
       //$.alert("Add Question");
       $("#questionForm").show()
       questionHeading()
+      sectionQuestionList()
     });
 
-    $(document).on("submit", "#questionForm", function() {
-      event.preventDefault(this);
-      var formData = $(this).serialize();
-      $.alert("Form Submitted " + formData)
-      $.post("onlineSql.php", formData, function() {}, "text").done(function(data, success) {
-        $.alert(data)
-        $('#questionForm')[0].reset();
+    $(document).on("click", ".activeQuestion", function() {
+      var qb_id = $(this).attr('data-qb');
+      $.alert("Qb  " + qb_id)
+      $.post("onlineSql.php", {
+        qb_id: qb_id,
+        action: "activeQuestion"
+      }, function() {
+        //$.alert("Fecth" + mydata);
+      }, "text").done(function(data, status) {
+        $.alert(data);
+        sectionQuestionList()
+      }).fail(function() {
+        $.alert("Error !!");
       })
     });
-
+    $(document).on("click", ".addOption", function() {
+      var content = tinyMCE.get('question').getContent();
+      $.alert("Option  " + content)
+      $.post("onlineSql.php", {
+        content: content,
+        action: "addOption"
+      }, function() {
+        //$.alert("Fecth" + mydata);
+      }, "text").done(function(data, status) {
+        $.alert(data);
+        sectionQuestionList()
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+    });
+    $(document).on("click", ".addQuestion", function() {
+      var selectedSection = $("#selectedSection").text()
+      var defaultMarks = $("#defaultMarks").val()
+      var defaultNMarks = $("#defaultNMarks").val()
+      var question = tinyMCE.get('question').getContent();
+      $.alert("Section  " + selectedSection + "Question" + question)
+      $.post("onlineSql.php", {
+        sectionId: selectedSection,
+        defaultMarks: defaultMarks,
+        defaultNMarks: defaultNMarks,
+        question: question,
+        action: "addQuestion"
+      }, function() {
+        //$.alert("Fecth" + mydata);
+      }, "text").done(function(data, status) {
+        $.alert(data);
+        sectionQuestionList()
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+    });
     $(document).on('click', '.defaultSection', function() {
       var id = $(this).attr('data-section');
       var value = $("#defaultSection" + id).text();
       //$.alert("Decrement " + id + "Value" + value);
-      $("#selectedSection").html(value);
+      $("#selectedSection").text(value);
     });
 
     $(document).on('click', '.defaultMarks, .defaultNMarks', function() {
@@ -379,6 +418,22 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     });
+
+    function sectionQuestionList() {
+      var selectedSection = $("#selectedSection").text()
+      //$.alert("Section  " + selectedSection)
+      $.post("onlineSql.php", {
+        sectionId: selectedSection,
+        action: "sectionQuestionList"
+      }, function() {
+        //$.alert("Fecth" + mydata);
+      }, "text").done(function(data, status) {
+        //$.alert(data);
+        $("#sectionQuestionList").html(data)
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+    }
 
     function questionHeading(section) {
       //$.alert("In SAS Claim List");
