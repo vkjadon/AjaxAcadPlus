@@ -74,6 +74,7 @@ if (isset($_POST['action'])) {
         echo '<td>' . $id . '</td>';
         echo '<td>' . $output["data"][$i]["sas_period"] . '</td>';
         echo '<td>' . getField($conn, $subject_id, $subTable, $subId, $subCode) . '</td>';
+        //$present=();
         echo '<td><button class="btn btn-info btn-square-sm btn-block applyButton" id="' . $id . '">Apply</button></td>';
         echo '</tr>';
       }

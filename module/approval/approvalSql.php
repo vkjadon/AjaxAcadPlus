@@ -4,6 +4,11 @@ include('../../config_database.php');
 include('../../config_variable.php');
 include('../../php_function.php');
 include('../../phpFunction/leaveFunction.php');
+include('../../phpFunction/myArrayFunction.php');
+//echo $myId;
+$myArrayCI = getResponsibilityArray($conn, "class_incharge", $myId, "class_id");
+
+print_r($myArrayCI);
 //echo $_POST['action'];
 if (isset($_POST['action'])) {
 	if ($_POST['action'] == 'eaClaimList') {
@@ -55,7 +60,7 @@ if (isset($_POST['action'])) {
 		//$tn_sas = "student_attendance_setup" . $mySes;
 		//echo "SAS Table " . $tn_sas;
 		$json = get_extraAttendanceJson($conn, $tn_eac);
-		//echo $json;
+		echo $json;
 		$array = json_decode($json, true);
 		//echo $array;
 		echo '<table class="table list-table-xxs">';
@@ -68,15 +73,16 @@ if (isset($_POST['action'])) {
 			$eae_name = getField($conn, $eae_id, "ea_event", "eae_id", "eae_name");
 			$sas_id = $array["data"][$i]["sas_id"];
 			$sas_period = getField($conn, $sas_id, $tn_sas, "sas_id", "sas_period");
+			$sql = "select cl.* from $tn_rc rc, class cl where rc.class_id=cl.class_id and student_id='$student_id'";
+			$class_id = getFieldValue($conn, "class_id", $sql);
+			$class_name = getFieldValue($conn, "class_name", $sql);
 
-			if ($sas_id > 0) {
+			if ($sas_id > 0 && in_array($class_id, $myArrayCI)) {
 				$status = $array["data"][$i]["eac_status"];
 				if ($status == '3') echo '<tr class="approved">';
 				elseif ($status == '4') echo '<tr class="rejected">';
 				else echo '<tr>';
 				echo '<td>' . $student_name . '[' . $student_id . ']</td>';
-				$sql = "select cl.class_name from $tn_rc rc, class cl where rc.class_id=cl.class_id and student_id='$student_id'";
-				$class_name = getFieldValue($conn, "class_name", $sql);
 				$remarks = $array["data"][$i]["eac_remarks"];
 				$date = date("d-m-Y", strtotime($eac_date));
 				$text = $student_name . '[' . $class_name . '] <br> claimed attendances of Period ' . $sas_period . ' for ' . $date . '<br>on account of ' . $eae_name . '<br> Remarks : <br>' . $remarks . '<br>';
@@ -96,13 +102,20 @@ if (isset($_POST['action'])) {
 		$sql = "update ea_claim set eac_approved='0', approver_ts='$today_ts', eac_status='4' where  student_id='" . $_POST['student_id'] . "' and sas_id='" . $_POST['sas_id'] . "'";
 		$result = $conn->query($sql);
 		if (!$result) $conn->error;
+		$class_id = getField($conn, $_POST['student_id'], $tn_rc, "student_id", "class_id");
+		$tn_sa = "student_attendance" . $class_id;
+		//echo "SA ".$tn_sa;
+		$sql = "update $tn_sa set sa_present='1' where  student_id='" . $_POST['student_id'] . "' and sas_id='" . $_POST['sas_id'] . "'";
+		$result = $conn->query($sql);
+		if (!$result) $conn->error;
 	} elseif ($_POST['action'] == "approveSAS") {
 		$sql = "update ea_claim set eac_approved='0', approver_ts='$today_ts', eac_status='3' where  student_id='" . $_POST['student_id'] . "' and sas_id='" . $_POST['sas_id'] . "'";
 		$result = $conn->query($sql);
 		if (!$result) $conn->error;
+
 		//echo "RC ".$tn_rc;
-		$class_id=getField($conn, $_POST['student_id'], $tn_rc, "student_id", "class_id");
-		$tn_sa="student_attendance".$class_id;
+		$class_id = getField($conn, $_POST['student_id'], $tn_rc, "student_id", "class_id");
+		$tn_sa = "student_attendance" . $class_id;
 		//echo "SA ".$tn_sa;
 		$sql = "update $tn_sa set sa_present='0' where  student_id='" . $_POST['student_id'] . "' and sas_id='" . $_POST['sas_id'] . "'";
 		$result = $conn->query($sql);
