@@ -100,6 +100,7 @@
 
     </div>
     <div class="navbar-nav">
+      <a href="<?php echo $codePath . '../report/adminReport'; ?>" target="_blank" class="nav-item nav-link">Report</a>
       <a href="<?php echo $codePath . '/module/profile/'; ?>" class="nav-item nav-link">Profile</a>
       <a href="<?php echo $codePath . '/logout.php'; ?>" class="nav-item nav-link">Logout</a>
     </div>
