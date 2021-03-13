@@ -13,10 +13,10 @@ function selectList($conn, $selectTitle, $data, $sql)
 {
   //echo "Inst in function $tableName $id $name $where";
   $required = $data[0];
-  $id = $data[1];
-  $name = $data[2];
-  $abbri = $data[3];
-  $idName = $data[4];
+  $id = $data[1]; //Table Id Field name 
+  $name = $data[2]; // Class Name and Field Name also
+  $abbri = $data[3]; // Field Name for abbri ("" if no abbri is required in the list)
+  $idName = $data[4]; // id of the variable and name of the variable (user defined)
 
   $result = $conn->query($sql);
   if ($result) {

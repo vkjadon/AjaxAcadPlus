@@ -35,10 +35,10 @@ require('../../php_function.php');
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
 
           <a class="list-group-item list-group-item-action active sea" id="list-ea-list" data-toggle="list" href="#list-sea" role="tab" aria-controls="sea">Subject Extra Attendance </a>
-
           <!-- <a class="list-group-item list-group-item-action ea" id="list-ea-list" data-toggle="list" href="#list-ea" role="tab" aria-controls="ea"> Extra Attendance </a> -->
-
+          <a class="list-group-item list-group-item-action ear" id="list-ear-list" data-toggle="list" href="#list-ear" role="tab" aria-controls="ear"> Extra Attendance Report</a>
         </div>
+
       </div>
 
       <div class="col-10">
@@ -59,7 +59,6 @@ require('../../php_function.php');
               </div>
             </div>
           </div>
-
           <div class="tab-pane fade" id="list-appLeave" role="tabpanel" aria-labelledby="list-appLeave-list">
             <div class="row">
               <div class="col-8 mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addNew2">New2</button>
@@ -67,7 +66,21 @@ require('../../php_function.php');
               </div>
             </div>
           </div>
-
+          <div class="tab-pane fade" id="list-ear" role="tabpanel" aria-labelledby="list-ear-list">
+            <div class="row">
+              <div class="col-6 mt-1 mb-1">
+                <div class="row">
+                  <div class="col-6 p-0">
+                    <p class="programList"></p>
+                  </div>
+                  <div class="col-6">
+                    <p class="classList"></p>
+                  </div>
+                </div>
+                <p id="classStudentList"></p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -84,26 +97,24 @@ require('../../php_function.php');
 <script>
   $(document).ready(function() {
     $(".topBarTitle").text("Approvals");
-    $(".selectPanel").show();
-    $("#panelId").hide();
-
-    $(document).on('click', '.checkAll', function() {
-      var id = $("#panelId").text();
-      //$.alert("Panel Id" + id);
-      if (id == "CS") $('.sclCS').prop('checked', true); // Checks it
-      else $('.scb').prop('checked', true); // Checks it
-
-    });
-    $(document).on('click', '.uncheckAll', function() {
-      var id = $("#panelId").text();
-      //$.alert("Panel Id" + id);
-      if (id == "CS") $('.sclCS').prop('checked', false);
-      else $('.scb').prop('checked', false);
-
-    });
-
     eaClaimList();
     sasEACList();
+
+    $(document).on('click', '.ear', function() {
+      programSelectList();
+    });
+
+    $(document).on('change', '#sel_program', function() {
+      var programId=$("#sel_program").val();
+      //$.alert("Program " + programId);
+      if(programId=="ALL")$.alert("ALL Program Disabled!!");
+      else classSelectList();
+    });
+
+    $(document).on('change', '#sel_class', function() {
+      classStudentList();
+
+    });
 
     $(document).on('click', '.sasRejectButton', function() {
       var student_id = $(this).attr("data-std")
@@ -120,7 +131,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     });
-
     $(document).on('click', '.sasApproveButton', function() {
       var student_id = $(this).attr("data-std")
       var sas_id = $(this).attr("data-sas")
@@ -136,7 +146,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     });
-
     $(document).on('click', '.approveButton', function() {
       var text = $(this).attr("data-text")
       var student_id = $(this).attr("data-std")
@@ -150,6 +159,22 @@ require('../../php_function.php');
       $("#eac_date").val(eac_date);
       $("#modalText").html(text);
     });
+    $(document).on('click', '.rejectButton', function() {
+      var student_id = $(this).attr("data-std")
+      var eac_date = $(this).attr("data-eacDate")
+      //$.alert("Std " + student_id + " Date " + eac_date);
+      $.post("approvalSql.php", {
+        action: "rejectEAC",
+        student_id: student_id,
+        eac_date: eac_date
+      }, function(data, status) {
+        //$.alert("Success " + data);
+        eaClaimList();
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+    });
+
     $(document).on('submit', '#modalForm', function(event) {
       event.preventDefault(this);
       var action = $("#action").val();
@@ -178,21 +203,44 @@ require('../../php_function.php');
         $.alert(error_msg);
       }
     });
-    $(document).on('click', '.rejectButton', function() {
-      var student_id = $(this).attr("data-std")
-      var eac_date = $(this).attr("data-eacDate")
-      //$.alert("Std " + student_id + " Date " + eac_date);
-      $.post("approvalSql.php", {
-        action: "rejectEAC",
-        student_id: student_id,
-        eac_date: eac_date
+
+    function classSelectList() {
+      var programId=$("#sel_program").val();
+      //$.alert("In Class List " + programId);
+      $.post("attendanceReportSql.php", {
+        programId:programId,
+        action: "class"
       }, function(data, status) {
         //$.alert("Success " + data);
-        eaClaimList();
+        $(".classList").html(data);
       }, "text").fail(function() {
         $.alert("Error !!");
       })
-    });
+    }
+    function programSelectList() {
+      //$.alert("In program List");
+      $.post("attendanceReportSql.php", {
+        action: "program"
+      }, function(data, status) {
+        //$.alert("Success " + data);
+        $(".programList").html(data);
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+    }    
+    function classStudentList() {
+      var classId=$("#sel_class").val();
+      //$.alert("In Class Student List");
+      $.post("attendanceReportSql.php", {
+        classId: classId,
+        action: "classStudentList"
+      }, function(data, status) {
+        //$.alert("Success " + data);
+        $("#classStudentList").html(data);
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+    }
 
     function sasEACList() {
       //$.alert("In SAS Claim List");
@@ -205,7 +253,17 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
-
+    function sasEACReport() {
+      //$.alert("In SAS Claim Report");
+      $.post("attendanceReportSql.php", {
+        action: "sasEACReport"
+      }, function(data, status) {
+        //$.alert("Success " + data);
+        $("#sasEACReport").html(data);
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+    }
     function eaClaimList() {
       //$.alert("In Claim List");
       $.post("approvalSql.php", {
@@ -217,7 +275,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
-
     function getFormattedDate(ts, fmt) {
       var a = new Date(ts);
       var day = a.getDate();

@@ -37,6 +37,7 @@ require('../../php_function.php');
           <a class="list-group-item list-group-item-action active sea" id="list-ea-list" data-toggle="list" href="#list-sea" role="tab" aria-controls="sea">Subject Extra Attendance </a>
 
           <!-- <a class="list-group-item list-group-item-action ea" id="list-ea-list" data-toggle="list" href="#list-ea" role="tab" aria-controls="ea"> Extra Attendance </a> -->
+          <a class="list-group-item list-group-item-action ear" id="list-ear-list" data-toggle="list" href="#list-ear" role="tab" aria-controls="ear"> Extra Attendance Report</a>
 
         </div>
       </div>
