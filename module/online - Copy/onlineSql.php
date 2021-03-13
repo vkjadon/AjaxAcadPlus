@@ -180,7 +180,6 @@ if (isset($_POST['action'])) {
 			$array = $result->fetch_assoc();
 			$test_id = $array["test_id"];
 		}
-		echo "Test Id $test_id";
 		$sectionId = $_POST['sectionId'];
 		$json = get_sectionQuestionListJson($conn, $test_id, $sectionId);
 		//echo $json;
@@ -197,32 +196,23 @@ if (isset($_POST['action'])) {
       	<div class="card-body mt-0 py-1">
 				<div class="row">
 				<div class="col">
-				<span class="testQuestion">['.$id.']' . $qb_text . '</span>';
+				<span class="testQuestion">' . $qb_text . '</span>';
 				echo '</div></div>';
-
-				$sqlOption = "select * from question_option where qb_id='$id' order by qo_code";
+				$sqlOption = "select * from question_option where qb_id='$id'";
 				$resultOption = $conn->query($sqlOption);
 				while ($rows = $resultOption->fetch_assoc()) {
 					echo '<div class="row"><div class="col-9"><div class="card">
-      			<div class="card-body m-0 p-1">
-		  			<input type="text" class="form-control questionOption" value="' . $rows["qo_text"] . '">
-					</div>';
-					$correct=$rows["qo_correct"];
-					$code=$rows["qo_code"];
+      	<div class="card-body mt-0 py-1">
+				<span class="questionOption">' . $rows["qo_text"] . '</span></div>';
 					echo '</div>';
 					echo '</div>';
-					echo '<div class="col-3 p-0">';
-					if($correct=="0")echo '<a href="#" class="changeOption" data-qb="' . $id . '" data-code="' . $code . '" data-set="setRight"><i class="fa fa-times"></i></a>&nbsp;&nbsp;';
-					else echo '<a href="#" class="changeOption" data-qb="' . $id . '" data-code="' . $code . '"  data-set="setWrong"><i class="fa fa-check"></i></a>&nbsp;&nbsp;';
-					echo '<a href="#" class="uploadOption"><i class="fa fa-upload"></i></a>&nbsp;&nbsp;';
-					echo '<a href="#" class="trashOption" data-qb="' . $id . '" data-code="' . $code . '"><i class="fa fa-trash"></i></a>';
-					echo '</div>';
+					echo '<div class="col-3">--</div>';
 					echo '</div>';
 				}
 				echo '<div class="row">
 				<div class="col">';
-				echo '<a href="#" class="editQuestion" data-test="' . $id . '" data-section="' . $i . '"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;';
-				echo '<a href="#" class="trashQuestion" data-test="' . $id . '" data-section="' . $i . '"><i class="fa fa-trash"></i></a>&nbsp;&nbsp;';
+				echo '<button class="btn btn-secondary btn-square-sm mt-0 editQuestion" data-test="' . $id . '" data-section="' . $i . '">Edit</button>
+				<button class="btn btn-danger btn-square-sm mt-0 dropOption" data-qb="' . $id . '"><span class="badge badge-light"><i class="fa fa-times"></i></span></button>';
 				echo '</div>';
 				echo '</div>';
 
@@ -232,7 +222,7 @@ if (isset($_POST['action'])) {
       	<div class="card-body mt-0 py-1">
 				<div class="row">
 				<div class="col">
-				<span class="testQuestion">['.$id.']' . $qb_text . '</span>
+				<span class="testQuestion">' . $qb_text . '</span>
 				</div></div>
 				<div class="row">
 				<div class="col">
@@ -294,16 +284,6 @@ if (isset($_POST['action'])) {
 		if ($result) $output = $result->fetch_assoc();
 		else $output = array("qb_text" => "Please write/paste your Question Here");
 		echo json_encode($output);
-	} elseif ($_POST['action'] == 'changeOption') {
-		$qb_id = $_POST['qb_id'];
-		$qo_code = $_POST['qo_code'];
-		$change_code = $_POST['change_code'];
-		//echo "Jai ho $qb_id code $qo_code";
-		if($change_code=="setRight")$sql = "update question_option set qo_correct='1' where qb_id='$qb_id' and qo_code='$qo_code'";
-		else $sql = "update question_option set qo_correct='0' where qb_id='$qb_id' and qo_code='$qo_code'";
-		$result = $conn->query($sql);
-		if ($result) echo "Updated Successfully";
-		else echo $conn->error;
 	}
 } elseif ($_POST['instructionId'] == 'T' || $_POST['instructionId'] == 'S') {
 	$test_id = $_POST['testId'];

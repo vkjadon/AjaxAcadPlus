@@ -156,6 +156,7 @@ require('../../php_function.php');
       $("#questionForm").hide()
       testHeading()
     });
+
     $(".aq").click(function() {
       //$.alert("Add Question");
       $("#questionForm").show()
@@ -163,25 +164,6 @@ require('../../php_function.php');
       sectionQuestionList()
     });
 
-    $(document).on("click", ".changeOption", function() {
-      var qb_id = $(this).attr('data-qb');
-      var qo_code = $(this).attr('data-code');
-      var change_code = $(this).attr('data-set');
-      //$.alert("Qb  " + qb_id + " Code " + qo_code + " Change " + change_code)
-      $.post("onlineSql.php", {
-        qb_id: qb_id,
-        qo_code: qo_code,
-        change_code:change_code,
-        action: "changeOption"
-      }, function() {
-        //$.alert("Fecth" + mydata);
-      }, "text").done(function(data, status) {
-        //$.alert(data);
-        sectionQuestionList()
-      }).fail(function() {
-        $.alert("Error !!");
-      })
-    });
     $(document).on("click", ".activeQuestion", function() {
       var qb_id = $(this).attr('data-qb');
       $.alert("Qb  " + qb_id)
@@ -239,6 +221,7 @@ require('../../php_function.php');
       //$.alert("Decrement " + id + "Value" + value);
       $("#selectedSection").text(value);
     });
+
     $(document).on('click', '.defaultMarks, .defaultNMarks', function() {
       var id = $(this).attr('id');
       var value = $("." + id).text();
@@ -345,10 +328,13 @@ require('../../php_function.php');
       $("#questionHeading").hide()
       $("#sectionId").val("-")
     });
+
+
     $(".addTestButton").click(function() {
       $("#addTestDiv").toggle();
       $("#action").val("addTest")
     });
+
     $(document).on("click", ".setActiveButton", function() {
       var id = $(this).attr("data-test")
       //$.alert("Id" + id)
@@ -360,6 +346,7 @@ require('../../php_function.php');
         testList();
       })
     });
+
     $(document).on("click", ".addQuestionButton", function() {
       var id = $(this).attr("data-test")
       $.alert("Id " + id);
@@ -372,6 +359,7 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     });
+
     $(document).on("click", ".removeTestButton", function() {
       var id = $(this).attr("data-test")
       //$.alert("Id" + id)
@@ -383,6 +371,7 @@ require('../../php_function.php');
         testList();
       })
     });
+
     $(document).on("submit", "#addTestForm", function() {
       event.preventDefault(this);
       var formData = $(this).serialize();
@@ -412,6 +401,7 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     });
+
     $(document).on('click', '.increment', function() {
       var id = $(this).attr('id');
       var value = $("." + id).text();
@@ -431,7 +421,7 @@ require('../../php_function.php');
 
     function sectionQuestionList() {
       var selectedSection = $("#selectedSection").text()
-      $.alert("Section  " + selectedSection)
+      //$.alert("Section  " + selectedSection)
       $.post("onlineSql.php", {
         sectionId: selectedSection,
         action: "sectionQuestionList"
@@ -444,6 +434,7 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
+
     function questionHeading(section) {
       //$.alert("In SAS Claim List");
       $.post("onlineSql.php", {
@@ -456,6 +447,7 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
+
     function testHeading() {
       //$.alert("In SAS Claim List");
       $.post("onlineSql.php", {
@@ -467,6 +459,7 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
+
     function testQuestionList() {
       //$.alert("In SAS Claim List");
       $.post("onlineSql.php", {
@@ -478,6 +471,7 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
+
     function testList() {
       //$.alert("In SAS Claim List");
       $.post("onlineSql.php", {
@@ -489,6 +483,7 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
+
     function getFormattedDate(ts, fmt) {
       var a = new Date(ts);
       var day = a.getDate();
