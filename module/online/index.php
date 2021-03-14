@@ -92,9 +92,9 @@ require('../../php_function.php');
                     <textarea class="content" id="question" name="question"></textarea>
                   </div>
                 </div>
-                <!-- <button class="btn btn-primary btn-square-sm questionImageButton">Upload Image</button> -->
+                <input type="hidden" id="actionCode" name="actionCode">
                 <button class="btn btn-secondary btn-square-sm addQuestion">Save Question</button>
-                <button class="btn btn-warning btn-square-sm addOption">Option<span class="badge"><i class="fa fa-plus"></i></span></button>
+                <button class="btn btn-warning btn-square-sm addOption">Save Option</button>
               </div>
               <div class="col-6 mt-1 mb-1">
                 <p id="sectionQuestionList"></p>
@@ -159,6 +159,7 @@ require('../../php_function.php');
     $(".aq").click(function() {
       //$.alert("Add Question");
       $("#questionForm").show()
+      $("#actionCode").val("add")
       questionHeading()
       sectionQuestionList()
     });
@@ -171,7 +172,7 @@ require('../../php_function.php');
       $.post("onlineSql.php", {
         qb_id: qb_id,
         qo_code: qo_code,
-        change_code:change_code,
+        change_code: change_code,
         action: "changeOption"
       }, function() {
         //$.alert("Fecth" + mydata);
@@ -182,9 +183,31 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     });
+    $(document).on("click", ".updateOption", function() {
+      var qb_id = $(this).attr("data-qb");
+      var qo_code = $(this).attr("data-code");
+      var qo_text = $("#option" + qo_code).val();
+      if (qo_text === "") $.alert("Option Cannot be Blank!!")
+      else {
+        //$.alert("Qb  " + qb_id + " Code " + qo_code + " Text " + qo_text)
+        $.post("onlineSql.php", {
+          qb_id: qb_id,
+          qo_code: qo_code,
+          qo_text: qo_text,
+          action: "updateOption"
+        }, function() {
+          //$.alert("Fecth" + mydata);
+        }, "text").done(function(data, status) {
+          $.alert(data);
+          //ssectionQuestionList()
+        }).fail(function() {
+          $.alert("Error !!");
+        })
+      }
+    });
     $(document).on("click", ".activeQuestion", function() {
       var qb_id = $(this).attr('data-qb');
-      $.alert("Qb  " + qb_id)
+      //$.alert("Qb  " + qb_id)
       $.post("onlineSql.php", {
         qb_id: qb_id,
         action: "activeQuestion"
@@ -216,6 +239,7 @@ require('../../php_function.php');
       var selectedSection = $("#selectedSection").text()
       var defaultMarks = $("#defaultMarks").val()
       var defaultNMarks = $("#defaultNMarks").val()
+      var actionCode = $("#actionCode").val()
       var question = tinyMCE.get('question').getContent();
       $.alert("Section  " + selectedSection + "Question" + question)
       $.post("onlineSql.php", {
@@ -223,6 +247,7 @@ require('../../php_function.php');
         defaultMarks: defaultMarks,
         defaultNMarks: defaultNMarks,
         question: question,
+        actionCode: actionCode,
         action: "addQuestion"
       }, function() {
         //$.alert("Fecth" + mydata);
@@ -233,6 +258,14 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     });
+    $(document).on('click', '.editQuestion', function() {
+      var qb_text = $(this).attr("data-qb")
+      $.alert("Question Text " + qb_text);
+      tinyMCE.get('question').setContent(qb_text)
+      $("#actionCode").val("edit")
+
+    });
+
     $(document).on('click', '.defaultSection', function() {
       var id = $(this).attr('data-section');
       var value = $("#defaultSection" + id).text();
@@ -431,7 +464,7 @@ require('../../php_function.php');
 
     function sectionQuestionList() {
       var selectedSection = $("#selectedSection").text()
-      $.alert("Section  " + selectedSection)
+      //$.alert("Section  " + selectedSection)
       $.post("onlineSql.php", {
         sectionId: selectedSection,
         action: "sectionQuestionList"
@@ -444,6 +477,7 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
+
     function questionHeading(section) {
       //$.alert("In SAS Claim List");
       $.post("onlineSql.php", {
@@ -456,6 +490,7 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
+
     function testHeading() {
       //$.alert("In SAS Claim List");
       $.post("onlineSql.php", {
@@ -467,6 +502,7 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
+
     function testQuestionList() {
       //$.alert("In SAS Claim List");
       $.post("onlineSql.php", {
@@ -478,6 +514,7 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
+
     function testList() {
       //$.alert("In SAS Claim List");
       $.post("onlineSql.php", {
@@ -489,6 +526,7 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
+
     function getFormattedDate(ts, fmt) {
       var a = new Date(ts);
       var day = a.getDate();
