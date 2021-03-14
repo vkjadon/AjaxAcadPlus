@@ -164,6 +164,45 @@ require('../../php_function.php');
       sectionQuestionList()
     });
 
+    $(document).on("click", ".addCheckPoint", function() {
+      var qb_id = $(this).attr("data-qb");
+      var qc_sno = $(this).attr("data-sno");
+      var value = $("#newCP").val();
+      $.alert(" QbId  " + qb_id + " CP Sno " + qc_sno + " CP " + value)
+      $.post("onlineSql.php", {
+        qb_id : qb_id,
+        qc_sno : qc_sno,
+        qc_name : value,
+        action: "addCP"
+      }, function() {
+        //$.alert("Fecth" + mydata);
+      }, "text").done(function(data, status) {
+        $.alert(data);
+        sectionQuestionList()
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+    });
+    $(document).on('blur', '.parameter', function() {
+      var qp_sno = $(this).attr("data-qp");
+      var qb_id = $(this).attr("data-qb");
+      var tag = $(this).attr("data-tag");
+      var value = $(this).val();
+      //Confirm Alert Plugin shows Alert Box twice
+      //alert(" Parameter  " + qp_sno + " QB " + qb_id + " Value " + value + " Tag " + tag);
+      $.post("onlineSql.php", {
+        qb_id : qb_id,
+        qp_sno : qp_sno,
+        tag : tag,
+        value: value,
+        action: "updateParameter"
+      }, function(mydata, mystatus) {
+        //$.alert("Updated!!");
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+    });
+
     $(document).on("click", ".changeOption", function() {
       var qb_id = $(this).attr('data-qb');
       var qo_code = $(this).attr('data-code');
@@ -241,7 +280,7 @@ require('../../php_function.php');
       var defaultNMarks = $("#defaultNMarks").val()
       var actionCode = $("#actionCode").val()
       var question = tinyMCE.get('question').getContent();
-      $.alert("Section  " + selectedSection + "Question" + question)
+      //$.alert("Section  " + selectedSection + "Question" + question)
       $.post("onlineSql.php", {
         sectionId: selectedSection,
         defaultMarks: defaultMarks,
@@ -252,7 +291,9 @@ require('../../php_function.php');
       }, function() {
         //$.alert("Fecth" + mydata);
       }, "text").done(function(data, status) {
-        $.alert(data);
+        $.alert("Updated!!");
+        tinyMCE.get('question').setContent("")
+        $("#actionCode").val("add")
         sectionQuestionList()
       }).fail(function() {
         $.alert("Error !!");
@@ -260,7 +301,7 @@ require('../../php_function.php');
     });
     $(document).on('click', '.editQuestion', function() {
       var qb_text = $(this).attr("data-qb")
-      $.alert("Question Text " + qb_text);
+      //$.alert("Question Text " + qb_text);
       tinyMCE.get('question').setContent(qb_text)
       $("#actionCode").val("edit")
 
