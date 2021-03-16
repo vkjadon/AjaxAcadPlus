@@ -163,16 +163,88 @@ require('../../php_function.php');
       questionHeading()
       sectionQuestionList()
     });
+    $(document).on('click', '.trashCP, .trashOption', function() {
+      var id = $(this).attr("data-qb");
+      var sno = $(this).attr("data-sno");
+      var tag = $(this).attr("data-tag");
+      //$.alert(" QbId  " + id + " Sno " + sno + " Tag " + tag)
+      $.confirm({
+        title: 'Confirm!',
+        draggable: true,
+        content: "Please confirm to delete!! ",
+        buttons: {
+          confirm: {
+            btnClass: 'btn-blue',
+            action: function() {
+              $.post("onlineSql.php", {
+                id: id,
+                sno: sno,
+                tag: tag,
+                action: "delete"
+              }, function() {}, "text").done(function(data, status) {
+                $.alert(data);
+                sectionQuestionList()
+              })
+            }
+          },
+          cancel: {
+            btnClass: "btn-danger",
+            action: function() {}
+          },
+        }
+      });
+    });
 
-    $(document).on("click", ".addCheckPoint", function() {
+    $(document).on('blur', '.checkPoint', function() {
+      var qc_sno = $(this).attr("data-sno");
+      var qb_id = $(this).attr("data-qb");
+      var tag = $(this).attr("data-tag");
+      var value = $(this).val();
+      //Confirm Alert Plugin shows Alert Box twice
+      //alert(" Parameter  " + qc_sno + " QB " + qb_id + " Value " + value + " Tag " + tag);
+      $.post("onlineSql.php", {
+        qb_id: qb_id,
+        qc_sno: qc_sno,
+        tag: tag,
+        value: value,
+        action: "updateCP"
+      }, function(mydata, mystatus) {
+        //$.alert("Updated!!");
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+    });
+
+    $(document).on("click", ".updateCP", function() {
       var qb_id = $(this).attr("data-qb");
       var qc_sno = $(this).attr("data-sno");
       var value = $("#newCP").val();
       $.alert(" QbId  " + qb_id + " CP Sno " + qc_sno + " CP " + value)
       $.post("onlineSql.php", {
-        qb_id : qb_id,
-        qc_sno : qc_sno,
-        qc_name : value,
+        qb_id: qb_id,
+        qc_sno: qc_sno,
+        qc_name: value,
+        action: "updateCP"
+      }, function() {
+        //$.alert("Fecth" + mydata);
+      }, "text").done(function(data, status) {
+        $.alert(data);
+        sectionQuestionList()
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+    });
+    $(document).on("click", ".addCheckPoint", function() {
+      var qb_id = $(this).attr("data-qb");
+      var qc_sno = $(this).attr("data-sno");
+      var value = $("#newCP").val();
+      var valueMarks = $("#newCPMarks").val();
+      $.alert(" QbId  " + qb_id + " CP Sno " + qc_sno + " CP " + value)
+      $.post("onlineSql.php", {
+        qb_id: qb_id,
+        qc_sno: qc_sno,
+        qc_name: value,
+        qc_marks: valueMarks,
         action: "addCP"
       }, function() {
         //$.alert("Fecth" + mydata);
@@ -191,9 +263,9 @@ require('../../php_function.php');
       //Confirm Alert Plugin shows Alert Box twice
       //alert(" Parameter  " + qp_sno + " QB " + qb_id + " Value " + value + " Tag " + tag);
       $.post("onlineSql.php", {
-        qb_id : qb_id,
-        qp_sno : qp_sno,
-        tag : tag,
+        qb_id: qb_id,
+        qp_sno: qp_sno,
+        tag: tag,
         value: value,
         action: "updateParameter"
       }, function(mydata, mystatus) {
@@ -506,7 +578,7 @@ require('../../php_function.php');
     function sectionQuestionList() {
       var selectedSection = $("#selectedSection").text()
       //$.alert("Section  " + selectedSection)
-      $.post("onlineSql.php", {
+      $.post("sectionQuestionListSql.php", {
         sectionId: selectedSection,
         action: "sectionQuestionList"
       }, function() {
