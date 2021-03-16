@@ -1,0 +1,3 @@
+<p>A boiler of * m shell diameter is to carry gas at * MPa. Design a boiler joint assuming quadruple joint with assumed efficiency of 85%. &nbsp;The material properties are give as</p>
+<p>S<sub>yt</sub>=230 MPa;&nbsp;S<sub>yc</sub>=335 MPa;&nbsp;S<sub>ys</sub>=190 MPa;&nbsp;</p>
+<p>You can assume that resisting area of rivet in double shear is 80% more than the area in single shear and the factor of safety can be taken as 3.5.</p>

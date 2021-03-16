@@ -54,7 +54,13 @@ div.minWidth100{
   font-style: italic;
   font-size: small;
 }
-.testQuestion {
+.warning {
+  color: rgba(231, 40, 50, 0.911);
+  font-style: italic;
+  font-size: small;
+  font-weight: bold;
+}
+.testQuestionText {
   font-style: italic;
   font-size: small;
 }
@@ -87,6 +93,11 @@ div.minWidth100{
   font-size: small;
 }
 .fa-trash {
+  color: rgba(245, 7, 19, 0.911);
+  padding-left: 2px;
+  padding-right: 2px;
+}
+.fa-exclamation-triangle {
   color: rgba(245, 7, 19, 0.911);
   padding-left: 2px;
   padding-right: 2px;

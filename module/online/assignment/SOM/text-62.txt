@@ -1,0 +1,1 @@
+<p>Determine the force in member ED, and CD of the truss loaded by force of * kN and * kN at point C and D respectively. The length of horizontal and vertical members are 3 m each. Tensile force in member should be treated as positive.</p>

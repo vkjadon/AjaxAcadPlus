@@ -1,0 +1,1 @@
+<p>A simply supported beam is supported at point A and C. The load intensity of uniformly distributed load is * kN/m and the concentrated load <em>W</em> is * kN. Draw shear force and bending moment diagram.</p>

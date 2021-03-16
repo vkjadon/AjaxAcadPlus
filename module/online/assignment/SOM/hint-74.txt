@@ -1,0 +1,1 @@
+<p>Location of resultant is obtained by using principle of moments. It states that sum of moment is equal to moment of sum (resultant). In other word, you have to locate the x coordinate of CG of the load distribution in this case.</p>

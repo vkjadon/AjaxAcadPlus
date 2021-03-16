@@ -87,21 +87,21 @@ require('../../php_function.php');
               <div class="col-6 mt-1 mb-1">
                 <p id="questionHeading"></p>
                 <h5>Section : <span id="selectedSection">1</span></h5>
-                <div class="form-group row">
-                  <div class="col-sm-12">
-                    <textarea class="content" id="question" name="question"></textarea>
-                  </div>
-                </div>
+                  <textarea class="content" id="question" name="question"></textarea>
                 <input type="hidden" id="actionCode" name="actionCode">
                 <button class="btn btn-secondary btn-square-sm addQuestion">Save Question</button>
                 <button class="btn btn-warning btn-square-sm addOption">Save Option</button>
               </div>
               <div class="col-6 mt-1 mb-1">
-                <p id="sectionQuestionList"></p>
+                <p class="showActiveQuestion"></p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <p class="sectionQuestionList"></p>
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -120,7 +120,7 @@ require('../../php_function.php');
     selector: 'textarea',
     plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
     toolbar_mode: 'floating',
-    height: "220",
+    height: "320",
   });
 </script>
 
@@ -162,6 +162,22 @@ require('../../php_function.php');
       $("#actionCode").val("add")
       questionHeading()
       sectionQuestionList()
+      activeQuestion()
+    });
+    $(document).on("click", ".testQuestion", function() {
+      var qb_id = $(this).attr("data-qb")
+      var test_id = $(this).attr("data-test")
+      var tag = $(this).attr("data-tag")
+      $.alert("Id" + qb_id)
+      $.post("sectionQuestionListSql.php", {
+        qb_id: qb_id,
+        test_id: test_id,
+        tag: tag,
+        action: "testQuestion"
+      }, () => {}, "html").done(function(data, status) {
+        $.alert(data);
+        activeQuestion();
+      })
     });
     $(document).on('click', '.trashCP, .trashOption', function() {
       var id = $(this).attr("data-qb");
@@ -183,7 +199,7 @@ require('../../php_function.php');
                 action: "delete"
               }, function() {}, "text").done(function(data, status) {
                 $.alert(data);
-                sectionQuestionList()
+                activeQuestion()
               })
             }
           },
@@ -194,7 +210,6 @@ require('../../php_function.php');
         }
       });
     });
-
     $(document).on('blur', '.checkPoint', function() {
       var qc_sno = $(this).attr("data-sno");
       var qb_id = $(this).attr("data-qb");
@@ -214,7 +229,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     });
-
     $(document).on("click", ".updateCP", function() {
       var qb_id = $(this).attr("data-qb");
       var qc_sno = $(this).attr("data-sno");
@@ -229,7 +243,7 @@ require('../../php_function.php');
         //$.alert("Fecth" + mydata);
       }, "text").done(function(data, status) {
         $.alert(data);
-        sectionQuestionList()
+        activeQuestion()
       }).fail(function() {
         $.alert("Error !!");
       })
@@ -250,7 +264,7 @@ require('../../php_function.php');
         //$.alert("Fecth" + mydata);
       }, "text").done(function(data, status) {
         $.alert(data);
-        sectionQuestionList()
+        activeQuestion()
       }).fail(function() {
         $.alert("Error !!");
       })
@@ -289,7 +303,7 @@ require('../../php_function.php');
         //$.alert("Fecth" + mydata);
       }, "text").done(function(data, status) {
         //$.alert(data);
-        sectionQuestionList()
+        activeQuestion()
       }).fail(function() {
         $.alert("Error !!");
       })
@@ -310,7 +324,7 @@ require('../../php_function.php');
           //$.alert("Fecth" + mydata);
         }, "text").done(function(data, status) {
           $.alert(data);
-          //ssectionQuestionList()
+          //sactiveQuestion()
         }).fail(function() {
           $.alert("Error !!");
         })
@@ -326,7 +340,7 @@ require('../../php_function.php');
         //$.alert("Fecth" + mydata);
       }, "text").done(function(data, status) {
         $.alert(data);
-        sectionQuestionList()
+        activeQuestion()
       }).fail(function() {
         $.alert("Error !!");
       })
@@ -341,7 +355,7 @@ require('../../php_function.php');
         //$.alert("Fecth" + mydata);
       }, "text").done(function(data, status) {
         $.alert(data);
-        sectionQuestionList()
+        activeQuestion()
       }).fail(function() {
         $.alert("Error !!");
       })
@@ -575,6 +589,22 @@ require('../../php_function.php');
       })
     });
 
+    function activeQuestion() {
+      var selectedSection = $("#selectedSection").text()
+      //$.alert("Section  " + selectedSection)
+      $.post("sectionQuestionListSql.php", {
+        sectionId: selectedSection,
+        action: "activeQuestion"
+      }, function() {
+        //$.alert("Fecth" + mydata);
+      }, "text").done(function(data, status) {
+        //$.alert(data);
+        $(".showActiveQuestion").html(data)
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+    }
+
     function sectionQuestionList() {
       var selectedSection = $("#selectedSection").text()
       //$.alert("Section  " + selectedSection)
@@ -585,7 +615,7 @@ require('../../php_function.php');
         //$.alert("Fecth" + mydata);
       }, "text").done(function(data, status) {
         //$.alert(data);
-        $("#sectionQuestionList").html(data)
+        $(".sectionQuestionList").html(data)
       }).fail(function() {
         $.alert("Error !!");
       })

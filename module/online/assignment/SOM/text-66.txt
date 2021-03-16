@@ -1,0 +1,1 @@
+<p>A truss is subjected to loads of * kN each at&nbsp; points D, G and H. The horizontal members are of * m each. Find the forces in vertical members. Take tensile as positive.</p>

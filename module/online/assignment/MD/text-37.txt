@@ -1,0 +1,1 @@
+<p>Design the bolts used for connecting the 20 mm thick bracket to the vertical structure as shown in Figure. A vertical load of * kN acts at the distance of * mm from the centre line. The material for bolts and the bracket is mild steel for which permissible tensile, shear and crushing stress are 85 MPa, 60 MPa and 100 MPa respectively.&nbsp;</p>

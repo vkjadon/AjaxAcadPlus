@@ -1,0 +1,1 @@
+<p>Determine the force in members GB and AB of the truss if the load F is * kN.&nbsp; Take tensile as positive.</p>

@@ -1,0 +1,1 @@
+<p>A steel (12 mm x 160 mm) plate is symmetrically placed between two wood ( 80 mm x&nbsp; 240 mm) planks as shown to form a flitched beam. Calculate the maximum stresses induced in both the materials if the maximum moment on the beam is * kN.m. Take Es= *Ew.</p>

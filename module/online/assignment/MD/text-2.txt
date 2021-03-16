@@ -1,0 +1,1 @@
+<p>A stepped axial bar is loaded as shown. Determine the maximum safe value of axial load P in kN if maximum allowable stress for steel = * MPa, maximum allowable stress for aluminum = * MPa and maximum allowable stress for bronze = * MPa</p>

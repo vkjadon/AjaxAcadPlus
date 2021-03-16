@@ -1,0 +1,1 @@
+<p>A * N pulley and bracket arrangement is attached to a wall as shown in figure. The CG of bracket-pulley assembly can be assumed located at 50 mm towards the left of the pulley center. The tension in the rope is * kN. Design the bolt assuming&nbsp;&sigma;<sub>dt</sub>=70 MPa and&nbsp;&tau;<sub>d</sub>=35 MPa.</p>

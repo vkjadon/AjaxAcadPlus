@@ -1,0 +1,1 @@
+<p>A circular shaft is subjected to bending and twisting moments of * kN.m and * kN.m respectively. Design the shaft using maximum distorsion energy theory neglecting effect of keyway.</p>

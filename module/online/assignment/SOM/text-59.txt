@@ -1,0 +1,1 @@
+<p>Determine the force on the pins at B and D if the load F is * N.&nbsp;</p>

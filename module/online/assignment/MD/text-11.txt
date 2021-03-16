@@ -1,0 +1,1 @@
+<p>A shaft running at 200 rpm has * mm diameter. Determine the torque transmitting capacity of * mm wide key of 125 mm length. The permissible stresses in compression and shear are * MPa and 50 MPa respectively. Also, determine the height of the key.</p>

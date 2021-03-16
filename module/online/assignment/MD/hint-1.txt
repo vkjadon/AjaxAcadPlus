@@ -1,0 +1,4 @@
+<p>To find safe diameter, the maximum induced stress should be less than equal to design stress.</p>
+<p>The design stress is given by ratio of strength to factor of safety.</p>
+<p>In present case, the load is axial and tensile. Considering yielding as failure criterion, we can write the design equation as below:</p>
+<p>Normal Stress (&sigma;)=(S<sub>yt</sub>/n) Assume appropriate value of n and Solve this to get inner diameter.</p>

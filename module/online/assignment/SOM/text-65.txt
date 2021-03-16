@@ -1,0 +1,1 @@
+<p>A truss is supported at A and B. The length of each horizontal members is 2 m . The force at C and E are * kN and * kN respectively. Find the forces in members BG, GE and DE if BG is inclined at an angle 30 deg to BE. Take tensile as positive.</p>

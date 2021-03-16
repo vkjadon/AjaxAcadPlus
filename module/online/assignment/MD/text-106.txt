@@ -1,0 +1,1 @@
+<p>A steel bracket is welded to a plate and loaded with 4 kN as shown below. Calculate the size of the weld if permissible shear stress in the weld is * N/mm&lt;sup&gt;2&lt;/sup&gt; and an additional load of * kN is applied</p>

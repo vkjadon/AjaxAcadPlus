@@ -1,0 +1,1 @@
+<p>A cantilever of * m length is loaded with a concentrated load F of * N and a moment of * N.m. The moment is acting at mid point of the cantilever. Draw shear force and bending moment diagram</p>

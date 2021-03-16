@@ -1,0 +1,11 @@
+<ol>
+<li>Calculate M<sub>td</sub></li>
+<li>Calculate D (major diameter)</li>
+<li>Standardize &nbsp;Shaft diameter using Standard shaft table</li>
+<li>Find width using spine table. For 6 spline b=0.25D.</li>
+<li>Calculate height (0.1D for slide when loaded)and length (1.5D)</li>
+<li>Calculate minor diameter d (D-2h=0.8D)</li>
+<li>&nbsp;Find maximum stress in the shaft (minor diameter)</li>
+<li>Calculate bending stress in the spline.</li>
+<li>Calculate axial force.</li>
+</ol>

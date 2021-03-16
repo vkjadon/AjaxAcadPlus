@@ -1,0 +1,1 @@
+<p>Design a CI flange coupling for a mild steel shaft transmitting * kW at * rpm. The allowable shear stress of shaft is * MPa whereas the allowable tensile stresses of key and bolt are * MPa. The design stress for flange in shear is 12.5 MPa. The crushing strength can be assumed equal to 1.25 time tensile strength.</p>

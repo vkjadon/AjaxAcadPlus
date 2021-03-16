@@ -1,0 +1,1 @@
+<p>The beam of negligible weight is supported horizontally by two springs. If the beam is horizontal and the springs are unstretched when the load is removed, determine the angle of tilt of the beam with horizontal when the load is applied. The stiffnesses of springs AB and CD are is * kN/m and &nbsp;* kN/m respectively. The load intensity w= * N/m.</p>

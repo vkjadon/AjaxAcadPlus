@@ -1,0 +1,1 @@
+<p>Calculate second moment of area about xx and yy axes passing though the CG of the section. Consider a=* mm; b=* mm and c=* mm. Take, origin at bottom left corner.</p>

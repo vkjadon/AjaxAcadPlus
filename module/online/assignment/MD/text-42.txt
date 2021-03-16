@@ -1,0 +1,4 @@
+<p>A pulley is mounted at * mm away from the bearing on a shaft to transmit * W at 120 rpm. Following data are given</p>
+<p>Diameter of pulley = * mm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Weight of pulley, =* N</p>
+<p>Angle of lap, =180<sup>0</sup> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Coefficient of friction, =0.3</p>
+<p>The power is being transmitted horizontally.</p>

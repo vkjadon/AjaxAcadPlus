@@ -1,0 +1,5 @@
+<ol>
+<li>Consider torsional shear mode of failure of Muff to find outer diameter.</li>
+<li>The equation is to be solved by hit and trial.&nbsp;</li>
+<li>Modify the dimension to next higher integer.</li>
+</ol>

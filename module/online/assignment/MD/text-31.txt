@@ -1,0 +1,1 @@
+<p>Figure shows a quadruple joint. How many rivets (N-1) are there in one pitch length (OPL)?. Assume that row -I is removed, how much is the difference (N-2) between the rivets in OPL in two cases? &nbsp; How many rivets (N-3) will be there in OPL if row III is eliminated.</p>

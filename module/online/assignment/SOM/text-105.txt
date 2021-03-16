@@ -1,0 +1,1 @@
+<p>The stresses at a point on two planes are shown in the following figures. The planes are inclined at an angle * deg. Determine the normal stress on the plane and principal stresses.</p>

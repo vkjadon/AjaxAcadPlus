@@ -1,0 +1,1 @@
+<p>A circular shaft is subjected to bending and twisting moments of * kN.m and * kN.m respectively. Design the shaft using ASTM code and considering the effect of keyway. Assume C<sub>m</sub>=1.0, C<sub>t</sub>=1.0.</p>

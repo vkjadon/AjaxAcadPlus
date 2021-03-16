@@ -1,0 +1,1 @@
+<p>Two lengths of 300mm &times; 18mm are to be connected by a double cover plate butt joint. Design a suitable joint assuming&nbsp;&sigma;<sub>dt</sub>=* MPa;&nbsp;&sigma;<sub>dc</sub>=* MPa;&nbsp;&tau;<sub>d</sub>=* MPa.</p>

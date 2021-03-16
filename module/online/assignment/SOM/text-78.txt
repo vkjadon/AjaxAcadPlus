@@ -1,0 +1,1 @@
+<p>A 6 m long cantilever is loaded with a uniformly varying load of * kN/m throughout its length. An additional point load of * kN is applied at mid point of the cantilever. Draw shear force and bending moment diagram.</p>

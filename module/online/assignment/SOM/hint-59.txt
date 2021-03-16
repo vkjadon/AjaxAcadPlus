@@ -1,0 +1,6 @@
+<p>There are three links. BD, AD and Pulley. Let the center be E. There are four Pin/Hinge Joints; A, B, D and E. So, two reactions at each. FBD of pulley will give us E<sub>x</sub> and E<sub>y</sub>&nbsp;(Forces by link on pulley).Both will be equal and opposite to Belt/Rope tension F.</p>
+<p>Draw FBD of BD. Two reactions at B (any direction) and Two at D (any directios,) with two known forces at E (Forces by pulley on link BD).</p>
+<p>Draw FBD of AD. Two reactions at A (any direction) and Two at D (Use Newton Third law).</p>
+<p>Appy equations of equilibrium on both FBD to find unkown.</p>
+<p>Resultant of Bx and By is the load at B.&nbsp;</p>
+<p>Resultant of Dx and Dy is the load at D.&nbsp;</p>

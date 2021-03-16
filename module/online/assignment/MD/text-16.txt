@@ -1,0 +1,1 @@
+<p>A sleeve of * mm outer diameter and * mm inner diameter is designed for transmitting * kN.m. If the shaft and key are made of steel (S<sub>yt</sub>&nbsp;=S<sub>yc</sub>= 400 N/mm<sup>2</sup>) and muff or sleeve is mode of FG200 cast iron (S<sub>ut</sub>&nbsp;=200 N/mm<sup>2</sup>) , find the factor of safety used in design of muff, shaft and key.</p>

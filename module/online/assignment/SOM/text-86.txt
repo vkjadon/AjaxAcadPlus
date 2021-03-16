@@ -1,0 +1,1 @@
+<p>A 16 m long simply supported beam has 1 m of overhang at left support. It is subjected to a point load of * kN at left end and an udl of * kN/m is acting over its whole length. Determine the location of movable right support such that the mid point of the beam is point of contraflexure. Draw SFD and BMD.</p>

@@ -1,0 +1,1 @@
+<p>A simply supported beam is loaded with a udl of * N/m over span a (* m) starting from support A and * N/m in rest of the span (* m). Replace the load by an equivalent resultant force and couple moment acting at point A and obtain the support reactions. Consider reactions positive along positive axes.&nbsp;</p>

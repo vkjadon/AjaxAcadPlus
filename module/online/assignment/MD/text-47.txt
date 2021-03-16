@@ -1,0 +1,1 @@
+<p>If a completely reversed load is applied on a hot rolled steel bar (S<sub>ut</sub> = * MPa) of * mm diameter such that the maximum stress is * MPa. Determine the safe number of cycles for 99.9% reliability.</p>

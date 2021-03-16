@@ -1,0 +1,1 @@
+<p>A * m long horizontal beam carries a UDL of * kN/m on the whole length. The beam is freely supported at the left end. Determine the position of the second support so that the maximum BM on the beam is as small as possible. Also, draw SFD and BMD.</p>

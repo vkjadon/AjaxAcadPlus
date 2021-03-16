@@ -1,0 +1,5 @@
+<ul>
+<li>Calculate loadsin all the members in terms of F.</li>
+<li>Compare the maximum Tensile and Compressive loads to their respective maximum permissible values</li>
+<li>Minimum of the two load values such obtained is your desired value of F.</li>
+</ul>

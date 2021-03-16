@@ -1,0 +1,1 @@
+<p>The springs AB and BC each have a stiffness of * N/m and an unstretched length of 3 m. Determine the horizontal force F applied to the cord which is attached to the small ring B that the displacement of the ring from the wall is d = * m</p>

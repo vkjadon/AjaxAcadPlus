@@ -1,0 +1,1 @@
+<p>A member ABC of lengths AB and BC of * m and * m respectively is loaded as shown. The vertical load of * N is acting on portion AB as linearly varying load. The load intensity of uniformly distributed load on portion BC is * N/m. Find the support reactions.</p>

@@ -1,0 +1,10 @@
+<ol>
+<li>Calculate design stresses (&tau;<sub>d shaft</sub>&nbsp;,&nbsp;&tau;<sub>d key</sub> and &sigma;<sub>d key c</sub>).</li>
+<li>Design Shaft for shear strength.</li>
+<li>Standarize the diameter.</li>
+<li>Select Key dimensions from Key Standard</li>
+<li>Calculate Key length</li>
+<li>Check for Torsional strength in shear and crushing.</li>
+<li>Reset Key length if fails in step 6.</li>
+<li>Draw Dimensional sketch of the key.</li>
+</ol>

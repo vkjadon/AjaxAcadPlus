@@ -1,0 +1,1 @@
+<p>A zig-zag, double riveted lap joint for a pair of 12 mm thick steel plate has to transmit &nbsp;* kN force . Design the joint taking &sigma;<sub>dt</sub>= * N/mm<sup>2</sup>&nbsp;, &sigma;<sub>dc</sub>= 100 N/mm<sup>2</sup>&nbsp; and &tau;<sub>d</sub>&nbsp;= 48 &nbsp;N/mm<sup>2</sup>&nbsp;.</p>

@@ -1,0 +1,1 @@
+<p>An simply supported beam of length 10 m has equal overhang on either sides and carries an UDL of * kN/m. If the supports are to be so adjusted that the maximum BM is the minimum possible, determine the position of the supports. and draw SFD and BMD.</p>

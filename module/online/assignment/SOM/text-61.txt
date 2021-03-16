@@ -1,0 +1,1 @@
+<p>Determine the force in each member of the truss if the load at C and D are * kN and * kN respectively. The length of horizontal and vertical members are of 3 m. Tensile force is to be treated as positive.</p>

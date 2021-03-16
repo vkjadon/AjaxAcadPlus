@@ -1,0 +1,1 @@
+<p>Design a pair of Kennedy key to transmit * kW at * rpm. The overload factor can be taken as 1.2.</p>

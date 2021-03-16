@@ -1,0 +1,2 @@
+<p>A punch hole is produced when the material is removed. Also the load acting is along the failure plane over the circumference.</p>
+<p>Use the stress at this point and the area to find the load.</p>

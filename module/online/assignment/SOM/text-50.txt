@@ -1,0 +1,1 @@
+<p>Forces of * kN and * kN are acting at point A and C respectively on a member as shown. Find the moment of force about point B. The distance AB and BC are * mm and * mm respectively.</p>

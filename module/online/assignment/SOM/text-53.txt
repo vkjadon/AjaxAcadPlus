@@ -1,0 +1,1 @@
+<p>The moments of F about points A and B are * N.m and * N.m respectively both counterclockwise. Determine F and angle &theta;.</p>

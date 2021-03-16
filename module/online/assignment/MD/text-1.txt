@@ -1,0 +1,1 @@
+<p>A hollow steel tube with an outside diameter of * mm must carry a tensile load of * kN. Determine the inside diameter of the tube if the yield strength is limited to 240 MN/m<sup>2</sup>.</p>

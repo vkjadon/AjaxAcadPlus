@@ -1,0 +1,2 @@
+<p>Design a woodruff key to transmit power through a shaft of * mm diameter. Following design stresses can be used for key:</p>
+<p>&tau;<sub>d key</sub>=50 MPa; &nbsp;&sigma;<sub>dc key</sub>=90 MPa.</p>

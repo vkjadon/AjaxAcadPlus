@@ -1,0 +1,1 @@
+<p>A muff coupling is design to transmit 3.5 kN.m twisting moment through a shaft of * mm diameter. Design the muff using design stress in tension as * MPa.</p>

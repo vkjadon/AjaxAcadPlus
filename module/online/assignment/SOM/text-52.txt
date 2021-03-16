@@ -1,0 +1,1 @@
+<p>Forces of * kN and * kN are acting at point A and C respectively on a member as shown. Find the moment of forces about point B. The angle &theta; is * degrees.</p>

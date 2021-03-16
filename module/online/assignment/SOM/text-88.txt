@@ -1,0 +1,1 @@
+<p>A hole is to be punched out of a plate having a shearing strength of * MPa. The compressive stress in the punch is limited to * MPa. (a) Compute the maximum thickness of plate in which a hole * mm in diameter can be punched. (b) If the plate is * mm thick, determine the diameter of the smallest hole that can be punched.</p>

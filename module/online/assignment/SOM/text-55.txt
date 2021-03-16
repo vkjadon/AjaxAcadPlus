@@ -1,0 +1,1 @@
+<p>The towline exerts a force of F = * kN at the end of the 8 m long crane boom (OA). If &theta; = *<sup>0</sup>, determine the placement x of the hook at B so that this force creates a maximum moment about point O. What is this moment?</p>

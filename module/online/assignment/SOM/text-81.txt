@@ -1,0 +1,1 @@
+<p>A simply supported beam is loaded as shown in the Figure. Draw SFD and BMD if the magnitude of the couple at C, udl and load at D are * kN/m, * kN/m and * kN respectively.</p>

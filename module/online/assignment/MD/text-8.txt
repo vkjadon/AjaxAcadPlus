@@ -1,0 +1,1 @@
+<p>Recommend a key for a shaft of * mm diameter to transmit * kN m. For shaft and key S<sub>yt</sub>= 225 MPa, S<sub>ys</sub>= 150 MPa and &nbsp;S<sub>yc</sub>= 270 MPa. The factor of safety is same for both key and shaft.</p>

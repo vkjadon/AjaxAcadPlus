@@ -1,0 +1,1 @@
+<p>A truss having vertical and horizontal members of length * m is loaded as shown. Find the load in members BC, BE and EF. The load at point B, C, D and E are * kN. 10 kN, 5 kN and * kN respectively.</p>

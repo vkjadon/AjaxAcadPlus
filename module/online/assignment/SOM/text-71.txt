@@ -1,0 +1,1 @@
+<p>A truss shown in figure below is loaded at point K, L, and M&nbsp; with a load of * kN at each point. The length of horizontal members are * m and that of vertical members are * m. Obtain the load in members KJ, JD and DE.</p>

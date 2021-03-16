@@ -1,0 +1,1 @@
+<p>A truss having vertical and horizontal members of length 1 m is loaded as shown. The members of the truss can safely support a tensile load of * kN and a compressive load of * kN. Find the maximum safe value of F so that the load on each member is always less than their respective limit.</p>
