@@ -40,7 +40,7 @@ if (isset($_POST['action'])) {
 				echo '<span class="' . $id . '">' . $value . '</span>';
 				echo '<a href="#" class="increment" id="' . $id . '" data-value="' . $value . '"><i class="fa fa-angle-double-right"></i></a></h6>
 					</div><div class="col-3">
-				<button class="btn btn-info btn-square-sm mt-0 addQuestionButton" data-test="' . $id . '" title="Add Test Questions" data-toggle="tooltip"><i class="fa fa-question-circle"></i></button>';
+				<button class="btn btn-info btn-square-sm mt-0 createLink" data-test="' . $id . '" title="Add Test Questions" data-toggle="tooltip"><i class="fa fa-link"></i></button>';
 				echo '<button class="btn btn-secondary btn-square-sm mt-0 addUserButton" data-test="' . $id . '" title="Add User" data-toggle="tooltip"><i class="fa fa-user"></i></button>
 					</div>
 					<div class="col-1">

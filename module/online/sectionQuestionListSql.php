@@ -18,9 +18,7 @@ if (isset($_POST['action'])) {
 		$json = get_activeQuestionJson($conn, $test_id, $sectionId);
 		//echo $json;
 		$array = json_decode($json, true);
-		$cpError = "False";
-		$paramError = "False";
-		$optionError = "True";
+		$cpError = "False"; $paramError = "False"; $optionError = "True"; $cpKeyError="False";
 		//echo $array;
 		for ($i = 0; $i < count($array["data"]); $i++) {
 			$id = $array["data"][$i]["qb_id"];
@@ -33,7 +31,7 @@ if (isset($_POST['action'])) {
       	<div class="card-body mt-0 py-1">
 				<div class="row">
 				<div class="col">
-				<span class="testQuestion">[Id:' . $id . ']' . $qb_text . '</span>';
+				<span class="testQuestionText">[Id:' . $id . ']' . $qb_text . '</span>';
 			echo '</div></div>';
 
 			// Block for Variable Data Question
@@ -72,7 +70,8 @@ if (isset($_POST['action'])) {
 				}
 
 				// Block for Check Points
-
+				$fileName='cp/cp-'.$id.'.php';
+				if(!file_exists($fileName))$cpKeyError="True";
 				echo '<div class="row">
 					<div class="col-8 p-0"><h6 class="ml-0 mt-2 mb-0 p-0">Check Points</h6></div>
 					<div class="col-2 p-0"><h6 class="ml-0 mt-2 mb-0 p-0">Marks</h6></div>
@@ -146,7 +145,7 @@ if (isset($_POST['action'])) {
 				} elseif ($cpError == "True") {
 					echo '<span class="warning"><i class="fa fa-exclamation-triangle"></i>Please add atleast one Check Point with Marks!!</span>';
 					$addToTestEroor = "True";
-				}
+				} 
 			} else {
 				if ($optionRows < 2) {
 					$addToTestEroor = "True";
@@ -161,6 +160,11 @@ if (isset($_POST['action'])) {
 			echo '<a href="#" class="editQuestion" data-qb="' . $qb_text . '"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;';
 			echo '<a href="#" class="uploadQuestion" data-qb="' . $id . '" title="Upload Question Image"><i class="fa fa-upload"></i></a>&nbsp;&nbsp;';
 			echo '<a href="#" class="trashQuestion" data-test="' . $id . '" data-section="' . $i . '"><i class="fa fa-trash"></i></a>&nbsp;&nbsp;';
+			
+			if ($cpKeyError == "True") {
+				echo '<button class="btn btn-info btn-square-sm mt-0 upload" data-upload="' . $id . '" data-tag="keyFile">Upload Key File</button>';
+				$addToTestEroor = "True";
+			}
 
 			if ($tq_status == 1 && $addToTestEroor == "False") echo '<button class="btn btn-info btn-square-sm mt-0 testQuestion" data-test="' . $test_id . '" data-qb="' . $id . '" data-tag="qtt">Add To Test</button>';
 			echo '</div>';
@@ -192,6 +196,7 @@ if (isset($_POST['action'])) {
 			$tq_marks = $array["data"][$i]["tq_marks"];
 			$tq_nmarks = $array["data"][$i]["tq_nmarks"];
 			$qb_status = $array["data"][$i]["qb_status"];
+			$tq_status = $array["data"][$i]["tq_status"];
 
 			$portion = explode("***", $qb_text);
 			$portion_count = count($portion);
@@ -209,11 +214,16 @@ if (isset($_POST['action'])) {
 					if ($sno < $portion_count) echo $abp[$ip]; //to avoid last print (NULL)
 				}
 				$solution = 'Y';
-				require("cp/cp-1.php");
-				echo '</div>
-					<div class="col">
-					<button class="btn btn-secondary btn-square-sm mt-0 activeQuestion" data-qb="' . $id . '">Set Active</button>
-					</div></div>';
+				$fileName='cp/cp-'.$id.'.php';
+				if(file_exists($fileName))require($fileName);
+				else echo '<span class="warning"><i class="fa fa-exclamation-triangle"> Key File Missing !! </i></soan>';
+				echo '</div>';
+				echo '<div class="col">';
+				if($qb_status>0)echo '<button class="btn btn-secondary btn-square-sm mt-0 activeQuestion" data-qb="' . $id . '">Set Active</button>';
+				else echo '<span class="warning">Active</span>';
+				if($tq_status==1)echo '<p class="text-info">Draft</p>';
+				else echo '<p class="text-success">Added</p>';
+				echo '</div></div>';
 
 				echo '</div></div>';
 			} else {
@@ -223,11 +233,15 @@ if (isset($_POST['action'])) {
 				<div class="col-1"><span>' . ($i + 1) . '[' . $id . ']</span></div>
 				<div class="col-10">
 				<span class="testQuestionText">' . $qb_text . '</span>
-				</div>
-				<div class="col">
-				<button class="btn btn-secondary btn-square-sm mt-0 activeQuestion" data-qb="' . $id . '">Set Active</button>
-				</div></div>
-				</div></div>';
+				</div>';
+				echo '<div class="col">';
+				if($qb_status>0)echo '<button class="btn btn-secondary btn-square-sm mt-0 activeQuestion" data-qb="' . $id . '">Set Active</button>';
+				else echo '<span class="warning">Active</span>';
+				if($tq_status==1)echo '<p class="text-info">Draft</p>';
+				else echo '<p class="text-success">Added</p>';
+				echo '</div></div>';
+
+				echo '</div></div>';
 			}
 		}
 	} elseif ($_POST['action'] == 'testQuestion') {

@@ -87,7 +87,7 @@ require('../../php_function.php');
               <div class="col-6 mt-1 mb-1">
                 <p id="questionHeading"></p>
                 <h5>Section : <span id="selectedSection">1</span></h5>
-                  <textarea class="content" id="question" name="question"></textarea>
+                <textarea class="content" id="question" name="question"></textarea>
                 <input type="hidden" id="actionCode" name="actionCode">
                 <button class="btn btn-secondary btn-square-sm addQuestion">Save Question</button>
                 <button class="btn btn-warning btn-square-sm addOption">Save Option</button>
@@ -682,5 +682,68 @@ require('../../php_function.php');
     }
   });
 </script>
+<script>
+  $(document).on('click', '.upload', function() {
+    var uploadId = $(this).attr("data-upload");
+    $.alert("Upload Id" + uploadId);
+    $("#uploadId").val(uploadId);
+    $('#uploadModal').modal('show');
+
+  });
+
+  $(document).on('submit', '#uploadModalForm', function(event) {
+    event.preventDefault();
+    var formData = $(this).serialize();
+    $.alert(formData);
+    // action and uploadId are passed as hidden
+    $.ajax({
+      url: "uploadSql.php",
+      method: "POST",
+      data: new FormData(this),
+      contentType: false, // The content type used when sending data to the server.  
+      cache: false, // To unable request pages to be cached  
+      processData: false, // To send DOMDocument or non processed data file it is set to false  
+      success: function(data) {
+        $.alert("List " + data);
+        $('#uploadModal').modal('hide');
+      }
+    })
+  });
+</script>
+<!-- Modal Section-->
+<div class="modal" id="uploadModal">
+  <div class="modal-dialog modal-md">
+    <form class="form-horizontal" id="uploadModalForm">
+      <div class="modal-content bg-secondary text-white">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Upload Document</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div> <!-- Modal Header Closed-->
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <div class="uploadForm">
+            <div class="row">
+              <div class="col-12">
+                <div class="form-group">
+                  <input type="file" name="upload_file">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- Modal Body Closed-->
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <input type="hidden" name="action" value="upload">
+          <input type="hidden" id="uploadId" name="uploadId">
+          <button type="submit" class="btn btn-success btn-sm">Submit</button>
+          <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
+        </div> <!-- Modal Footer Closed-->
+      </div> <!-- Modal Conent Closed-->
+    </form>
+  </div> <!-- Modal Dialog Closed-->
+</div> <!-- Modal Closed-->
 
 </html>
