@@ -57,36 +57,63 @@ $totalQuestions = count($array["data"]);
     }
     ?>
     <div class="row">
-      <div class="col-sm-12">
-        <div class="row">
-          <div class="col-sm-8 pr-0">
-            <p class="showQuestion"></p>
-          </div>
-          <div class="col-sm-4 p-0 m-0">
+      <div class="col-sm-2">
+
+        <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
+          <a class="list-group-item list-group-item-action active ti" id="list-ti-list" data-toggle="list" href="#list-ti" role="tab"> Test Instructions </a>
+          <a class="list-group-item list-group-item-action tq" id="list-tq-list" data-toggle="list" href="#list-tq" role="tab"> Test Question </a>
+          <a class="list-group-item list-group-item-action st" id="list-st-list" data-toggle="list" href="#list-st" role="tab"> Start Test </a>
+          <a class="list-group-item list-group-item-action tr" id="list-tr-list" data-toggle="list" href="#list-tr" role="tab" aria-controls="tr"> Test Report</a>
+        </div>
+      </div>
+
+      <div class="col-sm-10">
+        <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane show active" id="list-ti" role="tabpanel" aria-labelledby="list-ti-list">
             <div class="row">
-              <div class="col-sm-6 pr-0">
-                <div class="card-header">
-                  Start Time
-                  <div id="startTime">
-                    <h6><?php echo date("h:i:s", time()); ?></h6>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-6 pl-0">
-                <div class="card-header">
-                  Time Used
-                  <div id="stopWatch">0</div>
-                </div>
+              <div class="col-sm-5 mt-1 mb-1">
+                <p id="testHeading"></p>
               </div>
             </div>
-            <span id="currentQuestionId"><?php echo $currentQuestion; ?></span>
-            <!-- <span id="remainingQuestions"></span> -->
-            <p class="questionPallete"></p>
+          </div>
+          <div class="tab-pane fade" id="list-tq" role="tabpanel" aria-labelledby="list-tq-list">
+            <div class="row">
+              <div class="col-sm-12">
+                <p class="testQuestionList"></p>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="list-st" role="tabpanel" aria-labelledby="list-st-list">
+            <div class="row">
+              <div class="col-sm-8  p-0">
+                <p class="showQuestion"></p>
+              </div>
+              <div class="col-sm-4">
+                <div class="row">
+                  <div class="col-sm-6 p-0">
+                    <div class="card-header">
+                      Start Time
+                      <div id="startTime">
+                        <h6><?php echo date("h:i:s", time()); ?></h6>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 pl-0">
+                    <div class="card-header">
+                      Time Used
+                      <div id="stopWatch">0</div>
+                    </div>
+                  </div>
+                </div>
+                <span id="currentQuestionId"><?php echo $currentQuestion; ?></span>
+                <span id="remainingQuestions"></span>
+                <p class="pallete"></p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
   </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
@@ -110,39 +137,50 @@ $totalQuestions = count($array["data"]);
   // Storing data:
 
   $(document).ready(function() {
-    $("#currentQuestionId").hide();
     clockUpdate();
     setInterval(clockUpdate, 1000);
     var response_value = [];
     var qbArray = <?php echo json_encode($qb); ?>;
 
-    $("#remainingQuestions").html(qbArray);
-    getQuestion();
-    questionPallete();
-    var i = 1;
-    setInterval(function() {
-      var m = Math.floor(i / 60);
-      var s = i - m * 60;
-      $("#stopWatch").html("<h6>" + m + " min " + s + " Sec</h6>");
-      i++;
-    }, 1000);
+    $("#instructionForm").hide()
+    $("#questionForm").hide()
+    testHeading()
+    $(".ti").click(function() {
+      testHeading()
+    });
+    $(".tq").click(function() {
+      testQuestionList()
+    });
+    $(".st").click(function() {
+      //$.alert("Question ");
+      $("#remainingQuestions").html(qbArray);
+      getQuestion();
+      //pallete();
+      var i = 1;
+      setInterval(function() {
+        var m = Math.floor(i / 60);
+        var s = i - m * 60;
+        $("#stopWatch").html("<h6>" + m + " min " + s + " Sec</h6>");
+        i++;
+      }, 1000);
+    });
 
     $(document).on("click", ".nextQuestion", function() {
       var qb_id = $(this).attr("data-qb");
       //$.alert("Get Question " + qb_id + " Response " + response_value)
-      var index = qbArray.indexOf(qb_id) + 1;
-      if (index == qbArray.length) index = 0;
-      $.alert("df" + index + " Length " + qbArray.length);
+      const index = qbArray.indexOf(qb_id)+1;
+      $.alert("df"+index + " Length " + qbArray.length);
       response_value = [];
       var currentQuestionId = qbArray[index];
       $("#currentQuestionId").html(currentQuestionId);
       getQuestion();
     })
+
     $(document).on("click", ".submitOption", function() {
       var qb_id = $(this).attr("data-qb");
       var qo_code = $(this).attr("data-code");
       //$.alert("Get Question " + qb_id + " Code " + qo_code + " Response " + response_value)
-      $.post("openTestSql.php", {
+      $.post("openTestOlatSql.php", {
         response_value: response_value,
         qb_id: qb_id,
         qo_code: qo_code,
@@ -150,7 +188,7 @@ $totalQuestions = count($array["data"]);
       }, function() {}, "text").done(function(data, status) {
         //$.alert(" Result " + data);
         if (data == "Correct") {
-          //$.alert("Congratulations!!");
+          $.alert("Congratulations!!");
           const index = qbArray.indexOf(qb_id);
           if (index > -1) {
             qbArray.splice(index, 1);
@@ -160,41 +198,13 @@ $totalQuestions = count($array["data"]);
           var currentQuestionId = qbArray[Math.floor(Math.random() * qbArray.length)];
           //$.alert("JS Array " + qbArray + " Current " + currentQuestionId);
           $("#currentQuestionId").html(currentQuestionId);
-          //$('#successModal').modal('show');
-
-          $.confirm({
-            title: 'Congratulations!!',
-            content: 'You are going Great',
-            type: 'green',
-            typeAnimated: true,
-            buttons: {
-              tryAgain: {
-                text: 'Try More',
-                btnClass: 'btn-green',
-                action: function() {}
-              },
-            }
-          });
           getQuestion();
-        } else {
-          $.confirm({
-            title: 'Wrong Attempt! Good Try !!',
-            content: 'You can try again',
-            type: 'red',
-            typeAnimated: true,
-            buttons: {
-              tryAgain: {
-                text: 'Try Again',
-                btnClass: 'btn-red',
-                action: function() {}
-              },
-            }
-          });
-        }
+        } else $.alert("Please Try Again");
       }).fail(function(data) {
         $.alert("Error!!");
       })
     })
+
     $(document).on("click", ".markOption", function() {
       var qb_id = $(this).attr("data-qb");
       var qo_code = $(this).attr("data-code");
@@ -212,10 +222,11 @@ $totalQuestions = count($array["data"]);
       //$.alert(" Response Array " + response_value)
     })
 
+
     function getQuestion() {
       var qb_id = $("#currentQuestionId").html();
       //$.alert("Get Question Function  " + qb_id)
-      $.post("openTestSql.php", {
+      $.post("openTestOlatSql.php", {
         test_id: <?php echo $id ?>,
         qb_id: qb_id,
         action: "getQuestion"
@@ -228,9 +239,10 @@ $totalQuestions = count($array["data"]);
         $.alert("Error!!");
       })
     }
+
     function testQuestionList() {
       //$.alert("Section  " + selectedSection)
-      $.post("openTestSql.php", {
+      $.post("openTestOlatSql.php", {
         test_id: <?php echo $id ?>,
         action: "testQuestionList"
       }, function() {
@@ -242,23 +254,10 @@ $totalQuestions = count($array["data"]);
         $.alert("Error www !!");
       })
     }
-    function questionPallete() {
-      //$.alert("Section  " + selectedSection)
-      $.post("openTestSql.php", {
-        test_id: <?php echo $id ?>,
-        action: "questionPallete"
-      }, function() {
-        //$.alert("Fecth" + mydata);
-      }, "text").done(function(data, status) {
-        //$.alert(data);
-        $(".questionPallete").html(data)
-      }).fail(function(data) {
-        $.alert("Error www !!");
-      })
-    }
+
     function testHeading() {
       //$.alert("In SAS Claim List");
-      $.post("openTestSql.php", {
+      $.post("openTestOlatSql.php", {
         test_id: <?php echo $id ?>,
         action: "testHeading"
       }, function(data, status) {
@@ -268,6 +267,7 @@ $totalQuestions = count($array["data"]);
         $.alert("Error !!");
       })
     }
+
     function getFormattedDate(ts, fmt) {
       var a = new Date(ts);
       var day = a.getDate();
@@ -278,6 +278,7 @@ $totalQuestions = count($array["data"]);
       if (fmt == "dmY") return date;
       else return dateYmd;
     }
+
     function clockUpdate() {
       var date = new Date();
       $('.digital-clock').css({
@@ -344,24 +345,6 @@ $totalQuestions = count($array["data"]);
         </div> <!-- Modal Footer Closed-->
       </div> <!-- Modal Conent Closed-->
     </form>
-  </div> <!-- Modal Dialog Closed-->
-</div> <!-- Modal Closed-->
-
-<!-- Modal Section-->
-<div class="modal" id="successModal">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content bg-secondary text-white">
-      <!-- Modal body -->
-      <div class="modal-body">
-        <div class="row">
-        </div>
-      </div> <!-- Modal Body Closed-->
-
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
-      </div> <!-- Modal Footer Closed-->
-    </div> <!-- Modal Conent Closed-->
   </div> <!-- Modal Dialog Closed-->
 </div> <!-- Modal Closed-->
 
