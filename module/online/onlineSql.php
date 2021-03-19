@@ -128,13 +128,13 @@ if (isset($_POST['action'])) {
 			$test_id = $array["test_id"];
 		}
 		$sectionId = $_POST['sectionId'];
-		$question = $_POST['question'];
+		$question = data_check($_POST['question']);
 		$tq_marks = $_POST['defaultMarks'];
 		$tq_nmarks = $_POST['defaultNMarks'];
 		$actionCode = $_POST['actionCode'];
 		echo "Action Code $actionCode";
 		if ($actionCode == "add") {
-			$sql = "insert into question_bank (qb_level, qb_base, qb_text, submit_id, qb_status) values('1', '1', '" . $question . "','$myId', '1')";
+			$sql = "insert into question_bank (qb_level, qb_base, submit_id, qb_status) values('1', '1', '$myId', '1')";
 			$result = $conn->query($sql);
 			if ($result) {
 				echo "Added Successfully";
@@ -142,6 +142,8 @@ if (isset($_POST['action'])) {
 				$sql = "insert into test_question (test_id, test_section, qb_id, tq_marks, tq_nmarks, tq_status) values('$test_id', '$sectionId', '$insertId', '$tq_marks', '$tq_nmarks', '1')";
 				$result = $conn->query($sql);
 				if (!$result) echo $conn->error;
+				$fileName='ques-'.$insertId.'.txt';
+				writeToFile("../../olat/text", $fileName, $question);
 
 				// Block for Variable Input
 
@@ -164,11 +166,10 @@ if (isset($_POST['action'])) {
 			if ($result) {
 				$array = $result->fetch_assoc();
 				$qb_id = $array["qb_id"];
-				$sql = "update question_bank set qb_text='$question' where qb_id='$qb_id'";
-				$result = $conn->query($sql);
-				if ($result) echo "Updated Successfully";
-				else echo $conn->error;
-
+				
+				$fileName='ques-'.$qb_id.'.txt';
+				writeToFile("../../olat/text", $fileName, $question);
+				
 				// Block for Variable Input
 
 				$portion = explode("***", $question);

@@ -366,7 +366,7 @@ require('../../php_function.php');
       var defaultNMarks = $("#defaultNMarks").val()
       var actionCode = $("#actionCode").val()
       var question = tinyMCE.get('question').getContent();
-      //$.alert("Section  " + selectedSection + "Question" + question)
+      $.alert("Section  " + selectedSection + "Question" + question)
       $.post("onlineSql.php", {
         sectionId: selectedSection,
         defaultMarks: defaultMarks,
@@ -377,7 +377,7 @@ require('../../php_function.php');
       }, function() {
         //$.alert("Fecth" + mydata);
       }, "text").done(function(data, status) {
-        $.alert("Updated!!");
+        $.alert("Updated!!" + data);
         tinyMCE.get('question').setContent("")
         $("#actionCode").val("add")
         sectionQuestionList()
@@ -386,11 +386,14 @@ require('../../php_function.php');
       })
     });
     $(document).on('click', '.editQuestion', function() {
-      var qb_text = $(this).attr("data-qb")
-      //$.alert("Question Text " + qb_text);
-      tinyMCE.get('question').setContent(qb_text)
+      var qb_id = $(this).attr("data-qb")
+      //$.alert("Question Id " + qb_id);
+      var fileName="../../olat/text/ques-"+qb_id+".txt";
+      $.get(fileName, function(data) {
+        //$.alert(data)
+        tinyMCE.get('question').setContent(data)
+      }, 'text');
       $("#actionCode").val("edit")
-
     });
 
     $(document).on('click', '.defaultSection', function() {

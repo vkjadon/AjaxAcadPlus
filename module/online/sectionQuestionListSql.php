@@ -22,10 +22,14 @@ if (isset($_POST['action'])) {
 		//echo $array;
 		for ($i = 0; $i < count($array["data"]); $i++) {
 			$id = $array["data"][$i]["qb_id"];
-			$qb_text = $array["data"][$i]["qb_text"];
 			$tq_marks = $array["data"][$i]["tq_marks"];
 			$tq_nmarks = $array["data"][$i]["tq_nmarks"];
 			$tq_status = $array["data"][$i]["tq_status"];
+
+			$qb_text = $array["data"][$i]["qb_text"];
+			$fileName='../../olat/text/ques-'.$id.'.txt';
+			if (file_exists($fileName)) $qb_text = file_get_contents($fileName);
+			else $qb_text = "No File Found";
 
 			echo '<div class="card bg-light">
       	<div class="card-body mt-0 py-1">
@@ -157,7 +161,7 @@ if (isset($_POST['action'])) {
 			}
 			echo '<div class="row">
 				<div class="col-10">';
-			echo '<a href="#" class="editQuestion" data-qb="' . $qb_text . '"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;';
+			echo '<a href="#" class="editQuestion" data-qb="' . $id . '"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;';
 			echo '<a href="#" class="uploadQuestion" data-qb="' . $id . '" title="Upload Question Image"><i class="fa fa-upload"></i></a>&nbsp;&nbsp;';
 			echo '<a href="#" class="trashQuestion" data-test="' . $id . '" data-section="' . $i . '"><i class="fa fa-trash"></i></a>&nbsp;&nbsp;';
 			
@@ -198,6 +202,10 @@ if (isset($_POST['action'])) {
 			$qb_status = $array["data"][$i]["qb_status"];
 			$tq_status = $array["data"][$i]["tq_status"];
 
+			$fileName='../../olat/text/ques-'.$id.'.txt';
+			if (file_exists($fileName)) $qb_text = file_get_contents($fileName);
+			else $qb_text = "No File Found";
+			
 			$portion = explode("***", $qb_text);
 			$portion_count = count($portion);
 			if ($portion_count > 1) {
