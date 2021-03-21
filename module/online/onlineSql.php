@@ -134,7 +134,7 @@ if (isset($_POST['action'])) {
 		$actionCode = $_POST['actionCode'];
 		echo "Action Code $actionCode";
 		if ($actionCode == "add") {
-			$sql = "insert into question_bank (qb_level, qb_base, submit_id, qb_status) values('1', '1', '$myId', '1')";
+			$sql = "insert into question_bank (qb_level, qb_base, qb_text, submit_id, qb_status) values('1', '1', '$question', '$myId', '1')";
 			$result = $conn->query($sql);
 			if ($result) {
 				echo "Added Successfully";
@@ -257,8 +257,8 @@ if (isset($_POST['action'])) {
 				echo '<button class="btn btn-warning btn-square-sm mt-0 defaultSection" id="defaultSection' . $i . '" data-section="' . $i . '">' . $i . '</button>';
 			}
 			echo '</div>';
-			echo '<div class="col-2"><span class="topBarText">Marks(+)</span><input type="text" class="form-control form-control-sm defaultMarks w-50" id="defaultMarks" name="marks" value="4"></div>';
-			echo '<div class="col-2"><span class="topBarText">Marks(-)</span><input type="text" class="form-control form-control-sm defaultNMarks w-50" id="defaultNMarks" name="nmarks" value="0"></div>';
+			echo '<div class="col-3"><span class="topBarText">Marks(+)</span><input type="text" class="form-control form-control-sm defaultMarks w-50" id="defaultMarks" name="marks" value="4"></div>';
+			echo '<div class="col-3"><span class="topBarText">Marks(-)</span><input type="text" class="form-control form-control-sm defaultNMarks w-50" id="defaultNMarks" name="nmarks" value="0"></div>';
 			echo '</div>';
 			echo '</div></div>';
 		}
@@ -285,20 +285,30 @@ if (isset($_POST['action'])) {
 		$qo_code = $_POST['qo_code'];
 		$qo_text = $_POST['qo_text'];
 		//echo "Jai ho $qb_id code $qo_code";
-		$sql = "update question_option set qo_text='$qo_text' where qb_id='$qb_id' and qo_code='$qo_code'";
 		$result = $conn->query($sql);
 		if ($result) echo "Updated Successfully";
 		else echo $conn->error;
-	} elseif ($_POST['action'] == 'updateParameter') {
+	} elseif ($_POST['action'] == 'updateText') {
 		$qb_id = $_POST['qb_id'];
+		if(isset($_POST['qo_code']))$qo_code = $_POST['qo_code'];
 		$qp_sno = $_POST['qp_sno'];
 		$value = $_POST['value'];
 		$tag = $_POST['tag'];
-		//echo "Jai ho $qb_id code $qo_code";
-		$sql = "update qb_parameter set $tag='$value' where qb_id='$qb_id' and qp_sno='$qp_sno'";
+		//echo "Jai ho Tag $tag - Qb $qb_id - Val $value";
+		//echo "Jai ho  code $qo_code";
+		//echo "Jai ho  Sno  $qp_sno";
+		if($tag=="qo_text")$sql = "update question_option set qo_text='$value' where qb_id='$qb_id' and qo_code='$qo_code'";
+		elseif($tag=="qb_text")$sql = "update question_bank set $tag='$value' where qb_id='$qb_id'";
+		else $sql = "update qb_parameter set $tag='$value' where qb_id='$qb_id' and qp_sno='$qp_sno'";
 		$result = $conn->query($sql);
-		if ($result) echo "Updated Successfully";
-		else echo $conn->error;
+		$affectedRows=$conn->affected_rows;
+		if (!$result) echo $conn->error;
+		elseif($affectedRows==0){
+			$sql = "insert into qb_parameter (qb_id, qp_sno, $tag) values('$qb_id', '$qp_sno', '$value')";
+			$result = $conn->query($sql);
+			if (!$result) echo $conn->error;
+		}
+		else echo "Updated Successfully";
 	} elseif ($_POST['action'] == 'addCP') {
 		$qb_id = $_POST["qb_id"];
 		$qc_name = $_POST['qc_name'];
@@ -332,7 +342,7 @@ if (isset($_POST['action'])) {
 		$result = $conn->query($sql);
 		if ($result) echo "Removed Successfully";
 		else echo $conn->error;
-	}
+	} 
 } elseif ($_POST['instructionId'] == 'T' || $_POST['instructionId'] == 'S') {
 	$test_id = $_POST['testId'];
 	$id = $_POST['instructionId'];

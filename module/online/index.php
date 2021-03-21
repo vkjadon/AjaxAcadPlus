@@ -70,7 +70,7 @@ require('../../php_function.php');
                 <form class="instructionForm" id="instructionForm">
                   <div class="form-group row">
                     <div class="col-sm-12">
-                      <textarea class="content" id="instruction" name="instruction"></textarea>
+                      <vkj class="content" id="instruction" name="instruction"></vkj>
                     </div>
                   </div>
                   <input type="hidden" id="instructionId" name="instructionId">
@@ -84,15 +84,14 @@ require('../../php_function.php');
           </div>
           <div class="tab-pane fade" id="list-aq" role="tabpanel" aria-labelledby="list-aq-list">
             <div class="row">
-              <div class="col-6 mt-1 mb-1">
-                <p id="questionHeading"></p>
+              <div class="col-5 mt-1 mb-1">
                 <h5>Section : <span id="selectedSection">1</span></h5>
-                <textarea class="content" id="question" name="question"></textarea>
+                <textarea rows="4" class="content" id="question" name="question"></textarea>
                 <input type="hidden" id="actionCode" name="actionCode">
-                <button class="btn btn-secondary btn-square-sm addQuestion">Save Question</button>
-                <button class="btn btn-warning btn-square-sm addOption">Save Option</button>
+                <p id="questionHeading"></p>
+                <button class="btn btn-secondary btn-square-sm addQuestion">Add New Question</button>
               </div>
-              <div class="col-6 mt-1 mb-1">
+              <div class="col-7 mt-1 mb-1">
                 <p class="showActiveQuestion"></p>
               </div>
             </div>
@@ -117,7 +116,7 @@ require('../../php_function.php');
 <script src="https://cdn.tiny.cloud/1/xjvk0d07c7h90fry9yq9z0ljb019ujam91eo2jk8uhlun307/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
   tinymce.init({
-    selector: 'textarea',
+    selector: 'vkj',
     plugins: 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
     toolbar_mode: 'floating',
     height: "320",
@@ -168,14 +167,14 @@ require('../../php_function.php');
       var qb_id = $(this).attr("data-qb")
       var test_id = $(this).attr("data-test")
       var tag = $(this).attr("data-tag")
-      $.alert("Id" + qb_id)
+      //$.alert("Id" + qb_id)
       $.post("sectionQuestionListSql.php", {
         qb_id: qb_id,
         test_id: test_id,
         tag: tag,
         action: "testQuestion"
       }, () => {}, "html").done(function(data, status) {
-        $.alert(data);
+        //$.alert(data);
         activeQuestion();
       })
     });
@@ -233,7 +232,7 @@ require('../../php_function.php');
       var qb_id = $(this).attr("data-qb");
       var qc_sno = $(this).attr("data-sno");
       var value = $("#newCP").val();
-      $.alert(" QbId  " + qb_id + " CP Sno " + qc_sno + " CP " + value)
+      //$.alert(" QbId  " + qb_id + " CP Sno " + qc_sno + " CP " + value)
       $.post("onlineSql.php", {
         qb_id: qb_id,
         qc_sno: qc_sno,
@@ -242,7 +241,7 @@ require('../../php_function.php');
       }, function() {
         //$.alert("Fecth" + mydata);
       }, "text").done(function(data, status) {
-        $.alert(data);
+        //$.alert(data);
         activeQuestion()
       }).fail(function() {
         $.alert("Error !!");
@@ -269,22 +268,29 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     });
-    $(document).on('blur', '.parameter', function() {
+    $(document).on('blur', '.parameter, .testQuestionUpdate, .questionOption', function() {
       var qp_sno = $(this).attr("data-qp");
-      var qb_id = $(this).attr("data-qb");
+      var qb_id = $(".testQuestionUpdate").attr("data-qb");
+      var qo_code = $(this).attr("data-code");
       var tag = $(this).attr("data-tag");
-      var value = $(this).val();
+      if (tag == "qb_text") var value = $("textarea#uq").val();
+      else if (tag == "qo_text") var value = $(this).val();
+      else var value = $(this).val();
+
       //Confirm Alert Plugin shows Alert Box twice
-      //alert(" Parameter  " + qp_sno + " QB " + qb_id + " Value " + value + " Tag " + tag);
+      //$.alert(" Parameter  " + qp_sno + " QB " + qb_id + " Value " + value + " Tag " + tag);
       $.post("onlineSql.php", {
         qb_id: qb_id,
         qp_sno: qp_sno,
+        qo_code: qo_code,
         tag: tag,
         value: value,
-        action: "updateParameter"
-      }, function(mydata, mystatus) {
-        //$.alert("Updated!!");
-      }, "text").fail(function() {
+        action: "updateText"
+      }, function(data, status) {
+      }, "text").done(function(data,status) {
+        $.alert("Updated!!" + mydata);
+        sectionQuestionList()
+      }).fail(function() {
         $.alert("Error !!");
       })
     });
@@ -308,28 +314,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     });
-    $(document).on("click", ".updateOption", function() {
-      var qb_id = $(this).attr("data-qb");
-      var qo_code = $(this).attr("data-code");
-      var qo_text = $("#option" + qo_code).val();
-      if (qo_text === "") $.alert("Option Cannot be Blank!!")
-      else {
-        //$.alert("Qb  " + qb_id + " Code " + qo_code + " Text " + qo_text)
-        $.post("onlineSql.php", {
-          qb_id: qb_id,
-          qo_code: qo_code,
-          qo_text: qo_text,
-          action: "updateOption"
-        }, function() {
-          //$.alert("Fecth" + mydata);
-        }, "text").done(function(data, status) {
-          $.alert(data);
-          //sactiveQuestion()
-        }).fail(function() {
-          $.alert("Error !!");
-        })
-      }
-    });
     $(document).on("click", ".activeQuestion", function() {
       var qb_id = $(this).attr('data-qb');
       //$.alert("Qb  " + qb_id)
@@ -339,22 +323,25 @@ require('../../php_function.php');
       }, function() {
         //$.alert("Fecth" + mydata);
       }, "text").done(function(data, status) {
-        $.alert(data);
+        //$.alert(data);
         activeQuestion()
+        sectionQuestionList();
       }).fail(function() {
         $.alert("Error !!");
       })
     });
     $(document).on("click", ".addOption", function() {
-      var content = tinyMCE.get('question').getContent();
-      $.alert("Option  " + content)
+      //var content = tinyMCE.get('question').getContent();
+      var content = $("#newOption").val();
+
+      //$.alert("Option  " + content)
       $.post("onlineSql.php", {
         content: content,
         action: "addOption"
       }, function() {
         //$.alert("Fecth" + mydata);
       }, "text").done(function(data, status) {
-        $.alert(data);
+        //$.alert(data);
         activeQuestion()
       }).fail(function() {
         $.alert("Error !!");
@@ -365,7 +352,9 @@ require('../../php_function.php');
       var defaultMarks = $("#defaultMarks").val()
       var defaultNMarks = $("#defaultNMarks").val()
       var actionCode = $("#actionCode").val()
-      var question = tinyMCE.get('question').getContent();
+      //var question = get('question').getContent();
+      var question = $("textarea#question").val();
+
       $.alert("Section  " + selectedSection + "Question" + question)
       $.post("onlineSql.php", {
         sectionId: selectedSection,
@@ -378,23 +367,15 @@ require('../../php_function.php');
         //$.alert("Fecth" + mydata);
       }, "text").done(function(data, status) {
         $.alert("Updated!!" + data);
-        tinyMCE.get('question').setContent("")
+        //tinyMCE.get('question').setContent("")
+        $("textarea#question").val("");
         $("#actionCode").val("add")
         sectionQuestionList()
       }).fail(function() {
         $.alert("Error !!");
       })
     });
-    $(document).on('click', '.editQuestion', function() {
-      var qb_id = $(this).attr("data-qb")
-      //$.alert("Question Id " + qb_id);
-      var fileName="../../olat/text/ques-"+qb_id+".txt";
-      $.get(fileName, function(data) {
-        //$.alert(data)
-        tinyMCE.get('question').setContent(data)
-      }, 'text');
-      $("#actionCode").val("edit")
-    });
+
 
     $(document).on('click', '.defaultSection', function() {
       var id = $(this).attr('data-section');
@@ -487,7 +468,6 @@ require('../../php_function.php');
       $("#actionQuestion").val("addQuestion")
       questionHeading(section)
     });
-
     $(document).on('click', '.testInstruction', function() {
       var id = $(this).attr("data-test")
       //$.alert("Test Instruction " + id);
@@ -508,6 +488,7 @@ require('../../php_function.php');
       $("#questionHeading").hide()
       $("#sectionId").val("-")
     });
+
     $(".addTestButton").click(function() {
       $("#addTestDiv").toggle();
       $("#action").val("addTest")
@@ -525,7 +506,7 @@ require('../../php_function.php');
     });
     $(document).on("click", ".addQuestionButton", function() {
       var id = $(this).attr("data-test")
-      $.alert("Id " + id);
+      //$.alert("Id " + id);
       $.post("onlineSql.php", {
         action: "addQuestion"
       }, function(data, status) {
@@ -557,7 +538,6 @@ require('../../php_function.php');
         testList()
       })
     });
-
     $(document).on('click', '.decrement', function() {
       var id = $(this).attr('id');
       var value = $("." + id).text();
@@ -686,14 +666,20 @@ require('../../php_function.php');
   });
 </script>
 <script>
-  $(document).on('click', '.upload', function() {
+  $(document).on('click', '.uploadQuestionImage, .uploadOptionImage, .uploadKeyFile', function() {
     var uploadId = $(this).attr("data-upload");
-    $.alert("Upload Id" + uploadId);
+    var tag = $(this).attr("data-tag");
+    var code = $(this).attr("data-sno");
+    $.alert("Upload Id" + uploadId + "tag " + tag + " Cde " + code);
     $("#uploadId").val(uploadId);
+    $("#uploadTag").val(tag);
+    $("#uploadCode").val(code);
+    if (tag == "questionImage") $(".modalTitle").html("Upload Question Image");
+    else if (tag == "optionImage") $(".modalTitle").html("Upload Option Image");
+    else $(".modalTitle").html("Upload Key File");
     $('#uploadModal').modal('show');
 
   });
-
   $(document).on('submit', '#uploadModalForm', function(event) {
     event.preventDefault();
     var formData = $(this).serialize();
@@ -721,7 +707,7 @@ require('../../php_function.php');
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title">Upload Document</h4>
+          <h4 class="modalTitle"></h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div> <!-- Modal Header Closed-->
 
@@ -741,6 +727,8 @@ require('../../php_function.php');
         <div class="modal-footer">
           <input type="hidden" name="action" value="upload">
           <input type="hidden" id="uploadId" name="uploadId">
+          <input type="hidden" id="uploadTag" name="uploadTag">
+          <input type="hidden" id="uploadCode" name="uploadCode">
           <button type="submit" class="btn btn-success btn-sm">Submit</button>
           <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
         </div> <!-- Modal Footer Closed-->

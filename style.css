@@ -177,6 +177,22 @@ div.minWidth100{
   font-size: 12px;
   border-radius: 0px;
 }
+.btn-pallete-notVisited {
+  padding: 2px 8px;
+  font-size: 14px;
+  border-radius: 10px;
+  align-content: center;
+  border-color: rgb(59, 34, 150);
+}
+.btn-pallete-current {
+  padding: 2px 8px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 10px;
+  align-content: center;
+  border-color: rgb(59, 34, 150);
+}
+
 .btn-square-xs {
   padding: 2px 4px;
   font-size: 10px;

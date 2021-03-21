@@ -35,6 +35,7 @@ function get_sectionQuestionListJson($conn, $test_id, $test_section)
     $sub_array = array();
     $sub_array["qb_id"] = $rows['qb_id'];
     $sub_array["qb_text"] = $rows['qb_text'];
+    $sub_array["qb_image"] = $rows['qb_image'];
     $sub_array["tq_marks"] = $rows['tq_marks'];
     $sub_array["tq_nmarks"] = $rows['tq_nmarks'];
     $sub_array["tq_status"] = $rows['tq_status'];
@@ -82,6 +83,7 @@ function get_questionJson($conn, $test_id, $qb_id)
     $sub_array = array();
     $sub_array["qb_id"] = $rows['qb_id'];
     $sub_array["qb_text"] = $rows['qb_text'];
+    $sub_array["qb_image"] = $rows['qb_image'];
     $sub_array["tq_marks"] = $rows['tq_marks'];
     $sub_array["tq_nmarks"] = $rows['tq_nmarks'];
     $data[] = $sub_array;
@@ -104,6 +106,7 @@ function get_activeQuestionJson($conn, $test_id, $test_section)
     $sub_array = array();
     $sub_array["qb_id"] = $rows['qb_id'];
     $sub_array["qb_text"] = $rows['qb_text'];
+    $sub_array["qb_image"] = $rows['qb_image'];
     $sub_array["tq_marks"] = $rows['tq_marks'];
     $sub_array["tq_nmarks"] = $rows['tq_nmarks'];
     $sub_array["tq_status"] = $rows['tq_status'];
