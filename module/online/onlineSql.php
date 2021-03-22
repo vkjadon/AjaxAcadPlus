@@ -30,20 +30,15 @@ if (isset($_POST['action'])) {
 				echo '<div class="card bg-light">
       	<div class="card-body mt-0 py-1">
 				<div class="row">
+				<div class="col-6"><input class="form-control testName" data-test="'.$id.'" name="testName" value="' . $test_name . '" data-tag="test_name"></div>
 				<div class="col-4">
-				<h6>' . $test_name . '[' . $id . ']</h6>
-				</div><div class="col-4">
-				<h6 class="text-muted py-1">Section : ';
+				<h6 class="text-muted py-1">Sec : ';
 				$sql = "select * from test where test_id='$id'";
 				$value = getFieldValue($conn, "test_section", $sql);
 				echo '<a href="#" class="decrement" id="' . $id . '" data-value="' . $value . '"><i class="fa fa-angle-double-left"></i></a>';
 				echo '<span class="' . $id . '">' . $value . '</span>';
 				echo '<a href="#" class="increment" id="' . $id . '" data-value="' . $value . '"><i class="fa fa-angle-double-right"></i></a></h6>
-					</div><div class="col-3">
-				<button class="btn btn-info btn-square-sm mt-0 createLink" data-test="' . $id . '" title="Add Test Questions" data-toggle="tooltip"><i class="fa fa-link"></i></button>';
-				echo '<button class="btn btn-secondary btn-square-sm mt-0 addUserButton" data-test="' . $id . '" title="Add User" data-toggle="tooltip"><i class="fa fa-user"></i></button>
-					</div>
-					<div class="col-1">
+					</div><div class="col-2">
 				<button class="btn btn-square-sm mt-0 removeTestButton" data-test="' . $id . '"><i class="fa fa-trash"></i></button>
 					</div></div>
 				</div></div>';
@@ -51,14 +46,14 @@ if (isset($_POST['action'])) {
 				echo '<div class="card">
       	<div class="card-body mt-0 py-1">
 				<div class="row">
-				<div class="col">
+				<div class="col-6">
 				<h6>' . $test_name . '[' . $id . ']</h6>
-				</div><div class="col">';
+				</div><div class="col-4">';
 				$sql = "select * from test where test_id='$id'";
 				$value = getFieldValue($conn, "test_section", $sql);
-				echo '<h6 class="text-muted py-1">Section : ' . $value . '</h6>
-					</div><div class="col">
-					<button class="btn btn-secondary btn-square-sm mt-0 setActiveButton" data-test="' . $id . '" title="Make this Test Active" data-toggle="tooltip">Set Active</button>
+				echo '<h6 class="text-muted py-1">Sec : ' . $value . '</h6>
+					</div><div class="col-2">
+					<button class="btn btn-secondary btn-square-sm mt-0 setActiveButton" data-test="' . $id . '" title="Make this Test Active" data-toggle="tooltip">Active</button>
 				</div></div>
 
 				</div></div>';
@@ -249,10 +244,14 @@ if (isset($_POST['action'])) {
 			if (isset($_POST['nmarks'])) $nmarks = $_POST['nmarks'];
 			else $nmarks = '0';
 			echo '<div class="card">
-      	<div class="card-body mt-0 py-1">
-				<div class="row">';
-			echo '<div class="col"><h6>' . $test_name . '[' . $id . ']</h6>';
-			echo 'Section : ';
+      <div class="card-body mt-0 py-1">
+			<div class="row">';
+			echo '<div class="col"><h6>[' . $id . '] ' . $test_name . '</h6></div>';
+			echo '</div>';
+
+			echo '<div class="row">';
+			echo '<div class="col-6">';
+			echo 'Section <br> ';
 			for ($i = 1; $i <= $test_section; $i++) {
 				echo '<button class="btn btn-warning btn-square-sm mt-0 defaultSection" id="defaultSection' . $i . '" data-section="' . $i . '">' . $i . '</button>';
 			}
@@ -289,15 +288,18 @@ if (isset($_POST['action'])) {
 		if ($result) echo "Updated Successfully";
 		else echo $conn->error;
 	} elseif ($_POST['action'] == 'updateText') {
-		$qb_id = $_POST['qb_id'];
+		if(isset($_POST['qb_id']))$qb_id = $_POST['qb_id'];
 		if(isset($_POST['qo_code']))$qo_code = $_POST['qo_code'];
-		$qp_sno = $_POST['qp_sno'];
+		if(isset($_POST['qp_sno']))$qp_sno = $_POST['qp_sno'];
+		if(isset($_POST['test_id']))$test_id = $_POST['test_id'];
 		$value = $_POST['value'];
 		$tag = $_POST['tag'];
-		//echo "Jai ho Tag $tag - Qb $qb_id - Val $value";
+		echo "Jai ho Tag $tag - Val $value";
+		//echo "Rest  $qb_id - Val $value";
 		//echo "Jai ho  code $qo_code";
 		//echo "Jai ho  Sno  $qp_sno";
 		if($tag=="qo_text")$sql = "update question_option set qo_text='$value' where qb_id='$qb_id' and qo_code='$qo_code'";
+		elseif($tag=="test_name")$sql = "update test set test_name='$value' where test_id='$test_id'";
 		elseif($tag=="qb_text")$sql = "update question_bank set $tag='$value' where qb_id='$qb_id'";
 		else $sql = "update qb_parameter set $tag='$value' where qb_id='$qb_id' and qp_sno='$qp_sno'";
 		$result = $conn->query($sql);
@@ -338,6 +340,7 @@ if (isset($_POST['action'])) {
 		$tag = $_POST['tag'];
 		//echo "Jai ho $qb_id code $qo_code";
 		if($tag=="cp")$sql = "delete from qb_cp where qb_id='$id' and qc_sno='$sno'";
+		elseif($tag=="tq")$sql = "delete from test_question where qb_id='$id' and test_id='$sno'";
 		else $sql = "delete from question_option where qb_id='$id' and qo_code='$sno'";
 		$result = $conn->query($sql);
 		if ($result) echo "Removed Successfully";

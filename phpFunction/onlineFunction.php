@@ -47,7 +47,7 @@ function get_sectionQuestionListJson($conn, $test_id, $test_section)
   );
   return json_encode($output);
 }
-function get_testQuestionListJson($conn, $test_id, $test_section)
+function testQuestionList($conn, $test_id, $test_section)
 {
   if($test_section>0)$sql = "select qb.*, tq.* from test_question tq, question_bank qb where tq.qb_id=qb.qb_id and tq.test_id='$test_id' and tq.test_section='$test_section' and tq.tq_status='2' order by tq.qb_id";
   else $sql = "select qb.*, tq.* from test_question tq, question_bank qb where tq.qb_id=qb.qb_id and tq.test_id='$test_id' and tq.tq_status='2' order by tq.qb_id";
@@ -68,11 +68,11 @@ function get_testQuestionListJson($conn, $test_id, $test_section)
   $output = array(
     "data" => $data
   );
-  return json_encode($output);
+  return $output;
 }
-function get_questionJson($conn, $test_id, $qb_id)
+function get_questionJson($conn, $test_id, $id)
 {
-  $sql = "select qb.*, tq.* from test_question tq, question_bank qb where tq.qb_id=qb.qb_id and tq.test_id='$test_id' and tq.qb_id='$qb_id'";
+  $sql = "select qb.*, tq.* from test_question tq, question_bank qb where tq.qb_id=qb.qb_id and tq.test_id='$test_id' and tq.qb_id='$id'";
   $result = $conn->query($sql);
   if (!$result) {
     echo $result->error;
@@ -81,7 +81,6 @@ function get_questionJson($conn, $test_id, $qb_id)
   $data = array();
   while ($rows = $result->fetch_assoc()) {
     $sub_array = array();
-    $sub_array["qb_id"] = $rows['qb_id'];
     $sub_array["qb_text"] = $rows['qb_text'];
     $sub_array["qb_image"] = $rows['qb_image'];
     $sub_array["tq_marks"] = $rows['tq_marks'];
@@ -91,7 +90,7 @@ function get_questionJson($conn, $test_id, $qb_id)
   $output = array(
     "data" => $data
   );
-  return json_encode($output);
+  return $output;
 }
 function get_activeQuestionJson($conn, $test_id, $test_section)
 {

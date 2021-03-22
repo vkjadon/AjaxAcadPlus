@@ -85,11 +85,14 @@ require('../../php_function.php');
           <div class="tab-pane fade" id="list-aq" role="tabpanel" aria-labelledby="list-aq-list">
             <div class="row">
               <div class="col-5 mt-1 mb-1">
+                <h5>Add Question Panel</h5>
+              <p id="questionHeading"></p>
                 <h5>Section : <span id="selectedSection">1</span></h5>
                 <textarea rows="4" class="content" id="question" name="question"></textarea>
                 <input type="hidden" id="actionCode" name="actionCode">
-                <p id="questionHeading"></p>
                 <button class="btn btn-secondary btn-square-sm addQuestion">Add New Question</button>
+                <button class="btn btn-warning btn-square-sm showQuestionLibrary">Show Question Library</button>
+                <button class="btn btn-info btn-square-sm showTestQuestion">Show Test Question</button>
               </div>
               <div class="col-7 mt-1 mb-1">
                 <p class="showActiveQuestion"></p>
@@ -155,13 +158,33 @@ require('../../php_function.php');
       $("#questionForm").hide()
       testHeading()
     });
-    $(".aq").click(function() {
+    $(document).on("click", ".aq, .showTestQuestion", function() {
       //$.alert("Add Question");
       $("#questionForm").show()
       $("#actionCode").val("add")
       questionHeading()
       sectionQuestionList()
       activeQuestion()
+    });
+    $(".showQuestionLibrary").click(function() {
+      //$.alert("Add Question");
+      $(".showActiveQuestion").html("");
+      questionLibrary()
+    });
+
+    $(document).on("click", ".addQuestionToTest", function() {
+      var qb_id = $(this).attr("data-qb")
+      var test_section = $("#selectedSection").text()
+      //$.alert("Id" + qb_id + " Section " + test_section)
+
+      $.post("sectionQuestionListSql.php", {
+        qb_id: qb_id,
+        test_section: test_section,
+        action: "addLibraryQuestionToTest"
+      }, () => {}, "html").done(function(data, status) {
+        //$.alert(data);
+        questionLibrary();
+      })
     });
     $(document).on("click", ".testQuestion", function() {
       var qb_id = $(this).attr("data-qb")
@@ -178,10 +201,11 @@ require('../../php_function.php');
         activeQuestion();
       })
     });
-    $(document).on('click', '.trashCP, .trashOption', function() {
+    $(document).on('click', '.trashCP, .trashOption, .trashQuestion', function() {
       var id = $(this).attr("data-qb");
       var sno = $(this).attr("data-sno");
       var tag = $(this).attr("data-tag");
+      //var test_id = $(this).attr("data-test");
       //$.alert(" QbId  " + id + " Sno " + sno + " Tag " + tag)
       $.confirm({
         title: 'Confirm!',
@@ -198,7 +222,8 @@ require('../../php_function.php');
                 action: "delete"
               }, function() {}, "text").done(function(data, status) {
                 $.alert(data);
-                activeQuestion()
+                if(tag=="tq") sectionQuestionList();
+                else activeQuestion();
               })
             }
           },
@@ -268,9 +293,10 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     });
-    $(document).on('blur', '.parameter, .testQuestionUpdate, .questionOption', function() {
+    $(document).on('blur', '.parameter, .testQuestionUpdate, .questionOption, .testName', function() {
       var qp_sno = $(this).attr("data-qp");
       var qb_id = $(".testQuestionUpdate").attr("data-qb");
+      var test_id = $(".testName").attr("data-test");
       var qo_code = $(this).attr("data-code");
       var tag = $(this).attr("data-tag");
       if (tag == "qb_text") var value = $("textarea#uq").val();
@@ -278,16 +304,16 @@ require('../../php_function.php');
       else var value = $(this).val();
 
       //Confirm Alert Plugin shows Alert Box twice
-      //$.alert(" Parameter  " + qp_sno + " QB " + qb_id + " Value " + value + " Tag " + tag);
+      $.alert(" Parameter  " + qp_sno + " QB " + qb_id + " Value " + value + " Tag " + tag);
       $.post("onlineSql.php", {
         qb_id: qb_id,
         qp_sno: qp_sno,
         qo_code: qo_code,
+        test_id: test_id,
         tag: tag,
         value: value,
         action: "updateText"
-      }, function(data, status) {
-      }, "text").done(function(data,status) {
+      }, function(data, status) {}, "text").done(function(data, status) {
         $.alert("Updated!!" + mydata);
         sectionQuestionList()
       }).fail(function() {
@@ -519,13 +545,29 @@ require('../../php_function.php');
     $(document).on("click", ".removeTestButton", function() {
       var id = $(this).attr("data-test")
       //$.alert("Id" + id)
-      $.post("onlineSql.php", {
-        id: id,
-        action: "removeTest"
-      }, () => {}, "html").done(function(data, status) {
-        $.alert(data);
-        testList();
-      })
+      $.confirm({
+        title: 'Confirm!',
+        draggable: true,
+        content: "Please confirm to delete!! ",
+        buttons: {
+          confirm: {
+            btnClass: 'btn-blue',
+            action: function() {
+              $.post("onlineSql.php", {
+                id: id,
+                action: "removeTest"
+              }, () => {}, "html").done(function(data, status) {
+                $.alert(data);
+                testList();
+              })
+            }
+          },
+          cancel: {
+            btnClass: "btn-danger",
+            action: function() {}
+          },
+        }
+      });
     });
     $(document).on("submit", "#addTestForm", function() {
       event.preventDefault(this);
@@ -594,6 +636,20 @@ require('../../php_function.php');
       $.post("sectionQuestionListSql.php", {
         sectionId: selectedSection,
         action: "sectionQuestionList"
+      }, function() {
+        //$.alert("Fecth" + mydata);
+      }, "text").done(function(data, status) {
+        //$.alert(data);
+        $(".sectionQuestionList").html(data)
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+    }
+
+    function questionLibrary() {
+      //$.alert("Library  ")
+      $.post("sectionQuestionListSql.php", {
+        action: "questionLibrary"
       }, function() {
         //$.alert("Fecth" + mydata);
       }, "text").done(function(data, status) {
