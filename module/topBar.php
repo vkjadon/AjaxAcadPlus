@@ -132,6 +132,7 @@
 <!--/.Navbar-->
 <!--/.Navbar -->
 
+
 <!-- <nav class="navbar fixed-top bg-secondary text-white">
   <a class="navbar-brand" href="../">
   <img src="<?php echo $setLogo; ?>" width="60%">
@@ -149,4 +150,4 @@
   </ul>
 </nav> -->
 <h1>&nbsp;</h1>
-<h5>&nbsp;</h5>
+<h6>&nbsp;</h6>

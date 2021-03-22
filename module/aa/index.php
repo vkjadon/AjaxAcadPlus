@@ -69,7 +69,7 @@ require('../../php_function.php');
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane fade show active" id="list-bs" role="tabpanel" aria-labelledby="list-bs-list">
             <div class="row">
-              <div class="col-5 mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addBatch">Batch</button>
+              <div class="col-5 mt-1 mb-1"><button class="btn btn-secondary btn-sm addBatch">Batch</button>
                 <p style="text-align:center" id="batchShowList"></p>
               </div>
               <div class="col-7 mt-1 mb-1" id="batchSession">
@@ -719,7 +719,7 @@ require('../../php_function.php');
 <div class="modal" id="firstModal">
   <div class="modal-dialog modal-md">
     <form class="form-horizontal" id="modalForm">
-      <div class="modal-content bg-secondary text-white">
+      <div class="modal-content">
 
         <!-- Modal Header -->
         <div class="modal-header">
@@ -953,8 +953,8 @@ require('../../php_function.php');
           <input type="hidden" id="batchIdModal" name="batchIdModal">
           <input type="hidden" id="programIdModal" name="programIdModal">
           <input type="hidden" id="subjectIdModal" name="subjectIdModal">
-          <button type="submit" class="btn btn-success btn-sm" id="submitModalForm">Submit</button>
-          <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-secondary" id="submitModalForm">Submit</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
         </div> <!-- Modal Footer Closed-->
       </div> <!-- Modal Conent Closed-->
 
@@ -1010,7 +1010,7 @@ require('../../php_function.php');
           <input type="hidden" id="actionSecond" name="action">
           <input type="hidden" id="originalProgram" name="programId">
           <input type="hidden" id="originalBatch" name="batchId">
-          <button type="submit" class="btn btn-success btn-sm">Submit</button>
+          <button type="submit" class="btn btn-secondary btn-sm">Submit</button>
           <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
         </div> <!-- Modal Footer Closed-->
       </div> <!-- Modal Conent Closed-->
