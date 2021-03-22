@@ -621,7 +621,6 @@ require('../../php_function.php');
         <!-- Modal footer -->
         <div class="modal-footer">
           <input type="hidden" name="action" value="view">
-          <input type="hidden" id="stqIdM" name="stqIdM">
           <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
         </div> <!-- Modal Footer Closed-->
       </div> <!-- Modal Conent Closed-->

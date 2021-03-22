@@ -96,7 +96,7 @@ if (isset($_POST['action'])) {
         // getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
 
         $columnCount = count($header);
-        echo "In Function  $sql Column Count $columnCount";
+        // echo "In Function  $sql Column Count $columnCount";
         echo '<table class="list-table-xs">';
         echo '<thead align="center">';
         echo '<th><i class="fa fa-edit"></i></th><th>Id</th><th>Qualification</th><th>Institute</th><th>Board</th><th>Passing Year</th><th>Marks Obtained</th><th>Maximum Marks</th><th>Percentage/CGPA</th><th><i class="fa fa-trash"></i></th><th>Upload</th><th>View</th>';

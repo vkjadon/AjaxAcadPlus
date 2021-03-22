@@ -1,6 +1,9 @@
 .folder {
   color:rgba(235, 222, 48, 0.726);
 }
+.grey-bg {
+  background-color: #fbfdff;
+}
 
 /* Div css */
 div.message{
