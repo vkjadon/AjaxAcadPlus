@@ -1,0 +1,1 @@
+<p>A pin type flexible coulpng is used to transmit power at * rpm through six pins arranged at * mm pcd. One of the pin of the coupling is shown in figure.&nbsp;The bearing pressure between rubber bush and CI flange is 0.5 MPa and between sleeve and bush is 1.5MPa. Suggest the safe power that can be transmitted on the basis of bearing of bush/pin.</p>

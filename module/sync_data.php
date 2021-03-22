@@ -7,6 +7,7 @@
 //sync_data($conn, "classes", "class");
 //sync_data($conn, "staff", "staff");
 //sync_data($conn, "registration_class2021", "registration_class");
+sync_data($conn, "department_ci", "class_incharge");
 
 function sync_data($conn, $tableX, $table)
 {
@@ -28,6 +29,8 @@ function sync_data($conn, $tableX, $table)
 		for ($i = $rows; $i < $rowsX; $i++) {
 			$sql = "";
 			if ($table == "batch") $sql = "insert into $table (batch, batch_status) values('" . $output["data"][$i]["batch"] . "','0')";
+
+			elseif ($table == "class_incharge") $sql = "insert into $table (staff_id, ci_from, ci_to, class_id, ci_status) values('" . $output["data"][$i]["staff_id"] . "', '" . $output["data"][$i]["dci_from"] . "', '" . $output["data"][$i]["dci_to"] . "',  '" . $output["data"][$i]["class_id"] . "', '0')";
 
 			elseif ($table == "registration_class") $sql = "insert into $table (class_id, student_id, rc_date, submit_id, rc_status) values('" . $output["data"][$i]["class_id"] . "', '" . $output["data"][$i]["student_id"] . "', '" . $output["data"][$i]["submit_date"] . "',  '" . $output["data"][$i]["submit_id"] . "', '0')";
 

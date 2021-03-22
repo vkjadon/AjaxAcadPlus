@@ -1,0 +1,1 @@
+<p>Determine the stress components acting on the inclined plane AB. &sigma;<sub>x</sub>=* MPa; &sigma;<sub>y</sub>=* MPa; &tau;<sub>xy</sub>=* MPa; &theta;=*&deg;.</p>

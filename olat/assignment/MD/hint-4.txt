@@ -1,0 +1,1 @@
+<p>The load is acting along the plane of cross-section of the bolt. It induces in-plane shear stress. The load is resisted by two planes, therefore, it is the case of double shear. Assume factos of safety and calculate the diameter.</p>

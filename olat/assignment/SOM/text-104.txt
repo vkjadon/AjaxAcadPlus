@@ -1,0 +1,1 @@
+<p>The state of stress at a point of a member is shown in the following figures (&theta;=* and &alpha;=*). Determine the resultant state stress represented on the element shown in the last figure.</p>

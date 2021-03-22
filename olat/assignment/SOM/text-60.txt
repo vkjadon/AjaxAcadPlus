@@ -1,0 +1,1 @@
+<p>The toggle clamp is subjected to a force * N at the handle. Determine the vertical clamping force acting at E.</p>

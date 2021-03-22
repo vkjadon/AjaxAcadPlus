@@ -1,0 +1,1 @@
+<p>* mm tie bars of a bridge are to be connected with double cover butt joint to carry a load of * kN. Use S<sub>ut</sub>=570 MPa. The shear strength can be considered as half of tensile strength. &nbsp;The design stress in compression is 125% more than that of the design shear stress.</p>

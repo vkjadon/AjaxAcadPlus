@@ -1,0 +1,1 @@
+<p>The portion AC (* m) of a member ABC is inclined at 60<sup>0</sup>&nbsp;as shown. The load intensity at A is * N/m. Find the reactions at A and C if BC is * m and the uniformly distributed load on it is * N/m.</p>

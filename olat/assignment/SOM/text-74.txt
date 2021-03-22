@@ -1,0 +1,1 @@
+<p>The load intensities at A and B&nbsp; are * kN/m and * kN/m respectively. The length of portion BC is * m.&nbsp;Replace the loading by an equivalent resultant force and specify its location measured from point A. Calculate the support reactions.</p>

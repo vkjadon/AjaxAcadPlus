@@ -1,0 +1,1 @@
+<p>Calculate Design torque using power and rpm. Follow usual procedure to design key.</p>

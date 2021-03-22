@@ -1,0 +1,1 @@
+<p>A force of * kN is acting at point A on a member as shown. AB is inclined at an angle of&nbsp; * degree as shown. Find the moment of force about point B in clockwise direcion. The distance AB is * mm.</p>

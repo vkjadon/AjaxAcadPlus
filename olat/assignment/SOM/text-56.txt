@@ -1,0 +1,1 @@
+<p>The two-member frame is pin connected at E. The cable is attached to D, passes over the smooth peg at C, and supports an additional vertical downward load of * N at point C. Determine the forces at point A, B and E.</p>

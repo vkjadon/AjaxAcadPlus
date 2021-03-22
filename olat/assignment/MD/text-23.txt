@@ -1,0 +1,1 @@
+<p>Two plates of * mm thickness are to be connected by double row ziz-zag riveting lap joint. Design the joint taking &sigma;<sub>dt</sub>= * N/mm<sup>2</sup>&nbsp;, &sigma;<sub>dc</sub>= 115 N/mm<sup>2</sup>&nbsp; and &tau;<sub>d</sub> = * &nbsp;N/mm<sup>2</sup>&nbsp;.</p>

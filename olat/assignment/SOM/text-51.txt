@@ -1,0 +1,1 @@
+<p>Forces of * kN and * kN are acting at point A and C respectively on a member as shown. Find the moment of forces about mid point of line AB. The distance AB and AC are * mm and * mm respectively.</p>

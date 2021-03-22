@@ -1,0 +1,2 @@
+<p>Permissible angular deflection &nbsp;1 degree for every 15 diameters means that angle of twist in length of 15d is 1 degree.</p>
+<p>Take care of units of G and E for calculations. These are given in GPa, convert into MPa.</p>

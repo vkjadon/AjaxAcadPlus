@@ -1,0 +1,1 @@
+<p>Design a six spline shaft for an automobile gear box to transmit * kW at * rpm. The spline is made of alloy steel (SAE 1045; &tau;<sub>ys</sub> = 60 MPa) and may be 25% overloaded . How much force will be required to shift the gears if coefficient of friction betweeen spline and spline hub is taken as 0.15?</p>

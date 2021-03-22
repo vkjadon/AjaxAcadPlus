@@ -1,0 +1,66 @@
+<p>Following data are given for a protected flange coupling used to transmit * N.m.</p>
+<table border="1" width="0">
+<tbody>
+<tr>
+<td style="width: 109px;">
+<p>Shaft diameter</p>
+</td>
+<td style="width: 59px;">
+<p>25 mm</p>
+</td>
+<td style="width: 151px;">
+<p>Outside flange &nbsp;diameter</p>
+</td>
+<td style="width: 66px;">
+<p>100 mm</p>
+</td>
+<td style="width: 98px;">
+<p>Key</p>
+</td>
+<td style="width: 60px;">
+<p>4x4 mm</p>
+</td>
+</tr>
+<tr>
+<td style="width: 109px;">
+<p>Hub diameter</p>
+</td>
+<td style="width: 59px;">
+<p>* mm</p>
+</td>
+<td style="width: 151px;">
+<p>Length of hub</p>
+</td>
+<td style="width: 66px;">
+<p>40 mm</p>
+</td>
+<td style="width: 98px;">
+<p>PCD of bolts</p>
+</td>
+<td style="width: 60px;">
+<p>80 mm</p>
+</td>
+</tr>
+<tr>
+<td style="width: 109px;">
+<p>Number of bolts</p>
+</td>
+<td style="width: 59px;">
+<p>*</p>
+</td>
+<td style="width: 151px;">
+<p>Flange thickness</p>
+</td>
+<td style="width: 66px;">
+<p>15 mm</p>
+</td>
+<td style="width: 98px;">
+<p>Bolt diameter</p>
+</td>
+<td style="width: 60px;">
+<p>10 mm</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Determine the stresses induced in shaft, key and bolt assuming length of key is same as length of hub.</p>

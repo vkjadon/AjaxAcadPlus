@@ -1,0 +1,1 @@
+<p>Design a key for a shaft transmitting * kW at * rpm. Use S<sub>yt</sub>= 225 MPa, S<sub>ys</sub>= 150 MPa and S<sub>yc</sub>= 270 MPa.</p>

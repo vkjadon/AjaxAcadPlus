@@ -1,0 +1,1 @@
+<p>Design a sunk key to transmit * N m torque. The key and the shaft are made of C45 steel and factor of safety can be taken as * and yield strength in tension (S<sub>yt</sub>) is&nbsp;* MPa. Use standards to set the dimesions of the key and the length of the key can be taken as 1.5 times diameter of shaft.</p>

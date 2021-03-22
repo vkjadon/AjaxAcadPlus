@@ -1,0 +1,1 @@
+<p>A pin type flexible coulpng is used to transmit * kW at 720 rpm. The six pins are arranged at 160 mm pcd. One of the pin of the coupling is shown in figure. Calculate the stress induced in rubber bush. Also obtain the maximum tensile stress induced in pin.</p>

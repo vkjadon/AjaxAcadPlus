@@ -1,0 +1,4 @@
+<p style="text-align: justify;">* kW at 1200 rpm is being transmitted from a motor to a shaft located vertically above through pinion gear arrangement. The pitch circle diameter of pinion is * mm with speed ratio 3. The two third of the power is taken away at station <em>A</em> horizontally and remaining at station vertically downward through belt pulley arrangement. Assume angle of contact at both the pulleys as 180 degree and coefficient of friction between belt and pulley is 0.22. The diameters of pulley at <em>A</em> and <em>B</em> are * mm and * mm respectively. The shaft rotates in the direction shown in the figure. Design the shaft.</p>
+<p><a href="https://www.youtube.com/embed/cOrhwSEhJLk" target="_blank" rel="noopener">Solution Part-1</a></p>
+<p>&nbsp;<a href="https://youtu.be/-TPLJfkAris" target="_blank" rel="noopener">Solution Part-2</a></p>
+<p style="text-align: justify;">&nbsp;</p>

@@ -1,0 +1,5 @@
+<p>Axial Tensile Load will induce Tensile Stress at every point in the cantilever. Let it be&nbsp;&sigma;<sub>1</sub>.&nbsp;</p>
+<p>Vertical (transverse) Load at free end induces bending stress in the cantilever. It will depend on bending moment and the location of the point in the cross-section of maximum bending moment i.e. distance from NA.</p>
+<p>So, calculate Maximum BM (M<sub>max</sub>)&gt; Second moment of area about NA (I<sub>NA</sub>)&gt; y<sub>max</sub>&nbsp;.</p>
+<p>Let it be&nbsp;&sigma;<sub>2</sub>=&nbsp;&sigma;<sub>2t</sub>=&sigma;<sub>2c</sub></p>
+<p>&sigma;<sub>t max</sub>=&sigma;<sub>2t</sub>+&sigma;<sub>1</sub>&nbsp;and&nbsp;&sigma;<sub>c max</sub>=&sigma;<sub>2c</sub>-&sigma;<sub>1</sub></p>

@@ -1,0 +1,1 @@
+<p>Design a muff couling to transmit * kW power at * rpm. Assume overload factor as unity.</p>

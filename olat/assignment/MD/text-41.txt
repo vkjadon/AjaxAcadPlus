@@ -1,0 +1,4 @@
+<p>A shaft, supported by two bearings * mm apart, transmits * kW at 1000 rpm. A vertical load of * kN acts at the mid span of the shaft. Design the shaft for the following permissible values</p>
+<p>Permissible shear stress 40 MPa; E=210 GPa; G=80 GPa &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</p>
+<p>Permissible lateral deflection&nbsp;&nbsp; 0.025 mm</p>
+<p>Permissible angular deflection &nbsp;1 degree for every 15 diameters. Cm=1.5; Ct=1.0.</p>

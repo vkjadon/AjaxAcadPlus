@@ -1,0 +1,1 @@
+<p>A * mm cantilever beam having&nbsp;<em>S<sub>ut</sub></em> = 540 <em>MPa</em>&nbsp; and <em>S<sub>yt</sub></em>= 320 <em>MPa</em>&nbsp; subjected to a completely reversed load of * <em>kN</em>. It is machined and reliability is 50%. Calculate endurance limit and diameter for infinite life using factor of safety of&nbsp; *. Assume&nbsp;<em>k<sub>f</sub>=1.38.</em></p>

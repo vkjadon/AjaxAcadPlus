@@ -1,0 +1,1 @@
+<p>A crane hook trolley is supported by beam having section shown in figure. The section has span of 10 m and thicknesses of all the flanges are * mm. If allowable stresses in tension and compression are 100 and 120 N/mm<sup>2</sup> respectively, calculate the safe load supported by the beam.</p>

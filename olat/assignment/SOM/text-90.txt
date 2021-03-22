@@ -1,0 +1,1 @@
+<p>A * mm thick steel strip is * mm wide. The strip is wrapped around a cylinder of * mm diameter. Find the maximum stress in the strip is E=200 GPa.</p>

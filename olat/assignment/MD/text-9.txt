@@ -1,0 +1,1 @@
+<p><span lang="EN-US" style="font-size: 11.0pt; mso-bidi-font-weight: bold; mso-bidi-font-style: italic;">A * mm diameter pulley is keyed to a * mm diameter shaft. Design a key (C40) if the tension in the tight side of the belt is 2.5 kN more than the tension in slack side. Assume overload factor as unity.</span></p>

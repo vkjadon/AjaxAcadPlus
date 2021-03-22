@@ -1,0 +1,6 @@
+<p>Design a hollow shaft for an axial flow compressor using distortion energy theory and the following data:</p>
+<p>Maximum twisting moment = * kN.m&nbsp;</p>
+<p>Maximum bending moment = * kN.m</p>
+<p>Design shear stress &nbsp;= * N/mm<sup>2</sup></p>
+<p>Design Normal stress &nbsp;= * N/mm<sup>2</sup></p>
+<p>The ratio of outer to inner diameter can be taken as 2.0 and load is applied gradually. Cm=1.5 and Ct=1.0</p>

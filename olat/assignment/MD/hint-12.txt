@@ -1,0 +1,9 @@
+<ol>
+<li>Find M<sub>td</sub></li>
+<li>Design Shaft. Standardise using standard shaft diameter table.&nbsp;</li>
+<li>Set b=(d/6).&nbsp;Modify to next higher integer.</li>
+<li>Calculate length using shear mode of failure.&nbsp;</li>
+<li>Modify length to next higher integer.</li>
+<li>Check in crushing mode of failure.</li>
+<li>If M<sub>t keyC</sub>&lt;M<sub>td</sub>, modify length using&nbsp;M<sub>t keyC</sub>=M<sub>td</sub>. Modify to next higher integer.</li>
+</ol>

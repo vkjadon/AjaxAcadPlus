@@ -1,0 +1,1 @@
+<p style="text-align: justify;">Two * mm &nbsp;thick mild steel tie rods are to be connected by means of a butt joint with double cover plates to support a load of * kN. Design the joint if permissible stresses are 80 MPa, 65 MPa and 110 MPa&nbsp;in tension, &nbsp;shear &nbsp;and crushing respectively.</p>

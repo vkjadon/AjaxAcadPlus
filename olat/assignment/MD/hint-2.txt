@@ -1,0 +1,3 @@
+<p>Draw axial load diagram to know the load in different section</p>
+<p>Write design equation for each section and calculate the value of P</p>
+<p>Least of all three is answer</p>

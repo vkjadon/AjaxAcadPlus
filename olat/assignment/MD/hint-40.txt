@@ -1,0 +1,8 @@
+<ul>
+<li>Claculate&nbsp;<strong>Outer</strong>&nbsp;diameter of shaft using maximum distortion energy.</li>
+<li>Use Design normal stress (sigmaD not tauD)</li>
+<li>Modify outer diameter to standard value</li>
+<li>Calculate the inner diameter and DO NOT modify to standard diameter. Simply round it off to next higher integer.</li>
+<li>Calculate von-mices stress of the calculated dimensions and applied load.</li>
+</ul>
+<p><strong><em>NOTE: We calculate outer diamter and modify it standard diameter because the standard shaft is available for outer dimension. It is bored to get the desired inner diamter.</em></strong></p>

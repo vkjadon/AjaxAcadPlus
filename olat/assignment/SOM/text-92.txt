@@ -1,0 +1,1 @@
+<p>The cast iron has * mm&nbsp; bore and * mm thickness is used to carry water. It is supported at two points (i.e. roller supports) * m apart. Consider the weight density of CI as&nbsp; are 70 kN/m<sup>3</sup>, calculate the maximum stress in the pipe when it is full of water.</p>

@@ -1,0 +1,6 @@
+<p>We have to find force at E. There are three links.</p>
+<p>1. EBA hinged at B and A. 2. CD hinged at C and D. 3. BCG hinged at B and C.</p>
+<p>The FBD of first link will show Five forces. Two at B, two at A and one at E.</p>
+<p>The FBD of BCG will show Five forces two each at B, C and known F.&nbsp; B is common and should follow the directions of reactions in accordnace with Newton third law.</p>
+<p>Also CD is two force member and point C on link BCG can be shown with one reaction along CD.</p>
+<p>Six unknows in all and six equations of equilibrium from two FBD.&nbsp;</p>

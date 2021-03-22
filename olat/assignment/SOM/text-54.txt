@@ -1,0 +1,1 @@
+<p>T= * kN and W= *kN. Find the moment about point B of force (a) W (b) T&nbsp; and (c) W and T in clockwise direction.</p>

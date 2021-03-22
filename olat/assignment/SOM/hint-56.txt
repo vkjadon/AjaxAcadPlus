@@ -1,0 +1,5 @@
+<p>Draw FBD of links AC and BD.</p>
+<p>Rope/string will always be tension.</p>
+<p>There are three pin/hinge joints (A, B and E).</p>
+<p>The BD is subjected to 5 forces. Two at B (assume any directions),&nbsp; two at E (assume any directions) and one rope/string tension at D (towards +x to represnt rope tension).</p>
+<p>The AC is subjected to 6 forces. Two at A (assume any directions),&nbsp; two at E (directions according Newton's third law) and two rope/string tensions at C (towards -x and -y to represent rope tensions).</p>

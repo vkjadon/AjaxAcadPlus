@@ -1,0 +1,1 @@
+<p>A * m diameter cylindrical boiler is carrying steam at * MPa pressure. The efficiency can be assumed as 80%. Take &sigma;<sub>dt</sub>=85 MPa; &sigma;<sub>dc</sub>=120 MPa;&nbsp;&tau;<sub>dt</sub>=60 MPa.</p>

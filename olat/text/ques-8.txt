@@ -1,0 +1,1 @@
+<p>Find moment of force F ( * kN) acting on the member as shown about fixed point of the member. The horizontal side of the member is a= * mm and vertical is b= * mm.</p>

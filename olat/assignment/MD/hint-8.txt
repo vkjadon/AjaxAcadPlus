@@ -1,0 +1,9 @@
+<ol>
+<li>Calculate FoS using Shaft design Equation.</li>
+<li>Calculate design stresses ( (&tau;<sub>d shaft</sub>&nbsp;,&nbsp;&tau;<sub>d key</sub> and &sigma;<sub>d key c</sub>).</li>
+<li>Select Key dimensions from Key Standard</li>
+<li>Calculate Key length using<em><strong> l=1.5d</strong></em></li>
+<li>Check for Torsional strength in shear and crushing.</li>
+<li>Reset Key length if fails in step 5.</li>
+<li>Draw Dimensional sketch of the key.</li>
+</ol>

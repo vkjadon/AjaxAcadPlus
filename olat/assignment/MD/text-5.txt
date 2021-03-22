@@ -1,0 +1,1 @@
+<p>A cantilever * mm in length and * mm in diameter is subjected to an axial tensile load of 15 kN, &nbsp;a vertical load of 3 kN act at its free end. Determine the maximum compressive and tensile stress.&nbsp;</p>

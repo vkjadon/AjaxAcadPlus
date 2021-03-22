@@ -1,0 +1,1 @@
+<p>Plates of * mm thickness are to be connected by a triple riveted butt joint with two equal covers plates. The pitch of the outer row is twice the pitch of those in the other rows. Design the joint taking &sigma;<sub>dt</sub>= 80 N/mm<sup>2</sup>&nbsp;, &sigma;<sub>dc</sub>= * N/mm<sup>2</sup>&nbsp; and &tau;<sub>d</sub>&nbsp;= 50 &nbsp;N/mm<sup>2</sup>&nbsp;.</p>

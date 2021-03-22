@@ -30,19 +30,21 @@ if (isset($_POST['action'])) {
 				echo '<div class="card bg-light">
       	<div class="card-body mt-0 py-1">
 				<div class="row">
-				<div class="col">
+				<div class="col-4">
 				<h6>' . $test_name . '[' . $id . ']</h6>
-				</div><div class="col">
+				</div><div class="col-4">
 				<h6 class="text-muted py-1">Section : ';
 				$sql = "select * from test where test_id='$id'";
 				$value = getFieldValue($conn, "test_section", $sql);
 				echo '<a href="#" class="decrement" id="' . $id . '" data-value="' . $value . '"><i class="fa fa-angle-double-left"></i></a>';
 				echo '<span class="' . $id . '">' . $value . '</span>';
 				echo '<a href="#" class="increment" id="' . $id . '" data-value="' . $value . '"><i class="fa fa-angle-double-right"></i></a></h6>
-					</div><div class="col">
-				<button class="btn btn-danger btn-square-sm mt-0 removeTestButton" data-test="' . $id . '" title="Remove Test" data-toggle="tooltip"><i class="fa fa-trash"></i></button>';
-				echo '<button class="btn btn-info btn-square-sm mt-0 addQuestionButton" data-test="' . $id . '" title="Add Test Questions" data-toggle="tooltip"><i class="fa fa-question-circle"></i></button>';
+					</div><div class="col-3">
+				<button class="btn btn-info btn-square-sm mt-0 createLink" data-test="' . $id . '" title="Add Test Questions" data-toggle="tooltip"><i class="fa fa-link"></i></button>';
 				echo '<button class="btn btn-secondary btn-square-sm mt-0 addUserButton" data-test="' . $id . '" title="Add User" data-toggle="tooltip"><i class="fa fa-user"></i></button>
+					</div>
+					<div class="col-1">
+				<button class="btn btn-square-sm mt-0 removeTestButton" data-test="' . $id . '"><i class="fa fa-trash"></i></button>
 					</div></div>
 				</div></div>';
 			} else {
@@ -82,6 +84,8 @@ if (isset($_POST['action'])) {
 		$sql = "update test set test_status='1' where test_status='0' and submit_id='$myId'";
 		$conn->query($sql);
 		updateField($conn, "test", array("test_id", "test_status"), array($id, "0"), "1");
+		$sql = "update question_bank set qb_status='1' where qb_status='0' and submit_id='$myId'";
+		$conn->query($sql);
 	} elseif ($_POST['action'] == 'testHeading') {
 		$sql = "select * from test where test_status='0' and submit_id='$myId'";
 		$result = $conn->query($sql);
@@ -94,12 +98,12 @@ if (isset($_POST['action'])) {
 			echo '<div class="card">
       	<div class="card-body mt-0 py-1">
 				<div class="row">
-				<div class="col">
+				<div class="col-6">
 				<h6>' . $test_name . '[' . $id . ']</h6>';
 			$sql = "select * from test where test_id='$id'";
 			$value = getFieldValue($conn, "test_section", $sql);
 			echo '</div>';
-			echo '<div class="col"><h6 class="text-muted py-1">Section : ' . $value . '</h6></div>';
+			echo '<div class="col-3"><h6 class="text-muted py-1">Section : ' . $value . '</h6></div>';
 			echo '<div class="col-3"><button class="btn btn-info btn-square-sm mt-0 testInstruction" data-test="' . $id . '">Instructions</button></div>';
 			echo '</div>';
 			echo '</div></div>';
@@ -109,9 +113,9 @@ if (isset($_POST['action'])) {
 				echo '<div class="card">
       	<div class="card-body mt-0 py-1">
 				<div class="row">';
-				echo '<div class="col"><h6 class="text-muted py-1">Section : ' . $i . '</h6></div>';
-				echo '<div class="col"><h6 class="text-muted py-1">Marks : ' . $value . '</h6></div>';
-				echo '<div class="col"><button class="btn btn-secondary btn-square-sm mt-0 sectionInstruction" data-test="' . $id . '" data-section="' . $i . '">Instructions</button></div>';
+				echo '<div class="col-6"><h6 class="text-muted py-1">Section : ' . $i . '</h6></div>';
+				echo '<div class="col-3"><h6 class="text-muted py-1">Marks : ' . $value . '</h6></div>';
+				echo '<div class="col-3"><button class="btn btn-secondary btn-square-sm mt-0 sectionInstruction" data-test="' . $id . '" data-section="' . $i . '">Instructions</button></div>';
 				echo '</div>';
 				echo '</div></div>';
 			}
@@ -124,20 +128,61 @@ if (isset($_POST['action'])) {
 			$test_id = $array["test_id"];
 		}
 		$sectionId = $_POST['sectionId'];
-		$question = $_POST['question'];
+		$question = data_check($_POST['question']);
 		$tq_marks = $_POST['defaultMarks'];
 		$tq_nmarks = $_POST['defaultNMarks'];
-		$sql = "insert into question_bank (qb_level, qb_base, qb_text, submit_id, qb_status) values('1', '1', '" . $question . "','$myId', '1')";
-		$result = $conn->query($sql);
-		if ($result) {
-			echo "Added Successfully";
-			$insertId = $conn->insert_id;
-			$sql = "insert into test_question (test_id, test_section, qb_id, tq_marks, tq_nmarks, tq_status) values('$test_id', '$sectionId', '$insertId', '$tq_marks', '$tq_nmarks', '1')";
+		$actionCode = $_POST['actionCode'];
+		echo "Action Code $actionCode";
+		if ($actionCode == "add") {
+			$sql = "insert into question_bank (qb_level, qb_base, qb_text, submit_id, qb_status) values('1', '1', '$question', '$myId', '1')";
 			$result = $conn->query($sql);
-			if (!$result) echo $conn->error;
+			if ($result) {
+				echo "Added Successfully";
+				$insertId = $conn->insert_id;
+				$sql = "insert into test_question (test_id, test_section, qb_id, tq_marks, tq_nmarks, tq_status) values('$test_id', '$sectionId', '$insertId', '$tq_marks', '$tq_nmarks', '1')";
+				$result = $conn->query($sql);
+				if (!$result) echo $conn->error;
+				$fileName='ques-'.$insertId.'.txt';
+				writeToFile("../../olat/text", $fileName, $question);
+
+				// Block for Variable Input
+
+				$portion = explode("***", $question);
+				$portion_count = count($portion);
+				if ($portion_count > 1) {
+					for ($ipc = 1; $ipc < $portion_count; $ipc++) {
+						$sql = "insert into qb_parameter (qb_id, qp_sno, qp_name) values('$insertId', '$ipc', 'Parameter')";
+						$result = $conn->query($sql);
+						if (!$result) echo $conn->error;
+					}
+				}
+			} else {
+				$error = $conn->errno;
+				if ($error == "1062") echo "Duplicate Found !!!";
+			}
 		} else {
-			$error = $conn->errno;
-			if ($error == "1062") echo "Duplicate Found !!!";
+			$sql = "select * from question_bank where qb_status='0' and submit_id='$myId'";
+			$result = $conn->query($sql);
+			if ($result) {
+				$array = $result->fetch_assoc();
+				$qb_id = $array["qb_id"];
+				
+				$fileName='ques-'.$qb_id.'.txt';
+				writeToFile("../../olat/text", $fileName, $question);
+				
+				// Block for Variable Input
+
+				$portion = explode("***", $question);
+				$portion_count = count($portion);
+				if ($portion_count > 1) {
+					for ($ipc = 1; $ipc < $portion_count; $ipc++) {
+						$sql = "insert into qb_parameter (qb_id, qp_sno, qp_name) values('$qb_id', '$ipc', 'Parameter')";
+						$result = $conn->query($sql);
+						//if (!$result) echo $conn->error;
+					}
+				}
+				echo "Question Updated";
+			}
 		}
 	} elseif ($_POST['action'] == 'addOption') {
 		$sql = "select * from question_bank where qb_status='0' and submit_id='$myId'";
@@ -173,65 +218,6 @@ if (isset($_POST['action'])) {
 		$sql = "update question_bank set qb_status='0' where qb_id='$qb_id'";
 		$result = $conn->query($sql);
 		if ($result) echo "Updated Successfully";
-	} elseif ($_POST['action'] == 'sectionQuestionList') {
-		$sql = "select * from test where test_status='0' and submit_id='$myId'";
-		$result = $conn->query($sql);
-		if ($result) {
-			$array = $result->fetch_assoc();
-			$test_id = $array["test_id"];
-		}
-		$sectionId = $_POST['sectionId'];
-		$json = get_sectionQuestionListJson($conn, $test_id, $sectionId);
-		//echo $json;
-		$array = json_decode($json, true);
-		//echo $array;
-		for ($i = 0; $i < count($array["data"]); $i++) {
-			$id = $array["data"][$i]["qb_id"];
-			$qb_text = $array["data"][$i]["qb_text"];
-			$tq_marks = $array["data"][$i]["tq_marks"];
-			$tq_nmarks = $array["data"][$i]["tq_nmarks"];
-			$qb_status = $array["data"][$i]["qb_status"];
-			if ($qb_status == "0") {
-				echo '<div class="card bg-light">
-      	<div class="card-body mt-0 py-1">
-				<div class="row">
-				<div class="col">
-				<span class="testQuestion">' . $qb_text . '</span>';
-				echo '</div></div>';
-				$sqlOption = "select * from question_option where qb_id='$id'";
-				$resultOption = $conn->query($sqlOption);
-				while ($rows = $resultOption->fetch_assoc()) {
-					echo '<div class="row"><div class="col-9"><div class="card">
-      	<div class="card-body mt-0 py-1">
-				<span class="questionOption">' . $rows["qo_text"] . '</span></div>';
-					echo '</div>';
-					echo '</div>';
-					echo '<div class="col-3">--</div>';
-					echo '</div>';
-				}
-				echo '<div class="row">
-				<div class="col">';
-				echo '<button class="btn btn-secondary btn-square-sm mt-0 editQuestion" data-test="' . $id . '" data-section="' . $i . '">Edit</button>
-				<button class="btn btn-danger btn-square-sm mt-0 dropOption" data-qb="' . $id . '"><span class="badge badge-light"><i class="fa fa-times"></i></span></button>';
-				echo '</div>';
-				echo '</div>';
-
-				echo '</div></div>';
-			} else {
-				echo '<div class="card">
-      	<div class="card-body mt-0 py-1">
-				<div class="row">
-				<div class="col">
-				<span class="testQuestion">' . $qb_text . '</span>
-				</div></div>
-				<div class="row">
-				<div class="col">
-				<button class="btn btn-secondary btn-square-sm mt-0 activeQuestion" data-qb="' . $id . '">Active</button>
-				<button class="btn btn-danger btn-square-sm mt-0 dropQuestion" data-qb="' . $id . '">Drop From Test</button>
-				</div></div>
-				</div></div>';
-			}
-		}
 	} elseif ($_POST['action'] == 'fetchInstruction') {
 		$test_id = $_POST['testId'];
 		$folder = '../../' . $myFolder . '/test/' . $test_id;
@@ -271,8 +257,8 @@ if (isset($_POST['action'])) {
 				echo '<button class="btn btn-warning btn-square-sm mt-0 defaultSection" id="defaultSection' . $i . '" data-section="' . $i . '">' . $i . '</button>';
 			}
 			echo '</div>';
-			echo '<div class="col-2"><span class="topBarText">Marks(+)</span><input type="text" class="form-control form-control-sm defaultMarks w-50" id="defaultMarks" name="marks" value="4"></div>';
-			echo '<div class="col-2"><span class="topBarText">Marks(-)</span><input type="text" class="form-control form-control-sm defaultNMarks w-50" id="defaultNMarks" name="nmarks" value="0"></div>';
+			echo '<div class="col-3"><span class="topBarText">Marks(+)</span><input type="text" class="form-control form-control-sm defaultMarks w-50" id="defaultMarks" name="marks" value="4"></div>';
+			echo '<div class="col-3"><span class="topBarText">Marks(-)</span><input type="text" class="form-control form-control-sm defaultNMarks w-50" id="defaultNMarks" name="nmarks" value="0"></div>';
 			echo '</div>';
 			echo '</div></div>';
 		}
@@ -284,7 +270,79 @@ if (isset($_POST['action'])) {
 		if ($result) $output = $result->fetch_assoc();
 		else $output = array("qb_text" => "Please write/paste your Question Here");
 		echo json_encode($output);
-	}
+	} elseif ($_POST['action'] == 'changeOption') {
+		$qb_id = $_POST['qb_id'];
+		$qo_code = $_POST['qo_code'];
+		$change_code = $_POST['change_code'];
+		//echo "Jai ho $qb_id code $qo_code";
+		if ($change_code == "setRight") $sql = "update question_option set qo_correct='1' where qb_id='$qb_id' and qo_code='$qo_code'";
+		else $sql = "update question_option set qo_correct='0' where qb_id='$qb_id' and qo_code='$qo_code'";
+		$result = $conn->query($sql);
+		if ($result) echo "Updated Successfully";
+		else echo $conn->error;
+	} elseif ($_POST['action'] == 'updateOption') {
+		$qb_id = $_POST['qb_id'];
+		$qo_code = $_POST['qo_code'];
+		$qo_text = $_POST['qo_text'];
+		//echo "Jai ho $qb_id code $qo_code";
+		$result = $conn->query($sql);
+		if ($result) echo "Updated Successfully";
+		else echo $conn->error;
+	} elseif ($_POST['action'] == 'updateText') {
+		$qb_id = $_POST['qb_id'];
+		if(isset($_POST['qo_code']))$qo_code = $_POST['qo_code'];
+		$qp_sno = $_POST['qp_sno'];
+		$value = $_POST['value'];
+		$tag = $_POST['tag'];
+		//echo "Jai ho Tag $tag - Qb $qb_id - Val $value";
+		//echo "Jai ho  code $qo_code";
+		//echo "Jai ho  Sno  $qp_sno";
+		if($tag=="qo_text")$sql = "update question_option set qo_text='$value' where qb_id='$qb_id' and qo_code='$qo_code'";
+		elseif($tag=="qb_text")$sql = "update question_bank set $tag='$value' where qb_id='$qb_id'";
+		else $sql = "update qb_parameter set $tag='$value' where qb_id='$qb_id' and qp_sno='$qp_sno'";
+		$result = $conn->query($sql);
+		$affectedRows=$conn->affected_rows;
+		if (!$result) echo $conn->error;
+		elseif($affectedRows==0){
+			$sql = "insert into qb_parameter (qb_id, qp_sno, $tag) values('$qb_id', '$qp_sno', '$value')";
+			$result = $conn->query($sql);
+			if (!$result) echo $conn->error;
+		}
+		else echo "Updated Successfully";
+	} elseif ($_POST['action'] == 'addCP') {
+		$qb_id = $_POST["qb_id"];
+		$qc_name = $_POST['qc_name'];
+		$qc_marks = $_POST['qc_marks'];
+		$qc_sno = $_POST['qc_sno'];
+		$sql = "insert into qb_cp (qb_id, qc_name, qc_marks, qc_sno) values('$qb_id', '$qc_name', '$qc_marks', '$qc_sno')";
+		$result = $conn->query($sql);
+		if ($result) {
+			echo "Added Successfully";
+		} else {
+			$error = $conn->errno;
+			if ($error == "1062") echo "Duplicate Found !!!";
+		}
+	}elseif ($_POST['action'] == 'updateCP') {
+		$qb_id = $_POST['qb_id'];
+		$qc_sno = $_POST['qc_sno'];
+		$value = $_POST['value'];
+		$tag = $_POST['tag'];
+		//echo "Jai ho $qb_id code $qo_code";
+		$sql = "update qb_cp set $tag='$value' where qb_id='$qb_id' and qc_sno='$qc_sno'";
+		$result = $conn->query($sql);
+		if ($result) echo "Updated Successfully";
+		else echo $conn->error;
+	}elseif ($_POST['action'] == 'delete') {
+		$id = $_POST['id'];
+		$sno = $_POST['sno'];
+		$tag = $_POST['tag'];
+		//echo "Jai ho $qb_id code $qo_code";
+		if($tag=="cp")$sql = "delete from qb_cp where qb_id='$id' and qc_sno='$sno'";
+		else $sql = "delete from question_option where qb_id='$id' and qo_code='$sno'";
+		$result = $conn->query($sql);
+		if ($result) echo "Removed Successfully";
+		else echo $conn->error;
+	} 
 } elseif ($_POST['instructionId'] == 'T' || $_POST['instructionId'] == 'S') {
 	$test_id = $_POST['testId'];
 	$id = $_POST['instructionId'];

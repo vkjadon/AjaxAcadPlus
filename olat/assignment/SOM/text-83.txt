@@ -1,0 +1,1 @@
+<p>A beam is hinged at B and is supported at A, C and D as shown. A couple of * kN.m is acting at E and also subjected to a load of * kN at F. Draw SFD and BMD.</p>

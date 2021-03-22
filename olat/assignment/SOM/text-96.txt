@@ -1,0 +1,1 @@
+<p>Calculate second moment of area for the section shown in figure about an axis parallel to x-axis passing through centroid of the section. Take a= * mm; b=* mm; c=* mm; d=* mm.</p>

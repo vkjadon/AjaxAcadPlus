@@ -57,7 +57,13 @@ div.minWidth100{
   font-style: italic;
   font-size: small;
 }
-.testQuestion {
+.warning {
+  color: rgba(231, 40, 50, 0.911);
+  font-style: italic;
+  font-size: small;
+  font-weight: bold;
+}
+.testQuestionText {
   font-style: italic;
   font-size: small;
 }
@@ -89,8 +95,50 @@ div.minWidth100{
   border: thick;
   font-size: small;
 }
+.fa-trash {
+  color: rgba(245, 7, 19, 0.911);
+  padding-left: 2px;
+  padding-right: 2px;
+}
+.fa-exclamation-triangle {
+  color: rgba(245, 7, 19, 0.911);
+  padding-left: 2px;
+  padding-right: 2px;
+}
+.fa-upload {
+  color: rgba(7, 130, 245, 0.911);
+  padding-left: 2px;
+  padding-right: 2px;
+}
+.fa-check {
+  color: rgba(64, 216, 25, 0.911);
+  padding-right: 2px;
+}
+.fa-times {
+  color: rgba(207, 37, 45, 0.911);
+  padding-right: 2px;
+}
+.fa-pencil {
+  color: rgba(62, 88, 122, 0.527);
+}
 .fa-remove {
   color: rgba(245, 7, 19, 0.911);
+}
+/* a tag */
+
+.atag {
+  padding:4px;
+  font-weight:normal;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: small;
+}
+.atag .list-group-item:hover {
+  background-color: rgb(44, 145, 74);
+  border-color: white;
+}
+.atag .active {
+  background-color: rgb(106, 110, 110);
+  border-color: white;
 }
 
 /* List css */
@@ -132,6 +180,22 @@ div.minWidth100{
   font-size: 12px;
   border-radius: 0px;
 }
+.btn-pallete-notVisited {
+  padding: 2px 8px;
+  font-size: 14px;
+  border-radius: 10px;
+  align-content: center;
+  border-color: rgb(59, 34, 150);
+}
+.btn-pallete-current {
+  padding: 2px 8px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 10px;
+  align-content: center;
+  border-color: rgb(59, 34, 150);
+}
+
 .btn-square-xs {
   padding: 2px 4px;
   font-size: 10px;
@@ -166,4 +230,16 @@ textarea
   font-weight:normal;
   font-family:Georgia, 'Times New Roman', Times, serif;
   background-color: rgb(244, 247, 248);
+}
+
+/*Digital Clock*/
+
+.digital-clock {
+  height: 30px;
+  color: #ffffff;
+  border: 2px solid #999;
+  border-radius: 4px;
+  text-align: center;
+  font: 25px/30px 'DIGITAL', Helvetica;
+  background: linear-gradient(90deg, #000, #555);
 }

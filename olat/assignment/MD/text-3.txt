@@ -1,0 +1,1 @@
+<p>Determine the force required to punch a * mm-diameter hole in plate of thickness * mm. The ultimate tensile strength of the plate is 440 MPa, yield strength 210 MPa and ultimate shear strength of plate is 350 MPa. Also calculate the failure area.</p>

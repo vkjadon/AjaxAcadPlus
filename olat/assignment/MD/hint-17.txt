@@ -1,0 +1,8 @@
+<ol>
+<li>Calculate design twisting moment (N.mm). Use overload factor between 1.1 to 1.5</li>
+<li>Design Shaft.</li>
+<li>Modify to standard shaft diameter.</li>
+<li>Set dimensions of the coupling using standard table.</li>
+<li>Use design equations for different modes of failure according to the check points.</li>
+<li>The torsional capacity of all the bolts are to be calculated.</li>
+</ol>

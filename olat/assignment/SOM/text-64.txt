@@ -1,0 +1,1 @@
+<p>Determine the force in each member of the truss if the load at B and C are * kN and * kN respectively. The distance between A and E is 4 m and all horizontal links are of 3 m length.</p>

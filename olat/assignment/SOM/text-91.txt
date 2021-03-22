@@ -1,0 +1,1 @@
+<p>A * mm deep symmetrical section has second moment of area about neutral axis as 10<sup>8</sup> mm<sup>4</sup>. The beam is simply supported between * m. Find the load intensity of full length udl if the bending stress in not to exceed * MPa.</p>

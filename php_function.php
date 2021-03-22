@@ -350,6 +350,15 @@ function moveUp($conn, $table, $fields, $values, $sql)
 
   $sno = $valueSno - 1;
 }
+
+function writeToFile($folder, $fileName, $content){
+  echo $folder;
+  if (!is_dir($folder)) mkdir($folder);
+	$fileHandle = fopen($folder.'/'.$fileName, 'w+') or die("Cannot open file");
+	fwrite($fileHandle, $content);
+	fclose($fileHandle);
+}
+
 function dayList($dummy1, $dummy2)
 {
   echo '<div class="form-check form-check-inline">

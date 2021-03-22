@@ -1,0 +1,1 @@
+<p>A piller crane of * mm base diameter uses eight bolts at a pcd of 1600 mm of base diameter. A load of * tonnes &nbsp;is to be lifted. A schemetic arrangement is shown in the figure. Design the bolt neglecting the primary force. &nbsp;The design stress of bolt in tension and shear are 84 MPa and 50 MPa respectively.</p>

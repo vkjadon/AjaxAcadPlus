@@ -1,0 +1,1 @@
+<p>A * mm diameter machine member is loaded as shown in Figure. The loads of 5 kN and 10 kN are acting in &nbsp;plane along the indicated directions. An additional load of * kN is acting at point &nbsp;C along the positive z- axis. Calculate the reactions, the maximum normal and shear stresses at fixed end.</p>

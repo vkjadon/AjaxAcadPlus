@@ -1,0 +1,8 @@
+<p>This is the case of 3D. There would be six equations of static equilibrium. Three for Force along and three for moments about coordinate axes.</p>
+<p>F<sub>x</sub> will induce axial stress (normal stress)</p>
+<p>M<sub>x</sub> will induce shear stress&nbsp;</p>
+<p>M<sub>y</sub> will induce bending (normal) stress in x-z plane</p>
+<p>M<sub>z</sub> will induce bending (normal) stress in x-y plane</p>
+<p>Maximum normal stress in resultant of M<sub>y</sub> and&nbsp;M<sub>z</sub>&nbsp;and then algebraiclly added with axial stress.&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>

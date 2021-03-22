@@ -1,0 +1,1 @@
+<p>Determine the diameter of the smallest bolt that can bear a load of * kN in the assemble as shown such that the induced shear stress in the bolt does not exceed * MPa.</p>

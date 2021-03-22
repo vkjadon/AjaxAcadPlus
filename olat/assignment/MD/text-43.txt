@@ -1,0 +1,67 @@
+<p>A line shaft rotating at 750 rpm receives power <em>A</em> through gear arrangement and delivers * kW at station <em>B</em>, * kW at <em>C</em> and 4 kW at <em>D</em> as shown in the Figure. Design the shaft using maximum shear stress theory neglecting the effect of keyway. The bending moments (N.m) in <em>x-y</em> and <em>x-z</em> planes are tabulated at salient points as below</p>
+<ol>
+<li style="list-style-type: none;">
+<table style="margin-left: auto; margin-right: auto;" border="1" width="100%">
+<tbody>
+<tr>
+<td style="width: 204px;">&nbsp;</td>
+<td style="width: 60px;">
+<p><em>A</em></p>
+</td>
+<td style="width: 60px;">
+<p><em>B</em></p>
+</td>
+<td style="width: 60px;">
+<p><em>C</em></p>
+</td>
+<td style="width: 60px;">
+<p><em>D</em></p>
+</td>
+<td style="width: 74px;">
+<p><em>E &amp; F</em></p>
+</td>
+</tr>
+<tr>
+<td style="width: 204px;">
+<p>Bending moment in <em>x-y</em> plane</p>
+</td>
+<td style="width: 60px;">
+<p>945</p>
+</td>
+<td style="width: 60px;">
+<p>1200</p>
+</td>
+<td style="width: 60px;">
+<p>*</p>
+</td>
+<td style="width: 60px;">
+<p>1150</p>
+</td>
+<td style="width: 74px;">
+<p>0</p>
+</td>
+</tr>
+<tr>
+<td style="width: 204px;">
+<p>Bending moment in <em>x-z</em> plane</p>
+</td>
+<td style="width: 60px;">
+<p>1855</p>
+</td>
+<td style="width: 60px;">
+<p>*</p>
+</td>
+<td style="width: 60px;">
+<p>2010</p>
+</td>
+<td style="width: 60px;">
+<p>500</p>
+</td>
+<td style="width: 74px;">
+<p>0</p>
+</td>
+</tr>
+</tbody>
+</table>
+<br /><br /></li>
+</ol>

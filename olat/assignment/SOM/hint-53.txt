@@ -1,0 +1,2 @@
+<p>Two unknowns : F and theta. Take moment of force F about point A and B. This will give two equations as moment about A and B are given. Take a note of the units. N.m and mm.</p>
+<p>Resolve F to simplifying the analysis.</p>

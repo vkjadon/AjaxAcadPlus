@@ -13,10 +13,10 @@ function selectList($conn, $selectTitle, $data, $sql)
 {
   //echo "Inst in function $tableName $id $name $where";
   $required = $data[0];
-  $id = $data[1];
-  $name = $data[2];
-  $abbri = $data[3];
-  $idName = $data[4];
+  $id = $data[1]; //Table Id Field name 
+  $name = $data[2]; // Class Name and Field Name also
+  $abbri = $data[3]; // Field Name for abbri ("" if no abbri is required in the list)
+  $idName = $data[4]; // id of the variable and name of the variable (user defined)
 
   $result = $conn->query($sql);
   if ($result) {
@@ -584,6 +584,25 @@ function get_subjectResource($conn, $tn_res, $subject_id)
   return json_encode($output);
 }
 
+function get_tableRowX($conn, $sql, $arrayField)
+{
+
+  $result = $conn->query($sql);
+  if (!$result) die(" The script could not be Loadded! Please report!");
+  $data = array();
+  while ($rows = $result->fetch_assoc()) {
+    $sub_array = array();
+    for ($i = 0; $i < count($arrayField); $i++) {
+      $field = $arrayField[$i];
+      $sub_array[$field] = $rows[$field];
+    }
+    $data[] = $sub_array;
+  }
+  $output = array(
+    "data" => $data
+  );
+  return json_encode($output);
+}
 function getTableRow($conn, $sql, $arrayField)
 {
 

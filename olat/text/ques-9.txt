@@ -1,0 +1,1 @@
+A car moving with a speed of *** km/hr. Find the distance travelled in *** hrs.

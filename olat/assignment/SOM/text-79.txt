@@ -1,0 +1,1 @@
+<p>Draw BMD for a * m cantilever loaded with linearly distributed load of maximum intensity * kN/m. The load is starting from free end to fixed end.</p>

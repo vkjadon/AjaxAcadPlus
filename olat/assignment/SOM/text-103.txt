@@ -1,0 +1,1 @@
+<p>Determine the stress components acting on the inclined plane. &theta;=*&deg;</p>
