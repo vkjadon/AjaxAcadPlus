@@ -566,7 +566,7 @@ if (!isset($myScl) || !isset($myProg) || !isset($mySes)) {
 
   </section>
 
-  <section id="stats-subtitle">
+  <!-- <section id="stats-subtitle">
     <div class="row">
       <div class="col-12 mt-3 mb-1">
         <h4 class="text-uppercase">Statistics With Subtitle</h4>
@@ -661,7 +661,7 @@ if (!isset($myScl) || !isset($myProg) || !isset($mySes)) {
         </div>
       </div>
     </div>
-  </section>
+  </section> -->
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
