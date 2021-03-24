@@ -26,7 +26,7 @@ To inclue standard file
 // Solution
 	if($solution=='Y')
 	{
-		echo '<table class="table table-bordered">';
+		echo '<table class="table list-table-xs">';
 		echo '<tr><td> x </td><td>'.$x.' </td></tr>';
 		echo '<tr><td> y </td><td>'.$y.' </td></tr>';
 		echo '<tr><td>Force</td><td>'.$pcp[0].' N</td></tr>';

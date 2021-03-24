@@ -26,9 +26,7 @@ To inclue standard file
 // Solution
 	if($solution=='Y')
 	{
-		echo '<table class="table table-bordered">';
-		echo '<tr><td> AB </td><td>'.$AB.' </td></tr>';
-		echo '<tr><td> AC </td><td>'.$AC.' </td></tr>';
+		echo '<table class="table list-table-xs">';
 		echo '<tr><td> Theta </td><td>'.$theta.' </td></tr>';
 		echo '<tr><td> dA</td><td>'.$d_A.' </td></tr>';
 		echo '<tr><td> dC </td><td>'.$d_C.' </td></tr>';

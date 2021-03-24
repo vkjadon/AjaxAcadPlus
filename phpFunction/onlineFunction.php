@@ -1,7 +1,8 @@
 <?php
 function get_testListJson($conn, $myId)
 {
-  $sql = "select * from test where test_status<9 and submit_id='$myId' order by test_status asc, submit_ts desc";
+  if($myId>0)$sql = "select * from test where test_status<9 and submit_id='$myId' order by test_status asc, submit_ts desc";
+  else $sql = "select * from test where test_status<9 order by test_status asc, submit_ts desc";
   $result = $conn->query($sql);
   if (!$result) {
     echo $result->error;

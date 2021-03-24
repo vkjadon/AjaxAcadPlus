@@ -181,13 +181,13 @@ if (isset($_POST['action'])) {
 				}
 			}
 			echo '<div class="row">
-				<div class="col-10">';
+				<div class="col-10 m-0 p-0">';
+				echo '<button class="btn btn-warning btn-square-sm m-0 uploadKeyFile" data-upload="' . $id . '" data-tag="keyFile">Upload Key File</button>&nbsp;&nbsp;';
 			//echo '<a href="#" class="editQuestion" data-qb="' . $id . '"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;';
 			echo '<a href="#" class="uploadQuestionImage" data-upload="' . $id . '" data-tag="questionImage" title="Upload Question Image"><i class="fa fa-upload"></i></a>&nbsp;&nbsp;';
-
-
+			
 			if ($cpKeyError == "True") {
-				echo '<button class="btn btn-info btn-square-sm mt-0 uploadKeyFile" data-upload="' . $id . '" data-tag="keyFile">Upload Key File</button>';
+				echo '<span class="warning"><i class="fa fa-exclamation-triangle"> Key File Missing !! </i></soan>';
 				$addToTestEroor = "True";
 			}
 
