@@ -10,6 +10,16 @@ require('../../php_function.php');
 
 <head>
   <title>Outcome Based Education : AcadPlus</title>
+<<<<<<< HEAD
+||||||| merged common ancestors
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+=======
   <!-- Font Awesome -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
   <!-- Google Fonts -->
@@ -18,12 +28,23 @@ require('../../php_function.php');
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.css" rel="stylesheet" />
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+>>>>>>> df090e8b21e39c0f50b3bac44dcab832d928620c
   <link rel="stylesheet" href="../../table.css">
   <link rel="stylesheet" href="../../style.css">
+<<<<<<< HEAD
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
+||||||| merged common ancestors
+=======
 
+>>>>>>> df090e8b21e39c0f50b3bac44dcab832d928620c
 </head>
 
 <body>
+
   <?php require("../topBar.php"); ?>
   <div class="container-fluid">
     <div class="row">
@@ -36,7 +57,7 @@ require('../../php_function.php');
               <div class="selectSchool">
                 <?php
                 $sql = "select * from school where school_status='0'";
-                selectList($conn, "Select School", array(0,"school_id", "school_name", "school_abbri", "school_name"), $sql);
+                selectList($conn, "Select School", array(0, "school_id", "school_name", "school_abbri", "school_name"), $sql);
                 ?>
                 <div class="form-check-inline teaching">
                   <label class="form-check-label">Teaching
@@ -53,7 +74,7 @@ require('../../php_function.php');
             <p class="selectDept">
               <?php
               $sql = "select * from department where dept_status='0'";
-              selectList($conn, "Select Department", array(0,"dept_id", "dept_name", "dept_abbri", "sel_dept"), $sql);
+              selectList($conn, "Select Department", array(0, "dept_id", "dept_name", "dept_abbri", "sel_dept"), $sql);
               ?>
             </p>
           </div>
@@ -72,11 +93,11 @@ require('../../php_function.php');
         </div>
       </div>
 
-      <div class="col-10">
+      <div class="col-3">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane fade show active" id="list-si" role="tabpanel" aria-labelledby="list-si-list">
             <div class="row">
-              <div class="mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addInst">New</button>
+              <div class="mt-1 mb-1"><button class="btn btn-secondary btn-sm mt-1 addInst">New</button>
                 <p id="instShowList"></p>
               </div>
             </div>
@@ -84,7 +105,7 @@ require('../../php_function.php');
 
           <div class="tab-pane fade show" id="list-mis" role="tabpanel" aria-labelledby="list-mis-list">
             <div class="row">
-              <div class="mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addSchool">New</button>
+              <div class="mt-1 mb-1"><button class="btn btn-secondary btn-sm mt-1 addSchool">New</button>
                 <p id="schoolShowList"></p>
               </div>
             </div>
@@ -92,7 +113,7 @@ require('../../php_function.php');
 
           <div class="tab-pane fade show" id="list-mid" role="tabpanel" aria-labelledby="list-mid-list">
             <div class="row">
-              <div class="mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addDept">New</button>
+              <div class="mt-1 mb-1"><button class="btn btn-secondary btn-sm mt-1 addDept">New</button>
                 <p id="deptShowList"></p>
               </div>
             </div>
@@ -100,13 +121,64 @@ require('../../php_function.php');
 
           <div class="tab-pane fade show" id="list-mip" role="tabpanel" aria-labelledby="list-mip-list">
             <div class="row">
-              <div class="mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addProgram">New</button>
+              <div class="mt-1 mb-1"><button class="btn btn-secondary btn-sm mt-1 addProgram">New</button>
                 <p id="programShowList"></p>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <div class="col-7">
+        <div class="row">
+          <form class="text-center border border-light p-4 shadow w-75" id="basicInfoForm">
+            <p class="h4 mb-2">Basic Information</p>
+            <hr>
+            <p class="h6 align-left">Name and Address of the Institution</p>
+            <div class="row">
+              <div class="col-12">
+                <div class="form-group">
+                  <div class="md-form md-outline">
+                    <input type="text" id="instName" class="form-control">
+                    <label for="instName">Instituton Name</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <div class="form-group">
+                  <div class="md-form md-outline">
+                    <textarea id="instAddress" class="md-textarea form-control" rows="3"></textarea>
+                    <label for="instAddress">Address</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group">
+                  <div class="md-form md-outline">
+                    <input type="text" id="instCity" class="form-control">
+                    <label for="instCity">City</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  <div class="md-form md-outline">
+                  <input type="text" id="instPIN" class="form-control">
+                    <label for="instPIN">PIN Code</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
 
 
 </body>
@@ -121,6 +193,14 @@ require('../../php_function.php');
 
 <script src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
 <script src="//cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+<<<<<<< HEAD
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+
+||||||| merged common ancestors
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+=======
+>>>>>>> df090e8b21e39c0f50b3bac44dcab832d928620c
 
 <script>
   $(document).ready(function() {
@@ -405,6 +485,12 @@ require('../../php_function.php');
       }
     });
 
+    $(document).on('click', '.basicInfoUni', function() {
+      $('.basicInfoForm').hide();
+    });
+
+
+
     function instList() {
       //$.alert("In List Function");
       $.post("instSql.php", {
@@ -478,12 +564,11 @@ require('../../php_function.php');
 
   });
 </script>
-
 <!-- Modal Section-->
 <div class="modal" id="firstModal">
   <div class="modal-dialog modal-md">
     <form class="form-horizontal" id="modalForm">
-      <div class="modal-content bg-secondary text-white">
+      <div class="modal-content">
 
         <!-- Modal Header -->
         <div class="modal-header">
@@ -668,8 +753,8 @@ require('../../php_function.php');
           <input type="hidden" id="schoolIdModal" name="schoolIdModal">
           <input type="hidden" id="deptTypeModal" name="deptTypeModal">
           <input type="hidden" id="deptIdModal" name="deptIdModal">
-          <button type="submit" class="btn btn-success btn-sm" id="submitModalForm">Submit</button>
-          <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-secondary" id="submitModalForm">Submit</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
         </div> <!-- Modal Footer Closed-->
       </div> <!-- Modal Conent Closed-->
 

@@ -116,13 +116,13 @@ function getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDeco
   // $button[1]=>0 Delete Button NOT Required; => 1 Delete Button Required
   // $button[2]=>0 Retrieve button Not Required; => 1 Required
   // $button[3]=>0 Process button Not Required; => 1 Required
-  // statusDecode is an associative array to Decode the Field value by an appropriate Phrase as 
+  // statusDecode is an associative array to Decode the Field value by an appropriate Phrase as
   //  Y by Yes M by Male etc. It can aslo be used to align the table cell.
   $columnCount = count($header);
   //echo "In Function  $sql Column Count $columnCount";
   if (isset($statusDecode["align"]) == "center") $align = 'align=' . '"center"';
   else $align = '';
-  echo '<table class="list-table-xs">';
+  echo '<table class="table  table-striped w-auto">';
   echo '<thead ' . $align . '>';
   if ($button[0] == '1') echo '<th><i class="fa fa-edit"></i></th>';
   for ($j = 0; $j < $columnCount; $j++) echo '<th>' . $header[$j] . '</th>';
@@ -259,9 +259,9 @@ function getFieldValue($conn, $fieldName, $sql)
 }
 function getField($conn, $getId, $tableName, $id, $name)
 {
-  //echo "In Function  $getId (Value passed) 
-  //$tableName 
-  // $id (Field name corresponding to $getId value) 
+  //echo "In Function  $getId (Value passed)
+  //$tableName
+  // $id (Field name corresponding to $getId value)
   // Field name to be returen from the table $name";
 
   $sql = "select * from $tableName where $id='" . $getId . "'";
@@ -281,9 +281,9 @@ function getField($conn, $getId, $tableName, $id, $name)
 
 function getFieldArray($conn,  $getId, $tableName, $id, $name)
 {
-  
-  //Return All the values of the field $name from the Table $tableName against another Field $getId 
-  
+
+  //Return All the values of the field $name from the Table $tableName against another Field $getId
+
   $sql = "select * from $tableName where $id='" . $getId . "'";
   $result = $conn->query($sql);
   $i = 0;
