@@ -557,7 +557,7 @@ function get_classTimeTableJson($conn, $classId, $tn_tt, $tn_tl, $tn_tlg, $dayof
   else $sql = "select tlg.*, tl.*, tt.* from $tn_tlg tlg, $tn_tl tl, $tn_tt tt where tt.tl_id=tl.tl_id and tl.tlg_id=tlg.tlg_id and tlg.class_id='$classId' and tt.tt_day='$dayofDate' and tlg.tlg_status='0'";
 
   $result = $conn->query($sql);
-  if (!$result) die(" The script could not be Loadded! Please report!");
+  if (!$result) die(" The script could not be Loadded ClassTimeTableJson! Please report!");
   $data = array();
   while ($rows = $result->fetch_assoc()) {
     $sub_array = array();

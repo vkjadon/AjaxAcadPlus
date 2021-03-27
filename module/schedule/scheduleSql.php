@@ -44,7 +44,7 @@ if (isset($_POST['action'])) {
     $class_semester = getField($conn, $classId, "class", "class_id", "class_semester");
     $program_id = getField($conn, $classId, "class", "class_id", "program_id");
 
-    //echo "Cl $classId -B $batch_id -Sem $class_semester -P $program_id";
+    //echo "Cl $classId -B $batch_id -Sem $class_semester -P $program_id $tn_tlg";
 
     $sql = "select * from subject where program_id='$program_id' and batch_id='$batch_id' and subject_semester='$class_semester'";
     $result = $conn->query($sql);
@@ -95,7 +95,7 @@ if (isset($_POST['action'])) {
   } elseif ($_POST["action"] == "tl") {
     $classId = $_POST['classId'];
     $sno=1;
-    //echo "Classs $classId";
+    echo "Classs $classId";
     $sql = "select tlg.*, sb.* from $tn_tlg tlg, subject sb where tlg.subject_id=sb.subject_id and tlg.class_id='$classId' and tlg.tlg_status='0' order by tlg.subject_id, tlg.tlg_type";
     $result = $conn->query($sql);
     if (!$result) die("Could not List the Teaching Load!");
@@ -335,6 +335,7 @@ function slotLoad($conn, $tn_tt, $tn_tlg, $tn_tl, $classId, $dayId, $period, $dr
 }
 function tlg($conn, $tn_tlg, $subject_id, $classId, $tlg_type)
 {
+  //echo "Table $tn_tlg";
   $dup = "select * from $tn_tlg where subject_id='$subject_id' and class_id='$classId' and tlg_type='$tlg_type'";
   addData($conn, $tn_tlg, "tlg_id", array("class_id", "subject_id", "tlg_type", "tlg_group"), array($classId, $subject_id, $tlg_type, "1"), "tlg_status", $dup, "NULL");
 

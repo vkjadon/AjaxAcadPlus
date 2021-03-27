@@ -34,7 +34,7 @@ if (isset($mySes)) {
   $tn_ad = 'assessment_design';
   //check_tn_ad($conn, $tn_ad);
 
-  $tn_ccd = 'cc_detail';
+  $tn_ccd = 'cc_detail'.$mySes;
   //check_tn_ccd($conn, $tn_ccd);
 
   $tn_cco = 'cc_outcome';
@@ -43,34 +43,34 @@ if (isset($mySes)) {
   $tn_class = 'class';
   //check_tn_rs($conn, $tn_tl);
 
-  $tn_eac = 'ea_claim';
+  $tn_eac = 'ea_claim'.$mySes;
   //check_tn_eac($conn, $tn_eac);
 
-  $tn_rc = 'registration_class';
+  $tn_rc = 'registration_class'.$mySes;
   //check_tn_rc($conn, $tn_tl);
 
-  $tn_res = 'resource_subject';
+  $tn_res = 'resource_subject'.$mySes;
   //check_tn_rs($conn, $tn_tl);
 
-  $tn_rs = 'registration_subject';
+  $tn_rs = 'registration_subject'.$mySes;
   //check_tn_rs($conn, $tn_tl);
 
-  $tn_tlg = 'tl_group';
+  $tn_tlg = 'tl_group'.$mySes;
   check_tn_tlg($conn, $tn_tlg);
 
-  $tn_tl = 'teaching_load';
+  $tn_tl = 'teaching_load'.$mySes;
   check_tn_tl($conn, $tn_tl);
 
-  $tn_tt = 'time_table';
+  $tn_tt = 'time_table'.$mySes;
   //check_tn_tl($conn, $tn_tl);
 
   $tn_sas = 'student_attendance_setup' . $mySes;
   check_tn_sas($conn, $tn_sas);
 
-  $tn_sbt = 'subject_topic';
+  $tn_sbt = 'subject_topic'.$mySes;
   //check_tn_rs($conn, $tn_tl);
 } else {
-  $tn_eac = "ea_claim";
+  $tn_eac = 'ea_claim';
   $tn_rc = 'registration_class2021';
   //check_tn_rc($conn, $tn_tl);
 }
