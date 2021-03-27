@@ -61,7 +61,7 @@ if (isset($_POST['action'])) {
     $id = $_POST['checkboxes_value'];
     $from = $_POST['scheduleFrom'];
     $to = $_POST['scheduleTo'];
-    //echo "$from - $to";
+    echo "$from - $to";
     $days = (strtotime($to) - strtotime($from)) / (24 * 60 * 60) + 1;
     for ($i = 0; $i < count($id); $i++) {
       echo '<button class="btn btn-secondary btn-square-sm" disabled>' . getField($conn, $id[$i], 'class', 'class_id', 'class_name') . '</button>';
@@ -100,7 +100,7 @@ if (isset($_POST['action'])) {
     echo "<h4>Schedule Created </h4>";
   } elseif ($_POST['action'] == 'sessionClassListSTT') {
     $programId = $_POST['programId'];
-    //echo "sddsd $programId";
+    echo "sddsd $programId";
     $json = get_sessionClass($conn, $mySes, $programId);
     //echo $json;
     $array = json_decode($json, true);
