@@ -51,7 +51,7 @@ function get_sectionQuestionListJson($conn, $test_id, $test_section)
 function testQuestionList($conn, $test_id, $test_section)
 {
   if($test_section>0)$sql = "select qb.*, tq.* from test_question tq, question_bank qb where tq.qb_id=qb.qb_id and tq.test_id='$test_id' and tq.test_section='$test_section' and tq.tq_status='2' order by tq.qb_id";
-  else $sql = "select qb.*, tq.* from test_question tq, question_bank qb where tq.qb_id=qb.qb_id and tq.test_id='$test_id' and tq.tq_status='2' order by tq.qb_id";
+  else $sql = "select qb.*, tq.* from test_question tq, question_bank qb where tq.qb_id=qb.qb_id and tq.test_id='$test_id' and tq.tq_status='2' order by rand()";
   $result = $conn->query($sql);
   if (!$result) {
     echo $result->error;

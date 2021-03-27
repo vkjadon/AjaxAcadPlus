@@ -181,9 +181,8 @@ if (isset($_POST['action'])) {
 				}
 			}
 			echo '<div class="row">
-				<div class="col-10 m-0 p-0">';
-				echo '<button class="btn btn-warning btn-square-sm m-0 uploadKeyFile" data-upload="' . $id . '" data-tag="keyFile">Upload Key File</button>&nbsp;&nbsp;';
-			//echo '<a href="#" class="editQuestion" data-qb="' . $id . '"><i class="fa fa-pencil"></i></a>&nbsp;&nbsp;';
+				<div class="col-10">';
+				if ($portion_count > 1)echo '<button class="btn btn-warning btn-square-sm m-0 uploadKeyFile" data-upload="' . $id . '" data-tag="keyFile">Upload Key File</button>&nbsp;&nbsp;';
 			echo '<a href="#" class="uploadQuestionImage" data-upload="' . $id . '" data-tag="questionImage" title="Upload Question Image"><i class="fa fa-upload"></i></a>&nbsp;&nbsp;';
 			
 			if ($cpKeyError == "True") {
@@ -233,8 +232,10 @@ if (isset($_POST['action'])) {
 				echo '<div class="card">
 				<div class="card-body mt-0 py-1">
 				<div class="row">
-				<div class="col-1"><span>' . ($i + 1) . '[' . $id . ']</span></div>
-				<div class="col-10">';
+				<div class="col-1"><span>' . ($i + 1) . '[' . $id . ']</span><br>';
+				echo '<a href="#" class="trashQuestion" data-sno="' . $test_id . '" data-qb="' . $id . '" data-tag="tq"><i class="fa fa-trash"></i></a>&nbsp;&nbsp;';
+				echo '</div>';
+				echo '<div class="col-9">';
 				for ($ip = 0; $ip < $portion_count; $ip++) {
 					$sno = $ip + 1;
 					$sql = "select * from qb_parameter where qb_id='$id' and qp_sno='$sno'";
@@ -260,8 +261,10 @@ if (isset($_POST['action'])) {
 				echo '<div class="card">
       	<div class="card-body mt-0 py-1">
 				<div class="row">
-				<div class="col-1"><span>' . ($i + 1) . '[' . $id . ']</span></div>
-				<div class="col-10">
+				<div class="col-1"><span>' . ($i + 1) . '[' . $id . ']</span><br>';
+				echo '<a href="#" class="trashQuestion" data-sno="' . $test_id . '" data-qb="' . $id . '" data-tag="tq"><i class="fa fa-trash"></i></a>&nbsp;&nbsp;';
+				echo '</div>';
+				echo '<div class="col-9">
 				<span class="testQuestionText">' . $qb_text . '</span>';
 				if (strlen($qb_image) > 5) echo '<p><img src="../../olat/img/' . $qb_image . '"></p>';
 				echo '</div>';
@@ -271,8 +274,6 @@ if (isset($_POST['action'])) {
 				if ($tq_status == 1) echo '<p class="text-info">Draft</p>';
 				else echo '<p class="text-success">Added</p>';
 				echo '</div></div>';
-				echo '<a href="#" class="trashQuestion" data-sno="' . $test_id . '" data-qb="' . $id . '" data-tag="tq"><i class="fa fa-trash"></i></a>&nbsp;&nbsp;';
-
 				echo '</div></div>';
 			}
 		}

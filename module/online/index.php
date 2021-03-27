@@ -40,7 +40,7 @@ require('../../php_function.php');
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="list-mt" role="tabpanel" aria-labelledby="list-mt-list">
             <div class="row">
-              <div class="col-6 mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addTestButton">New Test</button>
+              <div class="col-7 mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addTestButton">New Test</button>
                 <div class="card" id="addTestDiv">
                   <form id="addTestForm">
                     <div class="card-body bg-secondary">
@@ -58,7 +58,7 @@ require('../../php_function.php');
                 </div>
                 <p id="testList"></p>
               </div>
-              <div class="col-6 mt-1 mb-1" id="testRight">
+              <div class="col-5 mt-1 mb-1" id="testRight">
               </div>
             </div>
           </div>
@@ -131,26 +131,9 @@ require('../../php_function.php');
 
 <script>
   $(document).ready(function() {
-    $(document).on('click', '.checkAll', function() {
-      var id = $("#panelId").text();
-      //$.alert("Panel Id" + id);
-      if (id == "CS") $('.sclCS').prop('checked', true); // Checks it
-      else $('.scb').prop('checked', true); // Checks it
-
-    });
-
-    $(document).on('click', '.uncheckAll', function() {
-      var id = $("#panelId").text();
-      //$.alert("Panel Id" + id);
-      if (id == "CS") $('.sclCS').prop('checked', false);
-      else $('.scb').prop('checked', false);
-
-    });
     $('[data-toggle="popover"]').popover();
     $('[data-toggle="tooltip"]').tooltip();
-    $(".topBarTitle").text("Examination");
-    $(".selectPanel").show();
-    $("#panelId").hide();
+    //$("#panelId").hide();
     $("#addTestDiv").hide();
     //$("#questionForm").hide()
     testList();
@@ -384,7 +367,7 @@ require('../../php_function.php');
       //var question = get('question').getContent();
       var question = $("textarea#question").val();
 
-      $.alert("Section  " + selectedSection + "Question" + question)
+      //$.alert("Section  " + selectedSection + "Question" + question)
       $.post("onlineSql.php", {
         sectionId: selectedSection,
         defaultMarks: defaultMarks,
@@ -395,7 +378,7 @@ require('../../php_function.php');
       }, function() {
         //$.alert("Fecth" + mydata);
       }, "text").done(function(data, status) {
-        $.alert("Updated!!" + data);
+        //$.alert("Updated!!" + data);
         //tinyMCE.get('question').setContent("")
         $("textarea#question").val("");
         $("#actionCode").val("add")
@@ -404,7 +387,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     });
-
 
     $(document).on('click', '.defaultSection', function() {
       var id = $(this).attr('data-section');
@@ -632,7 +614,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
-
     function sectionQuestionList() {
       var selectedSection = $("#selectedSection").text()
       //$.alert("Section  " + selectedSection)
@@ -648,7 +629,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
-
     function questionLibrary() {
       //$.alert("Library  ")
       $.post("sectionQuestionListSql.php", {
@@ -662,7 +642,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
-
     function questionHeading(section) {
       //$.alert("In SAS Claim List");
       $.post("onlineSql.php", {
@@ -675,7 +654,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
-
     function testHeading() {
       //$.alert("In SAS Claim List");
       $.post("onlineSql.php", {
@@ -687,7 +665,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
-
     function testQuestionList() {
       //$.alert("In SAS Claim List");
       $.post("onlineSql.php", {
@@ -699,7 +676,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
-
     function testList() {
       //$.alert("In SAS Claim List");
       $.post("onlineSql.php", {
@@ -711,7 +687,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
-
     function getFormattedDate(ts, fmt) {
       var a = new Date(ts);
       var day = a.getDate();
@@ -754,6 +729,8 @@ require('../../php_function.php');
       success: function(data) {
         //$.alert("List " + data);
         $('#uploadModal').modal('hide');
+        $('#uploadModalForm')[0].reset();
+
       }
     })
   });
