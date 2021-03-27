@@ -1,92 +1,3 @@
-<<<<<<< HEAD
-<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet"> -->
-
-<!--Navbar-->
-<nav class="navbar navbar-expand-lg fixed-top navbar-dark info-color-dark">
-
- <!-- Navbar brand -->
- <a class="navbar-brand" href="../">ACADPLUS</a>
-
- <!-- Collapse button -->
- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav" aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
-  <span class="navbar-toggler-icon"></span>
- </button>
-
- <!-- Collapsible content -->
- <div class="collapse navbar-collapse" id="basicExampleNav">
-
-  <!-- Links -->
-  <ul class="navbar-nav mr-auto">
-   <!-- Dropdown -->
-   <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administration</a>
-    <div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
-     <div class="row">
-      <div class="col-6">
-       <a href="<?php echo $codePath . '/module/inst/'; ?>" class="dropdown-item">SetUp Institite</a>
-       <a href="<?php echo $codePath . '/module/admission/'; ?>" class="dropdown-item">Admission</a>
-       <a href="<?php echo $codePath . '/module/approval/'; ?>" class="dropdown-item">Approvals</a>
-      </div>
-      <div class="col-6">
-       <a href="<?php echo $codePath . '/module/manage_responsibility/'; ?>" class="dropdown-item">Assign Responsibility</a>
-       <a href="<?php echo $codePath . '/module/sop/'; ?>" class="dropdown-item">SOP</a>
-       <a href="<?php echo $codePath . '/module/committee/'; ?>" class="dropdown-item">Committees</a>
-||||||| merged common ancestors
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
-
-<!--Navbar-->
-<nav class="navbar navbar-expand-lg fixed-top navbar-dark info-color-dark">
-
- <!-- Navbar brand -->
- <a class="navbar-brand" href="../">ACADPLUS</a>
-
- <!-- Collapse button -->
- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav" aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
-  <span class="navbar-toggler-icon"></span>
- </button>
-
- <!-- Collapsible content -->
- <div class="collapse navbar-collapse" id="basicExampleNav">
-
-  <!-- Links -->
-  <ul class="navbar-nav mr-auto">
-   <!-- Dropdown -->
-   <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administration</a>
-    <div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
-     <div class="row">
-      <div class="col-6">
-       <a href="<?php echo $codePath . '/module/inst/'; ?>" class="dropdown-item">SetUp Institite</a>
-       <a href="<?php echo $codePath . '/module/admission/'; ?>" class="dropdown-item">Admission</a>
-       <a href="<?php echo $codePath . '/module/approval/'; ?>" class="dropdown-item">Approvals</a>
-      </div>
-      <div class="col-6">
-       <a href="<?php echo $codePath . '/module/manage_responsibility/'; ?>" class="dropdown-item">Assign Responsibility</a>
-       <a href="<?php echo $codePath . '/module/sop/'; ?>" class="dropdown-item">SOP</a>
-       <a href="<?php echo $codePath . '/module/committee/'; ?>" class="dropdown-item">Committees</a>
-=======
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
   <!-- <a href="#" class="navbar-brand">Brand</a> -->
   <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
@@ -112,7 +23,6 @@
             </div>
           </div>
         </div>
->>>>>>> df090e8b21e39c0f50b3bac44dcab832d928620c
       </div>
 
       <div class="nav-item dropdown">
