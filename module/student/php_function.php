@@ -13,7 +13,7 @@ function selectList($conn, $selectTitle, $data, $sql)
 {
   //echo "Inst in function $tableName $id $name $where";
   $required = $data[0];
-  $id = $data[1]; //Table Id Field name 
+  $id = $data[1]; //Table Id Field name
   $name = $data[2]; // Class Name and Field Name also
   $abbri = $data[3]; // Field Name for abbri ("" if no abbri is required in the list)
   $idName = $data[4]; // id of the variable and name of the variable (user defined)
@@ -122,9 +122,9 @@ function getFieldValue($conn, $fieldName, $sql)
 
 function getField($conn, $getId, $tableName, $id, $name)
 {
-  //echo "In Function  $getId (Value passed) 
-  //$tableName 
-  // $id (Field name corresponding to $getId value) 
+  //echo "In Function  $getId (Value passed)
+  //$tableName
+  // $id (Field name corresponding to $getId value)
   // Field name to be returen from the table $name";
 
   $sql = "select * from $tableName where $id='" . $getId . "'";
@@ -152,7 +152,7 @@ function getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDeco
   // $button[1]=>0 Delete Button NOT Required; => 1 Delete Button Required
   // $button[2]=>0 Retrieve button Not Required; => 1 Required
   // $button[3]=>0 Process button Not Required; => 1 Required
-  // statusDecode is an associative array to Decode the Field value by an appropriate Phrase as 
+  // statusDecode is an associative array to Decode the Field value by an appropriate Phrase as
   //  Y by Yes M by Male etc. It can aslo be used to align the table cell.
   $columnCount = count($header);
   //echo "In Function  $sql Column Count $columnCount";
@@ -607,7 +607,7 @@ function getTableRow($conn, $sql, $arrayField)
 {
 
   $result = $conn->query($sql);
-  if (!$result) die(" The script could not be Loadded! Please report!");
+  if (!$result) die(" The script could not be Loaded! Please report!");
   $data = array();
   while ($rows = $result->fetch_assoc()) {
     $sub_array = array();
