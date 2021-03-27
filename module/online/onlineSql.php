@@ -30,9 +30,8 @@ if (isset($_POST['action'])) {
 				echo '<div class="card bg-light">
       	<div class="card-body mt-0 py-1">
 				<div class="row">
-				<div class="col-6"><input class="form-control testName" data-test="'.$id.'" name="testName" value="' . $test_name . '" data-tag="test_name"></div>
-				<div class="col-4">
-				<h6 class="text-muted py-1">Sec : ';
+				<div class="col-10"><input class="form-control testName" data-test="'.$id.'" name="testName" value="' . $test_name . '" data-tag="test_name"><br>
+				<h6 class="text-muted py-1">Section : ';
 				$sql = "select * from test where test_id='$id'";
 				$value = getFieldValue($conn, "test_section", $sql);
 				echo '<a href="#" class="decrement" id="' . $id . '" data-value="' . $value . '"><i class="fa fa-angle-double-left"></i></a>';

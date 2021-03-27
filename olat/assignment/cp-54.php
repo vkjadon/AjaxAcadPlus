@@ -22,7 +22,7 @@ To inclue standard file
 // Solution
 	if($solution=='Y')
 	{
-		echo '<table class="table table-bordered">';
+		echo '<table class="table list-table-xs">';
 		echo '<tr><td>M about B due to T</td><td>'.$pcp[0].' kN.m</td></tr>';
 		echo '<tr><td>M about B due to W</td><td>'.$pcp[1].' kN.m</td></tr>';
 		echo '<tr><td>M about B </td><td>'.$pcp[2].' kN.m</td></tr>';

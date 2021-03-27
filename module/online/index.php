@@ -9,10 +9,13 @@ require('../../php_function.php');
 
 <head>
   <title>Outcome Based Education : ClassConnect</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+  <!-- MDB -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.css" rel="stylesheet" />
 
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
   <link rel="stylesheet" href="../../table.css">
   <link rel="stylesheet" href="../../style.css">
@@ -33,12 +36,11 @@ require('../../php_function.php');
           <a class="list-group-item list-group-item-action tr" id="list-tr-list" data-toggle="list" href="#list-tr" role="tab" aria-controls="tr"> Test Report</a>
         </div>
       </div>
-
       <div class="col-10">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="list-mt" role="tabpanel" aria-labelledby="list-mt-list">
             <div class="row">
-              <div class="col-6 mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addTestButton">New Test</button>
+              <div class="col-7 mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addTestButton">New Test</button>
                 <div class="card" id="addTestDiv">
                   <form id="addTestForm">
                     <div class="card-body bg-secondary">
@@ -56,7 +58,7 @@ require('../../php_function.php');
                 </div>
                 <p id="testList"></p>
               </div>
-              <div class="col-6 mt-1 mb-1" id="testRight">
+              <div class="col-5 mt-1 mb-1" id="testRight">
               </div>
             </div>
           </div>
@@ -86,7 +88,7 @@ require('../../php_function.php');
             <div class="row">
               <div class="col-5 mt-1 mb-1">
                 <h5>Add Question Panel</h5>
-              <p id="questionHeading"></p>
+                <p id="questionHeading"></p>
                 <h5>Section : <span id="selectedSection">1</span></h5>
                 <textarea rows="4" class="content" id="question" name="question"></textarea>
                 <input type="hidden" id="actionCode" name="actionCode">
@@ -109,12 +111,13 @@ require('../../php_function.php');
     </div>
   </div>
 </body>
+<!-- MDB -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.js"></script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-<script src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-<script src="//cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 <script src="https://cdn.tiny.cloud/1/xjvk0d07c7h90fry9yq9z0ljb019ujam91eo2jk8uhlun307/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <script>
@@ -128,26 +131,9 @@ require('../../php_function.php');
 
 <script>
   $(document).ready(function() {
-    $(document).on('click', '.checkAll', function() {
-      var id = $("#panelId").text();
-      //$.alert("Panel Id" + id);
-      if (id == "CS") $('.sclCS').prop('checked', true); // Checks it
-      else $('.scb').prop('checked', true); // Checks it
-
-    });
-
-    $(document).on('click', '.uncheckAll', function() {
-      var id = $("#panelId").text();
-      //$.alert("Panel Id" + id);
-      if (id == "CS") $('.sclCS').prop('checked', false);
-      else $('.scb').prop('checked', false);
-
-    });
     $('[data-toggle="popover"]').popover();
     $('[data-toggle="tooltip"]').tooltip();
-    $(".topBarTitle").text("Examination");
-    $(".selectPanel").show();
-    $("#panelId").hide();
+    //$("#panelId").hide();
     $("#addTestDiv").hide();
     //$("#questionForm").hide()
     testList();
@@ -221,8 +207,8 @@ require('../../php_function.php');
                 tag: tag,
                 action: "delete"
               }, function() {}, "text").done(function(data, status) {
-                $.alert(data);
-                if(tag=="tq") sectionQuestionList();
+                //$.alert(data);
+                if (tag == "tq") sectionQuestionList();
                 else activeQuestion();
               })
             }
@@ -277,7 +263,7 @@ require('../../php_function.php');
       var qc_sno = $(this).attr("data-sno");
       var value = $("#newCP").val();
       var valueMarks = $("#newCPMarks").val();
-      $.alert(" QbId  " + qb_id + " CP Sno " + qc_sno + " CP " + value)
+      //$.alert(" QbId  " + qb_id + " CP Sno " + qc_sno + " CP " + value)
       $.post("onlineSql.php", {
         qb_id: qb_id,
         qc_sno: qc_sno,
@@ -287,7 +273,7 @@ require('../../php_function.php');
       }, function() {
         //$.alert("Fecth" + mydata);
       }, "text").done(function(data, status) {
-        $.alert(data);
+        //$.alert(data);
         activeQuestion()
       }).fail(function() {
         $.alert("Error !!");
@@ -304,7 +290,7 @@ require('../../php_function.php');
       else var value = $(this).val();
 
       //Confirm Alert Plugin shows Alert Box twice
-      $.alert(" Parameter  " + qp_sno + " QB " + qb_id + " Value " + value + " Tag " + tag);
+      //$.alert(" Parameter  " + qp_sno + " QB " + qb_id + " Value " + value + " Tag " + tag);
       $.post("onlineSql.php", {
         qb_id: qb_id,
         qp_sno: qp_sno,
@@ -314,7 +300,7 @@ require('../../php_function.php');
         value: value,
         action: "updateText"
       }, function(data, status) {}, "text").done(function(data, status) {
-        $.alert("Updated!!" + mydata);
+        //$.alert("Updated!!" + mydata);
         sectionQuestionList()
       }).fail(function() {
         $.alert("Error !!");
@@ -381,7 +367,7 @@ require('../../php_function.php');
       //var question = get('question').getContent();
       var question = $("textarea#question").val();
 
-      $.alert("Section  " + selectedSection + "Question" + question)
+      //$.alert("Section  " + selectedSection + "Question" + question)
       $.post("onlineSql.php", {
         sectionId: selectedSection,
         defaultMarks: defaultMarks,
@@ -392,7 +378,7 @@ require('../../php_function.php');
       }, function() {
         //$.alert("Fecth" + mydata);
       }, "text").done(function(data, status) {
-        $.alert("Updated!!" + data);
+        //$.alert("Updated!!" + data);
         //tinyMCE.get('question').setContent("")
         $("textarea#question").val("");
         $("#actionCode").val("add")
@@ -401,7 +387,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     });
-
 
     $(document).on('click', '.defaultSection', function() {
       var id = $(this).attr('data-section');
@@ -629,7 +614,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
-
     function sectionQuestionList() {
       var selectedSection = $("#selectedSection").text()
       //$.alert("Section  " + selectedSection)
@@ -645,7 +629,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
-
     function questionLibrary() {
       //$.alert("Library  ")
       $.post("sectionQuestionListSql.php", {
@@ -659,7 +642,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
-
     function questionHeading(section) {
       //$.alert("In SAS Claim List");
       $.post("onlineSql.php", {
@@ -672,7 +654,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
-
     function testHeading() {
       //$.alert("In SAS Claim List");
       $.post("onlineSql.php", {
@@ -684,7 +665,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
-
     function testQuestionList() {
       //$.alert("In SAS Claim List");
       $.post("onlineSql.php", {
@@ -696,7 +676,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
-
     function testList() {
       //$.alert("In SAS Claim List");
       $.post("onlineSql.php", {
@@ -708,7 +687,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
-
     function getFormattedDate(ts, fmt) {
       var a = new Date(ts);
       var day = a.getDate();
@@ -726,7 +704,7 @@ require('../../php_function.php');
     var uploadId = $(this).attr("data-upload");
     var tag = $(this).attr("data-tag");
     var code = $(this).attr("data-sno");
-    $.alert("Upload Id" + uploadId + "tag " + tag + " Cde " + code);
+    //$.alert("Upload Id" + uploadId + "tag " + tag + " Cde " + code);
     $("#uploadId").val(uploadId);
     $("#uploadTag").val(tag);
     $("#uploadCode").val(code);
@@ -739,7 +717,7 @@ require('../../php_function.php');
   $(document).on('submit', '#uploadModalForm', function(event) {
     event.preventDefault();
     var formData = $(this).serialize();
-    $.alert(formData);
+    //$.alert(formData);
     // action and uploadId are passed as hidden
     $.ajax({
       url: "uploadSql.php",
@@ -749,8 +727,10 @@ require('../../php_function.php');
       cache: false, // To unable request pages to be cached  
       processData: false, // To send DOMDocument or non processed data file it is set to false  
       success: function(data) {
-        $.alert("List " + data);
+        //$.alert("List " + data);
         $('#uploadModal').modal('hide');
+        $('#uploadModalForm')[0].reset();
+
       }
     })
   });

@@ -175,25 +175,34 @@ div.minWidth100{
 .btn-round-sm .active{
   background-color: rgb(83, 90, 95);
 }
-.btn-square-sm {
+.btn-secondary {
+  background-color: rgb(83, 90, 95);
+}.btn-square-sm {
   padding: 2px 8px;
   font-size: 12px;
   border-radius: 0px;
 }
-.btn-pallete-notVisited {
+
+.qpBtn {
   padding: 2px 8px;
   font-size: 14px;
   border-radius: 10px;
   align-content: center;
+  background-color:rgba(227, 231, 236, 0.842) ;
+}
+
+.qpBtnNotVisited {
   border-color: rgb(59, 34, 150);
 }
-.btn-pallete-current {
-  padding: 2px 8px;
-  font-size: 14px;
-  font-weight: bold;
-  border-radius: 10px;
-  align-content: center;
-  border-color: rgb(59, 34, 150);
+.qpBtnCurrent {
+  color:#ffffff;
+  background-color:rgba(88, 36, 230, 0.842) ;
+}
+.qpBtnSubmitted {
+  background-color:rgba(36, 230, 78, 0.842) ;
+}
+.qpBtnVisited {
+  background-color:rgba(148, 201, 218, 0.842) ;
 }
 
 .btn-square-xs {
