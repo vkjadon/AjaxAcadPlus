@@ -1,7 +1,7 @@
-<nav class="navbar navbar-expand-lg fixed-top navbar-dark info-color-dark">
+<nav class="navbar navbar-expand-lg fixed-top navbar-light bg-info">
 
  <!-- Navbar brand -->
- <a class="navbar-brand" href="../">ACADPLUS</a>
+ <a class="navbar-brand" href="<?php echo $codePath . '/module/';?>">ACADPLUS</a>
 
  <!-- Collapse button -->
  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav" aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -10,7 +10,6 @@
 
  <!-- Collapsible content -->
  <div class="collapse navbar-collapse" id="basicExampleNav">
-
   <!-- Links -->
   <ul class="navbar-nav mr-auto">
    <!-- Dropdown -->
@@ -64,7 +63,21 @@
      </div>
     </div>
    </li>
-
+   <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="hr/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">HR</a>
+    <div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
+     <div class="row">
+      <div class="col-6">
+       <a href="<?php echo $codePath . '/module/hr/'; ?>" class="dropdown-item"> Staff  </a>
+       <a href="<?php echo $codePath . '/module/leave/'; ?>" class="dropdown-item"> Leave </a>
+      </div>
+      <div class="col-6">
+       <a href="<?php echo $codePath . '/module/feedback/'; ?>" class="dropdown-item"> Feedback </a>
+       <a href="<?php echo $codePath . '/module/feedback/'; ?>" class="dropdown-item"> Mentoring </a>
+      </div>
+     </div>
+    </div>
+   </li>
    <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Communication</a>
     <div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
@@ -115,24 +128,5 @@
  <!-- Collapsible content -->
 
 </nav>
-<!--/.Navbar-->
-<!--/.Navbar -->
-
-
-<!-- <nav class="navbar fixed-top bg-secondary text-white">
-  <a class="navbar-brand" href="../">
-  <img src="<?php echo $setLogo; ?>" width="60%">
-</a>
-  <h1 class="display-4 topBarTitle"></h1>
-  <ul class="navbar-nav ml-auto">
-    <li class="nav-item active">
-      <a class="navbar-brand text-white topBarText" href="../">Home</a>
-      <span class="navbar-brand text-white topBarText">[<?php echo $myUn . $myId; ?>]<?php echo $myFolder; ?></span>
-      <span class="navbar-brand text-white topBarText"><?php echo getField($conn, $myProg, "program", "program_id", "sp_abbri"); ?></span>
-      <span class="navbar-brand text-white topBarText">[<?php if (isset($mySes)) echo getField($conn, $mySes, "session", "session_id", "session_name"); ?>]</span>
-      <a class="navbar-brand text-white topBarText" href="../../logout.php">Logout</a>
-    </li>
-  </ul>
-</nav> -->
 <h1>&nbsp;</h1>
 <h6>&nbsp;</h6>

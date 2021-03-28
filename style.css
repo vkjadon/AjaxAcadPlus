@@ -91,7 +91,7 @@ div.minWidth100{
   font-size: small;
 }
 .dropdown-item {
-  color: rgba(39, 23, 134, 0.884);
+  color: rgba(50, 39, 218, 0.884);
   border: thick;
   font-size: small;
 }
@@ -153,7 +153,6 @@ div.minWidth100{
   border-color: white;
 }
 .list-group-mine .active {
-  background-color: rgb(106, 110, 110);
   border-color: white;
 }
 
@@ -162,6 +161,7 @@ div.minWidth100{
   font-weight:normal;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: small;
+  color: #ffffff;
 }
 
 /* Button css*/
@@ -176,7 +176,7 @@ div.minWidth100{
   background-color: rgb(83, 90, 95);
 }
 .btn-secondary {
-  background-color: rgb(83, 90, 95);
+  background-color: rgb(166, 201, 226);
 }.btn-square-sm {
   padding: 2px 8px;
   font-size: 12px;
