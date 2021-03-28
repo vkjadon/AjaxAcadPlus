@@ -86,15 +86,13 @@ div.minWidth100{
   color: rgba(39, 23, 134, 0.884);
   text-align: center;
   font-style: italic;
+  padding: 0px;
+  margin: 0px;;
   border: thick;
   background-color: rgba(228, 233, 235, 0.897);
   font-size: small;
 }
-.dropdown-item {
-  color: rgba(50, 39, 218, 0.884);
-  border: thick;
-  font-size: small;
-}
+
 .fa-trash {
   color: rgba(245, 7, 19, 0.911);
   padding-left: 2px;
@@ -147,13 +145,14 @@ div.minWidth100{
   font-weight:normal;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: small;
+  border-color: rgb(231, 231, 236);
 }
 .list-group-mine .list-group-item:hover {
   background-color: rgb(221, 224, 226);
-  border-color: white;
+  border-color: rgb(114, 28, 212);
 }
 .list-group-mine .active {
-  border-color: white;
+  border-color: rgb(42, 67, 207);
 }
 
 .nav-link {
@@ -175,12 +174,13 @@ div.minWidth100{
 .btn-round-sm .active{
   background-color: rgb(83, 90, 95);
 }
-.btn-secondary {
-  background-color: rgb(166, 201, 226);
-}.btn-square-sm {
+.btn-mySecondary{
+  background-color: rgba(203, 213, 214, 0.219);
+}
+.btn-square-sm {
   padding: 2px 8px;
   font-size: 12px;
-  border-radius: 0px;
+  border-radius: 2px;
 }
 
 .qpBtn {

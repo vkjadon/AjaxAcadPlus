@@ -10,48 +10,28 @@ require('../../php_function.php');
 
 <head>
   <title>Outcome Based Education : AcadPlus</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
-  <link rel="stylesheet" href="../../table.css">
-  <link rel="stylesheet" href="../../style.css">
-
-
-  
+  <?php require("../css.php"); ?>
 </head>
 
 <body>
   <?php require("../topBar.php"); ?>
   <div class="container-fluid">
+    <span id="panelId"></span>
     <div class="row">
       <div class="col-sm-2">
-        <div class="card text-left selectPanel">
-          <span id="panelId"></span>
-          <span class="m-1 p-0" id="selectPanelTitle"></span>
-          <div class="col">
-            <form>
-              <p class="selectDept">
-                <?php
-                $sql = "select * from department where dept_status='0'";
-                selectList($conn, "Select a Department", array("0", "dept_id", "dept_name", "dept_abbri", "sel_dept"), $sql);
-                ?>
-              </p>
-            </form>
-          </div>
-        </div>
-        <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
+        <div class="list-group list-group-mine" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active as" id="list-as-list" data-toggle="list" href="#list-as" role="tab" aria-controls="as"> Add Staff </a>
           <a class="list-group-item list-group-item-action sq" id="list-sq-list" data-toggle="list" href="#list-sq" role="tab" aria-controls="sq"> Staff Qualification </a>
+          <a class="list-group-item list-group-item-action sq" id="list-sq-list" data-toggle="list" href="#list-sq" role="tab" aria-controls="sq"> Role/Responsibility </a>
+          <em>Add staff not to be assigned designation and department. The staff to be assigned these from Role/Responsibility Tab.</em>
         </div>
       </div>
       <div class="col-sm-10">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane fade show active" id="list-as" role="tabpanel" aria-labelledby="list-as-list">
             <div class="row">
-              <div class="col-5 mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addStaff">Add</button>
+              <div class="col-5">
+                <button class="btn btn-danger btn-sm addStaff">Add New</button>
                 <p style="text-align:center" id="staffList"></p>
               </div>
             </div>
@@ -79,14 +59,7 @@ require('../../php_function.php');
 
 </html>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<script src="https://cdn.tiny.cloud/1/xjvk0d07c7h90fry9yq9z0ljb019ujam91eo2jk8uhlun307/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+<?php require("../js.php"); ?>
 <script>
   function resetForm() {
     document.getElementById("formStaff").reset();
@@ -356,17 +329,16 @@ require('../../php_function.php');
 <div class="modal" id="firstModal">
   <div class="modal-dialog modal-md">
     <form class="form-horizontal" id="modalForm">
-      <div class="modal-content bg-secondary text-white">
-
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title" id="modal_title"></h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div> <!-- Modal Header Closed-->
+      <div class="modal-content">
 
         <!-- Modal body -->
         <div class="modal-body">
           <div class="staffForm">
+            <div class="row">
+              <div class="col-12 text-center">
+                <h4 class="modal-title" id="modal_title"></h4>
+              </div>
+            </div>
             <div class="row">
               <div class="col-6">
                 <div class="form-group">
@@ -545,9 +517,6 @@ require('../../php_function.php');
               </div>
             </div>
           </div>
-        </div> <!-- Modal Body Closed-->
-        <!-- Modal footer -->
-        <div class="modal-footer">
           <input type="hidden" id="modalId" name="modalId">
           <input type="hidden" id="action" name="action">
           <input type="hidden" id="deptIdModal" name="deptIdModal">
@@ -563,17 +532,17 @@ require('../../php_function.php');
 <div class="modal" id="uploadModal">
   <div class="modal-dialog modal-md">
     <form class="form-horizontal" id="uploadModalForm">
-      <div class="modal-content bg-secondary text-white">
-
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">Upload Document</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div> <!-- Modal Header Closed-->
+      <div class="modal-content">
 
         <!-- Modal body -->
         <div class="modal-body">
           <div class="uploadForm">
+            <div class="row">
+              <div class="col-12">
+                <h4 class="modal-title text-primary pb-2">Upload Document</h4>
+                    </hr>
+              </div>
+            </div>
             <div class="row">
               <div class="col-12">
                 <div class="form-group">
@@ -582,9 +551,6 @@ require('../../php_function.php');
               </div>
             </div>
           </div>
-        </div> <!-- Modal Body Closed-->
-        <!-- Modal footer -->
-        <div class="modal-footer">
           <input type="hidden" name="action" value="upload">
           <input type="hidden" id="stqIdM" name="stqIdM">
           <button type="submit" class="btn btn-success btn-sm">Submit</button>
@@ -626,4 +592,5 @@ require('../../php_function.php');
     </form>
   </div> <!-- Modal Dialog Closed-->
 </div> <!-- Modal Closed-->
+
 </html>

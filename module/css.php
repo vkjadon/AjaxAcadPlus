@@ -6,8 +6,7 @@
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
-
-<link rel="stylesheet" href="../../table.css">
 <link rel="stylesheet" href="../../style.css">
+<link rel="stylesheet" href="../../table.css">
 <link rel="stylesheet" href="../../toggle.css">
 
