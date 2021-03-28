@@ -11,22 +11,21 @@ require('../../php_function.php');
 <head>
   <title>Outcome Based Education : AcadPlus</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
-
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
   <link rel="stylesheet" href="../../table.css">
   <link rel="stylesheet" href="../../style.css">
+
+
+  
 </head>
 
 <body>
   <?php require("../topBar.php"); ?>
   <div class="container-fluid">
-    <h1>&nbsp;</h1>
-    <h1>&nbsp;</h1>
-
     <div class="row">
       <div class="col-sm-2">
         <div class="card text-left selectPanel">
@@ -77,15 +76,16 @@ require('../../php_function.php');
       </div>
     </div>
   </div>
-  </div>
-  </div>
 
 </html>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<script src="https://cdn.tiny.cloud/1/xjvk0d07c7h90fry9yq9z0ljb019ujam91eo2jk8uhlun307/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <script>
   function resetForm() {
@@ -235,7 +235,6 @@ require('../../php_function.php');
         }
       })
     });
-
 
     $(document).on('click', '.addStaffQualification', function() {
       $('#modal_title').text("Add Staff Qualifications");
@@ -612,7 +611,7 @@ require('../../php_function.php');
           <?php
           $stq_id = $_POST['stqIdM'];
           $sql = "select stq.* from staff_qualification stq where stq.stq_id='$stq_id'";
-          $conn -> query($sql);
+          $conn->query($sql);
           $folder = '../../' . $myFolder . '/qualification';
           $file = $folder . '/' . $stq_id;
           ?>
@@ -627,5 +626,4 @@ require('../../php_function.php');
     </form>
   </div> <!-- Modal Dialog Closed-->
 </div> <!-- Modal Closed-->
-
 </html>
