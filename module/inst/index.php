@@ -10,13 +10,8 @@ require('../../php_function.php');
 
 <head>
  <title>Outcome Based Education : AcadPlus</title>
- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
- <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
- <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" rel="stylesheet">
- <link rel="stylesheet" href="../../table.css">
- <link rel="stylesheet" href="../../style.css">
+ <?php require("../css.php");?>
+
 </head>
 
 <body>
@@ -89,16 +84,16 @@ require('../../php_function.php');
             <!-- Accordion item 1 -->
             <div class="card">
              <div id="headingOne" class="card-header bg-white shadow-sm border-0">
-              <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">Collapsible Group Item #1</a></h6>
+              <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">Basic Information</a></h6>
              </div>
              <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionExample" class="collapse show">
-              <div class="card-body p-5">
-               <form class="text border border-light p-4 shadow w-100" id="basicInfoForm">
-                <p>Name and Address of the Institution</p>
+              <div class="card-body">
+               <form class="text w-100 p-0" id="basicInfoForm">
+                <p>Name and Address of the University</p>
                 <div class="row">
                  <div class="col-12">
                   <div class="form-group">
-                   <div class="md-form md-outline">
+                   <div class="md-form md-outline m-0">
                     <input type="text" id="instName" class="form-control">
                     <label for="instName">Instituton Name</label>
                    </div>
@@ -108,7 +103,7 @@ require('../../php_function.php');
                 <div class="row">
                  <div class="col-12">
                   <div class="form-group">
-                   <div class="md-form md-outline">
+                   <div class="md-form md-outline m-0">
                     <textarea id="instAddress" class="md-textarea form-control" rows="3"></textarea>
                     <label for="instAddress">Address</label>
                    </div>
@@ -118,7 +113,7 @@ require('../../php_function.php');
                 <div class="row">
                  <div class="col-6">
                   <div class="form-group">
-                   <div class="md-form md-outline">
+                   <div class="md-form md-outline m-0">
                     <input type="text" id="instCity" class="form-control">
                     <label for="instCity">City</label>
                    </div>
@@ -126,7 +121,7 @@ require('../../php_function.php');
                  </div>
                  <div class="col-6">
                   <div class="form-group">
-                   <div class="md-form md-outline">
+                   <div class="md-form md-outline m-0">
                     <input type="text" id="instPIN" class="form-control">
                     <label for="instPIN">PIN Code</label>
                    </div>
@@ -136,7 +131,7 @@ require('../../php_function.php');
                 <div class="row">
                  <div class="col-6">
                   <div class="form-group">
-                   <div class="md-form md-outline">
+                   <div class="md-form md-outline m-0">
                     <input type="text" id="instState" class="form-control">
                     <label for="instState">State</label>
                    </div>
@@ -144,15 +139,51 @@ require('../../php_function.php');
                  </div>
                  <div class="col-6">
                   <div class="form-group">
-                   <div class="md-form md-outline">
+                   <div class="md-form md-outline m-0">
                     <input type="text" id="instWebsite" class="form-control">
                     <label for="instWebsite">Website</label>
                    </div>
                   </div>
                  </div>
                 </div>
-                <p>Contact for Information</p>
-
+                <p>Nature of University</p>
+                <div class="row">
+                 <div class="col-6">
+                  <div class="form-group">
+                   <div class="md-form md-outline m-0">
+                    <input type="text" id="instStatus" class="form-control">
+                    <label for="instStatus">Institution Status</label>
+                   </div>
+                  </div>
+                 </div>
+                 <div class="col-6">
+                  <div class="form-group">
+                   <div class="md-form md-outline m-0">
+                    <input type="text" id="instType" class="form-control">
+                    <label for="instType">Type of University</label>
+                   </div>
+                  </div>
+                 </div>
+                </div>
+                <p>Establishment Details</p>
+                <div class="row">
+                 <div class="col-6">
+                  <div class="form-group">
+                   <div class="md-form md-outline m-0">
+                    <input type="text" id="instStatus" class="form-control">
+                    <label for="instStatus">Institution Status</label>
+                   </div>
+                  </div>
+                 </div>
+                 <div class="col-6">
+                  <div class="form-group">
+                   <div class="md-form md-outline m-0">
+                    <input type="text" id="instType" class="form-control">
+                    <label for="instType">Type of University</label>
+                   </div>
+                  </div>
+                 </div>
+                </div>
                </form>
               </div>
              </div>
@@ -225,18 +256,7 @@ require('../../php_function.php');
 
 </body>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<script src="https://cdn.tiny.cloud/1/xjvk0d07c7h90fry9yq9z0ljb019ujam91eo2jk8uhlun307/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-
-
-<script src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-<script src="//cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js"></script>
+<?php require("../js.php");?>
 
 
 <script>
