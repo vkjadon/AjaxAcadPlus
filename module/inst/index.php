@@ -10,7 +10,41 @@ require('../../php_function.php');
 
 <head>
  <title>Outcome Based Education : AcadPlus</title>
- <?php require("../css.php");?>
+ <?php require("../css.php"); ?>
+ <style>
+  .collapsible-link::before {
+   content: '';
+   width: 14px;
+   height: 2px;
+   background: #333;
+   position: absolute;
+   top: calc(50% - 1px);
+   right: 1rem;
+   display: block;
+   transition: all 0.3s;
+  }
+
+  /* Vertical line */
+  .collapsible-link::after {
+   content: '';
+   width: 2px;
+   height: 14px;
+   background: #333;
+   position: absolute;
+   top: calc(50% - 7px);
+   right: calc(1rem + 6px);
+   display: block;
+   transition: all 0.3s;
+  }
+
+  .collapsible-link[aria-expanded='true']::after {
+   transform: rotate(90deg) translateX(-1px);
+  }
+
+  .collapsible-link[aria-expanded='true']::before {
+   transform: rotate(180deg);
+  }
+ </style>
 
 </head>
 
@@ -79,14 +113,13 @@ require('../../php_function.php');
          <div class="row">
           <div class="col-lg-12 mx-auto">
            <!-- Accordion -->
-           <div id="accordionExample" class="accordion shadow">
+           <div id="accordionInfo" class="accordion shadow">
 
-            <!-- Accordion item 1 -->
             <div class="card">
              <div id="headingOne" class="card-header bg-white shadow-sm border-0">
               <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">Basic Information</a></h6>
              </div>
-             <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionExample" class="collapse show">
+             <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionInfo" class="collapse show">
               <div class="card-body">
                <form class="text w-100 p-0" id="basicInfoForm">
                 <p>Name and Address of the University</p>
@@ -170,17 +203,164 @@ require('../../php_function.php');
                  <div class="col-6">
                   <div class="form-group">
                    <div class="md-form md-outline m-0">
-                    <input type="text" id="instStatus" class="form-control">
-                    <label for="instStatus">Institution Status</label>
+                    <input type="date" id="instEstDateUni" class="form-control">
+                    <label for="instEstDateUni">Establishment Date of the University</label>
                    </div>
                   </div>
                  </div>
                  <div class="col-6">
                   <div class="form-group">
                    <div class="md-form md-outline m-0">
-                    <input type="text" id="instType" class="form-control">
-                    <label for="instType">Type of University</label>
+                    <input type="date" id="instEstDate" class="form-control">
+                    <label for="instEstDate">Establishment Date</label>
                    </div>
+                  </div>
+                 </div>
+                </div>
+                <div class="row">
+                 <div class="col-12">
+                  <div class="form-group">
+                   <div class="md-form md-outline m-0">
+                    <input type="text" id="instStatusEst" class="form-control">
+                    <label for="instStatusEst">Status Prior to Establishment</label>
+                   </div>
+                  </div>
+                 </div>
+                </div>
+                <p class="m-0">Recognition Details</p>
+                <p>Date of Recognition as a University by UGC or Any Other National Agency</p>
+                <div class="row">
+                 <div class="col-6">
+                  <div class="form-group">
+                   <div class="md-form md-outline m-0">
+                    <input type="date" id="underSection2f" class="form-control">
+                    <label for="underSection2f">Under Section 2f of UGC</label>
+                   </div>
+                  </div>
+                 </div>
+                 <div class="col-6">
+                  <div class="form-group">
+                   <div class="md-form md-outline m-0">
+                    <input type="date" id="underSection12b" class="form-control">
+                    <label for="underSection12b">Under Section 12B of UGC</label>
+                   </div>
+                  </div>
+                 </div>
+                </div>
+                <p>Is the University Recognised as a 'University with Potential for Excellence Yes No (UPE)' by the UGC?</p>
+                <div class="custom-control custom-radio">
+                 <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios">
+                 <label class="custom-control-label" for="defaultUnchecked">Yes</label>
+                </div>
+
+                <div class="custom-control custom-radio">
+                 <input type="radio" class="custom-control-input" id="defaultChecked" name="defaultExampleRadios" checked>
+                 <label class="custom-control-label" for="defaultChecked">No</label>
+                </div>
+               </form>
+              </div>
+             </div>
+            </div>
+            <div class="card">
+             <div id="headingTwo" class="card-header bg-white shadow-sm border-0">
+              <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" class="d-block position-relative collapsed text-dark text-uppercase collapsible-link py-2">Geographical Information</a></h6>
+             </div>
+             <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionInfo" class="collapse">
+              <div class="card-body">
+               <form class="text w-100 p-0" id="basicInfoForm">
+                <p>Location, Area and Activity of Campus</p>
+                <div class="row">
+                 <div class="col-12">
+                  <div class="form-group">
+                   <div class="md-form md-outline m-0">
+                    <textarea id="instAddress" class="md-textarea form-control" rows="3"></textarea>
+                    <label for="instAddress">Address</label>
+                   </div>
+                  </div>
+                 </div>
+                </div>
+                <div class="row">
+                 <div class="col-4">
+                  <div class="form-group">
+                   <div class="md-form md-outline m-0">
+                    <input type="text" id="campusType" class="form-control">
+                    <label for="campusType">Campus Type</label>
+                   </div>
+                  </div>
+                 </div>
+                 <div class="col-4">
+                  <div class="form-group">
+                   <div class="md-form md-outline m-0">
+                    <input type="text" id="campusArea" class="form-control">
+                    <label for="campusArea">Campus Area in acres</label>
+                   </div>
+                  </div>
+                 </div>
+                 <div class="col-4">
+                  <div class="form-group">
+                   <div class="md-form md-outline m-0">
+                    <input type="text" id="campusBuiltupArea" class="form-control">
+                    <label for="campusBuiltupArea">BuiltUp Area in sq.mts.</label>
+                   </div>
+                  </div>
+                 </div>
+                </div>
+                <div class="row">
+                 <div class="col-3">
+                  <div class="form-group">
+                   <div class="md-form md-outline m-0">
+                    <input type="text" id="campusProgrammes" class="form-control">
+                    <label for="campusProgrammes">Programmes Offered</label>
+                   </div>
+                  </div>
+                 </div>
+                 <div class="col-3">
+                  <div class="form-group">
+                   <div class="md-form md-outline m-0">
+                    <input type="date" id="campusDate" class="form-control">
+                    <label for="campusDate">Date of Establishment</label>
+                   </div>
+                  </div>
+                 </div>
+                 <div class="col-6">
+                  <div class="form-group">
+                   <div class="md-form md-outline m-0">
+                    <input type="date" id="Date" class="form-control">
+                    <label for="Date">Date of Recognition by UGC/MHRD</label>
+                   </div>
+                  </div>
+                 </div>
+                </div>
+                <p>Location</p>
+                <div class="row">
+                 <div class="col-2">
+                  <div class="custom-control custom-radio">
+                   <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios">
+                   <label class="custom-control-label" for="defaultUnchecked">Urban</label>
+                  </div>
+                 </div>
+                 <div class="col-2">
+                  <div class="custom-control custom-radio">
+                   <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios">
+                   <label class="custom-control-label" for="defaultUnchecked">Rural</label>
+                  </div>
+                 </div>
+                 <div class="col-2">
+                  <div class="custom-control custom-radio">
+                   <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios">
+                   <label class="custom-control-label" for="defaultUnchecked">Tribal</label>
+                  </div>
+                 </div>
+                 <div class="col-2">
+                  <div class="custom-control custom-radio">
+                   <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios">
+                   <label class="custom-control-label" for="defaultUnchecked">Hill</label>
+                  </div>
+                 </div>
+                 <div class="col-4">
+                  <div class="custom-control custom-radio">
+                   <input type="radio" class="custom-control-input" id="defaultChecked" name="defaultExampleRadios" checked>
+                   <label class="custom-control-label" for="defaultChecked">Semi Urban</label>
                   </div>
                  </div>
                 </div>
@@ -188,39 +368,11 @@ require('../../php_function.php');
               </div>
              </div>
             </div>
-
-            <!-- Accordion item 2 -->
-            <div class="card">
-             <div id="headingTwo" class="card-header bg-white shadow-sm border-0">
-              <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" class="d-block position-relative collapsed text-dark text-uppercase collapsible-link py-2">Collapsible Group Item #2</a></h6>
-             </div>
-             <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionExample" class="collapse">
-              <div class="card-body p-5">
-               <p class="font-weight-light m-0">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.</p>
-              </div>
-             </div>
-            </div>
-
-            <!-- Accordion item 3 -->
-            <div class="card">
-             <div id="headingThree" class="card-header bg-white shadow-sm border-0">
-              <h6 class="mb-0 font-weight-bold"><a href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" class="d-block position-relative collapsed text-dark text-uppercase collapsible-link py-2">Collapsible Group Item #3</a></h6>
-             </div>
-             <div id="collapseThree" aria-labelledby="headingThree" data-parent="#accordionExample" class="collapse">
-              <div class="card-body p-5">
-               <p class="font-weight-light m-0">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et.</p>
-              </div>
-             </div>
-            </div>
-
            </div>
           </div>
          </div>
         </div>
-
-
        </div>
-
       </div>
      </div>
 
@@ -256,7 +408,7 @@ require('../../php_function.php');
 
 </body>
 
-<?php require("../js.php");?>
+<?php require("../js.php"); ?>
 
 
 <script>
@@ -264,6 +416,8 @@ require('../../php_function.php');
   $(".topBarTitle").text("Institution");
   instList();
   $('.selectPanel').hide();
+  $('#accordionInfo').hide();
+
 
   $(document).on('click', '.mis', function() {
    schoolList();
@@ -543,7 +697,19 @@ require('../../php_function.php');
   });
 
   $(document).on('click', '.basicInfoUni', function() {
-   $('.basicInfoForm').hide();
+   $('#accordionInfo').show();
+   var id = $(this).attr("data-inst");
+   $.post("instSql.php", {
+    instId: id,
+    action: "fetchInst"
+   }, () => {}, "json").done(function(data) {
+    $('#instName').val(data.inst_name);
+    $('#instWebsite').val(data.inst_url);
+    $('#instAddress').val(data.inst_address);
+    $('#inst_doi').val(data.inst_doi);
+   }, "text").fail(function() {
+    $.alert("fail in place of error");
+   })
   });
 
 

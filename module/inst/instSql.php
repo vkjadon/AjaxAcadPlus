@@ -104,8 +104,8 @@ if (isset($_POST['action'])) {
       <div class="card-body mb-0">
       <h5 class="card-title" >' . $inst_name . '[' . $inst_id . ']</h5>
       <h6 class="card-subtitle mb-2 text-muted">' . $inst_url . ' [' . $inst_abbri . ']</h6>
-      <a href="#" class="btn btn-info btn-sm basicInfoUni" data-text="' . $text . '" data-tl="' . $inst_id . '">Basic Info</a>
-      <a href="#" class="btn btn-danger btn-sm acadInfoUni"  data-text="' . $text . '" data-tl="' . $inst_id . '" data-sub="' . $subject_id . '">Academic Info</a>
+      <a href="#" class="btn btn-info btn-sm basicInfoUni" data-text="' . $text . '" data-inst="' . $inst_id . '">Basic Info</a>
+      <a href="#" class="btn btn-danger btn-sm acadInfoUni"  data-text="' . $text . '" data-="' . $inst_id . '" data-sub="' . $subject_id . '">Academic Info</a>
       </div></div>';
     }
 
