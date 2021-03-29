@@ -72,7 +72,7 @@
        <a href="<?php echo $codePath . '/module/leave/'; ?>" class="dropdown-item"> Leave </a>
       </div>
       <div class="col-6">
-       <a href="<?php echo $codePath . '/module/feedback/'; ?>" class="dropdown-item"> Feedback </a>
+       <a href="<?php echo $codePath . '/module/feedback/'; ?>" class="dropdown-item"> Support </a>
        <a href="<?php echo $codePath . '/module/feedback/'; ?>" class="dropdown-item"> Mentoring </a>
       </div>
      </div>
