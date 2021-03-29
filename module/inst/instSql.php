@@ -15,11 +15,15 @@ if (isset($_POST['action'])) {
     $dup_alert = "Duplicate URL Exists. One Institute can have one URL. Give Dummy Unique URL if required";
     addData($conn, 'institution', 'inst_id', $fields, $values, $status, $dup, $dup_alert);
   } elseif ($_POST['action'] == 'updateInst') {
-    $fields = ['inst_id', 'inst_name', 'inst_abbri', 'inst_url', 'inst_doi'];
-    $values = [$_POST['modalId'], data_check($_POST['inst_name']), data_check($_POST['inst_abbri']),  data_check($_POST['inst_url']), data_check($_POST['inst_doi'])];
-    $dup = "select * from institution where inst_id='" . $_POST["modalId"] . "'";
-    $dup_alert = "Could Not Update - Duplicate Entries";
-    updateData($conn, 'institution', $fields, $values, $dup, $dup_alert);
+    $id_name = $_POST['id_name'];
+    $id = $_POST['id'];
+    $tag = $_POST['tag'];
+    $value = $_POST['value'];
+
+    $sql="update institution set $tag='$value' where $id_name='$id'";
+    $conn->query($sql);
+    echo $conn->error;
+
   } elseif ($_POST['action'] == 'fetchInst') {
     $id = $_POST['instId'];
     $sql = "SELECT * FROM institution where inst_id='$id'";
@@ -104,8 +108,8 @@ if (isset($_POST['action'])) {
       <div class="card-body mb-0">
       <h5 class="card-title" >' . $inst_name . '[' . $inst_id . ']</h5>
       <h6 class="card-subtitle mb-2 text-muted">' . $inst_url . ' [' . $inst_abbri . ']</h6>
-      <a href="#" class="btn btn-info btn-sm basicInfoUni" data-text="' . $text . '" data-inst="' . $inst_id . '">Basic Info</a>
-      <a href="#" class="btn btn-danger btn-sm acadInfoUni"  data-text="' . $text . '" data-="' . $inst_id . '" data-sub="' . $subject_id . '">Academic Info</a>
+      <a href="#" class="btn btn-info btn-sm basicInfoUni" data-inst="' . $inst_id . '">Basic Info</a>
+      <a href="#" class="btn btn-danger btn-sm acadInfoUni"  data-="' . $inst_id . '">Academic Info</a>
       </div></div>';
     }
 
