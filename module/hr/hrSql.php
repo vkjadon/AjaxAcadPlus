@@ -41,7 +41,7 @@ if (isset($_POST['action'])) {
       <h7 class="card-title">' . $staff_name . '</h7><br>
 						</div>
 						<div class="col-2">
-						<a href="#" class="fa fa-edit editStaff" data-inst="' . $staff_id . '"></a>
+						<a href="#" class="fa fa-edit editStaff" data-staff="' . $staff_id . '"></a>
 						</div>
 						</div>
       <h8 class="card-subtitle mb-2 text-muted">' . $staff_email . ' </h8>

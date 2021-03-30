@@ -12,39 +12,47 @@ require('../../php_function.php');
 	<title>Outcome Based Education : AcadPlus</title>
 	<?php require("../css.php"); ?>
 	<style>
-  .collapsible-link::before {
-   content: '';
-   width: 14px;
-   height: 2px;
-   background: #333;
-   position: absolute;
-   top: calc(50% - 1px);
-   right: 1rem;
-   display: block;
-   transition: all 0.3s;
-  }
+		.collapsible-link::before {
+			content: '';
+			width: 14px;
+			height: 2px;
+			background: #333;
+			position: absolute;
+			top: calc(50% - 1px);
+			right: 1rem;
+			display: block;
+			transition: all 0.3s;
+		}
 
-  /* Vertical line */
-  .collapsible-link::after {
-   content: '';
-   width: 2px;
-   height: 14px;
-   background: #333;
-   position: absolute;
-   top: calc(50% - 7px);
-   right: calc(1rem + 6px);
-   display: block;
-   transition: all 0.3s;
-  }
+		/* Vertical line */
+		.collapsible-link::after {
+			content: '';
+			width: 2px;
+			height: 14px;
+			background: #333;
+			position: absolute;
+			top: calc(50% - 7px);
+			right: calc(1rem + 6px);
+			display: block;
+			transition: all 0.3s;
+		}
 
-  .collapsible-link[aria-expanded='true']::after {
-   transform: rotate(90deg) translateX(-1px);
-  }
+		.collapsible-link[aria-expanded='true']::after {
+			transform: rotate(90deg) translateX(-1px);
+		}
 
-  .collapsible-link[aria-expanded='true']::before {
-   transform: rotate(180deg);
-  }
- </style>
+		.collapsible-link[aria-expanded='true']::before {
+			transform: rotate(180deg);
+		}
+
+		.collapseAccordian {
+			background-color: #e1f5fe;
+		}
+
+		.collapseHeader {
+			background-color: #29b6f6;
+		}
+	</style>
 </head>
 
 <body>
@@ -77,9 +85,122 @@ require('../../php_function.php');
 													<div id="headingOne" class="card-header bg-white shadow-sm border-0">
 														<h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">Edit Details</a></h6>
 													</div>
-													<div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionStaff" class="collapse show">
+													<div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionStaff" class="collapse show collapseAccordian">
 														<div class="card-body">
-
+															<form class="form-horizontal" id="modalForm">
+																	<div class="row">
+																		<div class="col-12 text-center">
+																		</div>
+																	</div>
+																	<div class="row">
+																		<div class="col-6">
+																			<div class="form-group">
+																				Staff Name
+																				<input type="text" class="form-control form-control-sm" id="sName" name="sName" placeholder="Staff Name">
+																			</div>
+																		</div>
+																		<div class="col-6">
+																			<div class="form-group">
+																				Designation
+																				<div class="row">
+																					<div class="col">
+																						<?php
+																						$sql_desigantion = "select * from designation";
+																						$result = $conn->query($sql_desigantion);
+																						if ($result) {
+																							echo '<select class="form-control form-control-sm" name="sel_desig" id="sel_desig" required>';
+																							while ($rows = $result->fetch_assoc()) {
+																								$select_id = $rows['designation_id'];
+																								$select_name = $rows['designation_name'];
+																								echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+																							}
+																							echo '</select>';
+																						} else echo $conn->error;
+																						if ($result->num_rows == 0) echo 'No Data Found';
+																						?>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="row">
+																		<div class="col-6">
+																			<div class="form-group">
+																				Email
+																				<input type="text" class="form-control form-control-sm" id="sEmail" name="sEmail" placeholder="Staff Email Id">
+																			</div>
+																		</div>
+																		<div class="col-6">
+																			<div class="form-group">
+																				Mobile Number
+																				<input type="text" class="form-control form-control-sm" id="sMobile" name="sMobile" placeholder="Staff Mobile Number">
+																			</div>
+																		</div>
+																	</div>
+																	<div class="row">
+																		<div class="col-6">
+																			<div class="form-group">
+																				Father Name
+																				<input type="text" class="form-control form-control-sm" id="fName" name="fName" placeholder="Name of the Father">
+																			</div>
+																		</div>
+																		<div class="col-6">
+																			<div class="form-group">
+																				Mother Name
+																				<input type="text" class="form-control form-control-sm" id="mName" name="mName" placeholder="Name of the Mother">
+																			</div>
+																		</div>
+																	</div>
+																	<div class="row">
+																		<div class="col-6">
+																			<div class="form-group">
+																				Date of Birth
+																				<input type="date" class="form-control form-control-sm" id="sDob" name="sDob" placeholder="Date of Birth">
+																			</div>
+																		</div>
+																		<div class="col-6">
+																			<div class="form-group">
+																				Date of Joining
+																				<input type="date" class="form-control form-control-sm" id="sDoj" name="sDoj" placeholder="Date of Joining">
+																			</div>
+																		</div>
+																	</div>
+																	<div class="row">
+																		<div class="col-12">
+																			<div class="form-group">
+																				Address
+																				<input type="text" class="form-control form-control-sm" id="sAddress" name="sAddress" placeholder="Address">
+																			</div>
+																		</div>
+																	</div>
+																	<div class="row">
+																		<div class="col-12">
+																			<div class="form-group">
+																				Adhaar Number
+																				<input type="text" class="form-control form-control-sm" id="sAdhaar" name="sAdhaar" placeholder="12 Digit Adhaar Number">
+																			</div>
+																		</div>
+																	</div>
+																	<hr>
+																	<div class="row">
+																		<div class="col-5">
+																			<div class="form-check-inline">
+																				<input type="radio" class="form-check-input" checked id="male" name="sGender" value="Male">Male
+																			</div>
+																			<div class="form-check-inline">
+																				<input type="radio" class="form-check-input" id="female" name="female" value="sGender">Female
+																			</div>
+																		</div>
+																		<div class="col-7">
+																			<div class="form-check-inline">
+																				<input type="radio" class="form-check-input" checked id="Teaching" name="sTeaching" value="Teaching">Teaching
+																			</div>
+																			<div class="form-check-inline">
+																				<input type="radio" class="form-check-input" id="NonTeaching" name="sTeaching" value="NonTeaching">Non-Teaching
+																			</div>
+																		</div>
+																	</div>
+															</form>
 														</div>
 													</div>
 												</div>
@@ -87,9 +208,75 @@ require('../../php_function.php');
 													<div id="headingTwo" class="card-header bg-white shadow-sm border-0">
 														<h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" class="d-block position-relative collapsed text-dark text-uppercase collapsible-link py-2">Add Qualification</a></h6>
 													</div>
-													<div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionStaff" class="collapse">
+													<div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionStaff" class="collapse collapseAccordian">
 														<div class="card-body">
-
+															<div class="staffQualificationForm">
+																<div class="row">
+																	<div class="col-6">
+																		<div class="form-group">
+																			Qualification
+																			<div class="row">
+																				<div class="col">
+																					<?php
+																					$sql_qualification = "select * from qualification";
+																					$result = $conn->query($sql_qualification);
+																					if ($result) {
+																						echo '<select class="form-control form-control-sm" name="sel_qual" id="sel_qual" required>';
+																						while ($rows = $result->fetch_assoc()) {
+																							$select_id = $rows['qualification_id'];
+																							$select_name = $rows['qualification_name'];
+																							echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+																						}
+																						echo '</select>';
+																					} else echo $conn->error;
+																					if ($result->num_rows == 0) echo 'No Data Found';
+																					?>
+																				</div>
+																			</div>
+																		</div>
+																	</div>
+																	<div class="col-6">
+																		<div class="form-group">
+																			Institute
+																			<input type="text" class="form-control form-control-sm" id="sInst" name="sInst" placeholder="Name of the Institute">
+																		</div>
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="col-6">
+																		<div class="form-group">
+																			Board
+																			<input type="text" class="form-control form-control-sm" id="sBoard" name="sBoard" placeholder="Board">
+																		</div>
+																	</div>
+																	<div class="col-6">
+																		<div class="form-group">
+																			Year of Passing
+																			<input type="text" class="form-control form-control-sm" id="sYear" name="sYear" placeholder="Passing Year">
+																		</div>
+																	</div>
+																</div>
+																<div class="row">
+																	<div class="col-4">
+																		<div class="form-group">
+																			Marks Obtained
+																			<input type="text" class="form-control form-control-sm" id="sMarksObt" name="sMarksObt" placeholder="Marks Obtained">
+																		</div>
+																	</div>
+																	<div class="col-4">
+																		<div class="form-group">
+																			Maximum Marks
+																			<input type="text" class="form-control form-control-sm" id="sMaxMarks" name="sMaxMarks" placeholder="Maximum marks">
+																		</div>
+																	</div>
+																	<div class="col-4">
+																		<div class="form-group">
+																			Percentage/CGPA
+																			<input type="text" class="form-control form-control-sm" id="sCgpa" name="sCgpa" placeholder="Percentage/CGPA">
+																		</div>
+																	</div>
+																</div>
+															</div>
 														</div>
 													</div>
 												</div>
@@ -132,6 +319,8 @@ require('../../php_function.php');
 	$(document).ready(function() {
 		$('#list-as').show();
 		$('#list-sq').hide();
+		$('#accordionStaff').hide();
+
 		var z = $("#sel_dept").val();
 		staffList();
 		$('#deptIdModal').val(z);
@@ -190,6 +379,19 @@ require('../../php_function.php');
 		});
 
 		$(document).on('click', '.editStaff', function() {
+			$('#accordionStaff').show();
+			var id = $(this).attr("data-staff");
+   $('#staffIdHidden').val(id);
+   $.post("hrSql.php", {
+    staffId: id,
+    action: "fetchStaff"
+   }, () => {}, "json").done(function(data) {
+    $("#sEmail").val(data.staff_email);
+    $("#sName").val(data.staff_name);
+				$("#sMobile").val(data.staff_mobile);
+   }, "text").fail(function() {
+    $.alert("fail in place of error");
+   })
 
 		});
 
