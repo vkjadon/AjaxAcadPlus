@@ -127,9 +127,9 @@ require('../../php_function.php');
 																<div class="row">
 																	<div class="col-12">
 																		<div class="form-group">
-																			<div class="md-form md-outline m-0">
+																			<div class="md-form m-0">
+                   Instituton Name
 																				<input type="text" id="instName" class="form-control instForm" data-tag="inst_name">
-																				<label for="instName">Instituton Name</label>
 																			</div>
 																		</div>
 																	</div>
@@ -138,7 +138,7 @@ require('../../php_function.php');
 																	<div class="col-12">
 																		<div class="form-group">
 																			<div class="md-form md-outline m-0">
-																				<textarea id="instAddress" class="md-textarea form-control" rows="3"></textarea>
+																				<textarea id="instAddress" class="md-textarea form-control instForm" data-tag="inst_address" rows="3"></textarea>
 																				<label for="instAddress">Address</label>
 																			</div>
 																		</div>
@@ -156,7 +156,7 @@ require('../../php_function.php');
 																	<div class="col-6">
 																		<div class="form-group">
 																			<div class="md-form md-outline m-0">
-																				<input type="text" id="instPIN" class="form-control">
+																				<input type="text" id="instPIN" class="form-control instForm" data-tag="inst_pincode">
 																				<label for="instPIN">PIN Code</label>
 																			</div>
 																		</div>
@@ -166,7 +166,7 @@ require('../../php_function.php');
 																	<div class="col-6">
 																		<div class="form-group">
 																			<div class="md-form md-outline m-0">
-																				<input type="text" id="instState" class="form-control">
+																				<input type="text" id="instState" class="form-control instForm" data-tag="inst_state">
 																				<label for="instState">State</label>
 																			</div>
 																		</div>
@@ -174,7 +174,7 @@ require('../../php_function.php');
 																	<div class="col-6">
 																		<div class="form-group">
 																			<div class="md-form md-outline m-0">
-																				<input type="text" id="instWebsite" class="form-control">
+																				<input type="text" id="instWebsite" class="form-control instForm" data-tag="inst_url">
 																				<label for="instWebsite">Website</label>
 																			</div>
 																		</div>
@@ -185,15 +185,15 @@ require('../../php_function.php');
 																	<div class="col-6">
 																		<div class="form-group">
 																			<div class="md-form md-outline m-0">
-																				<input type="text" id="instStatus" class="form-control">
+																				<input type="text" id="instStatus" class="form-control instForm" data-tag="inst_status">
 																				<label for="instStatus">Institution Status</label>
 																			</div>
 																		</div>
 																	</div>
 																	<div class="col-6">
 																		<div class="form-group">
-																			<div class="md-form md-outline m-0">
-																				<input type="text" id="instType" class="form-control">
+																			<div class="md-form m-0">
+																				<input type="text" id="instType" class="form-control instForm" data-tag="inst_type">
 																				<label for="instType">Type of University</label>
 																			</div>
 																		</div>
@@ -204,7 +204,7 @@ require('../../php_function.php');
 																	<div class="col-6">
 																		<div class="form-group">
 																			<div class="md-form md-outline m-0">
-																				<input type="date" id="instEstDateUni" class="form-control">
+																				<input type="date" id="instEstDateUni" class="form-control instForm" data-tag="inst_est_date_uni">
 																				<label for="instEstDateUni">Establishment Date of the University</label>
 																			</div>
 																		</div>
@@ -212,7 +212,7 @@ require('../../php_function.php');
 																	<div class="col-6">
 																		<div class="form-group">
 																			<div class="md-form md-outline m-0">
-																				<input type="date" id="instEstDate" class="form-control">
+																				<input type="date" id="instEstDate" class="form-control instForm" data-tag="inst_est_date">
 																				<label for="instEstDate">Establishment Date</label>
 																			</div>
 																		</div>
@@ -222,7 +222,7 @@ require('../../php_function.php');
 																	<div class="col-12">
 																		<div class="form-group">
 																			<div class="md-form md-outline m-0">
-																				<input type="text" id="instStatusEst" class="form-control">
+																				<input type="text" id="instStatusEst" class="form-control instForm" data-tag="inst_status_est">
 																				<label for="instStatusEst">Status Prior to Establishment</label>
 																			</div>
 																		</div>
@@ -234,7 +234,7 @@ require('../../php_function.php');
 																	<div class="col-6">
 																		<div class="form-group">
 																			<div class="md-form md-outline m-0">
-																				<input type="date" id="underSection2f" class="form-control">
+																				<input type="date" id="underSection2f" class="form-control instForm" data-tag="inst_under2f">
 																				<label for="underSection2f">Under Section 2f of UGC</label>
 																			</div>
 																		</div>
@@ -242,7 +242,7 @@ require('../../php_function.php');
 																	<div class="col-6">
 																		<div class="form-group">
 																			<div class="md-form md-outline m-0">
-																				<input type="date" id="underSection12b" class="form-control">
+																				<input type="date" id="underSection12b" class="form-control instForm" data-tag="inst_under12b">
 																				<label for="underSection12b">Under Section 12B of UGC</label>
 																			</div>
 																		</div>
@@ -250,13 +250,13 @@ require('../../php_function.php');
 																</div>
 																<p>Is the University Recognised as a 'University with Potential for Excellence Yes No (UPE)' by the UGC?</p>
 																<div class="custom-control custom-radio">
-																	<input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios">
-																	<label class="custom-control-label" for="defaultUnchecked">Yes</label>
+																	<input type="radio" class="custom-control-input inst_yesugc" id="inst_yesugc" name="defaultExampleRadios">
+																	<label class="custom-control-label" for="inst_yesugc">Yes</label>
 																</div>
 
 																<div class="custom-control custom-radio">
-																	<input type="radio" class="custom-control-input" id="defaultChecked" name="defaultExampleRadios" checked>
-																	<label class="custom-control-label" for="defaultChecked">No</label>
+																	<input type="radio" class="custom-control-input inst_nougc" id="inst_nougc" name="defaultExampleRadios" checked>
+																	<label class="custom-control-label" for="inst_nougc">No</label>
 																</div>
 															</form>
 														</div>
@@ -274,8 +274,8 @@ require('../../php_function.php');
 																	<div class="col-12">
 																		<div class="form-group">
 																			<div class="md-form md-outline m-0">
-																				<textarea id="instAddress" class="md-textarea form-control" rows="3"></textarea>
-																				<label for="instAddress">Address</label>
+																				<textarea id="instAddressCampus" class="md-textarea form-control instForm" data-tag="inst_address_campus" rows="3"></textarea>
+																				<label for="instAddressCampus">Address</label>
 																			</div>
 																		</div>
 																	</div>
@@ -284,7 +284,7 @@ require('../../php_function.php');
 																	<div class="col-4">
 																		<div class="form-group">
 																			<div class="md-form md-outline m-0">
-																				<input type="text" id="campusType" class="form-control">
+																				<input type="text" id="campusType" class="form-control instForm" data-tag="inst_campus_type" >
 																				<label for="campusType">Campus Type</label>
 																			</div>
 																		</div>
@@ -292,7 +292,7 @@ require('../../php_function.php');
 																	<div class="col-4">
 																		<div class="form-group">
 																			<div class="md-form md-outline m-0">
-																				<input type="text" id="campusArea" class="form-control">
+																				<input type="text" id="campusArea" class="form-control instForm" data-tag="inst_campus_area">
 																				<label for="campusArea">Campus Area in acres</label>
 																			</div>
 																		</div>
@@ -300,7 +300,7 @@ require('../../php_function.php');
 																	<div class="col-4">
 																		<div class="form-group">
 																			<div class="md-form md-outline m-0">
-																				<input type="text" id="campusBuiltupArea" class="form-control">
+																				<input type="text" id="campusBuiltupArea" class="form-control instForm" data-tag="inst_campus_builtup_area">
 																				<label for="campusBuiltupArea">BuiltUp Area in sq.mts.</label>
 																			</div>
 																		</div>
@@ -310,7 +310,7 @@ require('../../php_function.php');
 																	<div class="col-3">
 																		<div class="form-group">
 																			<div class="md-form md-outline m-0">
-																				<input type="text" id="campusProgrammes" class="form-control">
+																				<input type="text" id="campusProgrammes" class="form-control instForm" data-tag="inst_campus_programmes">
 																				<label for="campusProgrammes">Programmes Offered</label>
 																			</div>
 																		</div>
@@ -318,7 +318,7 @@ require('../../php_function.php');
 																	<div class="col-3">
 																		<div class="form-group">
 																			<div class="md-form md-outline m-0">
-																				<input type="date" id="campusDate" class="form-control">
+																				<input type="date" id="campusDate" class="form-control instForm" data-tag="inst_campus_date">
 																				<label for="campusDate">Date of Establishment</label>
 																			</div>
 																		</div>
@@ -326,8 +326,8 @@ require('../../php_function.php');
 																	<div class="col-6">
 																		<div class="form-group">
 																			<div class="md-form md-outline m-0">
-																				<input type="date" id="Date" class="form-control">
-																				<label for="Date">Date of Recognition by UGC/MHRD</label>
+																				<input type="date" id="dateUGC" class="form-control instForm" data-tag="inst_dateUGC">
+																				<label for="dateUGC">Date of Recognition by UGC/MHRD</label>
 																			</div>
 																		</div>
 																	</div>
