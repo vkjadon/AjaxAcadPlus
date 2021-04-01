@@ -115,15 +115,26 @@ if (isset($_POST['action'])) {
 
   } elseif ($_POST["action"] == "schoolList") {
     //echo "MyId- $myId";
-    $tableId = 'school_id';
-    $fields = array("school_name", "school_abbri", "school_url", "school_doi", "school_status");
-    $dataType = array("0", "0", "0", "1", "0");
-    $header = array("Id", "School Name", "School abbri", "School URL", "School DoI", "Status");
-    $statusDecode = array("status" => "school_status", "0" => "Active", "1" => "Deleted");
-    $button = array("1", "1", "0", "0");
-
     $sql = "SELECT * from school where school_status='0' order by school_name";
-    getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
+    $json = getTableRow($conn, $sql, array("school_id", "school_name", "school_abbri", "school_url"));
+    // echo $json;
+    $array = json_decode($json, true);
+    $count = count($array["data"]);
+    //  echo $count;
+    for ($i = 0; $i < count($array["data"]); $i++) {
+      $school_id = $array["data"][$i]["school_id"];
+      $school_name = $array["data"][$i]["school_name"];
+      $school_abbri = $array["data"][$i]["school_abbri"];
+      $school_url = $array["data"][$i]["school_url"];
+
+      echo '<div class="card">
+      <div class="card-body mb-0">
+      <h5 class="card-title" >' . $school_name . '[' . $school_id . ']</h5>
+      <h6 class="card-subtitle mb-2 text-muted">' . $school_url . ' [' . $school_abbri . ']</h6>
+      <a href="#" class="btn btn-info btn-sm basicInfoCollege" data-school="' . $school_id . '">Basic Info</a>
+      </div></div>';
+    }
+
   } elseif ($_POST["action"] == "deptList") {
 
     //echo "MyId- $myId";
