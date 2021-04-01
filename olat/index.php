@@ -46,8 +46,8 @@ $totalTests = count($array["data"]);
 		for ($i = 0; $i < $totalTests; $i++) {
 			$id = $array["data"][$i]["test_id"];
 			echo '<div class="row">
-			<div class="col-9 mt-2 pt-2"><a href="openTest.php?id=' . $id . '" class="btn btn-info btn-block btn-lg">' . $array["data"][$i]["test_name"] . '</a></div>
-			<div class="col-3"></div>
+			<div class="col-4 mt-2 pt-2"><a href="openTest.php?id=' . $id . '" class="btn btn-info btn-block btn-lg">' . $array["data"][$i]["test_name"] . '</a></div>
+			<div class="col-6"></div>
 			</div>';
 		}
 		?>
