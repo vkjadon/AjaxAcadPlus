@@ -85,16 +85,12 @@ if (isset($_POST['action'])) {
   } elseif ($_POST["action"] == "batchList") {
     //    echo "MyId- $myId";
     $tableId = 'batch_id';
-
     $statusDecode = array("status" => "batch_status", "0" => "Active", "1" => "Removed");
-    $button = array("1", "1", "0", "1");
-
+    $button = array("E", "Session", "D");
     $fields = array("batch", "batch_status");
     $dataType = array("0");
-    $header = array("Id", "Batch", "Status");
-
     $sql = "select * from batch order by batch desc";
-    getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
+    getListCard($conn, $tableId, $fields, $dataType, $sql, $statusDecode, $button);
   } elseif ($_POST["action"] == "addBatch") {
     $fields = ['batch'];
     $values = [data_check($_POST['newBatch'])];
@@ -117,28 +113,21 @@ if (isset($_POST['action'])) {
     updateData($conn, 'batch', $fields, $values, $dup, $dup_alert);
     // echo "inside update batch";
   } elseif ($_POST['action'] == 'batchSession') {
-    $school_id = $myScl;
+    //$school_id = $myScl;
     $ay_id = $_POST['batchId'];
-
-    $json = get_schoolSession($conn, $school_id, $ay_id);
+    $json = get_schoolSession($conn, $ay_id);
     //echo $json;
     $array = json_decode($json, true);
     //echo count($array);
     //echo count($array["data"]);
-    echo '<button class="btn btn-secondary btn-square-sm addSessionButton">New Session</button>';
-    echo '<table class="table list-table-xs">';
-    echo '<tr><th><i class="fa fa-edit"></i></th><th>Id</th><th>Session</th><th>Program</th><th>Start</th><th>End</th><th>Remarks</th><th><i class="fa fa-trash"></i></th></tr>';
+    echo '<button class="btn btn-secondary btn-sm addSessionButton">New Session</button>';
+    echo '<table class="table table-bordered">';
+    echo '<tr><th><i class="fa fa-edit"></i></th><th>Id</th><th>Session</th><th><i class="fa fa-trash"></i></th></tr>';
     for ($i = 0; $i < count($array["data"]); $i++) {
-
+      echo '<tr>';
       echo '<td><a href="#" class="session_idE" id="' . $array["data"][$i]["id"] . '"><i class="fa fa-edit"></i></a></td>';
       echo '<td>' . $array["data"][$i]["id"] . '</td>';
       echo '<td>' . $array["data"][$i]["name"] . '</td>';
-      $program_id = $array["data"][$i]["program"];
-      if ($program_id > 0) echo '<td>' . getField($conn, $program_id, "program", "program_id", "sp_name") . '</td>';
-      else echo '<td>All Other</td>';
-      echo '<td>' . $array["data"][$i]["session_start"] . '</td>';
-      echo '<td>' . $array["data"][$i]["session_end"] . '</td>';
-      echo '<td>' . $array["data"][$i]["remarks"] . '</td>';
       echo '<td><a href="#" class="session_idD" id="' . $array["data"][$i]["id"] . '"><i class="fa fa-trash"></i></a></td>';
       echo '</tr>';
     }

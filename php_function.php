@@ -171,6 +171,61 @@ function getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDeco
   }
   echo '</table>';
 }
+function getListCard($conn, $tableId, $fields, $dataType, $sql, $statusDecode, $button)
+{
+  // $tableId=Table Auto Increment ID (to be used for editing data and "deleteData")
+  // $fields= Array of fields to fetch from the output of the Query
+  // $dataType= Array of data type of the fields, 0 Text 1 Date Format 2 TimeStamp
+  // $header= Array of Table Headers - Add Id as first field
+  // $sql=Query to be execute
+  // $button[0]=>0 Edit Button NOT Required; => 1 Edit Button Required
+  // $button[1]=>0 Delete Button NOT Required; => 1 Delete Button Required
+  // $button[2]=>0 Retrieve button Not Required; => 1 Required
+  // $button[3]=>0 Process button Not Required; => 1 Required
+  // statusDecode is an associative array to Decode the Field value by an appropriate Phrase as
+  //  Y by Yes M by Male etc. It can aslo be used to align the table cell.
+  //echo "In Function  $sql Column Count $columnCount";
+  $buttonCount = count($button);
+  $fieldCount = count($fields);
+  $result = $conn->query($sql);
+  if (!$result) {
+    echo $conn->error;
+    die(" The script could not be Loadded! Please report!");
+  }
+  //echo '<div class="card-columns">';
+  echo '<div class="row">';
+  while ($rows = $result->fetch_assoc()) {
+    $data = "";
+    echo '<div class="col-4 mb-2">';
+    echo '<div class="card">
+    <div class="card-body">';     
+    $id = $rows[$tableId];
+    for ($j = 0; $j < $fieldCount; $j++) {
+      $fieldName = $fields[$j];
+      $fieldValue = $rows[$fieldName];
+      $data .= ' data-' . $fieldName . '="' . $fieldValue . '"';
+      if ($fieldName == $statusDecode["status"]) echo '<div class="col">' . $statusDecode[$fieldValue] . '</div>';
+      else {
+        if ($dataType[$j] == "0"){
+          if($j==0)echo '<div class="col"><div class="card-title"><h3>' . $fieldValue . '</h3></div></div>';
+          else echo '<div class="col">' . $fieldValue . '</div>';
+        } 
+        elseif ($dataType[$j] == "1") echo '<div class="col">' . date("d-M-Y", strtotime($fieldValue)) . '</div>';
+      }
+    }
+    echo '<div class="row"><div class="col">';
+    for ($i = 0; $i < $buttonCount; $i++) {
+      if ($button[$i] == 'E') echo '<a href="#" class="float-left ' . $tableId . 'E" id="' . $id . '"><i class="fa fa-edit"></i></a>';
+      elseif ($button[$i] == 'D') echo '<a href="#" class="float-right ' . $tableId . 'D" id="' . $id . '"><i class="fa fa-trash"></i></a>';
+      else echo '<a href="#" class="' . $tableId . $button[$i] . '" data-id="'.$id.'" ' . $data . '>' . $button[$i] . '</a>';
+    }
+    echo '</div></div></div>';
+    echo '</div>';
+    echo '</div>';
+  }
+  echo '</div>';
+  //echo '</div>';
+}
 function updateField($conn, $table, $fields, $values, $echo)
 {
   // $table - Name of the Table
@@ -526,11 +581,10 @@ function get_sessionClass($conn, $mySes)
   );
   return json_encode($output);
 }
-function get_schoolSession($conn, $school_id, $ay_id)
+function get_schoolSession($conn, $ay_id)
 {
 
-  if ($school_id == 'ALL') $sql = "select s.* from session s where ay_id='$ay_id' order by session_name";
-  else $sql = "select s.* from session s where s.school_id='$school_id' and ay_id='$ay_id' order by session_name";
+  $sql = "select s.* from session s where ay_id='$ay_id' order by session_name";
 
   $result = $conn->query($sql);
   if (!$result) die(" The script could not be Loadded! Please report!");
@@ -539,10 +593,6 @@ function get_schoolSession($conn, $school_id, $ay_id)
     $sub_array = array();
     $sub_array["id"] = $rows['session_id'];
     $sub_array["name"] = $rows['session_name'];
-    $sub_array["program"] = $rows['program_id'];
-    $sub_array["remarks"] = $rows['session_remarks'];
-    $sub_array["session_start"] = $rows['session_start'];
-    $sub_array["session_end"] = $rows['session_end'];
     $data[] = $sub_array;
   }
   $output = array(

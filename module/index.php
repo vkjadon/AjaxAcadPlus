@@ -4,9 +4,9 @@ require('../config_variable.php');
 require('../php_function.php');
 $dept_id = getField($conn, $myId, "staff", "staff_id", "dept_id");
 $school_id = getField($conn, $dept_id, "department", "dept_id", "school_id");
-$prog_id = getField($conn, $dept_id, "program", "dept_id", "program_id");
-$sql = "select * from session where program_id='$prog_id' order by session_id desc";
+$sql = "select * from session_school where school_id='$school_id' order by session_id desc";
 $ses_id = getFieldValue($conn, "session_id", $sql);
+echo "Dept $dept_id School $school_id Session $ses_id";
 if ($ses_id == "") {
   $sql = "select * from session where program_id='0' and school_id='$school_id' order by session_id desc";
   $ses_id = getFieldValue($conn, "session_id", $sql);
