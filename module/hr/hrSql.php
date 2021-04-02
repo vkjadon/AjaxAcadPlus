@@ -164,22 +164,21 @@ if (isset($_POST['action'])) {
 		}
 		echo '</table>';
 	} elseif ($_POST['action'] == 'updateStaffQualification') {
-	$id_name = $_POST['id_name'];
-	$staff_id = $_POST['staff_id'];
-    $id = $_POST['id'];
-    $tag = $_POST['tag'];
-    $value = $_POST['value'];
-	$sql="update staff_qualification set $tag='$value' where $id_name='$id' and staff_id='$staff_id'";
-	$result = $conn->query($sql);
-	$affectedRows=$conn->affected_rows;
-	echo "affected rows $affectedRows";
+		$id_name = $_POST['id_name'];
+		$staff_id = $_POST['staff_id'];
+		$id = $_POST['id'];
+		$tag = $_POST['tag'];
+		$value = $_POST['value'];
+		$sql = "update staff_qualification set $tag='$value' where $id_name='$id' and staff_id='$staff_id'";
+		$result = $conn->query($sql);
+		$affectedRows = $conn->affected_rows;
+		echo "affected rows $affectedRows";
 		if (!$result) echo $conn->error;
-		elseif($affectedRows==0){
+		elseif ($affectedRows == 0) {
 			$sql = "insert into staff_qualification (staff_id, $tag) values ('$staff_id', '$value')";
 			$result = $conn->query($sql);
 			if (!$result) echo $conn->error;
-		}
-		else "Updated";
+		} else "Updated";
 	} elseif ($_POST['action'] == 'fetchStaffQualification') {
 		$stq_id = $_POST['stqId'];
 		$sql = "select * FROM staff_qualification where stq_id='$stq_id'";
