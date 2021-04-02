@@ -22,21 +22,33 @@ if (isset($_POST["query"])) {
 if (isset($_POST['action'])) {
 	if ($_POST['action'] == 'studentList') {
 
-		// echo "MyId- $myId";
-		$tableId = 'student_id';
-
 		$program_id = $_POST['programId'];
 		$batch_id = $_POST['batchId'];
+		if ($program_id > 0 && $batch_id > 0) $sql = "select * from student st where st.program_id='$program_id' and st.batch_id='$batch_id' and student_status='0' order by student_name";
+		$json = getTableRow($conn, $sql, array("student_id", "student_name", "student_rollno"));
+		// echo $json;
+		$array = json_decode($json, true);
+		$count = count($array["data"]);
+		//  echo $count;
+		for ($i = 0; $i < count($array["data"]); $i++) {
+			$student_id = $array["data"][$i]["student_id"];
+			$student_name = $array["data"][$i]["student_name"];
+			$student_rollno = $array["data"][$i]["student_rollno"];
 
-		$statusDecode = array("status" => "student_status", "0" => "Active", "9" => "Inactive");
-		$button = array("1", "1", "0", "0", "Details", "Contact");
+			echo '<div class="card">
+      <div class="card-body mb-0">
+						<div class="row">
+						<div class="col-10">
+      <h7 class="card-title">' . $student_name . '</h7><br>
+						</div>
+						<div class="col-2">
+						<a href="#" class="fa fa-edit editStudent" data-staff="' . $student_id . '"></a>
+						</div>
+						</div>
+      <h8 class="card-subtitle mb-2 text-muted">' . $student_rollno . ' </h8>
+      </div></div>';
+		}
 
-		$fields = array("student_name", "student_rollno", "student_mobile", "student_email");
-		$dataType = array("0", "0", "0", "0", "0");
-		$header = array("Id", "Student Name", "Roll Number", "Mobile", "Email");
-
-		if ($program_id > 0 && $batch_id > 0) $sql = "select * from student st where st.program_id='$program_id' and st.batch_id='$batch_id'";
-		getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
 	} elseif ($_POST['action'] == 'addStudent') {
 
 		$program_id = $_POST['programIdModal'];
