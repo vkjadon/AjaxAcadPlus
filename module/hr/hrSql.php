@@ -49,9 +49,8 @@ if (isset($_POST['action'])) {
 		}
 	} elseif ($_POST['action'] == 'addStaff') {
 
-		$dept_id = $_POST['deptIdModal'];
-		$fields = ['dept_id', 'staff_name', 'deignation_id', 'staff_mobile', 'staff_mobile'];
-		$values = [$_POST['deptIdModal'], data_check($_POST['sName']), data_check($_POST['sel_desig']), $_POST['sMobile'], $_POST['sEmail']];
+		$fields = ['staff_name', 'staff_doj', 'staff_mobile', 'staff_mobile'];
+		$values = [data_check($_POST['sName']), data_check($_POST['sDoj']), $_POST['sMobile'], $_POST['sEmail']];
 		$status = 'staff_status';
 		$dup = "select * from staff where staff_id='" . data_check($_POST["sRno"]) . "' and $status='0'";
 		$dup_alert = "Duplicate URL Exists. One Dept can have one URL. Give Dummy Unique URL if required";
@@ -63,11 +62,13 @@ if (isset($_POST['action'])) {
 		$output = $result->fetch_assoc();
 		echo json_encode($output);
 	} elseif ($_POST['action'] == 'updateStaff') {
-		$fields = ['staff_id', 'staff_name', 'designation_id', 'staff_mobile', 'staff_email'];
-		$values = [$_POST['modalId'], data_check($_POST['sName']), data_check($_POST['sel_desig']), data_check($_POST['sMobile']), data_check($_POST['sEmail'])];
-		$dup = "select * from staff where staff_id='" . $_POST["modalId"] . "'";
-		$dup_alert = "Could Not Update - Duplicate Entries";
-		updateData($conn, 'staff', $fields, $values, $dup, $dup_alert);
+		$id_name = $_POST['id_name'];
+		$id = $_POST['id'];
+		$tag = $_POST['tag'];
+		$value = $_POST['value'];
+		$sql = "update staff set $tag='$value' where $id_name='$id'";
+		$conn->query($sql);
+		echo $conn->error;
 	} elseif ($_POST['action'] == 'addDetails') {
 		$std_id = $_POST['modalId'];
 		$sql = "insert into student_details (student_id, sd_fname, sd_mname, sd_foccupation, sd_fdesignation, sd_dob, sd_gender, sd_category) values ('$_POST[modalId]', '$_POST[fName]', '$_POST[mName]', '$_POST[fOccupation]', '$_POST[fDes]', '$_POST[sDob]', '$_POST[sGender]', '$_POST[sCategory]')";
@@ -99,9 +100,9 @@ if (isset($_POST['action'])) {
 		$statusDecode = array("status" => "stq_status", "0" => "Active", "9" => "Inactive");
 		$button = array("1", "1", "0", "0", "Upload", "View");
 
-		$fields = array("qualification_name", "stq_institute", "stq_board", "stq_year", "stq_marksObtained", "stq_marksMax", "stq_percentage");
+		$fields = array("qualification_name", "stq_institute", "stq_board", "stq_percentage");
 		$dataType = array("0", "0", "0", "0", "0", "0", "0");
-		$header = array("Id", "Qualification", "Institute", "Board", "Passing Year", "Marks Obtained", "Maximum Marks", "Percentage/CGPA");
+		$header = array("Id", "Qualification", "Institute", "Board", "Percentage/CGPA");
 
 		if ($stfId > 0) $sql = "select stq.*, q.qualification_name from staff_qualification stq, qualification q where q.qualification_id=stq.qualification_id and stq.staff_id='$stfId'";
 		// getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
@@ -110,7 +111,7 @@ if (isset($_POST['action'])) {
 		// echo "In Function  $sql Column Count $columnCount";
 		echo '<table class="list-table-xs">';
 		echo '<thead align="center">';
-		echo '<th><i class="fa fa-edit"></i></th><th>Id</th><th>Qualification</th><th>Institute</th><th>Board</th><th>Passing Year</th><th>Marks Obtained</th><th>Maximum Marks</th><th>Percentage/CGPA</th><th><i class="fa fa-trash"></i></th><th>Upload</th><th>View</th>';
+
 
 		if (isset($statusDecode["align"]) == "center") $align = 'align=' . '"center"';
 		else $align = '';
@@ -163,11 +164,22 @@ if (isset($_POST['action'])) {
 		}
 		echo '</table>';
 	} elseif ($_POST['action'] == 'updateStaffQualification') {
-		$stq_id = $_POST['modalId'];
-		$update = "update staff_qualification set qualification_id='$_POST[sel_qual]', stq_institute='$_POST[sInst]', stq_board='$_POST[sBoard]', stq_year='$_POST[sYear]', stq_marksObtained='$_POST[sMarksObt]', stq_marksMax='$_POST[sMaxMarks]', stq_percentage='$_POST[sCgpa]' where stq_id = '$stq_id'";
-		$result = $conn->query($update);
+	$id_name = $_POST['id_name'];
+	$staff_id = $_POST['staff_id'];
+    $id = $_POST['id'];
+    $tag = $_POST['tag'];
+    $value = $_POST['value'];
+	$sql="update staff_qualification set $tag='$value' where $id_name='$id' and staff_id='$staff_id'";
+	$result = $conn->query($sql);
+	$affectedRows=$conn->affected_rows;
+	echo "affected rows $affectedRows";
 		if (!$result) echo $conn->error;
-		else echo "New record updated successfully";
+		elseif($affectedRows==0){
+			$sql = "insert into staff_qualification (staff_id, $tag) values ('$staff_id', '$value')";
+			$result = $conn->query($sql);
+			if (!$result) echo $conn->error;
+		}
+		else "Updated";
 	} elseif ($_POST['action'] == 'fetchStaffQualification') {
 		$stq_id = $_POST['stqId'];
 		$sql = "select * FROM staff_qualification where stq_id='$stq_id'";
