@@ -178,8 +178,9 @@ div.minWidth100{
 }
 .btn-square-sm {
   padding: 2px 8px;
+  margin: 0px;
   font-size: 12px;
-  border-radius: 2px;
+  border-radius: 0px;
 }
 
 .qpBtn {

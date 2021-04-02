@@ -1,5 +1,0 @@
-For Doppler’s effect, which of the following is a correct statement
-I During observer motion both frequency and wavelength will change
-II During source motion both frequency and wavelength will change
-III During source motion only will change
-IV During observer motion only will change
