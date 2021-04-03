@@ -77,9 +77,12 @@ require('../../php_function.php');
         <p id="staffList"></p>
        </div>
        <div class="col-8">
-        <div class="row">
-         <div class="col-4">
-          <h2 id="staff_title"></h2>
+        <div class="row staffUser">
+         <div class="col-1">
+          <i class="fas fa-user-circle fa-2x"></i>
+         </div>
+         <div class="col-11 p-0 m-0">
+          <h3 class="font-italic" id="staff_title"></h3>
          </div>
         </div>
         <div class="row">
@@ -306,6 +309,7 @@ require('../../php_function.php');
   $('#list-as').show();
   $('#list-sq').hide();
   $('#accordionStaff').hide();
+  $('.staffUser').hide();
 
   var z = $("#sel_dept").val();
   staffList();
@@ -415,7 +419,7 @@ require('../../php_function.php');
     staffId: id,
     action: "fetchStaff"
    }, () => {}, "json").done(function(data) {
-    $.alert("hello"+data.staff_name);
+    // $.alert("hello" + data.staff_name);
     $("#sEmail").val(data.staff_email);
     $("#sName").val(data.staff_name);
     $("#sMobile").val(data.staff_mobile);
@@ -427,7 +431,9 @@ require('../../php_function.php');
     $("#sGender").val(data.staff_gender);
     $("#sTeaching").val(data.staff_teaching);
     $("#sDoj").val(data.staff_doj);
-    $("#staff_title").val(data.staff_name);
+    $("#staff_title").text(data.staff_name);
+    $('.staffUser').show();
+
 
    }, "text").fail(function() {
     $.alert("fail in place of error");
