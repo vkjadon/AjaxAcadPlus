@@ -76,26 +76,31 @@ if (isset($_POST['action'])) {
     //echo count($array["data"]);
     for ($i = 0; $i < count($array["data"]); $i++) {
       $subject_id=$array["data"][$i]["subject_id"];
-      echo '<div class="card m-1 p-1">';
-      echo '<div class="card-body mb-0 pb-0">';
       echo '<div class="row">';
-      echo '<div class="col-sm-2 text-center">';
-      echo '[' . $subject_id . ']';
-      echo '<a href="#" class="float left session_idE" data-id="' . $subject_id . '"><i class="fa fa-edit"></i></a>';
+        echo '<div class="col-sm-3 mr-0 pr-0">';
+          echo '<div class="card m-0 mb-1 p-0">';
+            echo '<div class="card-body p-1">';
+              echo '[' . $subject_id . ']';
+              echo '<a href="#" class="float-right session_idE" data-id="' . $subject_id . '"><i class="fa fa-edit"></i></a>';
+            echo '</div>';
+          echo '</div>';
+        echo '</div>';
+      
+        echo '<div class="col-sm-9">';
+          echo '<div class="card m-0 mb-1 p-0">';
+            echo '<div class="card-body">';
+              echo '<div class="row">';
+                echo '<div class="col-sm-8">';
+                  echo $array["data"][$i]["subject_code"].' : <span class="cardBodyText">'.$array["data"][$i]["subject_name"].'</span>';
+                echo '</div>';
+                echo '<div class="col-sm-2">';
+                  echo '<a href="#" class="float-right session_idD" data-id="' . $subject_id . '"><i class="fa fa-trash"></i></a>';
+                echo '</div>';
+              echo '</div>';
+            echo '</div>';
+          echo '</div>';
+        echo '</div>';
       echo '</div>';
-      echo '<div class="col-sm-8">';
-      echo $array["data"][$i]["subject_code"].' : <span class="cardBodyText">'.$array["data"][$i]["subject_name"].'</span>';
-      echo '</div>';
-      echo '<div class="col-sm-1">';
-      echo '<a href="#" class="float-right session_idD" data-id="' . $subject_id . '"><i class="fa fa-trash"></i></a>';
-      echo '</div>';
-      echo '</div>';
-      echo '<div class="row">';
-      echo '<div class="col-sm-3">';
-      echo '<a href="#" class="atag addSchool" data-id="' . $subject_id . '">Add School</a>';
-      echo '</div>';
-      echo '</div>';
-      echo '</div></div>';
     }
   } elseif ($_POST["action"] == "batchList") {
     //    echo "MyId- $myId";
@@ -265,7 +270,3 @@ if (isset($_POST['action'])) {
       getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
     }
   }
-
-
-
-
