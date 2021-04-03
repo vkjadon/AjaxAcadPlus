@@ -71,7 +71,10 @@ require('../../php_function.php');
       <div class="row">
        <div class="col-4 mt-1 mb-1">
         <div class="card border-info mb-3">
-         <div class="card-header">Select Batch and Programme</div>
+         <div class="card-header">
+          Select Batch and Programme
+          <button class="btn btn-info btn-sm mt-1 addStudent">Add</button>
+         </div>
          <div class="card-body text-primary">
           <form>
            <div class="row">
@@ -93,17 +96,15 @@ require('../../php_function.php');
             </div>
            </div>
           </form>
-          <div class="row">
-           <div class="col-12">
-            <input type="text" name="student" id="student" class="form-control form-control-sm" placeholder="Name of the Student">
-            <div class='list-group' id="studentAutoList"></div>
+          <div class="input-group md-form form-sm form-2 pl-0">
+           <input name="studentSearch" id="studentSearch" class="form-control my-0 py-1 red-border" type="text" placeholder="Search Student" aria-label="Search">
+           <div class="input-group-append">
+            <span class="input-group-text cyan lighten-3" id="basic-text1"><i class="fas fa-search text-grey" aria-hidden="true"></i></span>
            </div>
           </div>
-          <div class="row">
-           <div class="col-6 p-2">
-            <button class="btn btn-info btn-sm mt-1 addStudent">Add New</button>
-           </div>
-          </div>
+          <div class='list-group' id="studentAutoList"></div>
+
+
          </div>
         </div>
        </div>
@@ -251,7 +252,7 @@ require('../../php_function.php');
                 <div class="row">
                  <div class="col-6">
                   <div class="form-check-inline">
-                   <input type="radio" class="form-check-input sDetailForm" checked id="male" name="sGender" value="Male" data-tag="sd_gander">Male
+                   <input type="radio" class="form-check-input sDetailForm" checked id="male" name="sGender" value="Male" data-tag="sd_gender">Male
                   </div>
                   <div class="form-check-inline">
                    <input type="radio" class="form-check-input sDetailForm" id="female" name="female" value="sGender" data-tag="sd_gender">Female
@@ -326,6 +327,74 @@ require('../../php_function.php');
            <div class="card-body">
             <div class="row">
              <div class="col-12">
+              <div class="studentQualificationFormAccordian">
+               <div class="row">
+                <div class="col-6">
+                 <div class="form-group">
+                  Qualification
+                  <div class="row">
+                   <div class="col">
+                    <?php
+                    $sql_qualification = "select * from qualification";
+                    $result = $conn->query($sql_qualification);
+                    if ($result) {
+                     echo '<select class="form-control form-control-sm sQualForm" name="sel_qual" id="sel_qual" data-tag="qualification_id" required>';
+                     echo '<option selected disabled>Select Qualification</option>';
+                     while ($rows = $result->fetch_assoc()) {
+                      $select_id = $rows['qualification_id'];
+                      $select_name = $rows['qualification_name'];
+                      echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+                     }
+                     echo '</select>';
+                    } else echo $conn->error;
+                    if ($result->num_rows == 0) echo 'No Data Found';
+                    ?>
+                   </div>
+                  </div>
+                 </div>
+                </div>
+                <div class="col-6">
+                 <div class="form-group">
+                  Institute
+                  <input type="text" class="form-control form-control-sm sQualForm" id="sInst" name="sInst" placeholder="Name of the Institute" data-tag="sq_institute">
+                 </div>
+                </div>
+               </div>
+               <div class="row">
+                <div class="col-6">
+                 <div class="form-group">
+                  Board
+                  <input type="text" class="form-control form-control-sm sQualForm" id="sBoard" name="sBoard" placeholder="Board" data-tag="sq_board">
+                 </div>
+                </div>
+                <div class="col-6">
+                 <div class="form-group">
+                  Year of Passing
+                  <input type="text" class="form-control form-control-sm sQualForm" id="sYear" name="sYear" placeholder="Passing Year" data-tag="sq_year">
+                 </div>
+                </div>
+               </div>
+               <div class="row">
+                <div class="col-4">
+                 <div class="form-group">
+                  Marks Obtained
+                  <input type="text" class="form-control form-control-sm sQualForm" id="sMarksObt" name="sMarksObt" placeholder="Marks Obtained" data-tag="sq_marksObtained">
+                 </div>
+                </div>
+                <div class="col-4">
+                 <div class="form-group">
+                  Maximum Marks
+                  <input type="text" class="form-control form-control-sm sQualForm" id="sMaxMarks" name="sMaxMarks" placeholder="Maximum marks" data-tag="sq_marksMax">
+                 </div>
+                </div>
+                <div class="col-4">
+                 <div class="form-group">
+                  Percentage/CGPA
+                  <input type="text" class="form-control form-control-sm sQualForm" id="sCgpa" name="sCgpa" placeholder="Percentage/CGPA" data-tag="sq_percentage">
+                 </div>
+                </div>
+               </div>
+              </div>
               <p style="text-align:center" id="qualificationShowList"></p>
              </div>
             </div>
@@ -362,7 +431,6 @@ require('../../php_function.php');
  $(document).ready(function() {
 
   $('[data-toggle="tooltip"]').tooltip();
-  $(".topBarTitle").text("Admission");
   var y = $("#sel_batch").val();
   var z = $("#sel_program").val();
   if (y > 0 && z > 0) studentList(y, z);
@@ -374,9 +442,9 @@ require('../../php_function.php');
   $('#accordionStudent').hide();
 
 
-  $('#student').keyup(function() {
+  $('#studentSearch').keyup(function() {
    var query = $(this).val();
-   alert(query);
+   // alert(query);
    if (query != '') {
     $.ajax({
      url: "admissionSql.php",
@@ -396,22 +464,60 @@ require('../../php_function.php');
   });
 
   $(document).on('click', '.autoList', function() {
-   $('#student').val($(this).text());
+   $('#studentSearch').val($(this).text());
    var stdId = $(this).attr("data-std");
-   $('#panelId').val(stdId);
-   studentQualificationList(stdId);
-
-   // $.alert('hello'+stdId);
    $('#studentAutoList').fadeOut();
+   $('#studentShowList').show();
    $('.studentProfile').show();
+   $('#accordionStudent').show();
 
    $.post("admissionSql.php", {
-    action: "fetchStudent",
-    studentId: stdId
+    studentId: stdId,
+    action: "fetchStudent"
    }, () => {}, "json").done(function(data) {
-    // $.alert("List " + data.student_name);
-    $(".fetchStudentName").html(data.student_name);
-   }).fail(function() {
+    $(".student_email").text(data.student_email);
+    $(".student_name").text(data.student_name);
+    $(".student_rollno").text(data.student_rollno);
+    $(".student_mobile").text(data.student_mobile);
+    $("#sEmail").val(data.student_email);
+    $("#sName").val(data.student_name);
+    $("#sRno").val(data.student_rollno);
+    $("#sMobile").val(data.student_mobile);
+    $("#sDob").val(data.student_dob);
+    $("#fName").val(data.student_fname);
+    $("#mName").val(data.student_mname);
+    $("#sAdhaar").val(data.student_adhaar);
+    $("#sAddress").val(data.student_address);
+    $("#sGender").val(data.student_gender);
+   }, "text").fail(function() {
+    $.alert("fail in place of error");
+   })
+
+   $.post("admissionSql.php", {
+    studentId: stdId,
+    action: "fetchDetails"
+   }, () => {}, "json").done(function(data) {
+    $("#fName").val(data.sd_fname);
+    $("#mName").val(data.sd_mname);
+    $("#sGender").val(data.sd_gender);
+    $("#sCategory").val(data.sd_category);
+    $("#fOccupation").val(data.sd_foccupation);
+    $("#fDes").val(data.sd_fdesignation);
+    $("#sDob").val(data.sd_dob);
+   }, "text").fail(function() {
+    $.alert("fail in place of error");
+   })
+
+   $.post("admissionSql.php", {
+    studentId: stdId,
+    action: "fetchContact"
+   }, () => {}, "json").done(function(data) {
+    $("#fEmail").val(data.sc_femail);
+    $("#mEmail").val(data.sc_memail);
+    $("#sAddress").val(data.sc_address);
+    $("#fMobile").val(data.sc_fmobile);
+    $("#mMobile").val(data.sc_mmobile);
+   }, "text").fail(function() {
     $.alert("fail in place of error");
    })
   });
@@ -447,6 +553,7 @@ require('../../php_function.php');
    $('#accordionStudent').show();
    var id = $(this).attr("data-student");
    $("#studentIdHidden").val(id);
+   studentQualificationList(id);
 
    $.post("admissionSql.php", {
     studentId: id,
@@ -478,8 +585,8 @@ require('../../php_function.php');
     $("#mName").val(data.sd_mname);
     $("#sGender").val(data.sd_gender);
     $("#sCategory").val(data.sd_category);
-    $("#fOccupation").val(data.sd_occupation);
-    $("#fDes").val(data.sd_designation);
+    $("#fOccupation").val(data.sd_foccupation);
+    $("#fDes").val(data.sd_fdesignation);
     $("#sDob").val(data.sd_dob);
    }, "text").fail(function() {
     $.alert("fail in place of error");
@@ -555,6 +662,31 @@ require('../../php_function.php');
    })
   });
 
+  $(document).on('blur', '.sQualForm', function() {
+   var studentId = $("#studentIdHidden").val()
+   var tag = $(this).attr("data-tag")
+   var value = $(this).val()
+   var qId = $('#sel_qual').val()
+
+   // $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
+   if (qId === null) {
+    $.alert("Select a Qualification first" + qId);
+   } else {
+    $.post("admissionSql.php", {
+     id_name: "qualification_id",
+     id: qId,
+     tag: tag,
+     student_id: studentId,
+     value: value,
+     action: "updateStudentQualification"
+    }, function(data) {
+     $.alert("List " + data);
+    }, "text").fail(function() {
+     $.alert("fail in place of error");
+    })
+   }
+  });
+
   $(document).on('click', '.addStudentQualification', function() {
    $('#modal_title').text("Add Student Qualifications");
    $('#firstModal').modal('show');
@@ -571,31 +703,25 @@ require('../../php_function.php');
   $(document).on('click', '.sq_idE', function() {
    var id = $(this).attr('id');
    var stdId = $('#panelId').val();
-   $.alert("Id " + id + "std" + stdId);
+   // $.alert("Id " + id + "std" + stdId);
    $.post("admissionSql.php", {
     action: "fetchStudentQualification",
     sqId: id,
     std_id: stdId
    }, () => {}, "json").done(function(data) {
-    $.alert("List " + data.student_id + "sq " + data.qualification_id);
-    $('#modal_title').text("Update Student Qualification [" + id + "]");
+    // $.alert("List " + data.student_id + "sq " + data.qualification_id);
     $("#sInst").val(data.sq_institute);
     $("#sBoard").val(data.sq_board);
     $("#sYear").val(data.sq_year);
     $("#sMarksObt").val(data.sq_marksObtained);
     $("#sMaxMarks").val(data.sq_marksMax);
-    $("#modalId").val(id);
-    $("#action").val("updateStudentQualification");
+    $("#sCgpa").val(data.sq_percentage);
     var qual = data.qualification_id;
     $("#sel_qual option[value='" + qual + "']").attr("selected", "selected");
-    $('#firstModal').modal('show');
    }, "text").fail(function() {
     $.alert("fail in place of error");
    })
    $(".studentForm").hide();
-   $(".studentContactForm").hide();
-   $(".studentQualificationForm").show();
-   $(".studentDetailForm").hide();
   });
 
   $(document).on('click', '.student_idE', function() {
