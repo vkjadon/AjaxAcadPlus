@@ -66,6 +66,7 @@ require('../../php_function.php');
 
      <a class="list-group-item list-group-item-action mid" id="list-mid-list" data-toggle="list" href="#list-mid" role="tab" aria-controls="mid"> Manage Department </a>
      <a class="list-group-item list-group-item-action mip" id="list-mip-list" data-toggle="list" href="#list-mip" role="tab" aria-controls="mip"> Manage Programme </a>
+     <a class="list-group-item list-group-item-action bs" id="list-bs-list" data-toggle="list" href="#list-bs" role="tab" aria-controls="bs"> Batch/Session </a>
     </div>
    </div>
 

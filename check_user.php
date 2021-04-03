@@ -7,7 +7,7 @@ require("php_function.php");
 if ($_POST['action'] == 'checkUser') {
   $myUn = $_POST['username'];
   $myPwd = $_POST['userpassword'];
-  $url = $setUrl . '/acadplus/api/check_user.php?u=' . $myUn . '&&p=' . $myPwd.'&&mf='.$myFolder;
+  $url = $setUrl . '/acadplus/api/check_user.php?u=' . $myUn . '&&p=' . $myPwd . '&&mf=' . $myFolder;
   $curl = curl_init();
   curl_setopt($curl, CURLOPT_URL, $url);
   curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -19,20 +19,7 @@ if ($_POST['action'] == 'checkUser') {
   $_SESSION['myStdId'] = $id["student"];
   $_SESSION['un'] = $myUn;
   $_SESSION['pwd'] = $myPwd;
-
-} elseif ($_POST['action'] == 'setProgram') {
-  $mpid = $_POST['programId'];
-  $prog=getField($conn, $myProg, "program", "program_id", "sp_abbri");
-  //echo $prog;
-  $_SESSION['mypid'] = $mpid;
-
-} elseif ($_POST['action'] == 'selSession') {
-  $mpid = $_POST['programId'];
-
-  $sql = "select * from session where program_id='$mpid'";
-  selectList($conn, "Select Session", array("2", "session_id", "session_name", "", "sel_session"), $sql);
-} elseif ($_POST['action'] == 'setSession') {
-  $msid = $_POST['sessionId'];
-  //echo 'Ses [' . $msid . ']';
-  $_SESSION['mysid'] = $msid;
-}
+} elseif ($_POST['action'] == 'setProgram') $_SESSION['mypid'] = $_POST['programId'];
+elseif ($_POST['action'] == 'setSession') $_SESSION['mysid'] = $_POST['sessionId'];
+elseif ($_POST['action'] == 'setSchool') $_SESSION['mysclid'] = $_POST['schoolId'];
+elseif ($_POST['action'] == 'setDept') $_SESSION['mydeptid'] = $_POST['deptId'];

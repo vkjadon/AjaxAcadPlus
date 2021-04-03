@@ -64,24 +64,39 @@ if (isset($_POST['action'])) {
     };
     
   } elseif ($_POST["action"] == "subList") {
-    //    echo "MyId- $myId";
+    //echo "MyId- $myId Prog $myProg";
     $tableId = 'subject_id';
 
-    $program_id = $_POST['programId'];
     $batch_id = $_POST['batchId'];
+    $sql="select * from subject where program_id='$myProg' and batch_id='$batch_id'";
+    $json = getTableRow($conn, $sql, array("subject_id", "subject_name", "subject_code"));
 
-    $statusDecode = array("status" => "subject_status", "0" => "Core", "1" => "Dept Elective", "2" => "Open Elective");
-    $button = array("1", "1", "0", "0");
-
-    $fields = array("subject_name", "subject_code", "subject_semester", "subject_lecture", "subject_tutorial", "subject_practical", "subject_credit", "subject_type", "subject_mode", "subject_category", "subject_internal", "subject_external", "staff_name");
-    $dataType = array("0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0");
-    $header = array("Id", "Subject Name", "Code", "Sem", "L", "T", "P", "Cr",  "Type", "Mode", "Cat", "Int", "Ext", "Staff");
-
-    if ($program_id > 0 && $batch_id > 0) $sql = "select sb.*, st.staff_name from subject sb, staff st where sb.program_id='$program_id' and sb.batch_id='$batch_id' and sb.staff_id=st.staff_id and sb.subject_status='0' order by sb.subject_semester, sb.subject_name";
-    elseif ($program_id > 0) $sql = "select sb.*, st.staff_name from subject sb, staff st where sb.program_id='$program_id' and sb.staff_id=st.staff_id and sb.subject_status='0' order by sb.subject_semester, sb.subject_name";
-    elseif ($batch_id > 0) $sql = "select sb.*, st.staff_name from subject sb staff st where sb.batch_id='$batch_id' and sb.staff_id=st.staff_id and sb.subject_status='0' order by sb.subject_semester, sb.subject_name";
-    else $sql = "select sb.*, st.staff_name from subject sb, staff st where sb.staff_id=st.staff_id and sb.subject_status='0' order by sb.subject_semester, sb.subject_name";
-    getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
+    $array = json_decode($json, true);
+    //echo count($array);
+    //echo count($array["data"]);
+    for ($i = 0; $i < count($array["data"]); $i++) {
+      $subject_id=$array["data"][$i]["subject_id"];
+      echo '<div class="card m-1 p-1">';
+      echo '<div class="card-body mb-0 pb-0">';
+      echo '<div class="row">';
+      echo '<div class="col-sm-2 text-center">';
+      echo '[' . $subject_id . ']';
+      echo '<a href="#" class="float left session_idE" data-id="' . $subject_id . '"><i class="fa fa-edit"></i></a>';
+      echo '</div>';
+      echo '<div class="col-sm-8">';
+      echo $array["data"][$i]["subject_code"].' : <span class="cardBodyText">'.$array["data"][$i]["subject_name"].'</span>';
+      echo '</div>';
+      echo '<div class="col-sm-1">';
+      echo '<a href="#" class="float-right session_idD" data-id="' . $subject_id . '"><i class="fa fa-trash"></i></a>';
+      echo '</div>';
+      echo '</div>';
+      echo '<div class="row">';
+      echo '<div class="col-sm-3">';
+      echo '<a href="#" class="atag addSchool" data-id="' . $subject_id . '">Add School</a>';
+      echo '</div>';
+      echo '</div>';
+      echo '</div></div>';
+    }
   } elseif ($_POST["action"] == "batchList") {
     //    echo "MyId- $myId";
     $tableId = 'batch_id';
@@ -120,16 +135,29 @@ if (isset($_POST['action'])) {
     $array = json_decode($json, true);
     //echo count($array);
     //echo count($array["data"]);
-    echo '<button class="btn btn-secondary btn-sm addSessionButton">New Session</button>';
-    echo '<table class="table table-bordered">';
-    echo '<tr><th><i class="fa fa-edit"></i></th><th>Id</th><th>Session</th><th><i class="fa fa-trash"></i></th></tr>';
     for ($i = 0; $i < count($array["data"]); $i++) {
-      echo '<tr>';
-      echo '<td><a href="#" class="session_idE" id="' . $array["data"][$i]["id"] . '"><i class="fa fa-edit"></i></a></td>';
-      echo '<td>' . $array["data"][$i]["id"] . '</td>';
-      echo '<td>' . $array["data"][$i]["name"] . '</td>';
-      echo '<td><a href="#" class="session_idD" id="' . $array["data"][$i]["id"] . '"><i class="fa fa-trash"></i></a></td>';
-      echo '</tr>';
+      echo '<div class="card mb-1">';
+      echo '<div class="card-body mb-0 pb-0">';
+      echo '<div class="row">';
+      echo '<div class="col-sm-1">';
+      echo '<a href="#" class="float left session_idE" data-id="' . $array["data"][$i]["id"] . '"><i class="fa fa-edit"></i></a>';
+      echo '</div>';
+      echo '<div class="col-sm-2">';
+      echo '[' . $array["data"][$i]["id"] . ']';
+      echo '</div>';
+      echo '<div class="col-sm-6">';
+      echo '<span class="cardBodyText">'.$array["data"][$i]["name"].'</span>';
+      echo '</div>';
+      echo '<div class="col-sm-3">';
+      echo '<a href="#" class="float-right session_idD" data-id="' . $array["data"][$i]["id"] . '"><i class="fa fa-trash"></i></a>';
+      echo '</div>';
+      echo '</div>';
+      echo '<div class="row">';
+      echo '<div class="col-3">';
+      echo '<a href="#" class="atag addSchool" data-id="' . $array["data"][$i]["id"] . '">Add School</a>';
+      echo '</div>';
+      echo '</div>';
+      echo '</div></div>';
     }
     echo '</table>';
     

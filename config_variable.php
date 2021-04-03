@@ -5,27 +5,17 @@ require("check_table.php");
 if (isset($_SESSION["setUrl"])) $setUrl = $_SESSION['setUrl'];
 if (isset($_SESSION["setLogo"])) $setLogo = $_SESSION['setLogo'];
 if (isset($_SESSION["setCodePath"])) $codePath = $_SESSION['setCodePath'];
+if (isset($_SESSION["myFolder"])) $myFolder = $_SESSION['myFolder'];
 
-if (isset($_SESSION["msd"])) $mySessionId = $_SESSION["msd"];
-if (isset($_SESSION["mcd"])) $myInstId = $_SESSION['mcd'];
-
-if (isset($_SESSION["vkuname"])) $myUn = $_SESSION['vkuname'];
-elseif (isset($_SESSION['un'])) $myUn = $_SESSION['un'];
-
-if (isset($_SESSION["eii3password"])) $myPwd = $_SESSION['eii3password'];
-elseif (isset($_SESSION['pwd'])) $myPwd = $_SESSION['pwd'];
-
+if (isset($_SESSION['un'])) $myUn = $_SESSION['un'];
+if (isset($_SESSION['pwd'])) $myPwd = $_SESSION['pwd'];
 if (isset($_SESSION["myid"])) $myId = $_SESSION['myid'];
-
 if (isset($_SESSION["privledge"])) $myPriv = $_SESSION['privledge'];
 
-if (isset($_SESSION["mypid"])) $myProg = $_SESSION['mypid'];
-
 if (isset($_SESSION["mysclid"])) $myScl = $_SESSION['mysclid'];
-
 if (isset($_SESSION["mysid"])) $mySes = $_SESSION['mysid'];
-
-if (isset($_SESSION["myFolder"])) $myFolder = $_SESSION['myFolder'];
+if (isset($_SESSION["mydeptid"])) $myDept = $_SESSION['mydeptid'];
+if (isset($_SESSION["mypid"])) $myProg = $_SESSION['mypid'];
 
 if (isset($_SESSION['myStdId']) > 0) $myStdId = $_SESSION["myStdId"];
 

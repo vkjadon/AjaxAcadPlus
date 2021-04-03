@@ -62,6 +62,11 @@ div.minWidth100{
   font-size: small;
   font-weight: bold;
 }
+.cardBodyText {
+  color: rgba(17, 17, 17, 0.911);
+  font-style: italic;
+  font-size: small;
+}
 .testQuestionText {
   font-style: italic;
   font-size: small;

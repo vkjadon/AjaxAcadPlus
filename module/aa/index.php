@@ -4,7 +4,6 @@ require("../../config_database.php");
 require('../../config_variable.php');
 require('../../php_function.php');
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,15 +16,19 @@ require('../../php_function.php');
 	<?php require("../topBar.php"); ?>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-2">
+			<div class="col-sm-2">
 				<div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
 					<a class="list-group-item list-group-item-action active bs" id="list-bs-list" data-toggle="list" href="#list-bs" role="tab" aria-controls="bs"> Batch/Session </a>
 					<a class="list-group-item list-group-item-action po" id="list-po-list" data-toggle="list" href="#list-po" role="tab" aria-controls="po"> Programme Outcome </a>
 					<a class="list-group-item list-group-item-action sub" id="list-sub-list" data-toggle="list" href="#list-sub" role="tab" aria-controls="sub"> Courses/Subjects </a>
 					<a class="list-group-item list-group-item-action co" id="list-co-list" data-toggle="list" href="#list-co" role="tab" aria-controls="co"> Course Outcome </a>
 				</div>
+				<div class="bg-danger text-white text-center py-1 mt-2">Select Batch</div>
+				<?php
+				$sql = "select * from batch where batch_status='0' order by batch desc";
+				selectList($conn, 'Sel Batch', array('2', 'batch_id', 'batch', '', 'sel_batch'), $sql);
+				?>
 			</div>
-
 			<div class="col-10">
 				<div class="tab-content" id="nav-tabContent">
 					<div class="tab-pane fade show active" id="list-bs" role="tabpanel" aria-labelledby="list-bs-list">
@@ -34,11 +37,12 @@ require('../../php_function.php');
 								<button class="btn btn-secondary btn-sm addBatch">New Batch</button>
 								<p style="text-align: center;" id="batchShowList"></p>
 							</div>
-							<div class="col-6 mt-1 mb-1" id="batchSession">
+							<div class="col-6">
+								<button class="btn btn-secondary btn-sm addSessionButton">New Session</button>
+								<p id="batchSession"></p>
 							</div>
 						</div>
 					</div>
-
 					<div class="tab-pane fade show" id="list-po" role="tabpanel" aria-labelledby="list-po-list">
 						<div class="row">
 							<div class="mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addPo">Add</button>
@@ -49,8 +53,8 @@ require('../../php_function.php');
 
 					<div class="tab-pane fade" id="list-sub" role="tabpanel" aria-labelledby="list-sub-list">
 						<div class="row">
-							<div class="mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addSubject">New Subject</button>
-								<button class="btn btn-secondary btn-square-sm mt-1 copySubject">Copy Subject</button>
+							<div class="mt-1 mb-1"><button class="btn btn-secondary btn-sm mt-1 addSubject">New Subject</button>
+								<button class="btn btn-sm btn-warning mt-1 copySubject">Copy Subject</button>
 
 								<p id="subShowList"></p>
 								<p id="subCoordinator"></p>
@@ -68,7 +72,6 @@ require('../../php_function.php');
 				</div>
 			</div>
 		</div>
-	</div>
 </body>
 
 <?php require("../js.php"); ?>
@@ -78,22 +81,10 @@ require('../../php_function.php');
 
 		$('[data-toggle="tooltip"]').tooltip();
 		$(".topBarTitle").text("Academics");
-		$(".selectBatch").hide();
-		$(".selectSubject").hide();
 		batchList();
 		poList();
 		coList();
 
-		// Select Panel
-		$(document).on("change", "#sel_program", function() {
-			var batch_id = $("#sel_batch").val();
-			var program_id = $("#sel_program").val();
-			// $.alert("Changed Program " + batch_id + program_id);
-			subjectList(batch_id, program_id);
-			$("#hiddenProgram").val(program_id);
-			$("#hiddenBatchPO").val(batch_id);
-			poList();
-		});
 		$(document).on("change", "#sel_batch", function() {
 			var batch_id = $("#sel_batch").val();
 			var program_id = $("#sel_program").val();
@@ -106,51 +97,19 @@ require('../../php_function.php');
 
 		// Left Panel Block
 		$(document).on('click', '.bs', function() {
-			$('#list-po').hide();
-			$('#list-bs').show();
-			$('#list-co').hide();
-			$('#list-sub').hide();
-
-			$(".selectBatch").hide();
-			$(".selectSubject").hide();
-			$(".selectProgram").show();
-
 			batchList();
 		});
 		$(document).on('click', '.po', function() {
 			$('#action').val("addPo");
-			$('#list-bs').hide();
-			$('#list-po').show();
-			$('#list-co').hide();
-			$('#list-sub').hide();
-			$(".selectPanel").show();
-			$(".selectBatch").show();
-			$(".selectProgram").show();
-			$(".selectSubject").hide();
-
+			poList();
 		});
 		$(document).on('click', '.co', function() {
-			$(".selectPanel").hide();
 			$('#action').val("addCo");
-			$('#list-po').hide();
-			$('#list-bs').hide();
-			$('#list-co').show();
-			$('#list-sub').hide();
-			$(".selectPanel").show();
-			$(".selectBatch").hide();
-			$(".selectProgram").hide();
-			$(".selectSubject").show();
+			coList();
+
 		});
 		$(document).on('click', '.sub', function() {
-			$(".selectPanel").show();
-			$('#list-po').hide();
-			$('#list-bs').hide();
-			$('#list-co').hide();
-			$('#list-sub').show();
-			$(".selectPanel").show();
-			$(".selectBatch").show();
-			$(".selectProgram").show();
-			$(".selectSubject").hide();
+			subjectList();
 		});
 
 		$(document).on('submit', '#modalForm', function(event) {
@@ -560,21 +519,22 @@ require('../../php_function.php');
 			})
 		}
 
-		function subjectList(x, y) {
+		function subjectList() {
 			var x = $("#sel_batch").val();
-			var y = $("#sel_program").val();
-			//$.alert("In List Function"+ x + y);
-			$.post("aaSql.php", {
-				action: "subList",
-				batchId: x,
-				programId: y
-			}, function(mydata, mystatus) {
-				$("#subShowList").show();
-				//$.alert("List " + mydata);
-				$("#subShowList").html(mydata);
-			}, "text").fail(function() {
-				$.alert("Error !!");
-			})
+				//$.alert(" Select a Batch X = " + x);
+			if (x==="") {
+				$.alert(" Select a Batch to Proceed !!");
+			} else {
+				$.post("aaSql.php", {
+					action: "subList",
+					batchId: x
+				}, function(mydata, mystatus) {
+					//$.alert("List " + mydata);
+					$("#subShowList").html(mydata);
+				}, "text").fail(function() {
+					$.alert("Error !!");
+				})
+			}
 		}
 
 		function batchList() {
