@@ -34,11 +34,12 @@ if (isset($_POST['action'])) {
 			// $fileName='../../olat/text/ques-'.$id.'.txt';
 			// if (file_exists($fileName)) $qb_text = file_get_contents($fileName);
 			// else $qb_text = "No File Found";
-			echo '<h5>Question Edit Panel</h5>';
-			echo '<div class="card bg-light">
+			echo '<div class="card">
       	<div class="card-body mt-2 py-1">
 				<div class="row">
 				<div class="col">
+				<h5>Question Edit Panel</h5>
+
 				<textarea rows="4" class="testQuestionText testQuestionUpdate" data-qb="' . $id . '" id="uq" data-tag="qb_text">' . $qb_text . '</textarea>';
 			if (strlen($qb_image) > 5) echo '<img src="../../olat/img/' . $qb_image . '">';
 

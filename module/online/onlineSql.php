@@ -30,7 +30,7 @@ if (isset($_POST['action'])) {
 				echo '<div class="card bg-light">
       	<div class="card-body mt-0 py-1">
 				<div class="row">
-				<div class="col-10"><input class="form-control testName" data-test="'.$id.'" name="testName" value="' . $test_name . '" data-tag="test_name"><br>
+				<div class="col-10"><input class="form-control testName" data-test="' . $id . '" name="testName" value="' . $test_name . '" data-tag="test_name"><br>
 				<h6 class="text-muted py-1">Section : ';
 				$sql = "select * from test where test_id='$id'";
 				$value = getFieldValue($conn, "test_section", $sql);
@@ -89,30 +89,21 @@ if (isset($_POST['action'])) {
 			$test_name = $array["test_name"];
 			$test_section = $array["test_section"];
 			$test_status = $array["test_status"];
-			echo '<div class="card">
-      	<div class="card-body mt-0 py-1">
-				<div class="row">
-				<div class="col-6">
-				<h6>' . $test_name . '[' . $id . ']</h6>';
-			$sql = "select * from test where test_id='$id'";
-			$value = getFieldValue($conn, "test_section", $sql);
-			echo '</div>';
-			echo '<div class="col-3"><h6 class="text-muted py-1">Section : ' . $value . '</h6></div>';
-			echo '<div class="col-3"><button class="btn btn-info btn-square-sm mt-0 testInstruction" data-test="' . $id . '">Instructions</button></div>';
-			echo '</div>';
-			echo '</div></div>';
+			echo '<div class="col p-0"><button class="btn btn-primary btn-sm studyMaterial"> Study Material</button></div>';
+
+			echo '<div class="card p-2">
+   <div class="card-body p-1">
+				<a href="#" class="atag testInstruction p-0" data-test="' . $id . '"><i class="fa fa-edit"></i></a>
+				<span><b> ' . $test_name . '</b></span>';
+			echo '<div class="row">';
 			for ($i = 1; $i <= $test_section; $i++) {
 				$sql = "select sum(tq_marks) as sum from test_question where test_id='$id' and test_section='$i'";
 				$value = getFieldValue($conn, "sum", $sql);
-				echo '<div class="card">
-      	<div class="card-body mt-0 py-1">
-				<div class="row">';
-				echo '<div class="col-6"><h6 class="text-muted py-1">Section : ' . $i . '</h6></div>';
-				echo '<div class="col-3"><h6 class="text-muted py-1">Marks : ' . $value . '</h6></div>';
-				echo '<div class="col-3"><button class="btn btn-secondary btn-square-sm mt-0 sectionInstruction" data-test="' . $id . '" data-section="' . $i . '">Instructions</button></div>';
-				echo '</div>';
-				echo '</div></div>';
+				//echo '<div class="col-3"><h6 class="text-muted py-1">Marks : ' . $value . '</h6></div>';
+				echo '<div class="col"><button class="btn btn-info btn-square-sm sectionInstruction" data-test="' . $id . '" data-section="' . $i . '">Section : ' . $i . ' Instructions</button></div>';
 			}
+			echo '</div>';
+			echo '</div></div>';
 		}
 	} elseif ($_POST['action'] == 'addQuestion') {
 		$sql = "select * from test where test_status='0' and submit_id='$myId'";
@@ -136,7 +127,7 @@ if (isset($_POST['action'])) {
 				$sql = "insert into test_question (test_id, test_section, qb_id, tq_marks, tq_nmarks, tq_status) values('$test_id', '$sectionId', '$insertId', '$tq_marks', '$tq_nmarks', '1')";
 				$result = $conn->query($sql);
 				if (!$result) echo $conn->error;
-				$fileName='ques-'.$insertId.'.txt';
+				$fileName = 'ques-' . $insertId . '.txt';
 				writeToFile("../../olat/text", $fileName, $question);
 
 				// Block for Variable Input
@@ -160,10 +151,10 @@ if (isset($_POST['action'])) {
 			if ($result) {
 				$array = $result->fetch_assoc();
 				$qb_id = $array["qb_id"];
-				
-				$fileName='ques-'.$qb_id.'.txt';
+
+				$fileName = 'ques-' . $qb_id . '.txt';
 				writeToFile("../../olat/text", $fileName, $question);
-				
+
 				// Block for Variable Input
 
 				$portion = explode("***", $question);
@@ -242,23 +233,42 @@ if (isset($_POST['action'])) {
 			else $marks = '0';
 			if (isset($_POST['nmarks'])) $nmarks = $_POST['nmarks'];
 			else $nmarks = '0';
-			echo '<div class="card">
-      <div class="card-body mt-0 py-1">
-			<div class="row">';
+			echo '<div class="row">';
 			echo '<div class="col"><h6>[' . $id . '] ' . $test_name . '</h6></div>';
 			echo '</div>';
 
 			echo '<div class="row">';
-			echo '<div class="col-6">';
-			echo 'Section <br> ';
+			echo '<div class="col-3">';
+			echo '<div class="row">';
+			echo '<div class="col p-0 m-1">';
+			echo '<span class="topBarText p-0 m-0">Subject Topic</span>';
+			echo '<input type="text" class="form-control form-control-sm subjectTopic" id="subjectTopic" name="subjectTopic" value="">';
+			echo '</div>';
+			echo '</div>';
+			echo '</div>';
+			echo '<div class="col-3">
+				<span class="topBarText p-0 m-0">+ Marks -</span>
+				<div class="row">
+					<div class="col p-0 m-1">
+						<input type="text" class="form-control form-control-sm defaultMarks" id="defaultMarks" name="marks" value="4">
+					</div>
+					<div class="col p-0 m-1">
+						<input type="text" class="form-control form-control-sm defaultNMarks" id="defaultNMarks" name="nmarks" value="0">
+					</div>
+				</div>
+			</div>';
+
+			echo '<div class="col-3 text-center">';
+			echo '<span class="topBarText p-0 m-0">Sections</span>';
+			echo '<div class="row">';
+			echo '<div class="col p-0 m-1 text-center">';
 			for ($i = 1; $i <= $test_section; $i++) {
 				echo '<button class="btn btn-warning btn-square-sm mt-0 defaultSection" id="defaultSection' . $i . '" data-section="' . $i . '">' . $i . '</button>';
 			}
 			echo '</div>';
-			echo '<div class="col-3"><span class="topBarText">Marks(+)</span><input type="text" class="form-control form-control-sm defaultMarks w-50" id="defaultMarks" name="marks" value="4"></div>';
-			echo '<div class="col-3"><span class="topBarText">Marks(-)</span><input type="text" class="form-control form-control-sm defaultNMarks w-50" id="defaultNMarks" name="nmarks" value="0"></div>';
 			echo '</div>';
-			echo '</div></div>';
+			echo '</div>';
+			echo '</div>';
 		}
 	} elseif ($_POST['action'] == 'fetchQuestion') {
 		$test_id = $_POST['testId'];
@@ -287,29 +297,28 @@ if (isset($_POST['action'])) {
 		if ($result) echo "Updated Successfully";
 		else echo $conn->error;
 	} elseif ($_POST['action'] == 'updateText') {
-		if(isset($_POST['qb_id']))$qb_id = $_POST['qb_id'];
-		if(isset($_POST['qo_code']))$qo_code = $_POST['qo_code'];
-		if(isset($_POST['qp_sno']))$qp_sno = $_POST['qp_sno'];
-		if(isset($_POST['test_id']))$test_id = $_POST['test_id'];
+		if (isset($_POST['qb_id'])) $qb_id = $_POST['qb_id'];
+		if (isset($_POST['qo_code'])) $qo_code = $_POST['qo_code'];
+		if (isset($_POST['qp_sno'])) $qp_sno = $_POST['qp_sno'];
+		if (isset($_POST['test_id'])) $test_id = $_POST['test_id'];
 		$value = $_POST['value'];
 		$tag = $_POST['tag'];
 		echo "Jai ho Tag $tag - Val $value";
 		//echo "Rest  $qb_id - Val $value";
 		//echo "Jai ho  code $qo_code";
 		//echo "Jai ho  Sno  $qp_sno";
-		if($tag=="qo_text")$sql = "update question_option set qo_text='$value' where qb_id='$qb_id' and qo_code='$qo_code'";
-		elseif($tag=="test_name")$sql = "update test set test_name='$value' where test_id='$test_id'";
-		elseif($tag=="qb_text")$sql = "update question_bank set $tag='$value' where qb_id='$qb_id'";
+		if ($tag == "qo_text") $sql = "update question_option set qo_text='$value' where qb_id='$qb_id' and qo_code='$qo_code'";
+		elseif ($tag == "test_name") $sql = "update test set test_name='$value' where test_id='$test_id'";
+		elseif ($tag == "qb_text") $sql = "update question_bank set $tag='$value' where qb_id='$qb_id'";
 		else $sql = "update qb_parameter set $tag='$value' where qb_id='$qb_id' and qp_sno='$qp_sno'";
 		$result = $conn->query($sql);
-		$affectedRows=$conn->affected_rows;
+		$affectedRows = $conn->affected_rows;
 		if (!$result) echo $conn->error;
-		elseif($affectedRows==0){
+		elseif ($affectedRows == 0) {
 			$sql = "insert into qb_parameter (qb_id, qp_sno, $tag) values('$qb_id', '$qp_sno', '$value')";
 			$result = $conn->query($sql);
 			if (!$result) echo $conn->error;
-		}
-		else echo "Updated Successfully";
+		} else echo "Updated Successfully";
 	} elseif ($_POST['action'] == 'addCP') {
 		$qb_id = $_POST["qb_id"];
 		$qc_name = $_POST['qc_name'];
@@ -323,7 +332,7 @@ if (isset($_POST['action'])) {
 			$error = $conn->errno;
 			if ($error == "1062") echo "Duplicate Found !!!";
 		}
-	}elseif ($_POST['action'] == 'updateCP') {
+	} elseif ($_POST['action'] == 'updateCP') {
 		$qb_id = $_POST['qb_id'];
 		$qc_sno = $_POST['qc_sno'];
 		$value = $_POST['value'];
@@ -333,18 +342,18 @@ if (isset($_POST['action'])) {
 		$result = $conn->query($sql);
 		if ($result) echo "Updated Successfully";
 		else echo $conn->error;
-	}elseif ($_POST['action'] == 'delete') {
+	} elseif ($_POST['action'] == 'delete') {
 		$id = $_POST['id'];
 		$sno = $_POST['sno'];
 		$tag = $_POST['tag'];
 		//echo "Jai ho $qb_id code $qo_code";
-		if($tag=="cp")$sql = "delete from qb_cp where qb_id='$id' and qc_sno='$sno'";
-		elseif($tag=="tq")$sql = "delete from test_question where qb_id='$id' and test_id='$sno'";
+		if ($tag == "cp") $sql = "delete from qb_cp where qb_id='$id' and qc_sno='$sno'";
+		elseif ($tag == "tq") $sql = "delete from test_question where qb_id='$id' and test_id='$sno'";
 		else $sql = "delete from question_option where qb_id='$id' and qo_code='$sno'";
 		$result = $conn->query($sql);
 		if ($result) echo "Removed Successfully";
 		else echo $conn->error;
-	} 
+	}
 } elseif ($_POST['instructionId'] == 'T' || $_POST['instructionId'] == 'S') {
 	$test_id = $_POST['testId'];
 	$id = $_POST['instructionId'];

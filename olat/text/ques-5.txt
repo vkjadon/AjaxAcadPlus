@@ -1,1 +1,0 @@
-In case of a p-n junction diode at high value of reverse bias, the current tries sharply. The value of reverse bias is known as

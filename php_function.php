@@ -16,12 +16,20 @@ function selectList($conn, $selectTitle, $data, $sql)
   $name = $data[2];
   $abbri = $data[3];
   $idName = $data[4];
-
+  if (count($data) > 5) {
+    $selectedId = $data[5];
+    $selectedName = $data[6];
+  }
+  //$required=0; Required some value
+  //$required>0 The variable need the selection for proceed
+  //$required=2 The ALL item does NOT appear in the List
   $result = $conn->query($sql);
   if ($result) {
     if ($required == '0') echo '<select class="form-control form-control-sm ' . $name . '" name="' . $idName . '" id="' . $idName . '">';
     else echo '<select class="form-control form-control-sm ' . $name . '" name="' . $idName . '" id="' . $idName . '" required>';
-    if (strlen($selectTitle) > 2) echo '<option value="">' . $selectTitle . '</option>';
+     
+    if (strlen($selectTitle) > 2 && count($data)<6) echo '<option value="">' . $selectTitle . '</option>';
+    elseif(count($data)>5) echo '<option value="'.$selectedId.'">' . $selectedName . '</option>';
     while ($rows = $result->fetch_assoc()) {
       $select_id = $rows[$id];
       $select_name = $rows[$name];
@@ -170,6 +178,56 @@ function getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDeco
     echo '</tr>';
   }
   echo '</table>';
+}
+function getListCard($conn, $tableId, $fields, $dataType, $sql, $statusDecode, $button)
+{
+  // $tableId=Table Auto Increment ID (to be used for editing data and "deleteData")
+  // $fields= Array of fields to fetch from the output of the Query
+  // $dataType= Array of data type of the fields, 0 Text 1 Date Format 2 TimeStamp
+  // $header= Array of Table Headers - Add Id as first field
+  // $sql=Query to be execute
+  // statusDecode is an associative array to Decode the Field value by an appropriate Phrase as
+  //  Y by Yes M by Male etc. It can aslo be used to align the table cell.
+  //echo "In Function  $sql Column Count $columnCount";
+  $buttonCount = count($button);
+  $fieldCount = count($fields);
+  $result = $conn->query($sql);
+  if (!$result) {
+    echo $conn->error;
+    die(" The script could not be Loadded! Please report!");
+  }
+  //echo '<div class="card-columns">';
+  echo '<div class="row">';
+  while ($rows = $result->fetch_assoc()) {
+    $data = "";
+    echo '<div class="col-sm-4 mb-2">';
+    echo '<div class="card">
+    <div class="card-body">';
+    $id = $rows[$tableId];
+    for ($j = 0; $j < $fieldCount; $j++) {
+      $fieldName = $fields[$j];
+      $fieldValue = $rows[$fieldName];
+      $data .= ' data-' . $fieldName . '="' . $fieldValue . '"';
+      if ($fieldName == $statusDecode["status"]) echo '<div class="col">' . $statusDecode[$fieldValue] . '</div>';
+      else {
+        if ($dataType[$j] == "0") {
+          if ($j == 0) echo '<div class="col"><div class="card-title"><h3>' . $fieldValue . '</h3></div></div>';
+          else echo '<div class="col">' . $fieldValue . '</div>';
+        } elseif ($dataType[$j] == "1") echo '<div class="col">' . date("d-M-Y", strtotime($fieldValue)) . '</div>';
+      }
+    }
+    echo '<div class="row"><div class="col">';
+    for ($i = 0; $i < $buttonCount; $i++) {
+      if ($button[$i] == 'E') echo '<a href="#" class="float-left ' . $tableId . 'E" id="' . $id . '"><i class="fa fa-edit"></i></a>';
+      elseif ($button[$i] == 'D') echo '<a href="#" class="float-right ' . $tableId . 'D" id="' . $id . '"><i class="fa fa-trash"></i></a>';
+      else echo '<a href="#" class="atag ' . $tableId . $button[$i] . '" data-id="' . $id . '" ' . $data . '>' . $button[$i] . '</a>';
+    }
+    echo '</div></div></div>';
+    echo '</div>';
+    echo '</div>';
+  }
+  echo '</div>';
+  //echo '</div>';
 }
 function updateField($conn, $table, $fields, $values, $echo)
 {
@@ -330,11 +388,11 @@ function getMaxValue($conn, $sql)
 }
 function status_decode($status)
 {
-  if ($status==0)return "Saved";
-  elseif ($status==1) return "Forwarded";
-  elseif ($status==2) return "Rejected[F]";
-  elseif ($status==3) return "Approved";
-  elseif ($status==4) return "Rejected[A]";
+  if ($status == 0) return "Saved";
+  elseif ($status == 1) return "Forwarded";
+  elseif ($status == 2) return "Rejected[F]";
+  elseif ($status == 3) return "Approved";
+  elseif ($status == 4) return "Rejected[A]";
   else return "Withdrawn";
 }
 function moveUp($conn, $table, $fields, $values, $sql)
@@ -351,12 +409,13 @@ function moveUp($conn, $table, $fields, $values, $sql)
   $sno = $valueSno - 1;
 }
 
-function writeToFile($folder, $fileName, $content){
+function writeToFile($folder, $fileName, $content)
+{
   echo $folder;
   if (!is_dir($folder)) mkdir($folder);
-	$fileHandle = fopen($folder.'/'.$fileName, 'w+') or die("Cannot open file");
-	fwrite($fileHandle, $content);
-	fclose($fileHandle);
+  $fileHandle = fopen($folder . '/' . $fileName, 'w+') or die("Cannot open file");
+  fwrite($fileHandle, $content);
+  fclose($fileHandle);
 }
 
 function dayList($dummy1, $dummy2)
@@ -526,11 +585,10 @@ function get_sessionClass($conn, $mySes)
   );
   return json_encode($output);
 }
-function get_schoolSession($conn, $school_id, $ay_id)
+function get_schoolSession($conn, $ay_id)
 {
 
-  if ($school_id == 'ALL') $sql = "select s.* from session s where ay_id='$ay_id' order by session_name";
-  else $sql = "select s.* from session s where s.school_id='$school_id' and ay_id='$ay_id' order by session_name";
+  $sql = "select s.* from session s where ay_id='$ay_id' order by session_id desc";
 
   $result = $conn->query($sql);
   if (!$result) die(" The script could not be Loadded! Please report!");
@@ -539,10 +597,6 @@ function get_schoolSession($conn, $school_id, $ay_id)
     $sub_array = array();
     $sub_array["id"] = $rows['session_id'];
     $sub_array["name"] = $rows['session_name'];
-    $sub_array["program"] = $rows['program_id'];
-    $sub_array["remarks"] = $rows['session_remarks'];
-    $sub_array["session_start"] = $rows['session_start'];
-    $sub_array["session_end"] = $rows['session_end'];
     $data[] = $sub_array;
   }
   $output = array(
@@ -718,14 +772,14 @@ function getNotice($conn, $id, $myFolder)
   else {
     $output = array();
     $arrayRows = $result->fetch_assoc();
-    $output["notice_id"]=$arrayRows["notice_id"];
-    $output["notice_subject"]=$arrayRows["notice_subject"];
+    $output["notice_id"] = $arrayRows["notice_id"];
+    $output["notice_subject"] = $arrayRows["notice_subject"];
 
     $folder = '../../' . $myFolder . '/notice';
-    $fileName = $folder.'/text-'.$_POST["noticeId"].'.txt';
-    if(file_exists($fileName))$content=file_get_contents($fileName);
-    else $content="No File Found";
-    $output["content"]=$content;
+    $fileName = $folder . '/text-' . $_POST["noticeId"] . '.txt';
+    if (file_exists($fileName)) $content = file_get_contents($fileName);
+    else $content = "No File Found";
+    $output["content"] = $content;
   }
   return $output;
 }
