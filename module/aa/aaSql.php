@@ -7,7 +7,7 @@ include('../../php_function.php');
 if (isset($_POST['action'])) {
   if ($_POST["action"] == "addSubject") {
     $fields = ['program_id', 'batch_id', 'subject_name', 'subject_code', 'subject_semester', 'subject_credit', 'subject_type', 'subject_mode', 'subject_category', 'subject_lecture', 'subject_tutorial', 'subject_practical', 'subject_internal', 'subject_external', 'staff_id', 'submit_id'];
-    $values = [$_POST['programIdModal'], $_POST['batchIdModal'], data_check($_POST['subject_name']), data_check($_POST['subject_code']), data_check($_POST['subject_semester']), data_check($_POST['subject_credit']), data_check($_POST['subject_type']), data_check($_POST['subject_mode']), data_check($_POST['subject_category']), data_check($_POST['subject_lecture']), data_check($_POST['subject_tutorial']), data_check($_POST['subject_practical']), data_check($_POST['subject_internal']), data_check($_POST['subject_external']), $_POST['sel_staff'], $myId];
+    $values = [$myProg, $_POST['batchIdModal'], data_check($_POST['subject_name']), data_check($_POST['subject_code']), data_check($_POST['subject_semester']), data_check($_POST['subject_credit']), data_check($_POST['subject_type']), data_check($_POST['subject_mode']), data_check($_POST['subject_category']), data_check($_POST['subject_lecture']), data_check($_POST['subject_tutorial']), data_check($_POST['subject_practical']), data_check($_POST['subject_internal']), data_check($_POST['subject_external']), $_POST['sel_staff'], $myId];
     $status = 'subject_status';
     $dup = "select * from subject where subject_code='" . data_check($_POST["subject_code"]) . "' and program_id='" . $_POST["programIdModal"] . "' and batch_id='" . $_POST["batchIdModal"] . "' and $status='0'";
     $dup_alert = "Duplicate Code Exists. Multiple Subject Codes not Allowed!";
@@ -19,17 +19,27 @@ if (isset($_POST['action'])) {
     $output = $result->fetch_assoc();
     echo json_encode($output);
   } elseif ($_POST['action'] == 'updateSubject') {
-    $fields = ['subject_id', 'subject_name', 'subject_code', 'subject_semester', 'subject_lecture', 'subject_tutorial', 'subject_practical', 'subject_credit', 'subject_type', 'subject_mode', 'subject_category', 'subject_internal', 'subject_external', 'staff_id'];
+    $fields = ['subject_id', 'subject_name', 'subject_code', 'subject_semester', 'subject_lecture', 'subject_tutorial', 'subject_practical', 'subject_credit', 'subject_type', 'subject_mode', 'subject_category', 'subject_internal', 'subject_external', 'subject_sno', 'staff_id'];
 
-    $values = [$_POST['modalId'], data_check($_POST['subject_name']), data_check($_POST['subject_code']), data_check($_POST['subject_semester']), data_check($_POST['subject_lecture']), data_check($_POST['subject_tutorial']), data_check($_POST['subject_practical']),  data_check($_POST['subject_credit']), data_check($_POST['subject_type']), data_check($_POST['subject_mode']), data_check($_POST['subject_category']), data_check($_POST['subject_internal']), data_check($_POST['subject_external']), $_POST['sel_staff']];
+    $values = [$_POST['modalId'], data_check($_POST['subject_name']), data_check($_POST['subject_code']), data_check($_POST['subject_semester']), data_check($_POST['subject_lecture']), data_check($_POST['subject_tutorial']), data_check($_POST['subject_practical']),  data_check($_POST['subject_credit']), data_check($_POST['subject_type']), data_check($_POST['subject_mode']), data_check($_POST['subject_category']), data_check($_POST['subject_internal']), data_check($_POST['subject_external']),data_check($_POST['subject_sno']), $_POST['sel_staff']];
     $dup = "select * from subject where subject_id='" . $_POST["modalId"] . "'";
     $dup_alert = "Could Not Update - Duplicate Entries";
     updateData($conn, 'subject', $fields, $values, $dup, $dup_alert);
+  } elseif ($_POST['action'] == 'deleteSubject') {    
+    $id=$_POST['id'];
+    $sql = "update subject set subject_status='9' where subject_id='$id'";
+    $conn->query($sql);
+    // echo $conn->error;
+  }elseif ($_POST['action'] == 'resetSubject') {    
+    $id=$_POST['id'];
+    $sql = "update subject set subject_status='0' where subject_id='$id'";
+    $conn->query($sql);
+    echo $conn->error;
   } elseif ($_POST['action'] == 'copySubject') {
-    
+
     $copyFromProgram = $_POST['programId'];
     $copyFromBatch = $_POST['batchId'];
-    
+
     $copySemester = $_POST['copy_semester'];
     $copyBatch = $_POST['copy_batch'];
 
@@ -39,69 +49,108 @@ if (isset($_POST['action'])) {
 
     $sql = "select * FROM subject where program_id='$copyFromProgram' and batch_id='$copyFromBatch' and subject_semester='$copySemester'";
     $result = $conn->query($sql);
-    while($rows=$result->fetch_assoc()){
-      $subject_code=$rows['subject_code'];
-      $subject_name=$rows['subject_name'];
-      $subject_type=$rows['subject_type'];
-      $subject_mode=$rows['subject_mode'];
-      $subject_lecture=$rows['subject_lecture'];
-      $subject_tutorial=$rows['subject_tutorial'];
-      $subject_practical=$rows['subject_practical'];
-      $subject_category=$rows['subject_category'];
-      $subject_credit=$rows['subject_credit'];
-      $subject_internal=$rows['subject_internal'];
-      $subject_external=$rows['subject_external'];
-      $staff_id=$rows['staff_id'];
+    while ($rows = $result->fetch_assoc()) {
+      $subject_code = $rows['subject_code'];
+      $subject_name = $rows['subject_name'];
+      $subject_type = $rows['subject_type'];
+      $subject_mode = $rows['subject_mode'];
+      $subject_lecture = $rows['subject_lecture'];
+      $subject_tutorial = $rows['subject_tutorial'];
+      $subject_practical = $rows['subject_practical'];
+      $subject_category = $rows['subject_category'];
+      $subject_credit = $rows['subject_credit'];
+      $subject_internal = $rows['subject_internal'];
+      $subject_external = $rows['subject_external'];
+      $staff_id = $rows['staff_id'];
       echo "$subject_code | ";
-      $dup="select * from subject where program_id='$copyFromProgram' and batch_id='$copyBatch' and subject_code='$subject_code'";
-      $result_dup=$conn->query($dup);
-      if(!$result_dup)echo $conn->error;
-      else if($result_dup->num_rows==0){
-        $insert="insert into subject (program_id, batch_id, subject_semester, subject_name, subject_code, subject_type, subject_mode, subject_lecture, subject_tutorial, subject_practical, subject_category, subject_credit, subject_internal, subject_external, staff_id, submit_id) values('$copyFromProgram', '$copyBatch', '$copySemester', '$subject_name', '$subject_code', '$subject_type', '$subject_mode', '$subject_lecture', '$subject_tutorial', '$subject_practical', '$subject_category', '$subject_credit', '$subject_internal', '$subject_external', '$staff_id', '$myId')";
-        $result_insert=$conn->query($insert);
-        if(!$result_insert)echo $conn->error;  
+      $dup = "select * from subject where program_id='$copyFromProgram' and batch_id='$copyBatch' and subject_code='$subject_code'";
+      $result_dup = $conn->query($dup);
+      if (!$result_dup) echo $conn->error;
+      else if ($result_dup->num_rows == 0) {
+        $insert = "insert into subject (program_id, batch_id, subject_semester, subject_name, subject_code, subject_type, subject_mode, subject_lecture, subject_tutorial, subject_practical, subject_category, subject_credit, subject_internal, subject_external, staff_id, submit_id) values('$copyFromProgram', '$copyBatch', '$copySemester', '$subject_name', '$subject_code', '$subject_type', '$subject_mode', '$subject_lecture', '$subject_tutorial', '$subject_practical', '$subject_category', '$subject_credit', '$subject_internal', '$subject_external', '$staff_id', '$myId')";
+        $result_insert = $conn->query($insert);
+        if (!$result_insert) echo $conn->error;
       }
     };
-    
   } elseif ($_POST["action"] == "subList") {
     //echo "MyId- $myId Prog $myProg";
     $tableId = 'subject_id';
 
     $batch_id = $_POST['batchId'];
-    $sql="select * from subject where program_id='$myProg' and batch_id='$batch_id'";
-    $json = getTableRow($conn, $sql, array("subject_id", "subject_name", "subject_code"));
-
+    $sql = "select * from subject where program_id='$myProg' and batch_id='$batch_id' and subject_semester>0 order by subject_semester, subject_status, subject_sno";
+    $json = getTableRow($conn, $sql, array("subject_id", "subject_name", "subject_code", "subject_lecture", "subject_tutorial", "subject_practical", "subject_credit", "subject_semester", "subject_sno", "subject_type", "subject_status"));
     $array = json_decode($json, true);
     //echo count($array);
     //echo count($array["data"]);
     for ($i = 0; $i < count($array["data"]); $i++) {
-      $subject_id=$array["data"][$i]["subject_id"];
+      $subject_id = $array["data"][$i]["subject_id"];
+      $L = $array["data"][$i]["subject_lecture"];
+      $T = $array["data"][$i]["subject_tutorial"];
+      $P = $array["data"][$i]["subject_practical"];
+      $Cr = $array["data"][$i]["subject_credit"];
+      $sno = $array["data"][$i]["subject_sno"];
+      $type = $array["data"][$i]["subject_type"];
+      $status = $array["data"][$i]["subject_status"];
       echo '<div class="row">';
-        echo '<div class="col-sm-3 mr-0 pr-0">';
-          echo '<div class="card m-0 mb-1 p-0">';
-            echo '<div class="card-body p-1">';
-              echo '[' . $subject_id . ']';
-              echo '<a href="#" class="float-right session_idE" data-id="' . $subject_id . '"><i class="fa fa-edit"></i></a>';
-            echo '</div>';
-          echo '</div>';
-        echo '</div>';
-      
-        echo '<div class="col-sm-9">';
-          echo '<div class="card m-0 mb-1 p-0">';
-            echo '<div class="card-body">';
-              echo '<div class="row">';
-                echo '<div class="col-sm-8">';
-                  echo $array["data"][$i]["subject_code"].' : <span class="cardBodyText">'.$array["data"][$i]["subject_name"].'</span>';
-                echo '</div>';
-                echo '<div class="col-sm-2">';
-                  echo '<a href="#" class="float-right session_idD" data-id="' . $subject_id . '"><i class="fa fa-trash"></i></a>';
-                echo '</div>';
-              echo '</div>';
-            echo '</div>';
-          echo '</div>';
-        echo '</div>';
+      echo '<div class="col-sm-3 mb-1 bg-one cardBodyText">';
+      echo 'ID : ' . $subject_id.' <b>['.$sno.']</b>';
+      echo '<a href="#" class="float-right subject_idE" data-id="' . $subject_id . '"><i class="fa fa-edit"></i></a>';
+      echo '<div>SubCode : <b>' . $array["data"][$i]["subject_code"] . '</b>
+      <span class="float-right footerNote">' . $type . '</span></div>';
+      echo '</div>';
+      echo '<div class="col-sm-9 pl-0">';
+      echo '<div class="card m-0 mb-1 p-0 card-square">';
+      echo '<div class="card-body p-2">';
+      echo '<div class="row">';
+      echo '<div class="col-sm-8">';
+      echo '<div class="cardBodyText"><b>' . $array["data"][$i]["subject_name"] . '</b></div>';
+      echo '<div class="cardBodyText">Semester : ' . $array["data"][$i]["subject_semester"];
+      echo ' <b>Credit : ' . $Cr . '</b>';
+      echo '</div>';
+      echo '</div>';
+      echo '<div class="col-sm-2">';
+      echo 'L-T-P<br>' . $L . '-' . $T . '-' . $P;
+      echo '</div>';
+      echo '<div class="col-sm-1">';
+      if($status=="9")echo '<a href="#" class="float-right subject_idR" data-id="' . $subject_id . '">Removed</a>';
+      else echo '<a href="#" class="float-right subject_idD" data-id="' . $subject_id . '"><i class="fa fa-trash"></i></a>';
+      echo '</div>';
+      echo '</div>';
+      echo '</div>';
+      echo '</div>';
+      echo '</div>';
       echo '</div>';
     }
+  } elseif ($_POST["action"] == "subjectSummary") {
+    //echo "MyId- $myId Prog $myProg";
+    $batch_id = $_POST['batchId'];
+    $totalLecture = 0;
+    $totalTutorial = 0;
+    $totalPractical = 0;
+    $totalCredit = 0;
+    $sql = "select sum(subject_lecture) as lecture, sum(subject_tutorial) as tutorial, sum(subject_practical) as practical, sum(subject_credit) as credit, subject_semester from subject where subject_semester>0 and program_id='$myProg' and batch_id='$batch_id' group by subject_semester";
+    $result = $conn->query($sql);
+    echo '<div class="card card-square">';
+    echo '<table class="table table-bordered list-table-xs">';
+    echo '<tr><th>Semester</th><th>Lecture</th><th>Tutorial</th><th>Pr</th><th>Credit</th></tr>';
+    while ($row = $result->fetch_array()) {
+      $lecture = $row["lecture"];
+      $tutorial = $row["tutorial"];
+      $practical = $row["practical"];
+      $credit = $row["credit"];
+      $subject_semester = $row["subject_semester"];
+      echo '<tr class="text-center">';
+      echo '<td>' . $subject_semester . '</td><td>' . $lecture . '</td><td>' . $tutorial . '</td><td>' . $practical . '</td><td>' . $credit . '</td>';
+      echo '</tr>';
+      $totalLecture += $lecture;
+      $totalTutorial += $tutorial;
+      $totalPractical += $practical;
+      $totalCredit += $credit;
+    }
+    echo '<tr class="text-center">';
+    echo '<td></td><td class="totalRow-sm">' . $totalLecture . '</td><td class="totalRow-sm">' . $totalTutorial . '</td><td class="totalRow-sm">' . $totalPractical . '</td><td class="totalRow-sm">' . $totalCredit . '</td>';
+    echo '</tr>';
+    echo '</table>';
   } elseif ($_POST["action"] == "batchList") {
     //    echo "MyId- $myId";
     $tableId = 'batch_id';
@@ -151,7 +200,7 @@ if (isset($_POST['action'])) {
       echo '[' . $array["data"][$i]["id"] . ']';
       echo '</div>';
       echo '<div class="col-sm-6">';
-      echo '<span class="cardBodyText">'.$array["data"][$i]["name"].'</span>';
+      echo '<span class="cardBodyText">' . $array["data"][$i]["name"] . '</span>';
       echo '</div>';
       echo '<div class="col-sm-3">';
       echo '<a href="#" class="float-right session_idD" data-id="' . $array["data"][$i]["id"] . '"><i class="fa fa-trash"></i></a>';
@@ -165,7 +214,6 @@ if (isset($_POST['action'])) {
       echo '</div></div>';
     }
     echo '</table>';
-    
   } elseif ($_POST["action"] == "addSession") {
     //echo "Add Session";
     $fields = ['school_id', 'program_id', 'ay_id', 'session_name', 'session_start', 'session_end', 'session_remarks'];
@@ -194,79 +242,79 @@ if (isset($_POST['action'])) {
     else $sql = "select p.* from program p where p.program_status='0'";
     selectInput($conn, 'Select Program', 'program_id', 'program_name', 'program_abbri', 'sel_program', $sql);
   } elseif ($_POST["action"] == "addPo") {
-      // echo "Add PO";
-      echo "Prg Id ".$_POST['programIdModal'];
-      echo "batchId ".$_POST['batchIdModal'];
-      $fields = ['program_id', 'batch_id', 'po_name', 'po_code', 'po_sno'];
-      $values = [$_POST['programIdModal'], $_POST['batchIdModal'], data_check($_POST['poStatement']), data_check($_POST['poCode']), data_check($_POST['poSno'])];
-      $status = 'po_status';
-      $dup = "select * from program_outcome where po_sno='" . data_check($_POST["poSno"]) . "' and program_id='" . $_POST["programIdModal"] . "'  and batch_id='" . $_POST["batchIdModal"] . "'and $status='0'";
-      $dup_alert = "Serial Number Alreday Exists ! Please Check the Order!!";
-      addData($conn, 'program_outcome', 'po_id', $fields, $values, $status, $dup, $dup_alert);
+    // echo "Add PO";
+    echo "Prg Id " . $_POST['programIdModal'];
+    echo "batchId " . $_POST['batchIdModal'];
+    $fields = ['program_id', 'batch_id', 'po_name', 'po_code', 'po_sno'];
+    $values = [$_POST['programIdModal'], $_POST['batchIdModal'], data_check($_POST['poStatement']), data_check($_POST['poCode']), data_check($_POST['poSno'])];
+    $status = 'po_status';
+    $dup = "select * from program_outcome where po_sno='" . data_check($_POST["poSno"]) . "' and program_id='" . $_POST["programIdModal"] . "'  and batch_id='" . $_POST["batchIdModal"] . "'and $status='0'";
+    $dup_alert = "Serial Number Alreday Exists ! Please Check the Order!!";
+    addData($conn, 'program_outcome', 'po_id', $fields, $values, $status, $dup, $dup_alert);
   } elseif ($_POST['action'] == 'fetchPo') {
-      $id = $_POST['poId'];
-      $sql = "select * FROM program_outcome where po_id='$id'";
-      $result = $conn->query($sql);
-      $output = $result->fetch_assoc();
-      echo json_encode($output);
+    $id = $_POST['poId'];
+    $sql = "select * FROM program_outcome where po_id='$id'";
+    $result = $conn->query($sql);
+    $output = $result->fetch_assoc();
+    echo json_encode($output);
   } elseif ($_POST['action'] == 'updatePo') {
-      $fields = ['po_id', 'po_code', 'po_name', 'po_sno'];
-      $values = [$_POST['modalId'], data_check($_POST['poCode']), data_check($_POST['poStatement']), data_check($_POST['poSno'])];
-      $dup = "select * from program_outcome where po_sno='" . $_POST["poSno"] . "' and po_name='" . $_POST["poStatement"] . "' and program_id='" . $_POST["programIdModal"] . "' and batch_id='" . $_POST["batchIdModal"] . "'";
-      $dup_alert = "Could Not Update - Duplicate Entries";
-      updateData($conn, 'program_outcome', $fields, $values, $dup, $dup_alert);
+    $fields = ['po_id', 'po_code', 'po_name', 'po_sno'];
+    $values = [$_POST['modalId'], data_check($_POST['poCode']), data_check($_POST['poStatement']), data_check($_POST['poSno'])];
+    $dup = "select * from program_outcome where po_sno='" . $_POST["poSno"] . "' and po_name='" . $_POST["poStatement"] . "' and program_id='" . $_POST["programIdModal"] . "' and batch_id='" . $_POST["batchIdModal"] . "'";
+    $dup_alert = "Could Not Update - Duplicate Entries";
+    updateData($conn, 'program_outcome', $fields, $values, $dup, $dup_alert);
   } elseif ($_POST["action"] == "poList") {
-          // echo "MyId- $myId";
-      $program_id = $_POST['programId'];
-      $batch_id = $_POST['batchId'];
+    // echo "MyId- $myId";
+    $program_id = $_POST['programId'];
+    $batch_id = $_POST['batchId'];
 
-      $sql = "select * from program_outcome where program_id='$program_id' and batch_id='$batch_id' order by po_sno, po_code";
-      $tableId = 'po_id';
+    $sql = "select * from program_outcome where program_id='$program_id' and batch_id='$batch_id' order by po_sno, po_code";
+    $tableId = 'po_id';
 
-      $statusDecode = array("status" => "po_status", "0" => "Active", "1" => "Removed");
-      $button = array("1", "1", "0", "0");
+    $statusDecode = array("status" => "po_status", "0" => "Active", "1" => "Removed");
+    $button = array("1", "1", "0", "0");
 
-      $fields = array("po_code", "po_sno", "po_name", "po_status");
-      $dataType = array("0", "0", "0", "0");
-      $header = array("Id", "PO", "#", "PO Statement", "Status");
+    $fields = array("po_code", "po_sno", "po_name", "po_status");
+    $dataType = array("0", "0", "0", "0");
+    $header = array("Id", "PO", "#", "PO Statement", "Status");
 
-      getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
+    getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
   } elseif ($_POST["action"] == "addCo") {
-       //echo "Add Session ";
-      $fields = ['subject_id', 'co_name', 'co_code', 'co_sno'];
-      $values = [$_POST['subjectIdModal'], data_check($_POST['coStatement']), data_check($_POST['coCode']), data_check($_POST['coSno'])];
-      $status = 'co_status';
-      $dup = "select * from course_outcome where co_sno='" . data_check($_POST["co_sno"]) . "' and subject_id='" . $_POST["subjectId"] . "'  and $status='0'";
-      $dup_alert = "Serial Number Alreday Exists ! Please Check the Order!!";
-      addData($conn, 'course_outcome', 'co_id', $fields, $values, $status, $dup, $dup_alert);
+    //echo "Add Session ";
+    $fields = ['subject_id', 'co_name', 'co_code', 'co_sno'];
+    $values = [$_POST['subjectIdModal'], data_check($_POST['coStatement']), data_check($_POST['coCode']), data_check($_POST['coSno'])];
+    $status = 'co_status';
+    $dup = "select * from course_outcome where co_sno='" . data_check($_POST["co_sno"]) . "' and subject_id='" . $_POST["subjectId"] . "'  and $status='0'";
+    $dup_alert = "Serial Number Alreday Exists ! Please Check the Order!!";
+    addData($conn, 'course_outcome', 'co_id', $fields, $values, $status, $dup, $dup_alert);
   } elseif ($_POST['action'] == 'fetchCo') {
-      //  echo "$id";
-      $id = $_POST['coId'];
-      $sql = "select * FROM course_outcome where co_id='$id'";
-      $result = $conn->query($sql);
-      $output = $result->fetch_assoc();
-      echo json_encode($output);
+    //  echo "$id";
+    $id = $_POST['coId'];
+    $sql = "select * FROM course_outcome where co_id='$id'";
+    $result = $conn->query($sql);
+    $output = $result->fetch_assoc();
+    echo json_encode($output);
   } elseif ($_POST['action'] == 'updateCo') {
-      $fields = ['co_id', 'co_code', 'co_name', 'co_sno'];
-      $values = [$_POST['modalId'], data_check($_POST['coCode']), data_check($_POST['coStatement']), data_check($_POST['coSno'])];
-      $dup = "select * from course_outcome where co_sno='" . $_POST["coSno"] . "' and co_name='" . $_POST["coStatement"] . "' and subject_id='" . $_POST["subjectIdModal"] . "'";
-      $dup_alert = "Could Not Update - Duplicate Entries";
-      updateData($conn, 'course_outcome', $fields, $values, $dup, $dup_alert);
+    $fields = ['co_id', 'co_code', 'co_name', 'co_sno'];
+    $values = [$_POST['modalId'], data_check($_POST['coCode']), data_check($_POST['coStatement']), data_check($_POST['coSno'])];
+    $dup = "select * from course_outcome where co_sno='" . $_POST["coSno"] . "' and co_name='" . $_POST["coStatement"] . "' and subject_id='" . $_POST["subjectIdModal"] . "'";
+    $dup_alert = "Could Not Update - Duplicate Entries";
+    updateData($conn, 'course_outcome', $fields, $values, $dup, $dup_alert);
   } elseif ($_POST["action"] == "coList") {
-      //    echo "MyId- $myId";
-      $subject_id = $_POST['subjectId'];
+    //    echo "MyId- $myId";
+    $subject_id = $_POST['subjectId'];
 
-      if ($subject_id == "ALL") $sql = "select co.*, sb.subject_name from course_outcome co, subject sb where sb.subject_id=co.subject_id  and co.co_status='0' and sb.subject_status='0' order by co_sno, co_code";
-      else $sql = "select  co.*, sb.subject_name  from course_outcome co, subject sb where sb.subject_id=co.subject_id and co.subject_id='$subject_id' and co.co_status='0' and sb.subject_status='0' order by co_sno, co_code";
-      $tableId = 'co_id';
+    if ($subject_id == "ALL") $sql = "select co.*, sb.subject_name from course_outcome co, subject sb where sb.subject_id=co.subject_id  and co.co_status='0' and sb.subject_status='0' order by co_sno, co_code";
+    else $sql = "select  co.*, sb.subject_name  from course_outcome co, subject sb where sb.subject_id=co.subject_id and co.subject_id='$subject_id' and co.co_status='0' and sb.subject_status='0' order by co_sno, co_code";
+    $tableId = 'co_id';
 
-      $statusDecode = array("status" => "co_status", "0" => "Active", "1" => "Removed");
-      $button = array("1", "1", "0", "0");
+    $statusDecode = array("status" => "co_status", "0" => "Active", "1" => "Removed");
+    $button = array("1", "1", "0", "0");
 
-      $fields = array("co_code", "co_sno", "co_name", "co_status");
-      $dataType = array("0", "0", "0", "0");
-      $header = array("Id", "CO", "#", "CO Statement", "Status");
+    $fields = array("co_code", "co_sno", "co_name", "co_status");
+    $dataType = array("0", "0", "0", "0");
+    $header = array("Id", "CO", "#", "CO Statement", "Status");
 
-      getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
-    }
+    getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
   }
+}

@@ -38,7 +38,7 @@ $totalTests = count($array["data"]);
 				</td>
 				<td class="text-white">
 					<h5><?php if ($totalTests > 0) echo 'Total Tests : ' . $totalTests;
-						else echo 'No Test Available! Please Wait!!'; ?></h5>
+							else echo 'No Test Available! Please Wait!!'; ?></h5>
 				</td>
 			</tr>
 		</table>
