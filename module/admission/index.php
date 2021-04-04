@@ -165,7 +165,6 @@ require('../../php_function.php');
         </div>
        </div>
       </div>
-      <div class="row"></div>
 
       <div class="row">
        <div class="col-4 mt-1 mb-1">
@@ -405,25 +404,13 @@ require('../../php_function.php');
        </div>
       </div>
 
-      <div class="tab-pane fade" id="list-sq" role="tabpanel" aria-labelledby="list-sq-list">
-       <div class="row">
-        <div class="col-3">
-         <input type="text" name="student" id="student" class="form-control form-control-sm" placeholder="Name of the Student">
-         <div class='list-group' id="studentAutoList"></div>
-        </div>
-       </div>
-       <div class="row">
-        <div class="col-5 mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addStudentQualification">Add</button>
-         <p style="text-align:center" id="qualificationShowList"></p>
-        </div>
-       </div>
-      </div>
      </div>
     </div>
    </div>
   </div>
  </div>
 </body>
+</html>
 
 <?php require("../js.php"); ?>
 
@@ -604,6 +591,8 @@ require('../../php_function.php');
    }, "text").fail(function() {
     $.alert("fail in place of error");
    })
+   $('studentContactFormAccordian').trigger("reset");
+
   });
 
   $(document).on('blur', '.sForm', function() {
@@ -664,10 +653,9 @@ require('../../php_function.php');
 
   $(document).on('blur', '.sQualForm', function() {
    var studentId = $("#studentIdHidden").val()
+   var qId = $('#sel_qual').val()
    var tag = $(this).attr("data-tag")
    var value = $(this).val()
-   var qId = $('#sel_qual').val()
-
    // $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
    if (qId === null) {
     $.alert("Select a Qualification first" + qId);

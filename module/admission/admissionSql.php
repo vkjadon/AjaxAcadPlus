@@ -148,7 +148,7 @@ if (isset($_POST['action'])) {
 		echo "affected rows $affectedRows";
 		if (!$result) echo $conn->error;
 		elseif ($affectedRows == 0) {
-			$sql = "insert into student_qualification (student_id, $tag) values ('$student_id', '$value')";
+			$sql = "insert into student_qualification (student_id, qualification_id, $tag) values ('$student_id', '$id, '$value')";
 			$result = $conn->query($sql);
 			if (!$result) echo $conn->error;
 		} else "Updated";

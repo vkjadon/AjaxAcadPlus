@@ -175,7 +175,7 @@ if (isset($_POST['action'])) {
 		echo "affected rows $affectedRows";
 		if (!$result) echo $conn->error;
 		elseif ($affectedRows == 0) {
-			$sql = "insert into staff_qualification (staff_id, $tag) values ('$staff_id', '$value')";
+			$sql = "insert into staff_qualification (staff_id, qualification_id, $tag) values ('$staff_id','$id', '$value')";
 			$result = $conn->query($sql);
 			if (!$result) echo $conn->error;
 		} else "Updated";

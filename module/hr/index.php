@@ -73,199 +73,70 @@ require('../../php_function.php');
      <div class="tab-pane fade show active" id="list-as" role="tabpanel" aria-labelledby="list-as-list">
       <div class="row">
        <div class="col-4">
-        <button class="btn btn-danger btn-sm addStaff">Add New</button>
+        <div class="card border-info mb-3">
+         <div class="card-header">
+          Enter Staff Name to Search
+          <button class="btn btn-info btn-sm addStaff">Add</button>
+         </div>
+         <div class="card-body text-primary">
+          <div class="input-group md-form form-sm form-2 pl-0">
+           <input name="staffSearch" id="staffSearch" class="form-control my-0 py-1 red-border" type="text" placeholder="Search Staff" aria-label="Search">
+           <div class="input-group-append">
+            <span class="input-group-text cyan lighten-3" id="basic-text1"><i class="fas fa-search text-grey" aria-hidden="true"></i></span>
+           </div>
+          </div>
+          <div class='list-group' id="staffAutoList"></div>
+         </div>
+        </div>
         <p id="staffList"></p>
        </div>
        <div class="col-8">
-        <div class="row staffUser">
-         <div class="col-1">
-          <i class="fas fa-user-circle fa-2x"></i>
-         </div>
-         <div class="col-11 p-0 m-0">
-          <h3 class="font-italic" id="staff_title"></h3>
-         </div>
-        </div>
-        <div class="row">
-         <div class="col-12 mx-auto">
-          <div id="accordionStaff" class="accordion shadow">
-           <div class="card">
-            <div id="headingOne" class="card-header bg-white shadow-sm border-0">
-             <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">Edit Details</a></h6>
-            </div>
-            <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionStaff" class="collapse show collapseAccordian">
+        <div class="card border-info mb-3 staffProfile">
+         <div class="card-header">Staff Profile</div>
+         <div class="card-body text-primary">
+          <div class="row">
+           <div class="col-3">
+            <div class="card">
              <div class="card-body">
-              <form class="form-horizontal" id="modalForm">
-               <input type="hidden" id="staffIdHidden" name="staffIdHidden">
-               <div class="row">
-                <div class="col-12 text-center">
-                </div>
-               </div>
-               <div class="row">
-                <div class="col-6">
-                 <div class="form-group">
-                  Staff Name
-                  <input type="text" class="form-control form-control-sm staffForm" id="sName" name="sName" placeholder="Staff Name" data-tag="staff_name">
-                 </div>
-                </div>
-                <div class="col-6">
-                 <div class="form-group">
-                  Date of Birth
-                  <input type="date" class="form-control form-control-sm staffForm" id="sDob" name="sDob" placeholder="Date of Birth" data-tag="staff_dob">
-                 </div>
-                </div>
-               </div>
-               <div class="row">
-                <div class="col-6">
-                 <div class="form-group">
-                  Email
-                  <input type="text" class="form-control form-control-sm staffForm" id="sEmail" name="sEmail" placeholder="Staff Email Id" data-tag="staff_email">
-                 </div>
-                </div>
-                <div class="col-6">
-                 <div class="form-group">
-                  Mobile Number
-                  <input type="text" class="form-control form-control-sm staffForm" id="sMobile" name="sMobile" placeholder="Staff Mobile Number" data-tag="staff_mobile">
-                 </div>
-                </div>
-               </div>
-               <div class="row">
-                <div class="col-6">
-                 <div class="form-group">
-                  Father Name
-                  <input type="text" class="form-control form-control-sm staffForm" id="fName" name="fName" placeholder="Name of the Father" data-tag="staff_fname">
-                 </div>
-                </div>
-                <div class="col-6">
-                 <div class="form-group">
-                  Mother Name
-                  <input type="text" class="form-control form-control-sm staffForm" id="mName" name="mName" placeholder="Name of the Mother" data-tag="staff_mname">
-                 </div>
-                </div>
-               </div>
-               <div class="row">
-                <div class="col-6">
-                 <div class="form-group">
-                  Date of Joining
-                  <input type="date" class="form-control form-control-sm staffForm" id="sDoj" name="sDoj" placeholder="Date of Joining" data-tag="staff_doj">
-                 </div>
-                </div>
-                <div class="col-6">
-                 <div class="form-group">
-                  Adhaar Number
-                  <input type="text" class="form-control form-control-sm staffForm" id="sAdhaar" name="sAdhaar" placeholder="12 Digit Adhaar Number" data-tag="staff_adhaar">
-                 </div>
-                </div>
-               </div>
-               <div class="row">
-                <div class="col-12">
-                 <div class="form-group">
-                  Address
-                  <input type="text" class="form-control form-control-sm staffForm" id="sAddress" name="sAddress" placeholder="Address" data-tag="staff_address">
-                 </div>
-                </div>
-               </div>
-               <hr>
-               <div class="row">
-                <div class="col-5">
-                 <div class="form-check-inline">
-                  <input type="radio" class="form-check-input staffForm" checked id="male" name="sGender" value="Male" data-tag="staff_gender">Male
-                 </div>
-                 <div class="form-check-inline">
-                  <input type="radio" class="form-check-input staffForm" id="female" name="female" value="sGender" data-tag="staff_gender">Female
-                 </div>
-                </div>
-                <div class="col-7">
-                 <div class="form-check-inline">
-                  <input type="radio" class="form-check-input staffForm" checked id="Teaching" name="sTeaching" value="Teaching" data-tag="staff_teaching">Teaching
-                 </div>
-                 <div class="form-check-inline">
-                  <input type="radio" class="form-check-input staffForm" id="NonTeaching" name="sTeaching" value="NonTeaching" data-tag="staff_teaching">Non-Teaching
-                 </div>
-                </div>
-               </div>
-              </form>
+              <div class="d-flex flex-column align-items-center text-center">
+               <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="100">
+              </div>
              </div>
             </div>
            </div>
-           <div class="card">
-            <div id="headingTwo" class="card-header bg-white shadow-sm border-0">
-             <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" class="d-block position-relative collapsed text-dark text-uppercase collapsible-link py-2">Add Qualification</a></h6>
-            </div>
-            <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionStaff" class="collapse collapseAccordian">
+           <div class="col-9">
+            <div class="card h-100">
              <div class="card-body">
-              <form class="form-horizontal" class="qualificationForm">
-               <input type="hidden" id="stqIdHidden" name="stqIdHidden">
-               <div class="row">
-                <div class="col-6">
-                 <div class="form-group">
-                  Qualification
-                  <div class="row">
-                   <div class="col">
-                    <?php
-                    $sql_qualification = "select * from qualification";
-                    $result = $conn->query($sql_qualification);
-                    if ($result) {
-                     echo '<select class="form-control form-control-sm staffQualificationForm" name="sel_qual" id="sel_qual" data-tag="qualification_id" required>';
-                     echo '<option selected disabled>Select Qualification</option>';
-                     while ($rows = $result->fetch_assoc()) {
-                      $select_id = $rows['qualification_id'];
-                      $select_name = $rows['qualification_name'];
-                      echo '<option value="' . $select_id . '">' . $select_name . '</option>';
-                     }
-                     echo '</select>';
-                    } else echo $conn->error;
-                    if ($result->num_rows == 0) echo 'No Data Found';
-                    ?>
-                   </div>
-                  </div>
-                 </div>
-                </div>
-                <div class="col-6">
-                 <div class="form-group">
-                  Institute
-                  <input type="text" class="form-control form-control-sm staffQualificationForm" id="sInst" name="sInst" placeholder="Name of the Institute" data-tag="stq_institute">
-                 </div>
-                </div>
-               </div>
-               <div class="row">
-                <div class="col-6">
-                 <div class="form-group">
-                  Board
-                  <input type="text" class="form-control form-control-sm staffQualificationForm" id="sBoard" name="sBoard" placeholder="Board" data-tag="stq_board">
-                 </div>
-                </div>
-                <div class="col-6">
-                 <div class="form-group">
-                  Year of Passing
-                  <input type="text" class="form-control form-control-sm staffQualificationForm" id="sYear" name="sYear" placeholder="Passing Year" data-tag="stq_year">
-                 </div>
-                </div>
-               </div>
-               <div class="row">
-                <div class="col-4">
-                 <div class="form-group">
-                  Marks Obtained
-                  <input type="text" class="form-control form-control-sm staffQualificationForm" id="sMarksObt" name="sMarksObt" placeholder="Marks Obtained" data-tag="stq_marksObtained">
-                 </div>
-                </div>
-                <div class="col-4">
-                 <div class="form-group">
-                  Maximum Marks
-                  <input type="text" class="form-control form-control-sm staffQualificationForm" id="sMaxMarks" name="sMaxMarks" placeholder="Maximum marks" data-tag="stq_marksMax">
-                 </div>
-                </div>
-                <div class="col-4">
-                 <div class="form-group">
-                  Percentage/CGPA
-                  <input type="text" class="form-control form-control-sm staffQualificationForm" id="sCgpa" name="sCgpa" placeholder="Percentage/CGPA" data-tag="stq_percentage">
-                 </div>
-                </div>
-               </div>
-              </form>
-
               <div class="row">
-               <div class="col-12">
-                <p style="text-align:center" id="qualificationShowList"></p>
+               <div class="col-3">
+                <h7 class="mb-0 ">Full Name</h7>
+               </div>
+               <div class="col-9 text-secondary staff_name">
+                Kenneth Valdez
+               </div>
+              </div>
+              <div class="row">
+               <div class="col-3">
+                <h7 class="mb-0 ">DOJ</h7>
+               </div>
+               <div class="col-9 text-secondary staff_doj">
+                Kenneth Valdez
+               </div>
+              </div>
+              <div class="row">
+               <div class="col-3">
+                <h7 class="mb-0 ">Email</h7>
+               </div>
+               <div class="col-9 text-secondary staff_email">
+                Kenneth Valdez
+               </div>
+              </div>
+              <div class="row">
+               <div class="col-3">
+                <h7 class="mb-0 ">Mobile</h7>
+               </div>
+               <div class="col-9 text-secondary staff_mobile">
+                Kenneth Valdez
                </div>
               </div>
              </div>
@@ -274,21 +145,191 @@ require('../../php_function.php');
           </div>
          </div>
         </div>
-       </div>
-      </div>
-     </div>
-    </div>
-    <div class="tab-content" id="nav-tabContent">
-     <div class="tab-pane fade show active" id="list-sq" role="tabpanel" aria-labelledby="list-sq-list">
-      <div class="row">
-       <div class="col-3">
-        <input type="text" name="staff" id="staff" class="form-control form-control-sm" placeholder="Faculty Name">
-        <div class='list-group' id="staffAutoList"></div>
-       </div>
-      </div>
+        <div id="accordionStaff" class="accordion shadow">
+         <div class="card">
+          <div id="headingOne" class="card-header bg-white shadow-sm border-0">
+           <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">Edit Details</a></h6>
+          </div>
+          <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionStaff" class="collapse show collapseAccordian">
+           <div class="card-body">
+            <form class="form-horizontal" id="modalForm">
+             <input type="hidden" id="staffIdHidden" name="staffIdHidden">
+             <div class="row">
+              <div class="col-12 text-center">
+              </div>
+             </div>
+             <div class="row">
+              <div class="col-6">
+               <div class="form-group">
+                Staff Name
+                <input type="text" class="form-control form-control-sm staffForm" id="sName" name="sName" placeholder="Staff Name" data-tag="staff_name">
+               </div>
+              </div>
+              <div class="col-6">
+               <div class="form-group">
+                Date of Birth
+                <input type="date" class="form-control form-control-sm staffForm" id="sDob" name="sDob" placeholder="Date of Birth" data-tag="staff_dob">
+               </div>
+              </div>
+             </div>
+             <div class="row">
+              <div class="col-6">
+               <div class="form-group">
+                Email
+                <input type="text" class="form-control form-control-sm staffForm" id="sEmail" name="sEmail" placeholder="Staff Email Id" data-tag="staff_email">
+               </div>
+              </div>
+              <div class="col-6">
+               <div class="form-group">
+                Mobile Number
+                <input type="text" class="form-control form-control-sm staffForm" id="sMobile" name="sMobile" placeholder="Staff Mobile Number" data-tag="staff_mobile">
+               </div>
+              </div>
+             </div>
+             <div class="row">
+              <div class="col-6">
+               <div class="form-group">
+                Father Name
+                <input type="text" class="form-control form-control-sm staffForm" id="fName" name="fName" placeholder="Name of the Father" data-tag="staff_fname">
+               </div>
+              </div>
+              <div class="col-6">
+               <div class="form-group">
+                Mother Name
+                <input type="text" class="form-control form-control-sm staffForm" id="mName" name="mName" placeholder="Name of the Mother" data-tag="staff_mname">
+               </div>
+              </div>
+             </div>
+             <div class="row">
+              <div class="col-6">
+               <div class="form-group">
+                Date of Joining
+                <input type="date" class="form-control form-control-sm staffForm" id="sDoj" name="sDoj" placeholder="Date of Joining" data-tag="staff_doj">
+               </div>
+              </div>
+              <div class="col-6">
+               <div class="form-group">
+                Adhaar Number
+                <input type="text" class="form-control form-control-sm staffForm" id="sAdhaar" name="sAdhaar" placeholder="12 Digit Adhaar Number" data-tag="staff_adhaar">
+               </div>
+              </div>
+             </div>
+             <div class="row">
+              <div class="col-12">
+               <div class="form-group">
+                Address
+                <input type="text" class="form-control form-control-sm staffForm" id="sAddress" name="sAddress" placeholder="Address" data-tag="staff_address">
+               </div>
+              </div>
+             </div>
+             <hr>
+             <div class="row">
+              <div class="col-5">
+               <div class="form-check-inline">
+                <input type="radio" class="form-check-input staffForm" checked id="male" name="sGender" value="Male" data-tag="staff_gender">Male
+               </div>
+               <div class="form-check-inline">
+                <input type="radio" class="form-check-input staffForm" id="female" name="female" value="sGender" data-tag="staff_gender">Female
+               </div>
+              </div>
+              <div class="col-7">
+               <div class="form-check-inline">
+                <input type="radio" class="form-check-input staffForm" checked id="Teaching" name="sTeaching" value="Teaching" data-tag="staff_teaching">Teaching
+               </div>
+               <div class="form-check-inline">
+                <input type="radio" class="form-check-input staffForm" id="NonTeaching" name="sTeaching" value="NonTeaching" data-tag="staff_teaching">Non-Teaching
+               </div>
+              </div>
+             </div>
+            </form>
+           </div>
+          </div>
+         </div>
+         <div class="card">
+          <div id="headingTwo" class="card-header bg-white shadow-sm border-0">
+           <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" class="d-block position-relative collapsed text-dark text-uppercase collapsible-link py-2">Add Qualification</a></h6>
+          </div>
+          <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionStaff" class="collapse collapseAccordian">
+           <div class="card-body">
+            <form class="form-horizontal" class="qualificationForm">
+             <input type="hidden" id="stqIdHidden" name="stqIdHidden">
+             <div class="row">
+              <div class="col-6">
+               <div class="form-group">
+                Qualification
+                <div class="row">
+                 <div class="col">
+                  <?php
+                  $sql_qualification = "select * from qualification";
+                  $result = $conn->query($sql_qualification);
+                  if ($result) {
+                   echo '<select class="form-control form-control-sm staffQualificationForm" name="sel_qual" id="sel_qual" data-tag="qualification_id" required>';
+                   echo '<option selected disabled>Select Qualification</option>';
+                   while ($rows = $result->fetch_assoc()) {
+                    $select_id = $rows['qualification_id'];
+                    $select_name = $rows['qualification_name'];
+                    echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+                   }
+                   echo '</select>';
+                  } else echo $conn->error;
+                  if ($result->num_rows == 0) echo 'No Data Found';
+                  ?>
+                 </div>
+                </div>
+               </div>
+              </div>
+              <div class="col-6">
+               <div class="form-group">
+                Institute
+                <input type="text" class="form-control form-control-sm staffQualificationForm" id="sInst" name="sInst" placeholder="Name of the Institute" data-tag="stq_institute">
+               </div>
+              </div>
+             </div>
+             <div class="row">
+              <div class="col-6">
+               <div class="form-group">
+                Board
+                <input type="text" class="form-control form-control-sm staffQualificationForm" id="sBoard" name="sBoard" placeholder="Board" data-tag="stq_board">
+               </div>
+              </div>
+              <div class="col-6">
+               <div class="form-group">
+                Year of Passing
+                <input type="text" class="form-control form-control-sm staffQualificationForm" id="sYear" name="sYear" placeholder="Passing Year" data-tag="stq_year">
+               </div>
+              </div>
+             </div>
+             <div class="row">
+              <div class="col-4">
+               <div class="form-group">
+                Marks Obtained
+                <input type="text" class="form-control form-control-sm staffQualificationForm" id="sMarksObt" name="sMarksObt" placeholder="Marks Obtained" data-tag="stq_marksObtained">
+               </div>
+              </div>
+              <div class="col-4">
+               <div class="form-group">
+                Maximum Marks
+                <input type="text" class="form-control form-control-sm staffQualificationForm" id="sMaxMarks" name="sMaxMarks" placeholder="Maximum marks" data-tag="stq_marksMax">
+               </div>
+              </div>
+              <div class="col-4">
+               <div class="form-group">
+                Percentage/CGPA
+                <input type="text" class="form-control form-control-sm staffQualificationForm" id="sCgpa" name="sCgpa" placeholder="Percentage/CGPA" data-tag="stq_percentage">
+               </div>
+              </div>
+             </div>
+            </form>
 
-      <div class="row">
-       <div class="col-5 mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addStaffQualification">Add</button>
+            <div class="row">
+             <div class="col-12">
+              <p style="text-align:center" id="qualificationShowList"></p>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+        </div>
        </div>
       </div>
      </div>
@@ -309,13 +350,13 @@ require('../../php_function.php');
   $('#list-as').show();
   $('#list-sq').hide();
   $('#accordionStaff').hide();
-  $('.staffUser').hide();
+  $('.staffProfile').hide();
 
   var z = $("#sel_dept").val();
   staffList();
   $('#deptIdModal').val(z);
 
-  $('#staff').keyup(function() {
+  $('#staffSearch').keyup(function() {
    var query = $(this).val();
    // alert(query);
    if (query != '') {
@@ -337,13 +378,41 @@ require('../../php_function.php');
   });
 
   $(document).on('click', '.autoList', function() {
-   $('#staff').val($(this).text());
+   $('#staffSearch').val($(this).text());
    var stfId = $(this).attr("data-std");
-   $('#panelId').val(stfId);
-   //staffQualificationList(stfId);
+   staffQualificationList(stfId);
    $('#staffAutoList').fadeOut();
-  });
+   $.post("hrSql.php", {
+    staffId: stfId,
+    action: "fetchStaff"
+   }, () => {}, "json").done(function(data) {
+    // $.alert("hello" + data.staff_name);
+    $(".staff_email").text(data.staff_email);
+    $(".staff_name").text(data.staff_name);
+    $(".staff_mobile").text(data.staff_mobile);
+    $(".staff_doj").text(data.staff_doj);
+    $("#sEmail").val(data.staff_email);
+    $("#sName").val(data.staff_name);
+    $("#sMobile").val(data.staff_mobile);
+    $("#sDob").val(data.staff_dob);
+    $("#fName").val(data.staff_fname);
+    $("#mName").val(data.staff_mname);
+    $("#sAdhaar").val(data.staff_adhaar);
+    $("#sAddress").val(data.staff_address);
+    $("#sGender").val(data.staff_gender);
+    $("#sTeaching").val(data.staff_teaching);
+    $("#sDoj").val(data.staff_doj);
+    $('.staffProfile').show();
+    $('#accordionStaff').show();
 
+
+
+   }, "text").fail(function() {
+    $.alert("fail in place of error");
+   })
+
+
+  });
 
   $(document).on('click', '.sq', function() {
    $(".selectPanel").show();
@@ -432,13 +501,16 @@ require('../../php_function.php');
     $("#sTeaching").val(data.staff_teaching);
     $("#sDoj").val(data.staff_doj);
     $("#staff_title").text(data.staff_name);
-    $('.staffUser').show();
+    $(".staff_email").text(data.staff_email);
+    $(".staff_name").text(data.staff_name);
+    $(".staff_mobile").text(data.staff_mobile);
+    $(".staff_doj").text(data.staff_doj);
+    $('.staffProfile').show();
 
 
    }, "text").fail(function() {
     $.alert("fail in place of error");
    })
-   $(".qualificationForm")[0].reset();
   });
 
   $(document).on('click', '.staff_idE', function() {
