@@ -26,7 +26,7 @@ require('../../php_function.php');
 				<div class="bg-danger text-white text-center py-1 mt-2">Select Batch</div>
 				<?php
 				$sql = "select * from batch where batch_status='0' order by batch desc";
-				selectList($conn, 'Sel Batch', array('2', 'batch_id', 'batch', '', 'sel_batch'), $sql);
+				selectList($conn, 'Sel Batch', array('0', 'batch_id', 'batch', '', 'sel_batch'), $sql);
 				?>
 			</div>
 			<div class="col-10">
@@ -50,18 +50,20 @@ require('../../php_function.php');
 							</div>
 						</div>
 					</div>
-
 					<div class="tab-pane fade" id="list-sub" role="tabpanel" aria-labelledby="list-sub-list">
 						<div class="row">
-							<div class="mt-1 mb-1"><button class="btn btn-secondary btn-sm mt-1 addSubject">New Subject</button>
-								<button class="btn btn-sm btn-warning mt-1 copySubject">Copy Subject</button>
-
-								<p id="subShowList"></p>
-								<p id="subCoordinator"></p>
+							<button class="btn btn-secondary btn-sm mt-1 addSubject">New Subject</button>
+							<button class="btn btn-sm btn-warning mt-1 copySubject">Copy Subject</button>
+						</div>
+						<div class="row">
+							<div class="col-sm-8">
+								<div id="subShowList"></div>
+							</div>
+							<div class="col-sm-4">
+								<div id="subjectSummary"></div>
 							</div>
 						</div>
 					</div>
-
 					<div class="tab-pane fade show" id="list-co" role="tabpanel" aria-labelledby="list-co-list">
 						<div class="row">
 							<div class="mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addCo">Add</button>
@@ -72,11 +74,13 @@ require('../../php_function.php');
 				</div>
 			</div>
 		</div>
+	</div>
 </body>
 
 <?php require("../js.php"); ?>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-<script>
+<script type="text/javascript">
 	$(document).ready(function() {
 
 		$('[data-toggle="tooltip"]').tooltip();
@@ -89,7 +93,7 @@ require('../../php_function.php');
 			var batch_id = $("#sel_batch").val();
 			var program_id = $("#sel_program").val();
 			// $.alert("Changed Program "+ batch_id + program_id);
-			subjectList(batch_id, program_id);
+			subjectList();
 			$("#hiddenProgram").val(program_id);
 			$("#hiddenBatchPO").val(batch_id);
 			poList();
@@ -118,7 +122,6 @@ require('../../php_function.php');
 			var staff = $("#sel_staff").val();
 			var action = $("#action").val();
 			var batch = $("#newBatch").val();
-			var selProgram = $("#sel_program").val();
 			var selBatch = $("#sel_batch").val();
 			var selSubject = $("#sel_subject").val();
 			var poc = $("#poCode").val();
@@ -131,9 +134,9 @@ require('../../php_function.php');
 			var error = "NO";
 			var error_msg = "";
 			if (action == "addSubject" || action == "updateSubject") {
-				if ($('#subject_name').val() === "" || $('#sel_staff').val() === "") {
+				if ($('#subject_name').val() === "" || $('#subject_semester').val() === "") {
 					error = "YES";
-					error_msg = "Subject Name and Coordinator cannot be blank";
+					error_msg = "Subject Name and Semester cannot be blank";
 				}
 			} else if (action == "addSession" || action == "updateSession") {
 				if ($("#session_name").val() == "") {
@@ -385,90 +388,106 @@ require('../../php_function.php');
 
 		// Manage Subject
 		$(document).on('click', '.subject_idD', function() {
-			$.alert("Disabled");
+			var id = $(this).attr("data-id");
+			$.alert("Disabled " + id);
+			$.post("aaSql.php", {
+				id: id,
+				action: "deleteSubject"
+			}, function(data, status) {
+				$.alert("Data" + data)
+				subjectList();
+			}, "text").fail(function() {
+				$.alert("Error in BatchSession Function");
+			})
+			
+		});
+		$(document).on('click', '.subject_idR', function() {
+			var id = $(this).attr("data-id");
+			$.alert("Disabled " + id);
+			$.post("aaSql.php", {
+				id: id,
+				action: "resetSubject"
+			}, function(data, status) {
+				$.alert("Data" + data)
+				subjectList();
+			}, "text").fail(function() {
+				$.alert("Error in BatchSession Function");
+			})
+			
 		});
 		$(document).on('click', '.subject_idE', function() {
-			var x = $("#sel_batch").val();
-			var y = $("#sel_program").val();
-			var id = $(this).attr('id');
-			//$.alert("Id " + id);
+			var id = $(this).attr("data-id");
+			$.alert("Id " + id);
+			$.post("aaSql.php", {
+				action: "fetchSubject",
+				subjectId: id
+			}, () => {}, "json").done(function(data) {
+				//$.alert("List " + data.inst_name);
 
-			if (x === "" || y == "") $.alert("Please select Program and Batch");
-			else {
+				$('#modal_title').text("Update Subject [" + id + "]");
 
-				$.post("aaSql.php", {
-					action: "fetchSubject",
-					subjectId: id
-				}, () => {}, "json").done(function(data) {
-					//$.alert("List " + data.inst_name);
+				$('#action').val("updateSubject");
+				$('#modalId').val(id);
+				$('#subject_name').val(data.subject_name);
+				$('#subject_code').val(data.subject_code);
+				$('#subject_semester').val(data.subject_semester);
+				$('#subject_credit').val(data.subject_credit);
+				$('#subject_lecture').val(data.subject_lecture);
+				$('#subject_tutorial').val(data.subject_tutorial);
+				$('#subject_practical').val(data.subject_practical);
+				$('#subject_internal').val(data.subject_internal);
+				$('#subject_external').val(data.subject_external);
+				$('#subject_sno').val(data.subject_sno);
+				var staff = data.staff_id;
+				//$.alert("Staff " + staff);
+				$("#sel_staff option[value='" + staff + "']").attr("selected", "selected");
+				var subType = data.subject_type;
+				if (subType == 'DE') {
+					document.getElementById("stDE").checked = true;
+				} else if (subType == 'OE') {
+					document.getElementById("stOE").checked = true;
+				} else if (subType == 'DC') {
+					document.getElementById("stDC").checked = true;
+				} else if (subType == 'OC') {
+					document.getElementById("stOC").checked = true;
+				}
 
-					$('#modal_title').text("Update Subject [" + id + "]");
+				var subMode = data.subject_mode;
+				if (subMode == 'Online') {
+					document.getElementById("smOn").checked = true;
+				} else if (subMode == 'Offline') {
+					document.getElementById("smOff").checked = true;
+				}
 
-					$('#action').val("updateSubject");
-					$('#modalId').val(id);
-					$('#subject_name').val(data.subject_name);
-					$('#subject_code').val(data.subject_code);
-					$('#subject_semester').val(data.subject_semester);
-					$('#subject_credit').val(data.subject_credit);
-					$('#subject_lecture').val(data.subject_lecture);
-					$('#subject_tutorial').val(data.subject_tutorial);
-					$('#subject_practical').val(data.subject_practical);
-					$('#subject_internal').val(data.subject_internal);
-					$('#subject_external').val(data.subject_external);
-					var staff = data.staff_id;
-					//$.alert("Staff " + staff);
-					$("#sel_staff option[value='" + staff + "']").attr("selected", "selected");
-					var subType = data.subject_type;
-					if (subType == 'DE') {
-						document.getElementById("stDE").checked = true;
-					} else if (subType == 'OE') {
-						document.getElementById("stOE").checked = true;
-					} else if (subType == 'DC') {
-						document.getElementById("stDC").checked = true;
-					} else if (subType == 'OC') {
-						document.getElementById("stOC").checked = true;
-					}
+				var subCat = data.subject_category;
+				if (subCat == 'Theory') {
+					document.getElementById("scTh").checked = true;
+				} else if (subCat == 'Practical') {
+					document.getElementById("scPr").checked = true;
+				} else if (subCat == 'Project') {
+					document.getElementById("scPrj").checked = true;
+				} else if (subCat == 'Field Work') {
+					document.getElementById("scFW").checked = true;
+				}
 
-					var subMode = data.subject_mode;
-					if (subMode == 'Online') {
-						document.getElementById("smOn").checked = true;
-					} else if (subMode == 'Offline') {
-						document.getElementById("smOff").checked = true;
-					}
+				$('#firstModal').modal('show');
+				$('.batchForm').hide();
+				$('.subjectForm').show();
+				$('.poForm').hide();
+				$('.coForm').hide();
+				$('.sessionForm').hide();
 
-					var subCat = data.subject_category;
-					if (subCat == 'Theory') {
-						document.getElementById("scTh").checked = true;
-					} else if (subCat == 'Practical') {
-						document.getElementById("scPr").checked = true;
-					} else if (subCat == 'Project') {
-						document.getElementById("scPrj").checked = true;
-					} else if (subCat == 'Field Work') {
-						document.getElementById("scFW").checked = true;
-					}
-
-					$('#firstModal').modal('show');
-					$('.batchForm').hide();
-					$('.subjectForm').show();
-					$('.poForm').hide();
-					$('.coForm').hide();
-					$('.sessionForm').hide();
-
-					//$("#ccform").html(mydata);
-				}, "text").fail(function() {
-					$.alert("fail in place of error");
-				})
-			}
+				//$("#ccform").html(mydata);
+			}, "text").fail(function() {
+				$.alert("fail in place of error");
+			})
 		});
 		$(document).on('click', '.addSubject', function() {
 			var x = $("#sel_batch").val();
-			var y = $("#sel_program").val();
-			$.alert("Add Subject" + x + "-" + y);
-			if (x === "" || y == "") $.alert("Please select Program and Batch");
+			$.alert("Add Subject" + x);
+			if (x === "") $.alert("Please select Batch !!");
 			else {
-
 				$('#modal_title').text("Add Subject");
-				$('#programIdModal').val(y);
 				$('#batchIdModal').val(x);
 				$('#action').val("addSubject");
 				$('#firstModal').modal('show');
@@ -521,20 +540,34 @@ require('../../php_function.php');
 
 		function subjectList() {
 			var x = $("#sel_batch").val();
-				//$.alert(" Select a Batch X = " + x);
-			if (x==="") {
+			//$.alert(" Select a Batch X = " + x);
+			if (x === "") {
 				$.alert(" Select a Batch to Proceed !!");
 			} else {
 				$.post("aaSql.php", {
-					action: "subList",
-					batchId: x
+					batchId: x,
+					action: "subList"
 				}, function(mydata, mystatus) {
 					//$.alert("List " + mydata);
 					$("#subShowList").html(mydata);
 				}, "text").fail(function() {
 					$.alert("Error !!");
 				})
+				subjectSummary();
 			}
+		}
+
+		function subjectSummary() {
+			var x = $("#sel_batch").val();
+			$.post("aaSql.php", {
+				batchId: x,
+				action: "subjectSummary"
+			}, () => {}, "text").done(function(result, status) {
+				//$.alert(status+result);
+				$("#subjectSummary").html(result);
+			}, "text").fail(function() {
+				$.alert("Error !!");
+			})
 		}
 
 		function batchList() {
@@ -628,6 +661,7 @@ require('../../php_function.php');
 			if (fmt == "dmY") return date;
 			else return dateYmd;
 		}
+
 	});
 </script>
 
@@ -668,8 +702,8 @@ require('../../php_function.php');
 							</div>
 							<div class="col-3">
 								<div class="form-group">
-									Credit
-									<input type="text" class="form-control form-control-sm" id="subject_credit" name="subject_credit" placeholder="Credit">
+									SNo
+									<input type="number" class="form-control form-control-sm" id="subject_sno" name="subject_sno" placeholder="SNo">
 								</div>
 							</div>
 							<div class="col-3">
@@ -706,9 +740,11 @@ require('../../php_function.php');
 							</div>
 							<div class="col-3">
 								<div class="form-group">
-
+									Credit
+									<input type="text" class="form-control form-control-sm" id="subject_credit" name="subject_credit" placeholder="Credit">
 								</div>
 							</div>
+
 						</div>
 						<hr>
 						<div class="row">

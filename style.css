@@ -4,6 +4,9 @@
 .grey-bg {
   background-color: #fbfdff;
 }
+.bg-one {
+  background-color: #f0ded14b;
+}
 
 /* Div css */
 div.message{
@@ -50,12 +53,7 @@ div.minWidth100{
 .display-4{
   font-size:40px;
 }
-.tableRowHead-sm {
-  text-align: center;
-  font-weight: bold;
-  font-style: italic;
-  font-size: small;
-}
+
 .warning {
   color: rgba(231, 40, 50, 0.911);
   font-style: italic;
@@ -182,6 +180,13 @@ div.minWidth100{
   background-color: rgba(203, 213, 214, 0.219);
 }
 .btn-square-sm {
+  padding: 2px 8px;
+  margin: 0px;
+  font-size: 12px;
+  border-radius: 0px;
+}
+
+.card-square {
   padding: 2px 8px;
   margin: 0px;
   font-size: 12px;

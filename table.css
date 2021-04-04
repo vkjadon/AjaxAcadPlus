@@ -42,6 +42,12 @@ table.list-table-xxs td {
   font-size:smaller;
   padding:2px;
 }
+table.tableRowHead-sm {
+  text-align: center;
+  font-weight: bold;
+  font-style: italic;
+  font-size: small;
+}
 
 tr.rejected{
   color: rgba(230, 22, 56, 0.884);
@@ -53,6 +59,11 @@ tr.approved{
   font-style: italic;
   background-color: rgb(178, 245, 176);
 }
+td.totalRow-sm {
+  font-weight: bold;
+  font-size: larger;
+}
+
 .selectPanel {
   color: rgba(230, 22, 56, 0.884);
   text-align: center;
