@@ -52,6 +52,14 @@ require('../../php_function.php');
   .collapseHeader {
    background-color: #29b6f6;
   }
+
+  .vertical {
+
+   border: none;
+   border-left: 1px solid hsla(200, 10%, 50%, 100);
+   height: 100vh;
+   width: 1px;
+  }
  </style>
 </head>
 
@@ -150,14 +158,10 @@ require('../../php_function.php');
           <div id="headingOne" class="card-header bg-white shadow-sm border-0">
            <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">Edit Details</a></h6>
           </div>
-          <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionStaff" class="collapse show collapseAccordian">
+          <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionStaff" class="collapse  collapseAccordian">
            <div class="card-body">
             <form class="form-horizontal" id="modalForm">
              <input type="hidden" id="staffIdHidden" name="staffIdHidden">
-             <div class="row">
-              <div class="col-12 text-center">
-              </div>
-             </div>
              <div class="row">
               <div class="col-6">
                <div class="form-group">
@@ -251,23 +255,103 @@ require('../../php_function.php');
           </div>
           <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionStaff" class="collapse collapseAccordian">
            <div class="card-body">
-            <form class="form-horizontal" class="qualificationForm">
-             <input type="hidden" id="stqIdHidden" name="stqIdHidden">
+            <input type="hidden" id="stqIdHidden" name="stqIdHidden">
+            <div class="row">
+             <div class="col-6">
+              <div class="form-group">
+               Qualification
+               <div class="row">
+                <div class="col">
+                 <?php
+                 $sql_qualification = "select * from qualification";
+                 $result = $conn->query($sql_qualification);
+                 if ($result) {
+                  echo '<select class="form-control form-control-sm staffQualificationForm" name="sel_qual" id="sel_qual" data-tag="qualification_id" required>';
+                  echo '<option selected disabled>Select Qualification</option>';
+                  while ($rows = $result->fetch_assoc()) {
+                   $select_id = $rows['qualification_id'];
+                   $select_name = $rows['qualification_name'];
+                   echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+                  }
+                  echo '</select>';
+                 } else echo $conn->error;
+                 if ($result->num_rows == 0) echo 'No Data Found';
+                 ?>
+                </div>
+               </div>
+              </div>
+             </div>
+             <div class="col-6">
+              <div class="form-group">
+               Institute
+               <input type="text" class="form-control form-control-sm staffQualificationForm" id="sInst" name="sInst" placeholder="Name of the Institute" data-tag="stq_institute">
+              </div>
+             </div>
+            </div>
+            <div class="row">
+             <div class="col-6">
+              <div class="form-group">
+               Board
+               <input type="text" class="form-control form-control-sm staffQualificationForm" id="sBoard" name="sBoard" placeholder="Board" data-tag="stq_board">
+              </div>
+             </div>
+             <div class="col-6">
+              <div class="form-group">
+               Year of Passing
+               <input type="text" class="form-control form-control-sm staffQualificationForm" id="sYear" name="sYear" placeholder="Passing Year" data-tag="stq_year">
+              </div>
+             </div>
+            </div>
+            <div class="row">
+             <div class="col-4">
+              <div class="form-group">
+               Marks Obtained
+               <input type="text" class="form-control form-control-sm staffQualificationForm" id="sMarksObt" name="sMarksObt" placeholder="Marks Obtained" data-tag="stq_marksObtained">
+              </div>
+             </div>
+             <div class="col-4">
+              <div class="form-group">
+               Maximum Marks
+               <input type="text" class="form-control form-control-sm staffQualificationForm" id="sMaxMarks" name="sMaxMarks" placeholder="Maximum marks" data-tag="stq_marksMax">
+              </div>
+             </div>
+             <div class="col-4">
+              <div class="form-group">
+               Percentage/CGPA
+               <input type="text" class="form-control form-control-sm staffQualificationForm" id="sCgpa" name="sCgpa" placeholder="Percentage/CGPA" data-tag="stq_percentage">
+              </div>
+             </div>
+            </div>
+            <div class="row">
+             <div class="col-12">
+              <p style="text-align:center" id="qualificationShowList"></p>
+             </div>
+            </div>
+           </div>
+          </div>
+         </div>
+         <div class="card">
+          <div id="headingThree" class="card-header bg-white shadow-sm border-0">
+           <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" class="d-block position-relative collapsed text-dark text-uppercase collapsible-link py-2">Service Record</a></h6>
+          </div>
+          <div id="collapseThree" aria-labelledby="headingThree" data-parent="#accordionStaff" class="collapse collapseAccordian">
+           <div class="card-body">
+            <form class="form-horizontal" id="staffServiceForm">
              <div class="row">
-              <div class="col-6">
-               <div class="form-group">
-                Qualification
-                <div class="row">
+              <div class=col-4>
+               <div class="row">
+                <div class="form-group">
                  <div class="col">
+                  Select Department
                   <?php
-                  $sql_qualification = "select * from qualification";
-                  $result = $conn->query($sql_qualification);
+                  $sql_department = "select * from department where dept_status='0'";
+                  $result = $conn->query($sql_department);
                   if ($result) {
-                   echo '<select class="form-control form-control-sm staffQualificationForm" name="sel_qual" id="sel_qual" data-tag="qualification_id" required>';
-                   echo '<option selected disabled>Select Qualification</option>';
+                   echo '<select class="form-control form-control-sm" name="sel_dept" id="sel_dept" required>';
+                   echo '<option selected disabled>Select Department</option>';
                    while ($rows = $result->fetch_assoc()) {
-                    $select_id = $rows['qualification_id'];
-                    $select_name = $rows['qualification_name'];
+                    $select_id = $rows['dept_id'];
+                    $select_name = $rows['dept_name'];
                     echo '<option value="' . $select_id . '">' . $select_name . '</option>';
                    }
                    echo '</select>';
@@ -277,55 +361,57 @@ require('../../php_function.php');
                  </div>
                 </div>
                </div>
-              </div>
-              <div class="col-6">
-               <div class="form-group">
-                Institute
-                <input type="text" class="form-control form-control-sm staffQualificationForm" id="sInst" name="sInst" placeholder="Name of the Institute" data-tag="stq_institute">
+               <div class="row">
+                <div class="form-group">
+                 <div class="col">
+                  Select Designation
+                  <?php
+                  $sql_desigantion = "select * from designation where designation_status='0'";
+                  $result = $conn->query($sql_desigantion);
+                  if ($result) {
+                   echo '<select class="form-control form-control-sm" name="sel_desig" id="sel_desig" required>';
+                   echo '<option selected disabled>Select Designation</option>';
+                   while ($rows = $result->fetch_assoc()) {
+                    $select_id = $rows['designation_id'];
+                    $select_name = $rows['designation_name'];
+                    echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+                   }
+                   echo '</select>';
+                  } else echo $conn->error;
+                  if ($result->num_rows == 0) echo 'No Data Found';
+                  ?>
+                 </div>
+                </div>
+               </div>
+               <div class="row">
+                <div class="col">
+                 <div class="form-group">
+                  With effect from
+                  <input type="date" class="form-control form-control-sm" id="sWef" name="sWef" placeholder="W.E.F" data-tag="ss_from">
+                 </div>
+                </div>
+               </div>
+               <div class="row">
+                <div class="col">
+                 <div class="form-group">
+                  Order Number
+                  <input type="text" class="form-control form-control-sm" id="sOrderNo" name="sOrderNo" placeholder="Order No." data-tag="ss_order">
+                 </div>
+                </div>
+               </div>
+               <div class="row">
+                <div class="col">
+                 <input type="hidden" id="action" name="action">
+                 <input type="hidden" id="stfIdService" name="stfIdService">
+                 <button type="submit" class="btn btn-primary btn-sm" id="submitServiceForm">Submit</button>
+                </div>
                </div>
               </div>
-             </div>
-             <div class="row">
-              <div class="col-6">
-               <div class="form-group">
-                Board
-                <input type="text" class="form-control form-control-sm staffQualificationForm" id="sBoard" name="sBoard" placeholder="Board" data-tag="stq_board">
-               </div>
-              </div>
-              <div class="col-6">
-               <div class="form-group">
-                Year of Passing
-                <input type="text" class="form-control form-control-sm staffQualificationForm" id="sYear" name="sYear" placeholder="Passing Year" data-tag="stq_year">
-               </div>
-              </div>
-             </div>
-             <div class="row">
-              <div class="col-4">
-               <div class="form-group">
-                Marks Obtained
-                <input type="text" class="form-control form-control-sm staffQualificationForm" id="sMarksObt" name="sMarksObt" placeholder="Marks Obtained" data-tag="stq_marksObtained">
-               </div>
-              </div>
-              <div class="col-4">
-               <div class="form-group">
-                Maximum Marks
-                <input type="text" class="form-control form-control-sm staffQualificationForm" id="sMaxMarks" name="sMaxMarks" placeholder="Maximum marks" data-tag="stq_marksMax">
-               </div>
-              </div>
-              <div class="col-4">
-               <div class="form-group">
-                Percentage/CGPA
-                <input type="text" class="form-control form-control-sm staffQualificationForm" id="sCgpa" name="sCgpa" placeholder="Percentage/CGPA" data-tag="stq_percentage">
-               </div>
+              <div class="col-8"><br>
+               <p style="text-align:center" id="serviceShowList"></p>
               </div>
              </div>
             </form>
-
-            <div class="row">
-             <div class="col-12">
-              <p style="text-align:center" id="qualificationShowList"></p>
-             </div>
-            </div>
            </div>
           </div>
          </div>
@@ -455,6 +541,22 @@ require('../../php_function.php');
    })
   });
 
+  $(document).on('submit', '#staffServiceForm', function() {
+   event.preventDefault(this);
+   var staffId = $("#staffIdHidden").val()
+   var deptId = $("#sel_dept").val()
+   var desigId = $("#sel_desig").val()
+   $("#stfIdService").val(staffId);
+   $("#action").val("addStaffService")
+   var formData = $(this).serialize();
+   $.alert("Form Submitted " + formData)
+   $.post("hrSql.php", formData, function() {}, "text").done(function(data, success) {
+    $.alert(data)
+    $('#staffServiceForm')[0].reset();
+    staffServiceList(staffId, deptId, desigId)
+   })
+  });
+
   $(document).on('blur', '.staffQualificationForm', function() {
    var staffId = $("#staffIdHidden").val()
    var qId = $('#sel_qual').val()
@@ -462,7 +564,19 @@ require('../../php_function.php');
    var value = $(this).val()
    // $.alert("Changes " + tag + " Value " + value + " Staff " + staffId + "q" + qId);
    if (qId === null) {
-    $.alert("Select a Qualification first" + qId);
+    $.confirm({
+     title: 'Encountered an error!',
+     content: 'Please Select Qualification First',
+     type: 'red',
+     typeAnimated: false,
+     buttons: {
+      tryAgain: {
+       text: 'Try again',
+       btnClass: 'btn-red',
+       action: function() {}
+      },
+     }
+    });
    } else {
     $.post("hrSql.php", {
      id_name: "qualification_id",
@@ -484,6 +598,7 @@ require('../../php_function.php');
    var id = $(this).attr("data-staff");
    $('#staffIdHidden').val(id);
    staffQualificationList(id);
+   staffServiceList(id);
    $.post("hrSql.php", {
     staffId: id,
     action: "fetchStaff"
@@ -677,6 +792,18 @@ require('../../php_function.php');
     $("#staffList").show();
     //	alert("List ");
     $("#staffList").html(mydata);
+   }, "text").fail(function() {
+    $.alert("fail in place of error");
+   })
+  }
+
+  function staffServiceList(x) {
+   $.post("hrSql.php", {
+    action: "staffServiceList",
+    staffId: x
+   }, function(mydata, mystatus) {
+    $("#serviceShowList").show();
+    $("#serviceShowList").html(mydata);
    }, "text").fail(function() {
     $.alert("fail in place of error");
    })

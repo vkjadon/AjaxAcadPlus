@@ -103,8 +103,6 @@ require('../../php_function.php');
            </div>
           </div>
           <div class='list-group' id="studentAutoList"></div>
-
-
          </div>
         </div>
        </div>
@@ -176,7 +174,7 @@ require('../../php_function.php');
           <div id="headingOne" class="card-header bg-white shadow-sm border-0">
            <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">Edit Details</a></h6>
           </div>
-          <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionStudent" class="collapse show collapseAccordian">
+          <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionStudent" class="collapse collapseAccordian">
            <div class="card-body">
             <form class="form-horizontal" id="modalForm">
              <input type="hidden" id="studentIdHidden" name="studentIdHidden">
@@ -410,6 +408,7 @@ require('../../php_function.php');
   </div>
  </div>
 </body>
+
 </html>
 
 <?php require("../js.php"); ?>
@@ -658,7 +657,19 @@ require('../../php_function.php');
    var value = $(this).val()
    // $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
    if (qId === null) {
-    $.alert("Select a Qualification first" + qId);
+    $.confirm({
+     title: 'Encountered an error!',
+     content: 'Please Select Qualification First',
+     type: 'red',
+     typeAnimated: true,
+     buttons: {
+      tryAgain: {
+       text: 'Try again',
+       btnClass: 'btn-red',
+       action: function() {}
+      },
+     }
+    });
    } else {
     $.post("admissionSql.php", {
      id_name: "qualification_id",
