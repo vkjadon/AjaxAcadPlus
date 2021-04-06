@@ -42,15 +42,41 @@ $totalTests = count($array["data"]);
 				</td>
 			</tr>
 		</table>
-		<?php
-		for ($i = 0; $i < $totalTests; $i++) {
-			$id = $array["data"][$i]["test_id"];
-			echo '<div class="row">
-			<div class="col-4 mt-2 pt-2"><a href="openTest.php?id=' . $id . '" class="btn btn-info btn-block btn-lg">' . $array["data"][$i]["test_name"] . '</a></div>
-			<div class="col-6"></div>
-			</div>';
-		}
-		?>
+		<div class="row">
+			<div class="col-4">
+				<?php
+				for ($i = 0; $i < $totalTests; $i++) {
+					$id = $array["data"][$i]["test_id"];
+					echo '<div class="row">
+			<div class="col mt-2 pt-2"><a href="openTest.php?id=' . $id . '" class="btn btn-info btn-block btn-lg">' . $array["data"][$i]["test_name"] . '</a></div>';
+					echo '</div>';
+				}
+				?>
+			</div>
+			<div class="col-5"></div>
+			<div class="col-3 mt-2 pt-2">
+				<div class="card bg-one">
+					<h3 class="text-center">ClassConnect Login</h1>
+						<div class="card-body">
+							<form method="post" id="userForm">
+								<div class="form-group">
+									<label>Username</label>
+									<input type="text" name="username" minlength="5" id="username" class="form-control" />
+									<span id="username_error" class="text-warning"></span>
+									<label>Password</label>
+									<input type="password" name="userpassword" id="userpassword" class="form-control" />
+									<span id="userpassword_error" class="text-warning"></span>
+								</div>
+								<div class="form-group">
+									<br>
+									<input type="hidden" name="action" id="action" value="checkUser" />
+									<input type="submit" name="userlogin" id="userlogin" class="btn btn-info btn-block" value="Login" />
+								</div>
+							</form>
+						</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
 
@@ -66,9 +92,25 @@ $totalTests = count($array["data"]);
 
 	$(document).ready(function() {
 		$("#currentQuestionId").hide();
+
+		$('#userForm').submit(function(event) {
+			event.preventDefault(this);
+			var formData = $(this).serialize();
+			//alert(formData);
+			$.post("olat_user.php", formData, function(mydata, mystatus) {
+				//alert(" success " + mydata.found);
+			}, "text").done(function(data, mystatus) {
+				alert("Id " + data);
+				if (data != "NotFound") {
+					location.href = "admin.php";
+				} else alert("Not Found");
+			}).fail(function() {
+				alert("fail in place of error");
+			})
+		});
+
 		clockUpdate();
 		setInterval(clockUpdate, 1000);
-
 		var i = 1;
 		setInterval(function() {
 			var m = Math.floor(i / 60);
