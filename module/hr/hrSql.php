@@ -189,7 +189,7 @@ if (isset($_POST['action'])) {
   $staff_id = $_POST['staffId'];
   // echo "Staff $staff_id";
   $sql = "SELECT * from staff_service where staff_id='$staff_id'";
-  $json = getTableRow($conn, $sql, array("ss_from", "dept_id", "desig_id", "ss_order"));
+  $json = getTableRow($conn, $sql, array("ss_from", "dept_id", "designation_id", "ss_order"));
   // echo $json;
   $array = json_decode($json, true);
   $count = count($array["data"]);
@@ -203,7 +203,7 @@ if (isset($_POST['action'])) {
   for ($i = 0; $i < count($array["data"]); $i++) {
    $ss_from = $array["data"][$i]["ss_from"];
    $dept_id = $array["data"][$i]["dept_id"];
-   $desig_id = $array["data"][$i]["desig_id"];
+   $desig_id = $array["data"][$i]["designation_id"];
    $ss_order = $array["data"][$i]["ss_order"];
    echo '<tr><td>'.$dept_id.'</td><td>'.$desig_id.'</td><td>'.$ss_from.'</td><td>'.$ss_order.'</td><td><i class="fa fa-trash deleteStaffService"></i></td></tr>';
 
@@ -212,7 +212,7 @@ if (isset($_POST['action'])) {
  } elseif ($_POST['action'] == 'addStaffService') {
   $staff_id = $_POST['stfIdService'];
   if (!$_POST['sel_dept'] == NULL && !$_POST['sel_desig'] == NULL && !$_POST['sOrderNo'] == NULL && !$_POST['sWef'] == NULL) {
-   $sql = "insert into staff_service (staff_id, dept_id, desig_id, ss_order , ss_from, ss_status) values('$staff_id', '" . $_POST['sel_dept'] . "','" . $_POST['sel_desig'] . "' ,'" . $_POST['sOrderNo'] . "','" . $_POST['sWef'] . "','1')";
+   $sql = "insert into staff_service (staff_id, dept_id, designation_id, ss_order , ss_from, ss_status) values('$staff_id', '" . $_POST['sel_dept'] . "','" . $_POST['sel_desig'] . "' ,'" . $_POST['sOrderNo'] . "','" . $_POST['sWef'] . "','1')";
    $result = $conn->query($sql);
    if ($result) echo "Added Successfully";
    else {
