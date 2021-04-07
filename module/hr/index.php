@@ -53,6 +53,13 @@ require('../../php_function.php');
    background-color: #29b6f6;
   }
 
+  .vertical {
+
+   border: none;
+   border-left: 1px solid hsla(200, 10%, 50%, 100);
+   height: 100vh;
+   width: 1px;
+  }
  </style>
 </head>
 
@@ -385,7 +392,6 @@ require('../../php_function.php');
                 <input type="text" class="form-control form-control-sm" id="sOrderNo" name="sOrderNo" placeholder="Order No." data-tag="ss_order">
                </div>
               </div>
-              &nbsp;
               <div class="col-2">
                <input type="hidden" id="action" name="action">
                <input type="hidden" id="stfIdService" name="stfIdService">

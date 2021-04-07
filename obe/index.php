@@ -1,12 +1,8 @@
 <?php
 session_start();
-include('openTestDb.php');
+include('openObeDb.php');
 require('../php_function.php');
-include('../phpFunction/onlineFunction.php');
-$json = get_testListJson($conn, "0");
-//echo $json;
-$array = json_decode($json, true);
-$totalTests = count($array["data"]);
+//include('../phpFunction/onlineFunction.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,36 +23,12 @@ $totalTests = count($array["data"]);
 
 <body>
 	<div class="container-fluid">
-		<table style="background-color:crimson;" width="100%">
-			<tr>
-				<td width="15%">
-					<div class="digital-clock">00:00:00</div>
-				</td>
-				<td width="5%"></td>
-				<td width="55%">
-					<h5 class="text-white">List of Test Available</h5>
-				</td>
-				<td class="text-white">
-					<h5><?php if ($totalTests > 0) echo 'Total Tests : ' . $totalTests;
-							else echo 'No Test Available! Please Wait!!'; ?></h5>
-				</td>
-			</tr>
-		</table>
 		<div class="row">
 			<div class="col-4">
-				<?php
-				for ($i = 0; $i < $totalTests; $i++) {
-					$id = $array["data"][$i]["test_id"];
-					echo '<div class="row">
-			<div class="col mt-2 pt-2"><a href="openTest.php?id=' . $id . '" class="btn btn-info btn-block btn-lg">' . $array["data"][$i]["test_name"] . '</a></div>';
-					echo '</div>';
-				}
-				?>
 			</div>
-			<div class="col-5"></div>
-			<div class="col-3 mt-2 pt-2">
+			<div class="col-4 mt-4 pt-2">
 				<div class="card bg-one">
-					<h3 class="text-center">ClassConnect Login</h1>
+					<h3 class="text-center">OBE Portal</h1>
 						<div class="card-body">
 							<form method="post" id="userForm">
 								<div class="form-group">
@@ -97,10 +69,10 @@ $totalTests = count($array["data"]);
 			event.preventDefault(this);
 			var formData = $(this).serialize();
 			//alert(formData);
-			$.post("olat_user.php", formData, function(mydata, mystatus) {
+			$.post("obe_user.php", formData, function(mydata, mystatus) {
 				//alert(" success " + mydata.found);
 			}, "text").done(function(data, mystatus) {
-				alert("Id " + data);
+				$.alert("Id " + data);
 				if (data != "NotFound") {
 					location.href = "admin.php";
 				} else alert("Not Found");

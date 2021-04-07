@@ -23,7 +23,7 @@ require('../../php_function.php');
 					<a class="list-group-item list-group-item-action sub" id="list-sub-list" data-toggle="list" href="#list-sub" role="tab" aria-controls="sub"> Courses/Subjects </a>
 					<a class="list-group-item list-group-item-action co" id="list-co-list" data-toggle="list" href="#list-co" role="tab" aria-controls="co"> Course Outcome </a>
 				</div>
-				<div class="bg-danger text-white text-center py-1 mt-2">Select Batch</div>
+				<div class="bg-one text-white text-center py-1 mt-2">Select Batch</div>
 				<?php
 				$sql = "select * from batch where batch_status='0' order by batch desc";
 				selectList($conn, 'Sel Batch', array('0', 'batch_id', 'batch', '', 'sel_batch'), $sql);
@@ -51,10 +51,17 @@ require('../../php_function.php');
 						</div>
 					</div>
 					<div class="tab-pane fade" id="list-sub" role="tabpanel" aria-labelledby="list-sub-list">
-						<div class="row">
-							<button class="btn btn-secondary btn-sm mt-1 addSubject">New Subject</button>
-							<button class="btn btn-sm btn-warning mt-1 copySubject">Copy Subject</button>
+					<div class="row">
+							<div class="col-sm-8 p-0">
+								<button class="btn btn-sm btn-secondary addSubject">New Subject</button>
+								<button class="btn btn-sm btn-warning copySubject">Copy Subject</button>
+								<a href="#" class="uploadSubject"><i class="fa fa-upload"></i></a>
+							</div>
+							<div class="col-sm-4">
+								<div><h5>Semester Wise Subject Summary</h5></div>
+							</div>
 						</div>
+
 						<div class="row">
 							<div class="col-sm-8">
 								<div id="subShowList"></div>
@@ -399,7 +406,7 @@ require('../../php_function.php');
 			}, "text").fail(function() {
 				$.alert("Error in BatchSession Function");
 			})
-			
+
 		});
 		$(document).on('click', '.subject_idR', function() {
 			var id = $(this).attr("data-id");
@@ -413,7 +420,7 @@ require('../../php_function.php');
 			}, "text").fail(function() {
 				$.alert("Error in BatchSession Function");
 			})
-			
+
 		});
 		$(document).on('click', '.subject_idE', function() {
 			var id = $(this).attr("data-id");
@@ -661,6 +668,43 @@ require('../../php_function.php');
 			if (fmt == "dmY") return date;
 			else return dateYmd;
 		}
+
+		$(document).on('click', '.uploadSubject', function() {
+			//$.alert("Session From");
+			var program = $(this).attr("data-program");
+			var batch = $(this).attr("data-batch");
+			$('#modal_title').text('Upload Subject');
+			$('#program').val(program);
+			$('#batch').val(batch);
+			$('#button_action').show().val('Update Subject');
+			$('#action').val('uploadSubject');
+			$('#formModal').modal('show');
+		});
+
+		$(document).on('submit', '#upload_csv', function(event) {
+			event.preventDefault();
+			var formData = $(this).serialize();
+			$('#subjectList').hide();
+			$.alert(formData);
+			// action and test_id are passed as hidden
+			$.ajax({
+				url: "uploadSubjectSql.php",
+				method: "POST",
+				data: new FormData(this),
+				contentType: false, // The content type used when sending data to the server.  
+				cache: false, // To unable request pages to be cached  
+				processData: false, // To send DOMDocument or non processed data file it is set to false  
+				success: function(data) {
+					//alert("List "+data);
+					$("#subjectList").hide();
+					$('#uploaded_data').html(data);
+					var y = $("#batch").val();
+					var z = $("#specialization_name").val();
+
+					subjectList(x, y, z);
+				}
+			})
+		});
 
 	});
 </script>
@@ -969,5 +1013,38 @@ require('../../php_function.php');
 		</form>
 	</div> <!-- Modal Dialog Closed-->
 </div> <!-- Modal Closed-->
+
+<div class="modal" id="formModal">
+	<div class="modal-dialog modal-md">
+		<form id="upload_csv">
+			<div class="modal-content">
+
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title" id="modal_title"></h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div> <!-- Modal Header Closed-->
+
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="form-group">
+						<div class="row">
+							<input type="file" name="csv_upload" />
+						</div>
+					</div>
+				</div> <!-- Modal Body Closed-->
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<input type="hidden" name="program_id" id="program_id" />
+					<input type="hidden" name="batch_id" id="batch_id" />
+					<input type="hidden" name="inst_id" id="inst_id" />
+					<input type="hidden" name="action" id="action" />
+					<input type="submit" name="button_action" id="button_action" class="btn btn-success btn-sm" />
+					<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+				</div> <!-- Modal Footer Closed-->
+			</div> <!-- Modal Conent Closed-->
+		</form>
+	</div> <!-- Modal Dialog Closed-->
+</div> 
 
 </html>

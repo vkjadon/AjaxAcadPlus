@@ -4,8 +4,11 @@
 .grey-bg {
   background-color: #fbfdff;
 }
-.bg-one {
-  background-color: #f0ded14b;
+.bg-two {
+  background-color: #ced8e7;
+}
+.bg-one{
+  background-color: #699bcafd;
 }
 
 /* Div css */
@@ -183,6 +186,11 @@ div.minWidth100{
   padding: 2px 8px;
   margin: 0px;
   font-size: 12px;
+  border-radius: 0px;
+}
+
+.btn-square {
+  margin: 0px;
   border-radius: 0px;
 }
 

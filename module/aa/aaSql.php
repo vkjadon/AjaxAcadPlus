@@ -91,35 +91,32 @@ if (isset($_POST['action'])) {
       $sno = $array["data"][$i]["subject_sno"];
       $type = $array["data"][$i]["subject_type"];
       $status = $array["data"][$i]["subject_status"];
-      echo '<div class="row">';
-      echo '<div class="col-sm-3 mb-1 bg-one cardBodyText">';
-      echo 'ID : ' . $subject_id.' <b>['.$sno.']</b>';
-      echo '<a href="#" class="float-right subject_idE" data-id="' . $subject_id . '"><i class="fa fa-edit"></i></a>';
-      echo '<div>SubCode : <b>' . $array["data"][$i]["subject_code"] . '</b>
-      <span class="float-right footerNote">' . $type . '</span></div>';
+      
+      echo '<div class="row border border-primary mb-2 cardBodyText">';
+        echo '<div class="col-sm-3 mb-0 bg-two">';
+          echo 'ID : ' . $subject_id.' <b>['.$sno.']</b>';
+          echo '<a href="#" class="float-right subject_idE" data-id="' . $subject_id . '"><i class="fa fa-edit"></i></a>';
+          echo '<div>SubCode : <b>' . $array["data"][$i]["subject_code"] . '</b>
+          <span class="float-right footerNote">' . $type . '</span></div>';
+        echo '</div>';
+      
+        echo '<div class="col-sm-7">';
+          echo '<div class="cardBodyText"><b>' . $array["data"][$i]["subject_name"] . '</b></div>';
+          echo '<div class="cardBodyText">Semester : ' . $array["data"][$i]["subject_semester"];
+          echo ' <b>Credit : ' . $Cr . '</b>';
+          echo '</div>';
+        echo '</div>';
+        
+        echo '<div class="col-sm-1">';
+          echo 'L-T-P<br>' . $L . '-' . $T . '-' . $P;
+        echo '</div>';
+      
+        echo '<div class="col-sm-1">';
+          if($status=="9")echo '<a href="#" class="float-right subject_idR" data-id="' . $subject_id . '">Removed</a>';
+          else echo '<a href="#" class="float-right subject_idD" data-id="' . $subject_id . '"><i class="fa fa-trash"></i></a>';
+        echo '</div>';
       echo '</div>';
-      echo '<div class="col-sm-9 pl-0">';
-      echo '<div class="card m-0 mb-1 p-0 card-square">';
-      echo '<div class="card-body p-2">';
-      echo '<div class="row">';
-      echo '<div class="col-sm-8">';
-      echo '<div class="cardBodyText"><b>' . $array["data"][$i]["subject_name"] . '</b></div>';
-      echo '<div class="cardBodyText">Semester : ' . $array["data"][$i]["subject_semester"];
-      echo ' <b>Credit : ' . $Cr . '</b>';
-      echo '</div>';
-      echo '</div>';
-      echo '<div class="col-sm-2">';
-      echo 'L-T-P<br>' . $L . '-' . $T . '-' . $P;
-      echo '</div>';
-      echo '<div class="col-sm-1">';
-      if($status=="9")echo '<a href="#" class="float-right subject_idR" data-id="' . $subject_id . '">Removed</a>';
-      else echo '<a href="#" class="float-right subject_idD" data-id="' . $subject_id . '"><i class="fa fa-trash"></i></a>';
-      echo '</div>';
-      echo '</div>';
-      echo '</div>';
-      echo '</div>';
-      echo '</div>';
-      echo '</div>';
+      
     }
   } elseif ($_POST["action"] == "subjectSummary") {
     //echo "MyId- $myId Prog $myProg";
