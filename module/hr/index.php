@@ -53,13 +53,6 @@ require('../../php_function.php');
    background-color: #29b6f6;
   }
 
-  .vertical {
-
-   border: none;
-   border-left: 1px solid hsla(200, 10%, 50%, 100);
-   height: 100vh;
-   width: 1px;
-  }
  </style>
 </head>
 
@@ -338,79 +331,71 @@ require('../../php_function.php');
            <div class="card-body">
             <form class="form-horizontal" id="staffServiceForm">
              <div class="row">
-              <div class=col-4>
-               <div class="row">
-                <div class="form-group">
-                 <div class="col">
-                  Select Department
-                  <?php
-                  $sql_department = "select * from department where dept_status='0'";
-                  $result = $conn->query($sql_department);
-                  if ($result) {
-                   echo '<select class="form-control form-control-sm" name="sel_dept" id="sel_dept" required>';
-                   echo '<option selected disabled>Select Department</option>';
-                   while ($rows = $result->fetch_assoc()) {
-                    $select_id = $rows['dept_id'];
-                    $select_name = $rows['dept_name'];
-                    echo '<option value="' . $select_id . '">' . $select_name . '</option>';
-                   }
-                   echo '</select>';
-                  } else echo $conn->error;
-                  if ($result->num_rows == 0) echo 'No Data Found';
-                  ?>
-                 </div>
-                </div>
-               </div>
-               <div class="row">
-                <div class="form-group">
-                 <div class="col">
-                  Select Designation
-                  <?php
-                  $sql_desigantion = "select * from designation where designation_status='0'";
-                  $result = $conn->query($sql_desigantion);
-                  if ($result) {
-                   echo '<select class="form-control form-control-sm" name="sel_desig" id="sel_desig" required>';
-                   echo '<option selected disabled>Select Designation</option>';
-                   while ($rows = $result->fetch_assoc()) {
-                    $select_id = $rows['designation_id'];
-                    $select_name = $rows['designation_name'];
-                    echo '<option value="' . $select_id . '">' . $select_name . '</option>';
-                   }
-                   echo '</select>';
-                  } else echo $conn->error;
-                  if ($result->num_rows == 0) echo 'No Data Found';
-                  ?>
-                 </div>
-                </div>
-               </div>
-               <div class="row">
-                <div class="col">
-                 <div class="form-group">
-                  With effect from
-                  <input type="date" class="form-control form-control-sm" id="sWef" name="sWef" placeholder="W.E.F" data-tag="ss_from">
-                 </div>
-                </div>
-               </div>
-               <div class="row">
-                <div class="col">
-                 <div class="form-group">
-                  Order Number
-                  <input type="text" class="form-control form-control-sm" id="sOrderNo" name="sOrderNo" placeholder="Order No." data-tag="ss_order">
-                 </div>
-                </div>
-               </div>
-               <div class="row">
-                <div class="col">
-                 <input type="hidden" id="action" name="action">
-                 <input type="hidden" id="stfIdService" name="stfIdService">
-                 <button type="submit" class="btn btn-primary btn-sm" id="submitServiceForm">Submit</button>
-                </div>
+              <div class="col-5">
+               <div class="form-group">
+                Select Department
+                <?php
+                $sql_department = "select * from department where dept_status='0'";
+                $result = $conn->query($sql_department);
+                if ($result) {
+                 echo '<select class="form-control form-control-sm" name="sel_dept" id="sel_dept" required>';
+                 echo '<option selected disabled>Select Department</option>';
+                 while ($rows = $result->fetch_assoc()) {
+                  $select_id = $rows['dept_id'];
+                  $select_name = $rows['dept_name'];
+                  echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+                 }
+                 echo '</select>';
+                } else echo $conn->error;
+                if ($result->num_rows == 0) echo 'No Data Found';
+                ?>
                </div>
               </div>
-              <div class="col-8"><br>
-               <p style="text-align:center" id="serviceShowList"></p>
+              <div class="col-7">
+               <div class="form-group">
+                Select Designation
+                <?php
+                $sql_desigantion = "select * from designation where designation_status='0'";
+                $result = $conn->query($sql_desigantion);
+                if ($result) {
+                 echo '<select class="form-control form-control-sm" name="sel_desig" id="sel_desig" required>';
+                 echo '<option selected disabled>Select Designation</option>';
+                 while ($rows = $result->fetch_assoc()) {
+                  $select_id = $rows['designation_id'];
+                  $select_name = $rows['designation_name'];
+                  echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+                 }
+                 echo '</select>';
+                } else echo $conn->error;
+                if ($result->num_rows == 0) echo 'No Data Found';
+                ?>
+               </div>
               </div>
              </div>
+             <div class="row">
+              <div class="col-5">
+               <div class="form-group">
+                With effect from
+                <input type="date" class="form-control form-control-sm" id="sWef" name="sWef" placeholder="W.E.F" data-tag="ss_from">
+               </div>
+              </div>
+              <div class="col-5">
+               <div class="form-group">
+                Order Number
+                <input type="text" class="form-control form-control-sm" id="sOrderNo" name="sOrderNo" placeholder="Order No." data-tag="ss_order">
+               </div>
+              </div>
+              &nbsp;
+              <div class="col-2">
+               <input type="hidden" id="action" name="action">
+               <input type="hidden" id="stfIdService" name="stfIdService">
+               <button type="submit" class="btn btn-primary btn-sm" id="submitServiceForm">Submit</button>
+              </div>
+             </div>
+             <!-- <div class="col-8"><br>
+               <p style="text-align:center" id="serviceShowList"></p>
+              </div> -->
+
             </form>
            </div>
           </div>

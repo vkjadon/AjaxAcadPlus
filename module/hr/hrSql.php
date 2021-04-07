@@ -205,7 +205,11 @@ if (isset($_POST['action'])) {
    $dept_id = $array["data"][$i]["dept_id"];
    $desig_id = $array["data"][$i]["designation_id"];
    $ss_order = $array["data"][$i]["ss_order"];
-   echo '<tr><td>'.$dept_id.'</td><td>'.$desig_id.'</td><td>'.$ss_from.'</td><td>'.$ss_order.'</td><td><i class="fa fa-trash deleteStaffService"></i></td></tr>';
+   $sql_desig = "select * from designation where designation_id='$desig_id'";
+			$value_desig = getFieldValue($conn, "designation_name", $sql_desig);
+   $sql_dept = "select * from department where dept_id='$dept_id'";
+			$value_dept = getFieldValue($conn, "dept_name", $sql_dept);
+   echo '<tr><td>'.$value_dept.'</td><td>'.$value_desig.'</td><td>'.$ss_from.'</td><td>'.$ss_order.'</td><td><i class="fa fa-trash deleteStaffService"></i></td></tr>';
 
   }
   echo '</table></table>';

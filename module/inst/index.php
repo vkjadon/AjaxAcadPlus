@@ -44,6 +44,10 @@ require('../../php_function.php');
   .collapsible-link[aria-expanded='true']::before {
    transform: rotate(180deg);
   }
+
+  .collapseAccordian {
+   background-color: #e1f5fe;
+  }
  </style>
 
 </head>
@@ -88,7 +92,7 @@ require('../../php_function.php');
              <div id="headingOne" class="card-header bg-white shadow-sm border-0">
               <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">Basic Information</a></h6>
              </div>
-             <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionInfoUni" class="collapse show">
+             <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionInfoUni" class="collapse collapseAccordian">
               <div class="card-body">
                <form class="text w-100 p-0" id="basicInfoForm">
                 <input type="hidden" id="instIdHidden" name="instIdHidden">
@@ -235,7 +239,7 @@ require('../../php_function.php');
              <div id="headingTwo" class="card-header bg-white shadow-sm border-0">
               <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" class="d-block position-relative collapsed text-dark text-uppercase collapsible-link py-2">Geographical Information</a></h6>
              </div>
-             <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionInfoUni" class="collapse">
+             <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionInfoUni" class="collapse collapseAccordian">
               <div class="card-body">
                <form class="text w-100 p-0" id="basicInfoForm">
                 <p>Location, Area and Activity of Campus</p>
@@ -361,7 +365,7 @@ require('../../php_function.php');
              <div id="headingOne" class="card-header bg-white shadow-sm border-0">
               <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">Basic Information</a></h6>
              </div>
-             <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionInfoSchool" class="collapse show">
+             <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionInfoSchool" class="collapse collapseAccordian">
               <div class="card-body">
                <form class="text w-100 p-0" id="basicInfoForm">
                 <input type="hidden" id="instIdHidden" name="instIdHidden">
@@ -508,7 +512,7 @@ require('../../php_function.php');
              <div id="headingTwo" class="card-header bg-white shadow-sm border-0">
               <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" class="d-block position-relative collapsed text-dark text-uppercase collapsible-link py-2">Geographical Information</a></h6>
              </div>
-             <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionInfoSchool" class="collapse">
+             <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionInfoSchool" class="collapse collapseAccordian">
               <div class="card-body">
 
               </div>
@@ -523,8 +527,10 @@ require('../../php_function.php');
      </div>
      <div class="tab-pane fade " id="list-mid" role="tabpanel" aria-labelledby="list-mid-list">
       <div class="row">
-       <div class="mt-1 mb-1"><button class="btn btn-secondary btn-sm mt-1 addDept">New</button>
-        <p id="deptShowList"></p>
+       <div class="col-4">
+        <div class="mt-1 mb-1"><button class="btn btn-secondary btn-sm mt-1 addDept">New</button>
+         <p id="deptShowList"></p>
+        </div>
        </div>
       </div>
      </div>
@@ -779,12 +785,12 @@ require('../../php_function.php');
    $.alert(" Disabled ");
   });
 
-  $(document).on('click', '.dept_idE', function() {
+  $(document).on('click', '.editDept', function() {
    $('.schoolForm').hide();
    $('.instForm').hide();
    $('.programForm').hide();
 
-   var id = $(this).attr('id');
+   var id = $(this).attr("data-dept");
    //$.alert("Id " + id);
 
    $.post("instSql.php", {
@@ -883,9 +889,6 @@ require('../../php_function.php');
     $('.programForm').show();
    }
   });
-
-
-
 
   function instList() {
    //$.alert("In List Function");
