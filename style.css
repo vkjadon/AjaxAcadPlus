@@ -186,6 +186,11 @@ div.minWidth100{
   border-radius: 0px;
 }
 
+.btn-square {
+  margin: 0px;
+  border-radius: 0px;
+}
+
 .card-square {
   padding: 2px 8px;
   margin: 0px;
