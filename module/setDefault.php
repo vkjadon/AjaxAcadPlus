@@ -1,4 +1,4 @@
-    <div class="bg-danger text-white text-center py-1 mt-2">Default Settings</div>
+    <div class="bg-one text-center py-1 mt-2">Default Settings</div>
     <?php
     if (isset($myScl)) {
         $name = getField($conn, $myScl, "school", "school_id", "school_abbri");

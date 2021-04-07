@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg fixed-top navbar-light bg-info">
+<nav class="navbar navbar-expand-lg fixed-top navbar-light bg-one">
 
 	<!-- Navbar brand -->
 	<a class="navbar-brand" href="<?php echo $codePath . '/module/'; ?>">ACADPLUS</a>
@@ -14,8 +14,8 @@
 		<ul class="navbar-nav mr-auto">
 			<!-- Dropdown -->
 			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administration</a>
-				<div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
+				<a class="nav-link dropdown-toggle text-white" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administration</a>
+				<div class="dropdown-menu dropdown-primary menuDouble bg-two" aria-labelledby="navbarDropdownMenuLink">
 					<div class="row">
 						<div class="col-6">
 							<a href="<?php echo $codePath . '/module/inst/'; ?>" class="dropdown-item">SetUp Institite</a>
