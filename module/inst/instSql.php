@@ -159,18 +159,37 @@ if (isset($_POST['action'])) {
   }
  } elseif ($_POST["action"] == "programList") {
   //    echo "MyId- $myId";
-  $tableId = 'program_id';
+  $sql = "SELECT * from program where program_status='0'";
+  $json = getTableRow($conn, $sql, array("program_id", "program_name", "program_abbri", "program_semester"));
+  $array = json_decode($json, true);
+  //echo count($array);
+  //echo count($array["data"]);
+  for ($i = 0; $i < count($array["data"]); $i++) {
+   $program_id = $array["data"][$i]["program_id"];
+   $program_name = $array["data"][$i]["program_name"];
+   $program_abbri = $array["data"][$i]["program_abbri"];
+   $program_semester = $array["data"][$i]["program_semester"];
 
-  //$dept_id=$_POST['deptId'];
+   echo '<div class="row border border-primary mb-2 cardBodyText">';
+   echo '<div class="col-sm-3 mb-0 bg-two">';
+   echo 'ID : ' . $program_id . '';
+   echo '<a href="#" class="float-right program_idE" data-id="' . $program_id . '"><i class="fa fa-edit"></i></a>';
+   echo '<div>Code : <b>' . $array["data"][$i]["program_abbri"] . '</b>
+          <span class="float-right footerNote"></span></div>';
+   echo '</div>';
 
-  $statusDecode = array("status" => "program_status", "0" => "Active", "1" => "Deleted");
-  $button = array("1", "1", "0", "0");
+   echo '<div class="col-sm-7">';
+   echo '<div class="cardBodyText"><b>' . $array["data"][$i]["program_name"] . '</b></div>';
+   echo '<div class="cardBodyText">Semester : ' . $array["data"][$i]["program_semester"];
+   echo ' <b>Credit : ' . $Cr . '</b>';
+   echo '</div>';
+   echo '</div>';
 
-  $fields = array("program_name", "program_abbri", "sp_name", "sp_abbri", "program_duration", "program_semester", "program_start", "program_seat", "program_code", "program_status");
-  $dataType = array("0", "0", "0", "0", "0", "0", "0", "0", "0", "0");
-  $header = array("Id", "Program Name", "Prg Abbri", "Sp Name", "Sp Abbri", "Duration (yrs)", "Semester", "Start Year", "Seats", " PrgCode", "Status");
-
-  $sql = "SELECT * from program where program_status='0' order by program_name";
-  getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
+   echo '<div class="col-sm-1">';
+   if ($status == "9") echo '<a href="#" class="float-right program_idR" data-id="' . $program_id . '">Removed</a>';
+   else echo '<a href="#" class="float-right program_idD" data-id="' . $program_id . '"><i class="fa fa-trash"></i></a>';
+   echo '</div>';
+   echo '</div>';
+  }
  }
 }
