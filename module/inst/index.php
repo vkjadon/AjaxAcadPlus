@@ -71,6 +71,7 @@ require('../../php_function.php');
      <a class="list-group-item list-group-item-action mid" id="list-mid-list" data-toggle="list" href="#list-mid" role="tab" aria-controls="mid"> Manage Department </a>
      <a class="list-group-item list-group-item-action mip" id="list-mip-list" data-toggle="list" href="#list-mip" role="tab" aria-controls="mip"> Manage Programme </a>
      <a class="list-group-item list-group-item-action bs" id="list-bs-list" data-toggle="list" href="#list-bs" role="tab" aria-controls="bs"> Batch/Session </a>
+     <a class="list-group-item list-group-item-action is" id="list-is-list" data-toggle="list" href="#list-is" role="tab" aria-controls="is"> Institute Structure </a>
     </div>
    </div>
 
@@ -536,10 +537,31 @@ require('../../php_function.php');
      </div>
      <div class="tab-pane fade " id="list-mip" role="tabpanel" aria-labelledby="list-mip-list">
       <div class="row">
-      <div class="col-8">
-       <div class="mt-1 mb-1"><button class="btn btn-secondary btn-sm mt-1 addProgram">New</button>
-        <p id="programShowList"></p>
+       <div class="col-8">
+        <div class="mt-1 mb-1"><button class="btn btn-secondary btn-sm mt-1 addProgram">New</button>
+         <p id="programShowList"></p>
+        </div>
        </div>
+      </div>
+     </div>
+     <div class="tab-pane fade " id="list-is" role="tabpanel" aria-labelledby="list-is-list">
+      <div class="row">
+       <div class="col-4">
+        <div class="card border-info mb-3">
+         <div class="card-header">
+          Attach Department to School
+         </div>
+         <div class="card-body text-primary">
+          <div class="input-group md-form form-sm form-2 pl-0">
+           <input name="staffSearch" id="staffSearch" class="form-control my-0 py-1 red-border" type="text" placeholder="Search Staff" aria-label="Search">
+           <div class="input-group-append">
+            <span class="input-group-text cyan lighten-3" id="basic-text1"><i class="fas fa-search text-grey" aria-hidden="true"></i></span>
+           </div>
+          </div>
+          <div class='list-group' id="staffAutoList"></div>
+         </div>
+        </div>
+        <p id="staffList"></p>
        </div>
       </div>
      </div>
