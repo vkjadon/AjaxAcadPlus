@@ -51,14 +51,16 @@ require('../../php_function.php');
 						</div>
 					</div>
 					<div class="tab-pane fade" id="list-sub" role="tabpanel" aria-labelledby="list-sub-list">
-					<div class="row">
+						<div class="row">
 							<div class="col-sm-8 p-0">
 								<button class="btn btn-sm btn-secondary addSubject">New Subject</button>
 								<button class="btn btn-sm btn-warning copySubject">Copy Subject</button>
 								<a href="#" class="uploadSubject"><i class="fa fa-upload"></i></a>
 							</div>
 							<div class="col-sm-4">
-								<div><h5>Semester Wise Subject Summary</h5></div>
+								<div>
+									<h5>Semester Wise Subject Summary</h5>
+								</div>
 							</div>
 						</div>
 
@@ -1045,6 +1047,6 @@ require('../../php_function.php');
 			</div> <!-- Modal Conent Closed-->
 		</form>
 	</div> <!-- Modal Dialog Closed-->
-</div> 
+</div>
 
 </html>

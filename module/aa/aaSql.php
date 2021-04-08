@@ -92,7 +92,7 @@ if (isset($_POST['action'])) {
       $type = $array["data"][$i]["subject_type"];
       $status = $array["data"][$i]["subject_status"];
       
-      echo '<div class="row border border-primary mb-2 cardBodyText">';
+      echo '<div class="row shadow border border-primary mb-1 cardBodyText">';
         echo '<div class="col-sm-3 mb-0 bg-two">';
           echo 'ID : ' . $subject_id.' <b>['.$sno.']</b>';
           echo '<a href="#" class="float-right subject_idE" data-id="' . $subject_id . '"><i class="fa fa-edit"></i></a>';
@@ -262,10 +262,9 @@ if (isset($_POST['action'])) {
     updateData($conn, 'program_outcome', $fields, $values, $dup, $dup_alert);
   } elseif ($_POST["action"] == "poList") {
     // echo "MyId- $myId";
-    $program_id = $_POST['programId'];
     $batch_id = $_POST['batchId'];
 
-    $sql = "select * from program_outcome where program_id='$program_id' and batch_id='$batch_id' order by po_sno, po_code";
+    $sql = "select * from program_outcome where program_id='$myProg' and batch_id='$batch_id' order by po_sno, po_code";
     $tableId = 'po_id';
 
     $statusDecode = array("status" => "po_status", "0" => "Active", "1" => "Removed");

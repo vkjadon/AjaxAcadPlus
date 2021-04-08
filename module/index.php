@@ -31,6 +31,7 @@ if (!isset($mySes)) {
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 	<link rel="stylesheet" href="../table.css">
 	<link rel="stylesheet" href="../style.css">
+	<script type="text/javascript" src="http://latex.codecogs.com/latexit.js"></script>
 </head>
 
 <body>
@@ -44,6 +45,11 @@ if (!isset($mySes)) {
 				//echo "Dept $myDept School $myScl Session $mySes";
 				?>
 			</div>
+			<div lang="latex">
+				\frac{1+sin(x)}{y}
+			</div>
+			<p>This equation <span lang="latex">\frac{1+sin(x)}{x^3}</span>
+appears on the same line at the text.</p>
 		</div>
 		<div class="navbar navbar-expand-md navbar-dark bg-dark fixed-bottom">
 			<div>
@@ -110,7 +116,7 @@ if (!isset($mySes)) {
 				schoolId: x,
 				action: "setSchool",
 			}, function(mydata, mystatus) {
-					//alert("- School Updated -" + mydata);
+				//alert("- School Updated -" + mydata);
 			}, "text").fail(function() {
 				$.alert("Error !!");
 			})

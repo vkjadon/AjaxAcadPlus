@@ -41,7 +41,7 @@ if (isset($_POST['action'])) {
 				<h5>Question Edit Panel</h5>
 
 				<textarea rows="4" class="testQuestionText testQuestionUpdate" data-qb="' . $id . '" id="uq" data-tag="qb_text">' . $qb_text . '</textarea>';
-			if (strlen($qb_image) > 5) echo '<img src="../../olat/img/' . $qb_image . '">';
+			if (strlen($qb_image) > 5) echo '<img src="img/' . $qb_image . '">';
 
 			echo '</div></div>';
 
@@ -81,7 +81,7 @@ if (isset($_POST['action'])) {
 				}
 
 				// Block for Check Points
-				$fileName = '../../olat/cp/cp-' . $id . '.php';
+				$fileName = 'cp/cp-' . $id . '.php';
 				if (!file_exists($fileName)) $cpKeyError = "True";
 				echo '<div class="row">
 					<div class="col-6 p-0"><h6 class="ml-0 mt-2 mb-0 p-0">Check Points</h6></div>
@@ -138,7 +138,7 @@ if (isset($_POST['action'])) {
 					echo '<div class="row"><div class="col-9"><div class="card">
       			<div class="card-body m-0 p-1">
 		  			<input type="text" class="form-control questionOption" data-qb="' . $id . '" data-code="' . $code . '" data-tag="qo_text" value="' . $qo_text . '">';
-					if (strlen($qo_image) > 5) echo '<img src="../../olat/img/' . $qo_image . '">';
+					if (strlen($qo_image) > 5) echo '<img src="img/' . $qo_image . '">';
 					echo '</div>';
 					echo '</div>';
 					echo '</div>';
@@ -267,7 +267,7 @@ if (isset($_POST['action'])) {
 				echo '</div>';
 				echo '<div class="col-9">
 				<span class="testQuestionText">' . $qb_text . '</span>';
-				if (strlen($qb_image) > 5) echo '<p><img src="../../olat/img/' . $qb_image . '"></p>';
+				if (strlen($qb_image) > 5) echo '<p><img src="img/' . $qb_image . '"></p>';
 				echo '</div>';
 				echo '<div class="col">';
 				if ($qb_status > 0) echo '<button class="btn btn-secondary btn-square-sm mt-0 activeQuestion" data-qb="' . $id . '">Set Active</button>';
@@ -317,7 +317,7 @@ if (isset($_POST['action'])) {
 					echo '<span class="testQuestionText">' . $portion[$ip] . '</span>';
 					if ($sno < $portion_count) echo $abp[$ip]; //to avoid last print (NULL)
 				}
-				if (strlen($qb_image) > 5) echo '<p><img src="../../olat/img/' . $qb_image . '"></p>';
+				if (strlen($qb_image) > 5) echo '<p><img src="img/' . $qb_image . '"></p>';
 				$solution = 'Y';
 				$fileName = '../../olat/cp/cp-' . $id . '.php';
 				if (!file_exists($fileName))echo '<span class="warning"><i class="fa fa-exclamation-triangle"> Key File Missing !! </i></soan>';
@@ -333,7 +333,7 @@ if (isset($_POST['action'])) {
 				<div class="col-1"><span>' . ($i + 1) . '[' . $id . ']</span></div>
 				<div class="col-10">
 				<span class="testQuestionText">' . $qb_text . '</span>';
-				if (strlen($qb_image) > 5) echo '<p><img src="../../olat/img/' . $qb_image . '"></p>';
+				if (strlen($qb_image) > 5) echo '<p><img src="img/' . $qb_image . '"></p>';
 				echo '</div>';
 				echo '<div class="col">';
 				echo '<button class="btn btn-secondary btn-square-sm mt-0 addQuestionToTest" data-qb="' . $id . '">Add to Test</button>';

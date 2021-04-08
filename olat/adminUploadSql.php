@@ -19,19 +19,19 @@ if(!empty($_FILES["upload_file"]["name"]))
   //echo "$newFile";
   if($uploadTag=="questionImage"){
     $newFile='question-'.$uploadId.'.'.$fileExtension;
-    $folder='../../olat/img';
+    $folder='img';
     $sql="update question_bank set qb_image='$newFile' where qb_id='$uploadId'";
     $conn->query($sql);
   }
   elseif($uploadTag=="optionImage"){
     $newFile='option-'.$uploadId.'-'.$uploadCode.'.'.$fileExtension;
-    $folder='../../olat/img';
+    $folder='img';
     $sql="update question_option set qo_image='$newFile' where qb_id='$uploadId' and qo_code='$uploadCode'";
     $conn->query($sql);
   }
   else {
     $newFile='cp-'.$uploadId.'.'.$fileExtension;
-    $folder='../../olat/cp';
+    $folder='cp';
   }
   if(in_array(strtolower($fileExtension), $allowed_ext))
   {
