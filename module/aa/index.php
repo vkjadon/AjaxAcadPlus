@@ -28,6 +28,13 @@ require('../../php_function.php');
 				$sql = "select * from batch where batch_status='0' order by batch desc";
 				selectList($conn, 'Sel Batch', array('0', 'batch_id', 'batch', '', 'sel_batch'), $sql);
 				?>
+				<div class="bg-one text-white text-center py-1 mt-2">Select Subject</div>
+				<?php
+				if(isset($myBatch)){
+					$sql = "select * from subject where subject_status='0' order by subject_name where program_id='$myProg' and batch_id='$myBatch'";
+					selectList($conn, 'Sel Subject', array('0', 'subject_id', 'subject', 'subject_code', 'sel_subject'), $sql);
+				}
+				?>
 			</div>
 			<div class="col-10">
 				<div class="tab-content" id="nav-tabContent">
@@ -45,7 +52,10 @@ require('../../php_function.php');
 					</div>
 					<div class="tab-pane fade show" id="list-po" role="tabpanel" aria-labelledby="list-po-list">
 						<div class="row">
-							<div class="mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addPo">Add</button>
+							<div class="col-sm-8">
+								<button class="btn btn-sm btn-secondary addPo">Add</button>
+								<a href="#" class="uploadPO"><i class="fa fa-upload"></i></a>
+
 								<p style="text-align:left" id="poShowList"></p>
 							</div>
 						</div>
@@ -75,7 +85,9 @@ require('../../php_function.php');
 					</div>
 					<div class="tab-pane fade show" id="list-co" role="tabpanel" aria-labelledby="list-co-list">
 						<div class="row">
-							<div class="mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addCo">Add</button>
+						<div class="col-sm-8">
+								<button class="btn btn-sm btn-secondary addCO">Add</button>
+								<a href="#" class="uploadPO"><i class="fa fa-upload"></i></a>
 								<p style="text-align:left" id="coShowList"></p>
 							</div>
 						</div>
@@ -158,9 +170,9 @@ require('../../php_function.php');
 					error_msg = "Batch is empty";
 				}
 			} else if (action == "addPo" || action == "uopdatePo") {
-				if (selProgram === "" || selBatch === "") {
+				if (selBatch === "") {
 					error = "YES";
-					error_msg = "Please Select Program and Batch to Proceed";
+					error_msg = "Please Select Batch to Proceed";
 				} else if (poc === "" || poS === "") {
 					error = "YES";
 					error_msg = "Enter PO Code and PO to Proceed !!";
@@ -546,7 +558,6 @@ require('../../php_function.php');
 				$.alert("Error in BatchSession Function");
 			})
 		}
-
 		function subjectList() {
 			var x = $("#sel_batch").val();
 			//$.alert(" Select a Batch X = " + x);
@@ -565,7 +576,6 @@ require('../../php_function.php');
 				subjectSummary();
 			}
 		}
-
 		function subjectSummary() {
 			var x = $("#sel_batch").val();
 			$.post("aaSql.php", {
@@ -578,7 +588,6 @@ require('../../php_function.php');
 				$.alert("Error !!");
 			})
 		}
-
 		function batchList() {
 			//$.alert("In List Function"+ x + y);
 			$.post("aaSql.php", {
@@ -591,7 +600,6 @@ require('../../php_function.php');
 				$.alert("Error !!");
 			})
 		}
-
 		function sessionList() {
 			var x = $("#sel_school").val();
 			var y = $("#sel_batch").val();
@@ -608,15 +616,12 @@ require('../../php_function.php');
 				$.alert("Error !!");
 			})
 		}
-
 		function poList() {
-			var x = $("#sel_program").val();
 			var y = $("#sel_batch").val();
-			//$.alert("In List Function" + x + y);
+			//$.alert("In List Function Batch " + y);
 
 			$.post("aaSql.php", {
 				action: "poList",
-				programId: x,
 				batchId: y
 			}, function(mydata, mystatus) {
 				$("#poShowList").show();
@@ -626,7 +631,6 @@ require('../../php_function.php');
 				$.alert("Error !!");
 			})
 		}
-
 		function coList() {
 			var x = $("#sel_subject").val();
 			// $.alert("In List Function" + x);
@@ -642,7 +646,6 @@ require('../../php_function.php');
 				$.alert("Error !!");
 			})
 		}
-
 		function programSelectList() {
 			var x = $("#sel_school").val();
 			var y = $("#sel_batch").val();
@@ -659,7 +662,6 @@ require('../../php_function.php');
 				$.alert("Error !!");
 			})
 		}
-
 		function getFormattedDate(ts, fmt) {
 			var a = new Date(ts);
 			var day = a.getDate();
@@ -670,7 +672,6 @@ require('../../php_function.php');
 			if (fmt == "dmY") return date;
 			else return dateYmd;
 		}
-
 		$(document).on('click', '.uploadSubject', function() {
 			//$.alert("Session From");
 			var program = $(this).attr("data-program");
@@ -682,7 +683,6 @@ require('../../php_function.php');
 			$('#action').val('uploadSubject');
 			$('#formModal').modal('show');
 		});
-
 		$(document).on('submit', '#upload_csv', function(event) {
 			event.preventDefault();
 			var formData = $(this).serialize();
@@ -707,7 +707,6 @@ require('../../php_function.php');
 				}
 			})
 		});
-
 	});
 </script>
 
@@ -1039,8 +1038,7 @@ require('../../php_function.php');
 				<div class="modal-footer">
 					<input type="hidden" name="program_id" id="program_id" />
 					<input type="hidden" name="batch_id" id="batch_id" />
-					<input type="hidden" name="inst_id" id="inst_id" />
-					<input type="hidden" name="action" id="action" />
+					<input type="hidden" name="action" id="actionUpload" />
 					<input type="submit" name="button_action" id="button_action" class="btn btn-success btn-sm" />
 					<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
 				</div> <!-- Modal Footer Closed-->

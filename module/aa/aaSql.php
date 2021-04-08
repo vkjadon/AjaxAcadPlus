@@ -100,14 +100,14 @@ if (isset($_POST['action'])) {
           <span class="float-right footerNote">' . $type . '</span></div>';
         echo '</div>';
       
-        echo '<div class="col-sm-7">';
+        echo '<div class="col-sm-6">';
           echo '<div class="cardBodyText"><b>' . $array["data"][$i]["subject_name"] . '</b></div>';
           echo '<div class="cardBodyText">Semester : ' . $array["data"][$i]["subject_semester"];
           echo ' <b>Credit : ' . $Cr . '</b>';
           echo '</div>';
         echo '</div>';
         
-        echo '<div class="col-sm-1">';
+        echo '<div class="col-sm-2">';
           echo 'L-T-P<br>' . $L . '-' . $T . '-' . $P;
         echo '</div>';
       
@@ -240,10 +240,9 @@ if (isset($_POST['action'])) {
     selectInput($conn, 'Select Program', 'program_id', 'program_name', 'program_abbri', 'sel_program', $sql);
   } elseif ($_POST["action"] == "addPo") {
     // echo "Add PO";
-    echo "Prg Id " . $_POST['programIdModal'];
-    echo "batchId " . $_POST['batchIdModal'];
+    //echo "batchId " . $_POST['batchIdModal'];
     $fields = ['program_id', 'batch_id', 'po_name', 'po_code', 'po_sno'];
-    $values = [$_POST['programIdModal'], $_POST['batchIdModal'], data_check($_POST['poStatement']), data_check($_POST['poCode']), data_check($_POST['poSno'])];
+    $values = [$myProg, $_POST['batchIdModal'], data_check($_POST['poStatement']), data_check($_POST['poCode']), data_check($_POST['poSno'])];
     $status = 'po_status';
     $dup = "select * from program_outcome where po_sno='" . data_check($_POST["poSno"]) . "' and program_id='" . $_POST["programIdModal"] . "'  and batch_id='" . $_POST["batchIdModal"] . "'and $status='0'";
     $dup_alert = "Serial Number Alreday Exists ! Please Check the Order!!";
@@ -263,18 +262,37 @@ if (isset($_POST['action'])) {
   } elseif ($_POST["action"] == "poList") {
     // echo "MyId- $myId";
     $batch_id = $_POST['batchId'];
-
     $sql = "select * from program_outcome where program_id='$myProg' and batch_id='$batch_id' order by po_sno, po_code";
-    $tableId = 'po_id';
+    $json = getTableRow($conn, $sql, array("po_id", "program_id", "batch_id", "po_code", "po_name", "po_sno", "po_status"));
+    $array = json_decode($json, true);
+    
+    for ($i = 0; $i < count($array["data"]); $i++) {
+      $po_id = $array["data"][$i]["po_id"];
+      $program_id = $array["data"][$i]["program_id"];
+      $batch_id = $array["data"][$i]["batch_id"];
+      $po_code = $array["data"][$i]["po_code"];
+      $po_sno = $array["data"][$i]["po_sno"];
+      $po_name = $array["data"][$i]["po_name"];
+      $status = $array["data"][$i]["po_status"];
+      
+      echo '<div class="row shadow border border-primary mb-1 cardBodyText">';
+        echo '<div class="col-sm-3 mb-0 bg-two">';
+          echo 'ID : ' . $po_id;
+          echo '<a href="#" class="float-right po_idE" data-id="' . $po_id . '"><i class="fa fa-edit"></i></a>';
+          echo '<div><b>' . $array["data"][$i]["po_code"] . $po_sno . '</b></div>';
+        echo '</div>';
+      
+        echo '<div class="col-sm-8">';
+          echo '<div class="cardBodyText"><b>' . $po_name . '</b></div>';
+        echo '</div>';
+              
+        echo '<div class="col-sm-1">';
+          if($status=="9")echo '<a href="#" class="float-right po_idR" data-id="' . $po_id . '">Removed</a>';
+          else echo '<a href="#" class="float-right po_idD" data-id="' . $po_id . '"><i class="fa fa-trash"></i></a>';
+        echo '</div>';
+      echo '</div>';
+    }
 
-    $statusDecode = array("status" => "po_status", "0" => "Active", "1" => "Removed");
-    $button = array("1", "1", "0", "0");
-
-    $fields = array("po_code", "po_sno", "po_name", "po_status");
-    $dataType = array("0", "0", "0", "0");
-    $header = array("Id", "PO", "#", "PO Statement", "Status");
-
-    getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
   } elseif ($_POST["action"] == "addCo") {
     //echo "Add Session ";
     $fields = ['subject_id', 'co_name', 'co_code', 'co_sno'];
@@ -303,14 +321,33 @@ if (isset($_POST['action'])) {
     if ($subject_id == "ALL") $sql = "select co.*, sb.subject_name from course_outcome co, subject sb where sb.subject_id=co.subject_id  and co.co_status='0' and sb.subject_status='0' order by co_sno, co_code";
     else $sql = "select  co.*, sb.subject_name  from course_outcome co, subject sb where sb.subject_id=co.subject_id and co.subject_id='$subject_id' and co.co_status='0' and sb.subject_status='0' order by co_sno, co_code";
     $tableId = 'co_id';
-
-    $statusDecode = array("status" => "co_status", "0" => "Active", "1" => "Removed");
-    $button = array("1", "1", "0", "0");
-
-    $fields = array("co_code", "co_sno", "co_name", "co_status");
-    $dataType = array("0", "0", "0", "0");
-    $header = array("Id", "CO", "#", "CO Statement", "Status");
-
-    getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
+    $json = getTableRow($conn, $sql, array("co_id", "subject_id", "co_code", "co_name", "co_sno", "co_status"));
+    $array = json_decode($json, true);
+    
+    for ($i = 0; $i < count($array["data"]); $i++) {
+      $co_id = $array["data"][$i]["po_id"];
+      $subject_id = $array["data"][$i]["subject_id"];
+      $co_code = $array["data"][$i]["co_code"];
+      $co_sno = $array["data"][$i]["co_sno"];
+      $co_name = $array["data"][$i]["co_name"];
+      $status = $array["data"][$i]["co_status"];
+      
+      echo '<div class="row shadow border border-primary mb-1 cardBodyText">';
+        echo '<div class="col-sm-3 mb-0 bg-two">';
+          echo 'ID : ' . $co_id;
+          echo '<a href="#" class="float-right co_idE" data-id="' . $co_id . '"><i class="fa fa-edit"></i></a>';
+          echo '<div><b>' . $co_code . $po_sno . '</b></div>';
+        echo '</div>';
+      
+        echo '<div class="col-sm-8">';
+          echo '<div class="cardBodyText"><b>' . $co_name . '</b></div>';
+        echo '</div>';
+              
+        echo '<div class="col-sm-1">';
+          if($status=="9")echo '<a href="#" class="float-right co_idR" data-id="' . $co_id . '">Removed</a>';
+          else echo '<a href="#" class="float-right co_idD" data-id="' . $co_id . '"><i class="fa fa-trash"></i></a>';
+        echo '</div>';
+      echo '</div>';
+    }
   }
 }

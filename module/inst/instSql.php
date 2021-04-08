@@ -169,6 +169,7 @@ if (isset($_POST['action'])) {
    $program_name = $array["data"][$i]["program_name"];
    $program_abbri = $array["data"][$i]["program_abbri"];
    $program_semester = $array["data"][$i]["program_semester"];
+   $Cr='';$status='';
 
    echo '<div class="row border border-primary mb-2 cardBodyText">';
    echo '<div class="col-sm-3 mb-0 bg-two">';
