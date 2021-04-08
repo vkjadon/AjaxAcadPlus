@@ -349,5 +349,8 @@ if (isset($_POST['action'])) {
         echo '</div>';
       echo '</div>';
     }
+  }elseif ($_POST["action"] == "selectSubject"){
+    $sql = "select * from subject where subject_status='0' and program_id='$myProg' and batch_id='".$_POST['batch_id']."' order by subject_semester, subject_name ";
+    selectList($conn, 'Sel Subject', array('0', 'subject_id', 'subject_name', 'subject_code', 'sel_subject'), $sql);
   }
 }
