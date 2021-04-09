@@ -45,7 +45,10 @@ require('../../php_function.php');
 					</div>
 					<div class="tab-pane fade show" id="list-po" role="tabpanel" aria-labelledby="list-po-list">
 						<div class="row">
-							<div class="mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addPo">Add</button>
+							<div class="col-sm-8">
+								<button class="btn btn-sm btn-secondary addPo">Add</button>
+								<a href="#" class="uploadPO"><i class="fa fa-upload"></i></a>
+
 								<p style="text-align:left" id="poShowList"></p>
 							</div>
 						</div>
@@ -75,8 +78,17 @@ require('../../php_function.php');
 					</div>
 					<div class="tab-pane fade show" id="list-co" role="tabpanel" aria-labelledby="list-co-list">
 						<div class="row">
-							<div class="mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addCo">Add</button>
-								<p style="text-align:left" id="coShowList"></p>
+							<div class="col-sm-1">
+								<button class="btn btn-sm btn-secondary addCO m-0">Add</button>
+							</div>
+							<div class="col-sm-8">
+								<span class="selectSubject"></span>
+							</div>
+							<div class="col-sm-2">
+								<a href="#" class="uploadPO"><i class="fa fa-upload"></i></a>
+							</div>
+							<div class="col-sm-12">
+								<span style="text-align:left" id="coShowList"></span>
 							</div>
 						</div>
 					</div>
@@ -106,6 +118,11 @@ require('../../php_function.php');
 			$("#hiddenProgram").val(program_id);
 			$("#hiddenBatchPO").val(batch_id);
 			poList();
+			selectSubject();
+		});
+
+		$(document).on("change", "#sel_subject", function() {
+			coList();
 		});
 
 		// Left Panel Block
@@ -119,7 +136,6 @@ require('../../php_function.php');
 		$(document).on('click', '.co', function() {
 			$('#action').val("addCo");
 			coList();
-
 		});
 		$(document).on('click', '.sub', function() {
 			subjectList();
@@ -158,9 +174,9 @@ require('../../php_function.php');
 					error_msg = "Batch is empty";
 				}
 			} else if (action == "addPo" || action == "uopdatePo") {
-				if (selProgram === "" || selBatch === "") {
+				if (selBatch === "") {
 					error = "YES";
-					error_msg = "Please Select Program and Batch to Proceed";
+					error_msg = "Please Select Batch to Proceed";
 				} else if (poc === "" || poS === "") {
 					error = "YES";
 					error_msg = "Enter PO Code and PO to Proceed !!";
@@ -203,9 +219,9 @@ require('../../php_function.php');
 		});
 
 		// Manage Course Outcome
-		$(document).on('click', '.addCo', function() {
+		$(document).on('click', '.addCO', function() {
 			x = $('#sel_subject').val();
-			// $.alert("x" + x);
+			//$.alert("x" + x);
 			$('#subjectIdModal').val(x);
 			$('#modal_title').text("Add Course Outcome");
 			$('#action').val("addCo");
@@ -610,18 +626,31 @@ require('../../php_function.php');
 		}
 
 		function poList() {
-			var x = $("#sel_program").val();
 			var y = $("#sel_batch").val();
-			//$.alert("In List Function" + x + y);
+			//$.alert("In List Function Batch " + y);
 
 			$.post("aaSql.php", {
 				action: "poList",
-				programId: x,
 				batchId: y
 			}, function(mydata, mystatus) {
 				$("#poShowList").show();
 				//$.alert("List " + mydata);
 				$("#poShowList").html(mydata);
+			}, "text").fail(function() {
+				$.alert("Error !!");
+			})
+		}
+
+		function selectSubject() {
+			var x = $("#sel_batch").val();
+			$.alert("Batch In SelSub Function" + x);
+			$.post("aaSql.php", {
+				batch_id: x,
+				action: "selectSubject"
+			}, function(mydata, mystatus) {
+				//$.alert("List " + mydata);
+				//$(".selectSubject").show();
+				$(".selectSubject").html(mydata);
 			}, "text").fail(function() {
 				$.alert("Error !!");
 			})
@@ -670,19 +699,16 @@ require('../../php_function.php');
 			if (fmt == "dmY") return date;
 			else return dateYmd;
 		}
-
 		$(document).on('click', '.uploadSubject', function() {
 			//$.alert("Session From");
-			var program = $(this).attr("data-program");
-			var batch = $(this).attr("data-batch");
+			//var batch = $(this).attr("data-batch");
 			$('#modal_title').text('Upload Subject');
-			$('#program').val(program);
-			$('#batch').val(batch);
+			//$('#program').val(program);
+			//$('#batch').val(batch);
 			$('#button_action').show().val('Update Subject');
 			$('#action').val('uploadSubject');
 			$('#formModal').modal('show');
 		});
-
 		$(document).on('submit', '#upload_csv', function(event) {
 			event.preventDefault();
 			var formData = $(this).serialize();
@@ -697,17 +723,14 @@ require('../../php_function.php');
 				cache: false, // To unable request pages to be cached  
 				processData: false, // To send DOMDocument or non processed data file it is set to false  
 				success: function(data) {
-					//alert("List "+data);
-					$("#subjectList").hide();
+					alert("List "+data);
+					//$("#subjectList").hide();
 					$('#uploaded_data').html(data);
-					var y = $("#batch").val();
-					var z = $("#specialization_name").val();
 
-					subjectList(x, y, z);
+					//subjectList(x, y, z);
 				}
 			})
 		});
-
 	});
 </script>
 
@@ -1037,10 +1060,6 @@ require('../../php_function.php');
 				</div> <!-- Modal Body Closed-->
 				<!-- Modal footer -->
 				<div class="modal-footer">
-					<input type="hidden" name="program_id" id="program_id" />
-					<input type="hidden" name="batch_id" id="batch_id" />
-					<input type="hidden" name="inst_id" id="inst_id" />
-					<input type="hidden" name="action" id="action" />
 					<input type="submit" name="button_action" id="button_action" class="btn btn-success btn-sm" />
 					<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
 				</div> <!-- Modal Footer Closed-->
