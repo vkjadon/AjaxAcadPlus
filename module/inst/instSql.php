@@ -4,8 +4,20 @@ include('../../config_database.php');
 include('../../config_variable.php');
 include('../../php_function.php');
 //echo $_POST['action'];
+if (isset($_POST['actionDeptProgram'])) {
+ $deptId = $_POST['deptIdHidden2'];
+ $programId = $_POST['programIdHidden'];
+ echo "$deptId,$schoolId";
+ if (!$_POST['sel_deptProgram'] == NULL && !$_POST['sel_program'] == NULL) {
+  $sql = "insert into dept_program (dept_id, program_id) values('$deptId', '$programId')";
+  $result = $conn->query($sql);
+  if ($result) echo "Added Successfully";
+  else {
+   $error = $conn->errno;
+  }
+ } else echo "No Field should be Blank";
+}
 if (isset($_POST['action'])) {
-
  if ($_POST['action'] == 'addInst') {
   //echo "MyId- $myId";
   $fields = ['inst_name', 'inst_abbri', 'inst_url', 'inst_doi', 'submit_id'];
@@ -191,5 +203,63 @@ if (isset($_POST['action'])) {
    echo '</div>';
    echo '</div>';
   }
+ } elseif ($_POST["action"] == "attachSchoolDept") {
+  $deptId = $_POST['deptIdHidden'];
+  $schoolId = $_POST['schoolIdHidden'];
+  echo "$deptId,$schoolId";
+  if (!$_POST['sel_dept'] == NULL && !$_POST['sel_school'] == NULL) {
+   $sql = "insert into school_dept (school_id, dept_id) values('$schoolId', '$deptId')";
+   $result = $conn->query($sql);
+   if ($result) echo "Added Successfully";
+   else {
+    $error = $conn->errno;
+   }
+  } else echo "No Field should be Blank";
+ } elseif ($_POST["action"] == "deptSchoolList") {
+  $sql = "SELECT * from school_dept";
+  $json = getTableRow($conn, $sql, array("school_id", "dept_id"));
+  $array = json_decode($json, true);
+  //echo count($array);
+  //echo count($array["data"]);
+  echo '<table class="list-table-xs">
+   <thead align="center">
+   <table class="list-table-xs">
+   <thead align="center"><th>School</th><th>Department</th>
+   <th><i class="fa fa-trash"></i></th>
+   </thead>';
+  for ($i = 0; $i < count($array["data"]); $i++) {
+   $school_id = $array["data"][$i]["school_id"];
+   $dept_id = $array["data"][$i]["dept_id"];
+   $sql_school = "select * from school where school_id='$school_id'";
+			$value_school = getFieldValue($conn, "school_name", $sql_school);
+   $sql_dept = "select * from department where dept_id='$dept_id'";
+			$value_dept = getFieldValue($conn, "dept_name", $sql_dept);
+
+   echo '<tr><td>'.$value_school.'</td><td>'.$value_dept.'</td><td><i class="fa fa-trash deleteSchoolDept"></i></td></tr>';
+  }
+  echo '</table></table>';
+ } elseif ($_POST["action"] == "deptProgramList") {
+  $sql = "SELECT * from dept_program";
+  $json = getTableRow($conn, $sql, array("dept_id", "program_id"));
+  $array = json_decode($json, true);
+  //echo count($array);
+  //echo count($array["data"]);
+  echo '<table class="list-table-xs">
+   <thead align="center">
+   <table class="list-table-xs">
+   <thead align="center"><th>Department</th><th>Program</th>
+   <th><i class="fa fa-trash"></i></th>
+   </thead>';
+  for ($i = 0; $i < count($array["data"]); $i++) {
+   $program_id = $array["data"][$i]["program_id"];
+   $dept_id = $array["data"][$i]["dept_id"];
+   $sql_program = "select * from program where program_id='$program_id'";
+			$value_school = getFieldValue($conn, "program_name", $sql_program);
+   $sql_dept = "select * from department where dept_id='$dept_id'";
+			$value_dept = getFieldValue($conn, "dept_name", $sql_dept);
+
+   echo '<tr><td>'.$value_dept.'</td><td>'.$value_school.'</td><td><i class="fa fa-trash deleteSchoolDept"></i></td></tr>';
+  }
+  echo '</table></table>';
  }
 }

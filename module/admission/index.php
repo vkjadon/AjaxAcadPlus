@@ -62,7 +62,7 @@ require('../../php_function.php');
    <div class="col-2">
     <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
      <a class="list-group-item list-group-item-action active as" id="list-as-list" data-toggle="list" href="#list-as" role="tab" aria-controls="as"> Add Student </a>
-     <a class="list-group-item list-group-item-action sq" id="list-sq-list" data-toggle="list" href="#list-sq" role="tab" aria-controls="sq"> Student Qualification </a>
+     <a class="list-group-item list-group-item-action us" id="list-us-list" data-toggle="list" href="#list-us" role="tab" aria-controls="us">Upload Student </a>
     </div>
    </div>
    <div class="col-10">
@@ -73,7 +73,6 @@ require('../../php_function.php');
         <div class="card border-info mb-3">
          <div class="card-header">
           Select Batch and Programme
-          <button class="btn btn-info btn-sm mt-1 addStudent">Add</button>
          </div>
          <div class="card-body text-primary">
           <form>
@@ -96,13 +95,21 @@ require('../../php_function.php');
             </div>
            </div>
           </form>
-          <div class="input-group md-form form-sm form-2 pl-0">
+          <div class="input-group md-form form-sm form-2 mt-1">
            <input name="studentSearch" id="studentSearch" class="form-control my-0 py-1 red-border" type="text" placeholder="Search Student" aria-label="Search">
            <div class="input-group-append">
             <span class="input-group-text cyan lighten-3" id="basic-text1"><i class="fas fa-search text-grey" aria-hidden="true"></i></span>
            </div>
           </div>
           <div class='list-group' id="studentAutoList"></div>
+          <div class="row">
+           <div class="col-sm-6">
+            <button class="btn btn-secondary btn-sm m-0 addStudent">New Student</button>
+           </div>
+           <div class="col-sm-6">
+            <button class="btn btn-primary btn-sm m-0 uploadStudent">Upload Student</button>
+           </div>
+          </div>
          </div>
         </div>
        </div>
@@ -163,7 +170,6 @@ require('../../php_function.php');
         </div>
        </div>
       </div>
-
       <div class="row">
        <div class="col-4 mt-1 mb-1">
         <p id="studentShowList"></p>
@@ -176,7 +182,7 @@ require('../../php_function.php');
           </div>
           <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionStudent" class="collapse collapseAccordian">
            <div class="card-body">
-            <form class="form-horizontal" id="modalForm">
+            <form class="form-horizontal">
              <input type="hidden" id="studentIdHidden" name="studentIdHidden">
              <div class="row">
               <div class="col-12">
@@ -185,19 +191,19 @@ require('../../php_function.php');
                  <div class="col-4">
                   <div class="form-group">
                    Student Name
-                   <input type="text" class="form-control form-control-sm sForm" id="sName" name="sName" placeholder="Name of the Student" data-tag="student_name">
+                   <input type="text" class="form-control form-control-sm sForm" id="sNameA" name="sNameA" placeholder="Name of the Student" data-tag="student_name">
                   </div>
                  </div>
                  <div class="col-4">
                   <div class="form-group">
                    Student Roll Number
-                   <input type="text" class="form-control form-control-sm sForm" id="sRno" name="sRno" placeholder="Roll Number of the Student" data-tag="student_rollno">
+                   <input type="text" class="form-control form-control-sm sForm" id="sRnoA" name="sRnoA" placeholder="Roll Number of the Student" data-tag="student_rollno">
                   </div>
                  </div>
                  <div class="col-4">
                   <div class="form-group">
                    Mobile Number
-                   <input type="text" class="form-control form-control-sm sForm" id="sMobile" name="sMobile" placeholder="Mobile Number of the Student" data-tag="student_mobile">
+                   <input type="text" class="form-control form-control-sm sForm" id="sMobileA" name="sMobileA" placeholder="Mobile Number of the Student" data-tag="student_mobile">
                   </div>
                  </div>
                 </div>
@@ -205,13 +211,13 @@ require('../../php_function.php');
                  <div class="col-6">
                   <div class="form-group">
                    Email
-                   <input type="text" class="form-control form-control-sm sForm" id="sEmail" name="sEmail" placeholder="Email ID of the Student" data-tag="student_email">
+                   <input type="text" class="form-control form-control-sm sForm" id="sEmailA" name="sEmailA" placeholder="Email ID of the Student" data-tag="student_email">
                   </div>
                  </div>
                  <div class="col-6">
                   <div class="form-group">
                    Date of Birth
-                   <input type="date" class="form-control form-control-sm sDetailForm" id="sDob" name="sDob" placeholder="Date of Birth" data-tag="sd_dob">
+                   <input type="date" class="form-control form-control-sm sDetailForm" id="sDobA" name="sDobA" placeholder="Date of Birth" data-tag="sd_dob">
                   </div>
                  </div>
                 </div>
@@ -403,6 +409,9 @@ require('../../php_function.php');
       </div>
 
      </div>
+     <div class="tab-pane show active" id="list-us" role="tabpanel" aria-labelledby="list-us-list">
+
+     </div>
     </div>
    </div>
   </div>
@@ -422,6 +431,9 @@ require('../../php_function.php');
   if (y > 0 && z > 0) studentList(y, z);
   $('#programIdModal').val(z);
   $('#batchIdModal').val(y);
+  $('#program_id').val(z);
+  $('#batch_id').val(y);
+
   $('#list-as').show();
   $('#list-sq').hide();
   $('.studentProfile').hide();
@@ -534,6 +546,31 @@ require('../../php_function.php');
    $(".studentQualificationForm").hide();
   });
 
+  $(document).on('click', '.uploadStudent', function() {
+   $('#modal_uploadTitle').text("Upload Student");
+   $('#formModal').modal('show');
+  });
+
+  $(document).on('submit', '#upload_csv', function(event) {
+   event.preventDefault();
+   var formData = $(this).serialize();
+
+   $.alert(formData);
+   // action and test_id are passed as hidden
+   $.ajax({
+    url: "uploadStudentSql.php",
+    method: "POST",
+    data: new FormData(this),
+    contentType: false, // The content type used when sending data to the server.
+    cache: false, // To unable request pages to be cached
+    processData: false, // To send DOMDocument or non processed data file it is set to false
+    success: function(data) {
+     $.alert(data);
+     $('#formModal').modal('hide');
+    }
+   })
+  });
+
   $(document).on('click', '.editStudent', function() {
    $('.studentProfile').show();
    $('#accordionStudent').show();
@@ -549,11 +586,11 @@ require('../../php_function.php');
     $(".student_name").text(data.student_name);
     $(".student_rollno").text(data.student_rollno);
     $(".student_mobile").text(data.student_mobile);
-    $("#sEmail").val(data.student_email);
-    $("#sName").val(data.student_name);
-    $("#sRno").val(data.student_rollno);
-    $("#sMobile").val(data.student_mobile);
-    $("#sDob").val(data.student_dob);
+    $("#sEmailA").val(data.student_email);
+    $("#sNameA").val(data.student_name);
+    $("#sRnoA").val(data.student_rollno);
+    $("#sMobileA").val(data.student_mobile);
+    $("#sDobA").val(data.student_dob);
     $("#fName").val(data.student_fname);
     $("#mName").val(data.student_mname);
     $("#sAdhaar").val(data.student_adhaar);
@@ -795,6 +832,10 @@ require('../../php_function.php');
   $(document).on('change', '#sel_batch, #sel_program', function() {
    var y = $("#sel_batch").val();
    var z = $("#sel_program").val();
+   $('#programIdModal').val(z);
+   $('#batchIdModal').val(y);
+   $('#program_id').val(z);
+   $('#batch_id').val(y);
    studentList(y, z);
   });
 
@@ -890,7 +931,7 @@ require('../../php_function.php');
 <div class="modal" id="firstModal">
  <div class="modal-dialog modal-md">
   <form class="form-horizontal" id="modalForm">
-   <div class="modal-content bg-secondary text-white">
+   <div class="modal-content">
 
     <!-- Modal Header -->
     <div class="modal-header">
@@ -930,73 +971,7 @@ require('../../php_function.php');
        </div>
       </div>
      </div>
-     <div class="studentQualificationForm">
-      <div class="row">
-       <div class="col-6">
-        <div class="form-group">
-         Qualification
-         <div class="row">
-          <div class="col">
-           <?php
-           $sql_qualification = "select * from qualification";
-           $result = $conn->query($sql_qualification);
-           if ($result) {
-            echo '<select class="form-control form-control-sm" name="sel_qual" id="sel_qual" required>';
-            while ($rows = $result->fetch_assoc()) {
-             $select_id = $rows['qualification_id'];
-             $select_name = $rows['qualification_name'];
-             echo '<option value="' . $select_id . '">' . $select_name . '</option>';
-            }
-            echo '</select>';
-           } else echo $conn->error;
-           if ($result->num_rows == 0) echo 'No Data Found';
-           ?>
-          </div>
-         </div>
-        </div>
-       </div>
-       <div class="col-6">
-        <div class="form-group">
-         Institute
-         <input type="text" class="form-control form-control-sm" id="sInst" name="sInst" placeholder="Name of the Institute">
-        </div>
-       </div>
-      </div>
-      <div class="row">
-       <div class="col-6">
-        <div class="form-group">
-         Board
-         <input type="text" class="form-control form-control-sm" id="sBoard" name="sBoard" placeholder="Board">
-        </div>
-       </div>
-       <div class="col-6">
-        <div class="form-group">
-         Year of Passing
-         <input type="text" class="form-control form-control-sm" id="sYear" name="sYear" placeholder="Passing Year">
-        </div>
-       </div>
-      </div>
-      <div class="row">
-       <div class="col-4">
-        <div class="form-group">
-         Marks Obtained
-         <input type="text" class="form-control form-control-sm" id="sMarksObt" name="sMarksObt" placeholder="Marks Obtained">
-        </div>
-       </div>
-       <div class="col-4">
-        <div class="form-group">
-         Maximum Marks
-         <input type="text" class="form-control form-control-sm" id="sMaxMarks" name="sMaxMarks" placeholder="Maximum marks">
-        </div>
-       </div>
-       <div class="col-4">
-        <div class="form-group">
-         Percentage/CGPA
-         <input type="text" class="form-control form-control-sm" id="sCgpa" name="sCgpa" placeholder="Percentage/CGPA">
-        </div>
-       </div>
-      </div>
-     </div>
+
     </div> <!-- Modal Body Closed-->
     <!-- Modal footer -->
     <div class="modal-footer">
@@ -1005,12 +980,45 @@ require('../../php_function.php');
      <input type="hidden" id="programIdModal" name="programIdModal">
      <input type="hidden" id="batchIdModal" name="batchIdModal">
      <input type="hidden" id="stdIdModal" name="stdIdModal">
-     <button type="submit" class="btn btn-success btn-sm" id="submitModalForm">Submit</button>
-     <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
+     <button type="submit" class="btn btn-secondary" id="submitModalForm">Submit</button>
+     <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
     </div> <!-- Modal Footer Closed-->
    </div> <!-- Modal Conent Closed-->
   </form>
  </div> <!-- Modal Dialog Closed-->
 </div> <!-- Modal Closed-->
+
+<div class="modal" id="formModal">
+ <div class="modal-dialog modal-md">
+  <form id="upload_csv">
+   <div class="modal-content">
+
+    <!-- Modal Header -->
+    <div class="modal-header">
+     <h4 class="modal-title" id="modal_uploadTitle"></h4>
+     <button type="button" class="close" data-dismiss="modal">&times;</button>
+    </div> <!-- Modal Header Closed-->
+
+    <!-- Modal body -->
+    <div class="modal-body">
+     <div class="form-group">
+      <div class="row">
+       <div class="col-sm-6">
+        <input type="file" name="student_upload" />
+       </div>
+      </div>
+     </div>
+    </div> <!-- Modal Body Closed-->
+    <!-- Modal footer -->
+    <div class="modal-footer">
+     <input type="hidden" name="program_id" id="program_id" />
+     <input type="hidden" name="batch_id" id="batch_id" />
+     <input type="submit" name="button_action" id="button_action" class="btn btn-success btn-sm" />
+     <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+    </div> <!-- Modal Footer Closed-->
+   </div> <!-- Modal Conent Closed-->
+  </form>
+ </div> <!-- Modal Dialog Closed-->
+</div>
 
 </html>

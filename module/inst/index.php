@@ -546,22 +546,123 @@ require('../../php_function.php');
      </div>
      <div class="tab-pane fade " id="list-is" role="tabpanel" aria-labelledby="list-is-list">
       <div class="row">
-       <div class="col-4">
+       <div class="col-6">
         <div class="card border-info mb-3">
          <div class="card-header">
           Attach Department to School
          </div>
          <div class="card-body text-primary">
-          <div class="input-group md-form form-sm form-2 pl-0">
-           <input name="staffSearch" id="staffSearch" class="form-control my-0 py-1 red-border" type="text" placeholder="Search Staff" aria-label="Search">
-           <div class="input-group-append">
-            <span class="input-group-text cyan lighten-3" id="basic-text1"><i class="fas fa-search text-grey" aria-hidden="true"></i></span>
+          <form class="form-horizontal" id="schoolDeptForm">
+           <div class="row">
+            <div class="col-sm-6">
+             <?php
+             $sql_school = "select * from school where school_status='0'";
+             $result = $conn->query($sql_school);
+             if ($result) {
+              echo '<select class="form-control form-control-sm attachSchoolForm" name="sel_school" id="sel_school" data-tag="school_id" required>';
+              echo '<option selected disabled>Select School</option>';
+              while ($rows = $result->fetch_assoc()) {
+               $select_id = $rows['school_id'];
+               $select_name = $rows['school_name'];
+               echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+              }
+              echo '</select>';
+             } else echo $conn->error;
+             if ($result->num_rows == 0) echo 'No Data Found';
+             ?>
+            </div>
+            <div class="col-sm-6">
+             <div class="input-group">
+              <?php
+              $sql_department = "select * from department where dept_status='0'";
+              $result = $conn->query($sql_department);
+              if ($result) {
+               echo '<select class="form-control form-control-sm" name="sel_dept" id="sel_dept" required>';
+               echo '<option selected disabled>Select Department</option>';
+               while ($rows = $result->fetch_assoc()) {
+                $select_id = $rows['dept_id'];
+                $select_name = $rows['dept_name'];
+                echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+               }
+               echo '</select>';
+              } else echo $conn->error;
+              if ($result->num_rows == 0) echo 'No Data Found';
+              ?>
+              <div class="input-group-append">
+               <input type="hidden" id="action" name="action">
+               <input type="hidden" id="schoolIdHidden" name="schoolIdHidden">
+               <input type="hidden" id="deptIdHidden" name="deptIdHidden">
+               <button class="btn btn-primary btn-sm m-0" type="submit">Submit</button>
+              </div>
+             </div>
+            </div>
            </div>
-          </div>
-          <div class='list-group' id="staffAutoList"></div>
+          </form>
          </div>
         </div>
-        <p id="staffList"></p>
+       </div>
+       <div class="col-6">
+        <div class="card border-info mb-3">
+         <div class="card-header">
+          Attach Program to Department
+         </div>
+         <div class="card-body text-primary">
+          <form class="form-horizontal" id="deptProgramForm">
+           <div class="row">
+            <div class="col-sm-6">
+             <?php
+             $sql_department = "select * from department where dept_status='0'";
+             $result = $conn->query($sql_department);
+             if ($result) {
+              echo '<select class="form-control form-control-sm" name="sel_deptProgram" id="sel_deptProgram" required>';
+              echo '<option selected disabled>Select Department</option>';
+              while ($rows = $result->fetch_assoc()) {
+               $select_id = $rows['dept_id'];
+               $select_name = $rows['dept_name'];
+               echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+              }
+              echo '</select>';
+             } else echo $conn->error;
+             if ($result->num_rows == 0) echo 'No Data Found';
+             ?>
+            </div>
+            <div class="col-sm-6">
+             <div class="input-group">
+              <?php
+              $sql_program = "select * from program where program_status='0'";
+              $result = $conn->query($sql_program);
+              if ($result) {
+               echo '<select class="form-control form-control-sm" name="sel_program" id="sel_program" data-tag="program_id" required>';
+               echo '<option selected disabled>Select Program</option>';
+               while ($rows = $result->fetch_assoc()) {
+                $select_id = $rows['program_id'];
+                $select_name = $rows['program_name'];
+                echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+               }
+               echo '</select>';
+              } else echo $conn->error;
+              if ($result->num_rows == 0) echo 'No Data Found';
+              ?>
+              <div class="input-group-append">
+               <input type="hidden" id="actionDeptProgram" name="actionDeptProgram">
+               <input type="hidden" id="programIdHidden" name="programIdHidden">
+               <input type="hidden" id="deptIdHidden2" name="deptIdHidden2">
+               <button class="btn btn-primary btn-sm m-0" type="submit">Submit</button>
+              </div>
+             </div>
+            </div>
+           </div>
+          </form>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="row">
+       <div class="col-sm-6">
+       <p id="schoolDeptShowList" style="text-align:center"></p>
+       </div>
+       <div class="col-sm-6">
+       <p id="deptProgramShowList" style="text-align:center"></p>
        </div>
       </div>
      </div>
@@ -616,6 +717,11 @@ require('../../php_function.php');
    $('.nonTeaching').hide();
    $('.selectDept').show();
   });
+  $(document).on('click', '.is', function() {
+   deptSchoolList();
+   deptProgramList();
+
+  });
 
   $(document).on('change', '#school_name', function() {
    // $.alert("Changes");
@@ -627,6 +733,38 @@ require('../../php_function.php');
    //x=$('form input[type=radio]:checked').val();
    //$.alert("Changes " + x);
    deptList();
+  });
+
+  $(document).on('submit', '#schoolDeptForm', function() {
+   event.preventDefault(this);
+   var deptId = $("#sel_dept").val()
+   var schoolId = $("#sel_school").val()
+   $('#schoolIdHidden').val(schoolId)
+   $('#deptIdHidden').val(deptId)
+   $("#action").val("attachSchoolDept")
+   var formData = $(this).serialize();
+   // $.alert("Form Submitted " + formData)
+   $.post("instSql.php", formData, function() {}, "text").done(function(data, success) {
+    // $.alert(data)
+    $('#schoolDeptForm')[0].reset();
+   })
+   deptSchoolList();
+  });
+
+  $(document).on('submit', '#deptProgramForm', function() {
+   event.preventDefault(this);
+   var deptId = $("#sel_deptProgram").val()
+   var programId = $("#sel_program").val()
+   $('#programIdHidden').val(programId)
+   $('#deptIdHidden2').val(deptId)
+   $("#actionDeptProgram").val("attachDeptProgram")
+   var formData = $(this).serialize();
+   // $.alert("Form Submitted " + formData)
+   $.post("instSql.php", formData, function() {}, "text").done(function(data, success) {
+    // $.alert(data)
+    $('#deptProgramForm')[0].reset();
+   })
+   deptProgramList()
   });
 
   $(document).on('submit', '#modalForm', function(event) {
@@ -969,6 +1107,40 @@ require('../../php_function.php');
     $("#programShowList").show();
     //$.alert("List " + mydata);
     $("#programShowList").html(mydata);
+   }, "text").fail(function() {
+    $.alert("Error !!");
+   })
+  }
+
+  function deptSchoolList() {
+   //$.alert("In List Function");
+   var x = $("#sel_dept").val();
+   var y = $("#sel_school").val();
+   $.post("instSql.php", {
+    action: "deptSchoolList",
+    deptId: x,
+    schoolId: y
+   }, function(mydata, mystatus) {
+    $("#schoolDeptShowList").show();
+    //$.alert("List " + mydata);
+    $("#schoolDeptShowList").html(mydata);
+   }, "text").fail(function() {
+    $.alert("Error !!");
+   })
+  }
+
+  function deptProgramList() {
+   //$.alert("In List Function");
+   var x = $("#sel_deptProgram").val();
+   var y = $("#sel_program").val();
+   $.post("instSql.php", {
+    action: "deptProgramList",
+    deptId: x,
+    programId: y
+   }, function(mydata, mystatus) {
+    $("#deptProgramShowList").show();
+    //$.alert("List " + mydata);
+    $("#deptProgramShowList").html(mydata);
    }, "text").fail(function() {
     $.alert("Error !!");
    })
