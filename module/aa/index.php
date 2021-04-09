@@ -701,11 +701,10 @@ require('../../php_function.php');
 		}
 		$(document).on('click', '.uploadSubject', function() {
 			//$.alert("Session From");
-			var program = $(this).attr("data-program");
-			var batch = $(this).attr("data-batch");
+			//var batch = $(this).attr("data-batch");
 			$('#modal_title').text('Upload Subject');
-			$('#program').val(program);
-			$('#batch').val(batch);
+			//$('#program').val(program);
+			//$('#batch').val(batch);
 			$('#button_action').show().val('Update Subject');
 			$('#action').val('uploadSubject');
 			$('#formModal').modal('show');
@@ -724,13 +723,11 @@ require('../../php_function.php');
 				cache: false, // To unable request pages to be cached  
 				processData: false, // To send DOMDocument or non processed data file it is set to false  
 				success: function(data) {
-					//alert("List "+data);
-					$("#subjectList").hide();
+					alert("List "+data);
+					//$("#subjectList").hide();
 					$('#uploaded_data').html(data);
-					var y = $("#batch").val();
-					var z = $("#specialization_name").val();
 
-					subjectList(x, y, z);
+					//subjectList(x, y, z);
 				}
 			})
 		});
@@ -1063,9 +1060,6 @@ require('../../php_function.php');
 				</div> <!-- Modal Body Closed-->
 				<!-- Modal footer -->
 				<div class="modal-footer">
-					<input type="hidden" name="program_id" id="program_id" />
-					<input type="hidden" name="batch_id" id="batch_id" />
-					<input type="hidden" name="action" id="actionUpload" />
 					<input type="submit" name="button_action" id="button_action" class="btn btn-success btn-sm" />
 					<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
 				</div> <!-- Modal Footer Closed-->
