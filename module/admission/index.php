@@ -565,7 +565,7 @@ require('../../php_function.php');
     cache: false, // To unable request pages to be cached
     processData: false, // To send DOMDocument or non processed data file it is set to false
     success: function(data) {
-     $.alert(data);
+     console.log(data);
      $('#formModal').modal('hide');
     }
    })
