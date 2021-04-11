@@ -206,8 +206,8 @@ if (isset($_POST['action'])) {
 			$array = $result->fetch_assoc();
 			$test_id = $array["test_id"];
 		}
-		//echo "Test Id $test_id";
 		$sectionId = $_POST['sectionId'];
+		echo "Test Id $test_id Section $sectionId";
 		$json = get_sectionQuestionListJson($conn, $test_id, $sectionId);
 		//echo $json;
 		$array = json_decode($json, true);
