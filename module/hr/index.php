@@ -523,16 +523,16 @@ require('../../php_function.php');
   });
 
   $(document).on('click', '.uploadStaff', function() {
-   $("#uploadModal").modal('show');
-   $(".uploadQualificationForm").hide()
-   $(".uploadStaffForm").show()
+   $.alert('hello');
+   $('#actionUpload').val('uploadStaff')
+   $('#button_action').show().val('Update Staff');
+   $('#formModal').modal('show');
+   $('#modal_uploadTitle').text('Upload Staff');
   });
 
-  $(document).on('submit', '.uploadStaffForm', function(event) {
+  $(document).on('submit', '#upload_csv', function(event) {
    event.preventDefault();
    var formData = $(this).serialize();
-
-   $.alert('hello');
    // action and test_id are passed as hidden
    $.ajax({
     url: "uploadStaffSql.php",
@@ -543,7 +543,6 @@ require('../../php_function.php');
     processData: false, // To send DOMDocument or non processed data file it is set to false
     success: function(data) {
      console.log(data);
-     $('#uploadModal').modal('hide');
     }
    })
   });
@@ -908,50 +907,38 @@ require('../../php_function.php');
  </div> <!-- Modal Dialog Closed-->
 </div> <!-- Modal Closed-->
 
-<div class="modal" id="uploadModal">
+<div class="modal" id="formModal">
  <div class="modal-dialog modal-md">
-  <form class="form-horizontal" id="uploadModalForm">
+  <form class="form-horizontal" id="upload_csv">
    <div class="modal-content">
+
+    <!-- Modal Header -->
+    <div class="modal-header">
+     <h4 class="modal-title" id="modal_uploadTitle"></h4>
+     <button type="button" class="close" data-dismiss="modal">&times;</button>
+    </div> <!-- Modal Header Closed-->
+
     <!-- Modal body -->
     <div class="modal-body">
-     <div class="uploadQualificationForm">
+     <div class="form-group">
       <div class="row">
-       <div class="col-12">
-        <h4 class="modal-title text-primary pb-2">Upload Qualification Document</h4>
-        </hr>
-       </div>
-      </div>
-      <div class="row">
-       <div class="col-12">
-        <div class="form-group">
-         <input type="file" name="upload_qualification">
-        </div>
+       <div class="col-sm-10">
+        <input type="file" name="csv_upload" />
        </div>
       </div>
      </div>
-     <div class="uploadStaffForm">
-      <div class="row">
-       <div class="col-12">
-        <h4 class="modal-title text-primary pb-2">Upload Document</h4>
-        </hr>
-       </div>
-      </div>
-      <div class="row">
-       <div class="col-12">
-        <div class="form-group">
-         <input type="file" name="upload_staff">
-        </div>
-       </div>
-      </div>
-     </div>
-     <input type="hidden" id="stqIdM" name="stqIdM">
-     <button type="submit" class="btn btn-success btn-sm">Submit</button>
-     <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
+    </div> <!-- Modal Body Closed-->
+    <!-- Modal footer -->
+    <div class="modal-footer">
+     <input type="hidden" name="action" id="actionUpload">
+     <input type="hidden" name="batch_idUpload" id="batch_idUpload">
+     <input type="submit" name="button_action" id="button_action" class="btn btn-success btn-sm" />
+     <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
     </div> <!-- Modal Footer Closed-->
    </div> <!-- Modal Conent Closed-->
   </form>
  </div> <!-- Modal Dialog Closed-->
-</div> <!-- Modal Closed-->
+</div>
 
 <div class="modal" id="viewModal">
  <div class="modal-dialog modal-md">
