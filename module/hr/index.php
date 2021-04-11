@@ -84,17 +84,25 @@ require('../../php_function.php');
         <div class="card border-info mb-3">
          <div class="card-header">
           Enter Staff Name to Search
-          <button class="btn btn-info btn-sm addStaff">Add</button>
          </div>
          <div class="card-body text-primary">
-          <div class="input-group md-form form-sm form-2 pl-0">
+          <div class="input-group md-form form-sm form-2 mt-1">
            <input name="staffSearch" id="staffSearch" class="form-control my-0 py-1 red-border" type="text" placeholder="Search Staff" aria-label="Search">
            <div class="input-group-append">
             <span class="input-group-text cyan lighten-3" id="basic-text1"><i class="fas fa-search text-grey" aria-hidden="true"></i></span>
            </div>
           </div>
           <div class='list-group' id="staffAutoList"></div>
+          <div class="row">
+           <div class="col-sm-6">
+            <button class="btn btn-secondary btn-sm m-0 addStaff">New Staff</button>
+           </div>
+           <div class="col-sm-6">
+            <button class="btn btn-primary btn-sm m-0 uploadStaff">Upload Staff</button>
+           </div>
+          </div>
          </div>
+
         </div>
         <p id="staffList"></p>
        </div>
@@ -514,6 +522,32 @@ require('../../php_function.php');
    $(".staffQualificationForm").hide();
   });
 
+  $(document).on('click', '.uploadStaff', function() {
+   $("#uploadModal").modal('show');
+   $(".uploadQualificationForm").hide()
+   $(".uploadStaffForm").show()
+  });
+
+  $(document).on('submit', '.uploadStaffForm', function(event) {
+   event.preventDefault();
+   var formData = $(this).serialize();
+
+   $.alert('hello');
+   // action and test_id are passed as hidden
+   $.ajax({
+    url: "uploadStaffSql.php",
+    method: "POST",
+    data: new FormData(this),
+    contentType: false, // The content type used when sending data to the server.
+    cache: false, // To unable request pages to be cached
+    processData: false, // To send DOMDocument or non processed data file it is set to false
+    success: function(data) {
+     console.log(data);
+     $('#uploadModal').modal('hide');
+    }
+   })
+  });
+
   $(document).on('blur', '.staffForm', function() {
    var staffId = $("#staffIdHidden").val()
    var tag = $(this).attr("data-tag")
@@ -679,12 +713,14 @@ require('../../php_function.php');
    //$.alert("id" + id);
    $('#stqIdM').val(id);
    $("#uploadModal").modal('show');
+   $(".uploadQualificationForm").show()
+   $(".uploadStaffForm").hide()
   });
 
-  $(document).on('submit', '#uploadModalForm', function(event) {
+  $(document).on('submit', '.uploadQualificationForm', function(event) {
    event.preventDefault();
    var formData = $(this).serialize();
-   //$.alert(formData);
+   $.alert(formData);
    // action and test_id are passed as hidden
    $.ajax({
     url: "uploadSql.php",
@@ -876,10 +912,24 @@ require('../../php_function.php');
  <div class="modal-dialog modal-md">
   <form class="form-horizontal" id="uploadModalForm">
    <div class="modal-content">
-
     <!-- Modal body -->
     <div class="modal-body">
-     <div class="uploadForm">
+     <div class="uploadQualificationForm">
+      <div class="row">
+       <div class="col-12">
+        <h4 class="modal-title text-primary pb-2">Upload Qualification Document</h4>
+        </hr>
+       </div>
+      </div>
+      <div class="row">
+       <div class="col-12">
+        <div class="form-group">
+         <input type="file" name="upload_qualification">
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="uploadStaffForm">
       <div class="row">
        <div class="col-12">
         <h4 class="modal-title text-primary pb-2">Upload Document</h4>
@@ -889,12 +939,11 @@ require('../../php_function.php');
       <div class="row">
        <div class="col-12">
         <div class="form-group">
-         <input type="file" name="upload_file">
+         <input type="file" name="upload_staff">
         </div>
        </div>
       </div>
      </div>
-     <input type="hidden" name="action" value="upload">
      <input type="hidden" id="stqIdM" name="stqIdM">
      <button type="submit" class="btn btn-success btn-sm">Submit</button>
      <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
