@@ -21,9 +21,7 @@ require('../../php_function.php');
 					<a class="list-group-item list-group-item-action active mt" id="list-mt-list" data-toggle="list" href="#list-mt" role="tab" aria-controls="mt"> Manage Test </a>
 					<a class="list-group-item list-group-item-action aq" id="list-aq-list" data-toggle="list" href="#list-aq" role="tab" aria-controls="aq"> Add Question </a>
 					<a class="list-group-item list-group-item-action ti" id="list-ti-list" data-toggle="list" href="#list-ti" role="tab" aria-controls="ti"> Instructions/Text </a>
-					<a class="list-group-item list-group-item-action pt" id="list-pt-list" data-toggle="list" href="#list-pt" role="tab" aria-controls="pt"> Preview Test </a>
-					<a class="list-group-item list-group-item-action mu" id="list-mu-list" data-toggle="list" href="#list-mu" role="tab" aria-controls="mu"> Manage Users </a>
-					<a class="list-group-item list-group-item-action at" id="list-at-list" data-toggle="list" href="#list-at" role="tab" aria-controls="at"> Announce Test </a>
+					<a class="list-group-item list-group-item-action pt" id="list-pt-list" data-toggle="list" href="#list-pt" role="tab" aria-controls="pt"> Publish Test </a>
 					<a class="list-group-item list-group-item-action tr" id="list-tr-list" data-toggle="list" href="#list-tr" role="tab" aria-controls="tr"> Test Report</a>
 				</div>
 			</div>
@@ -59,7 +57,7 @@ require('../../php_function.php');
 								<div class="card">
 									<div class="card-body mt-2 py-1">
 										<p id="questionHeading"></p>
-										<!-- <h5>Section : <span id="selectedSection">1</span></h5> -->
+										Section : <span id="selectedSection">1</span>
 										<textarea rows="4" class="content" id="question" name="question"></textarea>
 										<input type="hidden" id="actionCode" name="actionCode">
 										<button class="btn btn-secondary btn-square-sm addQuestion">Add New Question</button>
@@ -96,6 +94,15 @@ require('../../php_function.php');
 									<input type="hidden" id="sectionId" name="sectionId">
 									<button class="btn btn-secondary btn-square-sm saveNotice">Save</button>
 								</form>
+
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane fade" id="list-pt" role="tabpanel" aria-labelledby="list-pt-list">
+						<div class="row">
+							<div class="col-8 mt-1 mb-1">
+							</div>
+							<div class="col-4 mt-1 mb-1">
 
 							</div>
 						</div>
@@ -606,7 +613,7 @@ require('../../php_function.php');
 
 		function sectionQuestionList() {
 			var selectedSection = $("#selectedSection").text()
-			//$.alert("Section  " + selectedSection)
+			$.alert("Section  " + selectedSection)
 			$.post("sectionQuestionListSql.php", {
 				sectionId: selectedSection,
 				action: "sectionQuestionList"
