@@ -120,7 +120,6 @@ if (isset($_POST['action'])) {
       <h5 class="card-title" >' . $inst_name . '[' . $inst_id . ']</h5>
       <h6 class="card-subtitle mb-2 text-muted">' . $inst_url . ' [' . $inst_abbri . ']</h6>
       <a href="#" class="btn btn-info btn-sm basicInfoUni" data-inst="' . $inst_id . '">Basic Info</a>
-      <a href="#" class="btn btn-danger btn-sm acadInfoUni"  data-="' . $inst_id . '">Academic Info</a>
       </div></div>';
   }
  } elseif ($_POST["action"] == "schoolList") {
