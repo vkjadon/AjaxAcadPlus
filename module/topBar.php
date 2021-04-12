@@ -53,7 +53,8 @@
 				<div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
 					<div class="row">
 						<div class="col-6">
-							<a href="<?php echo $codePath . '/module/comm/'; ?>" class="dropdown-item"> Conduct </a>
+							<a href="<?php echo $codePath . '/module/examSetting/'; ?>" class="dropdown-item"> Exam Setting </a>
+							<a href="<?php echo $codePath . '/module/examConduct/'; ?>" class="dropdown-item"> Conduct </a>
 							<a href="<?php echo $codePath . '/module/comm/'; ?>" class="dropdown-item"> Evaluation </a>
 						</div>
 						<div class="col-6">
