@@ -610,7 +610,6 @@ require('../../php_function.php');
 				$.alert("Error !!");
 			})
 		}
-
 		function sectionQuestionList() {
 			var selectedSection = $("#selectedSection").text()
 			$.alert("Section  " + selectedSection)
@@ -626,7 +625,6 @@ require('../../php_function.php');
 				$.alert("Error !!");
 			})
 		}
-
 		function questionLibrary() {
 			//$.alert("Library  ")
 			$.post("sectionQuestionListSql.php", {
@@ -640,7 +638,6 @@ require('../../php_function.php');
 				$.alert("Error !!");
 			})
 		}
-
 		function questionHeading(section) {
 			//$.alert("In SAS Claim List");
 			$.post("onlineSql.php", {
@@ -653,7 +650,6 @@ require('../../php_function.php');
 				$.alert("Error !!");
 			})
 		}
-
 		function testHeading() {
 			//$.alert("In SAS Claim List");
 			$.post("onlineSql.php", {
@@ -665,7 +661,6 @@ require('../../php_function.php');
 				$.alert("Error !!");
 			})
 		}
-
 		function testQuestionList() {
 			//$.alert("In SAS Claim List");
 			$.post("onlineSql.php", {
@@ -677,7 +672,6 @@ require('../../php_function.php');
 				$.alert("Error !!");
 			})
 		}
-
 		function testList() {
 			//$.alert("In SAS Claim List");
 			$.post("onlineSql.php", {
@@ -689,7 +683,6 @@ require('../../php_function.php');
 				$.alert("Error !!");
 			})
 		}
-
 		function getFormattedDate(ts, fmt) {
 			var a = new Date(ts);
 			var day = a.getDate();
