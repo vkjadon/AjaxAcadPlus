@@ -101,56 +101,44 @@ require('../../php_function.php');
                 <div class="row">
                  <div class="col-12">
                   <div class="form-group">
-                   <div class="md-form m-0">
-                    <p class="text-muted m-0"> Instituton Name</p>
-                    <input type="text" id="instName" class="form-control instForm" data-tag="inst_name">
-                   </div>
+                   <p class="text-muted m-0"> Instituton Name</p>
+                   <input type="text" id="instName" class="form-control instForm" data-tag="inst_name">
                   </div>
                  </div>
                 </div>
                 <div class="row">
                  <div class="col-12">
                   <div class="form-group">
-                   <div class="md-form md-outline m-0">
-                    <p class="text-muted m-0">Address</p>
-                    <textarea id="instAddress" class="md-textarea form-control instForm" data-tag="inst_address" rows="3"></textarea>
-                   </div>
+                   <p class="text-muted m-0">Address</p>
+                   <textarea id="instAddress" class="md-textarea form-control instForm" data-tag="inst_address" rows="3"></textarea>
                   </div>
                  </div>
                 </div>
                 <div class="row">
                  <div class="col-6">
                   <div class="form-group">
-                   <div class="md-form md-outline m-0">
-                    <input type="text" id="instCity" class="form-control instForm" data-tag="inst_city">
-                    <label for="instCity">City</label>
-                   </div>
+                   <p class="text-muted m-0">Address</p>
+                   <input type="text" id="instCity" class="form-control instForm" data-tag="inst_city">
                   </div>
                  </div>
                  <div class="col-6">
                   <div class="form-group">
-                   <div class="md-form md-outline m-0">
-                    <input type="text" id="instPIN" class="form-control instForm" data-tag="inst_pincode">
-                    <label for="instPIN">PIN Code</label>
-                   </div>
+                   <p class="text-muted m-0">Pincode</p>
+                   <input type="text" id="instPIN" class="form-control instForm" data-tag="inst_pincode">
                   </div>
                  </div>
                 </div>
                 <div class="row">
                  <div class="col-6">
                   <div class="form-group">
-                   <div class="md-form md-outline m-0">
-                    <input type="text" id="instState" class="form-control instForm" data-tag="inst_state">
-                    <label for="instState">State</label>
-                   </div>
+                   <p class="text-muted m-0">State</p>
+                   <input type="text" id="instState" class="form-control instForm" data-tag="inst_state">
                   </div>
                  </div>
                  <div class="col-6">
                   <div class="form-group">
-                   <div class="md-form md-outline m-0">
-                    <input type="text" id="instWebsite" class="form-control instForm" data-tag="inst_url">
-                    <label for="instWebsite">Website</label>
-                   </div>
+                   <p class="text-muted m-0">Website</p>
+                   <input type="text" id="instWebsite" class="form-control instForm" data-tag="inst_url">
                   </div>
                  </div>
                 </div>
@@ -537,10 +525,14 @@ require('../../php_function.php');
      </div>
      <div class="tab-pane fade " id="list-mip" role="tabpanel" aria-labelledby="list-mip-list">
       <div class="row">
-       <div class="col-8">
-        <div class="mt-1 mb-1"><button class="btn btn-secondary btn-sm mt-1 addProgram">New</button>
-         <p id="programShowList"></p>
-        </div>
+       <div class="col-sm-8 mt-1 mb-1">
+        <button class="btn btn-primary btn-sm mt-1 addProgram">New Program</button>
+        <button class="btn btn-secondary btn-sm mt-1 uploadProgram">Upload Program</button>
+       </div>
+      </div>
+      <div class="row">
+       <div class="col-sm-8">
+        <p id="programShowList"></p>
        </div>
       </div>
      </div>
@@ -659,10 +651,10 @@ require('../../php_function.php');
       </div>
       <div class="row">
        <div class="col-sm-6">
-       <p id="schoolDeptShowList" style="text-align:center"></p>
+        <p id="schoolDeptShowList" style="text-align:center"></p>
        </div>
        <div class="col-sm-6">
-       <p id="deptProgramShowList" style="text-align:center"></p>
+        <p id="deptProgramShowList" style="text-align:center"></p>
        </div>
       </div>
      </div>
