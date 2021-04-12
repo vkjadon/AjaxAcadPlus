@@ -42,7 +42,8 @@ if (isset($_POST['action'])) {
   $output = $result->fetch_assoc();
   echo json_encode($output);
  } elseif ($_POST['action'] == 'addSchool') {
-  //echo "MyId- $myId";
+  // echo "MyId- $myId";
+  // echo "inside";
   $fields = ['school_name', 'school_abbri', 'school_url', 'school_doi', 'submit_id'];
   $values = [data_check($_POST['school_name']), data_check($_POST['school_abbri']), $_POST['school_url'], $_POST['school_doi'], $myId];
   $status = 'school_status';
@@ -180,7 +181,8 @@ if (isset($_POST['action'])) {
    $program_name = $array["data"][$i]["program_name"];
    $program_abbri = $array["data"][$i]["program_abbri"];
    $program_semester = $array["data"][$i]["program_semester"];
-   $Cr='';$status='';
+   $Cr = '';
+   $status = '';
 
    echo '<div class="row border border-primary mb-2 cardBodyText">';
    echo '<div class="col-sm-3 mb-0 bg-two">';
@@ -231,11 +233,11 @@ if (isset($_POST['action'])) {
    $school_id = $array["data"][$i]["school_id"];
    $dept_id = $array["data"][$i]["dept_id"];
    $sql_school = "select * from school where school_id='$school_id'";
-			$value_school = getFieldValue($conn, "school_name", $sql_school);
+   $value_school = getFieldValue($conn, "school_name", $sql_school);
    $sql_dept = "select * from department where dept_id='$dept_id'";
-			$value_dept = getFieldValue($conn, "dept_name", $sql_dept);
+   $value_dept = getFieldValue($conn, "dept_name", $sql_dept);
 
-   echo '<tr><td>'.$value_school.'</td><td>'.$value_dept.'</td><td><i class="fa fa-trash deleteSchoolDept"></i></td></tr>';
+   echo '<tr><td>' . $value_school . '</td><td>' . $value_dept . '</td><td><i class="fa fa-trash deleteSchoolDept"></i></td></tr>';
   }
   echo '</table></table>';
  } elseif ($_POST["action"] == "deptProgramList") {
@@ -254,11 +256,11 @@ if (isset($_POST['action'])) {
    $program_id = $array["data"][$i]["program_id"];
    $dept_id = $array["data"][$i]["dept_id"];
    $sql_program = "select * from program where program_id='$program_id'";
-			$value_school = getFieldValue($conn, "program_name", $sql_program);
+   $value_school = getFieldValue($conn, "program_name", $sql_program);
    $sql_dept = "select * from department where dept_id='$dept_id'";
-			$value_dept = getFieldValue($conn, "dept_name", $sql_dept);
+   $value_dept = getFieldValue($conn, "dept_name", $sql_dept);
 
-   echo '<tr><td>'.$value_dept.'</td><td>'.$value_school.'</td><td><i class="fa fa-trash deleteSchoolDept"></i></td></tr>';
+   echo '<tr><td>' . $value_dept . '</td><td>' . $value_school . '</td><td><i class="fa fa-trash deleteSchoolDept"></i></td></tr>';
   }
   echo '</table></table>';
  }
