@@ -38,7 +38,7 @@ include('../phpFunction/onlineFunction.php');
 			<div class="col-4">
 			</div>
 			<div class="col-3 mt-2 pt-2">
-				<div class="card bg-one text-white">
+				<div class="card">
 					<h3 class="text-center">Sorry!!</h1>
 						<div class="card-body">
 						<h5> Some missing parameter landed you here. Please check the URL.</h5>

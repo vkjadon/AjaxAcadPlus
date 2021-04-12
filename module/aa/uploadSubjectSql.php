@@ -21,19 +21,19 @@ if (!empty($_FILES["csv_upload"]["name"])) {
    // echo "inside Subject";
    while ($row = fgetcsv($file_data)) {
 
-    $subject_sno = $conn->real_escape_string($row[0]);  // po sno
-    $subject_name = $conn->real_escape_string($row[1]); // po code
-    $subject_code = $conn->real_escape_string($row[2]);  // po name
-    $subject_semester = $conn->real_escape_string($row[3]);  // po sno
-    $subject_type = $conn->real_escape_string($row[4]); // po code
-    $subject_mode = $conn->real_escape_string($row[5]);  // po name
-    $subject_practical = $conn->real_escape_string($row[6]);  // po sno
-    $subject_tutorial = $conn->real_escape_string($row[7]); // po code
-    $subject_lecture = $conn->real_escape_string($row[8]);  // po name
-    $subject_category = $conn->real_escape_string($row[9]);  // po sno
-    $subject_credit = $conn->real_escape_string($row[10]); // po code
-    $subject_internal = $conn->real_escape_string($row[11]);  // po name
-    $subject_external = $conn->real_escape_string($row[12]);  // po sno
+    $subject_sno = $conn->real_escape_string($row[0]);  
+    $subject_name = $conn->real_escape_string($row[1]); 
+    $subject_code = $conn->real_escape_string($row[2]); 
+    $subject_semester = $conn->real_escape_string($row[3]); 
+    $subject_practical = $conn->real_escape_string($row[4]); 
+    $subject_tutorial = $conn->real_escape_string($row[5]); 
+    $subject_lecture = $conn->real_escape_string($row[6]); 
+    $subject_credit = $conn->real_escape_string($row[7]);
+    $subject_type = $conn->real_escape_string($row[8]); 
+    $subject_mode = $conn->real_escape_string($row[9]);  
+    $subject_category = $conn->real_escape_string($row[10]); 
+    $subject_internal = $conn->real_escape_string($row[11]);  
+    $subject_external = $conn->real_escape_string($row[12]); 
 
     $sql = "select * from subject where batch_id='$batch_id' and program_id='$myProg' and subject_code='$subject_code'";
     $result = $conn->query($sql);

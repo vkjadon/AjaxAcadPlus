@@ -1,6 +1,5 @@
 body {
-    font-family: 'Montserrat';
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .folder {
@@ -86,6 +85,12 @@ div.minWidth100 {
     font-weight: bold;
 }
 
+.inputLabel{
+    color: rgba(65, 62, 75, 0.911);
+    font-style: italic;
+    font-size: small;
+    font-weight: bold;
+}
 .cardBodyText {
     color: rgba(17, 17, 17, 0.911);
     font-style: italic;
@@ -115,6 +120,20 @@ div.minWidth100 {
     font-size: small;
 }
 
+textarea {
+    width: 100%;
+}
+
+.fbOption {
+    font-size: small;
+}
+
+.fbQuestion {
+    padding: 4px;
+    font-weight: normal;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    background-color: rgb(244, 247, 248);
+}
 .selectPanel {
     color: rgba(39, 23, 134, 0.884);
     text-align: center;
@@ -297,20 +316,7 @@ div.minWidth100 {
     border-radius: 0px;
 }
 
-textarea {
-    width: 100%;
-}
 
-.fbOption {
-    font-size: small;
-}
-
-.fbQuestion {
-    padding: 4px;
-    font-weight: normal;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    background-color: rgb(244, 247, 248);
-}
 
 
 /*Digital Clock*/

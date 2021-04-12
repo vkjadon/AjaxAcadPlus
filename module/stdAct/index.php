@@ -1,58 +1,51 @@
 <?php
 session_start();
-include('../openDb.php');
-require('../php_function.php');
-include('../phpFunction/onlineFunction.php');
-$submit_date = date("Y-m-d", time());
+require("../../config_database.php");
+require('../../config_variable.php');
+require('../../php_function.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 	<title>Outcome Based Education : ClassConnect</title>
-	<?php require('../css.php'); ?>
-	<link rel="stylesheet" href="../style.css">
+	<?php require("../css.php"); ?>
 
 </head>
 
 <body>
+	<?php require("../topBar.php"); ?>
 	<div class="container-fluid">
-		<table style="background-color:crimson;" width="100%">
-			<tr>
-				<td width="15%">
-					<div class="digital-clock">00:00:00</div>
-				</td>
-				<td width="5%"></td>
-				<td width="55%">
-					<h5 class="text-white"></h5>
-				</td>
-			</tr>
-		</table>
 		<div class="row">
-			<div class="col-sm-8 p-2">
-				<button class="btn btn-sm btn-secondary addActivity">Add Activity [1.1.1]</button>
+			<div class="col-sm-2">
+				<div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
+					<a class="list-group-item list-group-item-action active mcs" id="list-mcs-list" data-toggle="list" href="#list-mcs" role="tab" aria-controls="mcs"> Manage Clubs/Societies </a>
+					<a class="list-group-item list-group-item-action ma" id="list-ma-list" data-toggle="list" href="#list-ma" role="tab" aria-controls="ma"> Manage Activities </a>
+				</div>
 			</div>
-			<div class="col-4 mt-2 pt-2">
-				<div class="card bg-light text-white">
-					<div class="card-body">
+			<div class="col-sm-10">
+				<div class="tab-content" id="nav-tabContent">
+					<div class="tab-pane show active" id="list-mcs" role="tabpanel" aria-labelledby="list-mcs-list">
+						<div class="row">
+							<div class="col-sm-6">
+								<button class="btn btn-secondary addMCS">Add Club/Society/Chapter</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="tab-pane fade" id="list-ma" role="tabpanel" aria-labelledby="list-ma-list">
+						<div class="row">
+							<div class="col-sm-6">
+								<button class="btn btn-secondary addActivity">Add Activity</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-sm-8">
-				<div id="activityList"></div>
-			</div>
-			<div class="col-sm-4">
-				<div id="activitySummary"></div>
-			</div>
-		</div>
 	</div>
 </body>
-
 <?php require("../js.php"); ?>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
 <script>
 	// Storing data:
 
@@ -257,13 +250,14 @@ $submit_date = date("Y-m-d", time());
 						<div class="row">
 							<div class="col-12">
 								<div class="form-group">
-								<span class="inputLabel">Remarks (if any)</span>
+									<span class="inputLabel">Remarks (if any)</span>
 									<input type="text" class="form-control form-control-sm" id="activity_remarks" name="activity_remarks" placeholder="Activity Remarks">
 								</div>
 							</div>
 						</div>
 						<hr>
-						<span class="inputLabel">The suggestive documents in the file of these activities</span><p>(1) Approval/Office Order (2) Constitution of committee (3) Proposed budget (4) Brochure (outcome-PO, content/syllabus, timeline etc) (5) Rgistration Forms (6) Schedule (7) Attendance (8) Evaluation/Jury (Rubics, Constitution of Jury, Score List) (9) Report (10) Attainment etc. You may add some other document if required or available or ignore if not relevant to the activity.</p>
+						<span class="inputLabel">The suggestive documents in the file of these activities</span>
+						<p>(1) Approval/Office Order (2) Constitution of committee (3) Proposed budget (4) Brochure (outcome-PO, content/syllabus, timeline etc) (5) Rgistration Forms (6) Schedule (7) Attendance (8) Evaluation/Jury (Rubics, Constitution of Jury, Score List) (9) Report (10) Attainment etc. You may add some other document if required or available or ignore if not relevant to the activity.</p>
 					</div>
 				</div> <!-- Modal Body Closed-->
 

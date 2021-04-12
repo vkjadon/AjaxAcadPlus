@@ -118,7 +118,6 @@ require('../../php_function.php');
    poList();
    selectSubject();
   });
-
   $(document).on("change", "#sel_subject", function() {
    coList();
   });
@@ -127,17 +126,14 @@ require('../../php_function.php');
   $(document).on('click', '.bs', function() {
    batchList();
   });
-
   $(document).on('click', '.po', function() {
    $('#action').val("addPo");
    poList();
   });
-
   $(document).on('click', '.co', function() {
    $('#action').val("addCo");
    coList();
   });
-
   $(document).on('click', '.sub', function() {
    subjectList();
   });
@@ -234,11 +230,9 @@ require('../../php_function.php');
    $("#modalForm")[0].reset();
    $('.selectPanel').show();
   });
-
   $(document).on('click', '.co_idD', function() {
    $.alert("Disabled");
   });
-
   $(document).on('click', '.co_idE', function() {
    var id = $(this).attr('id');
    // $.alert("Id " + id);
@@ -263,7 +257,6 @@ require('../../php_function.php');
     $.alert("fail in place of error");
    })
   });
-
   $(document).on("change", "#sel_subject", function() {
    var subject_id = $("#sel_subject").val();
    // $.alert("Changed Subject " + subject_id);
@@ -289,11 +282,9 @@ require('../../php_function.php');
    $('.selectPanel').show();
    $("#modalForm")[0].reset();
   });
-
   $(document).on('click', '.po_idD', function() {
    $.alert("Disabled");
   });
-
   $(document).on('click', '.po_idE', function() {
    var id = $(this).attr('id');
    //$.alert("Id " + id);
@@ -322,7 +313,6 @@ require('../../php_function.php');
   $(document).on('click', '.session_idD', function() {
    $.alert("Disabled");
   });
-
   $(document).on('click', '.addSessionButton', function(event) {
    var programId = $("#sel_program").val();
    var batchId = $("#panelId").val();
@@ -341,14 +331,12 @@ require('../../php_function.php');
     $(".sessionForm").show();
    }
   });
-
   $(document).on('click', '.batch_idSession', function() {
    var id = $(this).attr('data-id');
    $("#panelId").val(id);
    //$.alert("Process Id " + id);
    batchSession(id);
   });
-
   $(document).on('click', '.session_idE', function() {
    var id = $(this).attr('id');
    $.alert("Id " + id);
@@ -391,11 +379,9 @@ require('../../php_function.php');
    $('.coForm').hide();
    $('.sessionForm').hide();
   });
-
   $(document).on('click', '.batch_idD', function() {
    $.alert("Disabled");
   });
-
   $(document).on('click', '.batch_idE', function() {
    var id = $(this).attr('id');
    //$.alert("Id " + id);
@@ -421,6 +407,7 @@ require('../../php_function.php');
     $.alert("fail in place of error");
    })
   });
+
   // Manage Subject
   $(document).on('click', '.subject_idD', function() {
    var id = $(this).attr("data-id");
@@ -436,7 +423,6 @@ require('../../php_function.php');
    })
 
   });
-
   $(document).on('click', '.subject_idR', function() {
    var id = $(this).attr("data-id");
    $.alert("Disabled " + id);
@@ -450,7 +436,6 @@ require('../../php_function.php');
     $.alert("Error in BatchSession Function");
    })
   });
-
   $(document).on('click', '.subject_idE', function() {
    var id = $(this).attr("data-id");
    $.alert("Id " + id);
@@ -518,7 +503,6 @@ require('../../php_function.php');
     $.alert("fail in place of error");
    })
   });
-
   $(document).on('click', '.addSubject', function() {
    var x = $("#sel_batch").val();
    $.alert("Add Subject" + x);
@@ -535,7 +519,6 @@ require('../../php_function.php');
     $('.subjectForm').show();
    }
   });
-
   $(document).on('submit', '#modalSecondForm', function(event) {
    event.preventDefault(this);
    var formData = $(this).serialize();
@@ -548,7 +531,6 @@ require('../../php_function.php');
     $.alert("fail in place of error");
    })
   });
-
   $(document).on('click', '.copySubject', function() {
    var x = $("#sel_batch").val();
    var y = $("#sel_program").val();
@@ -576,7 +558,6 @@ require('../../php_function.php');
     $.alert("Error in BatchSession Function");
    })
   }
-
   function subjectList() {
    var x = $("#sel_batch").val();
    //$.alert(" Select a Batch X = " + x);
@@ -595,7 +576,6 @@ require('../../php_function.php');
     subjectSummary();
    }
   }
-
   function subjectSummary() {
    var x = $("#sel_batch").val();
    $.post("aaSql.php", {
@@ -608,7 +588,6 @@ require('../../php_function.php');
     $.alert("Error !!");
    })
   }
-
   function batchList() {
    //$.alert("In List Function"+ x + y);
    $.post("aaSql.php", {
@@ -621,7 +600,6 @@ require('../../php_function.php');
     $.alert("Error !!");
    })
   }
-
   function sessionList() {
    var x = $("#sel_school").val();
    var y = $("#sel_batch").val();
@@ -638,7 +616,6 @@ require('../../php_function.php');
     $.alert("Error !!");
    })
   }
-
   function poList() {
    var y = $("#sel_batch").val();
    //$.alert("In List Function Batch " + y);
@@ -654,7 +631,6 @@ require('../../php_function.php');
     $.alert("Error !!");
    })
   }
-
   function selectSubject() {
    var x = $("#sel_batch").val();
    $.alert("Batch In SelSub Function" + x);
@@ -669,7 +645,6 @@ require('../../php_function.php');
     $.alert("Error !!");
    })
   }
-
   function coList() {
    var x = $("#sel_subject").val();
    // $.alert("In List Function" + x);
@@ -685,7 +660,6 @@ require('../../php_function.php');
     $.alert("Error !!");
    })
   }
-
   function programSelectList() {
    var x = $("#sel_school").val();
    var y = $("#sel_batch").val();
@@ -702,7 +676,6 @@ require('../../php_function.php');
     $.alert("Error !!");
    })
   }
-
   function getFormattedDate(ts, fmt) {
    var a = new Date(ts);
    var day = a.getDate();
@@ -726,7 +699,6 @@ require('../../php_function.php');
    $('#actionUpload').val('uploadSubject');
    $('#formModal').modal('show');
   });
-
   $(document).on('click', '.uploadPo', function() {
    // $.alert("Session From");
    //var batch = $(this).attr("data-batch");
@@ -740,7 +712,6 @@ require('../../php_function.php');
    $("#batch_idUpload").val(y);
 
   });
-
   $(document).on('click', '.uploadCo', function() {
    // $.alert("Session From");
    //var batch = $(this).attr("data-batch");
@@ -753,7 +724,6 @@ require('../../php_function.php');
    $('#formModal').modal('show');
    $('#modal_uploadTitle').text('Upload CO');
   });
-
   $(document).on('submit', '#upload_csv', function(event) {
    event.preventDefault();
    var formData = $(this).serialize();
@@ -899,7 +869,13 @@ require('../../php_function.php');
          <input type="radio" class="form-check-input" id="scPrj" name="subject_category" value="Project">Project
         </div>
         <div class="form-check-inline">
-         <input type="radio" class="form-check-input" id="scFW" name="subject_category" value="FieldWork">Field Work
+         <input type="radio" class="form-check-input" id="scFW" name="subject_category" value="FieldWork">Field Project
+        </div>
+        <div class="form-check-inline">
+         <input type="radio" class="form-check-input" id="scTW" name="subject_category" value="ThesisWork">Thesis Work
+        </div>
+        <div class="form-check-inline">
+         <input type="radio" class="form-check-input" id="scIn" name="subject_category" value="Internship">Internship
         </div>
        </div>
       </div>

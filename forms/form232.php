@@ -30,7 +30,7 @@ $submit_date = date("Y-m-d", time());
 		</table>
 		<div class="row">
 			<div class="col-sm-8 p-2">
-				<button class="btn btn-sm btn-secondary addActivity">Add Activity [1.1.1]</button>
+				<button class="btn btn-secondary addActivity">ICT Integration [2.3.2]</button>
 			</div>
 			<div class="col-4 mt-2 pt-2">
 				<div class="card bg-light text-white">
@@ -124,20 +124,6 @@ $submit_date = date("Y-m-d", time());
 				<!-- Modal body -->
 				<div class="modal-body">
 					<div class="activityForm">
-						<div class="row">
-							<div class="col-8">
-								<div class="form-group">
-									<span class="inputLabel">Activity Name</span>
-									<input type="text" class="form-control form-control-sm" id="activity_name" name="activity_name" placeholder="Activity Name">
-								</div>
-							</div>
-							<div class="col-4">
-								<div class="form-group">
-									<span class="inputLabel">Coordinator</span>
-									<input type="text" class="form-control form-control-sm" id="activity_coordinator" name="activity_coordinator" placeholder="Employee Id">
-								</div>
-							</div>
-						</div>
 						<div class="row">
 							<div class="col-4">
 								<div class="form-group">

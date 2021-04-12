@@ -4,7 +4,6 @@ require("../../config_database.php");
 require('../../config_variable.php');
 require('../../php_function.php');
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
