@@ -24,6 +24,8 @@ if (!empty($_FILES["csv_upload"]["name"])) {
     $email = $conn->real_escape_string($row[3]);  // email
     $user_id = $conn->real_escape_string($row[4]);  // userid
 
+
+
     $sql = "select * from staff where staff_email='$email'";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
