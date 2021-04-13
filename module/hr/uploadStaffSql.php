@@ -11,7 +11,7 @@ if (!empty($_FILES["csv_upload"]["name"])) {
  $filename = $_FILES["csv_upload"]["name"];
  $allowed_ext = array(".csv");
  $file_ext = substr($filename, strripos($filename, '.')); // get file name
- // echo $file_ext;
+ echo $file_ext;
  if (in_array($file_ext, $allowed_ext)) {
   if ($_POST["action"] == "uploadStaff") {
    $file_data = fopen($_FILES["csv_upload"]["tmp_name"], 'r');
@@ -19,18 +19,20 @@ if (!empty($_FILES["csv_upload"]["name"])) {
    while ($row = fgetcsv($file_data)) {
     //    print_r($file_data);
     $name = $conn->real_escape_string($row[0]); // staff_name
-    $doj = $conn->real_escape_string($row[1]);  //doj
-    $mobile = $conn->real_escape_string($row[2]);  //mobile
-    $email = $conn->real_escape_string($row[3]);  //email
+    $doj = $conn->real_escape_string($row[1]);  // doj
+    $mobile = $conn->real_escape_string($row[2]);  // mobile
+    $email = $conn->real_escape_string($row[3]);  // email
+    $user_id = $conn->real_escape_string($row[4]);  // userid
 
     $sql = "select * from staff where staff_email='$email'";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     $records = $result->num_rows;
-    echo $records;
+    echo $name;
     if ($records == 0) {
-     $sql = "INSERT INTO staff (staff_name, staff_doj, staff_mobile, staff_email) VALUES ('$name', '$doj', '$mobile', '$email')";
-     $result = $conn->query($sql);
+     $sql = "INSERT INTO staff (staff_name, staff_doj, staff_mobile, staff_email, user_id) VALUES ('$name', '$doj', '$mobile', '$email', '$user_id')";
+     $result_insert = $conn->query($sql);
+     if (!$result_insert) echo $conn->error;
      $status = "Inserted";
     } else $status = "Exists";
    }

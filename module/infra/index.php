@@ -73,7 +73,9 @@ require('../../php_function.php');
      <div class="tab-pane show active" id="list-il" role="tabpanel" aria-labelledby="list-il-list">
       <div class="row">
        <div class="col-4">
-        <div class="mt-1 mb-1"><button class="btn btn-secondary btn-sm mt-1 addLocation">New Location</button>
+        <div class="mt-1 mb-1">
+        <button class="btn btn-primary btn-sm mt-1 addLocation">New Location</button>
+        <button class="btn btn-secondary btn-sm mt-1 uploadLocation">Upload Locations</button>
          <p id="locationShowList"></p>
         </div>
        </div>
@@ -93,16 +95,77 @@ require('../../php_function.php');
 <script>
  $(document).ready(function() {
   $(".topBarTitle").text("Institution");
+  locationList();
 
-  $(document).on('click', '.il', function() {});
+  $(document).on('click', '.il', function() {
+
+  });
 
   $(document).on('click', '.addLocation', function() {
-
    $('#modal_title').text("Add Location");
    $('#action').val("addLocation");
    $('#firstModal').modal('show');
    $('.locationForm').show();
   });
+
+  $(document).on('click', '.editLocation', function() {
+   var id = $(this).attr("data-loc");
+   // $.alert("Id " + id);
+
+   $.post("infraSql.php", {
+    locationId: id,
+    action: "fetchLocation"
+   }, () => {}, "json").done(function(data) {
+    //$.alert("List " + data.inst_name);
+    $('#modal_title').text("Update Location [" + id + "]");
+    $('#loc_name').val(data.location_name);
+    $('#loc_code').val(data.location_code);
+    $('#loc_rows').val(data.location_rows);
+    $('#loc_cols').val(data.location_columns);
+    $('#loc_type').val(data.location_type);
+    $('#loc_cap').val(data.location_capacity);
+    $('#loc_floor').val(data.location_floor);
+    $('#action').val("updateLocation");
+    $('#locationIdHidden').val(id);
+    $('#firstModal').modal('show');
+    $('.locationForm').show();
+   }, "text").fail(function() {
+    $.alert("fail in place of error");
+   })
+  });
+
+  $(document).on('submit', '#modalForm', function(event) {
+   event.preventDefault(this);
+   var x = $("#loc_code").val();
+   var y = $("#loc_name").val();
+   // $.alert("x"+x+"y"+y);
+   if (x === " " && y === " " && (action == "addLocation" || action == "updateLocation")) $.alert("Location Name cannot be blank!!");
+   else {
+    var formData = $(this).serialize();
+    $('#firstModal').modal('hide');
+    // $.alert(x + " Pressed" + action);
+    $.post("infraSql.php", formData, () => {}, "text").done(function(data) {
+     $.alert("List " + data);
+     if (action == "addLocation" || action == "updateLocation") locationList();
+     $('#modalForm')[0].reset();
+    }, "text").fail(function() {
+     $.alert("fail in place of error");
+    })
+   }
+  });
+
+  function locationList() {
+   // $.alert("In List Function");
+   $.post("infraSql.php", {
+    action: "locationList"
+   }, function(mydata, mystatus) {
+    $("#locationShowList").show();
+    // $.alert("List " + mydata);
+    $("#locationShowList").html(mydata);
+   }, "text").fail(function() {
+    $.alert("Error !!");
+   })
+  }
 
  });
 </script>
@@ -139,7 +202,7 @@ require('../../php_function.php');
        <div class="col-6">
         <div class="form-group">
          Capacity
-         <input type="url" class="form-control form-control-sm" id="loc_cap" name="loc_cap" placeholder="Location Capacity">
+         <input type="text" class="form-control form-control-sm" id="loc_cap" name="loc_cap" placeholder="Location Capacity">
         </div>
        </div>
        <div class="col-6">
@@ -190,9 +253,7 @@ require('../../php_function.php');
    <div class="modal-footer">
     <input type="hidden" id="modalId" name="modalId">
     <input type="hidden" id="action" name="action">
-    <input type="hidden" id="schoolIdModal" name="schoolIdModal">
-    <input type="hidden" id="deptTypeModal" name="deptTypeModal">
-    <input type="hidden" id="deptIdModal" name="deptIdModal">
+    <input type="hidden" id="locationIdHidden" name="locationIdHidden">
     <button type="submit" class="btn btn-secondary" id="submitModalForm">Submit</button>
     <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
    </div> <!-- Modal Footer Closed-->

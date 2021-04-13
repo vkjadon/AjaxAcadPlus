@@ -168,19 +168,19 @@ require('../../php_function.php');
           </div>
           <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionStaff" class="collapse  collapseAccordian">
            <div class="card-body">
-            <form class="form-horizontal" id="modalForm">
+            <form class="form-horizontal">
              <input type="hidden" id="staffIdHidden" name="staffIdHidden">
              <div class="row">
               <div class="col-6">
                <div class="form-group">
                 Staff Name
-                <input type="text" class="form-control form-control-sm staffForm" id="sName" name="sName" placeholder="Staff Name" data-tag="staff_name">
+                <input type="text" class="form-control form-control-sm staffForm" id="sNameAccordian" name="sNameAccordian" placeholder="Staff Name" data-tag="staff_name">
                </div>
               </div>
               <div class="col-6">
                <div class="form-group">
                 Date of Birth
-                <input type="date" class="form-control form-control-sm staffForm" id="sDob" name="sDob" placeholder="Date of Birth" data-tag="staff_dob">
+                <input type="date" class="form-control form-control-sm staffForm" id="sDobAccordian" name="sDobAccordian" placeholder="Date of Birth" data-tag="staff_dob">
                </div>
               </div>
              </div>
@@ -188,13 +188,13 @@ require('../../php_function.php');
               <div class="col-6">
                <div class="form-group">
                 Email
-                <input type="text" class="form-control form-control-sm staffForm" id="sEmail" name="sEmail" placeholder="Staff Email Id" data-tag="staff_email">
+                <input type="text" class="form-control form-control-sm staffForm" id="sEmailAccordian" name="sEmailAccordian" placeholder="Staff Email Id" data-tag="staff_email">
                </div>
               </div>
               <div class="col-6">
                <div class="form-group">
                 Mobile Number
-                <input type="text" class="form-control form-control-sm staffForm" id="sMobile" name="sMobile" placeholder="Staff Mobile Number" data-tag="staff_mobile">
+                <input type="text" class="form-control form-control-sm staffForm" id="sMobileAccordian" name="sMobileAccordian" placeholder="Staff Mobile Number" data-tag="staff_mobile">
                </div>
               </div>
              </div>
@@ -216,7 +216,7 @@ require('../../php_function.php');
               <div class="col-6">
                <div class="form-group">
                 Date of Joining
-                <input type="date" class="form-control form-control-sm staffForm" id="sDoj" name="sDoj" placeholder="Date of Joining" data-tag="staff_doj">
+                <input type="date" class="form-control form-control-sm staffForm" id="sDojAccordian" name="sDojAccordian" placeholder="Date of Joining" data-tag="staff_doj">
                </div>
               </div>
               <div class="col-6">
@@ -401,7 +401,7 @@ require('../../php_function.php');
                </div>
               </div>
               <div class="col-2">
-               <input type="hidden" id="action" name="action">
+               <!-- <input type="hidden" id="action" name="action"> -->
                <input type="hidden" id="stfIdService" name="stfIdService">
                <button type="submit" class="btn btn-primary btn-sm" id="submitServiceForm">Submit</button>
               </div>
@@ -523,7 +523,6 @@ require('../../php_function.php');
   });
 
   $(document).on('click', '.uploadStaff', function() {
-   $.alert('hello');
    $('#actionUpload').val('uploadStaff')
    $('#button_action').show().val('Update Staff');
    $('#formModal').modal('show');
@@ -534,6 +533,8 @@ require('../../php_function.php');
    event.preventDefault();
    var formData = $(this).serialize();
    // action and test_id are passed as hidden
+   $.alert(formData);
+
    $.ajax({
     url: "uploadStaffSql.php",
     method: "POST",
@@ -931,7 +932,6 @@ require('../../php_function.php');
     <!-- Modal footer -->
     <div class="modal-footer">
      <input type="hidden" name="action" id="actionUpload">
-     <input type="hidden" name="batch_idUpload" id="batch_idUpload">
      <input type="submit" name="button_action" id="button_action" class="btn btn-success btn-sm" />
      <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
     </div> <!-- Modal Footer Closed-->
