@@ -29,7 +29,8 @@ if (!empty($_FILES["csv_upload"]["name"])) {
     $subject_tutorial = $conn->real_escape_string($row[5]); 
     $subject_lecture = $conn->real_escape_string($row[6]); 
     $subject_credit = $conn->real_escape_string($row[7]);
-    $subject_type = $conn->real_escape_string($row[8]); 
+    $subject_type = $conn->real_escape_string($row[8]);
+    if($subject_type=="")$subject_type='DC';
     $subject_mode = $conn->real_escape_string($row[9]);  
     $subject_category = $conn->real_escape_string($row[10]); 
     $subject_internal = $conn->real_escape_string($row[11]);  

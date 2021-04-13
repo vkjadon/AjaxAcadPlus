@@ -65,7 +65,7 @@ require('../../php_function.php');
 
 <body>
  <?php require("../topBar.php"); ?>
- <div class="container-fluid">
+ <div class="container-fluid moduleBody">
   <span id="panelId"></span>
   <div class="row">
    <div class="col-sm-2">
