@@ -14,6 +14,8 @@ require('../../php_function.php');
 
 <body>
  <?php require("../topBar.php"); ?>
+ <div class="content">
+
  <div class="container-fluid">
   <div class="row">
    <div class="col-sm-2">
@@ -92,6 +94,7 @@ require('../../php_function.php');
    </div>
   </div>
  </div>
+</div>
 </body>
 
 <?php require("../js.php"); ?>
