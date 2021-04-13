@@ -73,6 +73,11 @@ require('../../php_function.php');
      <a class="list-group-item list-group-item-action bs" id="list-bs-list" data-toggle="list" href="#list-bs" role="tab" aria-controls="bs"> Batch/Session </a>
      <a class="list-group-item list-group-item-action is" id="list-is-list" data-toggle="list" href="#list-is" role="tab" aria-controls="is"> Institute Structure </a>
     </div>
+    <div class="bg-one text-white text-center py-1 mt-2">Select Batch</div>
+    <?php
+    $sql = "select * from batch where batch_status='0' order by batch desc";
+    selectList($conn, 'Sel Batch', array('0', 'batch_id', 'batch', '', 'sel_batch'), $sql);
+    ?>
    </div>
 
    <div class="col-10">
@@ -212,8 +217,8 @@ require('../../php_function.php');
                 </div>
                 <p>Is the University Recognised as a 'University with Potential for Excellence Yes No (UPE)' by the UGC?</p>
                 <div class="custom-control custom-radio">
-                 <input type="radio" class="custom-control-input inst_yesugc" id="inst_yesugc" name="defaultExampleRadios">
-                 <label class="custom-control-label" for="inst_yesugc">Yes</label>
+                 <input type="radio" class="custom-control-input inst_yesugcInst" id="inst_yesugcInst" name="defaultExampleRadios">
+                 <label class="custom-control-label" for="inst_yesugcInst">Yes</label>
                 </div>
 
                 <div class="custom-control custom-radio">
@@ -230,7 +235,7 @@ require('../../php_function.php');
              </div>
              <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionInfoUni" class="collapse collapseAccordian">
               <div class="card-body">
-               <form class="text w-100 p-0" id="basicInfoForm">
+               <form class="text w-100 p-0" id="geoInfoForm">
                 <p>Location, Area and Activity of Campus</p>
                 <div class="row">
                  <div class="col-12">
@@ -298,31 +303,31 @@ require('../../php_function.php');
                 <div class="row">
                  <div class="col-2">
                   <div class="custom-control custom-radio">
-                   <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios">
+                   <input type="radio" class="custom-control-input" id="urban" name="urban">
                    <label class="custom-control-label" for="defaultUnchecked">Urban</label>
                   </div>
                  </div>
                  <div class="col-2">
                   <div class="custom-control custom-radio">
-                   <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios">
+                   <input type="radio" class="custom-control-input" id="rural" name="rural">
                    <label class="custom-control-label" for="defaultUnchecked">Rural</label>
                   </div>
                  </div>
                  <div class="col-2">
                   <div class="custom-control custom-radio">
-                   <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios">
+                   <input type="radio" class="custom-control-input" id="tribal" name="tribal">
                    <label class="custom-control-label" for="defaultUnchecked">Tribal</label>
                   </div>
                  </div>
                  <div class="col-2">
                   <div class="custom-control custom-radio">
-                   <input type="radio" class="custom-control-input" id="defaultUnchecked" name="defaultExampleRadios">
+                   <input type="radio" class="custom-control-input" id="hill" name="hill">
                    <label class="custom-control-label" for="defaultUnchecked">Hill</label>
                   </div>
                  </div>
                  <div class="col-4">
                   <div class="custom-control custom-radio">
-                   <input type="radio" class="custom-control-input" id="defaultChecked" name="defaultExampleRadios" checked>
+                   <input type="radio" class="custom-control-input" id="semiUrban" name="semiUrbanSchoo" checked>
                    <label class="custom-control-label" for="defaultChecked">Semi Urban</label>
                   </div>
                  </div>
@@ -341,7 +346,7 @@ require('../../php_function.php');
      <div class="tab-pane fade" id="list-mis" role="tabpanel" aria-labelledby="list-mis-list">
       <div class="row">
        <div class="col-4">
-        <div class="mt-1 mb-1"><button class="btn btn-secondary btn-sm mt-1 addSchool">New</button>
+        <div class="mt-1 mb-1"><button class="btn btn-secondary btn-sm mt-1 addSchool">New School</button>
          <p id="schoolShowList"></p>
         </div>
        </div>
@@ -356,8 +361,8 @@ require('../../php_function.php');
              </div>
              <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionInfoSchool" class="collapse collapseAccordian">
               <div class="card-body">
-               <form class="text w-100 p-0" id="basicInfoForm">
-                <input type="hidden" id="instIdHidden" name="instIdHidden">
+               <form class="text w-100 p-0" id="basicSchoolInfoForm">
+                <!-- <input type="hidden" id="schoolIdHidden" name="schoolIdHidden"> -->
                 <p>Name and Address of the College</p>
                 <div class="row">
                  <div class="col-12">
@@ -383,16 +388,16 @@ require('../../php_function.php');
                  <div class="col-6">
                   <div class="form-group">
                    <div class="md-form md-outline m-0">
-                    <input type="text" id="schoolCity" class="form-control schoolForm" data-tag="inst_city">
-                    <label for="instCity">City</label>
+                    <p class="text-muted m-0">City</p>
+                    <input type="text" id="schoolCity" class="form-control schoolForm" data-tag="school_city">
                    </div>
                   </div>
                  </div>
                  <div class="col-6">
                   <div class="form-group">
                    <div class="md-form md-outline m-0">
-                    <input type="text" id="instPIN" class="form-control schoolForm" data-tag="inst_pincode">
-                    <label for="instPIN">PIN Code</label>
+                    <p class="text-muted m-0">Pin Code</p>
+                    <input type="text" id="schoolPIN" class="form-control schoolForm" data-tag="school_pincode">
                    </div>
                   </div>
                  </div>
@@ -401,97 +406,19 @@ require('../../php_function.php');
                  <div class="col-6">
                   <div class="form-group">
                    <div class="md-form md-outline m-0">
-                    <input type="text" id="instState" class="form-control schoolForm" data-tag="inst_state">
-                    <label for="instState">State</label>
+                    <p class="text-muted m-0">State</p>
+                    <input type="text" id="schoolState" class="form-control schoolForm" data-tag="school_state">
                    </div>
                   </div>
                  </div>
                  <div class="col-6">
                   <div class="form-group">
                    <div class="md-form md-outline m-0">
-                    <input type="text" id="instWebsite" class="form-control schoolForm" data-tag="inst_url">
-                    <label for="instWebsite">Website</label>
+                    <p class="text-muted m-0">Website</p>
+                    <input type="text" id="schoolWebsite" class="form-control schoolForm" data-tag="school_url">
                    </div>
                   </div>
                  </div>
-                </div>
-                <p>Nature of University</p>
-                <div class="row">
-                 <div class="col-6">
-                  <div class="form-group">
-                   <div class="md-form md-outline m-0">
-                    <input type="text" id="instStatus" class="form-control instForm" data-tag="inst_status">
-                    <label for="instStatus">Institution Status</label>
-                   </div>
-                  </div>
-                 </div>
-                 <div class="col-6">
-                  <div class="form-group">
-                   <div class="md-form m-0">
-                    <input type="text" id="instType" class="form-control instForm" data-tag="inst_type">
-                    <label for="instType">Type of University</label>
-                   </div>
-                  </div>
-                 </div>
-                </div>
-                <p>Establishment Details</p>
-                <div class="row">
-                 <div class="col-6">
-                  <div class="form-group">
-                   <div class="md-form md-outline m-0">
-                    <input type="date" id="instEstDateUni" class="form-control instForm" data-tag="inst_est_date_uni">
-                    <label for="instEstDateUni">Establishment Date of the University</label>
-                   </div>
-                  </div>
-                 </div>
-                 <div class="col-6">
-                  <div class="form-group">
-                   <div class="md-form md-outline m-0">
-                    <input type="date" id="instEstDate" class="form-control instForm" data-tag="inst_est_date">
-                    <label for="instEstDate">Establishment Date</label>
-                   </div>
-                  </div>
-                 </div>
-                </div>
-                <div class="row">
-                 <div class="col-12">
-                  <div class="form-group">
-                   <div class="md-form md-outline m-0">
-                    <input type="text" id="instStatusEst" class="form-control instForm" data-tag="inst_status_est">
-                    <label for="instStatusEst">Status Prior to Establishment</label>
-                   </div>
-                  </div>
-                 </div>
-                </div>
-                <p class="m-0">Recognition Details</p>
-                <p>Date of Recognition as a University by UGC or Any Other National Agency</p>
-                <div class="row">
-                 <div class="col-6">
-                  <div class="form-group">
-                   <div class="md-form md-outline m-0">
-                    <input type="date" id="underSection2f" class="form-control instForm" data-tag="inst_under2f">
-                    <label for="underSection2f">Under Section 2f of UGC</label>
-                   </div>
-                  </div>
-                 </div>
-                 <div class="col-6">
-                  <div class="form-group">
-                   <div class="md-form md-outline m-0">
-                    <input type="date" id="underSection12b" class="form-control instForm" data-tag="inst_under12b">
-                    <label for="underSection12b">Under Section 12B of UGC</label>
-                   </div>
-                  </div>
-                 </div>
-                </div>
-                <p>Is the University Recognised as a 'University with Potential for Excellence Yes No (UPE)' by the UGC?</p>
-                <div class="custom-control custom-radio">
-                 <input type="radio" class="custom-control-input inst_yesugc" id="inst_yesugc" name="defaultExampleRadios">
-                 <label class="custom-control-label" for="inst_yesugc">Yes</label>
-                </div>
-
-                <div class="custom-control custom-radio">
-                 <input type="radio" class="custom-control-input inst_nougc" id="inst_nougc" name="defaultExampleRadios" checked>
-                 <label class="custom-control-label" for="inst_nougc">No</label>
                 </div>
                </form>
               </div>
@@ -581,7 +508,7 @@ require('../../php_function.php');
               if ($result->num_rows == 0) echo 'No Data Found';
               ?>
               <div class="input-group-append">
-               <input type="hidden" id="action" name="action">
+               <!-- <input type="hidden" id="action" name="action"> -->
                <input type="hidden" id="schoolIdHidden" name="schoolIdHidden">
                <input type="hidden" id="deptIdHidden" name="deptIdHidden">
                <button class="btn btn-primary btn-sm m-0" type="submit">Submit</button>
@@ -658,6 +585,7 @@ require('../../php_function.php');
        </div>
       </div>
      </div>
+
     </div>
    </div>
   </div>
@@ -687,7 +615,6 @@ require('../../php_function.php');
 
   $(document).on('click', '.si', function() {
    $('.selectPanel').hide();
-
   });
 
   $(document).on('click', '.mid', function() {
@@ -774,7 +701,7 @@ require('../../php_function.php');
    else {
     var formData = $(this).serialize();
     $('#firstModal').modal('hide');
-    //$.alert(x + " Pressed" + formData);
+    $.alert(x + " Pressed" + action);
     $.post("instSql.php", formData, () => {}, "text").done(function(data) {
      $.alert("List " + data);
      if (action == "addInst" || action == "updateInst") instList();
@@ -1042,6 +969,33 @@ require('../../php_function.php');
     $('#firstModal').modal('show');
     $('.programForm').show();
    }
+  });
+
+  $(document).on('click', '.uploadProgram', function() {
+   var y = $("#sel_batch").val();
+   $("#batch_idUpload").val(y);
+   $('#actionUpload').val('uploadProgram')
+   $('#button_action').show().val('Update Program');
+   $('#formModal').modal('show');
+   $('#modal_uploadTitle').text('Upload Program');
+  });
+
+  $(document).on('submit', '#upload_csv', function(event) {
+   event.preventDefault();
+   var formData = $(this).serialize();
+   $.alert(formData);
+   // action and test_id are passed as hidden
+   $.ajax({
+    url: "uploadSql.php",
+    method: "POST",
+    data: new FormData(this),
+    contentType: false, // The content type used when sending data to the server.
+    cache: false, // To unable request pages to be cached
+    processData: false, // To send DOMDocument or non processed data file it is set to false
+    success: function(data) {
+     console.log(data);
+    }
+   })
   });
 
   function instList() {
@@ -1348,5 +1302,37 @@ require('../../php_function.php');
   </form>
  </div> <!-- Modal Dialog Closed-->
 </div> <!-- Modal Closed-->
+
+<div class="modal" id="formModal">
+ <div class="modal-dialog modal-md">
+  <form class="form-horizontal" id="upload_csv">
+   <div class="modal-content">
+
+    <!-- Modal Header -->
+    <div class="modal-header">
+     <h4 class="modal-title" id="modal_uploadTitle"></h4>
+     <button type="button" class="close" data-dismiss="modal">&times;</button>
+    </div> <!-- Modal Header Closed-->
+
+    <!-- Modal body -->
+    <div class="modal-body">
+     <div class="form-group">
+      <div class="row">
+       <div class="col-sm-10">
+        <input type="file" name="csv_upload" />
+       </div>
+      </div>
+     </div>
+    </div> <!-- Modal Body Closed-->
+    <!-- Modal footer -->
+    <div class="modal-footer">
+     <input type="hidden" name="action" id="actionUpload">
+     <input type="submit" name="button_action" id="button_action" class="btn btn-success btn-sm" />
+     <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+    </div> <!-- Modal Footer Closed-->
+   </div> <!-- Modal Conent Closed-->
+  </form>
+ </div> <!-- Modal Dialog Closed-->
+</div>
 
 </html>

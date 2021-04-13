@@ -21,6 +21,7 @@
 							<a href="<?php echo $codePath . '/module/inst/'; ?>" class="dropdown-item">SetUp Institite</a>
 							<a href="<?php echo $codePath . '/module/admission/'; ?>" class="dropdown-item">Admission</a>
 							<a href="<?php echo $codePath . '/module/approval/'; ?>" class="dropdown-item">Approvals</a>
+							<a href="<?php echo $codePath . '/module/infra/'; ?>" class="dropdown-item">Infrastructure</a>
 						</div>
 						<div class="col-6">
 							<a href="<?php echo $codePath . '/module/manage_responsibility/'; ?>" class="dropdown-item">Assign Responsibility</a>

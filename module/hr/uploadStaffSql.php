@@ -6,15 +6,15 @@ include('../../config_variable.php');
 include('../../php_function.php');
 $output = '';
 
-if (!empty($_FILES["upload_staff"]["name"])) {
+if (!empty($_FILES["csv_upload"]["name"])) {
  $output = '';
- $filename = $_FILES["upload_staff"]["name"];
+ $filename = $_FILES["csv_upload"]["name"];
  $allowed_ext = array(".csv");
  $file_ext = substr($filename, strripos($filename, '.')); // get file name
  // echo $file_ext;
  if (in_array($file_ext, $allowed_ext)) {
   if ($_POST["action"] == "uploadStaff") {
-   $file_data = fopen($_FILES["upload_staff"]["tmp_name"], 'r');
+   $file_data = fopen($_FILES["csv_upload"]["tmp_name"], 'r');
    fgetcsv($file_data);
    while ($row = fgetcsv($file_data)) {
     //    print_r($file_data);
