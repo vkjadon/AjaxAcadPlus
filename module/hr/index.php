@@ -155,6 +155,14 @@ require('../../php_function.php');
                 Kenneth Valdez
                </div>
               </div>
+              <div class="row">
+               <div class="col-3">
+                <h7 class="mb-0 ">User ID</h7>
+               </div>
+               <div class="col-9 text-secondary staff_userId">
+                Kenneth Valdez
+               </div>
+              </div>
              </div>
             </div>
            </div>
@@ -629,49 +637,26 @@ require('../../php_function.php');
     action: "fetchStaff"
    }, () => {}, "json").done(function(data) {
     // $.alert("hello" + data.staff_name);
-    $("#sEmail").val(data.staff_email);
-    $("#sName").val(data.staff_name);
-    $("#sMobile").val(data.staff_mobile);
-    $("#sDob").val(data.staff_dob);
+    $("#sEmailAccordian").val(data.staff_email);
+    $("#sNameAccordian").val(data.staff_name);
+    $("#sMobileAccordian").val(data.staff_mobile);
+    $("#sDobAccordian").val(data.staff_dob);
     $("#fName").val(data.staff_fname);
     $("#mName").val(data.staff_mname);
     $("#sAdhaar").val(data.staff_adhaar);
     $("#sAddress").val(data.staff_address);
     $("#sGender").val(data.staff_gender);
     $("#sTeaching").val(data.staff_teaching);
-    $("#sDoj").val(data.staff_doj);
+    $("#sDojAccordian").val(data.staff_doj);
     $("#staff_title").text(data.staff_name);
     $(".staff_email").text(data.staff_email);
     $(".staff_name").text(data.staff_name);
     $(".staff_mobile").text(data.staff_mobile);
     $(".staff_doj").text(data.staff_doj);
+    $(".staff_userId").text(data.user_id);
     $('.staffProfile').show();
 
 
-   }, "text").fail(function() {
-    $.alert("fail in place of error");
-   })
-  });
-
-  $(document).on('click', '.staff_idE', function() {
-   var id = $(this).attr('id');
-   //  $.alert("Id " + id);
-   $.post("hrSql.php", {
-    action: "fetchStaff",
-    staffId: id
-   }, () => {}, "json").done(function(data) {
-    // $.alert("List ");
-    $('#modal_title').text("Update Staff  [" + id + "]");
-    $("#sName").val(data.staff_name);
-    var desig = data.designation_id;
-    $("#sel_desig option[value='" + desig + "']").attr("selected", "selected");
-    $("#sEmail").val(data.staff_email);
-    $("#sMobile").val(data.staff_mobile);
-    $("#action").val("updateStaff");
-    $('#modalId').val(id);
-    $('#firstModal').modal('show');
-    $(".staffDetailForm").hide();
-    $(".staffForm").show();
    }, "text").fail(function() {
     $.alert("fail in place of error");
    })

@@ -20,11 +20,10 @@ if (!empty($_FILES["csv_upload"]["name"])) {
     //    print_r($file_data);
     $name = $conn->real_escape_string($row[0]); // staff_name
     $doj = $conn->real_escape_string($row[1]);  // doj
+    $doj = date('Y-m-d',strtotime($doj));
     $mobile = $conn->real_escape_string($row[2]);  // mobile
     $email = $conn->real_escape_string($row[3]);  // email
     $user_id = $conn->real_escape_string($row[4]);  // userid
-
-
 
     $sql = "select * from staff where staff_email='$email'";
     $result = $conn->query($sql);
