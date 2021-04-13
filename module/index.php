@@ -4,7 +4,8 @@ require('../config_variable.php');
 require('../php_function.php');
 
 if (!isset($myDept)) {
-	$myDept = getField($conn, $myId, "staff", "staff_id", "dept_id");
+	$sql="select dept_id from staff_service where staff_id='$myId' and ss_status='0'";
+	$myDept = getFieldValue($conn, "dept_id", $sql);
 	$_SESSION['mydeptid'] = $myDept;
 }
 

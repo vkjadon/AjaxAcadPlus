@@ -65,7 +65,6 @@ require('../../php_function.php');
         </div>
        </div>
       </div>
-
       <div class="row">
        <div class="col-sm-8">
         <div id="subShowList"></div>
@@ -545,7 +544,24 @@ require('../../php_function.php');
     $('#secondModal').modal('show');
    }
   });
+	$(document).on('click', '.vac', function() {
+   var id = $(this).attr("data-id");
+   var code = $(this).attr("data-code");
+   var field = $(this).attr("data-field");
+   $.alert("Disabled " + id);
+   $.post("aaSql.php", {
+    id: id,
+		code:code,
+		field:field,
+    action: "vac"
+   }, function(data, status) {
+    //$.alert("Data" + data)
+    subjectList();
+   }, "text").fail(function() {
+    $.alert("Error in BatchSession Function");
+   })
 
+  });
   // Functions
   function batchSession(x) {
    $.post("aaSql.php", {

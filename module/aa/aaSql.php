@@ -25,6 +25,20 @@ if (isset($_POST['action'])) {
     $dup = "select * from subject where subject_id='" . $_POST["modalId"] . "'";
     $dup_alert = "Could Not Update - Duplicate Entries";
     updateData($conn, 'subject', $fields, $values, $dup, $dup_alert);
+  } elseif ($_POST['action'] == 'vac') {
+    $id=$_POST['id'];
+    $code=$_POST['code'];
+    $field=$_POST['field'];
+    if($code=='N')$sql = "update subject_addon set $field='0' where subject_id='$id'";
+    else $sql = "update subject_addon set $field='1' where subject_id='$id'";
+    $result=$conn->query($sql);
+    if(!$result)echo $conn->error;
+    else 
+    {
+      //echo $conn->affected_rows;
+      $sql="insert into subject_addon (subject_id, $field) values('$id', '1')";
+      $conn->query($sql);
+    }
   } elseif ($_POST['action'] == 'deleteSubject') {    
     $id=$_POST['id'];
     $sql = "update subject set subject_status='9' where subject_id='$id'";
@@ -93,17 +107,27 @@ if (isset($_POST['action'])) {
       $status = $array["data"][$i]["subject_status"];
       
       echo '<div class="row shadow border border-primary mb-1 cardBodyText">';
-        echo '<div class="col-sm-3 mb-0 bg-two">';
-          echo 'ID : ' . $subject_id.' <b>['.$sno.']</b>';
+        echo '<div class="col-sm-2 p-1 mb-0 bg-two">';
+          echo 'ID:' . $subject_id.' <b>['.$sno.']</b>';
           echo '<a href="#" class="float-right subject_idE" data-id="' . $subject_id . '"><i class="fa fa-edit"></i></a>';
-          echo '<div>SubCode : <b>' . $array["data"][$i]["subject_code"] . '</b>
+          echo '<div><b>' . $array["data"][$i]["subject_code"] . '</b>
           <span class="float-right footerNote">' . $type . '</span></div>';
         echo '</div>';
-      
         echo '<div class="col-sm-6">';
           echo '<div class="cardBodyText"><b>' . $array["data"][$i]["subject_name"] . '</b></div>';
           echo '<div class="cardBodyText">Semester : ' . $array["data"][$i]["subject_semester"];
-          echo ' <b>Credit : ' . $Cr . '</b>';
+          echo ' <b>Credit : ' . $Cr . ' </b>';
+          $emp=getField($conn, $subject_id, "subject_addon", "subject_id", "subject_emp");
+          if($emp=="1")echo ' [ <i class="fa fa-check"><b><a href="#" class="vac" data-field="subject_emp" data-code="N" data-id="' . $subject_id . '"></i>Emp</a></b> ] ';
+          else echo ' [ <i class="fa fa-times"></i><b><a href="#" class="vac" data-field="subject_emp" data-code="Y" data-id="' . $subject_id . '">Emp</a></b> ] ';
+          
+          $skill=getField($conn, $subject_id, "subject_addon", "subject_id", "subject_skill");
+          if($skill=="1")echo ' [ <i class="fa fa-check"><b><a href="#" class="vac" data-field="subject_skill" data-code="N" data-id="' . $subject_id . '"></i>Skill</a></b> ] ';
+          else echo ' [ <i class="fa fa-times"></i><b><a href="#" class="vac" data-field="subject_skill" data-code="Y" data-id="' . $subject_id . '">Skill</a></b> ] ';
+
+          $entrep=getField($conn, $subject_id, "subject_addon", "subject_id", "subject_entrep");
+          if($entrep=="1")echo '<i class="fa fa-check"><b><a href="#" class="vac" data-field="subject_entrep" data-code="N" data-id="' . $subject_id . '"></i>Entrep</a></b>';
+          else echo '<i class="fa fa-times"></i><b><a href="#" class="vac" data-field="subject_entrep" data-code="Y" data-id="' . $subject_id . '">Entrep</a></b>';
           echo '</div>';
         echo '</div>';
         
@@ -111,7 +135,12 @@ if (isset($_POST['action'])) {
           echo 'L-T-P<br>' . $L . '-' . $T . '-' . $P;
         echo '</div>';
       
-        echo '<div class="col-sm-1">';
+        echo '<div class="col-sm-2">';
+        $vac=getField($conn, $subject_id, "subject_addon", "subject_id", "subject_vac");
+          
+          if($vac=="1")echo '<i class="fa fa-check"><b><a href="#" class="vac" data-field="subject_vac" data-code="N" data-id="' . $subject_id . '"></i>VAC</a></b>';
+          else echo '<i class="fa fa-times"></i><b><a href="#" class="vac" data-field="subject_vac" data-code="Y" data-id="' . $subject_id . '">VAC</a></b>';
+          echo '<br>';
           if($status=="9")echo '<a href="#" class="float-right subject_idR" data-id="' . $subject_id . '">Removed</a>';
           else echo '<a href="#" class="float-right subject_idD" data-id="' . $subject_id . '"><i class="fa fa-trash"></i></a>';
         echo '</div>';
@@ -125,7 +154,7 @@ if (isset($_POST['action'])) {
     $totalTutorial = 0;
     $totalPractical = 0;
     $totalCredit = 0;
-    $sql = "select sum(subject_lecture) as lecture, sum(subject_tutorial) as tutorial, sum(subject_practical) as practical, sum(subject_credit) as credit, subject_semester from subject where subject_semester>0 and program_id='$myProg' and batch_id='$batch_id' group by subject_semester";
+    $sql = "select sum(subject_lecture) as lecture, sum(subject_tutorial) as tutorial, sum(subject_practical) as practical, sum(subject_credit) as credit, subject_semester from subject where subject_semester>0 and program_id='$myProg' and batch_id='$batch_id' and subject_status<'9' group by subject_semester";
     $result = $conn->query($sql);
     echo '<div class="card card-square">';
     echo '<table class="table table-bordered list-table-xs">';
@@ -148,6 +177,34 @@ if (isset($_POST['action'])) {
     echo '<td></td><td class="totalRow-sm">' . $totalLecture . '</td><td class="totalRow-sm">' . $totalTutorial . '</td><td class="totalRow-sm">' . $totalPractical . '</td><td class="totalRow-sm">' . $totalCredit . '</td>';
     echo '</tr>';
     echo '</table>';
+    $sql = "select count(subject_id) as subjects from subject where subject_semester>0 and program_id='$myProg' and batch_id='$batch_id' and subject_status<'9'";
+    $result = $conn->query($sql);
+    $row = $result->fetch_array();
+    $totalSubjects=$row["subjects"];
+
+    $sql = "select count(subject_id) as subjects from subject where subject_type='DC' and subject_semester>0 and program_id='$myProg' and batch_id='$batch_id' and subject_status<'9'";
+    $result = $conn->query($sql);
+    $row = $result->fetch_array();
+    $coreSubjects=ceil(($row["subjects"]/$totalSubjects)*100);
+    
+    echo '<div class="row">
+      <div class="col-6 pr-0">
+        <div class="card text-white bg-info">
+          <div class="card-header">Core</div>
+          <div class="card-body">
+            <h3 class="card-title text-center">'.$coreSubjects.'%</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 pl-0">
+        <div class="card text-white bg-success">
+          <div class="card-header">Electives</div>
+          <div class="card-body">
+            <h3 class="card-title text-center">'.(100-$coreSubjects).'%</h3>
+          </div>
+        </div>
+      </div>
+    </div>';
   } elseif ($_POST["action"] == "batchList") {
     //    echo "MyId- $myId";
     $tableId = 'batch_id';
