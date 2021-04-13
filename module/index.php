@@ -37,7 +37,7 @@ if (!isset($mySes)) {
 
 <body>
 	<?php require("topBar.php"); ?>
-	<div class="container-fluid">
+	<div class="container-fluid moduleBody">
 		<div class="row">
 			<div class="col-2">
 				<?php
