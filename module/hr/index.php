@@ -662,29 +662,6 @@ require('../../php_function.php');
    })
   });
 
-  $(document).on('click', '.staff_idDetails', function() {
-   var id = $(this).attr('id');
-   // $.alert("id" + id);
-   $.post("hrSql.php", {
-     studentId: id,
-     action: "fetchStaffDetails"
-    }, function(data, status) {
-     // $.alert("data " + data)
-    },
-    "json").done(function(data) {
-    $("#fName").val(data.sd_fname);
-    $("#mName").val(data.sd_mname);
-    $("#sDob").val(data.sd_dob);
-   }).fail(function() {
-    $.alert("fail in place of error");
-   })
-   $('#modal_title').text("Add Staff Details");
-   $('#firstModal').modal('show');
-   $(".staffDetailForm").show();
-   $(".staffForm").hide();
-   $('#modalId').val(id);
-   $('#action').val("addDetails");
-  });
 
   $(document).on('click', '.stq_idView', function() {
    var id = $(this).attr('id');
@@ -906,6 +883,10 @@ require('../../php_function.php');
 
     <!-- Modal body -->
     <div class="modal-body">
+    <h5>Selected Department</h5>
+   <p class="selectedDepartment"><b><?php echo $myDeptAbbri; ?></b></p>
+    <hr>
+     <h5>Select File to Upload Staff</h5>
      <div class="form-group">
       <div class="row">
        <div class="col-sm-10">

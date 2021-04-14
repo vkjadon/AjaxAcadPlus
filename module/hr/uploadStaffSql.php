@@ -25,17 +25,22 @@ if (!empty($_FILES["csv_upload"]["name"])) {
     $email = $conn->real_escape_string($row[3]);  // email
     $user_id = $conn->real_escape_string($row[4]);  // userid
 
-    $sql = "select * from staff where staff_email='$email'";
+    $sql = "select * from staff where user_id='$user_id'";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     $records = $result->num_rows;
-    echo $name;
+
     if ($records == 0) {
      $sql = "INSERT INTO staff (staff_name, staff_doj, staff_mobile, staff_email, user_id) VALUES ('$name', '$doj', '$mobile', '$email', '$user_id')";
      $result_insert = $conn->query($sql);
+     $last_id = $conn->insert_id;
      if (!$result_insert) echo $conn->error;
      $status = "Inserted";
     } else $status = "Exists";
+
+    $sql = "INSERT INTO staff_service (staff_id, dept_id) VALUES ('$last_id', '$myDept')";
+    $result_service = $conn->query($sql);
+    if (!$result_service) echo $conn->error;
    }
   }
  } else $output = '1';
