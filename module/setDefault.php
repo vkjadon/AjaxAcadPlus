@@ -1,7 +1,7 @@
     <div class="bg-one text-center py-1 mt-2">Default Settings</div>
-    <div class="card bg-danger">
-        <div class="card-title">School</div>
+    <div class="card">
         <div class="card-body">
+            <h5 class="card-title">School</h5>
             <?php
             if (isset($myScl)) {
                 $name = getField($conn, $myScl, "school", "school_id", "school_abbri");
