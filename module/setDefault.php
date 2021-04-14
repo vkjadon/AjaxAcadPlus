@@ -1,13 +1,22 @@
     <div class="bg-one text-center py-1 mt-2">Default Settings</div>
+    <div class="card bg-danger">
+        <div class="card-title">School</div>
+        <div class="card-body">
+            <?php
+            if (isset($myScl)) {
+                $name = getField($conn, $myScl, "school", "school_id", "school_abbri");
+                $sql = "select * from school where school_status='0'";
+                selectList($conn, 'School', array('0', 'school_id', 'school_abbri', '', 'sel_school', $myScl, $name), $sql);
+            } else {
+                $sql = "select * from school where school_status='0'";
+                selectList($conn, 'School', array('0', 'school_id', 'school_abbri', '', 'sel_school'), $sql);
+            }
+            ?>
+        </div>
+    </div>
+
     <?php
-    if (isset($myScl)) {
-        $name = getField($conn, $myScl, "school", "school_id", "school_abbri");
-        $sql = "select * from school where school_status='0'";
-        selectList($conn, 'School', array('0', 'school_id', 'school_abbri', '', 'sel_school', $myScl, $name), $sql);
-    } else {
-        $sql = "select * from school where school_status='0'";
-        selectList($conn, 'School', array('0', 'school_id', 'school_abbri', '', 'sel_school'), $sql);
-    }
+
     if (isset($myDept)) {
         $name = getField($conn, $myDept, "department", "dept_id", "dept_abbri");
         $sql = "select * from department where dept_status='0'";
@@ -31,5 +40,15 @@
     } else {
         $sql = "select * from session where session_status='0'";
         selectList($conn, 'Session', array('1', 'session_id', 'session_name', '', 'sel_session'), $sql);
+    }
+
+    if (isset($myBatch)) {
+        //echo $myBatch;
+        $name = getField($conn, $myBatch, "batch", "batch_id", "batch");
+        $sql = "select * from batch where batch_status='0' order by batch desc";
+        selectList($conn, 'Batch', array('1', 'batch_id', 'batch', 'batch_id', 'sel_batch', $myBatch, $name), $sql);
+    } else {
+        $sql = "select * from batch where batch_status='0' order by batch desc";
+        selectList($conn, 'Batch', array('1', 'batch_id', 'batch', '', 'sel_batch'), $sql);
     }
     ?>

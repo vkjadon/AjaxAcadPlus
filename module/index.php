@@ -84,6 +84,19 @@ appears on the same line at the text.</p>
 				$.alert("Error !!");
 			})
 		})
+		$(document).on('change', '#sel_batch', function() {
+			var x = $("#sel_batch").val();
+			//$.alert("Batch Changed " + x);
+			$.post("../check_user.php", {
+				action: "setBatch",
+				batchId: x
+			}, function(mydata, mystatus) {
+				//$.alert("- Batch Updated -" + mydata);
+				location.reload();
+			}, "text").fail(function() {
+				$.alert("Error !!");
+			})
+		})
 
 		$(document).on('change', '#sel_session', function() {
 			var x = $("#sel_session").val();

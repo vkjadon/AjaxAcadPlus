@@ -14,6 +14,7 @@ if (isset($_SESSION["privledge"])) $myPriv = $_SESSION['privledge'];
 
 if (isset($_SESSION["mysclid"])) $myScl = $_SESSION['mysclid'];
 if (isset($_SESSION["mysid"])) $mySes = $_SESSION['mysid'];
+if (isset($_SESSION["myBatch"])) $myBatch = $_SESSION['myBatch'];
 if (isset($_SESSION["mydeptid"])) $myDept = $_SESSION['mydeptid'];
 if (isset($_SESSION["mypid"])) $myProg = $_SESSION['mypid'];
 
