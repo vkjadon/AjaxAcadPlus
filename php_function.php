@@ -25,8 +25,8 @@ function selectList($conn, $selectTitle, $data, $sql)
   //$required=2 The ALL item does NOT appear in the List
   $result = $conn->query($sql);
   if ($result) {
-    if ($required == '0') echo '<select class="form-control form-control-sm ' . $name . '" name="' . $idName . '" id="' . $idName . '">';
-    else echo '<select class="form-control form-control-sm ' . $name . '" name="' . $idName . '" id="' . $idName . '" required>';
+    if ($required == '0') echo '<select class="mdb-select form-control form-control-sm ' . $name . '" name="' . $idName . '" id="' . $idName . '">';
+    else echo '<select class="mdb-select form-control form-control-sm ' . $name . '" name="' . $idName . '" id="' . $idName . '" required>';
      
     if (strlen($selectTitle) > 2 && count($data)<6) echo '<option value="">' . $selectTitle . '</option>';
     elseif(count($data)>5) echo '<option value="'.$selectedId.'">' . $selectedName . '</option>';

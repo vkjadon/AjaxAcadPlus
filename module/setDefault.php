@@ -1,54 +1,80 @@
-    <div class="bg-one text-center py-1 mt-2">Default Settings</div>
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">School</h5>
-            <?php
-            if (isset($myScl)) {
-                $name = getField($conn, $myScl, "school", "school_id", "school_abbri");
-                $sql = "select * from school where school_status='0'";
-                selectList($conn, 'School', array('0', 'school_id', 'school_abbri', '', 'sel_school', $myScl, $name), $sql);
-            } else {
-                $sql = "select * from school where school_status='0'";
-                selectList($conn, 'School', array('0', 'school_id', 'school_abbri', '', 'sel_school'), $sql);
-            }
-            ?>
-        </div>
-    </div>
+<div class="card mb-2">
+	<div class="card-body m-0 p-1" style="background-color:beige">
+		<h7 class="card-title">School</h7>
+		<?php
+		if (isset($myScl)) {
+			$name = getField($conn, $myScl, "school", "school_id", "school_abbri");
+			$sql = "select * from school where school_status='0'";
+			selectList($conn, 'School', array('0', 'school_id', 'school_abbri', '', 'sel_school', $myScl, $name), $sql);
+		} else {
+			$sql = "select * from school where school_status='0'";
+			selectList($conn, 'School', array('0', 'school_id', 'school_abbri', '', 'sel_school'), $sql);
+		}
+		?>
+	</div>
+</div>
 
-    <?php
+<div class="card mb-2">
+	<div class="card-body m-0 p-1" style="background-color:cornsilk">
+		<h7 class="card-title">Department</h7>
+		<?php
 
-    if (isset($myDept)) {
-        $name = getField($conn, $myDept, "department", "dept_id", "dept_abbri");
-        $sql = "select * from department where dept_status='0'";
-        selectList($conn, 'Department', array('1', 'dept_id', 'dept_abbri', '', 'sel_dept', $myDept, $name), $sql);
-    } else {
-        $sql = "select * from department where dept_status='0'";
-        selectList($conn, 'Department', array('1', 'dept_id', 'dept_abbri', '', 'sel_dept'), $sql);
-    }
-    if (isset($myProg)) {
-        $name = getField($conn, $myProg, "program", "program_id", "sp_abbri");
-        $sql = "select * from program where program_status='0'";
-        selectList($conn, 'Program', array('1', 'program_id', 'sp_abbri', '', 'sel_program', $myProg, $name), $sql);
-    } else {
-        $sql = "select * from program where program_status='0'";
-        selectList($conn, 'Sel Program', array('0', 'program_id', 'sp_abbri', '', 'sel_program'), $sql);
-    }
-    if (isset($mySes)) {
-        $name = getField($conn, $mySes, "session", "session_id", "session_name");
-        $sql = "select * from session where session_status='0'";
-        selectList($conn, 'Session', array('1', 'session_id', 'session_name', 'session_id', 'sel_session', $mySes, $name), $sql);
-    } else {
-        $sql = "select * from session where session_status='0'";
-        selectList($conn, 'Session', array('1', 'session_id', 'session_name', '', 'sel_session'), $sql);
-    }
+		if (isset($myDept)) {
+			$name = getField($conn, $myDept, "department", "dept_id", "dept_abbri");
+			$sql = "select * from department where dept_status='0'";
+			selectList($conn, 'Department', array('1', 'dept_id', 'dept_abbri', '', 'sel_dept', $myDept, $name), $sql);
+		} else {
+			$sql = "select * from department where dept_status='0'";
+			selectList($conn, 'Department', array('1', 'dept_id', 'dept_abbri', '', 'sel_dept'), $sql);
+		}
+		?>
+	</div>
+</div>
 
-    if (isset($myBatch)) {
-        //echo $myBatch;
-        $name = getField($conn, $myBatch, "batch", "batch_id", "batch");
-        $sql = "select * from batch where batch_status='0' order by batch desc";
-        selectList($conn, 'Batch', array('1', 'batch_id', 'batch', 'batch_id', 'sel_batch', $myBatch, $name), $sql);
-    } else {
-        $sql = "select * from batch where batch_status='0' order by batch desc";
-        selectList($conn, 'Batch', array('1', 'batch_id', 'batch', '', 'sel_batch'), $sql);
-    }
-    ?>
+<div class="card mb-2">
+	<div class="card-body m-0 p-1" style="background-color:aliceblue">
+		<h7 class="card-title">Programme</h7>
+		<?php
+		if (isset($myProg)) {
+			$name = getField($conn, $myProg, "program", "program_id", "sp_abbri");
+			$sql = "select * from program where program_status='0'";
+			selectList($conn, 'Program', array('1', 'program_id', 'sp_abbri', '', 'sel_program', $myProg, $name), $sql);
+		} else {
+			$sql = "select * from program where program_status='0'";
+			selectList($conn, 'Sel Program', array('0', 'program_id', 'sp_abbri', '', 'sel_program'), $sql);
+		}
+		?>
+	</div>
+</div>
+<div class="card mb-2">
+	<div class="card-body m-0 p-1" style="background-color:floralwhite">
+		<h7 class="card-title">Session</h7>
+		<?php
+		if (isset($mySes)) {
+			$name = getField($conn, $mySes, "session", "session_id", "session_name");
+			$sql = "select * from session where session_status='0'";
+			selectList($conn, 'Session', array('1', 'session_id', 'session_name', 'session_id', 'sel_session', $mySes, $name), $sql);
+		} else {
+			$sql = "select * from session where session_status='0'";
+			selectList($conn, 'Session', array('1', 'session_id', 'session_name', '', 'sel_session'), $sql);
+		}
+		?>
+	</div>
+</div>
+
+<div class="card mb-2">
+	<div class="card-body m-0 p-1" style="background-color:bisque">
+		<h7 class="card-title">Batch</h7>
+		<?php
+		if (isset($myBatch)) {
+			//echo $myBatch;
+			$name = getField($conn, $myBatch, "batch", "batch_id", "batch");
+			$sql = "select * from batch where batch_status='0' order by batch desc";
+			selectList($conn, 'Batch', array('1', 'batch_id', 'batch', 'batch_id', 'sel_batch', $myBatch, $name), $sql);
+		} else {
+			$sql = "select * from batch where batch_status='0' order by batch desc";
+			selectList($conn, 'Batch', array('1', 'batch_id', 'batch', '', 'sel_batch'), $sql);
+		}
+		?>
+	</div>
+</div>
