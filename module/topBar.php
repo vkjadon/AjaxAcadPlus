@@ -1,6 +1,19 @@
+<?php
+	if(isset($myScl))$mySclAbbri=getField($conn, $myScl, "school", "school_id", "school_abbri");
+	else $mySclAbbri="Select School";
+	if(isset($myDept))$myDeptAbbri=getField($conn, $myDept, "department", "dept_id", "dept_abbri");
+	else $myDeptAbbri="Select Dept";
+	if(isset($myProg))$myProgAbbri=getField($conn, $myProg, "program", "program_id", "program_abbri");
+	else $myProgAbbri="Select Prog";
+	if(isset($mySes))$mySesName=getField($conn, $mySes, "session", "session_id", "session_name");
+	else $mySesName="Select Session";
+?>
 <header>
 	<div class="bg-light py-2">
-		Some top header info
+		<?php 
+			echo $mySclAbbri.'-'.$myDeptAbbri.'-'.$myProgAbbri.'-'.$mySesName;
+			//echo "School ".$myScl;
+		?>
 	</div>
 
 	<nav id="navbar_top" class="navbar navbar-expand-lg navbar-dark bg-one">

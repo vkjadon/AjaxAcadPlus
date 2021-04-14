@@ -79,6 +79,7 @@ appears on the same line at the text.</p>
 				programId: x
 			}, function(mydata, mystatus) {
 				//$.alert("- Program Updated -" + mydata);
+				location.reload();
 			}, "text").fail(function() {
 				$.alert("Error !!");
 			})
@@ -92,6 +93,7 @@ appears on the same line at the text.</p>
 				sessionId: x
 			}, function(mydata, mystatus) {
 				//alert("- Session Updated -" + mydata);
+				location.reload();
 			}, "text").fail(function() {
 				$.alert("Error !!");
 			})
@@ -105,6 +107,7 @@ appears on the same line at the text.</p>
 				deptId: x
 			}, function(mydata, mystatus) {
 				//alert("- Session Updated -" + mydata);
+				location.reload();
 			}, "text").fail(function() {
 				$.alert("Error !!");
 			})
