@@ -1001,6 +1001,17 @@ require('../../php_function.php');
 
     <!-- Modal body -->
     <div class="modal-body">
+     <div class="row">
+      <div class="col-sm-6">
+       <h5>Selected Batch</h5>
+       <p class="selectedBatch"><b><?php echo $myBatchAbbri; ?></b></p>
+      </div>
+      <div class="col-sm-6">
+       <h5>Selected Program</h5>
+       <p class="selectedProgram"><b><?php echo $myProgAbbri; ?></b></p>
+      </div>
+     </div>
+     <hr>
      <div class="form-group">
       <div class="row">
        <div class="col-sm-6">
