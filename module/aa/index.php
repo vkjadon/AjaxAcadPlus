@@ -16,77 +16,73 @@ require('../../php_function.php');
  <?php require("../topBar.php"); ?>
  <div class="content">
 
- <div class="container-fluid moduleBody">
-  <div class="row">
-   <div class="col-sm-2">
-    <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-     <a class="list-group-item list-group-item-action active bs" id="list-bs-list" data-toggle="list" href="#list-bs" role="tab" aria-controls="bs"> Batch/Session </a>
-     <a class="list-group-item list-group-item-action po" id="list-po-list" data-toggle="list" href="#list-po" role="tab" aria-controls="po"> Programme Outcome </a>
-     <a class="list-group-item list-group-item-action sub" id="list-sub-list" data-toggle="list" href="#list-sub" role="tab" aria-controls="sub"> Courses/Subjects </a>
-     <a class="list-group-item list-group-item-action co" id="list-co-list" data-toggle="list" href="#list-co" role="tab" aria-controls="co"> Course Outcome </a>
+  <div class="container-fluid moduleBody">
+   <div class="row">
+    <div class="col-sm-2">
+     <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
+      <a class="list-group-item list-group-item-action active bs" id="list-bs-list" data-toggle="list" href="#list-bs" role="tab" aria-controls="bs"> Batch/Session </a>
+      <a class="list-group-item list-group-item-action po" id="list-po-list" data-toggle="list" href="#list-po" role="tab" aria-controls="po"> Programme Outcome </a>
+      <a class="list-group-item list-group-item-action sub" id="list-sub-list" data-toggle="list" href="#list-sub" role="tab" aria-controls="sub"> Courses/Subjects </a>
+      <a class="list-group-item list-group-item-action co" id="list-co-list" data-toggle="list" href="#list-co" role="tab" aria-controls="co"> Course Outcome </a>
+     </div>
     </div>
-    <div class="bg-one text-white text-center py-1 mt-2">Select Batch</div>
-    <?php
-    $sql = "select * from batch where batch_status='0' order by batch desc";
-    selectList($conn, 'Sel Batch', array('0', 'batch_id', 'batch', '', 'sel_batch'), $sql);
-    ?>
-   </div>
-   <div class="col-10">
-    <div class="tab-content" id="nav-tabContent">
-     <div class="tab-pane fade show active" id="list-bs" role="tabpanel" aria-labelledby="list-bs-list">
-      <div class="row">
-       <div class="col-6">
-        <button class="btn btn-secondary btn-sm addBatch">New Batch</button>
-        <p style="text-align: center;" id="batchShowList"></p>
-       </div>
-       <div class="col-6">
-        <button class="btn btn-secondary btn-sm addSessionButton">New Session</button>
-        <p id="batchSession"></p>
-       </div>
-      </div>
-     </div>
-     <div class="tab-pane fade show" id="list-po" role="tabpanel" aria-labelledby="list-po-list">
-      <div class="row">
-       <div class="col-sm-8">
-        <button class="btn btn-sm btn-secondary addPo">Add PO</button>
-        <button class="btn btn-sm btn-primary uploadPo">Upload PO</button>
-        <p style="text-align:left" id="poShowList"></p>
-       </div>
-      </div>
-     </div>
-     <div class="tab-pane fade" id="list-sub" role="tabpanel" aria-labelledby="list-sub-list">
-      <div class="row">
-       <div class="col-sm-8 p-0">
-        <button class="btn btn-sm btn-secondary addSubject">New Subject</button>
-        <button class="btn btn-sm btn-warning copySubject">Copy Subject</button>
-        <button class="btn btn-sm btn-primary uploadSubject">Upload Subject</button>
-       </div>
-       <div class="col-sm-4">
-        <div>
-         <h5>Semester Wise Subject Summary</h5>
+    <div class="col-10">
+     <div class="tab-content" id="nav-tabContent">
+      <div class="tab-pane fade show active" id="list-bs" role="tabpanel" aria-labelledby="list-bs-list">
+       <div class="row">
+        <div class="col-6">
+         <button class="btn btn-secondary btn-sm addBatch">New Batch</button>
+         <p style="text-align: center;" id="batchShowList"></p>
+        </div>
+        <div class="col-6">
+         <button class="btn btn-secondary btn-sm addSessionButton">New Session</button>
+         <p id="batchSession"></p>
         </div>
        </div>
       </div>
-      <div class="row">
-       <div class="col-sm-8">
-        <div id="subShowList"></div>
-       </div>
-       <div class="col-sm-4">
-        <div id="subjectSummary"></div>
+      <div class="tab-pane fade show" id="list-po" role="tabpanel" aria-labelledby="list-po-list">
+       <div class="row">
+        <div class="col-sm-8">
+         <button class="btn btn-sm btn-secondary addPo">Add PO</button>
+         <button class="btn btn-sm btn-primary uploadPo">Upload PO</button>
+         <p style="text-align:left" id="poShowList"></p>
+        </div>
        </div>
       </div>
-     </div>
-     <div class="tab-pane fade show" id="list-co" role="tabpanel" aria-labelledby="list-co-list">
-      <div class="row">
-       <div class="col-sm-8">
-        <button class="btn btn-sm btn-secondary addCO m-0">Add</button>
-        <button class="btn btn-sm btn-primary uploadCo">Upload PO</button>
+      <div class="tab-pane fade" id="list-sub" role="tabpanel" aria-labelledby="list-sub-list">
+       <div class="row">
+        <div class="col-sm-8 p-0">
+         <button class="btn btn-sm btn-secondary addSubject">New Subject</button>
+         <button class="btn btn-sm btn-warning copySubject">Copy Subject</button>
+         <button class="btn btn-sm btn-primary uploadSubject">Upload Subject</button>
+        </div>
+        <div class="col-sm-4">
+         <div>
+          <h5>Semester Wise Subject Summary</h5>
+         </div>
+        </div>
        </div>
-       <div class="col-sm-8">
-        <span class="selectSubject"></span>
+       <div class="row">
+        <div class="col-sm-8">
+         <div id="subShowList"></div>
+        </div>
+        <div class="col-sm-4">
+         <div id="subjectSummary"></div>
+        </div>
        </div>
-       <div class="col-sm-12">
-        <span style="text-align:left" id="coShowList"></span>
+      </div>
+      <div class="tab-pane fade show" id="list-co" role="tabpanel" aria-labelledby="list-co-list">
+       <div class="row">
+        <div class="col-sm-8">
+         <button class="btn btn-sm btn-secondary addCO m-0">Add</button>
+         <button class="btn btn-sm btn-primary uploadCo">Upload CO</button>
+        </div>
+        <div class="col-sm-8">
+         <span class="selectSubject"></span>
+        </div>
+        <div class="col-sm-12">
+         <span style="text-align:left" id="coShowList"></span>
+        </div>
        </div>
       </div>
      </div>
@@ -94,7 +90,6 @@ require('../../php_function.php');
    </div>
   </div>
  </div>
-</div>
 </body>
 
 <?php require("../js.php"); ?>
@@ -547,15 +542,15 @@ require('../../php_function.php');
     $('#secondModal').modal('show');
    }
   });
-	$(document).on('click', '.vac', function() {
+  $(document).on('click', '.vac', function() {
    var id = $(this).attr("data-id");
    var code = $(this).attr("data-code");
    var field = $(this).attr("data-field");
    $.alert("Disabled " + id);
    $.post("aaSql.php", {
     id: id,
-		code:code,
-		field:field,
+    code: code,
+    field: field,
     action: "vac"
    }, function(data, status) {
     //$.alert("Data" + data)
@@ -577,14 +572,10 @@ require('../../php_function.php');
     $.alert("Error in BatchSession Function");
    })
   }
+
   function subjectList() {
-   var x = $("#sel_batch").val();
    //$.alert(" Select a Batch X = " + x);
-   if (x === "") {
-    $.alert(" Select a Batch to Proceed !!");
-   } else {
     $.post("aaSql.php", {
-     batchId: x,
      action: "subList"
     }, function(mydata, mystatus) {
      //$.alert("List " + mydata);
@@ -593,20 +584,20 @@ require('../../php_function.php');
      $.alert("Error !!");
     })
     subjectSummary();
-   }
+
   }
+
   function subjectSummary() {
-   var x = $("#sel_batch").val();
    $.post("aaSql.php", {
-    batchId: x,
     action: "subjectSummary"
    }, () => {}, "text").done(function(result, status) {
     //$.alert(status+result);
     $("#subjectSummary").html(result);
    }, "text").fail(function() {
-    $.alert("Error !!");
+    $.alert("Error 123 !!");
    })
   }
+
   function batchList() {
    //$.alert("In List Function"+ x + y);
    $.post("aaSql.php", {
@@ -619,6 +610,7 @@ require('../../php_function.php');
     $.alert("Error !!");
    })
   }
+
   function sessionList() {
    var x = $("#sel_school").val();
    var y = $("#sel_batch").val();
@@ -635,6 +627,7 @@ require('../../php_function.php');
     $.alert("Error !!");
    })
   }
+
   function poList() {
    var y = $("#sel_batch").val();
    //$.alert("In List Function Batch " + y);
@@ -650,6 +643,7 @@ require('../../php_function.php');
     $.alert("Error !!");
    })
   }
+
   function selectSubject() {
    var x = $("#sel_batch").val();
    $.alert("Batch In SelSub Function" + x);
@@ -664,6 +658,7 @@ require('../../php_function.php');
     $.alert("Error !!");
    })
   }
+
   function coList() {
    var x = $("#sel_subject").val();
    // $.alert("In List Function" + x);
@@ -679,6 +674,7 @@ require('../../php_function.php');
     $.alert("Error !!");
    })
   }
+
   function programSelectList() {
    var x = $("#sel_school").val();
    var y = $("#sel_batch").val();
@@ -695,6 +691,7 @@ require('../../php_function.php');
     $.alert("Error !!");
    })
   }
+
   function getFormattedDate(ts, fmt) {
    var a = new Date(ts);
    var day = a.getDate();

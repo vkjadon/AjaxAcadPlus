@@ -33,18 +33,18 @@ if (isset($_POST['action'])) {
     else $sql = "update subject_addon set $field='1' where subject_id='$id'";
     $result=$conn->query($sql);
     if(!$result)echo $conn->error;
-    else 
+    else
     {
       //echo $conn->affected_rows;
       $sql="insert into subject_addon (subject_id, $field) values('$id', '1')";
       $conn->query($sql);
     }
-  } elseif ($_POST['action'] == 'deleteSubject') {    
+  } elseif ($_POST['action'] == 'deleteSubject') {
     $id=$_POST['id'];
     $sql = "update subject set subject_status='9' where subject_id='$id'";
     $conn->query($sql);
     // echo $conn->error;
-  }elseif ($_POST['action'] == 'resetSubject') {    
+  }elseif ($_POST['action'] == 'resetSubject') {
     $id=$_POST['id'];
     $sql = "update subject set subject_status='0' where subject_id='$id'";
     $conn->query($sql);
@@ -89,9 +89,7 @@ if (isset($_POST['action'])) {
   } elseif ($_POST["action"] == "subList") {
     //echo "MyId- $myId Prog $myProg";
     $tableId = 'subject_id';
-
-    $batch_id = $_POST['batchId'];
-    $sql = "select * from subject where program_id='$myProg' and batch_id='$batch_id' and subject_semester>0 order by subject_semester, subject_status, subject_sno";
+    $sql = "select * from subject where program_id='$myProg' and batch_id='$myBatch' and subject_semester>0 order by subject_semester, subject_status, subject_sno";
     $json = getTableRow($conn, $sql, array("subject_id", "subject_name", "subject_code", "subject_lecture", "subject_tutorial", "subject_practical", "subject_credit", "subject_semester", "subject_sno", "subject_type", "subject_status"));
     $array = json_decode($json, true);
     //echo count($array);
@@ -105,7 +103,7 @@ if (isset($_POST['action'])) {
       $sno = $array["data"][$i]["subject_sno"];
       $type = $array["data"][$i]["subject_type"];
       $status = $array["data"][$i]["subject_status"];
-      
+
       echo '<div class="row shadow border border-primary mb-1 cardBodyText">';
         echo '<div class="col-sm-2 p-1 mb-0 bg-two">';
           echo 'ID:' . $subject_id.' <b>['.$sno.']</b>';
@@ -120,7 +118,7 @@ if (isset($_POST['action'])) {
           $emp=getField($conn, $subject_id, "subject_addon", "subject_id", "subject_emp");
           if($emp=="1")echo ' [ <i class="fa fa-check"><b><a href="#" class="vac" data-field="subject_emp" data-code="N" data-id="' . $subject_id . '"></i>Emp</a></b> ] ';
           else echo ' [ <i class="fa fa-times"></i><b><a href="#" class="vac" data-field="subject_emp" data-code="Y" data-id="' . $subject_id . '">Emp</a></b> ] ';
-          
+
           $skill=getField($conn, $subject_id, "subject_addon", "subject_id", "subject_skill");
           if($skill=="1")echo ' [ <i class="fa fa-check"><b><a href="#" class="vac" data-field="subject_skill" data-code="N" data-id="' . $subject_id . '"></i>Skill</a></b> ] ';
           else echo ' [ <i class="fa fa-times"></i><b><a href="#" class="vac" data-field="subject_skill" data-code="Y" data-id="' . $subject_id . '">Skill</a></b> ] ';
@@ -130,14 +128,14 @@ if (isset($_POST['action'])) {
           else echo '<i class="fa fa-times"></i><b><a href="#" class="vac" data-field="subject_entrep" data-code="Y" data-id="' . $subject_id . '">Entrep</a></b>';
           echo '</div>';
         echo '</div>';
-        
+
         echo '<div class="col-sm-2">';
           echo 'L-T-P<br>' . $L . '-' . $T . '-' . $P;
         echo '</div>';
-      
+
         echo '<div class="col-sm-2">';
         $vac=getField($conn, $subject_id, "subject_addon", "subject_id", "subject_vac");
-          
+
           if($vac=="1")echo '<i class="fa fa-check"><b><a href="#" class="vac" data-field="subject_vac" data-code="N" data-id="' . $subject_id . '"></i>VAC</a></b>';
           else echo '<i class="fa fa-times"></i><b><a href="#" class="vac" data-field="subject_vac" data-code="Y" data-id="' . $subject_id . '">VAC</a></b>';
           echo '<br>';
@@ -145,16 +143,15 @@ if (isset($_POST['action'])) {
           else echo '<a href="#" class="float-right subject_idD" data-id="' . $subject_id . '"><i class="fa fa-trash"></i></a>';
         echo '</div>';
       echo '</div>';
-      
+
     }
   } elseif ($_POST["action"] == "subjectSummary") {
     //echo "MyId- $myId Prog $myProg";
-    $batch_id = $_POST['batchId'];
     $totalLecture = 0;
     $totalTutorial = 0;
     $totalPractical = 0;
     $totalCredit = 0;
-    $sql = "select sum(subject_lecture) as lecture, sum(subject_tutorial) as tutorial, sum(subject_practical) as practical, sum(subject_credit) as credit, subject_semester from subject where subject_semester>0 and program_id='$myProg' and batch_id='$batch_id' and subject_status<'9' group by subject_semester";
+    $sql = "select sum(subject_lecture) as lecture, sum(subject_tutorial) as tutorial, sum(subject_practical) as practical, sum(subject_credit) as credit, subject_semester from subject where subject_semester>0 and program_id='$myProg' and batch_id='$myBatch' and subject_status<'9' group by subject_semester";
     $result = $conn->query($sql);
     echo '<div class="card card-square">';
     echo '<table class="table table-bordered list-table-xs">';
@@ -177,16 +174,16 @@ if (isset($_POST['action'])) {
     echo '<td></td><td class="totalRow-sm">' . $totalLecture . '</td><td class="totalRow-sm">' . $totalTutorial . '</td><td class="totalRow-sm">' . $totalPractical . '</td><td class="totalRow-sm">' . $totalCredit . '</td>';
     echo '</tr>';
     echo '</table>';
-    $sql = "select count(subject_id) as subjects from subject where subject_semester>0 and program_id='$myProg' and batch_id='$batch_id' and subject_status<'9'";
+    $sql = "select count(subject_id) as subjects from subject where subject_semester>0 and program_id='$myProg' and batch_id='$myBatch' and subject_status<'9'";
     $result = $conn->query($sql);
     $row = $result->fetch_array();
     $totalSubjects=$row["subjects"];
 
-    $sql = "select count(subject_id) as subjects from subject where subject_type='DC' and subject_semester>0 and program_id='$myProg' and batch_id='$batch_id' and subject_status<'9'";
+    $sql = "select count(subject_id) as subjects from subject where subject_type='DC' and subject_semester>0 and program_id='$myProg' and batch_id='$myBatch' and subject_status<'9'";
     $result = $conn->query($sql);
     $row = $result->fetch_array();
     $coreSubjects=ceil(($row["subjects"]/$totalSubjects)*100);
-    
+
     echo '<div class="row">
       <div class="col-6 pr-0">
         <div class="card text-white bg-info">
@@ -322,7 +319,7 @@ if (isset($_POST['action'])) {
     $sql = "select * from program_outcome where program_id='$myProg' and batch_id='$batch_id' order by po_sno, po_code";
     $json = getTableRow($conn, $sql, array("po_id", "program_id", "batch_id", "po_code", "po_name", "po_sno", "po_status"));
     $array = json_decode($json, true);
-    
+
     for ($i = 0; $i < count($array["data"]); $i++) {
       $po_id = $array["data"][$i]["po_id"];
       $program_id = $array["data"][$i]["program_id"];
@@ -331,18 +328,18 @@ if (isset($_POST['action'])) {
       $po_sno = $array["data"][$i]["po_sno"];
       $po_name = $array["data"][$i]["po_name"];
       $status = $array["data"][$i]["po_status"];
-      
+
       echo '<div class="row shadow border border-primary mb-1 cardBodyText">';
         echo '<div class="col-sm-3 mb-0 bg-two">';
           echo 'ID : ' . $po_id;
           echo '<a href="#" class="float-right po_idE" data-id="' . $po_id . '"><i class="fa fa-edit"></i></a>';
           echo '<div><b>' . $array["data"][$i]["po_code"] . $po_sno . '</b></div>';
         echo '</div>';
-      
+
         echo '<div class="col-sm-8">';
           echo '<div class="cardBodyText"><b>' . $po_name . '</b></div>';
         echo '</div>';
-              
+
         echo '<div class="col-sm-1">';
           if($status=="9")echo '<a href="#" class="float-right po_idR" data-id="' . $po_id . '">Removed</a>';
           else echo '<a href="#" class="float-right po_idD" data-id="' . $po_id . '"><i class="fa fa-trash"></i></a>';
@@ -380,7 +377,7 @@ if (isset($_POST['action'])) {
     $tableId = 'co_id';
     $json = getTableRow($conn, $sql, array("co_id", "subject_id", "co_code", "co_name", "co_sno", "co_status"));
     $array = json_decode($json, true);
-    
+
     for ($i = 0; $i < count($array["data"]); $i++) {
       $co_id = $array["data"][$i]["po_id"];
       $subject_id = $array["data"][$i]["subject_id"];
@@ -388,18 +385,18 @@ if (isset($_POST['action'])) {
       $co_sno = $array["data"][$i]["co_sno"];
       $co_name = $array["data"][$i]["co_name"];
       $status = $array["data"][$i]["co_status"];
-      
+
       echo '<div class="row shadow border border-primary mb-1 cardBodyText">';
         echo '<div class="col-sm-3 mb-0 bg-two">';
           echo 'ID : ' . $co_id;
           echo '<a href="#" class="float-right co_idE" data-id="' . $co_id . '"><i class="fa fa-edit"></i></a>';
           echo '<div><b>' . $co_code . $po_sno . '</b></div>';
         echo '</div>';
-      
+
         echo '<div class="col-sm-8">';
           echo '<div class="cardBodyText"><b>' . $co_name . '</b></div>';
         echo '</div>';
-              
+
         echo '<div class="col-sm-1">';
           if($status=="9")echo '<a href="#" class="float-right co_idR" data-id="' . $co_id . '">Removed</a>';
           else echo '<a href="#" class="float-right co_idD" data-id="' . $co_id . '"><i class="fa fa-trash"></i></a>';

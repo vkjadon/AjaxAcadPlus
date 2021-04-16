@@ -22,7 +22,8 @@ if (!empty($_FILES["csv_upload"]["name"])) {
 
     $subject_sno = $conn->real_escape_string($row[0]);
     $subject_name = $conn->real_escape_string($row[1]);
-    $subject_code = $conn->real_escape_string($row[2]);
+    $code = $conn->real_escape_string($row[2]);
+    $subject_code = str_replace(' ', '', $code);
     $subject_semester = $conn->real_escape_string($row[3]);
     $subject_lecture = $conn->real_escape_string($row[4]);
     $subject_tutorial = $conn->real_escape_string($row[5]);
@@ -77,6 +78,14 @@ if (!empty($_FILES["csv_upload"]["name"])) {
     $co_code = $conn->real_escape_string($row[0]); // po code
     $co_name = $conn->real_escape_string($row[1]);  // po name
     $co_sno = $conn->real_escape_string($row[2]);  // po sno
+    $subject_code = $conn->real_escape_string($row[3]);
+
+    $sql = "select * from subject where subject_code='$subject_code'";
+    $result = $conn->query($sql);
+    $resultValue = $result->num_rows;
+    if ($resultValue==0){
+
+    }
 
     $sql = "select * from course_outcome where batch_id='$batch_id' and program_id='$myProg' and co_sno='$co_sno'";
     $result = $conn->query($sql);
