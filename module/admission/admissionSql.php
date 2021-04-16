@@ -138,25 +138,47 @@ if (isset($_POST['action'])) {
   getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
  } elseif ($_POST['action'] == 'updateStudentQualification') {
   $id_name = $_POST['id_name'];
-		$student_id = $_POST['student_id'];
-		$id = $_POST['id'];
-		$tag = $_POST['tag'];
-		$value = $_POST['value'];
-		$sql = "update student_qualification set $tag='$value' where $id_name='$id' and student_id='$student_id'";
-		$result = $conn->query($sql);
-		$affectedRows = $conn->affected_rows;
-		echo "affected rows $affectedRows";
-		if (!$result) echo $conn->error;
-		elseif ($affectedRows == 0) {
-			$sql = "insert into student_qualification (student_id, qualification_id, $tag) values ('$student_id', '$id, '$value')";
-			$result = $conn->query($sql);
-			if (!$result) echo $conn->error;
-		} else "Updated";
+  $student_id = $_POST['student_id'];
+  $id = $_POST['id'];
+  $tag = $_POST['tag'];
+  $value = $_POST['value'];
+  $sql = "update student_qualification set $tag='$value' where $id_name='$id' and student_id='$student_id'";
+  $result = $conn->query($sql);
+  $affectedRows = $conn->affected_rows;
+  echo "affected rows $affectedRows";
+  if (!$result) echo $conn->error;
+  elseif ($affectedRows == 0) {
+   $sql = "insert into student_qualification (student_id, qualification_id, $tag) values ('$student_id', '$id, '$value')";
+   $result = $conn->query($sql);
+   if (!$result) echo $conn->error;
+  } else "Updated";
  } elseif ($_POST['action'] == 'fetchStudentQualification') {
   $sq_id = $_POST['sqId'];
   $sql = "select * FROM student_qualification where sq_id='$sq_id'";
   $result = $conn->query($sql);
   $output = $result->fetch_assoc();
   echo json_encode($output);
+ } elseif ($_POST['action'] == 'studentProgramList') {
+  $sql = "SELECT * from program";
+  $json = getTableRow($conn, $sql, array("program_id", "program_name"));
+  // echo $json;
+  $array = json_decode($json, true);
+  $count = count($array["data"]);
+  // echo $count;
+  echo '<table class="list-table-xs">
+     <thead align="center">
+     <table class="list-table-xs">
+     <thead align="center"><th>Program</th><th>Student Registered</th>
+     </thead>';
+  for ($i = 0; $i < count($array["data"]); $i++) {
+   $program_id = $array["data"][$i]["program_id"];
+   $program_name = $array["data"][$i]["program_name"];
+   $sql_desig = "select * from student where program_id='$program_id' and batch_id='$myBatch'";
+   $result = $conn->query($sql_desig);
+   $rowcount=mysqli_num_rows($result);
+   echo '<tr><td>' . $program_name . '</td><td>' . $rowcount . '</td></tr>';
+  }
+  echo '</table></table>';
+
  }
 }

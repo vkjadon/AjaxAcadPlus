@@ -57,12 +57,12 @@ require('../../php_function.php');
 
 <body>
  <?php require("../topBar.php"); ?>
- <div class="container-fluid">
+ <div class="container-fluid moduleBody">
   <div class="row">
    <div class="col-2">
     <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
      <a class="list-group-item list-group-item-action active as" id="list-as-list" data-toggle="list" href="#list-as" role="tab" aria-controls="as"> Add Student </a>
-     <a class="list-group-item list-group-item-action us" id="list-us-list" data-toggle="list" href="#list-us" role="tab" aria-controls="us">Upload Student </a>
+     <a class="list-group-item list-group-item-action sr" id="list-sr-list" data-toggle="list" href="#list-sr" role="tab" aria-controls="sr">Student Report</a>
     </div>
    </div>
    <div class="col-10">
@@ -409,12 +409,20 @@ require('../../php_function.php');
       </div>
 
      </div>
-     <div class="tab-pane show active" id="list-us" role="tabpanel" aria-labelledby="list-us-list">
-
+     <div class="tab-pane show active" id="list-sr" role="tabpanel" aria-labelledby="list-sr-list">
+      <div class="row">
+       <div class="col-4">
+        <p id="studentProgramReport"></p>
+       </div>
+       <div class="col-8">
+        <canvas id="horizontalBar"></canvas>
+       </div>
+      </div>
      </div>
     </div>
    </div>
   </div>
+ </div>
  </div>
 </body>
 
@@ -433,7 +441,6 @@ require('../../php_function.php');
   $('#batchIdModal').val(y);
   $('#program_id').val(z);
   $('#batch_id').val(y);
-
   $('#list-as').show();
   $('#list-sq').hide();
   $('.studentProfile').hide();
@@ -521,11 +528,18 @@ require('../../php_function.php');
   });
 
 
+  $(document).on('click', '.sr', function() {
+   $('#list-sr').show();
+   $('#studentProgramReport').show();
+   studentProgramReport();
+  });
+
   $(document).on('click', '.sq', function() {
    $(".selectPanel").show();
    $('#list-sq').show();
    $('#list-as').hide();
    $('#studentShowList').show();
+
   });
 
   $(document).on('click', '.as', function() {
@@ -839,31 +853,6 @@ require('../../php_function.php');
    studentList(y, z);
   });
 
-  $(document).on('click', '.student_idDetails', function() {
-   var id = $(this).attr('id');
-   // $.alert("id" + id);
-   $.post("admissionSql.php", {
-     studentId: id,
-     action: "fetchDetails"
-    }, function(data, status) {
-     // $.alert("data " + data)
-    },
-    "json").done(function(data) {
-    $("#fName").val(data.sd_fname);
-    $("#mName").val(data.sd_mname);
-    $("#sDob").val(data.sd_dob);
-   }).fail(function() {
-    $.alert("fail in place of error");
-   })
-   $('#modal_title').text("Add Student Details");
-   $('#firstModal').modal('show');
-   $(".studentDetailForm").show();
-   $(".studentForm").hide();
-   $(".studentContactForm").hide();
-   $('#modalId').val(id);
-   $('#action').val("addDetails");
-  });
-
   $(document).on('click', '.student_idContact', function() {
    var id = $(this).attr('id');
    $.alert("id" + id);
@@ -919,6 +908,33 @@ require('../../php_function.php');
     // $.alert("List qulai" + mydata);
 
     $("#qualificationShowList").html(mydata);
+   }, "text").fail(function() {
+    $.alert("Error !!");
+   })
+  }
+
+  function studentProgramReport() {
+  //  $.alert("In List Function");
+   $.post("admissionSql.php", {
+    action: "studentProgramList",
+   }, function(mydata, mystatus) {
+    $("#studentProgramReport").show();
+    // $.alert("List qulai" + mydata);
+    $("#studentProgramReport").html(mydata);
+   }, "text").fail(function() {
+    $.alert("Error !!");
+   })
+
+  }
+
+  function studentProgramReport() {
+   $.alert("In List Function");
+   $.post("admissionSql.php", {
+    action: "studentProgramList",
+   }, function(mydata, mystatus) {
+    $("#studentProgramReport").show();
+    // $.alert("List qulai" + mydata);
+    $("#studentProgramReport").html(mydata);
    }, "text").fail(function() {
     $.alert("Error !!");
    })

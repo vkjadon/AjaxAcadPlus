@@ -35,7 +35,7 @@ if (!empty($_FILES["csv_upload"]["name"])) {
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     $records = $result->num_rows;
-    echo "record $sno";
+    // echo "record $sno";
     if ($records == 0) {
      $sql = "INSERT INTO program (program_name, program_abbri, program_code, sp_name, sp_abbri, sp_code, program_seat, program_duration, program_semester, program_start, sno, program_status) VALUES ('$program_name', '$program_abbri', '$program_code', '$sp_name', '$sp_abbri', '$sp_code', '$program_seat', '$program_duration', '$program_semester', '$program_start', '$sno', '0')";
      $result_insert = $conn->query($sql);

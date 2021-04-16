@@ -16,7 +16,7 @@ require('../../php_function.php');
  <?php require("../topBar.php"); ?>
  <div class="content">
 
- <div class="container-fluid">
+ <div class="container-fluid moduleBody">
   <div class="row">
    <div class="col-sm-2">
     <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
