@@ -11,7 +11,7 @@ if (isset($myBatch)) $myBatchName = getField($conn, $myBatch, "batch", "batch_id
 else $myBatchName = "Select Batch";
 ?>
 <header>
-	<div class="bg-light py-2">
+	<div class="py-2">
 		<div class="row">
 			<div class="col ml-2">
 				<?php
