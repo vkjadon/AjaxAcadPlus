@@ -15,7 +15,7 @@ else $myBatchName = "Select Batch";
 		<div class="row">
 			<div class="col ml-2">
 				<?php
-				echo $mySclAbbri . '[' . $myDeptAbbri.']';
+				echo $mySclAbbri . '[' . $myDeptAbbri . ']';
 				//echo "School ".$myScl;
 				?>
 			</div>
@@ -27,10 +27,10 @@ else $myBatchName = "Select Batch";
 			</div>
 			<div class="col mr-2">
 				<span class="float-right">
-				<?php
-				echo $myProgAbbri . '-' . $myBatchName;
-				//echo "School ".$myScl;
-				?></span>
+					<?php
+					echo $myProgAbbri . '-' . $myBatchName;
+					//echo "School ".$myScl;
+					?></span>
 			</div>
 		</div>
 
