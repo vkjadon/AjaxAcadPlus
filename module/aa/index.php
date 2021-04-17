@@ -30,7 +30,7 @@ require('../../php_function.php');
           <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="list-bs" role="tabpanel" aria-labelledby="list-bs-list">
               <div class="row">
-                <div class="col-6">
+                <div class="col-sm-6">
                   <button class="btn btn-secondary btn-sm addBatch">New Batch</button>
                   <p style="text-align: center;" id="batchShowList"></p>
                 </div>
@@ -44,9 +44,9 @@ require('../../php_function.php');
             <div class="tab-pane fade show" id="list-po" role="tabpanel" aria-labelledby="list-po-list">
               <div class="row">
                 <div class="col-sm-8">
-                  <button class="btn btn-sm btn-secondary addPo">Add PO</button>
+                  <button class="btn btn-sm btn-secondary m-0 addPo">Add PO</button>
                   <button class="btn btn-sm btn-primary uploadPo">Upload PO</button>
-                  <p style="text-align:left" id="poShowList"></p>
+                  <p class="ml-2" style="text-align:left" id="poShowList"></p>
                 </div>
               </div>
             </div>
@@ -102,7 +102,6 @@ require('../../php_function.php');
     $('[data-toggle="tooltip"]').tooltip();
     $(".topBarTitle").text("Academics");
     batchList();
-    poList();
     coList();
 
     $(document).on("change", "#sel_subject", function() {
@@ -177,9 +176,9 @@ require('../../php_function.php');
       if (error == "NO") {
         var formData = $(this).serialize();
         $('#firstModal').modal('hide');
-        $.alert(" Pressed" + formData);
+        //$.alert(" Pressed" + formData);
         $.post("aaSql.php", formData, () => {}, "text").done(function(data) {
-          $.alert("List " + data);
+          //$.alert("List " + data);
           if (action == "addSubject" || action == "updateSubject") {
             subjectList();
           } else if (action == "addBatch" || action == "updateBatch") {
@@ -205,11 +204,12 @@ require('../../php_function.php');
       x = $('#sel_subject').val();
       //$.alert("x" + x);
       $('#subjectIdModal').val(x);
-      $('#modal_title').text("Add Course Outcome");
+      $('#modal_title').text("Course Outcome");
       $('#action').val("addCo");
       $('#firstModal').modal('show');
       $('.subjectForm').hide();
       $('.batchForm').hide();
+      $('.sessionForm').hide();
       $('.poForm').hide();
       $('.coForm').show();
       $("#modalForm")[0].reset();
@@ -251,12 +251,7 @@ require('../../php_function.php');
 
     // Manage Program Outcome
     $(document).on('click', '.addPo', function() {
-      x = $('#sel_program').val();
-      y = $('#sel_batch').val();
-      // $.alert("x" + x);
-      $('#programIdModal').val(x);
-      $('#batchIdModal').val(y);
-      $('#modal_title').text("Add Program Course");
+      $('#modal_title').html("Add PO [<?php echo $myProgAbbri; ?> - <?php echo $myBatchName; ?>]");
       $('#action').val("addPo");
       $('#firstModal').modal('show');
       $('.subjectForm').hide();
@@ -407,7 +402,7 @@ require('../../php_function.php');
         id: id,
         action: "resetSubject"
       }, function(data, status) {
-        $.alert("Data" + data)
+        //$.alert("Data" + data)
         subjectList();
       }, "text").fail(function() {
         $.alert("Error in BatchSession Function");
@@ -415,7 +410,7 @@ require('../../php_function.php');
     });
     $(document).on('click', '.subject_idE', function() {
       var id = $(this).attr("data-id");
-      $.alert("Id " + id);
+      //$.alert("Id " + id);
       $.post("aaSql.php", {
         action: "fetchSubject",
         subjectId: id
@@ -482,10 +477,10 @@ require('../../php_function.php');
     });
     $(document).on('click', '.addSubject', function() {
       var x = $("#sel_batch").val();
-      $.alert("Add Subject" + x);
+      //$.alert("Add Subject" + x);
       if (x === "") $.alert("Please select Batch !!");
       else {
-        $('#modal_title').text("Add Subject");
+        $('#modal_title').html("Add Subject [<?php echo $myProgAbbri . '-' . $myBatchName . ']'; ?> ");
         $('#batchIdModal').val(x);
         $('#action').val("addSubject");
         $('#firstModal').modal('show');
@@ -502,7 +497,7 @@ require('../../php_function.php');
       $('#secondModal').modal("hide");
       $.alert(" Pressed" + formData);
       $.post("aaSql.php", formData, () => {}, "text").done(function(data) {
-        $.alert("List " + data);
+        //$.alert("List " + data);
         $("#modalSecondForm")[0].reset();
       }, "text").fail(function() {
         $.alert("fail in place of error");
@@ -511,11 +506,11 @@ require('../../php_function.php');
     $(document).on('click', '.copySubject', function() {
       var x = $("#sel_batch").val();
       var y = $("#sel_program").val();
-      $.alert("Add Subject" + x + "-" + y);
+      //$.alert("Add Subject" + x + "-" + y);
       if (x === "" || y == "") $.alert("Please select Program and Batch");
       else {
 
-        $('#modal_titleSecond').text("Copy Subject");
+        $('#modal_titleSecond').html("Copy Subject [<?php echo $myProgAbbri . '-' . $myBatchName . ']'; ?> ");
         $('#originalProgram').val(y);
         $('#originalBatch').val(x);
         $('#actionSecond').val("copySubject");
@@ -565,7 +560,6 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
       subjectSummary();
-
     }
 
     function subjectSummary() {
@@ -593,12 +587,8 @@ require('../../php_function.php');
     }
 
     function poList() {
-      var y = $("#sel_batch").val();
-      //$.alert("In List Function Batch " + y);
-
       $.post("aaSql.php", {
-        action: "poList",
-        batchId: y
+        action: "poList"
       }, function(mydata, mystatus) {
         $("#poShowList").show();
         //$.alert("List " + mydata);
@@ -670,7 +660,7 @@ require('../../php_function.php');
     $(document).on('click', '.uploadSubject', function() {
       //$.alert("Session From");
       //var batch = $(this).attr("data-batch");
-      $('#modal_uploadTitle').text('Upload Subject');
+      $('#modal_uploadTitle').html("Upload Subject [<?php echo $myProgAbbri . '-' . $myBatchName . ']'; ?> ");
       //$('#program').val(program);
       //$('#batch').val(batch);
       var y = $("#sel_batch").val();
@@ -680,35 +670,24 @@ require('../../php_function.php');
       $('#formModal').modal('show');
     });
     $(document).on('click', '.uploadPo', function() {
-      // $.alert("Session From");
-      //var batch = $(this).attr("data-batch");
-      //$('#program').val(program);
-      //$('#batch').val(batch);
+      // $.alert("Upload PO");
       $('#actionUpload').val('uploadPO')
       $('#button_action').show().val('Update PO');
       $('#formModal').modal('show');
-      $('#modal_uploadTitle').text('Upload PO');
-      var y = $("#sel_batch").val();
-      $("#batch_idUpload").val(y);
-
+      $('#modal_uploadTitle').html("Upload PO [<?php echo $myProgAbbri . '-' . $myBatchName . ']'; ?>");
     });
     $(document).on('click', '.uploadCo', function() {
       // $.alert("Session From");
-      //var batch = $(this).attr("data-batch");
-      //$('#program').val(program);
-      //$('#batch').val(batch);
-      var y = $("#sel_batch").val();
-      $("#batch_idUpload").val(y);
       $('#actionUpload').val('uploadCO')
       $('#button_action').show().val('Update CO');
       $('#formModal').modal('show');
-      $('#modal_uploadTitle').text('Upload CO');
+      $('#modal_uploadTitle').text("Upload CO  [<?php echo $myProgAbbri . '-' . $myBatchName . ']'; ?>");
     });
     $(document).on('submit', '#upload_csv', function(event) {
       event.preventDefault();
       var formData = $(this).serialize();
       $('#subjectList').hide();
-      $.alert(formData);
+      //$.alert(formData);
       // action and test_id are passed as hidden
       $.ajax({
         url: "uploadSubjectSql.php",
@@ -719,9 +698,6 @@ require('../../php_function.php');
         processData: false, // To send DOMDocument or non processed data file it is set to false
         success: function(data) {
           $.alert("List " + data);
-          //$("#subjectList").hide();
-
-          //subjectList(x, y, z);
         }
       })
     });
@@ -989,7 +965,7 @@ require('../../php_function.php');
 <div class="modal" id="secondModal">
   <div class="modal-dialog modal-md">
     <form class="form-horizontal" id="modalSecondForm">
-      <div class="modal-content bg-secondary text-white">
+      <div class="modal-content">
 
         <!-- Modal Header -->
         <div class="modal-header">

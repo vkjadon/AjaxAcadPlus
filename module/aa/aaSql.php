@@ -147,10 +147,8 @@ if (isset($_POST['action'])) {
     }
   } elseif ($_POST["action"] == "subjectSummary") {
     //echo "MyId- $myId Prog $myProg";
-    $totalLecture = 0;
-    $totalTutorial = 0;
-    $totalPractical = 0;
-    $totalCredit = 0;
+    $totalLecture = 0;    $totalTutorial = 0;    $totalPractical = 0;
+    $totalCredit = 0;    $totalSubjects=0;       $coreSubjects=0;
     $sql = "select sum(subject_lecture) as lecture, sum(subject_tutorial) as tutorial, sum(subject_practical) as practical, sum(subject_credit) as credit, subject_semester from subject where subject_semester>0 and program_id='$myProg' and batch_id='$myBatch' and subject_status<'9' group by subject_semester";
     $result = $conn->query($sql);
     echo '<div class="card card-square">';
@@ -182,7 +180,7 @@ if (isset($_POST['action'])) {
     $sql = "select count(subject_id) as subjects from subject where subject_type='DC' and subject_semester>0 and program_id='$myProg' and batch_id='$myBatch' and subject_status<'9'";
     $result = $conn->query($sql);
     $row = $result->fetch_array();
-    $coreSubjects=ceil(($row["subjects"]/$totalSubjects)*100);
+    if($totalSubjects>0)$coreSubjects=ceil(($row["subjects"]/$totalSubjects)*100);
 
     echo '<div class="row">
       <div class="col-6 pr-0">
@@ -295,9 +293,9 @@ if (isset($_POST['action'])) {
     // echo "Add PO";
     //echo "batchId " . $_POST['batchIdModal'];
     $fields = ['program_id', 'batch_id', 'po_name', 'po_code', 'po_sno'];
-    $values = [$myProg, $_POST['batchIdModal'], data_check($_POST['poStatement']), data_check($_POST['poCode']), data_check($_POST['poSno'])];
+    $values = [$myProg, $myBatch, data_check($_POST['poStatement']), data_check($_POST['poCode']), data_check($_POST['poSno'])];
     $status = 'po_status';
-    $dup = "select * from program_outcome where po_sno='" . data_check($_POST["poSno"]) . "' and program_id='" . $_POST["programIdModal"] . "'  and batch_id='" . $_POST["batchIdModal"] . "'and $status='0'";
+    $dup = "select * from program_outcome where po_sno='" . data_check($_POST["poSno"]) . "' and program_id='" . $myProg . "'  and batch_id='" . $myBatch . "'and $status='0'";
     $dup_alert = "Serial Number Alreday Exists ! Please Check the Order!!";
     addData($conn, 'program_outcome', 'po_id', $fields, $values, $status, $dup, $dup_alert);
   } elseif ($_POST['action'] == 'fetchPo') {
@@ -313,7 +311,7 @@ if (isset($_POST['action'])) {
     $dup_alert = "Could Not Update - Duplicate Entries";
     updateData($conn, 'program_outcome', $fields, $values, $dup, $dup_alert);
   } elseif ($_POST["action"] == "poList") {
-    // echo "MyId- $myId";
+    //echo "MyId- $myProg - $myBatch";
     $sql = "select * from program_outcome where program_id='$myProg' and batch_id='$myBatch' order by po_sno, po_code";
     $json = getTableRow($conn, $sql, array("po_id", "program_id", "batch_id", "po_code", "po_name", "po_sno", "po_status"));
     $array = json_decode($json, true);
@@ -368,16 +366,14 @@ if (isset($_POST['action'])) {
     updateData($conn, 'course_outcome', $fields, $values, $dup, $dup_alert);
   } elseif ($_POST["action"] == "coList") {
     //    echo "MyId- $myId";
-    $subject_id = $_POST['subjectId'];
 
-    if ($subject_id == "ALL") $sql = "select co.*, sb.subject_name from course_outcome co, subject sb where sb.subject_id=co.subject_id  and co.co_status='0' and sb.subject_status='0' order by co_sno, co_code";
-    else $sql = "select  co.*, sb.subject_name  from course_outcome co, subject sb where sb.subject_id=co.subject_id and co.subject_id='$subject_id' and co.co_status='0' and sb.subject_status='0' order by co_sno, co_code";
+    $sql = "select co.*, sb.subject_name from course_outcome co, subject sb where sb.subject_id=co.subject_id and sb.program_id='$myProg' and sb.batch_id='$myBatch' and co.co_status='0' and sb.subject_status='0' order by sb.subject_semester, sb.subject_sno, co_sno, co_code";
     $tableId = 'co_id';
     $json = getTableRow($conn, $sql, array("co_id", "subject_id", "co_code", "co_name", "co_sno", "co_status"));
     $array = json_decode($json, true);
 
     for ($i = 0; $i < count($array["data"]); $i++) {
-      $co_id = $array["data"][$i]["po_id"];
+      $co_id = $array["data"][$i]["co_id"];
       $subject_id = $array["data"][$i]["subject_id"];
       $co_code = $array["data"][$i]["co_code"];
       $co_sno = $array["data"][$i]["co_sno"];
@@ -388,7 +384,7 @@ if (isset($_POST['action'])) {
         echo '<div class="col-sm-3 mb-0 bg-two">';
           echo 'ID : ' . $co_id;
           echo '<a href="#" class="float-right co_idE" data-id="' . $co_id . '"><i class="fa fa-edit"></i></a>';
-          echo '<div><b>' . $co_code . $po_sno . '</b></div>';
+          echo '<div><b>' . $co_code . $co_sno . '</b></div>';
         echo '</div>';
 
         echo '<div class="col-sm-8">';
