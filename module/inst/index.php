@@ -71,7 +71,7 @@ require('../../php_function.php');
 				</div>
 			</div>
 
-			<div class="col-10">
+			<div class="col-10 m-0 p-0">
 				<div class="tab-content" id="nav-tabContent">
 					<div class="tab-pane fade show active" id="list-si" role="tabpanel" aria-labelledby="list-si-list">
 						<div class="row">
@@ -83,7 +83,15 @@ require('../../php_function.php');
 							<div class="col-8">
 								<div class="container">
 									<div class="row">
-										<div class="col-lg-12 mx-auto">
+											<div class="col-3 bg-danger text-white p-1 ml-1">Schools</div>
+											<div class="col-1 bg-one text-white p-1 text-center"><h4>11</h4></div>
+											<div class="col-3 bg-danger text-white p-1 ml-1">Departments</div>
+											<div class="col-1 bg-one text-white p-1 text-center"><h4>17</h4></div>
+											<div class="col-2 bg-danger text-white p-1 ml-1">Programs</div>
+											<div class="col-1 bg-one text-white p-1 text-center"><h4>62</h4></div>
+									</div>
+									<div class="row">
+										<div class="col-lg-12 mx-auto mt-1 p-0">
 											<div id="accordionInfoUni" class="accordion shadow">
 												<div class="card">
 													<div id="headingOne" class="card-header bg-white shadow-sm border-0">
@@ -539,14 +547,14 @@ require('../../php_function.php');
 												<div class="col-sm-6">
 													<div class="input-group">
 														<?php
-														$sql_program = "select * from program where program_status='0'";
+														$sql_program = "select * from program where program_status='0' order by sp_name";
 														$result = $conn->query($sql_program);
 														if ($result) {
 															echo '<select class="form-control form-control-sm" name="sel_program" id="sel_program" data-tag="program_id" required>';
 															echo '<option selected disabled>Select Program</option>';
 															while ($rows = $result->fetch_assoc()) {
 																$select_id = $rows['program_id'];
-																$select_name = $rows['program_name'];
+																$select_name = $rows['sp_name'];
 																echo '<option value="' . $select_id . '">' . $select_name . '</option>';
 															}
 															echo '</select>';
@@ -569,10 +577,10 @@ require('../../php_function.php');
 						</div>
 						<div class="row">
 							<div class="col-sm-6">
-								<p id="schoolDeptShowList" style="text-align:center"></p>
+								<p id="schoolDeptShowList"></p>
 							</div>
 							<div class="col-sm-6">
-								<p id="deptProgramShowList" style="text-align:center"></p>
+								<p id="deptProgramShowList"></p>
 							</div>
 						</div>
 					</div>
@@ -580,13 +588,9 @@ require('../../php_function.php');
 			</div>
 		</div>
 	</div>
-
-
-
 </body>
 
 <?php require("../js.php"); ?>
-
 
 <script>
 	$(document).ready(function() {
@@ -602,11 +606,9 @@ require('../../php_function.php');
 			$('.selectPanel').hide();
 
 		});
-
 		$(document).on('click', '.si', function() {
 			$('.selectPanel').hide();
 		});
-
 		$(document).on('click', '.mid', function() {
 			$("#selectPanelTitle").text("Select School");
 			deptList();
@@ -629,15 +631,12 @@ require('../../php_function.php');
 		$(document).on('click', '.is', function() {
 			deptSchoolList();
 			deptProgramList();
-
 		});
 
 		$(document).on('change', '#school_name', function() {
-			// $.alert("Changes");
+			$.alert("Changes School ");
 			deptList();
-
 		});
-
 		$(document).on('change', '#dept_type', function() {
 			//x=$('form input[type=radio]:checked').val();
 			//$.alert("Changes " + x);
@@ -648,14 +647,13 @@ require('../../php_function.php');
 			event.preventDefault(this);
 			var deptId = $("#sel_dept").val()
 			var schoolId = $("#sel_school").val()
-			$('#schoolIdHidden').val(schoolId)
-			$('#deptIdHidden').val(deptId)
-			$("#action").val("attachSchoolDept")
-			var formData = $(this).serialize();
 			// $.alert("Form Submitted " + formData)
-			$.post("instSql.php", formData, function() {}, "text").done(function(data, success) {
-				// $.alert(data)
-				$('#schoolDeptForm')[0].reset();
+			$.post("instSql.php", {
+				deptId: deptId,
+				schoolId : schoolId,
+				action : "attachSchoolDept"
+			}, function() {}, "text").done(function(data, success) {
+				 //$.alert(data)
 			})
 			deptSchoolList();
 		});
@@ -671,7 +669,6 @@ require('../../php_function.php');
 			// $.alert("Form Submitted " + formData)
 			$.post("instSql.php", formData, function() {}, "text").done(function(data, success) {
 				// $.alert(data)
-				$('#deptProgramForm')[0].reset();
 			})
 			deptProgramList()
 		});
@@ -996,6 +993,7 @@ require('../../php_function.php');
 				$.alert("Error !!");
 			})
 		}
+
 		function schoolList() {
 			//$.alert("In List Function");
 			$.post("instSql.php", {
@@ -1008,6 +1006,7 @@ require('../../php_function.php');
 				$.alert("Error !!");
 			})
 		}
+
 		function deptList() {
 			var x = $("#school_name").val();
 			var y = $('form input[type=radio]:checked').val();
@@ -1025,6 +1024,7 @@ require('../../php_function.php');
 				$.alert("Error !!");
 			})
 		}
+
 		function programList() {
 			//$.alert("In List Function");
 			var x = $("#dept_name").val();
@@ -1040,6 +1040,7 @@ require('../../php_function.php');
 				$.alert("Error !!");
 			})
 		}
+
 		function deptSchoolList() {
 			//$.alert("In List Function");
 			var x = $("#sel_dept").val();
@@ -1056,6 +1057,7 @@ require('../../php_function.php');
 				$.alert("Error !!");
 			})
 		}
+
 		function deptProgramList() {
 			//$.alert("In List Function");
 			var x = $("#sel_deptProgram").val();
@@ -1072,6 +1074,7 @@ require('../../php_function.php');
 				$.alert("Error !!");
 			})
 		}
+
 		function getFormattedDate(ts, fmt) {
 			var a = new Date(ts);
 			var day = a.getDate();

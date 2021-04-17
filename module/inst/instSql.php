@@ -189,21 +189,27 @@ if (isset($_POST['action'])) {
 			$Cr = '';
 			$status = '';
 
-			echo '<div class="row border border-primary mb-2 cardBodyText">';
-			echo '<div class="col-sm-3 mb-0 bg-two">';
+			echo '<div class="row border border-primary mb-2 ml-2 cardBodyText">';
+			echo '<div class="col-sm-2 mb-0 bg-two">';
 			echo 'ID : ' . $program_id . '';
 			echo '<a href="#" class="float-right program_idE" data-id="' . $program_id . '"><i class="fa fa-edit"></i></a>';
 			echo '<div><b>' . $array["data"][$i]["program_abbri"] . '</b>
           <span class="float-right footerNote"></span></div>';
 			echo '</div>';
 
-			echo '<div class="col-sm-7">';
+			echo '<div class="col-sm-6">';
 			echo '<div class="cardBodyText"><b>' . $program_name . '</b></div>';
 			echo '<div class="cardBodyText">Semester : ' . $program_semester;
 			echo ' <b>Duration : ' . $program_duration . '</b>';
 			echo ' <b>Seats : ' . $array["data"][$i]["program_seat"] . '</b>';
 			echo '</div>';
 			echo '</div>';
+
+			echo '<div class="col-sm-2">';
+			echo '<div class="cardBodyText">In-Charge</div>';
+			echo '<div class="cardBodyText">--</div>';
+			echo '</div>';
+
 
 			echo '<div class="col-sm-2 text-center">';
 			if ($status == "9") echo '<a href="#" class="program_idR" data-id="' . $program_id . '">Removed</a>';
@@ -214,10 +220,10 @@ if (isset($_POST['action'])) {
 			echo '</div>';
 		}
 	} elseif ($_POST["action"] == "attachSchoolDept") {
-		$deptId = $_POST['deptIdHidden'];
-		$schoolId = $_POST['schoolIdHidden'];
+		$deptId = $_POST['deptId'];
+		$schoolId = $_POST['schoolId'];
 		echo "$deptId,$schoolId";
-		if (!$_POST['sel_dept'] == NULL && !$_POST['sel_school'] == NULL) {
+		if (!$_POST['deptId'] == NULL && !$_POST['schoolId'] == NULL) {
 			$sql = "insert into school_dept (school_id, dept_id) values('$schoolId', '$deptId')";
 			$result = $conn->query($sql);
 			if ($result) echo "Added Successfully";
@@ -232,11 +238,11 @@ if (isset($_POST['action'])) {
 		//echo count($array);
 		//echo count($array["data"]);
 		echo '<table class="list-table-xs">
-   <thead align="center">
-   <table class="list-table-xs">
-   <thead align="center"><th>School</th><th>Department</th>
-   <th><i class="fa fa-trash"></i></th>
-   </thead>';
+   	<thead align="center">
+   	<table class="list-table-xs">
+   	<thead align="center"><th>School</th><th>Department</th>
+   	<th><i class="fa fa-trash"></i></th>
+   	</thead>';
 		for ($i = 0; $i < count($array["data"]); $i++) {
 			$school_id = $array["data"][$i]["school_id"];
 			$dept_id = $array["data"][$i]["dept_id"];
@@ -245,7 +251,7 @@ if (isset($_POST['action'])) {
 			$sql_dept = "select * from department where dept_id='$dept_id'";
 			$value_dept = getFieldValue($conn, "dept_name", $sql_dept);
 
-			echo '<tr><td>' . $value_school . '</td><td>' . $value_dept . '</td><td><i class="fa fa-trash deleteSchoolDept"></i></td></tr>';
+			echo '<tr><td>' . $value_school . '</td><td>' . $value_dept . '</td><td class="text-center"><i class="fa fa-trash deleteSchoolDept"></i></td></tr>';
 		}
 		echo '</table></table>';
 	} elseif ($_POST["action"] == "deptProgramList") {
@@ -264,11 +270,11 @@ if (isset($_POST['action'])) {
 			$program_id = $array["data"][$i]["program_id"];
 			$dept_id = $array["data"][$i]["dept_id"];
 			$sql_program = "select * from program where program_id='$program_id'";
-			$value_school = getFieldValue($conn, "program_name", $sql_program);
+			$value_school = getFieldValue($conn, "sp_name", $sql_program);
 			$sql_dept = "select * from department where dept_id='$dept_id'";
 			$value_dept = getFieldValue($conn, "dept_name", $sql_dept);
 
-			echo '<tr><td>' . $value_dept . '</td><td>' . $value_school . '</td><td><i class="fa fa-trash deleteSchoolDept"></i></td></tr>';
+			echo '<tr><td>' . $value_dept . '</td><td>' . $value_school . '</td><td class="text-center"><i class="fa fa-trash deleteSchoolDept"></i></td></tr>';
 		}
 		echo '</table></table>';
 	}
