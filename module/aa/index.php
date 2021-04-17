@@ -227,9 +227,11 @@ require('../../php_function.php');
    $("#modalForm")[0].reset();
    $('.selectPanel').show();
   });
+
   $(document).on('click', '.co_idD', function() {
    $.alert("Disabled");
   });
+
   $(document).on('click', '.co_idE', function() {
    var id = $(this).attr('id');
    // $.alert("Id " + id);
@@ -254,6 +256,7 @@ require('../../php_function.php');
     $.alert("fail in place of error");
    })
   });
+
   $(document).on("change", "#sel_subject", function() {
    var subject_id = $("#sel_subject").val();
    // $.alert("Changed Subject " + subject_id);
@@ -279,9 +282,11 @@ require('../../php_function.php');
    $('.selectPanel').show();
    $("#modalForm")[0].reset();
   });
+
   $(document).on('click', '.po_idD', function() {
    $.alert("Disabled");
   });
+
   $(document).on('click', '.po_idE', function() {
    var id = $(this).attr('id');
    //$.alert("Id " + id);
@@ -328,12 +333,14 @@ require('../../php_function.php');
     $(".sessionForm").show();
    }
   });
+
   $(document).on('click', '.batch_idSession', function() {
    var id = $(this).attr('data-id');
    $("#panelId").val(id);
    //$.alert("Process Id " + id);
    batchSession(id);
   });
+
   $(document).on('click', '.session_idE', function() {
    var id = $(this).attr('id');
    $.alert("Id " + id);
@@ -1101,7 +1108,6 @@ require('../../php_function.php');
     <!-- Modal footer -->
     <div class="modal-footer">
      <input type="hidden" name="action" id="actionUpload">
-     <input type="hidden" name="batch_idUpload" id="batch_idUpload">
      <input type="submit" name="button_action" id="button_action" class="btn btn-success btn-sm" />
      <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
     </div> <!-- Modal Footer Closed-->
