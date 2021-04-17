@@ -315,8 +315,7 @@ if (isset($_POST['action'])) {
     updateData($conn, 'program_outcome', $fields, $values, $dup, $dup_alert);
   } elseif ($_POST["action"] == "poList") {
     // echo "MyId- $myId";
-    $batch_id = $_POST['batchId'];
-    $sql = "select * from program_outcome where program_id='$myProg' and batch_id='$batch_id' order by po_sno, po_code";
+    $sql = "select * from program_outcome where program_id='$myProg' and batch_id='$myBatch' order by po_sno, po_code";
     $json = getTableRow($conn, $sql, array("po_id", "program_id", "batch_id", "po_code", "po_name", "po_sno", "po_status"));
     $array = json_decode($json, true);
 
