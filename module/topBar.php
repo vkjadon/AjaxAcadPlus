@@ -1,4 +1,6 @@
 <?php
+// echo "My School in SetDefault $myScl";
+
 if (isset($myScl)) $mySclAbbri = getField($conn, $myScl, "school", "school_id", "school_abbri");
 else $mySclAbbri = "Select School";
 if (isset($myDept)) $myDeptAbbri = getField($conn, $myDept, "department", "dept_id", "dept_abbri");

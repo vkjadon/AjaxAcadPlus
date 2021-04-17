@@ -3,15 +3,14 @@ require("../config_database.php");
 require('../config_variable.php');
 require('../php_function.php');
 
+if (!isset($myScl)) {
+	$myScl = getField($conn, $myId, "staff", "staff_id", "school_id");
+	$_SESSION['mysclid'] = $myScl;
+}
 if (!isset($myDept)) {
 	$sql="select dept_id from staff_service where staff_id='$myId' and ss_status='0'";
 	$myDept = getFieldValue($conn, "dept_id", $sql);
 	$_SESSION['mydeptid'] = $myDept;
-}
-
-if (!isset($myScl)) {
-	$myScl = getField($conn, $myDept, "department", "dept_id", "school_id");
-	$_SESSION['mysclid'] = $myScl;
 }
 if (!isset($mySes)) {
 	$sql = "select * from session_school where school_id='$myScl'";
