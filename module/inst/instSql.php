@@ -238,11 +238,11 @@ if (isset($_POST['action'])) {
 		//echo count($array);
 		//echo count($array["data"]);
 		echo '<table class="list-table-xs">
-   	<thead align="center">
-   	<table class="list-table-xs">
-   	<thead align="center"><th>School</th><th>Department</th>
-   	<th><i class="fa fa-trash"></i></th>
-   	</thead>';
+   	 <thead align="center">
+   	 <table class="list-table-xs">
+   	 <thead align="center"><th>School</th><th>Department</th>
+   	 <th><i class="fa fa-trash"></i></th>
+   	 </thead>';
 		for ($i = 0; $i < count($array["data"]); $i++) {
 			$school_id = $array["data"][$i]["school_id"];
 			$dept_id = $array["data"][$i]["dept_id"];
@@ -261,11 +261,11 @@ if (isset($_POST['action'])) {
 		//echo count($array);
 		//echo count($array["data"]);
 		echo '<table class="list-table-xs">
-   <thead align="center">
-   <table class="list-table-xs">
-   <thead align="center"><th>Department</th><th>Program</th>
-   <th><i class="fa fa-trash"></i></th>
-   </thead>';
+    	<thead align="center">
+    	<table class="list-table-xs">
+    	<thead align="center"><th>Department</th><th>Program</th>
+    	<th><i class="fa fa-trash"></i></th>
+        </thead>';
 		for ($i = 0; $i < count($array["data"]); $i++) {
 			$program_id = $array["data"][$i]["program_id"];
 			$dept_id = $array["data"][$i]["dept_id"];

@@ -40,7 +40,11 @@ if (isset($_POST['action'])) {
 						<div class="col-10">
       <h7 class="card-title">' . $staff_name . '</h7><br>
 						</div>
-						<div class="col-2">
+						<div class="col-1 p-0">
+						<a href="#" class="fa fa-plus addUser" data-mdb-toggle="popover" title="Generate User"   data-mdb-content="And heres some amazing content. Its very engaging. Right?"
+      data-staff="' . $staff_id . '"></a>
+						</div>
+      <div class="col-1 p-0">
 						<a href="#" class="fa fa-edit editStaff" data-staff="' . $staff_id . '"></a>
 						</div>
 						</div>
@@ -206,11 +210,10 @@ if (isset($_POST['action'])) {
    $desig_id = $array["data"][$i]["designation_id"];
    $ss_order = $array["data"][$i]["ss_order"];
    $sql_desig = "select * from designation where designation_id='$desig_id'";
-			$value_desig = getFieldValue($conn, "designation_name", $sql_desig);
+   $value_desig = getFieldValue($conn, "designation_name", $sql_desig);
    $sql_dept = "select * from department where dept_id='$dept_id'";
-			$value_dept = getFieldValue($conn, "dept_name", $sql_dept);
-   echo '<tr><td>'.$value_dept.'</td><td>'.$value_desig.'</td><td>'.$ss_from.'</td><td>'.$ss_order.'</td><td><i class="fa fa-trash deleteStaffService"></i></td></tr>';
-
+   $value_dept = getFieldValue($conn, "dept_name", $sql_dept);
+   echo '<tr><td>' . $value_dept . '</td><td>' . $value_desig . '</td><td>' . $ss_from . '</td><td>' . $ss_order . '</td><td><i class="fa fa-trash deleteStaffService"></i></td></tr>';
   }
   echo '</table></table>';
  } elseif ($_POST['action'] == 'addStaffService') {
