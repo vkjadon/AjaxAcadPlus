@@ -474,12 +474,11 @@ function get_sessionClass($conn, $mySes)
   );
   return json_encode($output);
 }
-function get_schoolSession($conn, $school_id, $ay_id)
+function get_schoolSession($conn, $ay_id)
 {
 
-  if ($school_id == 'ALL') $sql = "select s.* from session s where ay_id='$ay_id' order by session_name";
-  else $sql = "select s.* from session s where s.school_id='$school_id' and ay_id='$ay_id' order by session_name";
-
+  $sql = "select s.* from session s where ay_id='$ay_id' order by session_name";
+  
   $result = $conn->query($sql);
   if (!$result) die(" The script could not be Loadded! Please report!");
   $data = array();
@@ -487,7 +486,7 @@ function get_schoolSession($conn, $school_id, $ay_id)
     $sub_array = array();
     $sub_array["id"] = $rows['session_id'];
     $sub_array["name"] = $rows['session_name'];
-    $sub_array["program"] = $rows['program_id'];
+    $sub_array["school_id"] = $rows['school_id'];
     $sub_array["remarks"] = $rows['session_remarks'];
     $data[] = $sub_array;
   }

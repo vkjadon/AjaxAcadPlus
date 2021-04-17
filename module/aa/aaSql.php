@@ -233,7 +233,6 @@ if (isset($_POST['action'])) {
     updateData($conn, 'batch', $fields, $values, $dup, $dup_alert);
     // echo "inside update batch";
   } elseif ($_POST['action'] == 'batchSession') {
-    //$school_id = $myScl;
     $ay_id = $_POST['batchId'];
     $json = get_schoolSession($conn, $ay_id);
     //echo $json;
@@ -257,20 +256,20 @@ if (isset($_POST['action'])) {
       echo '<a href="#" class="float-right session_idD" data-id="' . $array["data"][$i]["id"] . '"><i class="fa fa-trash"></i></a>';
       echo '</div>';
       echo '</div>';
+      $school_id=$array["data"][$i]["school_id"];
+      $school_abbri=getField($conn, $school_id, "school", "school_id", "school_abbri");
       echo '<div class="row">';
-      echo '<div class="col-3">';
-      echo '<a href="#" class="atag addSchool" data-id="' . $array["data"][$i]["id"] . '">Add School</a>';
-      echo '</div>';
+      echo '<span class="atag">' . $school_abbri . '</span>';
       echo '</div>';
       echo '</div></div>';
     }
-    echo '</table>';
+    if(count($array["data"])==0)echo "No Session Found";
   } elseif ($_POST["action"] == "addSession") {
     //echo "Add Session";
-    $fields = ['school_id', 'program_id', 'ay_id', 'session_name', 'session_start', 'session_end', 'session_remarks'];
-    $values = [$myScl, $_POST['programIdModal'], $_POST['batchIdModal'], data_check($_POST['session_name']), data_check($_POST['session_start']), data_check($_POST['session_end']), data_check($_POST['session_remarks'])];
+    $fields = ['school_id', 'ay_id', 'session_name', 'session_start', 'session_end', 'session_remarks'];
+    $values = [$myScl, $myBatch, data_check($_POST['session_name']), data_check($_POST['session_start']), data_check($_POST['session_end']), data_check($_POST['session_remarks'])];
     $status = 'session_status';
-    $dup = "select * from session where session_name='" . data_check($_POST["session_name"]) . "' and program_id='" . $_POST["programIdModal"] . "'  and ay_id='" . $_POST["batchIdModal"] . "'and $status='0'";
+    $dup = "select * from session where session_name='" . data_check($_POST["session_name"]) . "' and school_id='" . $myScl . "'  and ay_id='" . $myBatch . "'and $status='0'";
     $dup_alert = "Session Alreday Exists ! Please Change the Name";
     addData($conn, 'session', 'session_id', $fields, $values, $status, $dup, $dup_alert);
   } elseif ($_POST["action"] == "fetchSession") {

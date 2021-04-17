@@ -597,6 +597,7 @@ function get_schoolSession($conn, $ay_id)
     $sub_array = array();
     $sub_array["id"] = $rows['session_id'];
     $sub_array["name"] = $rows['session_name'];
+    $sub_array["school_id"] = $rows['school_id'];
     $data[] = $sub_array;
   }
   $output = array(
