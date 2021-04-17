@@ -30,13 +30,13 @@ if (!empty($_FILES["csv_upload"]["name"])) {
     $subject_practical = $conn->real_escape_string($row[6]);
     $subject_credit = $conn->real_escape_string($row[7]);
     $subject_type = $conn->real_escape_string($row[8]);
-    if($subject_type=="")$subject_type='DC';
+    if ($subject_type == "") $subject_type = 'DC';
     $subject_mode = $conn->real_escape_string($row[9]);
     $subject_category = $conn->real_escape_string($row[10]);
     $subject_internal = $conn->real_escape_string($row[11]);
-    if($subject_internal=="")$subject_internal='0';
+    if ($subject_internal == "") $subject_internal = '0';
     $subject_external = $conn->real_escape_string($row[12]);
-    if($subject_external=="")$subject_external='0';
+    if ($subject_external == "") $subject_external = '0';
 
 
     $sql = "select * from subject where batch_id='$myBatch' and program_id='$myProg' and subject_code='$subject_code'";
@@ -75,24 +75,26 @@ if (!empty($_FILES["csv_upload"]["name"])) {
    // echo "inside CO $batch_id $myProg";
    fgetcsv($file_data);
    while ($row = fgetcsv($file_data)) {
-    $co_code = $conn->real_escape_string($row[0]); // po code
-    $co_name = $conn->real_escape_string($row[1]);  // po name
-    $co_sno = $conn->real_escape_string($row[2]);  // po sno
-    $subject_code = $conn->real_escape_string($row[3]);
+    $co_name = $conn->real_escape_string($row[1]);  // co name
+    $subject_code = $conn->real_escape_string($row[0]);
 
     $sql = "select * from subject where subject_code='$subject_code'";
     $result = $conn->query($sql);
     $resultValue = $result->num_rows;
-    if ($resultValue==0){
+    $value_subject = getFieldValue($conn, "subject_id", $sql);
+    if ($resultValue == 0) {
+     $sql = "INSERT INTO subject (batch_id, program_id, subject_code) VALUES ('$myBatch', '$myProg', '$subject_code')";
+     $result = $conn->query($sql);
+     $value_subject = $conn->insert_id;
+     if (!$result) echo $conn->error;
+    } else {}
 
-    }
-
-    $sql = "select * from course_outcome where batch_id='$batch_id' and program_id='$myProg' and co_sno='$co_sno'";
+    $sql = "select * from course_outcome where subject_id='$value_subject' and co_name='$co_name'";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     $records = $result->num_rows;
     if ($records == 0) {
-     $sql = "INSERT INTO course_outcome (batch_id, program_id, co_code, co_name, co_sno, co_status) VALUES ('$batch_id', '$myProg', '$co_code', '$co_name', '$co_sno', '0')";
+     $sql = "INSERT INTO course_outcome (subject_id, co_code, co_name, co_status) VALUES ('$value_subject', 'CO', '$co_name', '0')";
      $result_insert = $conn->query($sql);
      if (!$result_insert) echo $conn->error;
      $status = "Inserted";
