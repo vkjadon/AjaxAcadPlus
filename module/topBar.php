@@ -1,5 +1,7 @@
 <?php
 // echo "My School in SetDefault $myScl";
+$myName = getField($conn, $myId, "staff", "staff_id", "staff_name");
+$myUserId = getField($conn, $myId, "staff", "staff_id", "user_id");
 
 if (isset($myScl)) $mySclAbbri = getField($conn, $myScl, "school", "school_id", "school_abbri");
 else $mySclAbbri = "Select School";
@@ -15,15 +17,17 @@ else $myBatchName = "Select Batch";
 <header>
 	<div class="py-2">
 		<div class="row">
-			<div class="col ml-2">
-				<?php
-				echo $mySclAbbri . '[' . $myDeptAbbri . ']';
+		<div class="col ml-2">
+				<span class="inputLabel"><?php
+				echo $myName . '[' . $myUserId . ']';
 				//echo "School ".$myScl;
-				?>
+				?></span>
 			</div>
+
 			<div class="col ml-2 text-center">
 				<?php
-				echo 'Session : ' . $mySesName;
+				echo $mySclAbbri . '[' . $myDeptAbbri . '] ';
+				echo '<b>'.$mySesName.'</b>';
 				//echo "School ".$myScl;
 				?>
 			</div>

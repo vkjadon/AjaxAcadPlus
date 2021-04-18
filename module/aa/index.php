@@ -83,7 +83,7 @@ require('../../php_function.php');
               </div>
             </div>
 
-            <div class="tab-pane fade show" id="list-co" role="tabpanel" aria-labelledby="list-co-list">
+            <div class="tab-pane fade show" id="list-copo" role="tabpanel" aria-labelledby="list-copo-list">
               <div class="row">
                 <div class="col-sm-8">
                   <button class="btn btn-sm btn-primary uploadCo">Upload CO-PO Map</button>
