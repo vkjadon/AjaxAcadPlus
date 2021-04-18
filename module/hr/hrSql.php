@@ -233,7 +233,7 @@ if (isset($_POST['action'])) {
   echo $conn->error;
  } elseif ($_POST['action'] == 'removeUser') {
   $id = $_POST['id'];
-  $sql = "update user set user_status='1' where staff_id='$id'";
+  $sql = "delete from user where staff_id='$id'";
   $conn->query($sql);
   echo $conn->error;
  }
