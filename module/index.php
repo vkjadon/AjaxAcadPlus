@@ -133,6 +133,8 @@ appears on the same line at the text.</p>
 				action: "setSchool",
 			}, function(mydata, mystatus) {
 				//alert("- School Updated -" + mydata);
+				location.reload();
+
 			}, "text").fail(function() {
 				$.alert("Error !!");
 			})
