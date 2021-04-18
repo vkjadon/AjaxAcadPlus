@@ -21,7 +21,6 @@ if (isset($_POST["query"])) {
 }
 if (isset($_POST['action'])) {
  if ($_POST['action'] == 'studentList') {
-
   $program_id = $_POST['programId'];
   $batch_id = $_POST['batchId'];
   if ($program_id > 0 && $batch_id > 0) $sql = "select * from student st where st.program_id='$program_id' and st.batch_id='$batch_id' and student_status='0' order by student_name";
