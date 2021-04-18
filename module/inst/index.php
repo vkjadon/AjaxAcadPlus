@@ -56,12 +56,6 @@ require('../../php_function.php');
  <div class="container-fluid moduleBody">
   <div class="row">
    <div class="col-2">
-
-    <?php
-    $url = $setUrl . '/acadplus/api/check_dept_head.php?u=' . $myUn . '&&p=' . $myPwd;
-    $dept_head = check_dept_head($url);
-    //echo $dept_head;
-    ?>
     <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
      <a class="list-group-item list-group-item-action active si" id="list-si-list" data-toggle="list" href="#list-si" role="tab" aria-controls="si"> Setup Institute </a>
      <a class="list-group-item list-group-item-action mis" id="list-mis-list" data-toggle="list" href="#list-mis" role="tab" aria-controls="mis"> Manage School </a>
