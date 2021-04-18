@@ -706,6 +706,8 @@ require('../../php_function.php');
           $.alert("List " + data);
         }
       })
+      $("#formModal")[0].reset;
+      $('#formModal').modal('hide');
     });
 
 

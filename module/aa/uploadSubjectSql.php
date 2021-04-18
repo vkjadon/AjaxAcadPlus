@@ -73,6 +73,7 @@ if (!empty($_FILES["csv_upload"]["name"])) {
 			// echo "inside CO $batch_id $myProg";
 			fgetcsv($file_data);
 			while ($row = fgetcsv($file_data)) {
+				//echo count($row);
 				$co_name = $conn->real_escape_string($row[1]);  // co name
 				$subject_code = $conn->real_escape_string($row[0]);
 				$subject_code = str_replace(" ", "", $subject_code);
@@ -83,11 +84,24 @@ if (!empty($_FILES["csv_upload"]["name"])) {
 					if (!$result) echo $conn->error;
 					$records = $result->num_rows;
 					if ($records == 0) {
-						$sql = "INSERT INTO course_outcome (subject_id, co_code, co_name, co_status) VALUES ('$value_subject', 'CO', '$co_name', '0')";
-						$result_insert = $conn->query($sql);
-						if (!$result_insert) echo $conn->error;
-						$status = "Inserted";
-					} else $status = "Exists";
+						$sql = "INSERT INTO course_outcome (subject_id, co_code, co_name, co_status) VALUES ('$subject_id', 'CO', '$co_name', '0')";
+						$result_co = $conn->query($sql);
+						$co_id=$conn->insert_id;
+						//echo "$co_id ";
+						$po=0;
+						for($i=2; $i<count($row); $i++){
+							$po++;
+							$sql_po="select po_id from program_outcome where program_id='$myProg' and batch_id='$myBatch' and po_sno='$po'";
+							$po_id=getFieldValue($conn,"po_id", $sql_po);
+							$po_scale = $conn->real_escape_string($row[$i]);  // po scale
+							
+							echo "$po_id $po_scale";
+
+							$sql_copo = "INSERT INTO copo_map (co_id, po_id, copo_scale) VALUES ('$co_id', '$po_id', '$po_scale')";
+							if(strlen($po_scale)>0)$conn->query($sql_copo);
+						}
+					} else $status = "CO Exists";
+
 				}
 			}
 		}

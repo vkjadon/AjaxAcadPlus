@@ -21,31 +21,30 @@ if (isset($_POST['action'])) {
   } elseif ($_POST['action'] == 'updateSubject') {
     $fields = ['subject_id', 'subject_name', 'subject_code', 'subject_semester', 'subject_lecture', 'subject_tutorial', 'subject_practical', 'subject_credit', 'subject_type', 'subject_mode', 'subject_category', 'subject_internal', 'subject_external', 'subject_sno', 'staff_id'];
 
-    $values = [$_POST['modalId'], data_check($_POST['subject_name']), data_check($_POST['subject_code']), data_check($_POST['subject_semester']), data_check($_POST['subject_lecture']), data_check($_POST['subject_tutorial']), data_check($_POST['subject_practical']),  data_check($_POST['subject_credit']), data_check($_POST['subject_type']), data_check($_POST['subject_mode']), data_check($_POST['subject_category']), data_check($_POST['subject_internal']), data_check($_POST['subject_external']),data_check($_POST['subject_sno']), $_POST['sel_staff']];
+    $values = [$_POST['modalId'], data_check($_POST['subject_name']), data_check($_POST['subject_code']), data_check($_POST['subject_semester']), data_check($_POST['subject_lecture']), data_check($_POST['subject_tutorial']), data_check($_POST['subject_practical']),  data_check($_POST['subject_credit']), data_check($_POST['subject_type']), data_check($_POST['subject_mode']), data_check($_POST['subject_category']), data_check($_POST['subject_internal']), data_check($_POST['subject_external']), data_check($_POST['subject_sno']), $_POST['sel_staff']];
     $dup = "select * from subject where subject_id='" . $_POST["modalId"] . "'";
     $dup_alert = "Could Not Update - Duplicate Entries";
     updateData($conn, 'subject', $fields, $values, $dup, $dup_alert);
   } elseif ($_POST['action'] == 'vac') {
-    $id=$_POST['id'];
-    $code=$_POST['code'];
-    $field=$_POST['field'];
-    if($code=='N')$sql = "update subject_addon set $field='0' where subject_id='$id'";
+    $id = $_POST['id'];
+    $code = $_POST['code'];
+    $field = $_POST['field'];
+    if ($code == 'N') $sql = "update subject_addon set $field='0' where subject_id='$id'";
     else $sql = "update subject_addon set $field='1' where subject_id='$id'";
-    $result=$conn->query($sql);
-    if(!$result)echo $conn->error;
-    else
-    {
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+    else {
       //echo $conn->affected_rows;
-      $sql="insert into subject_addon (subject_id, $field) values('$id', '1')";
+      $sql = "insert into subject_addon (subject_id, $field) values('$id', '1')";
       $conn->query($sql);
     }
   } elseif ($_POST['action'] == 'deleteSubject') {
-    $id=$_POST['id'];
+    $id = $_POST['id'];
     $sql = "update subject set subject_status='9' where subject_id='$id'";
     $conn->query($sql);
     // echo $conn->error;
-  }elseif ($_POST['action'] == 'resetSubject') {
-    $id=$_POST['id'];
+  } elseif ($_POST['action'] == 'resetSubject') {
+    $id = $_POST['id'];
     $sql = "update subject set subject_status='0' where subject_id='$id'";
     $conn->query($sql);
     echo $conn->error;
@@ -105,50 +104,53 @@ if (isset($_POST['action'])) {
       $status = $array["data"][$i]["subject_status"];
 
       echo '<div class="row shadow border border-primary mb-1 cardBodyText">';
-        echo '<div class="col-sm-2 p-1 mb-0 bg-two">';
-          echo 'ID:' . $subject_id.' <b>['.$sno.']</b>';
-          echo '<a href="#" class="float-right subject_idE" data-id="' . $subject_id . '"><i class="fa fa-edit"></i></a>';
-          echo '<div><b>' . $array["data"][$i]["subject_code"] . '</b>
+      echo '<div class="col-sm-2 p-1 mb-0 bg-two">';
+      echo 'ID:' . $subject_id . ' <b>[' . $sno . ']</b>';
+      echo '<a href="#" class="float-right subject_idE" data-id="' . $subject_id . '"><i class="fa fa-edit"></i></a>';
+      echo '<div><b>' . $array["data"][$i]["subject_code"] . '</b>
           <span class="float-right footerNote">' . $type . '</span></div>';
-        echo '</div>';
-        echo '<div class="col-sm-6">';
-          echo '<div class="cardBodyText"><b>' . $array["data"][$i]["subject_name"] . '</b></div>';
-          echo '<div class="cardBodyText">Semester : ' . $array["data"][$i]["subject_semester"];
-          echo ' <b>Credit : ' . $Cr . ' </b>';
-          $emp=getField($conn, $subject_id, "subject_addon", "subject_id", "subject_emp");
-          if($emp=="1")echo ' [ <i class="fa fa-check"><b><a href="#" class="vac" data-field="subject_emp" data-code="N" data-id="' . $subject_id . '"></i>Emp</a></b> ] ';
-          else echo ' [ <i class="fa fa-times"></i><b><a href="#" class="vac" data-field="subject_emp" data-code="Y" data-id="' . $subject_id . '">Emp</a></b> ] ';
+      echo '</div>';
+      echo '<div class="col-sm-6">';
+      echo '<div class="cardBodyText"><b>' . $array["data"][$i]["subject_name"] . '</b></div>';
+      echo '<div class="cardBodyText">Semester : ' . $array["data"][$i]["subject_semester"];
+      echo ' <b>Credit : ' . $Cr . ' </b>';
+      $emp = getField($conn, $subject_id, "subject_addon", "subject_id", "subject_emp");
+      if ($emp == "1") echo ' [ <i class="fa fa-check"><b><a href="#" class="vac" data-field="subject_emp" data-code="N" data-id="' . $subject_id . '"></i>Emp</a></b> ] ';
+      else echo ' [ <i class="fa fa-times"></i><b><a href="#" class="vac" data-field="subject_emp" data-code="Y" data-id="' . $subject_id . '">Emp</a></b> ] ';
 
-          $skill=getField($conn, $subject_id, "subject_addon", "subject_id", "subject_skill");
-          if($skill=="1")echo ' [ <i class="fa fa-check"><b><a href="#" class="vac" data-field="subject_skill" data-code="N" data-id="' . $subject_id . '"></i>Skill</a></b> ] ';
-          else echo ' [ <i class="fa fa-times"></i><b><a href="#" class="vac" data-field="subject_skill" data-code="Y" data-id="' . $subject_id . '">Skill</a></b> ] ';
+      $skill = getField($conn, $subject_id, "subject_addon", "subject_id", "subject_skill");
+      if ($skill == "1") echo ' [ <i class="fa fa-check"><b><a href="#" class="vac" data-field="subject_skill" data-code="N" data-id="' . $subject_id . '"></i>Skill</a></b> ] ';
+      else echo ' [ <i class="fa fa-times"></i><b><a href="#" class="vac" data-field="subject_skill" data-code="Y" data-id="' . $subject_id . '">Skill</a></b> ] ';
 
-          $entrep=getField($conn, $subject_id, "subject_addon", "subject_id", "subject_entrep");
-          if($entrep=="1")echo '<i class="fa fa-check"><b><a href="#" class="vac" data-field="subject_entrep" data-code="N" data-id="' . $subject_id . '"></i>Entrep</a></b>';
-          else echo '<i class="fa fa-times"></i><b><a href="#" class="vac" data-field="subject_entrep" data-code="Y" data-id="' . $subject_id . '">Entrep</a></b>';
-          echo '</div>';
-        echo '</div>';
-
-        echo '<div class="col-sm-2">';
-          echo 'L-T-P<br>' . $L . '-' . $T . '-' . $P;
-        echo '</div>';
-
-        echo '<div class="col-sm-2">';
-        $vac=getField($conn, $subject_id, "subject_addon", "subject_id", "subject_vac");
-
-          if($vac=="1")echo '<i class="fa fa-check"><b><a href="#" class="vac" data-field="subject_vac" data-code="N" data-id="' . $subject_id . '"></i>VAC</a></b>';
-          else echo '<i class="fa fa-times"></i><b><a href="#" class="vac" data-field="subject_vac" data-code="Y" data-id="' . $subject_id . '">VAC</a></b>';
-          echo '<br>';
-          if($status=="9")echo '<a href="#" class="float-right subject_idR" data-id="' . $subject_id . '">Removed</a>';
-          else echo '<a href="#" class="float-right subject_idD" data-id="' . $subject_id . '"><i class="fa fa-trash"></i></a>';
-        echo '</div>';
+      $entrep = getField($conn, $subject_id, "subject_addon", "subject_id", "subject_entrep");
+      if ($entrep == "1") echo '<i class="fa fa-check"><b><a href="#" class="vac" data-field="subject_entrep" data-code="N" data-id="' . $subject_id . '"></i>Entrep</a></b>';
+      else echo '<i class="fa fa-times"></i><b><a href="#" class="vac" data-field="subject_entrep" data-code="Y" data-id="' . $subject_id . '">Entrep</a></b>';
+      echo '</div>';
       echo '</div>';
 
+      echo '<div class="col-sm-2">';
+      echo 'L-T-P<br>' . $L . '-' . $T . '-' . $P;
+      echo '</div>';
+
+      echo '<div class="col-sm-2">';
+      $vac = getField($conn, $subject_id, "subject_addon", "subject_id", "subject_vac");
+
+      if ($vac == "1") echo '<i class="fa fa-check"><b><a href="#" class="vac" data-field="subject_vac" data-code="N" data-id="' . $subject_id . '"></i>VAC</a></b>';
+      else echo '<i class="fa fa-times"></i><b><a href="#" class="vac" data-field="subject_vac" data-code="Y" data-id="' . $subject_id . '">VAC</a></b>';
+      echo '<br>';
+      if ($status == "9") echo '<a href="#" class="float-right subject_idR" data-id="' . $subject_id . '">Removed</a>';
+      else echo '<a href="#" class="float-right subject_idD" data-id="' . $subject_id . '"><i class="fa fa-trash"></i></a>';
+      echo '</div>';
+      echo '</div>';
     }
   } elseif ($_POST["action"] == "subjectSummary") {
     //echo "MyId- $myId Prog $myProg";
-    $totalLecture = 0;    $totalTutorial = 0;    $totalPractical = 0;
-    $totalCredit = 0;    $totalSubjects=0;       $coreSubjects=0;
+    $totalLecture = 0;
+    $totalTutorial = 0;
+    $totalPractical = 0;
+    $totalCredit = 0;
+    $totalSubjects = 0;
+    $coreSubjects = 0;
     $sql = "select sum(subject_lecture) as lecture, sum(subject_tutorial) as tutorial, sum(subject_practical) as practical, sum(subject_credit) as credit, subject_semester from subject where subject_semester>0 and program_id='$myProg' and batch_id='$myBatch' and subject_status<'9' group by subject_semester";
     $result = $conn->query($sql);
     echo '<div class="card card-square">';
@@ -175,19 +177,19 @@ if (isset($_POST['action'])) {
     $sql = "select count(subject_id) as subjects from subject where subject_semester>0 and program_id='$myProg' and batch_id='$myBatch' and subject_status<'9'";
     $result = $conn->query($sql);
     $row = $result->fetch_array();
-    $totalSubjects=$row["subjects"];
+    $totalSubjects = $row["subjects"];
 
     $sql = "select count(subject_id) as subjects from subject where subject_type='DC' and subject_semester>0 and program_id='$myProg' and batch_id='$myBatch' and subject_status<'9'";
     $result = $conn->query($sql);
     $row = $result->fetch_array();
-    if($totalSubjects>0)$coreSubjects=ceil(($row["subjects"]/$totalSubjects)*100);
+    if ($totalSubjects > 0) $coreSubjects = ceil(($row["subjects"] / $totalSubjects) * 100);
 
     echo '<div class="row">
       <div class="col-6 pr-0">
         <div class="card text-white bg-info">
           <div class="card-header">Core</div>
           <div class="card-body">
-            <h3 class="card-title text-center">'.$coreSubjects.'%</h3>
+            <h3 class="card-title text-center">' . $coreSubjects . '%</h3>
           </div>
         </div>
       </div>
@@ -195,7 +197,7 @@ if (isset($_POST['action'])) {
         <div class="card text-white bg-success">
           <div class="card-header">Electives</div>
           <div class="card-body">
-            <h3 class="card-title text-center">'.(100-$coreSubjects).'%</h3>
+            <h3 class="card-title text-center">' . (100 - $coreSubjects) . '%</h3>
           </div>
         </div>
       </div>
@@ -254,14 +256,14 @@ if (isset($_POST['action'])) {
       echo '<a href="#" class="float-right session_idD" data-id="' . $array["data"][$i]["id"] . '"><i class="fa fa-trash"></i></a>';
       echo '</div>';
       echo '</div>';
-      $school_id=$array["data"][$i]["school_id"];
-      $school_abbri=getField($conn, $school_id, "school", "school_id", "school_abbri");
+      $school_id = $array["data"][$i]["school_id"];
+      $school_abbri = getField($conn, $school_id, "school", "school_id", "school_abbri");
       echo '<div class="row">';
       echo '<span class="atag">' . $school_abbri . '</span>';
       echo '</div>';
       echo '</div></div>';
     }
-    if(count($array["data"])==0)echo "No Session Found";
+    if (count($array["data"]) == 0) echo "No Session Found";
   } elseif ($_POST["action"] == "addSession") {
     //echo "Add Session";
     $fields = ['school_id', 'ay_id', 'session_name', 'session_start', 'session_end', 'session_remarks'];
@@ -326,23 +328,22 @@ if (isset($_POST['action'])) {
       $status = $array["data"][$i]["po_status"];
 
       echo '<div class="row shadow border border-primary mb-1 cardBodyText">';
-        echo '<div class="col-sm-3 mb-0 bg-two">';
-          echo 'ID : ' . $po_id;
-          echo '<a href="#" class="float-right po_idE" data-id="' . $po_id . '"><i class="fa fa-edit"></i></a>';
-          echo '<div><b>' . $array["data"][$i]["po_code"] . $po_sno . '</b></div>';
-        echo '</div>';
+      echo '<div class="col-sm-3 mb-0 bg-two">';
+      echo 'ID : ' . $po_id;
+      echo '<a href="#" class="float-right po_idE" data-id="' . $po_id . '"><i class="fa fa-edit"></i></a>';
+      echo '<div><b>' . $array["data"][$i]["po_code"] . $po_sno . '</b></div>';
+      echo '</div>';
 
-        echo '<div class="col-sm-8">';
-          echo '<div class="cardBodyText"><b>' . $po_name . '</b></div>';
-        echo '</div>';
+      echo '<div class="col-sm-8">';
+      echo '<div class="cardBodyText"><b>' . $po_name . '</b></div>';
+      echo '</div>';
 
-        echo '<div class="col-sm-1">';
-          if($status=="9")echo '<a href="#" class="float-right po_idR" data-id="' . $po_id . '">Removed</a>';
-          else echo '<a href="#" class="float-right po_idD" data-id="' . $po_id . '"><i class="fa fa-trash"></i></a>';
-        echo '</div>';
+      echo '<div class="col-sm-1">';
+      if ($status == "9") echo '<a href="#" class="float-right po_idR" data-id="' . $po_id . '">Removed</a>';
+      else echo '<a href="#" class="float-right po_idD" data-id="' . $po_id . '"><i class="fa fa-trash"></i></a>';
+      echo '</div>';
       echo '</div>';
     }
-
   } elseif ($_POST["action"] == "addCo") {
     //echo "Add Session ";
     $fields = ['subject_id', 'co_name', 'co_code', 'co_sno'];
@@ -367,38 +368,48 @@ if (isset($_POST['action'])) {
   } elseif ($_POST["action"] == "coList") {
     //    echo "MyId- $myId";
 
-    $sql = "select co.*, sb.subject_name from course_outcome co, subject sb where sb.subject_id=co.subject_id and sb.program_id='$myProg' and sb.batch_id='$myBatch' and co.co_status='0' and sb.subject_status='0' order by sb.subject_semester, sb.subject_sno, co_sno, co_code";
-    $tableId = 'co_id';
-    $json = getTableRow($conn, $sql, array("co_id", "subject_id", "co_code", "co_name", "co_sno", "co_status"));
-    $array = json_decode($json, true);
+    $sqlSub = "select sb.* from subject sb where sb.program_id='$myProg' and sb.batch_id='$myBatch' and sb.subject_status='0' and subject_semester>0 order by sb.subject_semester, sb.subject_sno";
+    $resultSub = $conn->query($sqlSub);
+    while ($subArray = $resultSub->fetch_assoc()) {
+      $subject_id = $subArray["subject_id"];
+      $subject_name = $subArray["subject_name"];
+      $subject_code = $subArray["subject_code"];
 
-    for ($i = 0; $i < count($array["data"]); $i++) {
-      $co_id = $array["data"][$i]["co_id"];
-      $subject_id = $array["data"][$i]["subject_id"];
-      $co_code = $array["data"][$i]["co_code"];
-      $co_sno = $array["data"][$i]["co_sno"];
-      $co_name = $array["data"][$i]["co_name"];
-      $status = $array["data"][$i]["co_status"];
+      echo '<div class="row shadow border border-primary mb-1">';
+      echo '<div class="col-sm-3 mb-0 bg-two inputLabel">';
+      echo 'Sem ' . $subArray["subject_semester"];
+      echo '</div>';
+      echo '<div class="col-sm-9 mb-0 bg-two inputLabel">';
+      echo $subject_name . '[' . $subject_code . ']';
+      echo '</div>';
 
-      echo '<div class="row shadow border border-primary mb-1 cardBodyText">';
-        echo '<div class="col-sm-2 mb-0 bg-two">';
-          echo getField($conn, $subject_id, "subject", "subject_id", "subject_code");
-          echo '<a href="#" class="float-right co_idE" data-id="' . $co_id . '"><i class="fa fa-edit"></i></a>';
-          echo '<div><b>' . $co_code . $co_sno . '</b></div>';
+      $sqlCO = "select co.* from course_outcome co where co.subject_id='$subject_id' and co.co_status='0' order by co.co_sno, co.co_code";
+      $resultCO = $conn->query($sqlCO);
+      while ($coArray = $resultCO->fetch_assoc()) {
+        $co_id = $coArray["co_id"];
+        $co_code = $coArray["co_code"];
+        $co_sno = $coArray["co_sno"];
+        $co_name = $coArray["co_name"];
+        $status = $coArray["co_status"];
+
+        echo '<div class="col-sm-2 cardBodyText">';
+        echo '<a href="#" class="float-right co_idE" data-id="' . $co_id . '"><i class="fa fa-edit"></i></a>';
+        echo '<div><b>' . $co_code . $co_sno . '</b></div>';
         echo '</div>';
 
-        echo '<div class="col-sm-9">';
-          echo '<div class="cardBodyText"><b>' . $co_name . '</b></div>';
+        echo '<div class="col-sm-9 cardBodyText">';
+        echo '<div class="cardBodyText"><b>' . $co_name . '</b></div>';
         echo '</div>';
 
         echo '<div class="col-sm-1">';
-          if($status=="9")echo '<a href="#" class="float-right co_idR" data-id="' . $co_id . '">Removed</a>';
-          else echo '<a href="#" class="float-right co_idD" data-id="' . $co_id . '"><i class="fa fa-trash"></i></a>';
+        if ($status == "9") echo '<a href="#" class="float-right co_idR" data-id="' . $co_id . '">Removed</a>';
+        else echo '<a href="#" class="float-right co_idD" data-id="' . $co_id . '"><i class="fa fa-trash"></i></a>';
         echo '</div>';
+      }
       echo '</div>';
     }
-  }elseif ($_POST["action"] == "selectSubject"){
-    $sql = "select * from subject where subject_status='0' and program_id='$myProg' and batch_id='".$_POST['batch_id']."' order by subject_semester, subject_name ";
+  } elseif ($_POST["action"] == "selectSubject") {
+    $sql = "select * from subject where subject_status='0' and program_id='$myProg' and batch_id='" . $_POST['batch_id'] . "' order by subject_semester, subject_name ";
     selectList($conn, 'Sel Subject', array('0', 'subject_id', 'subject_name', 'subject_code', 'sel_subject'), $sql);
   }
 }
