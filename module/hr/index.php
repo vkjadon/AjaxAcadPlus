@@ -775,7 +775,7 @@ require('../../php_function.php');
 
   $(document).on('click', '.addUser', function() {
    var id = $(this).attr("data-id");
-   $.alert("Disabled " + id);
+  //  $.alert("Disabled " + id);
    $.post("hrSql.php", {
     id: id,
     action: "addUser"

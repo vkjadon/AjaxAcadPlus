@@ -253,7 +253,7 @@ if (isset($_POST['action'])) {
 			$sql_dept = "select * from department where dept_id='$dept_id'";
 			$value_dept = getFieldValue($conn, "dept_name", $sql_dept);
 
-			echo '<tr><td>' . $value_school . '</td><td>' . $value_dept . '</td><td class="text-center"><i class="fa fa-trash deleteSchoolDept"></i></td></tr>';
+			echo '<tr><td>' . $value_school . '</td><td>' . $value_dept . '</td><td class="text-center"><a href="#" class="fa fa-trash deleteSchoolDept" data-dept="'.$dept_id.'" data-school="'.$school_id.'"></a></td></tr>';
 		}
 		echo '</table></table>';
 	} elseif ($_POST["action"] == "deptProgramList") {
@@ -276,8 +276,25 @@ if (isset($_POST['action'])) {
 			$sql_dept = "select * from department where dept_id='$dept_id'";
 			$value_dept = getFieldValue($conn, "dept_name", $sql_dept);
 
-			echo '<tr><td>' . $value_dept . '</td><td>' . $value_school . '</td><td class="text-center"><i class="fa fa-trash deleteSchoolDept"></i></td></tr>';
+			echo '<tr><td>' . $value_dept . '</td><td>' . $value_school . '</td>
+   <td class="text-center">
+   <a href="#" class="fa fa-trash deleteDeptProgram" data-dept="'.$dept_id.'" data-program="'.$program_id.'"></a>
+   </td>
+   </tr>';
 		}
 		echo '</table></table>';
-	}
+	} elseif ($_POST['action'] == 'removeSchoolDept') {
+  $schoolId = $_POST['schoolId'];
+  $deptId = $_POST['deptId'];
+		echo "$deptId,$schoolId";
+  $sql = "delete from school_dept where school_id='$schoolId' and dept_id='$deptId'";
+  $conn->query($sql);
+  echo $conn->error;
+ } elseif ($_POST['action'] == 'removeDeptProgram') {
+  $progId = $_POST['progId'];
+  $deptId = $_POST['deptId'];
+  $sql = "delete from dept_program where program_id='$progId' and dept_id='$deptId'";
+  $conn->query($sql);
+  echo $conn->error;
+ }
 }
