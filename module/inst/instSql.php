@@ -186,6 +186,8 @@ if (isset($_POST['action'])) {
 			$program_semester = $array["data"][$i]["program_semester"];
 			$program_duration = $array["data"][$i]["program_duration"];
 			$program_start = $array["data"][$i]["program_start"];
+			$sp_name = $array["data"][$i]["sp_name"];
+			$sp_abbri = $array["data"][$i]["sp_abbri"];
 			$Cr = '';
 			$status = '';
 
@@ -198,7 +200,7 @@ if (isset($_POST['action'])) {
 			echo '</div>';
 
 			echo '<div class="col-sm-6">';
-			echo '<div class="cardBodyText"><b>' . $program_name . '</b></div>';
+			echo '<div class="cardBodyText"><b>' . $sp_name . '</b> ['.$sp_abbri.']</div>';
 			echo '<div class="cardBodyText">Semester : ' . $program_semester;
 			echo ' <b>Duration : ' . $program_duration . '</b>';
 			echo ' <b>Seats : ' . $array["data"][$i]["program_seat"] . '</b>';
