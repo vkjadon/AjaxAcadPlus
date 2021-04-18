@@ -790,12 +790,12 @@ require('../../php_function.php');
 
   $(document).on('click', '.removeUser', function() {
    var id = $(this).attr("data-id");
-   $.alert("Disabled " + id);
+   // $.alert("Disabled " + id);
    $.post("hrSql.php", {
     id: id,
     action: "removeUser"
    }, function(data, status) {
-    $.alert("Data" + data)
+    // $.alert("Data" + data)
     staffList();
    }, "text").fail(function() {
     $.alert("Error in BatchSession Function");
