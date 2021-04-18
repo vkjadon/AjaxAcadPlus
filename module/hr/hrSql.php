@@ -34,18 +34,21 @@ if (isset($_POST['action'])) {
    $staff_mobile = $array["data"][$i]["staff_mobile"];
    $staff_email = $array["data"][$i]["staff_email"];
 
-   echo '<div class="card">
-      <div class="card-body mb-0">
-						<div class="row">
-						<div class="col-10">
-      <h7 class="card-title">' . $staff_name . '</h7><br>
-						</div>
-						<div class="col-2">
-						<a href="#" class="fa fa-edit editStaff" data-staff="' . $staff_id . '"></a>
-						</div>
-						</div>
-      <h8 class="card-subtitle mb-2 text-muted">' . $staff_email . ' </h8>
-      </div></div>';
+   $sql = "SELECT * from user where staff_id='$staff_id'";
+   $result = $conn->query($sql);
+   $status = getFieldValue($conn, "user_status", $sql);
+
+   echo '<div class="card">';
+   echo '<div class="card-body mb-0">';
+   echo '<div class="row">';
+   echo '<div class="col-10">';
+   echo '<h7 class="card-title">' . $staff_name . '</h7><br></div>';
+   echo '<div class="col-1 p-0">';
+   if ($status == "0") echo '<a href="#" class="fa fa-minus removeUser" data-id="' . $staff_id . '"></a></div>';
+   else echo '<a href="#" class="fa fa-plus addUser" data-id="' . $staff_id . '"></a></div>';
+   echo '<div class="col-1 p-0">';
+   echo '<a href="#" class="fa fa-edit editStaff" data-staff="' . $staff_id . '"></a></div></div>';
+   echo '<h8 class="card-subtitle mb-2 text-muted">' . $staff_email . ' </h8></div></div>';
   }
  } elseif ($_POST['action'] == 'addStaff') {
 
@@ -206,11 +209,10 @@ if (isset($_POST['action'])) {
    $desig_id = $array["data"][$i]["designation_id"];
    $ss_order = $array["data"][$i]["ss_order"];
    $sql_desig = "select * from designation where designation_id='$desig_id'";
-			$value_desig = getFieldValue($conn, "designation_name", $sql_desig);
+   $value_desig = getFieldValue($conn, "designation_name", $sql_desig);
    $sql_dept = "select * from department where dept_id='$dept_id'";
-			$value_dept = getFieldValue($conn, "dept_name", $sql_dept);
-   echo '<tr><td>'.$value_dept.'</td><td>'.$value_desig.'</td><td>'.$ss_from.'</td><td>'.$ss_order.'</td><td><i class="fa fa-trash deleteStaffService"></i></td></tr>';
-
+   $value_dept = getFieldValue($conn, "dept_name", $sql_dept);
+   echo '<tr><td>' . $value_dept . '</td><td>' . $value_desig . '</td><td>' . $ss_from . '</td><td>' . $ss_order . '</td><td><i class="fa fa-trash deleteStaffService"></i></td></tr>';
   }
   echo '</table></table>';
  } elseif ($_POST['action'] == 'addStaffService') {
@@ -223,5 +225,16 @@ if (isset($_POST['action'])) {
     $error = $conn->errno;
    }
   } else echo "No Field should be Blank";
+ } elseif ($_POST['action'] == 'addUser') {
+  $id = $_POST['id'];
+  $password = sha1(random_int(0, 10));
+  $sql = "insert into user (staff_id, user_password, user_status) values ('$id', '$password', '0')";
+  $conn->query($sql);
+  echo $conn->error;
+ } elseif ($_POST['action'] == 'removeUser') {
+  $id = $_POST['id'];
+  $sql = "update user set user_status='1' where staff_id='$id'";
+  $conn->query($sql);
+  echo $conn->error;
  }
 }

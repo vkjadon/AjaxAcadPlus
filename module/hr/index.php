@@ -774,6 +774,34 @@ require('../../php_function.php');
    }
   });
 
+  $(document).on('click', '.addUser', function() {
+   var id = $(this).attr("data-id");
+   $.alert("Disabled " + id);
+   $.post("hrSql.php", {
+    id: id,
+    action: "addUser"
+   }, function(data, status) {
+    $.alert("Data" + data)
+    staffList();
+   }, "text").fail(function() {
+    $.alert("Error in BatchSession Function");
+   })
+  });
+
+  $(document).on('click', '.removeUser', function() {
+   var id = $(this).attr("data-id");
+   $.alert("Disabled " + id);
+   $.post("hrSql.php", {
+    id: id,
+    action: "removeUser"
+   }, function(data, status) {
+    $.alert("Data" + data)
+    staffList();
+   }, "text").fail(function() {
+    $.alert("Error in BatchSession Function");
+   })
+  });
+
   function staffList() {
    $.post("hrSql.php", {
     action: "staffList"
@@ -813,6 +841,7 @@ require('../../php_function.php');
    })
 
   }
+
  });
 </script>
 
@@ -883,9 +912,9 @@ require('../../php_function.php');
 
     <!-- Modal body -->
     <div class="modal-body">
-    <h5>Selected Department</h5>
-   <p class="selectedDepartment"><b><?php echo $myDeptAbbri; ?></b></p>
-    <hr>
+     <h5>Selected Department</h5>
+     <p class="selectedDepartment"><b><?php echo $myDeptAbbri; ?></b></p>
+     <hr>
      <h5>Select File to Upload Staff</h5>
      <div class="form-group">
       <div class="row">
