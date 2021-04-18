@@ -9,46 +9,15 @@ require('../../php_function.php');
 
 <head>
   <title>Outcome Based Education : ClassConnect</title>
-  <?php require("../css.php");?>
+  <?php require("../css.php"); ?>
 
 </head>
 
 <body>
-<?php require("../topBar.php");?>
-  <div class="container-fluid">
+  <?php require("../topBar.php"); ?>
+  <div class="container-fluid moduleBody">
     <div class="row">
       <div class="col-2">
-        <?php
-        $url = $setUrl . '/acadplus/api/check_dept_head.php?u=' . $myUn . '&&p=' . $myPwd;
-        $dept_head = check_dept_head($url);
-        //echo $dept_head;
-        ?>
-        <div class="selectPanel">
-          <p class="selectPanel m-1 p-0" id="selectPanelTitle"></p>
-          <div class="col">
-            <div class="row" id="selectPanel">
-              <?php
-              $sql = "select * from subject where staff_id='$myId' and subject_status='0'";
-              selectList($conn, 'Select Subject', array('1', 'subject_id', 'subject_name', 'subject_code', 'sel_subject'), $sql);
-              ?>
-            </div>
-            <div class="row py-1">
-              <div class="col-6 form-group mt-0 mb-0 pr-0 pl-0">
-                <?php
-                $sql = "select * from program where program_status='0'";
-                selectList($conn, 'Select Program', array('1', 'program_id', 'sp_name', 'program_abbri', 'sel_program'), $sql);
-                ?>
-              </div>
-              <div class="col-6 form-group mt-0 mb-0 pr-0">
-                <?php
-                $sql = "select * from batch where batch_status='0' order by batch desc";
-                selectList($conn, 'Select Batch', array('1', 'batch_id', 'batch', 'batch_id', 'sel_batch'), $sql);
-                ?>
-              </div>
-              <div class="col-12 form-group mt-1 mb-0 pl-0 pr-0" id="pofSelect"></div>
-            </div>
-          </div>
-        </div>
         <div class="list-group list-group-mine" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active as" id="list-as-list" data-toggle="list" href="#list-as" role="tab" aria-controls="as"> Assessment Strategy </a>
           <a class="list-group-item list-group-item-action coa" id="list-coa-list" data-toggle="list" href="#list-coa" role="tab" aria-controls="coa"> CO Attainment </a>
@@ -62,13 +31,13 @@ require('../../php_function.php');
               <!-- Nav tabs -->
               <ul class="nav nav-tabs">
                 <li class="nav-item">
-                  <a class="nav-link active" id="assessmentMethodPanel" data-toggle="tab" href="#showMethodPanel">Assessment Method</a>
+                  <a class="nav-link tabLink active" id="assessmentMethodPanel" data-toggle="tab" href="#showMethodPanel">Assessment Method</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" data-toggle="tab" href="#showATPanel">Assessment Technique</a>
+                  <a class="nav-link tabLink" data-toggle="tab" href="#showATPanel">Assessment Technique</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link poScale" data-toggle="tab" href="#showScalePanel">PO Scale</a>
+                  <a class="nav-link tabLink poScale" data-toggle="tab" href="#showScalePanel">PO Scale</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link pof" data-toggle="tab" href="#showPOFPanel">PO Feedback</a>
@@ -76,16 +45,15 @@ require('../../php_function.php');
               </ul>
               <!-- Tab panes -->
               <div class="tab-content">
-                <div class="tab-pane container show active" id="showMethodPanel">
-                  <h5><button class="btn btn-info mt-1 addMethod"><i class="fa fa-plus"></i></button>
-                    Assessment Methods</h5>
+                <div class="tab-pane container show active p-0 m-0" id="showMethodPanel">
+                  <button class="btn btn-info mt-1 addMethod">Add New</button>
                   <div class="col">
                     <p id="assessmentMethodShowList"></p>
                   </div>
                 </div>
                 <div class="tab-pane fade" id="showATPanel">
-                  <h5><button class="btn btn-info mt-1 addAT"><i class="fa fa-plus"></i></button>
-                    Assessment Technique List </h5>
+                  <button class="btn btn-info mt-1 addAT">Add New</button>
+
                   <div class="col">
                     <div id="assessmentTechniqueShowList"></div>
                   </div>
@@ -94,15 +62,14 @@ require('../../php_function.php');
                   <div class="row">
                     <div class="col-3">
                       <div class="form-group">
-                        <button class="btn btn-primary btn-sm mt-1" id="poScaleButton">Show PO Scale</button>
+                        <button class="btn btn-info mt-1" id="poScaleButton">Show PO Scale</button>
                       </div>
                     </div>
                   </div>
                   <div id="poShowScale"></div>
                 </div>
                 <div class="tab-pane fade" id="showPOFPanel">
-                  <h5><button class="btn btn-info mt-1 addPOF"><i class="fa fa-plus"></i></button>
-                    Add PO Feedback </h5>
+                  <button class="btn btn-info mt-1 addPOF">Add PO Feedback</button>
                   <div class="col">
                     <p id="pofShowList"></p>
                   </div>
@@ -241,7 +208,7 @@ require('../../php_function.php');
   </div>
 </body>
 
-<?php require("../js.php");?>
+<?php require("../js.php"); ?>
 
 
 <script>
@@ -981,7 +948,7 @@ require('../../php_function.php');
 <div class="modal" id="firstModal">
   <div class="modal-dialog modal-md">
     <form class="form-horizontal" id="modalForm">
-      <div class="modal-content bg-secondary text-white">
+      <div class="modal-content">
 
         <!-- Modal Header -->
         <div class="modal-header">

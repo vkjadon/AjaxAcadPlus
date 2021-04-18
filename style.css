@@ -230,12 +230,10 @@ textarea {
     font-weight: normal;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: small;
-    color: #ffffff;
+    color: #703d3d;
 }
 
-
 /* Button css*/
-
 .btn-round-sm {
     padding: 2px 6px;
     font-size: 12px;
