@@ -27,9 +27,9 @@ function selectList($conn, $selectTitle, $data, $sql)
   if ($result) {
     if ($required == '0') echo '<select class="mdb-select form-control form-control-sm ' . $name . '" name="' . $idName . '" id="' . $idName . '">';
     else echo '<select class="mdb-select form-control form-control-sm ' . $name . '" name="' . $idName . '" id="' . $idName . '" required>';
-     
-    if (strlen($selectTitle) > 2 && count($data)<6) echo '<option value="">' . $selectTitle . '</option>';
-    elseif(count($data)>5) echo '<option value="'.$selectedId.'">' . $selectedName . '</option>';
+
+    if (strlen($selectTitle) > 2 && count($data) < 6) echo '<option value="">' . $selectTitle . '</option>';
+    elseif (count($data) > 5) echo '<option value="' . $selectedId . '">' . $selectedName . '</option>';
     while ($rows = $result->fetch_assoc()) {
       $select_id = $rows[$id];
       $select_name = $rows[$name];

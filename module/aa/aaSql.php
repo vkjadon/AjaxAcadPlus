@@ -367,6 +367,16 @@ if (isset($_POST['action'])) {
     updateData($conn, 'course_outcome', $fields, $values, $dup, $dup_alert);
   } elseif ($_POST["action"] == "coList") {
     //    echo "MyId- $myId";
+    $sql = "select * from program_outcome where program_id='$myProg' and batch_id='$myBatch' and po_status='0'";
+    $result = $conn->query($sql);
+    if ($result) {
+      $i=0;
+      while($row = $result->fetch_assoc()){
+        $poArray[$i] = $row["po_id"];
+        $i++;
+      }
+      $totalPO=$i;
+    }
 
     $sqlSub = "select sb.* from subject sb where sb.program_id='$myProg' and sb.batch_id='$myBatch' and sb.subject_status='0' and subject_semester>0 order by sb.subject_semester, sb.subject_sno";
     $resultSub = $conn->query($sqlSub);
@@ -392,23 +402,90 @@ if (isset($_POST['action'])) {
         $co_name = $coArray["co_name"];
         $status = $coArray["co_status"];
 
-        echo '<div class="col-sm-2 cardBodyText">';
-        echo '<a href="#" class="float-right co_idE" data-id="' . $co_id . '"><i class="fa fa-edit"></i></a>';
+        echo '<div class="col-sm-1 cardBodyText">';
         echo '<div><b>' . $co_code . $co_sno . '</b></div>';
         echo '</div>';
 
-        echo '<div class="col-sm-9 cardBodyText">';
+        echo '<div class="col-sm-10 cardBodyText">';
         echo '<div class="cardBodyText"><b>' . $co_name . '</b></div>';
+        //echo $totalPO;
+        $count=1;
+        for($i=0; $i<$totalPO; $i++){
+          $po_id=$poArray[$i];
+          echo '<span>PO'.$count++.' </span>';
+          $sqlPO="select * from copo_map where po_id='$po_id' and co_id='$co_id'";
+          echo '<span class="warning">'.getFieldValue($conn, "copo_scale", $sqlPO).' </span>';
+        }
         echo '</div>';
 
         echo '<div class="col-sm-1">';
+        echo '<a href="#" class="float-right co_idE" data-id="' . $co_id . '"><i class="fa fa-edit"></i></a>';
         if ($status == "9") echo '<a href="#" class="float-right co_idR" data-id="' . $co_id . '">Removed</a>';
         else echo '<a href="#" class="float-right co_idD" data-id="' . $co_id . '"><i class="fa fa-trash"></i></a>';
         echo '</div>';
       }
       echo '</div>';
     }
-  } elseif ($_POST["action"] == "selectSubject") {
+  }elseif ($_POST["action"] == "copoMap") {
+    //    echo "MyId- $myId";
+    $sql = "select * from program_outcome where program_id='$myProg' and batch_id='$myBatch' and po_status='0'";
+    $result = $conn->query($sql);
+    if ($result) {
+      $i=0;
+      while($row = $result->fetch_assoc()){
+        $poArray[$i] = $row["po_id"];
+        $i++;
+      }
+      $totalPO=$i;
+    }
+
+    $sqlSub = "select sb.* from subject sb where sb.program_id='$myProg' and sb.batch_id='$myBatch' and sb.subject_status='0' and subject_semester>0 order by sb.subject_semester, sb.subject_sno";
+    $resultSub = $conn->query($sqlSub);
+    while ($subArray = $resultSub->fetch_assoc()) {
+      $subject_id = $subArray["subject_id"];
+      $subject_name = $subArray["subject_name"];
+      $subject_code = $subArray["subject_code"];
+
+      echo '<div class="row shadow border border-primary mb-1">';
+      echo '<div class="col-sm-3 mb-0 bg-two inputLabel">';
+      echo 'Sem ' . $subArray["subject_semester"];
+      echo '</div>';
+      echo '<div class="col-sm-9 mb-0 bg-two inputLabel">';
+      echo $subject_name . '[' . $subject_code . ']';
+      echo '</div>';
+
+      $sqlCO = "select co.* from course_outcome co where co.subject_id='$subject_id' and co.co_status='0' order by co.co_sno, co.co_code";
+      echo '<table class="table list-table-sm">';
+      $resultCO = $conn->query($sqlCO);
+      while ($coArray = $resultCO->fetch_assoc()) {
+        $co_id = $coArray["co_id"];
+        $co_code = $coArray["co_code"];
+        $co_sno = $coArray["co_sno"];
+        $co_name = $coArray["co_name"];
+        $status = $coArray["co_status"];
+
+        echo '<div class="col-sm-1 cardBodyText">';
+        echo '<div><b>' . $co_code . $co_sno . '</b></div>';
+        echo '</div>';
+
+        echo '<div class="col-sm-10 cardBodyText">';
+        //echo $totalPO;
+        $count=1;
+        for($i=0; $i<$totalPO; $i++){
+          $po_id=$poArray[$i];
+          echo '<span>PO'.$count++.' </span>';
+          $sqlPO="select * from copo_map where po_id='$po_id' and co_id='$co_id'";
+          echo '<span class="warning">'.getFieldValue($conn, "copo_scale", $sqlPO).' </span>';
+        }
+        echo '</div>';
+
+        echo '<div class="col-sm-1">';
+        echo '<a href="#" class="float-right co_idE" data-id="' . $co_id . '"><i class="fa fa-edit"></i></a>';
+        echo '</div>';
+      }
+      echo '</div>';
+    }
+  }  elseif ($_POST["action"] == "selectSubject") {
     $sql = "select * from subject where subject_status='0' and program_id='$myProg' and batch_id='" . $_POST['batch_id'] . "' order by subject_semester, subject_name ";
     selectList($conn, 'Sel Subject', array('0', 'subject_id', 'subject_name', 'subject_code', 'sel_subject'), $sql);
   }

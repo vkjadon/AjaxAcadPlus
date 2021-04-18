@@ -24,7 +24,6 @@ require('../../php_function.php');
             <a class="list-group-item list-group-item-action po" id="list-po-list" data-toggle="list" href="#list-po" role="tab" aria-controls="po"> Programme Outcome </a>
             <a class="list-group-item list-group-item-action sub" id="list-sub-list" data-toggle="list" href="#list-sub" role="tab" aria-controls="sub"> Courses/Subjects </a>
             <a class="list-group-item list-group-item-action co" id="list-co-list" data-toggle="list" href="#list-co" role="tab" aria-controls="co"> Course Outcome </a>
-            <a class="list-group-item list-group-item-action copo" id="list-copo-list" data-toggle="list" href="#list-copo" role="tab" aria-controls="copo"> CO-PO </a>
           </div>
         </div>
         <div class="col-10">
@@ -75,23 +74,20 @@ require('../../php_function.php');
             </div>
             <div class="tab-pane fade show" id="list-co" role="tabpanel" aria-labelledby="list-co-list">
               <div class="row">
-                <div class="col-sm-8">
+                <div class="col-sm-12">
                   <button class="btn btn-sm btn-secondary addCO m-0">Add</button>
                   <button class="btn btn-sm btn-primary uploadCo">Upload CO</button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-7">
                   <span style="text-align:left" id="coShowList"></span>
                 </div>
-              </div>
-            </div>
-
-            <div class="tab-pane fade show" id="list-copo" role="tabpanel" aria-labelledby="list-copo-list">
-              <div class="row">
-                <div class="col-sm-8">
-                  <button class="btn btn-sm btn-primary uploadCo">Upload CO-PO Map</button>
-                  <span style="text-align:left" id="copoShowList"></span>
+                <div class="col-sm-5">
+                  <span style="text-align:left" id="copoMap"></span>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -620,12 +616,9 @@ require('../../php_function.php');
     }
 
     function coList() {
-      var x = $("#sel_subject").val();
       // $.alert("In List Function" + x);
-
       $.post("aaSql.php", {
-        action: "coList",
-        subjectId: x
+        action: "coList"
       }, function(mydata, mystatus) {
         $("#coShowList").show();
         //$.alert("List " + mydata);
@@ -633,6 +626,16 @@ require('../../php_function.php');
       }, "text").fail(function() {
         $.alert("Error !!");
       })
+
+      $.post("aaSql.php", {
+        action: "copoMap"
+      }, function(mydata, mystatus) {
+        //$.alert("List " + mydata);
+        $("#copoMap").html(mydata);
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+
     }
 
     function programSelectList() {
