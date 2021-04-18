@@ -20,9 +20,9 @@ if (!empty($_FILES["csv_upload"]["name"])) {
    echo "inside Subject";
    while ($row = fgetcsv($file_data)) {
     $subject_sno = $conn->real_escape_string($row[0]);
-    $code = $conn->real_escape_string($row[1]);
+    $subject_name = $conn->real_escape_string($row[1]);
+    $code = $conn->real_escape_string($row[2]);
     $subject_code = str_replace(' ', '', $code);
-    $subject_name = $conn->real_escape_string($row[2]);
     $subject_semester = $conn->real_escape_string($row[3]);
     $subject_lecture = $conn->real_escape_string($row[4]);
     $subject_tutorial = $conn->real_escape_string($row[5]);

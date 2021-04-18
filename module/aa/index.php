@@ -116,7 +116,6 @@ require('../../php_function.php');
     $(".topBarTitle").text("Academics");
     batchList();
     coList();
-    poSummary();
 
     $(document).on("change", "#sel_subject", function() {
       coList();
@@ -128,6 +127,7 @@ require('../../php_function.php');
     $(document).on('click', '.po', function() {
       $('#action').val("addPo");
       poList();
+      poSummary();
     });
     $(document).on('click', '.co', function() {
       $('#action').val("addCo");
