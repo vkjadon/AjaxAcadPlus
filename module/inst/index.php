@@ -654,6 +654,37 @@ require('../../php_function.php');
    deptList();
   });
 
+  $(document).on('click', '.deleteSchoolDept', function() {
+   var dept_id = $(this).attr("data-dept");
+   var school_id = $(this).attr("data-school");
+   // $.alert("Disabled "+school_id+dept_id);
+   $.post("instSql.php", {
+    deptId: dept_id,
+    schoolId: school_id,
+    action: "removeSchoolDept"
+   }, function(data, status) {
+    // $.alert("Data" + data)
+    deptSchoolList();
+   }, "text").fail(function() {
+    $.alert("Error");
+   })
+  });
+
+  $(document).on('click', '.deleteDeptProgram', function() {
+   var dept_id = $(this).attr("data-dept");
+   var prog_id = $(this).attr("data-program");
+   $.post("instSql.php", {
+    deptId: dept_id,
+    progId: prog_id,
+    action: "removeDeptProgram"
+   }, function(data, status) {
+    // $.alert("Data" + data)
+    deptProgramList();
+   }, "text").fail(function() {
+    $.alert("Error");
+   })
+  });
+
   $(document).on('submit', '#schoolDeptForm', function() {
    event.preventDefault(this);
    var deptId = $("#sel_dept").val()
@@ -683,6 +714,8 @@ require('../../php_function.php');
    })
    deptProgramList()
   });
+
+
 
   $(document).on('submit', '#modalForm', function(event) {
    event.preventDefault(this);
@@ -968,6 +1001,7 @@ require('../../php_function.php');
     $('.programForm').show();
    }
   });
+
 
   $(document).on('click', '.uploadProgram', function() {
    var y = $("#sel_batch").val();
