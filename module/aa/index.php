@@ -47,7 +47,11 @@ require('../../php_function.php');
                 <div class="col-sm-8">
                   <button class="btn btn-sm btn-secondary m-0 addPo">Add PO</button>
                   <button class="btn btn-sm btn-primary uploadPo">Upload PO</button>
-                  <p class="ml-2" style="text-align:left" id="poShowList"></p>
+                  <div class="p-2" id="poShowList"></div>
+                </div>
+                <div class="col-sm-4 mt-2">
+                  <h5>PO Summary [Batch - <?php echo $myBatchName;?>]</h5>
+                  <div id="poSummary"></div>
                 </div>
               </div>
             </div>
@@ -112,6 +116,7 @@ require('../../php_function.php');
     $(".topBarTitle").text("Academics");
     batchList();
     coList();
+    poSummary();
 
     $(document).on("change", "#sel_subject", function() {
       coList();
@@ -607,6 +612,17 @@ require('../../php_function.php');
       })
     }
 
+    function poSummary() {
+      $.post("aaSql.php", {
+        action: "poSummary"
+      }, function(mydata, mystatus) {
+        //$.alert("List " + mydata);
+        $("#poSummary").html(mydata);
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+    }
+
     function selectSubject() {
       var x = $("#sel_batch").val();
       $.alert("Batch In SelSub Function" + x);
@@ -633,7 +649,6 @@ require('../../php_function.php');
       }, "text").fail(function() {
         $.alert("Error !!");
       })
-
       $.post("aaSql.php", {
         action: "copoMap"
       }, function(mydata, mystatus) {
