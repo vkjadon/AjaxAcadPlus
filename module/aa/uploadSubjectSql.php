@@ -75,27 +75,20 @@ if (!empty($_FILES["csv_upload"]["name"])) {
 			while ($row = fgetcsv($file_data)) {
 				$co_name = $conn->real_escape_string($row[1]);  // co name
 				$subject_code = $conn->real_escape_string($row[0]);
-				$sql = "select * from subject where subject_code='$subject_code'";
-				$result = $conn->query($sql);
-				$resultValue = $result->num_rows;
-				$value_subject = getFieldValue($conn, "subject_id", $sql);
-				if ($resultValue == 0) {
-					$sql = "INSERT INTO subject (batch_id, program_id, subject_code) VALUES ('$myBatch', '$myProg', '$subject_code')";
+				$subject_code = str_replace(" ", "", $subject_code);
+				$subject_id = getField($conn, $subject_code, "subject", "subject_code", "subject_id");
+				if ($subject_id > 0) {
+					$sql = "select * from course_outcome where subject_id='$subject_id' and co_name='$co_name'";
 					$result = $conn->query($sql);
-					$value_subject = $conn->insert_id;
 					if (!$result) echo $conn->error;
-				} else {
+					$records = $result->num_rows;
+					if ($records == 0) {
+						$sql = "INSERT INTO course_outcome (subject_id, co_code, co_name, co_status) VALUES ('$value_subject', 'CO', '$co_name', '0')";
+						$result_insert = $conn->query($sql);
+						if (!$result_insert) echo $conn->error;
+						$status = "Inserted";
+					} else $status = "Exists";
 				}
-				$sql = "select * from course_outcome where subject_id='$value_subject' and co_name='$co_name'";
-				$result = $conn->query($sql);
-				if (!$result) echo $conn->error;
-				$records = $result->num_rows;
-				if ($records == 0) {
-					$sql = "INSERT INTO course_outcome (subject_id, co_code, co_name, co_status) VALUES ('$value_subject', 'CO', '$co_name', '0')";
-					$result_insert = $conn->query($sql);
-					if (!$result_insert) echo $conn->error;
-					$status = "Inserted";
-				} else $status = "Exists";
 			}
 		}
 	} else $output = '1';

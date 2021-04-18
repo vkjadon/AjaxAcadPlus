@@ -381,13 +381,13 @@ if (isset($_POST['action'])) {
       $status = $array["data"][$i]["co_status"];
 
       echo '<div class="row shadow border border-primary mb-1 cardBodyText">';
-        echo '<div class="col-sm-3 mb-0 bg-two">';
-          echo 'ID : ' . $co_id;
+        echo '<div class="col-sm-2 mb-0 bg-two">';
+          echo getField($conn, $subject_id, "subject", "subject_id", "subject_code");
           echo '<a href="#" class="float-right co_idE" data-id="' . $co_id . '"><i class="fa fa-edit"></i></a>';
           echo '<div><b>' . $co_code . $co_sno . '</b></div>';
         echo '</div>';
 
-        echo '<div class="col-sm-8">';
+        echo '<div class="col-sm-9">';
           echo '<div class="cardBodyText"><b>' . $co_name . '</b></div>';
         echo '</div>';
 
