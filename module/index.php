@@ -31,7 +31,7 @@ if (!isset($mySes)) {
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 	<link rel="stylesheet" href="../table.css">
 	<link rel="stylesheet" href="../style.css">
-	<script type="text/javascript" src="http://latex.codecogs.com/latexit.js"></script>
+	<script type="text/javascript" src="https://latex.codecogs.com/latexit.js"></script>
 </head>
 
 <body>
