@@ -75,26 +75,6 @@ require('../../php_function.php');
           Select Batch and Programme
          </div>
          <div class="card-body text-primary">
-          <form>
-           <div class="row">
-            <div class="col-6">
-             <p class="selectProgram">
-              <?php
-              $sql = "select * from program where program_status='0'";
-              selectList($conn, '', array("0", 'program_id', 'sp_name', 'program_abbri', 'sel_program'), $sql);
-              ?>
-             </p>
-            </div>
-            <div class="col-6">
-             <p class="selectBatch">
-              <?php
-              $sql = "select * from batch where batch_status='0' order by batch desc";
-              selectList($conn, '', array("0", 'batch_id', 'batch', '', 'sel_batch'), $sql);
-              ?>
-             </p>
-            </div>
-           </div>
-          </form>
           <div class="input-group md-form form-sm form-2 mt-1">
            <input name="studentSearch" id="studentSearch" class="form-control my-0 py-1 red-border" type="text" placeholder="Search Student" aria-label="Search">
            <div class="input-group-append">
@@ -434,18 +414,11 @@ require('../../php_function.php');
  $(document).ready(function() {
 
   $('[data-toggle="tooltip"]').tooltip();
-  var y = $("#sel_batch").val();
-  var z = $("#sel_program").val();
-  if (y > 0 && z > 0) studentList(y, z);
-  $('#programIdModal').val(z);
-  $('#batchIdModal').val(y);
-  $('#program_id').val(z);
-  $('#batch_id').val(y);
   $('#list-as').show();
   $('#list-sq').hide();
   $('.studentProfile').hide();
   $('#accordionStudent').hide();
-
+  studentList();
 
   $('#studentSearch').keyup(function() {
    var query = $(this).val();
@@ -568,8 +541,7 @@ require('../../php_function.php');
   $(document).on('submit', '#upload_csv', function(event) {
    event.preventDefault();
    var formData = $(this).serialize();
-
-   $.alert(formData);
+   // $.alert(formData);
    // action and test_id are passed as hidden
    $.ajax({
     url: "uploadStudentSql.php",
@@ -579,8 +551,8 @@ require('../../php_function.php');
     cache: false, // To unable request pages to be cached
     processData: false, // To send DOMDocument or non processed data file it is set to false
     success: function(data) {
-     console.log(data);
-     $('#formModal').modal('hide');
+    // $.alert("heloo"+data);
+    $('#formModal').modal('hide');
     }
    })
   });
@@ -804,8 +776,6 @@ require('../../php_function.php');
   $(document).on('submit', '#modalForm', function(event) {
    event.preventDefault(this);
    var action = $("#action").val();
-   var selProgram = $("#sel_program").val();
-   var selBatch = $("#sel_batch").val();
    var sName = $("#sName").val();
    var sMobile = $("#sMobile").val();
    var sEmail = $("#sEmail").val();
@@ -829,7 +799,7 @@ require('../../php_function.php');
     $.post("admissionSql.php", formData, () => {}, "text").done(function(data) {
      $.alert("List Updtaed" + data);
      if (action == "addSubject" || action == "updateSubject") {
-      studentList(selProgram, selBatch);
+      studentList();
      }
      if (action == "addStudentQualification" || action == "updateStudentQualification") {
       studentQualificationList(stdId);
@@ -844,13 +814,7 @@ require('../../php_function.php');
   });
 
   $(document).on('change', '#sel_batch, #sel_program', function() {
-   var y = $("#sel_batch").val();
-   var z = $("#sel_program").val();
-   $('#programIdModal').val(z);
-   $('#batchIdModal').val(y);
-   $('#program_id').val(z);
-   $('#batch_id').val(y);
-   studentList(y, z);
+   studentList();
   });
 
   $(document).on('click', '.student_idContact', function() {
@@ -882,12 +846,10 @@ require('../../php_function.php');
    $(".selectPanel").show();
   });
 
-  function studentList(y, z) {
+  function studentList() {
    //$.alert("In List Function" + y);
    $.post("admissionSql.php", {
-    action: "studentList",
-    batchId: y,
-    programId: z
+    action: "studentList"
    }, function(mydata, mystatus) {
     $("#studentShowList").show();
     // $.alert("List " + mydata);
@@ -914,7 +876,7 @@ require('../../php_function.php');
   }
 
   function studentProgramReport() {
-  //  $.alert("In List Function");
+   //  $.alert("In List Function");
    $.post("admissionSql.php", {
     action: "studentProgramList",
    }, function(mydata, mystatus) {
@@ -927,19 +889,6 @@ require('../../php_function.php');
 
   }
 
-  function studentProgramReport() {
-   $.alert("In List Function");
-   $.post("admissionSql.php", {
-    action: "studentProgramList",
-   }, function(mydata, mystatus) {
-    $("#studentProgramReport").show();
-    // $.alert("List qulai" + mydata);
-    $("#studentProgramReport").html(mydata);
-   }, "text").fail(function() {
-    $.alert("Error !!");
-   })
-
-  }
  });
 </script>
 
@@ -993,8 +942,6 @@ require('../../php_function.php');
     <div class="modal-footer">
      <input type="hidden" id="modalId" name="modalId">
      <input type="hidden" id="action" name="action">
-     <input type="hidden" id="programIdModal" name="programIdModal">
-     <input type="hidden" id="batchIdModal" name="batchIdModal">
      <input type="hidden" id="stdIdModal" name="stdIdModal">
      <button type="submit" class="btn btn-secondary" id="submitModalForm">Submit</button>
      <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -1020,7 +967,7 @@ require('../../php_function.php');
      <div class="row">
       <div class="col-sm-6">
        <h5>Selected Batch</h5>
-       <p class="selectedBatch"><b><?php echo $myBatchAbbri; ?></b></p>
+       <p class="selectedBatch"><b><?php echo $myBatchName; ?></b></p>
       </div>
       <div class="col-sm-6">
        <h5>Selected Program</h5>
@@ -1038,8 +985,6 @@ require('../../php_function.php');
     </div> <!-- Modal Body Closed-->
     <!-- Modal footer -->
     <div class="modal-footer">
-     <input type="hidden" name="program_id" id="program_id" />
-     <input type="hidden" name="batch_id" id="batch_id" />
      <input type="submit" name="button_action" id="button_action" class="btn btn-success btn-sm" />
      <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
     </div> <!-- Modal Footer Closed-->

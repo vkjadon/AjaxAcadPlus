@@ -21,14 +21,12 @@ if (isset($_POST["query"])) {
 }
 if (isset($_POST['action'])) {
  if ($_POST['action'] == 'studentList') {
-  $program_id = $_POST['programId'];
-  $batch_id = $_POST['batchId'];
-  if ($program_id > 0 && $batch_id > 0) $sql = "select * from student st where st.program_id='$program_id' and st.batch_id='$batch_id' and student_status='0' order by student_name";
+  if ($myProg > 0 && $myBatch > 0) $sql = "select * from student st where st.program_id='$myProg' and st.batch_id='$myBatch' and student_status='0' order by student_name";
   $json = getTableRow($conn, $sql, array("student_id", "student_name", "student_rollno"));
   // echo $json;
   $array = json_decode($json, true);
   $count = count($array["data"]);
-  //  echo $count;
+   // echo $count;
   for ($i = 0; $i < count($array["data"]); $i++) {
    $student_id = $array["data"][$i]["student_id"];
    $student_name = $array["data"][$i]["student_name"];
@@ -49,9 +47,8 @@ if (isset($_POST['action'])) {
   }
  } elseif ($_POST['action'] == 'addStudent') {
 
-  $program_id = $_POST['programIdModal'];
   $fields = ['batch_id', 'program_id', 'student_name', 'student_rollno', 'student_mobile', 'student_email'];
-  $values = [$_POST['batchIdModal'], $_POST['programIdModal'], data_check($_POST['sName']), data_check($_POST['sRno']), $_POST['sMobile'], $_POST['sEmail']];
+  $values = [$myBatch, $myProg, data_check($_POST['sName']), data_check($_POST['sRno']), $_POST['sMobile'], $_POST['sEmail']];
   $status = 'student_status';
   $dup = "select * from student where student_rollno='" . data_check($_POST["sRno"]) . "' and $status='0'";
   $dup_alert = "Duplicate URL Exists. One Dept can have one URL. Give Dummy Unique URL if required";
