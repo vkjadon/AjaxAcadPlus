@@ -281,7 +281,7 @@ require('../../php_function.php');
     });
     $(document).on('click', '.po_idE', function() {
       var id = $(this).attr('id');
-      //$.alert("Id " + id);
+      $.alert("Id " + id);
       $.post("aaSql.php", {
         action: "fetchPo",
         poId: id
