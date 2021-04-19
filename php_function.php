@@ -130,7 +130,7 @@ function getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDeco
   //echo "In Function  $sql Column Count $columnCount";
   if (isset($statusDecode["align"]) == "center") $align = 'align=' . '"center"';
   else $align = '';
-  echo '<table class="table  table-striped w-auto">';
+  echo '<table class="table list-table-xs table-striped w-auto">';
   echo '<thead ' . $align . '>';
   if ($button[0] == '1') echo '<th><i class="fa fa-edit"></i></th>';
   for ($j = 0; $j < $columnCount; $j++) echo '<th>' . $header[$j] . '</th>';

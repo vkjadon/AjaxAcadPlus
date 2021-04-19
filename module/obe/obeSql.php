@@ -238,8 +238,6 @@ if (isset($_POST['action'])) {
   } elseif ($_POST['action'] == 'psCopy') {
     echo "Action " . $_POST['action'];
     $po_id = $_POST['poId'];
-    $program_id = $_POST['programId'];
-    $batch_id = $_POST['batchId'];
 
     $sql="select * from po_scale where po_id='$po_id' and ps_scale='1'";
     $result=$conn->query($sql);
@@ -259,7 +257,7 @@ if (isset($_POST['action'])) {
     $ps3From=$row['ps_from'];
     $ps3To=$row['ps_to'];
 
-    $sqlPO = "select * from program_outcome where program_id='$program_id' and batch_id='$batch_id' and po_status='0'";
+    $sqlPO = "select * from program_outcome where program_id='$myProg' and batch_id='$myBatch' and po_status='0'";
     $resultPO = $conn->query($sqlPO);
     while ($rowsPO = $resultPO->fetch_assoc()) {
       $po= $rowsPO['po_id'];

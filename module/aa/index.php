@@ -104,6 +104,7 @@ require('../../php_function.php');
       </div>
     </div>
   </div>
+  <h1>&nbsp;</h1>
 </body>
 
 <?php require("../js.php"); ?>

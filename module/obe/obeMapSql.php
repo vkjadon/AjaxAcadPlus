@@ -4,7 +4,7 @@ include('../../config_database.php');
 include('../../config_variable.php');
 include('../../php_function.php');
 //echo "Action Map " . $_POST['actionMap'];
-
+$myProgAbbri = getField($conn, $myProg, "program", "program_id", "sp_abbri");
 if (isset($_POST['actionMap'])) {
   if ($_POST['actionMap'] == 'copoScale') {
     //echo "Action Map in copoScale" . $_POST['actionMap'];
@@ -80,12 +80,11 @@ if (isset($_POST['actionMap'])) {
     echo '<table class="table list-table-xs" id="tblData">';
     echo '<tr align="center">';
     $au = '3';
-    $program_id = $_POST['programId'];
-    $batch_id = $_POST['batchId'];
-    echo '<td>' . $program_id . '</td>';
+    
+    echo '<td>' . $myProgAbbri . '</td>';
     for ($j = 1; $j <= $au; $j++) echo '<td colspan="2">' . $j . '</td>';
     echo '</tr>';
-    $sqlPO = "select * from program_outcome where program_id='$program_id' and batch_id='$batch_id' and po_status='0'";
+    $sqlPO = "select * from program_outcome where program_id='$myProg' and batch_id='$myBatch' and po_status='0'";
     $resultPO = $conn->query($sqlPO);
     $i = 0;
     while ($rowsPO = $resultPO->fetch_assoc()) {
