@@ -62,13 +62,13 @@ else $myBatchName = "Select Batch";
 								<div class="col-6">
 									<a href="<?php echo $codePath . '/module/inst/'; ?>" class="dropdown-item">SetUp Institite</a>
 									<a href="<?php echo $codePath . '/module/admission/'; ?>" class="dropdown-item">Admission</a>
-									<a href="<?php echo $codePath . '/module/approval/'; ?>" class="dropdown-item">Approvals</a>
-									<a href="<?php echo $codePath . '/module/infra/'; ?>" class="dropdown-item">Infrastructure</a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item">Approvals</a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item">Infrastructure</a>
 								</div>
 								<div class="col-6">
-									<a href="<?php echo $codePath . '/module/manage_responsibility/'; ?>" class="dropdown-item">Assign Responsibility</a>
-									<a href="<?php echo $codePath . '/module/sop/'; ?>" class="dropdown-item">SOP</a>
-									<a href="<?php echo $codePath . '/module/committee/'; ?>" class="dropdown-item">Committees</a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item">Assign Responsibility</a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item">SOP</a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item">Committees</a>
 								</div>
 							</div>
 						</div>
@@ -80,11 +80,11 @@ else $myBatchName = "Select Batch";
 							<div class="row">
 								<div class="col-6">
 									<a href="<?php echo $codePath . '/module/aa/'; ?>" class="dropdown-item">Setting </a>
-									<a href="<?php echo $codePath . '/module/schedule/'; ?>" class="dropdown-item">Schedule</a>
-									<a href="<?php echo $codePath . '/module/registration/'; ?>" class="dropdown-item">Registration</a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item">Schedule</a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item">Registration</a>
 								</div>
 								<div class="col-6">
-									<a href="<?php echo $codePath . '/module/lms/'; ?>" class="dropdown-item">LMS</a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item">LMS</a>
 									<a href="<?php echo $codePath . '/module/online/'; ?>" class="dropdown-item">Online Assessment</a>
 								</div>
 							</div>
@@ -96,13 +96,13 @@ else $myBatchName = "Select Batch";
 						<div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
 							<div class="row">
 								<div class="col-6">
-									<a href="<?php echo $codePath . '/module/examSetting/'; ?>" class="dropdown-item"> Exam Setting </a>
-									<a href="<?php echo $codePath . '/module/examConduct/'; ?>" class="dropdown-item"> Conduct </a>
-									<a href="<?php echo $codePath . '/module/comm/'; ?>" class="dropdown-item"> Evaluation </a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item"> Exam Setting </a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item"> Conduct </a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item"> Evaluation </a>
 								</div>
 								<div class="col-6">
-									<a href="<?php echo $codePath . '/module/feedback/'; ?>" class="dropdown-item"> Internal Assessment </a>
-									<a href="<?php echo $codePath . '/module/feedback/'; ?>" class="dropdown-item"> Semester Result </a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item"> Internal Assessment </a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item"> Semester Result </a>
 								</div>
 							</div>
 						</div>
@@ -113,11 +113,11 @@ else $myBatchName = "Select Batch";
 							<div class="row">
 								<div class="col-6">
 									<a href="<?php echo $codePath . '/module/hr/'; ?>" class="dropdown-item"> Staff </a>
-									<a href="<?php echo $codePath . '/module/leave/'; ?>" class="dropdown-item"> Leave </a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item"> Leave </a>
 								</div>
 								<div class="col-6">
-									<a href="<?php echo $codePath . '/module/feedback/'; ?>" class="dropdown-item"> Support </a>
-									<a href="<?php echo $codePath . '/module/feedback/'; ?>" class="dropdown-item"> Mentoring </a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item"> Support </a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item"> Mentoring </a>
 								</div>
 							</div>
 						</div>
@@ -128,7 +128,7 @@ else $myBatchName = "Select Batch";
 							<div class="row">
 								<div class="col-6">
 									<a href="<?php echo $codePath . '/module/comm/'; ?>" class="dropdown-item"> Email </a>
-									<a href="<?php echo $codePath . '/module/comm/'; ?>" class="dropdown-item"> SMS </a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item"> SMS </a>
 								</div>
 								<div class="col-6">
 									<a href="<?php echo $codePath . '/module/feedback/'; ?>" class="dropdown-item"> Feedback </a>
@@ -142,11 +142,11 @@ else $myBatchName = "Select Batch";
 						<div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
 							<div class="row">
 								<div class="col-6">
-									<a href="<?php echo $codePath . '/module/stdAct/'; ?>" class="dropdown-item"> Activities </a>
-									<a href="<?php echo $codePath . '/module/hostel/'; ?>" class="dropdown-item"> Hostel </a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item"> Activities </a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item"> Hostel </a>
 								</div>
 								<div class="col-6">
-									<a href="<?php echo $codePath . '/module/hostel/'; ?>" class="dropdown-item"> Mentoring </a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item"> Mentoring </a>
 								</div>
 							</div>
 						</div>

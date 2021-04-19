@@ -128,18 +128,21 @@ if (isset($_POST['action'])) {
     addData($conn, 'assessment_design', 'ad_id', $fields, $values, $status, $dup, $dup_alert);
   } elseif ($_POST['action'] == "assessmentDesignList") {
     //echo "AT List - Block "; 
-    $sql = "select ad.*, at.*, sb.subject_name from assessment_design ad, assessment_technique at, subject sb where ad.subject_id=sb.subject_id and sb.staff_id='$myId' and ad.at_id=at.at_id and ad.ad_status='0' order by ad.ad_name";
+    $sql = "select ad.*, at.*, sb.subject_code from assessment_design ad, assessment_technique at, subject sb where ad.subject_id=sb.subject_id and ad.at_id=at.at_id and sb.program_id='$myProg' and sb.batch_id='$myBatch' and ad.ad_status='0' order by ad.ad_name";
+    //$result=$conn->query($sql);
+    //echo $result->num_rows;
     $tableId = 'ad_id';
 
     $statusDecode = array("status" => "at_status", "0" => "Active", "1" => "Removed");
     $button = array("1", "1", "0", "0");
 
-    $fields = array("ad_name", "subject_name", "at_name", "ad_question", "ad_mm", "ad_pm", "ad_weight", "ad_status");
+    $fields = array("ad_name", "subject_code", "at_name", "ad_question", "ad_mm", "ad_pm", "ad_weight", "ad_status");
     $dataType = array("0", "0", "0", "0", "0", "0", "0", "0");
     $header = array("Id", "Assessment", "Subject", " Technique", "AsessUnit", "Max Marks", "Pass Marks", "Weightage(%)", "Status");
 
     //echo "<h5> Assessment Technique List </h5>";
     getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
+
   } elseif ($_POST['action'] == 'fetchAD') {
     //echo "Add Assessment Method Block";
     $id = $_POST['adId'];

@@ -100,8 +100,7 @@ require('../../php_function.php');
               <!-- Tab panes -->
               <div class="tab-content">
                 <div class="tab-pane active" id="showDesignPanel">
-                  <h5><button class="btn btn-info mt-1 addDesign"><i class="fa fa-plus"></i></button>
-                    Design CO Assessment</h5>
+                  <button class="btn btn-info mt-1 addDesign">Design CO Assessment</button>
                   <div class="col">
                     <div id="assessmentDesignShowList"></div>
                   </div>
@@ -133,7 +132,7 @@ require('../../php_function.php');
                     <div class="col-3">
                       <div class="form-group">
                         <?php
-                        $sql = "select ad.*, sb.subject_code from assessment_design ad, subject sb where sb.subject_id=ad.subject_id and ad.submit_id='$myId' and sb.subject_status='0' and ad.ad_status='0'";
+                        $sql = "select ad.*, sb.subject_code from assessment_design ad, subject sb where sb.subject_id=ad.subject_id and sb.program_id='$myProg' and sb.batch_id='$myBatch' and sb.subject_status='0' and ad.ad_status='0'";
                         selectList($conn, 'Select Assessment', array('0', 'ad_id', 'ad_name', 'subject_code', 'sel_adUA'), $sql);
                         ?>
                       </div>
@@ -1070,8 +1069,8 @@ require('../../php_function.php');
                 <div class="form-group">
                   Subject
                   <?php
-                  $sql = "select sb.*, b.* from subject sb, batch b where sb.batch_id=b.batch_id and sb.subject_status='0'";
-                  selectList($conn, "Select subject", array("0", "subject_id", "subject_name", "batch", "sel_subjectAD"), $sql);
+                  $sql = "select sb.* from subject sb where sb.batch_id='$myBatch' and sb.program_id='$myProg' and sb.subject_status='0'";
+                  selectList($conn, "Select subject", array("0", "subject_id", "subject_name", "", "sel_subjectAD"), $sql);
                   ?>
                 </div>
               </div>
