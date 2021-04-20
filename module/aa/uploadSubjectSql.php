@@ -70,14 +70,15 @@ if (!empty($_FILES["csv_upload"]["name"])) {
    }
   } elseif ($_POST["action"] == "uploadCO") {
    $file_data = fopen($_FILES["csv_upload"]["tmp_name"], 'r');
-   echo "inside CO $batch_id $myProg";
+   echo "inside CO $myBatch $myProg";
    fgetcsv($file_data);
    while ($row = fgetcsv($file_data)) {
     //echo count($row);
     $co_name = $conn->real_escape_string($row[1]);  // co name
     $subject_code = $conn->real_escape_string($row[0]);
     $subject_code = str_replace(" ", "", $subject_code);
-    $subject_id = getField($conn, $subject_code, "subject", "subject_code", "subject_id");
+    $sql = "select * from subject where batch_id='$myBatch' and program_id='$myProg' and subject_code='$subject_code'";
+    $subject_id = getFieldValue($conn, "subject_id", $sql);
     if ($subject_id > 0) {
      $sql = "select * from course_outcome where subject_id='$subject_id' and co_name='$co_name'";
      $result = $conn->query($sql);
