@@ -56,8 +56,6 @@ require('../../php_function.php');
  <div class="container-fluid moduleBody">
   <div class="row">
    <div class="col-2">
-
-    
     <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
      <a class="list-group-item list-group-item-action active si" id="list-si-list" data-toggle="list" href="#list-si" role="tab" aria-controls="si"> Setup Institute </a>
      <a class="list-group-item list-group-item-action mis" id="list-mis-list" data-toggle="list" href="#list-mis" role="tab" aria-controls="mis"> Manage School </a>
@@ -118,7 +116,7 @@ require('../../php_function.php');
                 <div class="row">
                  <div class="col-12">
                   <div class="form-group">
-                   <p class="text-muted m-0"> Instituton Name</p>
+                   <p class="text m-0"> Instituton Name</p>
                    <input type="text" id="instName" class="form-control instForm" data-tag="inst_name">
                   </div>
                  </div>
@@ -126,7 +124,7 @@ require('../../php_function.php');
                 <div class="row">
                  <div class="col-12">
                   <div class="form-group">
-                   <p class="text-muted m-0">Address</p>
+                   <p class="text m-0">Address</p>
                    <textarea id="instAddress" class="md-textarea form-control instForm" data-tag="inst_address" rows="3"></textarea>
                   </div>
                  </div>
@@ -134,13 +132,13 @@ require('../../php_function.php');
                 <div class="row">
                  <div class="col-6">
                   <div class="form-group">
-                   <p class="text-muted m-0">Address</p>
+                   <p class="text m-0">City</p>
                    <input type="text" id="instCity" class="form-control instForm" data-tag="inst_city">
                   </div>
                  </div>
                  <div class="col-6">
                   <div class="form-group">
-                   <p class="text-muted m-0">Pincode</p>
+                   <p class="text m-0">Pincode</p>
                    <input type="text" id="instPIN" class="form-control instForm" data-tag="inst_pincode">
                   </div>
                  </div>
@@ -148,13 +146,13 @@ require('../../php_function.php');
                 <div class="row">
                  <div class="col-6">
                   <div class="form-group">
-                   <p class="text-muted m-0">State</p>
+                   <p class="text m-0">State</p>
                    <input type="text" id="instState" class="form-control instForm" data-tag="inst_state">
                   </div>
                  </div>
                  <div class="col-6">
                   <div class="form-group">
-                   <p class="text-muted m-0">Website</p>
+                   <p class="text m-0">Website</p>
                    <input type="text" id="instWebsite" class="form-control instForm" data-tag="inst_url">
                   </div>
                  </div>
@@ -163,29 +161,23 @@ require('../../php_function.php');
                 <div class="row">
                  <div class="col-6">
                   <div class="form-group">
-                   <div class="md-form md-outline m-0">
+                  <p class="text m-0">Institution Status</p>
                     <input type="text" id="instStatus" class="form-control instForm" data-tag="inst_status">
-                    <label for="instStatus">Institution Status</label>
-                   </div>
                   </div>
                  </div>
                  <div class="col-6">
                   <div class="form-group">
-                   <div class="md-form m-0">
+                  <p class="text m-0">Type of University</p>
                     <input type="text" id="instType" class="form-control instForm" data-tag="inst_type">
-                    <label for="instType">Type of University</label>
-                   </div>
                   </div>
                  </div>
                 </div>
-                <p>Establishment Details</p>
+                <p class="h4">Establishment Details</p>
                 <div class="row">
                  <div class="col-6">
                   <div class="form-group">
-                   <div class="md-form md-outline m-0">
+                  <p class="text m-0">Establishment Date of the University</p>
                     <input type="date" id="instEstDateUni" class="form-control instForm" data-tag="inst_est_date_uni">
-                    <label for="instEstDateUni">Establishment Date of the University</label>
-                   </div>
                   </div>
                  </div>
                  <div class="col-6">
