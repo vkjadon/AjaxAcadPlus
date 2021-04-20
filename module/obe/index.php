@@ -31,7 +31,7 @@ require('../../php_function.php');
               <!-- Nav tabs -->
               <ul class="nav nav-tabs">
                 <li class="nav-item">
-                  <a class="nav-link tabLink active" id="assessmentMethodPanel" data-toggle="tab" href="#showMethodPanel">Assessment Method</a>
+                  <a class="nav-link tabLink active" id="assessmentMethodPanel" data-toggle="tab" href="#showMethodPanel">Assessment Method </a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link tabLink" data-toggle="tab" href="#showATPanel">Assessment Technique</a>
@@ -46,31 +46,24 @@ require('../../php_function.php');
               <!-- Tab panes -->
               <div class="tab-content">
                 <div class="tab-pane container show active p-0 m-0" id="showMethodPanel">
-                  <button class="btn btn-info mt-1 addMethod">Add New</button>
-                  <div class="col">
+                  <button class="btn btn-info btn-square-sm mt-1 addMethod">Add New</button>
+                  <div class="col p-0 m-0">
                     <p id="assessmentMethodShowList"></p>
                   </div>
                 </div>
                 <div class="tab-pane fade" id="showATPanel">
-                  <button class="btn btn-info mt-1 addAT">Add New</button>
-
-                  <div class="col">
+                  <button class="btn btn-info btn-square-sm mt-1 addAT">Add New</button>
+                  <div class="col p-0 m-0">
                     <div id="assessmentTechniqueShowList"></div>
                   </div>
                 </div>
                 <div class="tab-pane fade" id="showScalePanel">
-                  <div class="row">
-                    <div class="col-3">
-                      <div class="form-group">
-                        <button class="btn btn-info mt-1" id="poScaleButton">Show PO Scale</button>
-                      </div>
-                    </div>
-                  </div>
-                  <div id="poShowScale"></div>
+                  <button class="btn btn-info btn-square-sm mt-1" id="poScaleButton">Show PO Scale</button>
+                  <div class="p-0 m-0" id="poShowScale"></div>
                 </div>
                 <div class="tab-pane fade" id="showPOFPanel">
-                  <button class="btn btn-info mt-1 addPOF">Add PO Feedback</button>
-                  <div class="col">
+                  <button class="btn btn-info btn-square-sm mt-1 addPOF">Add PO Feedback</button>
+                  <div class="col p-0 m-0">
                     <p id="pofShowList"></p>
                   </div>
                 </div>
@@ -100,8 +93,8 @@ require('../../php_function.php');
               <!-- Tab panes -->
               <div class="tab-content">
                 <div class="tab-pane active" id="showDesignPanel">
-                  <button class="btn btn-info mt-1 addDesign">Design CO Assessment</button>
-                  <div class="col">
+                  <button class="btn btn-info btn-square-sm mt-1 addDesign">Design CO Assessment</button>
+                  <div class="col p-0 m-0">
                     <div id="assessmentDesignShowList"></div>
                   </div>
                 </div>
