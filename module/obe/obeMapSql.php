@@ -206,7 +206,7 @@ if (isset($_POST['actionMap'])) {
       $rowsAD = $resultAD->fetch_assoc();
       $au = $rowsAD['ad_question'];
       $subject_id = $rowsAD['subject_id'];
-      echo '<td>' . $subject_id . '</td>';
+      echo '<td width="5%">SubId[' . $subject_id . ']</td><td width="40%">CO</td>';
       for ($j = 0; $j < $au; $j++) {
         $sno = $j + 1;
         $sqlAUMarks = "select * from au_marks where ad_id='$ad_id' and au_sno='$sno'";
@@ -230,8 +230,8 @@ if (isset($_POST['actionMap'])) {
       $i = 0;
       while ($rowsCO = $resultCO->fetch_assoc()) {
         $co_id[$i] = $rowsCO['co_id'];
-        echo '<tr align="center">';
-        echo '<td class="co" id="co' . $co_id[$i] . '" data-toggle="tooltip" title="' . $rowsCO['co_name'] . '">' . $rowsCO['co_code'] . $rowsCO['co_sno'] . '</td>';
+        echo '<tr>';
+        echo '<td class="co" id="co' . $co_id[$i] . '">' . $rowsCO['co_code'] . $rowsCO['co_sno'] . '</td><td>'.$rowsCO['co_name'].'</td>';
         $cellScale = '--';
         for ($j = 0; $j < $au; $j++) {
           $sno = $j + 1;
@@ -241,7 +241,7 @@ if (isset($_POST['actionMap'])) {
             $rows = $result->fetch_assoc();
             $cellScale = $rows['auco_weight'];
           } else $cellScale = "--";
-          echo '<td colspan="2" class="aucoMap" data-au="' . ($j + 1) . '" data-co="' . $co_id[$i] . '"><a href="#" style="display:block;  width:100%; text-decoration: none;">' . $cellScale . '</a></td>';
+          echo '<td colspan="2"  align="center" class="aucoMap" data-au="' . ($j + 1) . '" data-co="' . $co_id[$i] . '"><a href="#" style="display:block;  width:100%; text-decoration: none;">' . $cellScale . '</a></td>';
         }
         echo '</tr>';
       }
@@ -279,8 +279,9 @@ if (isset($_POST['actionMap'])) {
         echo '<td>AU-' . $sno . '(MM:' . $au_marks . ')</td>';
       }
       echo '</tr>';
-      $sqlStd = "select * from student where student_status='0'";
+      $sqlStd = "select * from student where program_id='$myProg' and batch_id='$myBatch' and student_status='0'";
       $resultStd = $conn->query($sqlStd);
+      if(!$resultStd)echo $conn->error;
       $i = 0;
       while ($rowsStd = $resultStd->fetch_assoc()) {
         $student_id[$i] = $rowsStd['student_id'];
