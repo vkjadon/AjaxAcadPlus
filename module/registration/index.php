@@ -176,7 +176,7 @@ require('../../php_function.php');
         subId: subId,
         status: status
       }, function(data, status) {
-        $.alert("Registration Updated !! ");
+        $.alert("Registration Updated !! " + data);
       }, "text")
     });
 

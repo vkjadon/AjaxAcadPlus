@@ -113,7 +113,7 @@ if (isset($_POST['action'])) {
     $student_id = $_POST['stdId'];
     $class_id = $_POST['classId'];
     //echo "Student - ".$student_id;
-    $totalCredit=0;
+    $totalCredit = 0;
     $sql = "select student_name from student where student_id='$student_id'";
     $student_name = getFieldValue($conn, 'student_name', $sql);
     echo '<h5 class="text-center">' . $student_name . '[' . $student_id . ']</h5>';
@@ -127,9 +127,9 @@ if (isset($_POST['action'])) {
     $i = 0;
     while ($rowArray = $result->fetch_assoc()) {
       $rs_tl = $rowArray["tl_id"];
-      $subject_id= $rowArray["subject_id"];
-      $subject_credit= $rowArray["subject_credit"];
-    
+      $subject_id = $rowArray["subject_id"];
+      $subject_credit = $rowArray["subject_credit"];
+
       //echo $rs_tl;
       $sql = "select * from $tn_rs where student_id='$student_id' and tl_id='$rs_tl' and rs_status='0'";
       $check_status = getFieldValue($conn, 'rs_id', $sql);
@@ -146,7 +146,7 @@ if (isset($_POST['action'])) {
       echo '<td>' . $subject_credit . '</td>';
       if ($check_status == "") echo '<td>--</td>';
       else {
-        
+
         echo '<td><button class="btn btn-secondary btn-square-sm updateClassButton" value="' . $check_status . '">Update</button></td>';
       }
       echo '</tr>';
@@ -166,5 +166,9 @@ if (isset($_POST['action'])) {
       $sql = "update $tn_rs set rs_status='0' where student_id='$student_id' and tl_id='$tl_id'";
     }
     $conn->query($sql);
+    if ($conn->affected_rows == 0) {
+      $sql = "insert into $tn_rs (student_id, tl_id, update_id, rs_status) values('$student_id','$tl_id','$myId', '0')";
+      $conn->query($sql);
+    }
   }
 }
