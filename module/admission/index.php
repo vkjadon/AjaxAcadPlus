@@ -63,6 +63,7 @@ require('../../php_function.php');
     <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
      <a class="list-group-item list-group-item-action active as" id="list-as-list" data-toggle="list" href="#list-as" role="tab" aria-controls="as"> Add Student </a>
      <a class="list-group-item list-group-item-action sr" id="list-sr-list" data-toggle="list" href="#list-sr" role="tab" aria-controls="sr">Student Report</a>
+     <a class="list-group-item list-group-item-action cbp" id="list-cbp-list" data-toggle="list" href="#list-cbp" role="tab" aria-controls="cbp">Change Batch/Program</a>
     </div>
    </div>
    <div class="col-10">
@@ -399,6 +400,15 @@ require('../../php_function.php');
        </div>
       </div>
      </div>
+
+     <div class="tab-pane show active" id="list-cbp" role="tabpanel" aria-labelledby="list-cbp-list">
+      <div class="row">
+       <div class="col-8">
+        <p id="changeBatchProgram"></p>
+       </div>
+      </div>
+     </div>
+
     </div>
    </div>
   </div>
@@ -502,7 +512,9 @@ require('../../php_function.php');
 
 
   $(document).on('click', '.sr', function() {
-   $('#list-sr').show();
+   $('#list-sr').hide();
+   $('#list-cbp').hide();
+   $('#list-sq').hide();
    $('#studentProgramReport').show();
    studentProgramReport();
   });
@@ -511,8 +523,17 @@ require('../../php_function.php');
    $(".selectPanel").show();
    $('#list-sq').show();
    $('#list-as').hide();
+   $('#list-cbp').show();
    $('#studentShowList').show();
 
+  });
+
+  $(document).on('click', '.cbp', function() {
+   $('#list-cbp').show();
+   $('#list-sq').hide();
+   $('#list-as').hide();
+   $('#changeBatchProgram').show();
+   changeBatchProgram();
   });
 
   $(document).on('click', '.as', function() {
@@ -551,8 +572,8 @@ require('../../php_function.php');
     cache: false, // To unable request pages to be cached
     processData: false, // To send DOMDocument or non processed data file it is set to false
     success: function(data) {
-    // $.alert("heloo"+data);
-    $('#formModal').modal('hide');
+     // $.alert("heloo"+data);
+     $('#formModal').modal('hide');
     }
    })
   });
@@ -883,6 +904,20 @@ require('../../php_function.php');
     $("#studentProgramReport").show();
     // $.alert("List qulai" + mydata);
     $("#studentProgramReport").html(mydata);
+   }, "text").fail(function() {
+    $.alert("Error !!");
+   })
+
+  }
+
+  function changeBatchProgram() {
+   //  $.alert("In List Function");
+   $.post("admissionSql.php", {
+    action: "changeBatchProgramStudentList",
+   }, function(mydata, mystatus) {
+    $("#changeBatchProgram").show();
+    // $.alert("List qulai" + mydata);
+    $("#changeBatchProgram").html(mydata);
    }, "text").fail(function() {
     $.alert("Error !!");
    })
