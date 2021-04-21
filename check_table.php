@@ -1,5 +1,25 @@
 <?php
 //echo "Check Tables";
+function check_tn_tt($conn, $table){
+  $sql="select * from $table";  
+  $result=$conn->query($sql);
+  if(!$result)
+  {
+    //echo "Table Missing $table";
+    $query=
+    'tl_id INT(5) NULL,
+    tt_day VARCHAR(10) NULL,
+    tt_period INT(1) NULL,
+    il_id INT(4) NOT NULL,
+    update_id INT(5) NULL,
+    update_ts timestamp NOT NULL,
+    UNIQUE(tl_id, tt_day, tt_period)';
+    $sql="CREATE TABLE $table ($query)";
+    $result=$conn->query($sql);
+    if(!$result)echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
 function check_tn_sas($conn, $table){
   $sql="select * from $table";  
   $result=$conn->query($sql);

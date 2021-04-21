@@ -7,9 +7,7 @@ include('../../php_function.php');
 //global $tn_tt;
 if (isset($_POST['action'])) {
   if ($_POST['action'] == 'sessionClassList') {
-    $programId = $_POST['programId'];
-    //echo "sddsd $programId";
-    $json = get_sessionClass($conn, $mySes, $programId);
+    $json = get_sessionClass($conn, $mySes, $myDept);
     //echo $json;
     $array = json_decode($json, true);
     //echo count($array);
@@ -99,9 +97,7 @@ if (isset($_POST['action'])) {
     }
     echo "<h4>Schedule Created </h4>";
   } elseif ($_POST['action'] == 'sessionClassListSTT') {
-    $programId = $_POST['programId'];
-    echo "sddsd $programId";
-    $json = get_sessionClass($conn, $mySes, $programId);
+    $json = get_sessionClass($conn, $mySes, $myDept);
     //echo $json;
     $array = json_decode($json, true);
     echo '<table class="table list-table-xs mb-0">';

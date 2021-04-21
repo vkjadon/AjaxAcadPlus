@@ -53,7 +53,7 @@ if (isset($mySes)) {
   check_tn_tl($conn, $tn_tl);
 
   $tn_tt = 'time_table'.$mySes;
-  //check_tn_tl($conn, $tn_tl);
+  check_tn_tt($conn, $tn_tt);
 
   $tn_sas = 'student_attendance_setup' . $mySes;
   check_tn_sas($conn, $tn_sas);
