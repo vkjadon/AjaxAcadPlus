@@ -81,7 +81,7 @@ if (isset($_POST['action'])) {
         for ($j = 0; $j < count($tl); $j++) {
           $sql = "select * from $tn_rs where student_id='$id[$i]' and tl_id='$tl[$j]'";
           if (!$conn->query($sql)->num_rows) {
-            $sql = "insert into $tn_rs (student_id, tl_id, update_id) values('$id[$i]','$tl[$j]','$myId')";
+            $sql = "insert into $tn_rs (student_id, tl_id, update_id, rs_status) values('$id[$i]','$tl[$j]','$myId', '0')";
             $result = $conn->query($sql);
           }
         }
@@ -148,7 +148,6 @@ if (isset($_POST['action'])) {
       else {
         
         echo '<td><button class="btn btn-secondary btn-square-sm updateClassButton" value="' . $check_status . '">Update</button></td>';
-        echo '<td><button class="btn btn-secondary btn-square-sm updateClassButton" value="' . $check_status . '">Group</button></td>';
       }
       echo '</tr>';
       $i++;

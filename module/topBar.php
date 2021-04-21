@@ -13,6 +13,8 @@ if (isset($mySes)) $mySesName = getField($conn, $mySes, "session", "session_id",
 else $mySesName = "Select Session";
 if (isset($myBatch)) $myBatchName = getField($conn, $myBatch, "batch", "batch_id", "batch");
 else $myBatchName = "Select Batch";
+if(!isset($myProg))$myProg='';
+if(!isset($myBatch))$myBatch='';
 ?>
 <header>
 	<div class="py-2">
@@ -84,7 +86,7 @@ else $myBatchName = "Select Batch";
 									<a href="<?php echo $codePath . '/module/registration/'; ?>" class="dropdown-item">Registration</a>
 								</div>
 								<div class="col-6">
-									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item">LMS</a>
+									<a href="<?php echo $codePath . '/module/lms/'; ?>" class="dropdown-item">LMS</a>
 									<a href="<?php echo $codePath . '/module/online/'; ?>" class="dropdown-item">Online Assessment</a>
 								</div>
 							</div>

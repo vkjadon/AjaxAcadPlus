@@ -44,7 +44,7 @@ if (isset($mySes)) {
   //check_tn_rs($conn, $tn_tl);
 
   $tn_rs = 'registration_subject'.$mySes;
-  //check_tn_rs($conn, $tn_tl);
+  check_tn_rs($conn, $tn_rs);
 
   $tn_tlg = 'tl_group'.$mySes;
   check_tn_tlg($conn, $tn_tlg);

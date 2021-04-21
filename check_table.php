@@ -1,5 +1,28 @@
 <?php
 //echo "Check Tables";
+function check_tn_rs($conn, $table){
+  $sql="select * from $table";  
+  $result=$conn->query($sql);
+  if(!$result)
+  {
+    //echo "Table Missing $table";
+    $query=
+    'rs_id INT(5) NOT NULL AUTO_INCREMENT,
+    student_id INT(5) NULL,
+    tl_id INT(4) NULL,
+    rs_date DATE,
+    update_ts timestamp,
+    update_id INT(5) NULL,
+    rs_status INT(1) NULL,
+    PRIMARY KEY (rs_id),
+    UNIQUE(student_id, tl_id)';
+    
+    $sql="CREATE TABLE $table ($query)";
+    $result=$conn->query($sql);
+    if(!$result)echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
 function check_tn_rc($conn, $table){
   $sql="select * from $table";  
   $result=$conn->query($sql);
@@ -11,9 +34,9 @@ function check_tn_rc($conn, $table){
     student_id INT(5) NULL,
     class_id INT(4) NULL,
     rc_date DATE,
-    submit_id INT(5) NOT NULL,
+    submit_id INT(5) NULL,
     submit_ts timestamp NOT NULL,
-    rc_status INT(1) NOT NULL,
+    rc_status INT(1) NULL,
     PRIMARY KEY (rc_id),
     UNIQUE(student_id, class_id)';
     
