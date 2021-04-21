@@ -425,7 +425,7 @@ require('../../php_function.php');
 
   $('[data-toggle="tooltip"]').tooltip();
   $('#list-as').show();
-  $('#list-sq').hide();
+  $('#list-sr').hide();
   $('.studentProfile').hide();
   $('#accordionStudent').hide();
   studentList();
@@ -512,25 +512,16 @@ require('../../php_function.php');
 
 
   $(document).on('click', '.sr', function() {
-   $('#list-sr').hide();
+   $('#list-sr').show();
    $('#list-cbp').hide();
-   $('#list-sq').hide();
+   $('#list-as').hide();
    $('#studentProgramReport').show();
    studentProgramReport();
   });
 
-  $(document).on('click', '.sq', function() {
-   $(".selectPanel").show();
-   $('#list-sq').show();
-   $('#list-as').hide();
-   $('#list-cbp').show();
-   $('#studentShowList').show();
-
-  });
-
   $(document).on('click', '.cbp', function() {
    $('#list-cbp').show();
-   $('#list-sq').hide();
+   $('#list-sr').hide();
    $('#list-as').hide();
    $('#changeBatchProgram').show();
    changeBatchProgram();
@@ -539,8 +530,8 @@ require('../../php_function.php');
   $(document).on('click', '.as', function() {
    $(".selectPanel").show();
    $('#list-as').show();
-   $('#list-sq').hide();
-
+   $('#list-sr').hide();
+   $('#list-cbp').hide();
   });
 
   $(document).on('click', '.addStudent', function() {
@@ -911,9 +902,9 @@ require('../../php_function.php');
   }
 
   function changeBatchProgram() {
-   //  $.alert("In List Function");
+    $.alert("In List Function");
    $.post("admissionSql.php", {
-    action: "changeBatchProgramStudentList",
+    action: "updateStudentList",
    }, function(mydata, mystatus) {
     $("#changeBatchProgram").show();
     // $.alert("List qulai" + mydata);
