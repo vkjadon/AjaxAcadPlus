@@ -38,7 +38,7 @@ if (isset($mySes)) {
   //check_tn_eac($conn, $tn_eac);
 
   $tn_rc = 'registration_class'.$mySes;
-  //check_tn_rc($conn, $tn_tl);
+  check_tn_rc($conn, $tn_rc);
 
   $tn_res = 'resource_subject'.$mySes;
   //check_tn_rs($conn, $tn_tl);

@@ -392,6 +392,23 @@ require('../../php_function.php');
       else $.alert("Class " + classId);
     });
 
+    $(document).on('click', '.increDecre', function() {
+      var id = $(this).attr('id');
+      var value = $(this).attr("data-value");
+      $.alert("Id " + id + "Value" + value);
+      $.post('scheduleSql.php', {
+        id: id,
+        value: value,
+        action: "increDecre"
+
+      }, function(data, status) {
+        classList();
+        //$.alert("Updated !! " + data);
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+    });
+
     $(document).on('click', '.decrement', function() {
       var id = $(this).attr('id');
       var value = $("." + id).text();
