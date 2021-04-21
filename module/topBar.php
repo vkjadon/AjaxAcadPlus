@@ -80,7 +80,7 @@ else $myBatchName = "Select Batch";
 							<div class="row">
 								<div class="col-6">
 									<a href="<?php echo $codePath . '/module/aa/'; ?>" class="dropdown-item">Setting </a>
-									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item">Schedule</a>
+									<a href="<?php echo $codePath . '/module/schedule/'; ?>" class="dropdown-item">Schedule</a>
 									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item">Registration</a>
 								</div>
 								<div class="col-6">

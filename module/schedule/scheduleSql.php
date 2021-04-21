@@ -7,18 +7,17 @@ include('../../php_function.php');
 //global $tn_tt;
 if (isset($_POST['action'])) {
   if ($_POST['action'] == 'clList') {
-    $programId=$_POST['programId'];
-    $fields = array("class_name", "class_section", "class_semester", "class_shift");
-    $header = array("Id", "Name", "Sec.", "Sem", "Shift");
-    $sql = "select cl.* from class cl where cl.session_id='$mySes' and cl.program_id='$programId' order by cl.class_semester";
+    $fields = array("class_name", "class_section", "class_semester", "class_shift", "sp_abbri", "batch");
+    $header = array("Id", "Name", "Sec.", "Sem", "Shift", "Prog", "Batch");
+    $sql = "select cl.*, p.sp_abbri, b.batch from class cl, program p, batch b where cl.program_id=p.program_id and cl.batch_id=b.batch_id and cl.session_id='$mySes' and cl.program_id='$myProg' order by cl.class_semester";
     $statusDecode = array("status" => "class_status", "0" => "Active", "1" => "Removed");
-    $dataType = array("0", "0", "0", "0", "0", "0");
+    $dataType = array("0", "0", "0", "0", "0", "0","0","0");
     $button = array("1", "1", "0", "1");
     getList($conn, "class_id", $fields, $dataType, $header, $sql, $statusDecode, $button);
-    echo "$programId - $mySes";
+    //echo "$programId - $mySes";
   } else if ($_POST['action'] == 'addClass') {
-    $fields = ['session_id', 'program_id', 'class_name', 'class_section', 'batch_id', 'class_semester', 'class_shift', 'submit_id'];
-    $values = [$mySes, $_POST['modalId'], data_check($_POST['class_name']), data_check($_POST['class_section']), $_POST['sel_batch'], data_check($_POST['class_semester']), $_POST['class_shift'], $myId];
+    $fields = ['session_id', 'program_id', 'dept_id',  'class_name', 'class_section', 'batch_id', 'class_semester', 'class_shift', 'submit_id'];
+    $values = [$mySes, $myProg, $myDept, data_check($_POST['class_name']), data_check($_POST['class_section']), $myBatch, data_check($_POST['class_semester']), $_POST['class_shift'], $myId];
     $status = 'class_status';
     $dup = "select * from class where class_name='" . data_check($_POST["class_name"]) . "' and class_section='" . data_check($_POST["class_section"]) . "' and session_id='$mySes' and $status='0'";
     $dup_alert = "Duplicate Class Name for the Session Exists.";

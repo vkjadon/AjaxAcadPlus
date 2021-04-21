@@ -7,23 +7,15 @@ require('../../php_function.php');
 <!DOCTYPE html>
 <html lang="en">
 
-<style>
-  input[type=text] {
-    border: none;
-    border-bottom: 2px solid;
-    word-wrap: break-word;
-  }
-</style>
-
 <head>
   <title>Outcome Based Education : ClassConnect</title>
-  <?php require("../css.php");?>
+  <?php require("../css.php"); ?>
 
 </head>
 
 <body>
   <?php require("../topBar.php"); ?>
-  <div class="container-fluid">
+  <div class="container-fluid moduleBody">
     <div class="row">
       <div class="col-2">
         <div class="card text-center selectPanel">
@@ -32,17 +24,10 @@ require('../../php_function.php');
           <div class="col">
             <p class="selectClass">
               <?php
-              $sql = "select * from class where session_id='$mySes'";
-              selectList($conn, "", array(0, "class_id", "class_name", "", "sel_class"), $sql)
+              $sql = "select * from class where session_id='$mySes' and dept_id='$myDept'";
+              selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
               ?>
             </p>
-            <p class="selectProgram">
-              <?php
-              $sql = "select * from program where program_status='0'";
-              selectList($conn, "", array(0, "program_id", "sp_name", "sp_abbri", "sel_program"), $sql)
-              ?>
-            </p>
-
           </div>
 
         </div>
@@ -64,10 +49,10 @@ require('../../php_function.php');
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="list-cc" role="tabpanel" aria-labelledby="list-cc-list">
             <div class="row">
-              <div class="col-5 mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addClass">New</button>
+              <div class="col-6 mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addClass">New</button>
                 <p id="clList"></p>
               </div>
-              <div class="col-7 mt-1 mb-1" id="classSubject"></div>
+              <div class="col-6 mt-1 mb-1" id="classSubject"></div>
             </div>
           </div>
 
@@ -124,7 +109,7 @@ require('../../php_function.php');
     </div>
   </div>
 </body>
-<?php require("../js.php");?>
+<?php require("../js.php"); ?>
 
 
 <script>
@@ -443,7 +428,7 @@ require('../../php_function.php');
 
     $(document).on('click', '.class_idP', function() {
       var id = $(this).attr('id');
-      //$.alert("Process Id " + id);
+      $.alert("Process Id " + id);
       classSubject(id);
     });
 
@@ -688,9 +673,8 @@ require('../../php_function.php');
     $(document).on('click', '.addClass', function() {
       var programId = $("#sel_program").val()
       //$.alert("Class Modal");
-      $('#modal_title').text("Add New Class");
+      $('#modal_titleClass').html("Add New Class [<?php echo $myProgAbbri . '-' . $myBatchName; ?>]");
       $('#action').val("addClass");
-      $('#modalId').val(programId);
       $('#submitModalForm').show();
       $('#submitModalForm').html("Submit");
 
@@ -877,11 +861,11 @@ require('../../php_function.php');
 <div class="modal" id="firstModal">
   <div class="modal-dialog modal-md">
     <form class="form-horizontal" id="modalForm">
-      <div class="modal-content bg-secondary text-white">
+      <div class="modal-content">
 
         <!-- Modal Header -->
         <div class="modal-header">
-          <h4 class="modal-title" id="modal_title"></h4>
+          <h4 class="modal-title" id="modal_titleClass"></h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div> <!-- Modal Header Closed-->
 
@@ -889,19 +873,10 @@ require('../../php_function.php');
         <div class="modal-body">
           <div class="classForm">
             <div class="row">
-              <div class="col-5">
+              <div class="col-6">
                 <div class="form-group">
                   Class Name
                   <input type="text" class="form-control form-control-sm" id="class_name" name="class_name" placeholder="Class Name">
-                </div>
-              </div>
-              <div class="col-4">
-                <div class="form-group">
-                  Batch
-                  <?php
-                  $sql = "select b.* from batch b where b.batch_status='0' order by batch desc";
-                  selectList($conn, "Select Batch", array("0", "batch_id", "batch", "batch_id", "sel_batch"), $sql);
-                  ?>
                 </div>
               </div>
               <div class="col-3">
@@ -910,14 +885,15 @@ require('../../php_function.php');
                   <input type="number" class="form-control form-control-sm" id="class_semester" name="class_semester" placeholder="semester">
                 </div>
               </div>
-
-            </div>
-            <div class="row">
               <div class="col-3">
                 <div class="form-group">
+                  Section
                   <input type="text" class="form-control form-control-sm" id="class_section" name="class_section" placeholder="Section">
                 </div>
               </div>
+            </div>
+            <div class="row">
+
               <div class="col">
                 <div class="form-check-inline"> Class Shift </div>
                 <div class="form-check-inline">
@@ -940,7 +916,6 @@ require('../../php_function.php');
               <div class="col-12" id="tlData"></div>
             </div>
           </div>
-
           <div class="clashForm">
             <div class="row">
               <div class="col-md-12" id="clashId"></div>
@@ -960,14 +935,6 @@ require('../../php_function.php');
               <div class="col-md-3" id="loadType"></div>
               <label class="col-md-3 text-right"><b>Group</b></label>
               <div class="col-md-3" id="loadGroup"></div>
-            </div>
-            <div class="row">
-              <label class="col-md-3 text-right"><b>Department</b></label>
-              <div class="col-md-9">
-                <?php
-                $sql = "select d.* from department d where d.dept_status='0' order by dept_name";
-                selectList($conn, "Select Department", array("0", "dept_id", "dept_name", "dept_abbri", "sel_dept"), $sql);
-                ?></div>
             </div>
             <div class="row">
               <label class="col-md-3 text-right"><b>Staff</b></label>
