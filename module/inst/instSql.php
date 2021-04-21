@@ -161,12 +161,12 @@ if (isset($_POST['action'])) {
    		<div class="card-body mb-0">
 				<div class="row">
 					<div class="col-9">
-   					<h7>' . $dept_name . '</h7>['.$dept_abbri.']<br>
+   					<h7>' . $dept_name . '</h7>[' . $dept_abbri . ']<br>
 	 					<h8 class="card-subtitle mb-2 text-muted">Head : -- </h8>
 	 				</div>
 					<div class="col-3 text-center">
 						<a href="#" class="fa fa-edit editDept" data-dept="' . $dept_id . '"></a>
-						<h6 class="cardBodyText">' . date("d-m-Y",strtotime($dept_doi)) . '</h6>
+						<h6 class="cardBodyText">' . date("d-m-Y", strtotime($dept_doi)) . '</h6>
 					</div>
 				</div>
    		</div>
@@ -200,7 +200,7 @@ if (isset($_POST['action'])) {
 			echo '</div>';
 
 			echo '<div class="col-sm-6">';
-			echo '<div class="cardBodyText"><b>' . $sp_name . '</b> ['.$sp_abbri.']</div>';
+			echo '<div class="cardBodyText"><b>' . $sp_name . '</b> [' . $sp_abbri . ']</div>';
 			echo '<div class="cardBodyText">Semester : ' . $program_semester;
 			echo ' <b>Duration : ' . $program_duration . '</b>';
 			echo ' <b>Seats : ' . $array["data"][$i]["program_seat"] . '</b>';
@@ -253,7 +253,7 @@ if (isset($_POST['action'])) {
 			$sql_dept = "select * from department where dept_id='$dept_id'";
 			$value_dept = getFieldValue($conn, "dept_name", $sql_dept);
 
-			echo '<tr><td>' . $value_school . '</td><td>' . $value_dept . '</td><td class="text-center"><a href="#" class="fa fa-trash deleteSchoolDept" data-dept="'.$dept_id.'" data-school="'.$school_id.'"></a></td></tr>';
+			echo '<tr><td>' . $value_school . '</td><td>' . $value_dept . '</td><td class="text-center"><a href="#" class="fa fa-trash deleteSchoolDept" data-dept="' . $dept_id . '" data-school="' . $school_id . '"></a></td></tr>';
 		}
 		echo '</table></table>';
 	} elseif ($_POST["action"] == "deptProgramList") {
@@ -278,23 +278,23 @@ if (isset($_POST['action'])) {
 
 			echo '<tr><td>' . $value_dept . '</td><td>' . $value_school . '</td>
    <td class="text-center">
-   <a href="#" class="fa fa-trash deleteDeptProgram" data-dept="'.$dept_id.'" data-program="'.$program_id.'"></a>
+   <a href="#" class="fa fa-trash deleteDeptProgram" data-dept="' . $dept_id . '" data-program="' . $program_id . '"></a>
    </td>
    </tr>';
 		}
 		echo '</table></table>';
 	} elseif ($_POST['action'] == 'removeSchoolDept') {
-  $schoolId = $_POST['schoolId'];
-  $deptId = $_POST['deptId'];
+		$schoolId = $_POST['schoolId'];
+		$deptId = $_POST['deptId'];
 		echo "$deptId,$schoolId";
-  $sql = "delete from school_dept where school_id='$schoolId' and dept_id='$deptId'";
-  $conn->query($sql);
-  echo $conn->error;
- } elseif ($_POST['action'] == 'removeDeptProgram') {
-  $progId = $_POST['progId'];
-  $deptId = $_POST['deptId'];
-  $sql = "delete from dept_program where program_id='$progId' and dept_id='$deptId'";
-  $conn->query($sql);
-  echo $conn->error;
- }
+		$sql = "delete from school_dept where school_id='$schoolId' and dept_id='$deptId'";
+		$conn->query($sql);
+		echo $conn->error;
+	} elseif ($_POST['action'] == 'removeDeptProgram') {
+		$progId = $_POST['progId'];
+		$deptId = $_POST['deptId'];
+		$sql = "delete from dept_program where program_id='$progId' and dept_id='$deptId'";
+		$conn->query($sql);
+		echo $conn->error;
+	}
 }

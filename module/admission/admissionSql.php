@@ -26,7 +26,7 @@ if (isset($_POST['action'])) {
   // echo $json;
   $array = json_decode($json, true);
   $count = count($array["data"]);
-   // echo $count;
+  // echo $count;
   for ($i = 0; $i < count($array["data"]); $i++) {
    $student_id = $array["data"][$i]["student_id"];
    $student_name = $array["data"][$i]["student_name"];
@@ -171,10 +171,17 @@ if (isset($_POST['action'])) {
    $program_name = $array["data"][$i]["program_name"];
    $sql_desig = "select * from student where program_id='$program_id' and batch_id='$myBatch'";
    $result = $conn->query($sql_desig);
-   $rowcount=mysqli_num_rows($result);
+   $rowcount = mysqli_num_rows($result);
    echo '<tr><td>' . $program_name . '</td><td>' . $rowcount . '</td></tr>';
   }
   echo '</table></table>';
-
+ } elseif ($_POST['action'] == 'updateStudentList') {
+  $fields = array("student_name", "student_rollno", "batch_id", "program_id");
+  $header = array("Name", "Roll Number", "Batch", "Program");
+  $sql = "select * from student where program_id='$myProg' and batch_id='$myBatch'";
+  $statusDecode = array("status" => "student_status", "0" => "Active", "1" => "Removed");
+  $dataType = array("0", "0", "0", "0");
+  $button = array("1", "1", "0", "1");
+  getList($conn, "student_id", $fields, $dataType, $header, $sql, $statusDecode, $button);
  }
 }
