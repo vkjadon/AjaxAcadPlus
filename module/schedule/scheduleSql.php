@@ -7,13 +7,29 @@ include('../../php_function.php');
 //global $tn_tt;
 if (isset($_POST['action'])) {
   if ($_POST['action'] == 'clList') {
-    $fields = array("class_name", "class_section", "class_semester", "class_shift", "sp_abbri", "batch");
-    $header = array("Id", "Name", "Sec.", "Sem", "Shift", "Prog", "Batch");
     $sql = "select cl.*, p.sp_abbri, b.batch from class cl, program p, batch b where cl.program_id=p.program_id and cl.batch_id=b.batch_id and cl.session_id='$mySes' and cl.program_id='$myProg' order by cl.class_semester";
-    $statusDecode = array("status" => "class_status", "0" => "Active", "1" => "Removed");
-    $dataType = array("0", "0", "0", "0", "0", "0","0","0");
-    $button = array("1", "1", "0", "1");
-    getList($conn, "class_id", $fields, $dataType, $header, $sql, $statusDecode, $button);
+    $result=$conn->query($sql);
+    echo '<table class="table list-table-xs"><tr><th>Id</th><th></th><th>Name</th><th>Sem</th><th>Shift</th><th>Prog</th><th>Batch</th><th><i class="fa fa-trash"></i></th><th>Action</th></tr>';
+    while($rowArray=$result->fetch_assoc()){
+      $id=$rowArray["class_id"];
+      $batch_id=$rowArray["batch_id"];
+      echo '<tr>';
+        echo '<td>'.$id.'</td>';
+        echo '<td><a href="#" class="class_idE" id="' . $id . '"><i class="fa fa-edit"></i></a></td>';
+        echo '<td>'.$rowArray["class_name"].'['.$rowArray["class_section"].']</td>';
+        echo '<td>'.$rowArray["class_semester"].'</td>';
+        echo '<td>'.$rowArray["class_shift"].'</td>';
+        echo '<td>'.$rowArray["sp_abbri"].'</td>';
+        echo '<td>';
+        echo '<a href="#" class="increDecre" id="' . $id . '" data-value="' . ($batch_id-1) . '"><i class="fa fa-angle-double-left"></i></a> ';
+        echo $rowArray["batch"];
+        echo ' <a href="#" class="increDecre" id="' . $id . '" data-value="' . ($batch_id+1) . '"><i class="fa fa-angle-double-right"></i></a> ';
+        echo '</td>';
+        echo '<td><a href="#" class="class_idD" id="' . $id . '"><i class="fa fa-trash"></i></a></td>';
+        echo '<td><a href="#" class="class_idP" id="' . $id . '">Groups</a></td>';
+        echo '</tr>';
+    }
+
     //echo "$programId - $mySes";
   } else if ($_POST['action'] == 'addClass') {
     $fields = ['session_id', 'program_id', 'dept_id',  'class_name', 'class_section', 'batch_id', 'class_semester', 'class_shift', 'submit_id'];
@@ -30,8 +46,8 @@ if (isset($_POST['action'])) {
     echo json_encode($output);
   } elseif ($_POST['action'] == "updateClass") {
     //echo "Update Class " . $_POST['modalId'];
-    $fields = ['class_id', 'class_name', 'batch_id', 'class_shift', 'class_semester', 'class_section'];
-    $values = [$_POST['modalId'], data_check($_POST['class_name']), $_POST['sel_batch'], $_POST['class_shift'], data_check($_POST['class_semester']), data_check($_POST['class_section'])];
+    $fields = ['class_id', 'class_name', 'class_shift', 'class_semester', 'class_section'];
+    $values = [$_POST['modalId'], data_check($_POST['class_name']), $_POST['class_shift'], data_check($_POST['class_semester']), data_check($_POST['class_section'])];
     $status = 'class_status';
     $dup_alert = " Class Name, Section Alreday Exists for this Session !! ";
     updateUniqueData($conn, 'class', $fields, $values, $dup_alert);
@@ -81,6 +97,10 @@ if (isset($_POST['action'])) {
       echo '</tr>';
     }
     echo '</table>';
+  } elseif ($_POST['action'] == 'increDecre') {
+    $value = $_POST['value'];
+    $id = $_POST['id'];
+    updateField($conn, "class", array("class_id", "batch_id"), array($id, $value), "");
   } elseif ($_POST['action'] == 'increment') {
     $value = $_POST['value'] + 1;
     $tlg_id = $_POST['tlg_id'];

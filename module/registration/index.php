@@ -30,7 +30,7 @@ require('../../php_function.php');
           <p class="selectClass">
             <span class="m-1 p-0" id="selectPanelTitle"></span>
             <?php
-            $sql = "select * from class where session_id='$mySes'";
+            $sql = "select * from class where session_id='$mySes' and program_id='$myProg'";
             selectList($conn, "Select Class", array(0, "class_id", "class_name", "", "sel_class"), $sql)
             ?>
           </p>
@@ -95,7 +95,7 @@ require('../../php_function.php');
         checkboxes_value: checkboxes_value,
         classId: classId
       }, function(data, status) {
-        //$.alert(data);
+        $.alert(data);
         sbpList(classId, rpp, startRecord);
       }, "text").fail(function() {
         $.alert("Fail");

@@ -460,12 +460,11 @@ function paginationBar($conn, $sqlAll, $rpp)
   $result = $conn->query($sqlAll);
   $num_rows = $result->num_rows;
   $page = ceil($num_rows / $rpp);
-  echo '<div class="row"><div class="col-10"><ul class="pagination pagination-sm">';
-  //echo '<li class="page-item" id><a class="page-link" href="#">1</a></li>';
+  echo '<div class="row"><div class="col-10"><ul class="pagination">';
 
   for ($i = 1; $i <= $page; $i++) {
     $startRecord = ($i - 1) * $rpp;
-    echo '<li class="page-item pageLink" id="page' . $i . '" data-start="' . $startRecord . '"><a class="page-link" href="#">' . $i . '</a></li>';
+    echo '<li class="page-item pageLink" id="page' . $i . '" data-start="' . $startRecord . '"><a class="page-link" href="#"><span class="btn btn-info btn-square-sm">' . $i . '</span></a></li>';
   }
   echo '</ul></div>';
   echo '<div class="col-2"><select class="form-control form-control-sm rpp" id="rpp" name="rpp">
@@ -544,10 +543,9 @@ function get_batchJson($conn)
 }
 function get_classSubject($conn, $class_id)
 {
-  $session_id = getField($conn, $class_id, "class", "class_id", "session_id");
   $batch_id = getField($conn, $class_id, "class", "class_id", "batch_id");
   $class_semester = getField($conn, $class_id, "class", "class_id", "class_semester");
-  $program_id = getField($conn, $session_id, "session", "session_id", "program_id");
+  $program_id = getField($conn, $class_id, "class", "class_id", "program_id");
 
   $sql = "select * from subject where program_id='$program_id' and batch_id='$batch_id' and subject_semester='$class_semester'";
   $result = $conn->query($sql);
