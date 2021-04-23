@@ -29,13 +29,8 @@ require('../../php_function.php');
               ?>
             </p>
           </div>
-
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-
-          <a class="list-group-item list-group-item-action active cc" id="list-cc-list" data-toggle="list" href="#list-cc" role="tab" aria-controls="cc"> Class Groups </a>
-
-          <a class="list-group-item list-group-item-action tl" id="list-tl-list" data-toggle="list" href="#list-tl" role="tab" aria-controls="tl"> Assign Load </a>
 
           <a class="list-group-item list-group-item-action tt" id="list-tt-list" data-toggle="list" href="#list-tt" role="tab" aria-controls="tt"> Time Table </a>
 
@@ -47,19 +42,7 @@ require('../../php_function.php');
       </div>
       <div class="col-10">
         <div class="tab-content" id="nav-tabContent">
-          <div class="tab-pane show active" id="list-cc" role="tabpanel" aria-labelledby="list-cc-list">
-            <div class="row">
-              <div class="col-6 mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addClass">New</button>
-                <p id="clList"></p>
-              </div>
-              <div class="col-6 mt-1 mb-1" id="classSubject"></div>
-            </div>
-          </div>
-
-          <div class="tab-pane fade" id="list-tl" role="tabpanel" aria-labelledby="list-tl-list">
-            <div class="col-8 mt-1 mb-1" id="tlList"></div>
-          </div>
-
+          
           <div class="tab-pane fade" id="list-tt" role="tabpanel" aria-labelledby="list-tt-list">
             <div id="dayList"></div>
             <div id="mondayList"></div>
@@ -70,12 +53,10 @@ require('../../php_function.php');
             <div id="saturdayList"></div>
             <div id="sundayList"></div>
           </div>
-
           <div class="tab-pane fade" id="list-stt" role="tabpanel" aria-labelledby="list-stt-list">
             <div id="sessionClassListSTT">Show TimeTable</div>
             <p id="showTimeTable"></p>
           </div>
-
           <div class="tab-pane fade" id="list-cs" role="tabpanel" aria-labelledby="list-cs-list">
             <div class="row">
               <div class="col-3 mt-1 mb-1">
@@ -103,7 +84,6 @@ require('../../php_function.php');
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -139,9 +119,7 @@ require('../../php_function.php');
     $("#panelId").hide();
 
     $(document).on('click', '.stt', function() {
-      $("#selectPanelTitle").text("Create Schedule");
       $("#panelId").html("STT");
-      $(".selectPanel").show();
       $(".selectClass").hide();
       $(".selectProgram").show();
       $("#clListProgram").show();
@@ -174,23 +152,6 @@ require('../../php_function.php');
       ttList(classId);
     });
 
-    $(document).on('click', '.tl', function() {
-      //$.alert("TL");
-      $("#selectPanelTitle").text("Assign Staff Panel");
-      $("#panelId").html("TL");
-      $(".selectProgram").hide();
-      $(".selectPanel").show();
-      $(".selectClass").show();
-      var classId = $("#sel_class").val();
-      tlList(classId);
-    });
-
-    $(document).on('click', '.clList, .cc', function() {
-      //$.alert("Class Modal");
-      $(".selectClass").hide();
-      $(".addClass").show();
-      $("#clList").show();
-    });
 
     $(document).on('click', '.sclSTT, .checkAllSTT, .uncheckAllSTT', function() {
       var checkboxes_value = [];
@@ -409,47 +370,6 @@ require('../../php_function.php');
       })
     });
 
-    $(document).on('click', '.decrement', function() {
-      var id = $(this).attr('id');
-      var value = $("." + id).text();
-      //$.alert("Decrement " + id + "Value" + value);
-      $.post('scheduleSql.php', {
-        action: "decrement",
-        tlg_id: id,
-        value: value
-      }, function(data, status) {
-        var newValue = Number(value) - 1;
-        if (newValue > 0) $("." + id).html(newValue);
-        else $("." + id).html(value);
-        //$.alert("Updated !! " + data);
-      }, "text").fail(function() {
-        $.alert("Error !!");
-      })
-    });
-
-    $(document).on('click', '.increment', function() {
-      var id = $(this).attr('id');
-      var value = $("." + id).text();
-      //$.alert("Increment " + id + "Value" + value);
-      $.post('scheduleSql.php', {
-        action: "increment",
-        tlg_id: id,
-        value: value
-      }, function(data, status) {
-        var newValue = Number(value) + 1;
-        $("." + id).html(newValue);
-        //$.alert("Updated !! " + data);
-      }, "text").fail(function() {
-        $.alert("Error !!");
-      })
-    });
-
-    $(document).on('click', '.class_idP', function() {
-      var id = $(this).attr('id');
-      $.alert("Process Id " + id);
-      classSubject(id);
-    });
-
     $(document).on('click', '.scb', function() {
       var id = $(this).attr('id');
       var status = $(this).is(":checked");
@@ -625,7 +545,7 @@ require('../../php_function.php');
         period: period
       }, function(data, status) {
         //$.alert("done");
-        $('#modal_title').text("Resolve Clashes from Time Table");
+        $('#modal_titleClass').text("Resolve Clashes from Time Table");
         //$('#action').val("dropSlot");
         $('#clashData').html(data);
 
@@ -644,64 +564,6 @@ require('../../php_function.php');
 
         $('#firstModal').modal('show');
       })
-    });
-
-    $(document).on('click', '.class_idE', function() {
-      var id = $(this).attr('id');
-      //$.alert("Id " + id);
-
-      $.post("scheduleSql.php", {
-        classId: id,
-        action: "fetchClass"
-      }, () => {}, "json").done(function(data) {
-        //$.alert("List " + data.class_name);
-        console.log("Error ", data);
-        $('#modal_title').text("Update Class [" + id + "]");
-        $('#class_name').val(data.class_name);
-        $('#class_section').val(data.class_section);
-        $('#class_semester').val(data.class_semester);
-
-        var class_shift = data.class_shift;
-        if (class_shift == 'Morning') {
-          document.getElementById("morning").checked = true;
-        } else if (class_shift == 'Evening') {
-          document.getElementById("evening").checked = true;
-        }
-
-        var batchId = data.batch_id;
-        $("#sel_batch option[value='" + batchId + "']").attr("selected", "selected");
-
-        $('#action').val("updateClass");
-        $('#modalId').val(id);
-        $('#submitModalForm').show();
-        $('#submitModalForm').html("Submit");
-
-        $(".uploadTTForm").hide()
-        $('.assignStaff').hide();
-        $('.clashForm').hide();
-
-        $('.classForm').show();
-
-        $('#firstModal').modal('show');
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
-    $(document).on('click', '.addClass', function() {
-      var programId = $("#sel_program").val()
-      //$.alert("Class Modal");
-      $('#modal_titleClass').html("Add New Class [<?php echo $myProgAbbri . '-' . $myBatchName; ?>]");
-      $('#action').val("addClass");
-      $('#submitModalForm').show();
-      $('#submitModalForm').html("Submit");
-
-      $(".assignStaff").hide()
-      $(".uploadTTForm").hide()
-      $(".clashForm").hide()
-
-      $(".classForm").show()
-      $('#firstModal').modal('show');
     });
 
     $(document).on('submit', '#modalForm', function(event) {
@@ -802,19 +664,6 @@ require('../../php_function.php');
       })
     }
 
-    function classSubject(x) {
-      //$.alert("In Class-Subject Function Class Id" + x);
-      $.post("scheduleSql.php", {
-        action: "clSub",
-        classId: x
-      }, function(data, status) {
-        //$.alert("Success " + data);
-        $("#classSubject").html(data);
-      }, "text").fail(function() {
-        $.alert("Error !!");
-      })
-    }
-
     function getFormattedDate(ts, fmt) {
       var a = new Date(ts);
       var day = a.getDate();
@@ -832,7 +681,7 @@ require('../../php_function.php');
 <div class="modal" id="substituteModal">
   <div class="modal-dialog modal-md">
     <form class="form-horizontal" id="modalFormSub">
-      <div class="modal-content bg-secondary text-white">
+      <div class="modal-content">
 
         <!-- Modal Header -->
         <div class="modal-header">

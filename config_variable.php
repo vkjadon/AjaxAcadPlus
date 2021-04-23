@@ -46,6 +46,12 @@ if (isset($mySes)) {
   $tn_rs = 'registration_subject'.$mySes;
   check_tn_rs($conn, $tn_rs);
 
+  $tn_sas = 'student_attendance_setup' . $mySes;
+  check_tn_sas($conn, $tn_sas);
+
+  $tn_sbt = 'subject_topic'.$mySes;
+  check_tn_sbt($conn, $tn_sbt);
+
   $tn_tlg = 'tl_group'.$mySes;
   check_tn_tlg($conn, $tn_tlg);
 
@@ -55,11 +61,6 @@ if (isset($mySes)) {
   $tn_tt = 'time_table'.$mySes;
   check_tn_tt($conn, $tn_tt);
 
-  $tn_sas = 'student_attendance_setup' . $mySes;
-  check_tn_sas($conn, $tn_sas);
-
-  $tn_sbt = 'subject_topic'.$mySes;
-  //check_tn_rs($conn, $tn_tl);
 } else {
   $tn_eac = 'ea_claim';
   $tn_rc = 'registration_class2021';

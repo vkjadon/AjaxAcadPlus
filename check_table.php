@@ -1,6 +1,32 @@
 <?php
 //echo "Check Tables";
-function check_tn_rs($conn, $table){
+function check_tn_sbt($conn, $table){
+  $sql="select * from $table";  
+  $result=$conn->query($sql);
+  if(!$result)
+  {
+    //echo "Table Missing $table";
+    $query=
+    'sbt_id INT(5) NOT NULL AUTO_INCREMENT,
+    subject_id INT(5) NULL,
+    sbt_name TEXT NULL,
+    sbt_sno INT(2) NULL,
+    sbt_weight INT(2) NULL,
+    sbt_slot INT(2) NULL,
+    sbt_type INT(2) NULL,
+    sbt_syllabus INT(1) NULL,
+    update_ts timestamp,
+    update_id INT(5) NULL,
+    sbt_status INT(1) NULL,
+    PRIMARY KEY (sbt_id),
+    UNIQUE(subject_id, sbt_name)';
+    
+    $sql="CREATE TABLE $table ($query)";
+    $result=$conn->query($sql);
+    if(!$result)echo $conn->error;
+  }
+  //else echo "Table Exists";
+}function check_tn_rs($conn, $table){
   $sql="select * from $table";  
   $result=$conn->query($sql);
   if(!$result)
