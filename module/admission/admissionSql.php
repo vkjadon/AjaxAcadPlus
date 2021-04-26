@@ -176,12 +176,24 @@ if (isset($_POST['action'])) {
   }
   echo '</table></table>';
  } elseif ($_POST['action'] == 'updateStudentList') {
-  $fields = array("student_name", "student_rollno", "batch_id", "program_id");
-  $header = array("Name", "Roll Number", "Batch", "Program");
   $sql = "select * from student where program_id='$myProg' and batch_id='$myBatch'";
-  $statusDecode = array("status" => "student_status", "0" => "Active", "1" => "Removed");
-  $dataType = array("0", "0", "0", "0");
-  $button = array("1", "1", "0", "1");
-  getList($conn, "student_id", $fields, $dataType, $header, $sql, $statusDecode, $button);
+  $result = $conn->query($sql);
+  $rows = mysqli_num_rows($result);
+  $i = 0;
+  while ($rowArray = $result->fetch_assoc()) {
+    $name[$i] = $rowArray["student_name"];
+    $roll[$i]= $rowArray["student_rollno"];
+    $batch[$i]= $rowArray["batch_id"];
+    $program[$i]= $rowArray["program_id"];
+    $i++;
+  }
+  echo '<table class="table table-striped list-table-xs mb-0">';
+  echo '<tr><th align="center">#</th><th></th><th>Student Name</th><th>Roll NUmber</th><th>Batch</th><th>Program</th></tr>';
+  for ($i = 0; $i < $rows; $i++) {
+   echo '<tr>';
+   echo '<td align="center">'.($i+1).'</td><td align="center"><input type="checkbox"></td><td>' . $name[$i] . '</td><td>' . $roll[$i] . '</td><td>' . $batch[$i] . '</td><td>' . $program[$i] . '</td>';
+   echo '</tr>';
+  }
+  echo '</table>';
  }
 }

@@ -902,12 +902,12 @@ require('../../php_function.php');
   }
 
   function changeBatchProgram() {
-    $.alert("In List Function");
+    // $.alert("In List Function");
    $.post("admissionSql.php", {
     action: "updateStudentList",
    }, function(mydata, mystatus) {
     $("#changeBatchProgram").show();
-    // $.alert("List qulai" + mydata);
+    // $.alert("List" + mydata);
     $("#changeBatchProgram").html(mydata);
    }, "text").fail(function() {
     $.alert("Error !!");

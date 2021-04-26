@@ -113,7 +113,7 @@ if (isset($_POST['action'])) {
     $student_id = $_POST['stdId'];
     $class_id = $_POST['classId'];
     //echo "Student - ".$student_id;
-    
+
     $sql = "select tl.tl_id, sb.* from $tn_tlg tlg, $tn_tl tl, subject sb where tlg.tlg_id=tl.tlg_id and tlg.subject_id=sb.subject_id and tlg.class_id='$class_id'";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
