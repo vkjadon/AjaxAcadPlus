@@ -22,7 +22,7 @@ require('../../php_function.php');
 
 <body>
   <?php require("../topBar.php"); ?>
-  <div class="container-fluid">
+  <div class="container-fluid moduleBody">
     <div class="row">
       <div class="col-2">
         <div class="card text-center selectPanel">

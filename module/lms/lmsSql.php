@@ -95,11 +95,11 @@ if (isset($_POST['action'])) {
     //echo "TL Id - $tlId";
     $tlgId = getField($conn, $tlId, $tn_tl, "tl_id", "tlg_id");
     $subject_id = getField($conn, $tlgId, $tn_tlg, "tlg_id", "subject_id");
-    $tlg_type = getField($conn, $tlgId, $tn_tlg, "tlg_id", "tlg_type");
     echo '<h6>Syllabus Topics</h6>';
     $sno = 1;
-    $sql = "select * from $tn_sbt where subject_id='$subject_id' and tlg_type='$tlg_type' and sbt_type='Syllabus' and sbt_status='0' order by sbt_sno";
+    $sql = "select * from $tn_sbt where subject_id='$subject_id' and sbt_status='0' order by sbt_type, sbt_sno";
     $result = $conn->query($sql);
+    if(!$result)echo $conn->error;
     echo '<table class="table list-table-xs mb-0">';
     echo '<tr><th>#</th><th>Id</th><th>Action</th><th width="50%">Topic</th><th>Wt</th><th>Slot(s)</th><th>Coverage</th></tr>';
     while ($rows = $result->fetch_assoc()) {
@@ -122,31 +122,6 @@ if (isset($_POST['action'])) {
         if($i>0)echo '<br>';
         echo getField($conn, $output[$i], $tn_sas, "sas_id", "sas_date"); ;
       }
-      echo '</td>';
-      echo '</tr>';
-    }
-    echo '</table>';
-    echo '<h6>Additional Topics</h6>';
-    $sno = 1;
-    $sql = "select * from $tn_sbt where subject_id='$subject_id' and tlg_type='$tlg_type' and sbt_type='Additional' and sbt_status='0' order by sbt_sno";
-    $result = $conn->query($sql);
-    echo '<table class="table list-table-xs mb-0">';
-    echo '<tr><th>#</th><th>Id</th><th>Action</th><th width="50%">Topic</th><th>Wt</th><th>Slot(s)</th><th>Coverage</th></tr>';
-    while ($rows = $result->fetch_assoc()) {
-      $sbtId = $rows["sbt_id"];
-      echo '<tr>';
-      echo '<td>' . $sno++ . '</td>';
-      echo '<td>[' . $rows["sbt_id"] . '] </td>';
-      echo '<td>';
-      if ($sno > 2) echo '<a href="#" class="btn btn-success btn-square-xs swapButton" data-sbtId="' . $sbtId . '" data-tlId="' . $tlId . '" data-swap="UP"><i class="fa fa-arrow-up"></i></a>';
-      if ($sno <= $result->num_rows) echo '<a href="#" class="btn btn-danger btn-square-xs swapButton" data-sbtId="' . $sbtId . '" data-tlId="' . $tlId . '" data-swap="DN"><i class="fa fa-arrow-down"></i></a>';
-      echo '<a href="#" class="btn btn-info btn-square-xs editButton" data-sbtId="' . $sbtId . '" data-tlId="' . $tlId . '"><i class="fa fa-edit"></i></a>';
-      echo '</td>';
-      echo '<td>' . $rows["sbt_name"] . '</td>';
-      echo '<td>' . $rows["sbt_weight"] . '</td>';
-      echo '<td>';
-      echo '</td>';
-      echo '<td>';
       echo '</td>';
       echo '</tr>';
     }
