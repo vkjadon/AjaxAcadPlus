@@ -406,6 +406,26 @@ require('../../php_function.php');
        <div class="col-8">
         <p id="changeBatchProgram"></p>
        </div>
+       <div class="col-4">
+        <div class="row">
+         <div class="card border-info mb-3" style="width:200px">
+          <div class="card-header">
+           Change Batch
+          </div>
+          <div class="card-body text-primary">
+          </div>
+         </div>
+        </div>
+        <div class="row">
+         <div class="card border-info mb-3" style="width:200px">
+          <div class="card-header">
+           Change Programme
+          </div>
+          <div class="card-body text-primary">
+          </div>
+         </div>
+        </div>
+       </div>
       </div>
      </div>
 
@@ -902,7 +922,7 @@ require('../../php_function.php');
   }
 
   function changeBatchProgram() {
-    // $.alert("In List Function");
+   // $.alert("In List Function");
    $.post("admissionSql.php", {
     action: "updateStudentList",
    }, function(mydata, mystatus) {
