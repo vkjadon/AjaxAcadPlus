@@ -178,25 +178,10 @@ if (isset($_POST['action'])) {
  } elseif ($_POST['action'] == 'updateStudentList') {
   $sql = "select * from student where program_id='$myProg' and batch_id='$myBatch'";
   $result = $conn->query($sql);
-  $rows = mysqli_num_rows($result);
-  $i = 0;
+  $json_array = array();
   while ($rowArray = $result->fetch_assoc()) {
-    $name[$i] = $rowArray["student_name"];
-    $roll[$i]= $rowArray["student_rollno"];
-    $batch[$i]= $rowArray["batch_id"];
-    $program[$i]= $rowArray["program_id"];
-    $i++;
+    $json_array[]=$rowArray;
   }
-  $sql = "SELECT * from batch where batch_id='$batch[$i]'";
-  $result = $conn->query($sql);
-  $batch_name = getFieldValue($conn, "batch_name", $sql);
-  echo '<table class="table table-striped list-table-xs mb-0">';
-  echo '<tr><th align="center">#</th><th></th><th>Student Name</th><th>Roll NUmber</th><th>Batch</th><th>Program</th></tr>';
-  for ($i = 0; $i < $rows; $i++) {
-   echo '<tr>';
-   echo '<td align="center">'.($i+1).'</td><td align="center"><input type="checkbox"></td><td>' . $name[$i] . '</td><td>' . $roll[$i] . '</td><td>' . $batch_name . '</td><td>' . $program[$i] . '</td>';
-   echo '</tr>';
-  }
-  echo '</table>';
+  echo json_encode($json_array);
  }
 }

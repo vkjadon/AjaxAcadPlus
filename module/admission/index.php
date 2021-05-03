@@ -405,6 +405,14 @@ require('../../php_function.php');
       <div class="row">
        <div class="col-8">
         <p id="changeBatchProgram"></p>
+        <table class="table table-bordered table-striped list-table-xs" id="studentProgramTable">
+          <tr>
+           <th>Name</th>
+           <th>Name</th>
+           <th>Name</th>
+           <th>Name</th>
+          </tr>
+        </table>
        </div>
        <div class="col-4">
         <div class="row">
@@ -545,6 +553,16 @@ require('../../php_function.php');
    $('#list-as').hide();
    $('#changeBatchProgram').show();
    changeBatchProgram();
+
+   // $.post("admissionSql.php", {
+   //  action: "updateStudentList",
+   // }, () => {}, "json").done(function(data) {
+   //  $.alert("List " + data.student_name);
+
+
+   // }, "text").fail(function() {
+   //  $.alert("fail in place of error");
+   // })
   });
 
   $(document).on('click', '.as', function() {
@@ -781,7 +799,6 @@ require('../../php_function.php');
   $(document).on('click', '.student_idE', function() {
    var id = $(this).attr('id');
    // $.alert("Id " + id);
-
    $.post("admissionSql.php", {
     action: "fetchStudent",
     studentId: id
@@ -923,11 +940,18 @@ require('../../php_function.php');
 
   function changeBatchProgram() {
    // $.alert("In List Function");
+   // $.post("admissionSql.php", {
+   //  action: "updateStudentList",
+   // }, () => {}, "json").done(function(data) {
+   //  $.alert("List " + data.student_name);
+   // }, "text").fail(function() {
+   //  $.alert("fail in place of error");
+   // })
    $.post("admissionSql.php", {
     action: "updateStudentList",
    }, function(mydata, mystatus) {
     $("#changeBatchProgram").show();
-    // $.alert("List" + mydata);
+    $.alert("List" + mydata);
     $("#changeBatchProgram").html(mydata);
    }, "text").fail(function() {
     $.alert("Error !!");
