@@ -404,32 +404,76 @@ require('../../php_function.php');
      <div class="tab-pane show active" id="list-cbp" role="tabpanel" aria-labelledby="list-cbp-list">
       <div class="row">
        <div class="col-8">
-        <p id="changeBatchProgram"></p>
         <table class="table table-bordered table-striped list-table-xs" id="studentProgramTable">
-          <tr>
-           <th>Name</th>
-           <th>Name</th>
-           <th>Name</th>
-           <th>Name</th>
-          </tr>
+         <tr>
+          <th><input type="checkbox" id="checkall" /></th>
+          <th>Name</th>
+          <th>Roll Number</th>
+          <th>Batch</th>
+          <th>Program</th>
+         </tr>
         </table>
        </div>
        <div class="col-4">
         <div class="row">
-         <div class="card border-info mb-3" style="width:200px">
+         <div class="card border-info mb-3" style="width:300px">
           <div class="card-header">
            Change Batch
           </div>
           <div class="card-body text-primary">
+           <form class="form-horizontal" id="changeBatch">
+            <div class="input-group">
+             <?php
+             $sql_batch = "select * from batch";
+             $result = $conn->query($sql_batch);
+             if ($result) {
+              echo '<select class="form-control form-control-sm" name="sel_batch" id="sel_batch" required>';
+              echo '<option selected disabled>Select Batch</option>';
+              while ($rows = $result->fetch_assoc()) {
+               $select_id = $rows['batch_id'];
+               $select_name = $rows['batch'];
+               echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+              }
+              echo '</select>';
+             } else echo $conn->error;
+             if ($result->num_rows == 0) echo 'No Data Found';
+             ?>
+             <div class="input-group-append">
+              <button class="btn btn-primary btn-sm m-0" type="submit">Submit</button>
+             </div>
+            </div>
+           </form>
           </div>
          </div>
         </div>
         <div class="row">
-         <div class="card border-info mb-3" style="width:200px">
+         <div class="card border-info mb-3" style="width:300px">
           <div class="card-header">
            Change Programme
           </div>
           <div class="card-body text-primary">
+           <form class="form-horizontal" id="changeProgram">
+            <div class="input-group">
+             <?php
+             $sql_program = "select * from program";
+             $result = $conn->query($sql_program);
+             if ($result) {
+              echo '<select class="form-control form-control-sm" name="sel_program" id="sel_program" required>';
+              echo '<option selected disabled>Select Program</option>';
+              while ($rows = $result->fetch_assoc()) {
+               $select_id = $rows['program_id'];
+               $select_name = $rows['sp_name'];
+               echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+              }
+              echo '</select>';
+             } else echo $conn->error;
+             if ($result->num_rows == 0) echo 'No Data Found';
+             ?>
+             <div class="input-group-append">
+              <button class="btn btn-primary btn-sm m-0" type="submit">Submit</button>
+             </div>
+            </div>
+           </form>
           </div>
          </div>
         </div>
@@ -477,6 +521,27 @@ require('../../php_function.php');
     $('#studentAutoList').fadeOut();
     $('#studentAutoList').html("");
    }
+  });
+
+  $(document).on('submit', '#changeBatch', function() {
+   event.preventDefault(this);
+   var batchId = $("#sel_batch").val()
+   var checkboxes_value = [];
+   $('.checkitem').each(function() {
+    if (this.checked) {
+     checkboxes_value.push($(this).val());
+    }
+   });
+   // $.alert("Change Batch Pressed " + checkboxes_value);
+   $.post("admissionSql.php", {
+     action: "changeBatch",
+     batchId: batchId,
+     checkboxes_value: checkboxes_value,
+   }, function(data, status) {
+     $.alert(data);
+   }, "text").fail(function() {
+     $.alert("Fail");
+   })
   });
 
   $(document).on('click', '.autoList', function() {
@@ -551,19 +616,30 @@ require('../../php_function.php');
    $('#list-cbp').show();
    $('#list-sr').hide();
    $('#list-as').hide();
-   $('#changeBatchProgram').show();
-   changeBatchProgram();
 
-   // $.post("admissionSql.php", {
-   //  action: "updateStudentList",
-   // }, () => {}, "json").done(function(data) {
-   //  $.alert("List " + data.student_name);
-
-
-   // }, "text").fail(function() {
-   //  $.alert("fail in place of error");
-   // })
+   $.post("admissionSql.php", {
+    action: "updateStudentList",
+   }, () => {}, "json").done(function(data) {
+    var student_data = '';
+    $.each(data, function(key, value) {
+     student_data += '<tr>';
+     student_data += '<td><input type="checkbox" class="checkitem" value="' + value.student_id + '"/></td>';
+     student_data += '<td>' + value.student_name + '</td>';
+     student_data += '<td>' + value.student_rollno + '</td>';
+     student_data += '<td>' + value.batch_id + '</td>';
+     student_data += '<td>' + value.program_id + '</td>';
+     student_data += '</tr>';
+    });
+    $("#studentProgramTable").append(student_data);
+   }, "json").fail(function() {
+    $.alert("fail in place of error");
+   })
   });
+
+  $("#checkall").change(function() {
+   $(".checkitem").prop("checked", $(this).prop("checked"))
+  })
+
 
   $(document).on('click', '.as', function() {
    $(".selectPanel").show();
@@ -932,27 +1008,6 @@ require('../../php_function.php');
     $("#studentProgramReport").show();
     // $.alert("List qulai" + mydata);
     $("#studentProgramReport").html(mydata);
-   }, "text").fail(function() {
-    $.alert("Error !!");
-   })
-
-  }
-
-  function changeBatchProgram() {
-   // $.alert("In List Function");
-   // $.post("admissionSql.php", {
-   //  action: "updateStudentList",
-   // }, () => {}, "json").done(function(data) {
-   //  $.alert("List " + data.student_name);
-   // }, "text").fail(function() {
-   //  $.alert("fail in place of error");
-   // })
-   $.post("admissionSql.php", {
-    action: "updateStudentList",
-   }, function(mydata, mystatus) {
-    $("#changeBatchProgram").show();
-    $.alert("List" + mydata);
-    $("#changeBatchProgram").html(mydata);
    }, "text").fail(function() {
     $.alert("Error !!");
    })
