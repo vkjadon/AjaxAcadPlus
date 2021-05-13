@@ -125,4 +125,35 @@ if ($_POST['action'] == 'add') {
     $json_array[] = $rowArray;
   }
   echo json_encode($json_array);
+} elseif ($_POST['action'] == 'setCurrentLeaveYear') {
+  $sql = "update leave_year set ly_status='A'";
+  $result = $conn->query($sql);
+  $id  = $_POST['id'];
+  $sql = "update leave_year set ly_status='C' where ly_id = '$id' ";
+  $result = $conn->query($sql);
+} elseif ($_POST['actionLeaveSetup'] == 'addLeaveSetup') {
+  $sel_month = $_POST['sel_month'];
+  $leaveType = $_POST['sql_lt'];
+  $leaveValue = $_POST['leaveValue'];
+  $lyIdHidden = $_POST['lyIdHidden'];
+  $sql = "insert into leave_setup (month, leave_typeid, ls_value, ly_id) values ('$sel_month', '$leaveType', '$leaveValue', '$lyIdHidden')";
+  $conn->query($sql);
+  echo $conn->error;
+} elseif ($_POST['action'] == 'leaveSetupList') {
+  $lt_id = $_POST['lt_id'];
+  $sql = "select ls.*, lt.leave_type from leave_setup ls, leave_type lt where lt.leave_typeid=ls.leave_typeid";
+  $result = $conn->query($sql);
+  $json_array = array();
+  while ($rowArray = $result->fetch_assoc()) {
+    $json_array[] = $rowArray;
+  }
+  echo json_encode($json_array);
+} elseif ($_POST['action'] == 'leaveDurationList') {
+  $sql = "select * from leave_duration";
+  $result = $conn->query($sql);
+  $json_array = array();
+  while ($rowArray = $result->fetch_assoc()) {
+    $json_array[] = $rowArray;
+  }
+  echo json_encode($json_array);
 }

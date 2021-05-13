@@ -12,6 +12,17 @@ require('../../php_function.php');
  <title>Admin Login : ClassConnect</title>
  <?php require("../css.php"); ?>
  <style>
+  #card_leave body {
+   background-color: #bcd9f5
+  }
+
+  #card_leave .card {
+   max-width: 25rem;
+   padding: 0;
+   border: none;
+   border-radius: 0.5rem
+  }
+
   #card_leave a.active {
    border-bottom: 2px solid #55c57a
   }
@@ -41,13 +52,27 @@ require('../../php_function.php');
    border: none
   }
 
-  #card_leave .btn {
+  #card_leave span {
+   margin-left: 0.5rem;
+   padding: 1px 10px;
    color: white;
-   float: right;
-   background-color: #228B22;
-
+   background-color: rgb(143, 143, 143);
+   border-radius: 4px;
+   font-weight: 600
   }
 
+  #card_leave .third {
+   padding: 0 1.5rem 0 1.5rem
+  }
+
+  #card_leave label {
+   font-weight: 500;
+   color: rgb(104, 104, 104)
+  }
+
+  #card_leave .btn-success {
+   float: right
+  }
 
   #card_leave .form-control:focus {
    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 7px rgba(0, 0, 0, 0.2)
@@ -64,6 +89,38 @@ require('../../php_function.php');
    list-style: none;
    margin-top: 1rem;
    padding-inline-start: 0
+  }
+
+  #card_leave .search {
+   padding: 0 1rem 0 1rem
+  }
+
+  #card_leave .ccontent li .wrapp {
+   padding: 0.3rem 1rem 0.001rem 1rem
+  }
+
+  #card_leave .ccontent li .wrapp div {
+   font-weight: 600
+  }
+
+  #card_leave .ccontent li .wrapp p {
+   font-weight: 360
+  }
+
+  #card_leave .ccontent li:hover {
+   background-color: rgb(117, 93, 255);
+   color: white
+  }
+
+  #card_leave .addinfo {
+   padding: 0 1rem
+  }
+
+  #card_leave .btn {
+   color: white;
+   float: right;
+   background-color: #228B22;
+
   }
  </style>
 
@@ -84,6 +141,7 @@ require('../../php_function.php');
      <a class="list-group-item list-group-item-action active ccfList" id="list-ccf-list" data-toggle="list" href="#list-ccf" role="tab" aria-controls="ccf">Compensatory Claim Form/Status</a>
      <a class="list-group-item list-group-item-action lt" id="list-lt-list" data-toggle="list" href="#list-lt" role="tab" aria-controls="lt">Leave Type</a>
      <a class="list-group-item list-group-item-action lc" id="list-lc-list" data-toggle="list" href="#list-lc" role="tab" aria-controls="lc">Leave Credit</a>
+     <a class="list-group-item list-group-item-action lf" id="list-lf-list" data-toggle="list" href="#list-lf" role="tab" aria-controls="lf">Leave Form</a>
 
      <?php
      if ($dept_head == '1') {
@@ -123,6 +181,9 @@ require('../../php_function.php');
           </li>
           <li class="nav-item">
            <a class="nav-link" id="pills_leaveYear" data-toggle="pill" href="#pills_year" role="tab" aria-controls="pills_year" aria-selected="false">Leave Year</a>
+          </li>
+          <li class="nav-item">
+           <a class="nav-link" id="pills_leaveDuration" data-toggle="pill" href="#pills_duration" role="tab" aria-controls="pills_duration" aria-selected="false">Leave Duration</a>
           </li>
          </ul> <!-- content -->
          <div class="tab-content" id="pills-tabContent p-3">
@@ -177,12 +238,14 @@ require('../../php_function.php');
             <div class="row">
              <div class="col-6">
               <div class="form-group">
-               <input type="date" class="form-control form-control-sm" id="leaveYearTo" name="leaveYearTo" placeholder="">
+               <label>FROM</label>
+               <input type="date" class="form-control form-control-sm" id="leaveYearFrom" name="leaveYearFrom" placeholder="">
               </div>
              </div>
              <div class="col-6">
               <div class="form-group">
-               <input type="date" class="form-control form-control-sm" id="leaveYearFrom" name="leaveYearFrom" placeholder="">
+               <label>TO</label>
+               <input type="date" class="form-control form-control-sm" id="leaveYearTo" name="leaveYearTo" placeholder="">
               </div>
              </div>
             </div>
@@ -190,13 +253,36 @@ require('../../php_function.php');
             <button type="submit" class="btn btn-sm">Submit</button>
            </form>
           </div>
+          <div class="tab-pane fade" id="pills_duration" role="tabpanel" aria-labelledby="pills_leaveDuration">
+           <div class="row">
+            <div class="col-4">
+             <div class="form-group">
+              <label>Short Leave</label>
+              <input class="form-control form-control-sm" type="text" placeholder="" />
+             </div>
+            </div>
+            <div class="col-4">
+             <div class="form-group">
+              <label>Half Day</label>
+              <input class="form-control form-control-sm" type="text" placeholder="" />
+             </div>
+            </div>
+            <div class="col-4">
+             <div class="form-group">
+              <label>Full Day</label>
+              <input class="form-control form-control-sm" type="text" placeholder="" />
+             </div>
+            </div>
+           </div>
+          </div>
          </div>
         </div>
        </div>
-       <div class="col-5">
+       <div class="col-7">
         <div class="container card shadow d-flex justify-content-center mt-2">
-         <table class="table table-bordered table-striped list-table-xs mt-3" id="leaveTypeTable">
+         <table class="table table-bordered table-striped list-table-sm mt-3" id="leaveTypeTable">
           <tr class="align-center">
+           <th><i class="fas fa-edit"></i></th>
            <th>Leave Type</th>
            <th>Maximum Leaves</th>
            <th>Minimum Leaves</th>
@@ -204,17 +290,145 @@ require('../../php_function.php');
           </tr>
          </table>
         </div>
-        <div class="container card shadow d-flex justify-content-center mt-2">
-         <table class="table table-bordered table-striped list-table-xs mt-3" id="leaveYearTable">
+        <div class="container card shadow d-flex justify-content-center mt-1">
+         <table class="table table-bordered table-striped list-table-sm mt-3" id="leaveYearTable">
           <tr class="align-center">
-           <th>To</th>
+           <th><i class="fas fa-edit"></i></th>
            <th>From</th>
+           <th>To</th>
+           <th>Set Current Year</th>
+          </tr>
+         </table>
+        </div>
+        <div class="container card shadow d-flex justify-content-center mt-0">
+         <table class="table table-bordered table-striped list-table-sm mt-3" id="leaveDurationTable">
+          <tr class="align-center">
+           <th>Leave</th>
+           <th>Hours</th>
           </tr>
          </table>
         </div>
        </div>
       </div>
 
+     </div>
+
+     <div class="tab-pane fade" id="list-lc" role="tabpanel" aria-labelledby="list-lc-list">
+      <div class="row">
+       <div class="col-5">
+        <div class="container card shadow d-flex justify-content-center mt-2" id="card_leave">
+         <!-- nav options -->
+         <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
+          <li class="nav-item">
+           <a class="nav-link active" id="pills_leaveType" data-toggle="pill" href="#pills_type" role="tab" aria-controls="pills_type" aria-selected="true">Leave Credit</a>
+          </li>
+         </ul> <!-- content -->
+         <div class="tab-content" id="pills-tabContent p-3">
+          <div class="tab-pane fade show active" id="pills_type" role="tabpanel" aria-labelledby="pills_leaveType">
+           <form class="form-horizontal" id="addLeaveSetup">
+            <div class="form-group">
+             <?php
+             $sql_ly = "select * from leave_year where ly_status='C'";
+             $result = $conn->query($sql_ly);
+             while ($rows = $result->fetch_assoc()) {
+              $from = $rows['ly_from'];
+              $to = $rows['ly_to'];
+              $ly_id = $rows['ly_id'];
+             }
+             $ly_from = date("d-m-Y", strtotime($from));
+             $ly_to = date("d-m-Y", strtotime($to));
+             // echo 'Leave Cycle : ' . $ly_from . ' to ' . $ly_to . '';
+             $month_from = date("F", strtotime($ly_from));
+             $month_fromN = date("m", strtotime($ly_from));
+             $month_fromN *= 1;
+             $month_to = date("F", strtotime($ly_to));
+             $year_to = date("Y", strtotime($ly_to));
+             $year_from = date("Y", strtotime($ly_from));
+             echo '<div class="row">';
+             echo '<div class="col-12">';
+             echo '<h6 class="mb-3" align="center">Leave Cycle : ' . $month_from . ' ' . $year_from . ' to ' . $month_to . ' ' . $year_to . '</h6>';
+             echo '</div></div>';
+             echo '<div class="row">';
+             echo '<div class="col-6">';
+             echo '<select class="form-control form-control-sm" name="sel_month" id="sel_month" required>';
+             echo '<option selected disabled>Select Month</option>';
+             $months = array(" ", "January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+             for ($i = 0; $i < 12; $i++) {
+              if ($month_fromN == 13) $month_fromN = 1;
+              // echo $months[$month_fromN];
+              echo '<option value="' . $month_fromN . '">' . $months[$month_fromN] . '</option>';
+              $month_fromN++;
+             }
+             echo '</select>';
+             echo '</div>';
+             ?>
+             <?php
+             $sql_lt = "select * from leave_type";
+             $result = $conn->query($sql_lt);
+             echo '<div class="col-6">';
+             if ($result) {
+              echo '<select class="form-control form-control-sm" name="sql_lt" id="sql_lt" required>';
+              echo '<option selected disabled>Select Leave Type</option>';
+              while ($rows = $result->fetch_assoc()) {
+               $select_id = $rows['leave_typeid'];
+               $select_name = $rows['leave_type'];
+               echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+              }
+              echo '</select>';
+              echo '</div></div>';
+             } else echo $conn->error;
+             if ($result->num_rows == 0) echo 'No Data Found';
+             ?>
+            </div>
+            <label>Add Value for leave</label>
+            <div class="input-group mb-3">
+             <input class="form-control form-control-sm" type="text" id="leaveValue" name="leaveValue" placeholder="" />
+             <div class="input-group-append">
+              <input type="hidden" id="actionLeaveSetup" name="actionLeaveSetup">
+              <input type="hidden" id="lyIdHidden" name="lyIdHidden" value="<?php echo $ly_id ?>">
+              <button class="btn btn-sm m-0 addLeaveSetup" type="submit">Submit</button>
+             </div>
+            </div>
+           </form>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="col-7">
+       </div>
+      </div>
+      <div class="row">
+       <div class="col-5">
+        <div class="container card shadow d-flex justify-content-center mt-2">
+         <table class="table table-bordered table-striped list-table-sm mt-3" id="leaveSetupTable">
+          <tr class="align-center">
+           <th><i class="fas fa-edit"></i></th>
+           <th>Leave Type</th>
+           <th>Month</th>
+           <th>Number of Leaves</th>
+          </tr>
+         </table>
+        </div>
+       </div>
+      </div>
+     </div>
+
+     <div class="tab-pane fade" id="list-lf" role="tabpanel" aria-labelledby="list-lf-list">
+      <div class="row">
+       <div class="col-5">
+        <div class="container card shadow d-flex justify-content-center mt-3">
+         <h2 class="card-header-title mt-2">Leave Balance</h2>
+         <table class="table table-bordered table-striped list-table-sm mt-2" id="leaveBalanceTable">
+          <tr class="align-center">
+           <th>Leave Type </th>
+           <th>Credit</th>
+           <th>Debit</th>
+           <th>Balance</th>
+          </tr>
+         </table>
+        </div>
+       </div>
+      </div>
      </div>
 
      <div class="tab-pane fade" id="list-lr" role="tabpanel" aria-labelledby="list-lr-list">
@@ -340,6 +554,7 @@ require('../../php_function.php');
    var leave_type = '';
    $.each(data, function(key, value) {
     leave_type += '<tr>';
+    leave_type += '<td><a href="#" class="fas fa-edit editLeaveType" data-leaveType="' + value.lt_id + '"></a></td>';
     leave_type += '<td>' + value.leave_type + '</td>';
     leave_type += '<td>' + value.leave_max + '</td>';
     leave_type += '<td>' + value.leave_min + '</td>';
@@ -357,8 +572,10 @@ require('../../php_function.php');
    var leave_year = '';
    $.each(data, function(key, value) {
     leave_year += '<tr>';
-    leave_year += '<td>' + value.ly_to + '</td>';
-    leave_year += '<td>' + value.ly_from + '</td>';
+    leave_year += '<td><a href="#" class="fas fa-edit editLeaveYear" data-leaveYear="' + value.ly_id + '"></a></td>';
+    leave_year += '<td>' + getFormattedDate(value.ly_from, "dmY") + '</td>';
+    leave_year += '<td>' + getFormattedDate(value.ly_to, "dmY") + '</td>';
+    leave_year += '<td><button type="button" class="btn btn-sm btn-primary currentLeaveYear" data-leaveYearButton="' + value.ly_id + '">Set Current</button></td>';
     leave_year += '</tr>';
    });
    $("#leaveYearTable").append(leave_year);
@@ -366,6 +583,39 @@ require('../../php_function.php');
    $.alert("fail in place of error");
   })
 
+  $.post("leaveSql.php", {
+   action: "leaveDurationList",
+  }, () => {}, "json").done(function(data) {
+   var leave_duration = '';
+   $.each(data, function(key, value) {
+    leave_duration += '<tr>'
+    leave_duration += '<td>' + value.ld_name + '</td>';
+    leave_duration += '<td>' +  value.ld_value + '</td>';
+    leave_duration += '</tr>';
+   });
+   $("#leaveDurationTable").append(leave_duration);
+  }, "json").fail(function() {
+   $.alert("fail in place of error");
+  })
+
+  var lt_id = $(this).attr("data-leaveType");
+  $.post("leaveSql.php", {
+   action: "leaveSetupList",
+   id: lt_id
+  }, () => {}, "json").done(function(data) {
+   var leave_setup = '';
+   $.each(data, function(key, value) {
+    leave_setup += '<tr>';
+    leave_setup += '<td><a href="#" class="fas fa-edit editLeaveSetup" data-leaveSetup="' + value.ls_id + '"></a></td>';
+    leave_setup += '<td>' + value.leave_type + '</td>';
+    leave_setup += '<td>' + GetMonthName(value.month) + '</td>';
+    leave_setup += '<td>' + value.ls_value + '</td>';
+    leave_setup += '</tr>';
+   });
+   $("#leaveSetupTable").append(leave_setup);
+  }, "json").fail(function() {
+   $.alert("fail in place of error");
+  })
 
 
   $(document).on('click', '.sr', function(event) {
@@ -377,13 +627,86 @@ require('../../php_function.php');
    else leaveList(lf, lt, deptId);
   });
 
+  $(document).on('click', '.lf', function(event) {
+   $('#list-lf').show();
+   $('#list-lt').hide();
+   $('#list-ccf').hide();
+   $('#list-lr').hide();
+   $('#leaveBalanceTable').show();
+  });
+
+
+
   $(document).on('click', '.ccfList', function() {
    ccfList();
+  });
+
+  $(document).on('click', '.currentLeaveYear', function() {
+   var id = $(this).attr("data-leaveYearButton");
+   $.alert('hello' + id);
+   $.post("leaveSql.php", {
+    id: id,
+    action: "setCurrentLeaveYear"
+   }, function(data) {}, "text").fail(function() {
+    $.alert("fail in place of error");
+   })
+  });
+
+  $(document).on('submit', '#leaveYearForm', function() {
+   event.preventDefault(this);
+   $.alert('hello');
+   $("#actionLeaveYear").val("addLeaveYear")
+   var formData = $(this).serialize();
+   $.alert("Form Submitted " + formData)
+   $.post("leaveSql.php", formData, function() {}, "text").done(function(data, success) {
+    $.alert(data)
+   })
+  });
+
+
+  $(document).on('submit', '#addLeaveSetup', function() {
+   event.preventDefault(this);
+   var sel_month = $('#sel_month').val()
+   var lt = $('#sql_lt').val()
+   $("#actionLeaveSetup").val("addLeaveSetup")
+   var formData = $(this).serialize();
+   $.alert("Form Submitted " + formData)
+   $.post("leaveSql.php", formData, function() {}, "text").done(function(data, success) {
+    $.alert(data)
+   })
   });
 
   $(document).on('click', '.lt', function() {
    $('#list-lt').show();
    $('#list-ccf').hide();
+   $('#leaveYearTable').hide();
+   $('#leaveDurationTable').hide();
+  });
+
+  $(document).on('click', '.lc', function() {
+   $('#list-lt').hide();
+   $('#list-lc').show();
+   $('#list-ccf').hide();
+   $('#leaveYearTable').hide();
+  });
+
+  $(document).on('click', '#pills_leaveType', function() {
+   $('#leaveYearTable').hide();
+   $('#leaveTypeTable').show();
+   $('#leaveDurationTable').hide();
+  });
+
+  $(document).on('click', '#pills_leaveYear', function() {
+   $('#leaveYearTable').show();
+   $('#leaveTypeTable').hide();
+   $('#leaveDurationTable').hide();
+  });
+
+  $(document).on('click', '#pills_leaveDuration', function() {
+   $('#leaveYearTable').hide();
+   $('#leaveTypeTable').hide();
+   $('#leaveDurationTable').show();
+
   });
 
   $(document).on('click', '.ccfApprove', function() {
@@ -394,7 +717,7 @@ require('../../php_function.php');
   $(document).on('submit', '#leaveYearForm', function() {
    event.preventDefault(this);
    $.alert('hello');
-    $("#actionLeaveYear").val("addLeaveYear")
+   $("#actionLeaveYear").val("addLeaveYear")
    var formData = $(this).serialize();
    $.alert("Form Submitted " + formData)
    $.post("leaveSql.php", formData, function() {}, "text").done(function(data, success) {
@@ -678,6 +1001,11 @@ require('../../php_function.php');
    var dateYmd = year + '-' + month + '-' + day;
    if (fmt == "dmY") return date;
    else return dateYmd;
+  }
+
+  function GetMonthName(monthNumber) {
+   var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+   return months[monthNumber - 1];
   }
 
  });
