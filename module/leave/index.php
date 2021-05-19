@@ -380,6 +380,22 @@ require('../../php_function.php');
              if ($result->num_rows == 0) echo 'No Data Found';
              ?>
             </div>
+            <div class="row">
+             <div class="col-12">
+              <label>Gender</label>
+              <div class="form-group">
+               <div class="form-check-inline">
+                <input type="radio" class="form-check-input" checked id="lcMale" name="lcGender" value="lcMale">Male
+               </div>
+               <div class="form-check-inline">
+                <input type="radio" class="form-check-input" id="lcFemale" name="lcGender" value="F">Female
+               </div>
+               <div class="form-check-inline">
+                <input type="radio" class="form-check-input" id="lcBoth" name="lcGender" value="lcBoth">Both
+               </div>
+              </div>
+             </div>
+            </div>
             <label>Add Value for leave</label>
             <div class="input-group mb-3">
              <input class="form-control form-control-sm" type="text" id="leaveValue" name="leaveValue" placeholder="" />
@@ -416,7 +432,83 @@ require('../../php_function.php');
      <div class="tab-pane fade" id="list-lf" role="tabpanel" aria-labelledby="list-lf-list">
       <div class="row">
        <div class="col-5">
-        <div class="container card shadow d-flex justify-content-center mt-3">
+        <div class="container card shadow d-flex justify-content-center mt-2" id="card_leave">
+         <!-- nav options -->
+         <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
+          <li class="nav-item">
+           <a class="nav-link active" id="pills_leaveForm" data-toggle="pill" href="#pills_form" role="tab" aria-controls="pills_form" aria-selected="true">Leave Form</a>
+          </li>
+         </ul> <!-- content -->
+         <div class="tab-content" id="pills-tabContent p-3">
+          <div class="tab-pane fade show active" id="pills_form" role="tabpanel" aria-labelledby="pills_leaveForm">
+           <form class="form-horizontal" id="leaveStaffForm">
+            <div class="row">
+             <div class="col-6">
+              <div class="form-group">
+               <label>FROM DATE </label>
+               <input type="date" class="form-control form-control-sm" id="leaveYearFrom" name="leaveYearFrom" placeholder="">
+              </div>
+             </div>
+             <div class="col-6">
+              <div class="form-group">
+               <label>TO DATE</label>
+               <input type="date" class="form-control form-control-sm" id="leaveYearTo" name="leaveYearTo" placeholder="">
+              </div>
+             </div>
+            </div>
+            <div class="row">
+             <div class="col-6">
+              <div class="form-group">
+               <label>FROM TIME</label>
+               <input type="time" class="form-control form-control-sm" id="leaveYearFrom" name="leaveYearFrom" placeholder="">
+              </div>
+             </div>
+             <div class="col-6">
+              <div class="form-group">
+               <label>TO TIME</label>
+               <input type="time" class="form-control form-control-sm" id="leaveYearTo" name="leaveYearTo" placeholder="">
+              </div>
+             </div>
+            </div>
+            <div class="row">
+             <div class="col-12">
+              <div class="form-group">
+               <label>Leave Type</label>
+               <?php
+               $sql_lt = "select * from leave_type";
+               $result = $conn->query($sql_lt);
+               if ($result) {
+                echo '<select class="form-control form-control-sm" name="sql_lt" id="sql_lt" required>';
+                echo '<option selected disabled>Select Leave Type</option>';
+                while ($rows = $result->fetch_assoc()) {
+                 $select_id = $rows['leave_typeid'];
+                 $select_name = $rows['leave_type'];
+                 echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+                }
+                echo '</select>';
+               } else echo $conn->error;
+               if ($result->num_rows == 0) echo 'No Data Found';
+               ?>
+              </div>
+             </div>
+            </div>
+            <div class="row">
+             <div class="col-12">
+              <div class="form-group">
+               <label>Reason</label>
+               <textarea class="form-control" id="" rows="3"></textarea>
+              </div>
+             </div>
+            </div>
+            <input type="hidden" id="actionLeaveForm" name="actionLeaveForm">
+            <button type="submit" class="btn btn-sm">Submit</button>
+           </form>
+          </div>
+         </div>
+        </div>
+       </div>
+       <div class="col-7">
+        <div class="container card shadow d-flex justify-content-center mt-2">
          <h2 class="card-header-title mt-2">Leave Balance</h2>
          <table class="table table-bordered table-striped list-table-sm mt-2" id="leaveBalanceTable">
           <tr class="align-center">
@@ -424,6 +516,27 @@ require('../../php_function.php');
            <th>Credit</th>
            <th>Debit</th>
            <th>Balance</th>
+          </tr>
+         </table>
+        </div>
+       </div>
+      </div>
+      <div class="row">
+       <div class="col-12">
+        <div class="container card shadow d-flex justify-content-center mt-2 ml-0">
+         <h2 class="card-header-title mt-2">Leave Application Status</h2>
+         <table class="table table-bordered table-striped list-table-sm mt-2" id="leaveBalanceTable">
+          <tr class="align-center">
+           <th>ID</th>
+           <th>FROM</th>
+           <th>TO</th>
+           <th>LD</th>
+           <th>Leave Type</th>
+           <th>Apply Date</th>
+           <th>Apply Time</th>
+           <th>Load Status</th>
+           <th>Approval Status</th>
+           <th>Action</th>
           </tr>
          </table>
         </div>
@@ -590,7 +703,7 @@ require('../../php_function.php');
    $.each(data, function(key, value) {
     leave_duration += '<tr>'
     leave_duration += '<td>' + value.ld_name + '</td>';
-    leave_duration += '<td>' +  value.ld_value + '</td>';
+    leave_duration += '<td>' + value.ld_value + '</td>';
     leave_duration += '</tr>';
    });
    $("#leaveDurationTable").append(leave_duration);
@@ -627,18 +740,33 @@ require('../../php_function.php');
    else leaveList(lf, lt, deptId);
   });
 
-  $(document).on('click', '.lf', function(event) {
-   $('#list-lf').show();
+  $(document).on('click', '.ccfList', function() {
    $('#list-lt').hide();
-   $('#list-ccf').hide();
-   $('#list-lr').hide();
-   $('#leaveBalanceTable').show();
+   $('#list-ccf').show();
+   $('#list-lf').hide();
+   $('#list-lc').hide();
+   ccfList();
   });
 
+  $(document).on('click', '.lt', function() {
+   $('#list-lt').show();
+   $('#list-ccf').hide();
+   $('#list-lf').hide();
+   $('#list-lc').hide();
+  });
 
+  $(document).on('click', '.lc', function() {
+   $('#list-lt').hide();
+   $('#list-lc').show();
+   $('#list-ccf').hide();
+   $('#list-lf').hide();
+  });
 
-  $(document).on('click', '.ccfList', function() {
-   ccfList();
+  $(document).on('click', '.lf', function(event) {
+   $('#list-lt').hide();
+   $('#list-lc').hide();
+   $('#list-ccf').hide();
+   $('#list-lf').show();
   });
 
   $(document).on('click', '.currentLeaveYear', function() {
@@ -663,6 +791,17 @@ require('../../php_function.php');
    })
   });
 
+  $(document).on('submit', '#leaveStaffForm', function() {
+   event.preventDefault(this);
+   $.alert('hello');
+   $("#actionLeaveForm").val("addStaffLeave")
+   var formData = $(this).serialize();
+   $.alert("Form Submitted " + formData)
+   $.post("leaveSql.php", formData, function() {}, "text").done(function(data, success) {
+    $.alert(data)
+   })
+  });
+
 
   $(document).on('submit', '#addLeaveSetup', function() {
    event.preventDefault(this);
@@ -676,19 +815,7 @@ require('../../php_function.php');
    })
   });
 
-  $(document).on('click', '.lt', function() {
-   $('#list-lt').show();
-   $('#list-ccf').hide();
-   $('#leaveYearTable').hide();
-   $('#leaveDurationTable').hide();
-  });
 
-  $(document).on('click', '.lc', function() {
-   $('#list-lt').hide();
-   $('#list-lc').show();
-   $('#list-ccf').hide();
-   $('#leaveYearTable').hide();
-  });
 
   $(document).on('click', '#pills_leaveType', function() {
    $('#leaveYearTable').hide();
@@ -714,18 +841,6 @@ require('../../php_function.php');
    ccfApproverPendingList();
   });
 
-  $(document).on('submit', '#leaveYearForm', function() {
-   event.preventDefault(this);
-   $.alert('hello');
-   $("#actionLeaveYear").val("addLeaveYear")
-   var formData = $(this).serialize();
-   $.alert("Form Submitted " + formData)
-   $.post("leaveSql.php", formData, function() {}, "text").done(function(data, success) {
-    $.alert(data)
-   })
-  });
-
-
   $(document).on('submit', '#modalForm', function(event) {
    event.preventDefault(this);
    var formData = $(this).serialize();
@@ -740,7 +855,6 @@ require('../../php_function.php');
     $.alert("fail in place of error");
    })
   });
-
 
   $(document).on('click', '.lccf_idP', function() {
 
@@ -868,7 +982,6 @@ require('../../php_function.php');
     }
    });
   });
-
 
   $(document).on('click', '.lccf_idE', function() {
    $('#ccform').hide();
