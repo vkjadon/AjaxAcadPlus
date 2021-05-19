@@ -142,17 +142,17 @@ if ($_POST['action'] == 'add') {
   $conn->query($sql);
   echo $conn->error;
 } elseif ($_POST['actionLeaveForm'] == 'addStaffLeave') {
-  $sel_month = $_POST['sel_month'];
-  $leaveType = $_POST['sql_lt'];
-  $leaveGender = $_POST['lcGender'];
-  // if($leaveGender=='B') $
-  $leaveValue = $_POST['leaveValue'];
-  $lyIdHidden = $_POST['lyIdHidden'];
-  $sql = "insert into leave_setup (ls_month, leave_typeid, ls_value, ly_id, ls_gender) values ('$sel_month', '$leaveType', '$leaveValue', '$lyIdHidden', '$leaveGender')";
+  $leaveFromDate = $_POST['leaveFromDate'];
+  $leaveToDate = $_POST['leaveToDate'];
+  $leaveToTime = $_POST['leaveToTime'];
+  $leaveFromTime = $_POST['leaveFromTime'];
+  $leaveTypeStaff = $_POST['leaveTypeStaff'];
+  $leaveReason = $_POST['leaveReason'];
+  $submitDate = date("Y-m-d");
+  $sql = "insert into leave_ledger (leave_from, leave_to, leave_timeFrom, leave_timeTo, leave_typeid, leave_reason, staff_id, submit_date) values ('$leaveFromDate', '$leaveToDate', '$leaveToTime', '$leaveFromTime', '$leaveTypeStaff', '$leaveReason', '$myId' ,'$submitDate')";
   $conn->query($sql);
   echo $conn->error;
-}
- elseif ($_POST['action'] == 'leaveSetupList') {
+} elseif ($_POST['action'] == 'leaveSetupList') {
   $lt_id = $_POST['lt_id'];
   $sql = "select ls.*, lt.leave_type from leave_setup ls, leave_type lt where lt.leave_typeid=ls.leave_typeid";
   $result = $conn->query($sql);

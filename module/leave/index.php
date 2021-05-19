@@ -446,13 +446,13 @@ require('../../php_function.php');
              <div class="col-6">
               <div class="form-group">
                <label>FROM DATE </label>
-               <input type="date" class="form-control form-control-sm" id="leaveYearFrom" name="leaveYearFrom" placeholder="">
+               <input type="date" class="form-control form-control-sm" id="leaveFromDate" name="leaveFromDate" placeholder="">
               </div>
              </div>
              <div class="col-6">
               <div class="form-group">
                <label>TO DATE</label>
-               <input type="date" class="form-control form-control-sm" id="leaveYearTo" name="leaveYearTo" placeholder="">
+               <input type="date" class="form-control form-control-sm" id="leaveToDate" name="leaveToDate" placeholder="">
               </div>
              </div>
             </div>
@@ -460,13 +460,13 @@ require('../../php_function.php');
              <div class="col-6">
               <div class="form-group">
                <label>FROM TIME</label>
-               <input type="time" class="form-control form-control-sm" id="leaveYearFrom" name="leaveYearFrom" placeholder="">
+               <input type="time" class="form-control form-control-sm" id="leaveFromTime" name="leaveFromTime" placeholder="">
               </div>
              </div>
              <div class="col-6">
               <div class="form-group">
                <label>TO TIME</label>
-               <input type="time" class="form-control form-control-sm" id="leaveYearTo" name="leaveYearTo" placeholder="">
+               <input type="time" class="form-control form-control-sm" id="leaveToTime" name="leaveToTime" placeholder="">
               </div>
              </div>
             </div>
@@ -478,7 +478,7 @@ require('../../php_function.php');
                $sql_lt = "select * from leave_type";
                $result = $conn->query($sql_lt);
                if ($result) {
-                echo '<select class="form-control form-control-sm" name="sql_lt" id="sql_lt" required>';
+                echo '<select class="form-control form-control-sm" name="leaveTypeStaff" id="leaveTypeStaff" required>';
                 echo '<option selected disabled>Select Leave Type</option>';
                 while ($rows = $result->fetch_assoc()) {
                  $select_id = $rows['leave_typeid'];
@@ -496,7 +496,7 @@ require('../../php_function.php');
              <div class="col-12">
               <div class="form-group">
                <label>Reason</label>
-               <textarea class="form-control" id="" rows="3"></textarea>
+               <textarea class="form-control" id="leaveReason" name="leaveReason" rows="3"></textarea>
               </div>
              </div>
             </div>
@@ -661,6 +661,7 @@ require('../../php_function.php');
   ccfList();
   $('#action').val("add");
 
+  // Leave Type table
   $.post("leaveSql.php", {
    action: "leaveTypeList",
   }, () => {}, "json").done(function(data) {
@@ -679,6 +680,7 @@ require('../../php_function.php');
    $.alert("fail in place of error");
   })
 
+ // Leave Year Table
   $.post("leaveSql.php", {
    action: "leaveYearList",
   }, () => {}, "json").done(function(data) {
@@ -695,7 +697,7 @@ require('../../php_function.php');
   }, "json").fail(function() {
    $.alert("fail in place of error");
   })
-
+  // Leave duration table
   $.post("leaveSql.php", {
    action: "leaveDurationList",
   }, () => {}, "json").done(function(data) {
@@ -711,6 +713,7 @@ require('../../php_function.php');
    $.alert("fail in place of error");
   })
 
+  // Leave Setup table
   var lt_id = $(this).attr("data-leaveType");
   $.post("leaveSql.php", {
    action: "leaveSetupList",

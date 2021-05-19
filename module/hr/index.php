@@ -246,10 +246,10 @@ require('../../php_function.php');
              <div class="row">
               <div class="col-5">
                <div class="form-check-inline">
-                <input type="radio" class="form-check-input staffForm" checked id="male" name="sGender" value="Male" data-tag="staff_gender">Male
+                <input type="radio" class="form-check-input staffForm" checked id="male" name="sGender" value="male" data-tag="staff_gender">Male
                </div>
                <div class="form-check-inline">
-                <input type="radio" class="form-check-input staffForm" id="female" name="female" value="sGender" data-tag="staff_gender">Female
+                <input type="radio" class="form-check-input staffForm" id="female" name="sGender" value="female" data-tag="staff_gender">Female
                </div>
               </div>
               <div class="col-7">
