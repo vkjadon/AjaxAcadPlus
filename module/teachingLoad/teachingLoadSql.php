@@ -51,6 +51,52 @@ if (isset($_POST['action'])) {
     $status = 'class_status';
     $dup_alert = " Class Name, Section Alreday Exists for this Session !! ";
     updateUniqueData($conn, 'class', $fields, $values, $dup_alert);
+  } elseif ($_POST['action'] == 'clSub') {
+    $classId = $_POST['classId'];
+
+    $session_id = getField($conn, $classId, "class", "class_id", "session_id");
+    $batch_id = getField($conn, $classId, "class", "class_id", "batch_id");
+    $class_semester = getField($conn, $classId, "class", "class_id", "class_semester");
+    $program_id = getField($conn, $classId, "class", "class_id", "program_id");
+
+    //echo "Cl $classId -B $batch_id -Sem $class_semester -P $program_id $tn_tlg";
+
+    $sql = "select * from subject where program_id='$program_id' and batch_id='$batch_id' and subject_semester='$class_semester'";
+    $result = $conn->query($sql);
+    $i=1;
+    echo '<button class="btn btn-secondary btn-square-sm checkAll">Check All</button>';
+    echo '<button class="btn btn-danger btn-square-sm uncheckAll">UnCheck All</button>';
+    echo '<table class="table list-table-xs">';
+    echo '<tr><th></th><th>#</th><th>Code</th><th>Name</th><th>L-T-P</th><th>LG</th><th>TG</th><th>PG</th></tr>';
+    while ($rows = $result->fetch_assoc()) {
+
+      $subject_id = $rows['subject_id'];
+      $L = $rows['subject_lecture'];
+      $T = $rows['subject_tutorial'];
+      $P = $rows['subject_practical'];
+
+      echo '<tr>';
+      echo '<td><input type="checkbox" class="scb" id="sub' . $rows['subject_id'] . '"></td>';
+      echo '<td>' . $i++. '</td>';
+      echo '<td>' . $rows['subject_code'] . '</td>';
+      echo '<td>' . $rows['subject_name'] . '</td>';
+      echo '<td>' . $L . '-' . $T . '-' . $P . '</td>';
+
+      echo '<td>';
+      if ($L > 0) tlg($conn, $tn_tlg, $subject_id, $classId, "L");
+      echo '</td>';
+
+      echo '<td>';
+      if ($T > 0) tlg($conn, $tn_tlg, $subject_id, $classId, "T");
+      echo '</td>';
+
+      echo '<td>';
+      if ($P > 0) tlg($conn, $tn_tlg, $subject_id, $classId, "P");
+      echo '</td>';
+
+      echo '</tr>';
+    }
+    echo '</table>';
   } elseif ($_POST['action'] == 'increDecre') {
     $value = $_POST['value'];
     $id = $_POST['id'];
