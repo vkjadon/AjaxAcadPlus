@@ -1,5 +1,4 @@
 
-<link rel="stylesheet" href="../../style.css">
 <?php
 // echo "My School in SetDefault $myScl";
 $myName = getField($conn, $myId, "staff", "staff_id", "staff_name");
@@ -86,7 +85,8 @@ if (!isset($myBatch)) $myBatch = '';
 						<div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
 							<div class="row bg-one">
 								<div class="col-6">
-									<a href="<?php echo $codePath . '/module/aa/'; ?>" class="dropdown-item p-1">Setting </a>
+									<a href="<?php echo $codePath . '/module/aa/'; ?>" class="dropdown-item p-1">Academic Settings </a>
+									<a href="<?php echo $codePath . '/module/subject/'; ?>" class="dropdown-item p-1">Manage Subjects </a>
 									<a href="<?php echo $codePath . '/module/teachingLoad/'; ?>" class="dropdown-item p-1">Teaching Load</a>
 									<a href="<?php echo $codePath . '/module/schedule/'; ?>" class="dropdown-item p-1">Schedule</a>
 								</div>
