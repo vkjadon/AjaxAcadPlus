@@ -161,14 +161,14 @@ require('../../php_function.php');
                 <div class="row">
                  <div class="col-6">
                   <div class="form-group">
-                  <p class="text m-0">Institution Status</p>
-                    <input type="text" id="instStatus" class="form-control instForm" data-tag="inst_status">
+                   <p class="text m-0">Institution Status</p>
+                   <input type="text" id="instStatus" class="form-control instForm" data-tag="inst_status">
                   </div>
                  </div>
                  <div class="col-6">
                   <div class="form-group">
-                  <p class="text m-0">Type of University</p>
-                    <input type="text" id="instType" class="form-control instForm" data-tag="inst_type">
+                   <p class="text m-0">Type of University</p>
+                   <input type="text" id="instType" class="form-control instForm" data-tag="inst_type">
                   </div>
                  </div>
                 </div>
@@ -176,8 +176,8 @@ require('../../php_function.php');
                 <div class="row">
                  <div class="col-6">
                   <div class="form-group">
-                  <p class="text m-0">Establishment Date of the University</p>
-                    <input type="date" id="instEstDateUni" class="form-control instForm" data-tag="inst_est_date_uni">
+                   <p class="text m-0">Establishment Date of the University</p>
+                   <input type="date" id="instEstDateUni" class="form-control instForm" data-tag="inst_est_date_uni">
                   </div>
                  </div>
                  <div class="col-6">

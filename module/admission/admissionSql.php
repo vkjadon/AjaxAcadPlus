@@ -176,12 +176,12 @@ if (isset($_POST['action'])) {
   }
   echo '</table></table>';
  } elseif ($_POST['action'] == 'updateStudentList') {
-  $fields = array("student_name", "student_rollno", "batch_id", "program_id");
-  $header = array("Name", "Roll Number", "Batch", "Program");
   $sql = "select * from student where program_id='$myProg' and batch_id='$myBatch'";
-  $statusDecode = array("status" => "student_status", "0" => "Active", "1" => "Removed");
-  $dataType = array("0", "0", "0", "0");
-  $button = array("1", "1", "0", "1");
-  getList($conn, "student_id", $fields, $dataType, $header, $sql, $statusDecode, $button);
+  $result = $conn->query($sql);
+  $json_array = array();
+  while ($rowArray = $result->fetch_assoc()) {
+    $json_array[]=$rowArray;
+  }
+  echo json_encode($json_array);
  }
 }
