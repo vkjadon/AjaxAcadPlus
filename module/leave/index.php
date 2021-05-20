@@ -525,7 +525,7 @@ require('../../php_function.php');
        <div class="col-12">
         <div class="container card shadow d-flex justify-content-center mt-2 ml-0">
          <h2 class="card-header-title mt-2">Leave Application Status</h2>
-         <table class="table table-bordered table-striped list-table-sm mt-2" id="leaveBalanceTable">
+         <table class="table table-bordered table-striped list-table-sm mt-2" id="leaveApplicationTable">
           <tr class="align-center">
            <th>ID</th>
            <th>FROM</th>
@@ -724,7 +724,7 @@ require('../../php_function.php');
     leave_setup += '<tr>';
     leave_setup += '<td><a href="#" class="fas fa-edit editLeaveSetup" data-leaveSetup="' + value.ls_id + '"></a></td>';
     leave_setup += '<td>' + value.leave_type + '</td>';
-    leave_setup += '<td>' + GetMonthName(value.month) + '</td>';
+    leave_setup += '<td>' + GetMonthName(value.ls_month) + '</td>';
     leave_setup += '<td>' + value.ls_value + '</td>';
     leave_setup += '</tr>';
    });
@@ -733,6 +733,22 @@ require('../../php_function.php');
    $.alert("fail in place of error");
   })
 
+ //Leave Application Status Table
+ $.post("leaveSql.php", {
+   action: "leaveApplicationList",
+  }, () => {}, "json").done(function(data) {
+   var leave_application = '';
+   $.each(data, function(key, value) {
+    leave_application += '<tr>';
+    leave_application += '<td>' + value.ll_id + '</td>';
+    leave_application += '<td>' + getFormattedDate(value.leave_from, "dmY") + '</td>';
+    leave_application += '<td>' + getFormattedDate(value.leave_to, "dmY") + '</td>';
+    leave_application += '</tr>';
+   });
+   $("#leaveApplicationTable").append(leave_application);
+  }, "json").fail(function() {
+   $.alert("fail in place of error");
+  })
 
   $(document).on('click', '.sr', function(event) {
    var lf = $("#leave_from").val();

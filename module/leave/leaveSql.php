@@ -169,4 +169,11 @@ if ($_POST['action'] == 'add') {
     $json_array[] = $rowArray;
   }
   echo json_encode($json_array);
+} elseif ($_POST['action'] == 'leaveApplicationList') {
+  $sql = "select ll.*, lt.leave_type from leave_ledger ll, leave_type lt where lt.leave_typeid=ll.leave_typeid";  $result = $conn->query($sql);
+  $json_array = array();
+  while ($rowArray = $result->fetch_assoc()) {
+    $json_array[] = $rowArray;
+  }
+  echo json_encode($json_array);
 }
