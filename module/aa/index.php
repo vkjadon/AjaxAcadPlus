@@ -22,9 +22,9 @@ require('../../php_function.php');
           <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
             <a class="list-group-item list-group-item-action active bs" id="list-bs-list" data-toggle="list" href="#list-bs" role="tab" aria-controls="bs"> Batch/Session </a>
             <a class="list-group-item list-group-item-action po" id="list-po-list" data-toggle="list" href="#list-po" role="tab" aria-controls="po"> Programme Outcome </a>
-            <a class="list-group-item list-group-item-action sub" id="list-sub-list" data-toggle="list" href="#list-sub" role="tab" aria-controls="sub"> Courses/Subjects </a>
+            <!-- <a class="list-group-item list-group-item-action sub" id="list-sub-list" data-toggle="list" href="#list-sub" role="tab" aria-controls="sub"> Courses/Subjects </a>
             <a class="list-group-item list-group-item-action co" id="list-co-list" data-toggle="list" href="#list-co" role="tab" aria-controls="co"> Course Outcome </a>
-            <a class="list-group-item list-group-item-action copo" id="list-copo-list" data-toggle="list" href="#list-copo" role="tab" aria-controls="copo"> CO-PO Map </a>
+            <a class="list-group-item list-group-item-action copo" id="list-copo-list" data-toggle="list" href="#list-copo" role="tab" aria-controls="copo"> CO-PO Map </a> -->
           </div>
         </div>
         <div class="col-10">
@@ -37,7 +37,7 @@ require('../../php_function.php');
                 </div>
                 <div class="col-6">
                   <button class="btn btn-secondary btn-sm addSessionButton">New Session</button>
-
+                  <input type="hidden" id="batchId" name="batchId">
                   <p id="batchSession"></p>
                 </div>
               </div>
@@ -50,7 +50,7 @@ require('../../php_function.php');
                   <div class="p-2" id="poShowList"></div>
                 </div>
                 <div class="col-sm-4 mt-2">
-                  <h5>PO Summary [Batch - <?php echo $myBatchName;?>]</h5>
+                  <h5>PO Summary [Batch - <?php echo $myBatchName; ?>]</h5>
                   <div id="poSummary"></div>
                 </div>
               </div>
@@ -144,7 +144,7 @@ require('../../php_function.php');
       var staff = $("#sel_staff").val();
       var action = $("#action").val();
       var batch = $("#newBatch").val();
-      var selBatch = $("#sel_batch").val();
+      var selBatch = $("#batchId").val();
       var selSubject = $("#sel_subject").val();
       var poc = $("#poCode").val();
       var poS = $("#poStatemnt").val();
@@ -203,7 +203,7 @@ require('../../php_function.php');
           } else if (action == "addCo" || action == "updateCo") {
             coList();
           } else if (action == "addSession" || action == "updateSession") {
-            batchSession(<?php echo $myBatch; ?>);
+            batchSession(selBatch);
           }
           $("#modalForm")[0].reset();
         }, "text").fail(function() {
@@ -309,8 +309,10 @@ require('../../php_function.php');
       $.alert("Disabled");
     });
     $(document).on('click', '.addSessionButton', function(event) {
+      var selBatch=$("#batchId").val();
       $.alert("New Session ");
-      $('#modal_title').text("Add Session [Batch " + <?php echo $myBatchName; ?> + "]");
+      $('#modal_title').text("Add Session" + selBatch);
+      $('#batchIdModal').val(selBatch);
       $('#action').val("addSession");
       $("#firstModal").modal('show');
       $(".batchForm").hide();
@@ -325,7 +327,7 @@ require('../../php_function.php');
       batchSession(id);
     });
     $(document).on('click', '.session_idE', function() {
-      var id = $(this).attr('id');
+      var id = $(this).attr('data-id');
       $.alert("Id " + id);
       $.post("aaSql.php", {
         action: "fetchSession",
@@ -559,6 +561,7 @@ require('../../php_function.php');
       }, function(data, status) {
         //$.alert("Data" + data)
         $("#batchSession").html(data);
+        $("#batchId").val(x);
       }, "text").fail(function() {
         $.alert("Error in BatchSession Function");
       })
@@ -753,153 +756,16 @@ require('../../php_function.php');
         </div> <!-- Modal Header Closed-->
         <!-- Modal body -->
         <div class="modal-body">
-          <div class="subjectForm">
-            <div class="row">
-              <div class="col-7">
-                <div class="form-group">
-                  Subject Name
-                  <input type="text" class="form-control form-control-sm" id="subject_name" name="subject_name" placeholder="Subject Name">
-                </div>
-              </div>
-              <div class="col-5">
-                <div class="form-group">
-                  Subject Code
-                  <input type="text" class="form-control form-control-sm" id="subject_code" name="subject_code" placeholder="Subject Code">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-3">
-                <div class="form-group">
-                  Semester
-                  <input type="number" class="form-control form-control-sm" id="subject_semester" name="subject_semester" placeholder="Semester">
-                </div>
-              </div>
-              <div class="col-3">
-                <div class="form-group">
-                  SNo
-                  <input type="number" class="form-control form-control-sm" id="subject_sno" name="subject_sno" placeholder="SNo">
-                </div>
-              </div>
-              <div class="col-3">
-                <div class="form-group">
-                  Internal
-                  <input type="text" class="form-control form-control-sm" id="subject_internal" name="subject_internal" placeholder="Internal">
-                </div>
-              </div>
-              <div class="col-3">
-                <div class="form-group">
-                  External
-                  <input type="text" class="form-control form-control-sm" id="subject_external" name="subject_external" placeholder="External">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-3">
-                <div class="form-group">
-                  Lecture
-                  <input type="number" class="form-control form-control-sm" id="subject_lecture" name="subject_lecture" placeholder="subject_lecture">
-                </div>
-              </div>
-              <div class="col-3">
-                <div class="form-group">
-                  Tutorial
-                  <input type="text" class="form-control form-control-sm" id="subject_tutorial" name="subject_tutorial" placeholder="subject_tutorial">
-                </div>
-              </div>
-              <div class="col-3">
-                <div class="form-group">
-                  Practical
-                  <input type="text" class="form-control form-control-sm" id="subject_practical" name="subject_practical" placeholder="subject_practical">
-                </div>
-              </div>
-              <div class="col-3">
-                <div class="form-group">
-                  Credit
-                  <input type="text" class="form-control form-control-sm" id="subject_credit" name="subject_credit" placeholder="Credit">
-                </div>
-              </div>
-
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col">
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" checked id="stDC" name="subject_type" value="DC">DC
-                </div>
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="stOC" name="subject_type" value="OC">OC
-                </div>
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="stDE" name="subject_type" value="DE">DE
-                </div>
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="stOE" name="subject_type" value="OE">OE
-                </div>
-              </div>
-              <div class="col">
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" checked id="smOff" name="subject_mode" value="Offline">Offline
-                </div>
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="smOn" name="subject_mode" value="Online">Online
-                </div>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col">
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" checked id="scTh" name="subject_category" value="Theory">Theory
-                </div>
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="scPr" name="subject_category" value="Practical">Practical
-                </div>
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="scPrj" name="subject_category" value="Project">Project
-                </div>
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="scFW" name="subject_category" value="FieldWork">Field Project
-                </div>
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="scTW" name="subject_category" value="ThesisWork">Thesis Work
-                </div>
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="scIn" name="subject_category" value="Internship">Internship
-                </div>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col">
-                <?php
-                $sql_staff = "select * from staff where staff_status='0' order by staff_name";
-                $result_staff = $conn->query($sql_staff);
-                if ($result_staff) {
-                  echo '<select class="form-control form-control-sm" name="sel_staff" id="sel_staff" required>';
-                  //echo '<option value="0">Select Coordinator</option>';
-                  while ($rows_staff = $result_staff->fetch_assoc()) {
-                    $select_id = $rows_staff['staff_id'];
-                    $select_name = $rows_staff['staff_name'];
-                    if ($abbri <> '') {
-                      $select_abbri = $rows_staff[$abbri];
-                      echo '<option value="' . $select_id . '">' . $select_name . '(' . $select_abbri . ')</option>';
-                    } else echo '<option value="' . $select_id . '">' . $select_name . '</option>';
-                  }
-                  //echo '<option value="ALL">ALL</option>';
-                  echo '</select>';
-                } else echo $conn->error;
-                if ($result_staff->num_rows == 0) echo 'No Data Found';
-                ?>
-              </div>
-            </div>
-          </div>
           <div class="batchForm">
             <div class="form-horizontal">
               <div class="form-group">
-                <label class="control-label col-sm-2" for="batch">Batch:</label>
-                <div class="col-sm-10">
-                  <input type="text" class="form-control form-control-sm" id="newBatch" name="newBatch" placeholder="Batch">
+                <div class="row">
+                  <div class="col-sm-4">
+                    Batch<input type="text" class="form-control form-control-sm" id="newBatch" name="newBatch" placeholder="Batch">
+                  </div>
+                  <div class="col-sm-4">
+                    Batch<input type="text" class="form-control form-control-sm" id="newBatch" name="newBatch" placeholder="Batch">
+                  </div>
                 </div>
               </div>
             </div>

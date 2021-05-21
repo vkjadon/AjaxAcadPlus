@@ -594,7 +594,10 @@ function get_schoolSession($conn, $ay_id)
   while ($rows = $result->fetch_assoc()) {
     $sub_array = array();
     $sub_array["id"] = $rows['session_id'];
+    $sub_array["ay_id"] = $rows['ay_id'];
     $sub_array["name"] = $rows['session_name'];
+    $sub_array["start"] = $rows['session_start'];
+    $sub_array["end"] = $rows['session_end'];
     $sub_array["school_id"] = $rows['school_id'];
     $data[] = $sub_array;
   }

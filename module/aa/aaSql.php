@@ -243,23 +243,29 @@ if (isset($_POST['action'])) {
       echo '<div class="card mb-1">';
       echo '<div class="card-body mb-0 pb-0">';
       echo '<div class="row">';
-      echo '<div class="col-sm-1">';
-      echo '<a href="#" class="float left session_idE" data-id="' . $array["data"][$i]["id"] . '"><i class="fa fa-edit"></i></a>';
-      echo '</div>';
       echo '<div class="col-sm-2">';
-      echo '[' . $array["data"][$i]["id"] . ']';
-      echo '</div>';
-      echo '<div class="col-sm-6">';
-      echo '<span class="cardBodyText">' . $array["data"][$i]["name"] . '</span>';
-      echo '</div>';
-      echo '<div class="col-sm-3">';
-      echo '<a href="#" class="float-right session_idD" data-id="' . $array["data"][$i]["id"] . '"><i class="fa fa-trash"></i></a>';
-      echo '</div>';
-      echo '</div>';
       $school_id = $array["data"][$i]["school_id"];
       $school_abbri = getField($conn, $school_id, "school", "school_id", "school_abbri");
-      echo '<div class="row">';
-      echo '<span class="atag">' . $school_abbri . '</span>';
+      echo '<span>' . $school_abbri . '</span>';
+      echo '<p>[' . $array["data"][$i]["id"] . '] ';
+      echo '<a href="#" class="session_idE" data-id="' . $array["data"][$i]["id"] . '"><i class="fa fa-edit"></i></a></p>';
+      echo '</div>';
+      $ay_id = $array["data"][$i]["ay_id"];
+      $batch = getField($conn, $ay_id, "batch", "batch_id", "batch");
+      $academic_year=$batch.'-'.($batch-1999);
+
+      echo '<div class="col-sm-4">';
+      echo '<span class="cardBodyText">AY ' . $academic_year . '</span>';
+      echo '<p class="cardBodyText">Start : ' . $array["data"][$i]["start"] . '</p>';
+      echo '</div>';
+      
+      echo '<div class="col-sm-4">';
+      echo '<span class="cardBodyText">' . $array["data"][$i]["name"] . '</span>';
+      echo '<p class="cardBodyText">End : ' . $array["data"][$i]["end"] . '</p>';
+      echo '</div>';
+      echo '<div class="col-sm-2">';
+      echo '<a href="#" class="float-right session_idD" data-id="' . $array["data"][$i]["id"] . '"><i class="fa fa-trash"></i></a>';
+      echo '</div>';
       echo '</div>';
       echo '</div></div>';
     }
@@ -267,7 +273,7 @@ if (isset($_POST['action'])) {
   } elseif ($_POST["action"] == "addSession") {
     //echo "Add Session";
     $fields = ['school_id', 'ay_id', 'session_name', 'session_start', 'session_end', 'session_remarks'];
-    $values = [$myScl, $myBatch, data_check($_POST['session_name']), data_check($_POST['session_start']), data_check($_POST['session_end']), data_check($_POST['session_remarks'])];
+    $values = [$myScl, $_POST['batchIdModal'], data_check($_POST['session_name']), data_check($_POST['session_start']), data_check($_POST['session_end']), data_check($_POST['session_remarks'])];
     $status = 'session_status';
     $dup = "select * from session where session_name='" . data_check($_POST["session_name"]) . "' and school_id='" . $myScl . "'  and ay_id='" . $myBatch . "'and $status='0'";
     $dup_alert = "Session Alreday Exists ! Please Change the Name";
