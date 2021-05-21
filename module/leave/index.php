@@ -688,6 +688,7 @@ require('../../php_function.php');
   }, "json").fail(function() {
    $.alert("fail in place of error");
   })
+  
   // Leave duration table
   $.post("leaveSql.php", {
    action: "leaveDurationList",

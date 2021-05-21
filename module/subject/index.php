@@ -20,40 +20,16 @@ require('../../php_function.php');
       <div class="row">
         <div class="col-sm-2">
           <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-            <a class="list-group-item list-group-item-action sub" id="list-sub-list" data-toggle="list" href="#list-sub" role="tab" aria-controls="sub"> Courses/Subjects </a>
+            <a class="list-group-item list-group-item-action show active sub" id="list-sub-list" data-toggle="list" href="#list-sub" role="tab" aria-controls="sub"> Courses/Subjects </a>
+            <a class="list-group-item list-group-item-action subReport" id="list-subReport-list" data-toggle="list" href="#list-subReport" role="tab" aria-controls="subReport"> Subject Report </a>
             <a class="list-group-item list-group-item-action co" id="list-co-list" data-toggle="list" href="#list-co" role="tab" aria-controls="co"> Course Outcome </a>
             <a class="list-group-item list-group-item-action copo" id="list-copo-list" data-toggle="list" href="#list-copo" role="tab" aria-controls="copo"> CO-PO Map </a>
           </div>
         </div>
         <div class="col-10">
           <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="list-bs" role="tabpanel" aria-labelledby="list-bs-list">
-              <div class="row">
-                <div class="col-sm-6">
-                  <button class="btn btn-secondary btn-sm addBatch">New Batch</button>
-                  <p style="text-align: center;" id="batchShowList"></p>
-                </div>
-                <div class="col-6">
-                  <button class="btn btn-secondary btn-sm addSessionButton">New Session</button>
 
-                  <p id="batchSession"></p>
-                </div>
-              </div>
-            </div>
-            <div class="tab-pane fade show" id="list-po" role="tabpanel" aria-labelledby="list-po-list">
-              <div class="row">
-                <div class="col-sm-8">
-                  <button class="btn btn-sm btn-secondary m-0 addPo">Add PO</button>
-                  <button class="btn btn-sm btn-primary uploadPo">Upload PO</button>
-                  <div class="p-2" id="poShowList"></div>
-                </div>
-                <div class="col-sm-4 mt-2">
-                  <h5>PO Summary [Batch - <?php echo $myBatchName;?>]</h5>
-                  <div id="poSummary"></div>
-                </div>
-              </div>
-            </div>
-            <div class="tab-pane fade" id="list-sub" role="tabpanel" aria-labelledby="list-sub-list">
+            <div class="tab-pane fade show active" id="list-sub" role="tabpanel" aria-labelledby="list-sub-list">
               <div class="row">
                 <div class="col-sm-8 p-0">
                   <button class="btn btn-sm btn-secondary addSubject">New Subject</button>
@@ -75,6 +51,30 @@ require('../../php_function.php');
                 </div>
               </div>
             </div>
+            <div class="tab-pane fade" id="list-subReport" role="tabpanel" aria-labelledby="list-subReport-list">
+
+              <div class="row">
+                <div class="col-sm-7">
+                  <h5>Subject List</h5>
+                  <table class="table table-striped table-bordered list-table-xs" id="subReport">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Subject Code</th>
+                        <th>Subject Name</th>
+                        <th>L-T-P</th>
+                        <th>Credit</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+                <div class="col-sm-5">
+                  <h5>Subject Summary</h5>
+                  <div id="subjectSummary"></div>
+                </div>
+              </div>
+            </div>
+
             <div class="tab-pane fade show" id="list-co" role="tabpanel" aria-labelledby="list-co-list">
               <div class="row">
                 <div class="col-sm-12">
@@ -88,7 +88,6 @@ require('../../php_function.php');
                 </div>
               </div>
             </div>
-
             <div class="tab-pane fade show" id="list-copo" role="tabpanel" aria-labelledby="list-copo-list">
               <div class="row">
                 <div class="col-sm-8">
@@ -113,27 +112,17 @@ require('../../php_function.php');
 
     $('[data-toggle="tooltip"]').tooltip();
     $(".topBarTitle").text("Academics");
-    batchList();
     coList();
+    subjectList();
+    subReport();
 
     $(document).on("change", "#sel_subject", function() {
       coList();
     });
     // Left Panel Block
-    $(document).on('click', '.bs', function() {
-      batchList();
-    });
-    $(document).on('click', '.po', function() {
-      $('#action').val("addPo");
-      poList();
-      poSummary();
-    });
     $(document).on('click', '.co', function() {
       $('#action').val("addCo");
       coList();
-    });
-    $(document).on('click', '.sub', function() {
-      subjectList();
     });
 
     $(document).on('submit', '#modalForm', function(event) {
@@ -190,7 +179,7 @@ require('../../php_function.php');
         var formData = $(this).serialize();
         $('#firstModal').modal('hide');
         //$.alert(" Pressed" + formData);
-        $.post("aaSql.php", formData, () => {}, "text").done(function(data) {
+        $.post("subjectSql.php", formData, () => {}, "text").done(function(data) {
           //$.alert("List " + data);
           if (action == "addSubject" || action == "updateSubject") {
             subjectList();
@@ -234,7 +223,7 @@ require('../../php_function.php');
     $(document).on('click', '.co_idE', function() {
       var id = $(this).attr('id');
       // $.alert("Id " + id);
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         action: "fetchCo",
         coId: id
       }, () => {}, "json").done(function(data) {
@@ -262,142 +251,11 @@ require('../../php_function.php');
       coList();
     });
 
-    // Manage Program Outcome
-    $(document).on('click', '.addPo', function() {
-      $('#modal_title').html("Add PO [<?php echo $myProgAbbri; ?> - <?php echo $myBatchName; ?>]");
-      $('#action').val("addPo");
-      $('#firstModal').modal('show');
-      $('.subjectForm').hide();
-      $('.batchForm').hide();
-      $('.poForm').show();
-      $('.coForm').hide();
-      $('.sessionForm').hide();
-      $('.selectPanel').show();
-      $("#modalForm")[0].reset();
-    });
-    $(document).on('click', '.po_idD', function() {
-      $.alert("Disabled");
-    });
-    $(document).on('click', '.po_idE', function() {
-      var id = $(this).attr('id');
-      $.alert("Id " + id);
-      $.post("aaSql.php", {
-        action: "fetchPo",
-        poId: id
-      }, () => {}, "json").done(function(data) {
-        //$.alert("List ");
-        $('#modal_title').text("Update PO [" + id + "]");
-        $("#poCode").val(data.po_code);
-        $("#poStatement").val(data.po_name);
-        $("#poSno").val(data.po_sno);
-        $("#action").val("updatePo");
-        $('#modalId').val(id);
-        $('#firstModal').modal('show');
-        $('.batchForm').hide();
-        $('.subjectForm').hide();
-        $('.poForm').show();
-        $('.coForm').hide();
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
-    // Manage Session
-    $(document).on('click', '.session_idD', function() {
-      $.alert("Disabled");
-    });
-    $(document).on('click', '.addSessionButton', function(event) {
-      $.alert("New Session ");
-      $('#modal_title').text("Add Session [Batch " + <?php echo $myBatchName; ?> + "]");
-      $('#action').val("addSession");
-      $("#firstModal").modal('show');
-      $(".batchForm").hide();
-      $(".poForm").hide();
-      $(".coForm").hide();
-      $(".subjectForm").hide();
-      $(".sessionForm").show();
-    });
-    $(document).on('click', '.batch_idSession', function() {
-      var id = $(this).attr('data-id');
-      //$.alert("Process Id " + id);
-      batchSession(id);
-    });
-    $(document).on('click', '.session_idE', function() {
-      var id = $(this).attr('id');
-      $.alert("Id " + id);
-      $.post("aaSql.php", {
-        action: "fetchSession",
-        sessionId: id
-      }, () => {}, "json").done(function(data) {
-        //$.alert("List " + data.batch);
-        $("#session_name").val(data.session_name);
-        $("#session_remarks").val(data.session_remarks);
-        $("#session_start").val(data.session_start);
-        $("#session_end").val(data.session_end);
-        $('#modal_title').text("Update Session [" + id + "]");
-        $('#action').val("updateSession");
-        $('#modalId').val(id);
-
-        $(".batchForm").hide();
-        $(".poForm").hide();
-        $(".coForm").hide();
-        $(".subjectForm").hide();
-        $(".sessionForm").show();
-
-        $('#submitModalForm').html("Submit");
-        $('#firstModal').modal().show;
-
-
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
-    // Manage Batch
-    $(document).on('click', '.addBatch', function() {
-      $('#modal_title').text("Add Batch");
-      $('#action').val("addBatch");
-      $('#firstModal').modal('show');
-      $('.subjectForm').hide();
-      $('.batchForm').show();
-      $('.poForm').hide();
-      $('.coForm').hide();
-      $('.sessionForm').hide();
-    });
-    $(document).on('click', '.batch_idD', function() {
-      $.alert("Disabled");
-    });
-    $(document).on('click', '.batch_idE', function() {
-      var id = $(this).attr('id');
-      //$.alert("Id " + id);
-      $.post("aaSql.php", {
-        action: "fetchBatch",
-        batchId: id
-      }, () => {}, "json").done(function(data) {
-        //$.alert("List " + data.batch);
-        $("#newBatch").val(data.batch);
-        $('#modal_title').text("Update Batch [" + id + "]");
-        $('#action').val("updateBatch");
-        $('#modalId').val(id);
-        $(".batchForm").show();
-        $(".poForm").hide();
-        $(".coForm").hide();
-        $(".subjectForm").hide();
-        $(".sessionForm").hide();
-        $('#submitModalForm').html("Submit");
-        $('#firstModal').modal().show;
-
-
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
     // Manage Subject
     $(document).on('click', '.subject_idD', function() {
       var id = $(this).attr("data-id");
       $.alert("Disabled " + id);
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         id: id,
         action: "deleteSubject"
       }, function(data, status) {
@@ -406,12 +264,11 @@ require('../../php_function.php');
       }, "text").fail(function() {
         $.alert("Error in BatchSession Function");
       })
-
     });
     $(document).on('click', '.subject_idR', function() {
       var id = $(this).attr("data-id");
       $.alert("Disabled " + id);
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         id: id,
         action: "resetSubject"
       }, function(data, status) {
@@ -424,7 +281,7 @@ require('../../php_function.php');
     $(document).on('click', '.subject_idE', function() {
       var id = $(this).attr("data-id");
       //$.alert("Id " + id);
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         action: "fetchSubject",
         subjectId: id
       }, () => {}, "json").done(function(data) {
@@ -477,13 +334,9 @@ require('../../php_function.php');
         }
 
         $('#firstModal').modal('show');
-        $('.batchForm').hide();
         $('.subjectForm').show();
-        $('.poForm').hide();
         $('.coForm').hide();
-        $('.sessionForm').hide();
 
-        //$("#ccform").html(mydata);
       }, "text").fail(function() {
         $.alert("fail in place of error");
       })
@@ -497,10 +350,7 @@ require('../../php_function.php');
         $('#batchIdModal').val(x);
         $('#action').val("addSubject");
         $('#firstModal').modal('show');
-        $('.batchForm').hide();
-        $('.poForm').hide();
         $('.coForm').hide();
-        $('.sessionForm').hide();
         $('.subjectForm').show();
       }
     });
@@ -509,7 +359,7 @@ require('../../php_function.php');
       var formData = $(this).serialize();
       $('#secondModal').modal("hide");
       $.alert(" Pressed" + formData);
-      $.post("aaSql.php", formData, () => {}, "text").done(function(data) {
+      $.post("subjectSql.php", formData, () => {}, "text").done(function(data) {
         //$.alert("List " + data);
         $("#modalSecondForm")[0].reset();
       }, "text").fail(function() {
@@ -535,7 +385,7 @@ require('../../php_function.php');
       var code = $(this).attr("data-code");
       var field = $(this).attr("data-field");
       $.alert("Disabled " + id);
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         id: id,
         code: code,
         field: field,
@@ -549,22 +399,32 @@ require('../../php_function.php');
 
     });
     // Functions
-    function batchSession(x) {
-      //$.alert("Batch " + x);
-      $.post("aaSql.php", {
-        action: "batchSession",
-        batchId: x
-      }, function(data, status) {
-        //$.alert("Data" + data)
-        $("#batchSession").html(data);
-      }, "text").fail(function() {
-        $.alert("Error in BatchSession Function");
+
+    function subReport() {
+      $.post("subjectSql.php", {
+        action: "subReport",
+      }, () => {}, "json").done(function(data) {
+        var table_row = '';
+        $.each(data, function(key, value) {
+          //$.alert(value.subject_name);
+          table_row += '<tr>';
+          table_row += '<td>' + value.subject_id + '</td>';
+          table_row += '<td>' + value.subject_code + '</td>';
+          table_row += '<td>' + value.subject_name + '</td>';
+          table_row += '<td>' + value.subject_lecture + '-' + value.subject_tutorial + '-' + value.subject_practical + '</td>';
+          table_row += '<td>' + value.subject_credit + '</td>';
+          table_row += '</tr>';
+        });
+        $("#subReport").append(table_row);
+
+      }).fail(function() {
+        $.alert("fail in place of error");
       })
     }
 
     function subjectList() {
       //$.alert(" Select a Batch X = " + x);
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         action: "subList"
       }, function(mydata, mystatus) {
         //$.alert("List " + mydata);
@@ -576,7 +436,7 @@ require('../../php_function.php');
     }
 
     function subjectSummary() {
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         action: "subjectSummary"
       }, () => {}, "text").done(function(result, status) {
         //$.alert(status+result);
@@ -586,46 +446,10 @@ require('../../php_function.php');
       })
     }
 
-    function batchList() {
-      //$.alert("In List Function"+ x + y);
-      $.post("aaSql.php", {
-        action: "batchList"
-      }, function(mydata, mystatus) {
-        $("#batchShowList").show();
-        //$.alert("List " + mydata);
-        $("#batchShowList").html(mydata);
-      }, "text").fail(function() {
-        $.alert("Error !!");
-      })
-    }
-
-    function poList() {
-      $.post("aaSql.php", {
-        action: "poList"
-      }, function(mydata, mystatus) {
-        $("#poShowList").show();
-        //$.alert("List " + mydata);
-        $("#poShowList").html(mydata);
-      }, "text").fail(function() {
-        $.alert("Error !!");
-      })
-    }
-
-    function poSummary() {
-      $.post("aaSql.php", {
-        action: "poSummary"
-      }, function(mydata, mystatus) {
-        //$.alert("List " + mydata);
-        $("#poSummary").html(mydata);
-      }, "text").fail(function() {
-        $.alert("Error !!");
-      })
-    }
-
     function selectSubject() {
       var x = $("#sel_batch").val();
       $.alert("Batch In SelSub Function" + x);
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         batch_id: x,
         action: "selectSubject"
       }, function(mydata, mystatus) {
@@ -639,7 +463,7 @@ require('../../php_function.php');
 
     function coList() {
       // $.alert("In List Function" + x);
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         action: "coList"
       }, function(mydata, mystatus) {
         $("#coShowList").show();
@@ -648,7 +472,7 @@ require('../../php_function.php');
       }, "text").fail(function() {
         $.alert("Error !!");
       })
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         action: "copoMap"
       }, function(mydata, mystatus) {
         //$.alert("List " + mydata);
@@ -663,7 +487,7 @@ require('../../php_function.php');
       var x = $("#sel_school").val();
       var y = $("#sel_batch").val();
       //$.alert("In Program Select List Function" + x);
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         actionSession: "programSelectList",
         schoolId: x,
         batchId: y
@@ -699,13 +523,6 @@ require('../../php_function.php');
       $('#actionUpload').val('uploadSubject');
       $('#formModal').modal('show');
     });
-    $(document).on('click', '.uploadPo', function() {
-      // $.alert("Upload PO");
-      $('#actionUpload').val('uploadPO')
-      $('#button_action').show().val('Update PO');
-      $('#formModal').modal('show');
-      $('#modal_uploadTitle').html("Upload PO [<?php echo $myProgAbbri . '-' . $myBatchName . ']'; ?>");
-    });
     $(document).on('click', '.uploadCo', function() {
       // $.alert("Session From");
       $('#actionUpload').val('uploadCO')
@@ -733,8 +550,6 @@ require('../../php_function.php');
       $("#formModal")[0].reset;
       $('#formModal').modal('hide');
     });
-
-
   });
 </script>
 
@@ -826,13 +641,7 @@ require('../../php_function.php');
                   <input type="radio" class="form-check-input" checked id="stDC" name="subject_type" value="DC">DC
                 </div>
                 <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="stOC" name="subject_type" value="OC">OC
-                </div>
-                <div class="form-check-inline">
                   <input type="radio" class="form-check-input" id="stDE" name="subject_type" value="DE">DE
-                </div>
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="stOE" name="subject_type" value="OE">OE
                 </div>
               </div>
               <div class="col">
@@ -870,89 +679,10 @@ require('../../php_function.php');
             <hr>
             <div class="row">
               <div class="col">
-                <?php
-                $sql_staff = "select * from staff where staff_status='0' order by staff_name";
-                $result_staff = $conn->query($sql_staff);
-                if ($result_staff) {
-                  echo '<select class="form-control form-control-sm" name="sel_staff" id="sel_staff" required>';
-                  //echo '<option value="0">Select Coordinator</option>';
-                  while ($rows_staff = $result_staff->fetch_assoc()) {
-                    $select_id = $rows_staff['staff_id'];
-                    $select_name = $rows_staff['staff_name'];
-                    if ($abbri <> '') {
-                      $select_abbri = $rows_staff[$abbri];
-                      echo '<option value="' . $select_id . '">' . $select_name . '(' . $select_abbri . ')</option>';
-                    } else echo '<option value="' . $select_id . '">' . $select_name . '</option>';
-                  }
-                  //echo '<option value="ALL">ALL</option>';
-                  echo '</select>';
-                } else echo $conn->error;
-                if ($result_staff->num_rows == 0) echo 'No Data Found';
-                ?>
+                
               </div>
             </div>
           </div>
-          <div class="batchForm">
-            <div class="form-horizontal">
-              <div class="form-group">
-                <label class="control-label col-sm-2" for="batch">Batch:</label>
-                <div class="col-sm-10">
-                  <input type="text" class="form-control form-control-sm" id="newBatch" name="newBatch" placeholder="Batch">
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="sessionForm">
-            <div class="row">
-              <div class="col-6">
-                <div class="form-group">
-                  Session Name
-                  <input type="text" class="form-control form-control-sm" id="session_name" name="session_name" placeholder="Session Name">
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="form-group">
-                  Session Remarks
-                  <input type="text" class="form-control form-control-sm" id="session_remarks" name="session_remarks" placeholder="Remarks">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                Start Date
-                <input type="date" class="form-control form-control-sm" id="session_start" name="session_start" placeholder="Strat Date" value="<?php echo $submit_date; ?>">
-              </div>
-              <div class="col-6">
-                End Date
-                <input type="date" class="form-control form-control-sm" id="session_end" name="session_end" placeholder="Strat Date" value="<?php echo $submit_date; ?>">
-              </div>
-            </div>
-          </div>
-
-          <div class="poForm">
-            <div class="row">
-              <div class="col-6">
-                <div class="form-group">
-                  Enter Code
-                  <input type="text" class="form-control form-control-sm" id="poCode" name="poCode" placeholder="PO Code">
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="form-group">
-                  Serial Order of PO
-                  <input type="text" class="form-control form-control-sm" id="poSno" name="poSno" placeholder="Serial Order">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12">
-                PO statement
-                <input type="text" class="form-control form-control-sm" id="poStatement" name="poStatement" placeholder="Enter PO Statement">
-              </div>
-            </div>
-          </div>
-
           <div class="coForm">
             <div class="row">
               <div class="col-6">
