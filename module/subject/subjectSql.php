@@ -170,7 +170,7 @@ if (isset($_POST['action'])) {
       $type = $array["data"][$i]["subject_type"];
       echo '<div class="row shadow border cardBodyText">';
       echo '<div class="col-sm-3 p-1 mb-0 bg-three">';
-      echo 'ID:' . $subject_id.' <b>' . $array["data"][$i]["subject_code"] . '</b>';
+      echo 'ID:' . $subject_id . ' <b>' . $array["data"][$i]["subject_code"] . '</b>';
       echo '<div>Sem : ' . $array["data"][$i]["subject_semester"];
       echo ' <b>Cr : ' . $Cr . ' </b></div>';
       echo '</div>';
@@ -178,10 +178,10 @@ if (isset($_POST['action'])) {
       echo '<div class="cardBodyText"><b>' . $array["data"][$i]["subject_name"] . '</b>
       </div>';
       for ($j = 0; $j < $electives; $j++) {
-        $assignedQuery="select submit_id from subject_elective where ep_id='$subject_id' and de_id='$de[$j]'";
+        $assignedQuery = "select submit_id from subject_elective where ep_id='$subject_id' and de_id='$de[$j]'";
         $assigned = getFieldValue($conn, "submit_id", $assignedQuery);
-        if($assigned) echo ' [ <i class="fa fa-check"></i><b><a href="#" class="vac" data-action="se" data-field="subject_se" data-code="N" data-ep="'.$subject_id.'" data-id="' . $de[$j] . '">' . $de_code[$j] . '</a></b> ] ';
-        else echo ' [ <i class="fa fa-times"></i><b><a href="#" class="vac" data-action="se" data-field="subject_se" data-code="Y" data-ep="'.$subject_id.'" data-id="' . $de[$j] . '">' . $de_code[$j] . '</a></b> ] ';
+        if ($assigned) echo ' [ <i class="fa fa-check"></i><b><a href="#" class="vac" data-action="se" data-field="subject_se" data-code="N" data-ep="' . $subject_id . '" data-id="' . $de[$j] . '">' . $de_code[$j] . '</a></b> ] ';
+        else echo ' [ <i class="fa fa-times"></i><b><a href="#" class="vac" data-action="se" data-field="subject_se" data-code="Y" data-ep="' . $subject_id . '" data-id="' . $de[$j] . '">' . $de_code[$j] . '</a></b> ] ';
       }
       echo '</div>';
       echo '</div>';
@@ -191,12 +191,57 @@ if (isset($_POST['action'])) {
     $ep = $_POST['ep'];
     $code = $_POST['code'];
     $field = $_POST['field'];
-    echo "DE  ".$de." EPool ".$de." Code ".$code;
+    echo "DE  " . $de . " EPool " . $de . " Code " . $code;
     if ($code == 'N') $sql = "delete from subject_elective where ep_id='$ep' and de_id='$de'";
     else $sql = "insert into subject_elective (ep_id, de_id, submit_id) values('$ep', '$de', '$myId')";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     else  $conn->query($sql);
+  } elseif ($_POST["action"] == "electivePool") {
+    //echo "MyId- $myId Prog $myProg";
+    $tableId = 'subject_id';
+    $sql = "select * from subject where program_id='$myProg' and batch_id='$myBatch' and subject_type='DE' and subject_semester>0 order by subject_semester";
+    $result_DE = $conn->query($sql);
+    if ($result_DE) {
+      $electives = $result_DE->num_rows;
+      $count = 0;
+      while ($deRows = $result_DE->fetch_assoc()) {
+        $subject_id = $deRows["subject_id"];
+        $subject_code = $deRows["subject_code"];
+        echo '<div class="border">';
+
+        echo '<div class="row p-1">';
+        echo '<div class="col-3">';
+        echo 'ID:' . $subject_id . ' <b>' . $subject_code . '</b>';
+        echo '</div>';
+        echo '<div class="col-sm-9">';
+        echo '<div>Sem : ' . $deRows["subject_semester"] . '<b> Cr : ' . $deRows["subject_credit"] . ' </b> <b>' . $deRows["subject_name"] . '</b></div>';
+        echo '</div>';
+        echo '</div>';
+
+        $sql = "select * from subject_elective where de_id='$subject_id'";
+        $result = $conn->query($sql);
+        while ($rowsPool = $result->fetch_assoc()) {
+          $ep_id = $rowsPool["ep_id"];
+          $offered = $rowsPool["offered"];
+          $cbcs = $rowsPool["cbcs"];
+          $sqlSub = "select * from subject where subject_id='$ep_id'";
+          $resultSubject = $conn->query($sqlSub);
+          $rowSubject = $resultSubject->fetch_assoc();
+          echo '<div class="row cardBodyText p-1">';
+          echo '<div class="col-sm-2">' . $rowSubject["subject_code"] . '</div>';
+          echo '<div class="col-sm-6">' . $rowSubject["subject_name"] . '</div>';
+          if($offered>0)echo '<div class="col-sm-2">Offered</div>';
+          else echo '<div class="col-sm-2">Offered</div>';
+          if($cbcs>0)echo '<div class="col-sm-2">CBCS</div>';
+          else echo '<div class="col-sm-2">CBCS</div>';
+          echo '</div>';
+        }
+        $count++;
+        echo '</div>';
+
+      }
+    }
   } elseif ($_POST["action"] == "subjectSummary") {
     //echo "MyId- $myId Prog $myProg";
     $totalLecture = 0;

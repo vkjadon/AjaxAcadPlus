@@ -21,7 +21,7 @@ require('../../php_function.php');
         <div class="col-sm-2">
           <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
             <a class="list-group-item list-group-item-action show active sub" id="list-sub-list" data-toggle="list" href="#list-sub" role="tab" aria-controls="sub"> Courses/Subjects </a>
-            <a class="list-group-item list-group-item-action sesSub" id="list-sesSub-list" data-toggle="list" href="#list-sesSub" role="tab" aria-controls="sesSub">Session Subject</a>
+            <a class="list-group-item list-group-item-action se" id="list-se-list" data-toggle="list" href="#list-se" role="tab" aria-controls="se">Session Electives</a>
             <a class="list-group-item list-group-item-action subReport" id="list-subReport-list" data-toggle="list" href="#list-subReport" role="tab" aria-controls="subReport"> Subject Report </a>
             <a class="list-group-item list-group-item-action co" id="list-co-list" data-toggle="list" href="#list-co" role="tab" aria-controls="co"> Course Outcome </a>
             <a class="list-group-item list-group-item-action copo" id="list-copo-list" data-toggle="list" href="#list-copo" role="tab" aria-controls="copo"> CO-PO Map </a>
@@ -52,11 +52,12 @@ require('../../php_function.php');
                 </div>
               </div>
             </div>
-            <div class="tab-pane fade" id="list-sesSub" role="tabpanel" aria-labelledby="list-sesSub-list">
+            <div class="tab-pane fade" id="list-se" role="tabpanel" aria-labelledby="list-se-list">
 
               <div class="row">
-                <div class="col-sm-7">
-                  
+                <div class="col-sm-6">
+                <h5>Elective/CBCS Pool</h5>
+                  <div id="electivePool"></div>
                 </div>
                 <div class="col-sm-5">
                 </div>
@@ -135,6 +136,10 @@ require('../../php_function.php');
     $(document).on('click', '.sub', function() {
       subjectList();
       electiveList();
+    });
+
+    $(document).on('click', '.se', function() {
+      electivePool();
     });
 
     $(document).on('click', '.co', function() {
@@ -450,6 +455,19 @@ require('../../php_function.php');
       }, function(mydata, mystatus) {
         //$.alert("List " + mydata);
         $("#electiveList").html(mydata);
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+      subjectSummary();
+    }
+
+    function electivePool() {
+      //$.alert(" Pool ");
+      $.post("subjectSql.php", {
+        action: "electivePool"
+      }, function(mydata, mystatus) {
+        //$.alert("List " + mydata);
+        $("#electivePool").html(mydata);
       }, "text").fail(function() {
         $.alert("Error !!");
       })
