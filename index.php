@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 </head>
 <?php require("config_database.php"); ?>
-<?php require("config_variable.php"); ?>
+<?php // require("config_variable.php"); ?>
 
 <body>
   <h1 class="display-3"> AcadPlus LMS </h1>

@@ -19,6 +19,7 @@
 	<div class="card-body m-0 p-1" style="background-color:cornsilk">
 		<h7 class="card-title">Department</h7>
 		<?php
+		//echo "My Department in SetDefault $myDept";
 
 		if (isset($myDept)) {
 			$name = getField($conn, $myDept, "department", "dept_id", "dept_abbri");

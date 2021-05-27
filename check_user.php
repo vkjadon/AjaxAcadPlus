@@ -33,8 +33,7 @@ if ($_POST['action'] == 'checkUser') {
   $id = json_decode($output, true);
   curl_close($curl);
   echo $output;*/
-  /*$id = json_decode($output, true);
-*/
+  //$id = json_decode($output, true);
 } elseif ($_POST['action'] == 'setProgram') $_SESSION['mypid'] = $_POST['programId'];
 elseif ($_POST['action'] == 'setSession') $_SESSION['mysid'] = $_POST['sessionId'];
 elseif ($_POST['action'] == 'setSchool') $_SESSION['mysclid'] = $_POST['schoolId'];

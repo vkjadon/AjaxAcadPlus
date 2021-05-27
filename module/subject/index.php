@@ -38,7 +38,7 @@ require('../../php_function.php');
                 </div>
                 <div class="col-sm-4">
                   <div>
-                    <h5>Semester Wise Subject Summary</h5>
+                    <h5>Manage Elective/CBCS Pool</h5>
                   </div>
                 </div>
               </div>
@@ -47,7 +47,7 @@ require('../../php_function.php');
                   <div id="subShowList"></div>
                 </div>
                 <div class="col-sm-4">
-                  <div id="subjectSummary"></div>
+                <div id="electivePool"></div>
                 </div>
               </div>
             </div>
@@ -638,18 +638,13 @@ require('../../php_function.php');
             <div class="row">
               <div class="col">
                 <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" checked id="stDC" name="subject_type" value="DC">DC
+                  <input type="radio" class="form-check-input" checked id="stDC" name="subject_type" title="Core Subject" value="DC">DC
                 </div>
                 <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="stDE" name="subject_type" value="DE">DE
-                </div>
-              </div>
-              <div class="col">
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" checked id="smOff" name="subject_mode" value="Offline">Offline
+                  <input type="radio" class="form-check-input" id="stDE" name="subject_type" title="Elective Subject" value="DE">DE
                 </div>
                 <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="smOn" name="subject_mode" value="Online">Online
+                  <input type="radio" class="form-check-input" id="stDE" name="subject_type" title="Elective Pool" value="EP">EP
                 </div>
               </div>
             </div>
@@ -679,7 +674,9 @@ require('../../php_function.php');
             <hr>
             <div class="row">
               <div class="col">
-                
+                <ul>
+               <li>EP (Elective Pool) is Elective subjects List for a Particular DE (Elective)</li>
+                </ul>
               </div>
             </div>
           </div>
