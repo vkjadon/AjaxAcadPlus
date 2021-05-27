@@ -21,6 +21,7 @@ require('../../php_function.php');
         <div class="col-sm-2">
           <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
             <a class="list-group-item list-group-item-action show active sub" id="list-sub-list" data-toggle="list" href="#list-sub" role="tab" aria-controls="sub"> Courses/Subjects </a>
+            <a class="list-group-item list-group-item-action sesSub" id="list-sesSub-list" data-toggle="list" href="#list-sesSub" role="tab" aria-controls="sesSub">Session Subject</a>
             <a class="list-group-item list-group-item-action subReport" id="list-subReport-list" data-toggle="list" href="#list-subReport" role="tab" aria-controls="subReport"> Subject Report </a>
             <a class="list-group-item list-group-item-action co" id="list-co-list" data-toggle="list" href="#list-co" role="tab" aria-controls="co"> Course Outcome </a>
             <a class="list-group-item list-group-item-action copo" id="list-copo-list" data-toggle="list" href="#list-copo" role="tab" aria-controls="copo"> CO-PO Map </a>
@@ -43,14 +44,25 @@ require('../../php_function.php');
                 </div>
               </div>
               <div class="row">
-                <div class="col-sm-8">
+                <div class="col-sm-7">
                   <div id="subShowList"></div>
                 </div>
-                <div class="col-sm-4">
-                <div id="electivePool"></div>
+                <div class="col-sm-5">
+                  <div id="electiveList"></div>
                 </div>
               </div>
             </div>
+            <div class="tab-pane fade" id="list-sesSub" role="tabpanel" aria-labelledby="list-sesSub-list">
+
+              <div class="row">
+                <div class="col-sm-7">
+                  
+                </div>
+                <div class="col-sm-5">
+                </div>
+              </div>
+            </div>
+
             <div class="tab-pane fade" id="list-subReport" role="tabpanel" aria-labelledby="list-subReport-list">
 
               <div class="row">
@@ -114,12 +126,17 @@ require('../../php_function.php');
     $(".topBarTitle").text("Academics");
     coList();
     subjectList();
+    electiveList();
     subReport();
 
     $(document).on("change", "#sel_subject", function() {
       coList();
     });
-    // Left Panel Block
+    $(document).on('click', '.sub', function() {
+      subjectList();
+      electiveList();
+    });
+
     $(document).on('click', '.co', function() {
       $('#action').val("addCo");
       coList();
@@ -384,15 +401,19 @@ require('../../php_function.php');
       var id = $(this).attr("data-id");
       var code = $(this).attr("data-code");
       var field = $(this).attr("data-field");
-      $.alert("Disabled " + id);
+      var action = $(this).attr("data-action");
+      var ep = $(this).attr("data-ep");
+      $.alert("Disabled " + id + " Code " + code + " Action " + action);
       $.post("subjectSql.php", {
         id: id,
+        ep: ep,
         code: code,
         field: field,
-        action: "vac"
+        action: action
       }, function(data, status) {
-        //$.alert("Data" + data)
+        $.alert("Data" + data)
         subjectList();
+        electiveList();
       }, "text").fail(function() {
         $.alert("Error in BatchSession Function");
       })
@@ -420,6 +441,19 @@ require('../../php_function.php');
       }).fail(function() {
         $.alert("fail in place of error");
       })
+    }
+
+    function electiveList() {
+      //$.alert(" Select a Batch X = " + x);
+      $.post("subjectSql.php", {
+        action: "electiveList"
+      }, function(mydata, mystatus) {
+        //$.alert("List " + mydata);
+        $("#electiveList").html(mydata);
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+      subjectSummary();
     }
 
     function subjectList() {
@@ -675,7 +709,7 @@ require('../../php_function.php');
             <div class="row">
               <div class="col">
                 <ul>
-               <li>EP (Elective Pool) is Elective subjects List for a Particular DE (Elective)</li>
+                  <li>EP (Elective Pool) is Elective subjects List for a Particular DE (Elective)</li>
                 </ul>
               </div>
             </div>

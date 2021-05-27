@@ -744,7 +744,6 @@ function get_subjectAttendance($conn, $tn_sa, $tn_sas, $tlId, $studentId)
   $output = array($delivered, $present);
   return $output;
 }
-
 function get_subjectResource($conn, $tn_res, $subject_id)
 {
   $sql = "select * from $tn_res where subject_id='$subject_id' and rsb_status='0'";
