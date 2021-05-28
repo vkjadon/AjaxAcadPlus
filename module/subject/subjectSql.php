@@ -103,7 +103,7 @@ if (isset($_POST['action'])) {
       $type = $array["data"][$i]["subject_type"];
       $status = $array["data"][$i]["subject_status"];
 
-      echo '<div class="row shadow border border-primary mb-1 cardBodyText">';
+      echo '<div class="row border border-primary mb-1 cardBodyText">';
       echo '<div class="col-sm-2 p-1 mb-0 bg-two">';
       echo 'ID:' . $subject_id . ' <b>[' . $sno . ']</b>';
       echo '<a href="#" class="float-right subject_idE" data-id="' . $subject_id . '"><i class="fa fa-edit"></i></a>';
@@ -168,7 +168,7 @@ if (isset($_POST['action'])) {
       $subject_id = $array["data"][$i]["subject_id"];
       $Cr = $array["data"][$i]["subject_credit"];
       $type = $array["data"][$i]["subject_type"];
-      echo '<div class="row shadow border cardBodyText">';
+      echo '<div class="row border border-primary m-1 mt-2 cardBodyText">';
       echo '<div class="col-sm-3 p-1 mb-0 bg-three">';
       echo 'ID:' . $subject_id . ' <b>' . $array["data"][$i]["subject_code"] . '</b>';
       echo '<div>Sem : ' . $array["data"][$i]["subject_semester"];
@@ -231,17 +231,31 @@ if (isset($_POST['action'])) {
           echo '<div class="row cardBodyText p-1">';
           echo '<div class="col-sm-2">' . $rowSubject["subject_code"] . '</div>';
           echo '<div class="col-sm-6">' . $rowSubject["subject_name"] . '</div>';
-          if($offered>0)echo '<div class="col-sm-2">Offered</div>';
-          else echo '<div class="col-sm-2">Offered</div>';
-          if($cbcs>0)echo '<div class="col-sm-2">CBCS</div>';
-          else echo '<div class="col-sm-2">CBCS</div>';
+          if($offered>0)echo '<div class="col-sm-2"><i class="fa fa-check"></i><b><a href="#" class="vac" data-action="offer" data-field="offered" data-code="N" data-ep="' . $ep_id . '" data-id="' . $subject_id . '">Offered</a></b></div>';
+          else echo '<div class="col-sm-2"><i class="fa fa-times"></i><b><a href="#" class="vac" data-action="offer" data-field="offered" data-code="Y" data-ep="' . $ep_id . '" data-id="' . $subject_id . '">Offered</a></b></div>';
+          if($cbcs>0)echo '<div class="col-sm-2"><i class="fa fa-check"></i><b><a href="#" class="vac" data-action="offer" data-field="cbcs" data-code="N" data-ep="' . $ep_id . '" data-id="' . $subject_id . '">CBCS</a></b></div>';
+          else echo '<div class="col-sm-2"><i class="fa fa-times"></i><b><a href="#" class="vac" data-action="offer" data-field="cbcs" data-code="Y" data-ep="' . $ep_id . '" data-id="' . $subject_id . '">CBCS</a></b></div>';
           echo '</div>';
         }
         $count++;
+        echo '<h6>Offer Schedule</h6>';
         echo '</div>';
 
       }
     }
+  } elseif ($_POST['action'] == 'offer') {
+    $de = $_POST['id'];
+    $ep = $_POST['ep'];
+    $code = $_POST['code'];
+    $field = $_POST['field'];
+    echo "DE  " . $de . " EPool " . $de . " Code " . $code;
+    if($field=="cbcs" && $code=="Y")$sql = "update subject_elective set cbcs='1', offered='1' where ep_id='$ep' and de_id='$de'";
+    else if($field=="offered" && $code=="N")$sql = "update subject_elective set cbcs='0', offered='0' where ep_id='$ep' and de_id='$de'";
+    else if($code=='Y')$sql = "update subject_elective set $field='1' where ep_id='$ep' and de_id='$de'";
+    else $sql = "update subject_elective set $field='0' where ep_id='$ep' and de_id='$de'";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+    else  $conn->query($sql);
   } elseif ($_POST["action"] == "subjectSummary") {
     //echo "MyId- $myId Prog $myProg";
     $totalLecture = 0;

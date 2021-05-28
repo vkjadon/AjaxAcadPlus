@@ -32,22 +32,14 @@ require('../../php_function.php');
 
             <div class="tab-pane fade show active" id="list-sub" role="tabpanel" aria-labelledby="list-sub-list">
               <div class="row">
-                <div class="col-sm-8 p-0">
+                <div class="col-sm-7">
                   <button class="btn btn-sm btn-secondary addSubject">New Subject</button>
                   <button class="btn btn-sm btn-warning copySubject">Copy Subject</button>
                   <button class="btn btn-sm btn-primary uploadSubject">Upload Subject</button>
-                </div>
-                <div class="col-sm-4">
-                  <div>
-                    <h5>Manage Elective/CBCS Pool</h5>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-7">
                   <div id="subShowList"></div>
                 </div>
                 <div class="col-sm-5">
+                  <button class="btn btn-sm btn-default btn-block disabled">Assign Elective to Elective/CBCS Pool</button>
                   <div id="electiveList"></div>
                 </div>
               </div>
@@ -56,7 +48,7 @@ require('../../php_function.php');
 
               <div class="row">
                 <div class="col-sm-6">
-                <h5>Elective/CBCS Pool</h5>
+                <button class="btn btn-sm btn-default btn-block disabled">Set Elective/CBCS Schedule</button>
                   <div id="electivePool"></div>
                 </div>
                 <div class="col-sm-5">
@@ -205,6 +197,7 @@ require('../../php_function.php');
           //$.alert("List " + data);
           if (action == "addSubject" || action == "updateSubject") {
             subjectList();
+            electiveList();
           } else if (action == "addBatch" || action == "updateBatch") {
             batchList();
           } else if (action == "addPo" || action == "updatePo") {
@@ -408,7 +401,7 @@ require('../../php_function.php');
       var field = $(this).attr("data-field");
       var action = $(this).attr("data-action");
       var ep = $(this).attr("data-ep");
-      $.alert("Disabled " + id + " Code " + code + " Action " + action);
+      //$.alert("Disabled " + id + " Code " + code + " Action " + action);
       $.post("subjectSql.php", {
         id: id,
         ep: ep,
@@ -416,9 +409,10 @@ require('../../php_function.php');
         field: field,
         action: action
       }, function(data, status) {
-        $.alert("Data" + data)
-        subjectList();
-        electiveList();
+        //$.alert("Data" + data)
+        if (action === "vac") subjectList();
+        else if (action === "se") electiveList();
+        else electivePool();
       }, "text").fail(function() {
         $.alert("Error in BatchSession Function");
       })
@@ -696,7 +690,10 @@ require('../../php_function.php');
                   <input type="radio" class="form-check-input" id="stDE" name="subject_type" title="Elective Subject" value="DE">DE
                 </div>
                 <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="stDE" name="subject_type" title="Elective Pool" value="EP">EP
+                  <input type="radio" class="form-check-input" id="stDP" name="subject_type" title="Elective Pool" value="EP">EP
+                </div>
+                <div class="form-check-inline">
+                  <input type="radio" class="form-check-input" id="stGB" name="subject_type" title="Governing Body" value="EP">GB
                 </div>
               </div>
             </div>
@@ -728,6 +725,7 @@ require('../../php_function.php');
               <div class="col">
                 <ul>
                   <li>EP (Elective Pool) is Elective subjects List for a Particular DE (Elective)</li>
+                  <li>GB (Governing Body). The subjects suggested by UGC/AICTE etc</li>
                 </ul>
               </div>
             </div>
