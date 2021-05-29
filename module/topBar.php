@@ -72,7 +72,7 @@ if (!isset($myBatch)) $myBatch = '';
 									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item p-1">Infrastructure</a>
 								</div>
 								<div class="col-6">
-									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item p-1">Assign Responsibility</a>
+									<a href="<?php echo $codePath . '/module/responsibility/'; ?>" class="dropdown-item p-1">Assign Responsibility</a>
 									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item p-1">SOP</a>
 									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item p-1">Committees</a>
 									<a href="<?php echo $codePath . '/module/leave/'; ?>" class="dropdown-item p-1">Leave</a>
