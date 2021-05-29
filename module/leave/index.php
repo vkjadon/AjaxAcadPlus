@@ -7,12 +7,12 @@ require('../../php_function.php');
 
 <!DOCTYPE html>
 <html lang="en">
-
+<link rel="stylesheet" href="leave.css">
 <head>
  <title>Admin Login : ClassConnect</title>
  <?php require("../css.php"); ?>
 <link rel="stylesheet" href="leave.css">
- 
+
 </head>
 
 <body>
@@ -26,6 +26,7 @@ require('../../php_function.php');
      <a class="list-group-item list-group-item-action lt" id="list-lt-list" data-toggle="list" href="#list-lt" role="tab" aria-controls="lt">Leave Type</a>
      <a class="list-group-item list-group-item-action lc" id="list-lc-list" data-toggle="list" href="#list-lc" role="tab" aria-controls="lc">Leave Credit</a>
      <a class="list-group-item list-group-item-action lf" id="list-lf-list" data-toggle="list" href="#list-lf" role="tab" aria-controls="lf">Leave Form</a>
+     <a class="list-group-item list-group-item-action ss" id="list-ss-list" data-toggle="list" href="#list-ss" role="tab" aria-controls="ss">Special Staff</a>
 
     <a class="list-group-item list-group-item-action ccfApprove" id="list-laf-list" data-toggle="list" href="#list-laf" role="tab" aria-controls="laf">Leave Forward/Approve Request</a>
     <a class="list-group-item list-group-item-action leaveReport" id="list-lr-list" data-toggle="list" href="#list-lr" role="tab" aria-controls="lr">Leave Report</a>
@@ -65,7 +66,7 @@ require('../../php_function.php');
           <li class="nav-item">
            <a class="nav-link" id="pills_leaveDuration" data-toggle="pill" href="#pills_duration" role="tab" aria-controls="pills_duration" aria-selected="false">Leave Duration</a>
           </li>
-         </ul> 
+         </ul>
          <!-- content -->
          <div class="tab-content" id="pills-tabContent p-3">
           <div class="tab-pane fade show active" id="pills_type" role="tabpanel" aria-labelledby="pills_leaveType">
@@ -526,10 +527,62 @@ require('../../php_function.php');
        </div>
       </div>
      </div>
+
+     <div class="tab-pane fade" id="list-ss" role="tabpanel" aria-labelledby="list-ss-list">
+      <div class="row">
+       <div class="col-5">
+        <div class="container card shadow d-flex justify-content-center mt-2" id="card_leave">
+         <!-- nav options -->
+         <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
+          <li class="nav-item">
+           <a class="nav-link active" id="pills_leaveForm" data-toggle="pill" href="#pills_form" role="tab" aria-controls="pills_form" aria-selected="true">Special Staff</a>
+          </li>
+         </ul> <!-- content -->
+         <div class="tab-content" id="pills-tabContent p-3">
+          <div class="tab-pane fade show active" id="pills_form" role="tabpanel" aria-labelledby="pills_leaveForm">
+           <form class="form-horizontal" id="specialStaffForm">
+            <div class="row">
+             <div class="col-12">
+              <div class="input-group md-form form-sm form-2 mt-1">
+               <input name="staffSearch" id="staffSearch" class="form-control form-control-sm" type="text" placeholder="Search Staff" aria-label="Search">
+               <div class="input-group-append">
+                <span class="input-group-text cyan lighten-3" id="basic-text1"><i class="fas fa-search text-grey" aria-hidden="true"></i></span>
+               </div>
+              </div>
+              <div class='list-group' id="staffAutoList"></div>
+             </div>
+            </div>
+            <div class="row">
+             <div class="col-6">
+              <div class="form-group">
+               <label>Approver</label>
+               <input type="text" class="form-control form-control-sm" id="approverSearch" name="approver" placeholder="">
+              </div>
+              <div class='list-group' id="approverAutoList"></div>
+             </div>
+             <div class="col-6">
+              <div class="form-group">
+               <label>Forwarder</label>
+               <input type="text" class="form-control form-control-sm" id="forwarderSearch" name="forwarder" placeholder="">
+              </div>
+              <div class='list-group' id="forwarderAutoList"></div>
+             </div>
+            </div>
+            <input type="hidden" id="specialStaffIdHidden" name="specialStaffIdHidden">
+            <input type="hidden" id="approverIdHidden" name="approverIdHidden">
+            <input type="hidden" id="forwarderIdHidden" name="forwarderIdHidden">
+            <input type="hidden" id="actionSpecialStaffForm" name="actionSpecialStaffForm">
+            <button type="submit" class="btn btn-sm">Submit</button>
+           </form>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
     </div>
    </div>
   </div>
- </div>
 </body>
 
 <?php require("../js.php"); ?>
@@ -541,6 +594,72 @@ require('../../php_function.php');
   $('.leaveList').hide();
   ccfList();
   $('#action').val("add");
+
+  $('#staffSearch').keyup(function() {
+   var specialStaffquery = $(this).val();
+   // alert(specialStaffquery);
+   if (specialStaffquery != '') {
+    $.ajax({
+     url: "leaveSql.php",
+     method: "POST",
+     action: "specialStaff",
+     data: {
+      specialStaffquery: specialStaffquery,
+     },
+     success: function(data) {
+      $('#staffAutoList').fadeIn();
+      $('#staffAutoList').html(data);
+     }
+    });
+   } else {
+    $('#staffAutoList').fadeOut();
+    $('#staffAutoList').html("");
+   }
+  });
+
+  $('#approverSearch').keyup(function() {
+   var approverQuery = $(this).val();
+   // alert(query);
+   if (approverQuery != '') {
+    $.ajax({
+     url: "leaveSql.php",
+     method: "POST",
+     search: "approver",
+     data: {
+      approverQuery: approverQuery,
+     },
+     success: function(data) {
+      $('#approverAutoList').fadeIn();
+      $('#approverAutoList').html(data);
+     }
+    });
+   } else {
+    $('#approverAutoList').fadeOut();
+    $('#approverAutoList').html("");
+   }
+  });
+
+  $('#forwarderSearch').keyup(function() {
+   var forwarderQuery = $(this).val();
+   // alert(query);
+   if (forwarderQuery != '') {
+    $.ajax({
+     url: "leaveSql.php",
+     method: "POST",
+     search: "forwarder",
+     data: {
+      forwarderQuery: forwarderQuery,
+     },
+     success: function(data) {
+      $('#forwarderAutoList').fadeIn();
+      $('#forwarderAutoList').html(data);
+     }
+    });
+   } else {
+    $('#forwarderAutoList').fadeOut();
+    $('#forwarderAutoList').html("");
+   }
+  });
 
   // Leave Type table
   $.post("leaveSql.php", {
@@ -561,7 +680,7 @@ require('../../php_function.php');
    $.alert("fail in place of error");
   })
 
- // Leave Year Table
+  // Leave Year Table
   $.post("leaveSql.php", {
    action: "leaveYearList",
   }, () => {}, "json").done(function(data) {
@@ -578,7 +697,7 @@ require('../../php_function.php');
   }, "json").fail(function() {
    $.alert("fail in place of error");
   })
-  
+
   // Leave duration table
   $.post("leaveSql.php", {
    action: "leaveDurationList",
@@ -615,8 +734,8 @@ require('../../php_function.php');
    $.alert("fail in place of error");
   })
 
- //Leave Application Status Table
- $.post("leaveSql.php", {
+  //Leave Application Status Table
+  $.post("leaveSql.php", {
    action: "leaveApplicationList",
   }, () => {}, "json").done(function(data) {
    var leave_application = '';
@@ -632,6 +751,27 @@ require('../../php_function.php');
    $.alert("fail in place of error");
   })
 
+  $(document).on('click', '.specialStaffAutoList', function() {
+   $('#staffSearch').val($(this).text());
+   var stfId = $(this).attr("data-std");
+   $('#specialStaffIdHidden').val(stfId);
+   $('#staffAutoList').fadeOut();
+  });
+
+  $(document).on('click', '.approverAutoList', function() {
+   $('#approverSearch').val($(this).text());
+   var stfId = $(this).attr("data-std");
+   $('#approverIdHidden').val(stfId);
+   $('#approverAutoList').fadeOut();
+  });
+
+  $(document).on('click', '.forwarderAutoList', function() {
+   $('#forwarderSearch').val($(this).text());
+   var stfId = $(this).attr("data-std");
+   $('#forwarderIdHidden').val(stfId);
+   $('#forwarderAutoList').fadeOut();
+  });
+
   $(document).on('click', '.sr', function(event) {
    var lf = $("#leave_from").val();
    var lt = $("#leave_to").val();
@@ -646,6 +786,7 @@ require('../../php_function.php');
    $('#list-ccf').show();
    $('#list-lf').hide();
    $('#list-lc').hide();
+   $('#list-ss').hide();
    ccfList();
   });
 
@@ -654,6 +795,8 @@ require('../../php_function.php');
    $('#list-ccf').hide();
    $('#list-lf').hide();
    $('#list-lc').hide();
+   $('#list-ss').hide();
+
   });
 
   $(document).on('click', '.lc', function() {
@@ -661,6 +804,8 @@ require('../../php_function.php');
    $('#list-lc').show();
    $('#list-ccf').hide();
    $('#list-lf').hide();
+   $('#list-ss').hide();
+
   });
 
   $(document).on('click', '.lf', function(event) {
@@ -668,6 +813,16 @@ require('../../php_function.php');
    $('#list-lc').hide();
    $('#list-ccf').hide();
    $('#list-lf').show();
+   $('#list-ss').hide();
+
+  });
+
+  $(document).on('click', '.ss', function(event) {
+   $('#list-lt').hide();
+   $('#list-lc').hide();
+   $('#list-ccf').hide();
+   $('#list-lf').hide();
+   $('#list-ss').show();
   });
 
   $(document).on('click', '.currentLeaveYear', function() {
@@ -678,6 +833,16 @@ require('../../php_function.php');
     action: "setCurrentLeaveYear"
    }, function(data) {}, "text").fail(function() {
     $.alert("fail in place of error");
+   })
+  });
+
+  $(document).on('submit', '#specialStaffForm', function() {
+   event.preventDefault(this);
+   $("#actionSpecialStaffForm").val("specialStaff")
+   var formData = $(this).serialize();
+   // $.alert("Form Submitted " + formData)
+   $.post("leaveSql.php", formData, function() {}, "text").done(function(data, success) {
+    $.alert(data)
    })
   });
 
@@ -703,7 +868,6 @@ require('../../php_function.php');
    })
   });
 
-
   $(document).on('submit', '#addLeaveSetup', function() {
    event.preventDefault(this);
    var sel_month = $('#sel_month').val()
@@ -715,8 +879,6 @@ require('../../php_function.php');
     $.alert(data)
    })
   });
-
-
 
   $(document).on('click', '#pills_leaveType', function() {
    $('#leaveYearTable').hide();

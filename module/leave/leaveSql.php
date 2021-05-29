@@ -13,6 +13,52 @@ include('../../php_function.php');
 9 - Rejected by Approver
 Once Rejected, A new application is to be submitted.
 */
+
+if (isset($_POST["specialStaffquery"])) {
+  $output = '';
+  $sql = "select * from staff where staff_name LIKE '%" . $_POST["specialStaffquery"] . "%'";
+  $result = $conn->query($sql);
+  $output = '<ul class="list-group">';
+  if ($result) {
+    while ($row = $result->fetch_assoc()) {
+      $output .= '<li class="list-group-item list-group-item-action specialStaffAutoList"  data-std="' . $row["staff_id"] . '" >' . $row["staff_name"] . '</li>';
+    }
+  } else {
+    $output .= '<li>Staff Not Found</li>';
+  }
+  $output .= '</ul>';
+  echo $output;
+}
+if (isset($_POST["approverQuery"])) {
+  $output = '';
+  $sql = "select * from staff where staff_name LIKE '%" . $_POST["approverQuery"] . "%'";
+  $result = $conn->query($sql);
+  $output = '<ul class="list-group">';
+  if ($result) {
+    while ($row = $result->fetch_assoc()) {
+      $output .= '<li class="list-group-item list-group-item-action approverAutoList"  data-std="' . $row["staff_id"] . '" >' . $row["staff_name"] . '</li>';
+    }
+  } else {
+    $output .= '<li>Staff Not Found</li>';
+  }
+  $output .= '</ul>';
+  echo $output;
+}
+if (isset($_POST["forwarderQuery"])) {
+  $output = '';
+  $sql = "select * from staff where staff_name LIKE '%" . $_POST["forwarderQuery"] . "%'";
+  $result = $conn->query($sql);
+  $output = '<ul class="list-group">';
+  if ($result) {
+    while ($row = $result->fetch_assoc()) {
+      $output .= '<li class="list-group-item list-group-item-action forwarderAutoList"  data-std="' . $row["staff_id"] . '" >' . $row["staff_name"] . '</li>';
+    }
+  } else {
+    $output .= '<li>Staff Not Found</li>';
+  }
+  $output .= '</ul>';
+  echo $output;
+}
 if ($_POST['action'] == 'add') {
   //echo "MyId- $myId";
   $fields = ['lccf_claim_date', 'lccf_reason', 'staff_id', 'submit_date', 'submit_id'];
@@ -170,10 +216,18 @@ if ($_POST['action'] == 'add') {
   }
   echo json_encode($json_array);
 } elseif ($_POST['action'] == 'leaveApplicationList') {
-  $sql = "select ll.*, lt.leave_type from leave_ledger ll, leave_type lt where lt.leave_typeid=ll.leave_typeid";  $result = $conn->query($sql);
+  $sql = "select ll.*, lt.leave_type from leave_ledger ll, leave_type lt where lt.leave_typeid=ll.leave_typeid";
+  $result = $conn->query($sql);
   $json_array = array();
   while ($rowArray = $result->fetch_assoc()) {
     $json_array[] = $rowArray;
   }
   echo json_encode($json_array);
+} elseif ($_POST['actionSpecialStaffForm'] == 'specialStaff') {
+  $staff_id = $_POST['specialStaffIdHidden'];
+  $approver_id = $_POST['approverIdHidden'];
+  $forwarder_id = $_POST['forwarderIdHidden'];
+  $sql = "insert into special_staff (staff_id, approver_id, forwarder_id) values ('$staff_id', '$approver_id', '$forwarder_id')";
+  $conn->query($sql);
+  echo $conn->error;
 }

@@ -495,15 +495,11 @@ require('../../php_function.php');
     $("#sGender").val(data.staff_gender);
     $("#sTeaching").val(data.staff_teaching);
     $("#sDoj").val(data.staff_doj);
-
     $('.staffProfile').show();
     $('#accordionStaff').show();
-
    }, "text").fail(function() {
     $.alert("fail in place of error");
    })
-
-
   });
 
   $(document).on('click', '.sq', function() {
