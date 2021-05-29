@@ -3,7 +3,7 @@ session_start();
 include('../../config_database.php');
 include('../../config_variable.php');
 include('../../php_function.php');
-//echo $_POST['action'];
+//echo "Action ".$_POST['action'];
 if (isset($_POST['action'])) {
   if ($_POST["action"] == "addSubject") {
     $fields = ['program_id', 'batch_id', 'subject_name', 'subject_code', 'subject_semester', 'subject_credit', 'subject_type', 'subject_mode', 'subject_category', 'subject_lecture', 'subject_tutorial', 'subject_practical', 'subject_internal', 'subject_external', 'staff_id', 'submit_id'];
@@ -50,17 +50,12 @@ if (isset($_POST['action'])) {
     echo $conn->error;
   } elseif ($_POST['action'] == 'copySubject') {
 
-    $copyFromProgram = $_POST['programId'];
-    $copyFromBatch = $_POST['batchId'];
-
-    $copySemester = $_POST['copy_semester'];
-    $copyBatch = $_POST['copy_batch'];
-
-    echo "Copy From Prog - $copyFromProgram - Batch - $copyFromBatch";
+    $copySemester = $_POST['newSemester'];
+    $copyBatch = $_POST['newBatch'];
 
     echo "Copy to Batch - $copyBatch - Sem - $copySemester";
 
-    $sql = "select * FROM subject where program_id='$copyFromProgram' and batch_id='$copyFromBatch' and subject_semester='$copySemester'";
+    $sql = "select * FROM subject where program_id='$myProg' and batch_id='$myBatch' and subject_semester='$copySemester'";
     $result = $conn->query($sql);
     while ($rows = $result->fetch_assoc()) {
       $subject_code = $rows['subject_code'];
@@ -76,11 +71,11 @@ if (isset($_POST['action'])) {
       $subject_external = $rows['subject_external'];
       $staff_id = $rows['staff_id'];
       echo "$subject_code | ";
-      $dup = "select * from subject where program_id='$copyFromProgram' and batch_id='$copyBatch' and subject_code='$subject_code'";
+      $dup = "select * from subject where program_id='$myProg' and batch_id='$copyBatch' and subject_code='$subject_code'";
       $result_dup = $conn->query($dup);
       if (!$result_dup) echo $conn->error;
       else if ($result_dup->num_rows == 0) {
-        $insert = "insert into subject (program_id, batch_id, subject_semester, subject_name, subject_code, subject_type, subject_mode, subject_lecture, subject_tutorial, subject_practical, subject_category, subject_credit, subject_internal, subject_external, staff_id, submit_id) values('$copyFromProgram', '$copyBatch', '$copySemester', '$subject_name', '$subject_code', '$subject_type', '$subject_mode', '$subject_lecture', '$subject_tutorial', '$subject_practical', '$subject_category', '$subject_credit', '$subject_internal', '$subject_external', '$staff_id', '$myId')";
+        $insert = "insert into subject (program_id, batch_id, subject_semester, subject_name, subject_code, subject_type, subject_mode, subject_lecture, subject_tutorial, subject_practical, subject_category, subject_credit, subject_internal, subject_external, staff_id, submit_id) values('$myProg', '$copyBatch', '$copySemester', '$subject_name', '$subject_code', '$subject_type', '$subject_mode', '$subject_lecture', '$subject_tutorial', '$subject_practical', '$subject_category', '$subject_credit', '$subject_internal', '$subject_external', '$staff_id', '$myId')";
         $result_insert = $conn->query($insert);
         if (!$result_insert) echo $conn->error;
       }

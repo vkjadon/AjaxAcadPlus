@@ -49,6 +49,9 @@ if (isset($mySes)) {
   $tn_sas = 'student_attendance_setup' . $mySes;
   check_tn_sas($conn, $tn_sas);
 
+  $tn_sc = 'subject_choice'.$mySes;
+  check_tn_sc($conn, $tn_sc);
+
   $tn_sbt = 'subject_topic'.$mySes;
   check_tn_sbt($conn, $tn_sbt);
 

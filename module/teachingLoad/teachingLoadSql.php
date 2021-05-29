@@ -8,26 +8,26 @@ include('../../php_function.php');
 if (isset($_POST['action'])) {
   if ($_POST['action'] == 'clList') {
     $sql = "select cl.*, p.sp_abbri, b.batch from class cl, program p, batch b where cl.program_id=p.program_id and cl.batch_id=b.batch_id and cl.session_id='$mySes' and cl.program_id='$myProg' order by cl.class_semester";
-    $result=$conn->query($sql);
+    $result = $conn->query($sql);
     echo '<table class="table list-table-xs"><tr><th>Id</th><th></th><th>Name</th><th>Sem</th><th>Shift</th><th>Prog</th><th>Batch</th><th><i class="fa fa-trash"></i></th><th>Action</th></tr>';
-    while($rowArray=$result->fetch_assoc()){
-      $id=$rowArray["class_id"];
-      $batch_id=$rowArray["batch_id"];
+    while ($rowArray = $result->fetch_assoc()) {
+      $id = $rowArray["class_id"];
+      $batch_id = $rowArray["batch_id"];
       echo '<tr>';
-        echo '<td>'.$id.'</td>';
-        echo '<td><a href="#" class="class_idE" id="' . $id . '"><i class="fa fa-edit"></i></a></td>';
-        echo '<td>'.$rowArray["class_name"].'['.$rowArray["class_section"].']</td>';
-        echo '<td>'.$rowArray["class_semester"].'</td>';
-        echo '<td>'.$rowArray["class_shift"].'</td>';
-        echo '<td>'.$rowArray["sp_abbri"].'</td>';
-        echo '<td>';
-        echo '<a href="#" class="increDecre" id="' . $id . '" data-value="' . ($batch_id-1) . '"><i class="fa fa-angle-double-left"></i></a> ';
-        echo $rowArray["batch"];
-        echo ' <a href="#" class="increDecre" id="' . $id . '" data-value="' . ($batch_id+1) . '"><i class="fa fa-angle-double-right"></i></a> ';
-        echo '</td>';
-        echo '<td><a href="#" class="class_idD" id="' . $id . '"><i class="fa fa-trash"></i></a></td>';
-        echo '<td><a href="#" class="class_idP" id="' . $id . '">Groups</a></td>';
-        echo '</tr>';
+      echo '<td>' . $id . '</td>';
+      echo '<td><a href="#" class="class_idE" id="' . $id . '"><i class="fa fa-edit"></i></a></td>';
+      echo '<td>' . $rowArray["class_name"] . '[' . $rowArray["class_section"] . ']</td>';
+      echo '<td>' . $rowArray["class_semester"] . '</td>';
+      echo '<td>' . $rowArray["class_shift"] . '</td>';
+      echo '<td>' . $rowArray["sp_abbri"] . '</td>';
+      echo '<td>';
+      echo '<a href="#" class="increDecre" id="' . $id . '" data-value="' . ($batch_id - 1) . '"><i class="fa fa-angle-double-left"></i></a> ';
+      echo $rowArray["batch"];
+      echo ' <a href="#" class="increDecre" id="' . $id . '" data-value="' . ($batch_id + 1) . '"><i class="fa fa-angle-double-right"></i></a> ';
+      echo '</td>';
+      echo '<td><a href="#" class="class_idD" id="' . $id . '"><i class="fa fa-trash"></i></a></td>';
+      echo '<td><a href="#" class="class_idP" id="' . $id . '">Groups</a></td>';
+      echo '</tr>';
     }
 
     //echo "$programId - $mySes";
@@ -59,11 +59,11 @@ if (isset($_POST['action'])) {
     $class_semester = getField($conn, $classId, "class", "class_id", "class_semester");
     $program_id = getField($conn, $classId, "class", "class_id", "program_id");
 
-    //echo "Cl $classId -B $batch_id -Sem $class_semester -P $program_id $tn_tlg";
+    echo "Cl $classId -B $batch_id -Sem $class_semester -P $program_id $tn_tlg";
 
     $sql = "select * from subject where program_id='$program_id' and batch_id='$batch_id' and subject_semester='$class_semester'";
     $result = $conn->query($sql);
-    $i=1;
+    $i = 1;
     echo '<button class="btn btn-secondary btn-square-sm checkAll">Check All</button>';
     echo '<button class="btn btn-danger btn-square-sm uncheckAll">UnCheck All</button>';
     echo '<table class="table list-table-xs">';
@@ -77,7 +77,7 @@ if (isset($_POST['action'])) {
 
       echo '<tr>';
       echo '<td><input type="checkbox" class="scb" id="sub' . $rows['subject_id'] . '"></td>';
-      echo '<td>' . $i++. '</td>';
+      echo '<td>' . $i++ . '</td>';
       echo '<td>' . $rows['subject_code'] . '</td>';
       echo '<td>' . $rows['subject_name'] . '</td>';
       echo '<td>' . $L . '-' . $T . '-' . $P . '</td>';
@@ -96,6 +96,8 @@ if (isset($_POST['action'])) {
 
       echo '</tr>';
     }
+    $sql = "update $tn_tlg set dept_id='$myDept' where dept_id=0 and class_id='$classId'";
+    $conn->query($sql);
     echo '</table>';
   } elseif ($_POST['action'] == 'increDecre') {
     $value = $_POST['value'];
@@ -113,19 +115,19 @@ if (isset($_POST['action'])) {
     if ($value > 0) updateField($conn, $tn_tlg, array("tlg_id", "tlg_group"), array($tlg_id, $value), "");
   } elseif ($_POST["action"] == "tl") {
     $classId = $_POST['classId'];
-    $sno=1;
-    echo "Classs $classId";
+    $sno = 1;
+    //echo "Classs $classId";
     $sql = "select tlg.*, sb.* from $tn_tlg tlg, subject sb where tlg.subject_id=sb.subject_id and tlg.class_id='$classId' and tlg.tlg_status='0' order by tlg.subject_id, tlg.tlg_type";
     $result = $conn->query($sql);
     if (!$result) die("Could not List the Teaching Load!");
     echo '<table  class="list-table-xs table-striped">';
-    echo '<thead><th>#</th><th>TlgId</th><th>Subject</th><th>Type</th><th>Grp</th><th>Staff</th><th>Assign</th></thead>';
+    echo '<thead><th>#</th><th>TlgId</th><th>Subject</th><th>Type</th><th>Grp</th><th>Staff</th><th>Assign</th><th>Choice</th></thead>';
     while ($rows = $result->fetch_assoc()) {
       $groups = $rows['tlg_group'];
       for ($i = 1; $i <= $groups; $i++) {
         $tlgType = $rows['tlg_type'];
         echo '<tr>';
-        echo '<td>' . $sno++. '</td>';
+        echo '<td>' . $sno++ . '</td>';
         echo '<td>' . $rows['tlg_id'] . '</td>';
         echo '<td>' . $rows['subject_name'] . '</td>';
         if ($tlgType == 'L') echo '<td>' . $tlgType . '-' . $rows['subject_lecture'] . '</td><td>LG-' . $i . '</td>';
@@ -147,7 +149,10 @@ if (isset($_POST['action'])) {
         }
         echo '</td>';
         echo '<td>';
-        echo '<button class="btn-info btn-xs openModalAssignStaff" id="' . $rows['tlg_id'] . '" data-group="' . $i . '" data-subject="' . $rows['subject_name'] . '" data-type="' . $tlgType . '">+</button>';
+        echo '<button class="btn btn-info btn-sm openModalAssignStaff" id="' . $rows['tlg_id'] . '" data-group="' . $i . '" data-subject="' . $rows['subject_name'] . '" data-type="' . $tlgType . '">Assign</button>';
+        echo '</td>';
+        echo '<td>';
+        echo '<button class="btn btn-success btn-sm subAllChoices" data-tlg="' . $rows['tlg_id'] . '">Choices</button>';
         echo '</td>';
         echo '</tr>';
       }
@@ -196,6 +201,103 @@ if (isset($_POST['action'])) {
       echo '</tr>';
     }
     echo '</table>';
+  } elseif ($_POST['action'] == "updateTlgDept") {
+    //echo "Update Dept " . $_POST['sel_dept'];
+    //echo "TlgId " . $_POST['tlg_idM'];
+    $sql = "update $tn_tlg set dept_id='" . $_POST['sel_dept'] . "' where tlg_id='" . $_POST['tlg_idM'] . "'";
+    $conn->query($sql);
+    //echo $_POST['tlg_idM'];
+    echo getField($conn, $_POST['sel_dept'], "department", "dept_id", "dept_abbri"); // return to update the display
+  } elseif ($_POST['action'] == "subChoiceList") {
+    $sno = 1;
+    $sql = "select tlg.*, sb.* from $tn_tlg tlg, subject sb where tlg.subject_id=sb.subject_id and dept_id='$myDept' and tlg.tlg_type='L' and tlg.tlg_status='0' order by tlg.subject_id, tlg.tlg_type";
+    $result = $conn->query($sql);
+    if (!$result) die("Could not List the Teaching Load!");
+    echo '<table  class="list-table-xs table-striped">';
+    echo '<thead><th>#</th><th>TlgId</th><th>Subject</th><th>Class</th><th>Weekly Load</th><th>Groups</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></thead>';
+    while ($rows = $result->fetch_assoc()) {
+      $tlgId = $rows['tlg_id'];
+      $tlgGroup = $rows['tlg_group'];
+      $class_id = $rows['class_id'];
+      echo '<tr>';
+      echo '<td>' . $sno++ . '</td>';
+      echo '<td>' . $rows['tlg_id'] . '</td>';
+      echo '<td>' . $rows['subject_name'] . '</td>';
+      echo '<td><div id="dept' . $tlgId . '">';
+      echo getField($conn, $class_id, "class", "class_id", "class_name");
+      echo '</div></td>';
+      echo '<td>' . $rows['subject_lecture'] . '</td><td>' . $tlgGroup . '</td>';
+      $sql = "select * from $tn_sc where staff_id='$myId' and tlg_id='$tlgId'";
+      $status = getFieldValue($conn, "choice", $sql);
+      $td = '<i class="fa fa-check"></i>';
+      if ($status == '1') echo '<td class="click"><a href="#" class="setChoice" data-choice="1" data-tlg="' . $tlgId . '">' . $td . '</a></td>';
+      else echo '<td class="click"><a href="#" class="setChoice" data-choice="1" data-tlg="' . $tlgId . '">&nbsp;</a></td>';
+      if ($status == '2') echo '<td class="click"><a href="#" class="setChoice" data-choice="2" data-tlg="' . $tlgId . '">' . $td . '</a></td>';
+      else echo '<td class="click"><a href="#" class="setChoice" data-choice="2" data-tlg="' . $tlgId . '">&nbsp;</a></td>';
+      if ($status == '3') echo '<td class="click"><a href="#" class="setChoice" data-choice="3" data-tlg="' . $tlgId . '">' . $td . '</a></td>';
+      else echo '<td class="click"><a href="#" class="setChoice" data-choice="3" data-tlg="' . $tlgId . '">&nbsp;</a></td>';
+      if ($status == '4') echo '<td class="click"><a href="#" class="setChoice" data-choice="4" data-tlg="' . $tlgId . '">' . $td . '</a></td>';
+      else echo '<td class="click"><a href="#" class="setChoice" data-choice="4" data-tlg="' . $tlgId . '">&nbsp;</a></td>';
+      if ($status == '5') echo '<td class="click"><a href="#" class="setChoice" data-choice="5" data-tlg="' . $tlgId . '">' . $td . '</a></td>';
+      else echo '<td class="click"><a href="#" class="setChoice" data-choice="5" data-tlg="' . $tlgId . '">&nbsp;</a></td>';
+      echo '</tr>';
+    }
+    echo '</table>';
+  } elseif ($_POST['action'] == "setChoice") {
+    //echo "Tl ".$_POST['tlg_id'];
+    // echo "Value ".$_POST['value'];
+    $sql = "select * from $tn_sc where staff_id='$myId' and choice='" . $_POST['value'] . "'";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+      // echo "Choice Found <br>";
+      $sql = "delete from $tn_sc where choice='" . $_POST['value'] . "' and staff_id='$myId'";
+      $result = $conn->query($sql);
+    }
+    $sql = "update $tn_sc set choice='" . $_POST['value'] . "' where tlg_id='" . $_POST['tlg_id'] . "' and staff_id='$myId'";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+    if ($conn->affected_rows == 0) {
+      $sql = "insert into $tn_sc (tlg_id,staff_id,choice) values('" . $_POST['tlg_id'] . "', '$myId', '" . $_POST['value'] . "')";
+      $result = $conn->query($sql);
+      if (!$result) echo "Could Not Insert !!";
+      else echo "Choice Added Successfully !!";
+    } else echo "Choice Updated !! ";
+  } elseif ($_POST['action'] == "myChoiceList") {
+    $sno = 1;
+    $sql = "select tlg.*, sc.* from $tn_tlg tlg, $tn_sc sc where sc.staff_id='$myId' and tlg.tlg_id=sc.tlg_id order by choice";
+    $result = $conn->query($sql);
+    while ($rows = $result->fetch_assoc()) {
+      $tlgId = $rows['tlg_id'];
+      $subject_id = $rows['subject_id'];
+      $class_id = $rows['class_id'];
+      $choice = $rows['choice'];
+      echo '<div class="card mb-1 p-0">';
+      echo '<div class="row">';
+      echo '<div class="col-sm-3 pr-0 mr-0 bg-danger text-white"><h3>'.$choice.'</h3>';
+      echo getField($conn, $class_id, "class", "class_id", "class_name");
+      echo '</div>';
+      echo '<div class="col-sm-9 p-0"><h5>';
+      echo getField($conn, $subject_id, "subject", "subject_id", "subject_name");
+      echo '</h5></div>';
+      echo '</div></div>';
+    }
+  } elseif ($_POST['action'] == "subAllChoices") {
+    $tlg_id=$_POST['tlg_id'];
+    $subject_id=getField($conn, $tlg_id, $tn_tlg, "tlg_id", "subject_id");
+    echo '<h5>'.getField($conn, $subject_id, "subject", "subject_id", "subject_name").'</h5>';
+
+    $sql = "select sc.*, s.staff_name from staff s, $tn_sc sc where sc.tlg_id='$tlg_id' and sc.staff_id=s.staff_id order by sc.choice";
+    $result = $conn->query($sql);
+    while ($rows = $result->fetch_assoc()) {
+      $tlgId = $rows['tlg_id'];
+      $staff = $rows['staff_name'];
+      $choice = $rows['choice'];
+      echo '<div class="row border">';
+      echo '<div class="col-sm-1 p-1 text-white text-center"><a href="#"><h5>'.$choice.'</h5></a></div>';
+      echo '<div class="col-sm-9 p-1"><h6>'.$staff.'</h6></div>';
+      echo '<div class="col-sm-2 p-1 text-white text-center"><a href="#"> Add </a></div>';
+      echo '</div>';
+    }
   }
 }
 

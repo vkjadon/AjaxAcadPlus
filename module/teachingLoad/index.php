@@ -107,14 +107,22 @@ require('../../phpFunction/teachingLoadFunction.php');
             </div>
           </div>
           <div class="tab-pane fade" id="list-subChoice" role="tabpanel" aria-labelledby="list-subChoice-list">
-            <div class="col-8 mt-1 mb-1"></div>
+            <div class="row">
+              <div class="col-8 mt-1 mb-1" id="subjectChoiceList"></div>
+              <div class="col-4 mt-1 mb-1" id="myChoiceList"></div>
+            </div>
           </div>
           <div class="tab-pane fade" id="list-tl" role="tabpanel" aria-labelledby="list-tl-list">
-            <div class="col-8 mt-1 mb-1" id="tlList"></div>
+            <div class="row">
+              <div class="col-9 mt-1 mb-1" id="tlList"></div>
+              <div class="col-3 mt-1 mb-1" id="subAllChoices"></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <h1>&nbsp;</h1>
+    <h1>&nbsp;</h1>
     <h1>&nbsp;</h1>
   </div>
 </body>
@@ -149,6 +157,17 @@ require('../../phpFunction/teachingLoadFunction.php');
       //$.alert("TL");
       $("#panelId").html("TL");
       tlList();
+    });
+
+    $(document).on('click', '.subChoice', function() {
+      subjectChoiceList();
+      myChoiceList();
+    });
+
+    $(document).on('click', '.subAllChoices', function() {
+      var tlg_id = $(this).attr("data-tlg")
+      //$.alert(tlg_id)
+      subAllChoices(tlg_id);
     });
 
     $(document).on('click', '.clList, .cc', function() {
@@ -231,7 +250,7 @@ require('../../phpFunction/teachingLoadFunction.php');
       var subject = $(this).attr('data-subject');
       var type = $(this).attr('data-type');
       //$.alert("tlg " + tlg_id + " Group " + group + " Subject " + subject);
-      $('#modal_title').text("Assign Staff");
+      $('#modal_titleClass').text("Assign Staff");
       $('#action').val("assignStaff");
       $('#submitModalForm').show();
       $('#submitModalForm').html("Submit");
@@ -246,7 +265,7 @@ require('../../phpFunction/teachingLoadFunction.php');
 
 
       $(".classForm").hide()
-      $(".uploadTTForm").hide()
+      $(".updateDeptForm").hide()
       $(".clashForm").hide()
 
       $(".assignStaff").show()
@@ -284,7 +303,7 @@ require('../../phpFunction/teachingLoadFunction.php');
         $('#submitModalForm').show();
         $('#submitModalForm').html("Submit");
 
-        $(".uploadTTForm").hide()
+        $(".updateDeptForm").hide()
         $('.assignStaff').hide();
         $('.clashForm').hide();
 
@@ -305,7 +324,7 @@ require('../../phpFunction/teachingLoadFunction.php');
       $('#submitModalForm').html("Submit");
 
       $(".assignStaff").hide()
-      $(".uploadTTForm").hide()
+      $(".updateDeptForm").hide()
       $(".clashForm").hide()
 
       $(".classForm").show()
@@ -315,6 +334,8 @@ require('../../phpFunction/teachingLoadFunction.php');
     $(document).on('submit', '#modalForm', function(event) {
       event.preventDefault(this);
       var action = $("#action").val();
+      var tlg_id = $("#tlg_idM").val();
+
       //$.alert("Form Submitted " + action);
       var error = "NO";
       var error_msg = "";
@@ -331,7 +352,7 @@ require('../../phpFunction/teachingLoadFunction.php');
       }
       if (error == "NO") {
         var formData = $(this).serialize();
-        $.alert(formData);
+        //$.alert(formData);
         $.post("teachingLoadSql.php", formData, () => {}, "text").done(function(data) {
           //$.alert(data);
           if (action == "addClass" || action == "updateClass") {
@@ -341,6 +362,9 @@ require('../../phpFunction/teachingLoadFunction.php');
             var classId = $("#sel_class").val();
             if (classId > 0) tlList(classId);
             else $.alert(" Select Class ");
+          } else {
+            //$.alert("Updated");
+            $("#dept" + tlg_id).html(data)
           }
           $('#firstModal').modal('hide');
           $('#modalForm')[0].reset();
@@ -351,10 +375,43 @@ require('../../phpFunction/teachingLoadFunction.php');
         $.alert(error_msg);
       }
     });
+    $(document).on('click', '.modalFormUpdateDept', function() {
+      var tlgId = $(this).attr('data-tlg');
+
+      //$.alert("Class Modal");
+      $('#modal_titleClass').html("Update Department for Teaching Load");
+      $('#action').val("updateTlgDept");
+      $('#tlg_idM').val(tlgId);
+      $('#submitModalForm').show();
+      $('#submitModalForm').html("Submit");
+
+      $(".assignStaff").hide()
+      $(".classForm").hide()
+
+      $(".updateDeptForm").show()
+      $('#firstModal').modal('show');
+    });
+    $(document).on('click', '.setChoice', function() {
+      var tlg_id = $(this).attr('data-tlg');
+      var value = $(this).attr('data-choice');
+      //$.alert("TlgId " + tlg_id + "Value" + value);
+      $.post('teachingLoadSql.php', {
+        action: "setChoice",
+        tlg_id: tlg_id,
+        value: value
+      }, function(data, status) {
+        //$("#c"+value+"tlg" + tlg_id).text(value);
+        $.alert(data);
+        subjectChoiceList()
+        myChoiceList();
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+    });
 
     function tlList() {
       var classId = $("#sel_class").val();
-      $.alert("Class " + classId);
+      //$.alert("Class " + classId);
       $.post("teachingLoadSql.php", {
         classId: classId,
         action: "tl"
@@ -362,6 +419,45 @@ require('../../phpFunction/teachingLoadFunction.php');
         $("#tlList").show();
         //$.alert("List " + mydata);
         $("#tlList").html(mydata);
+      }, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
+    }
+
+    function myChoiceList() {
+      //$.alert(" Subject Choice ");
+      $.post("teachingLoadSql.php", {
+        action: "myChoiceList"
+      }, function(mydata, mystatus) {
+        $("#myChoiceList").show();
+        //$.alert("List " + mydata);
+        $("#myChoiceList").html(mydata);
+      }, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
+    }
+
+    function subAllChoices(x) {
+      $.alert(" Subject All Choices " + x);
+      $.post("teachingLoadSql.php", {
+        tlg_id: x,
+        action: "subAllChoices"
+      }, function(mydata, mystatus) {
+        //$.alert("List " + mydata);
+        $("#subAllChoices").html(mydata);
+      }, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
+    }
+
+    function subjectChoiceList() {
+      //$.alert(" Subject Choice ");
+      $.post("teachingLoadSql.php", {
+        action: "subChoiceList"
+      }, function(mydata, mystatus) {
+        $("#subjectChoiceList").show();
+        //$.alert("List " + mydata);
+        $("#subjectChoiceList").html(mydata);
       }, "text").fail(function() {
         $.alert("fail in place of error");
       })
@@ -454,23 +550,14 @@ require('../../phpFunction/teachingLoadFunction.php');
               </div>
             </div>
           </div>
-          <div class="uploadTTForm">
+          <div class="updateDeptForm">
             <div class="row">
-              <label class="col-md-3 text-right"><b>Day</b></label>
-              <div class="col-md-3" id="dayNameM"></div>
-              <label class="col-md-3 text-right"><b>Period</b></label>
-              <div class="col-md-3" id="periodM"></div>
-            </div>
-            <div class="row">
-              <div class="col-12" id="tlData"></div>
-            </div>
-          </div>
-          <div class="clashForm">
-            <div class="row">
-              <div class="col-md-12" id="clashId"></div>
-            </div>
-            <div class="row">
-              <div class="col-12" id="clashData"></div>
+              <div class="col">
+                <?php
+                $sql = "select * from department where dept_status='0' and dept_type='0' order by dept_abbri";
+                selectList($conn, "Select New Department", array("0", "dept_id", "dept_abbri", "dept_id", "sel_dept"), $sql);
+                ?>
+              </div>
             </div>
           </div>
 
@@ -504,8 +591,6 @@ require('../../phpFunction/teachingLoadFunction.php');
           <input type="hidden" id="tlg_idM" name="tlg_idM">
           <input type="hidden" id="tl_groupM" name="tl_groupM">
           <input type="hidden" id="tlIdM" name="tlIdM">
-          <input type="hidden" id="dayM" name="dayM">
-          <input type="hidden" id="dropPeriodM" name="dropPeriodM">
           <input type="hidden" id="classIdM" name="classIdM">
 
           <button type="submit" class="btn btn-success btn-sm" id="submitModalForm"></button>

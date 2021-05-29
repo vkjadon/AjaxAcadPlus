@@ -21,7 +21,7 @@ function selectList($conn, $selectTitle, $data, $sql)
     $selectedName = $data[6];
   }
   //$required=0; Required some value
-  //$required>0 The variable need the selection for proceed
+  //$required>0 The variable need the selection to proceed
   //$required=2 The ALL item does NOT appear in the List
   $result = $conn->query($sql);
   if ($result) {

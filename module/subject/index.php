@@ -48,7 +48,7 @@ require('../../php_function.php');
 
               <div class="row">
                 <div class="col-sm-6">
-                <button class="btn btn-sm btn-default btn-block disabled">Set Elective/CBCS Schedule</button>
+                  <button class="btn btn-sm btn-default btn-block disabled">Set Elective/CBCS Schedule</button>
                   <div id="electivePool"></div>
                 </div>
                 <div class="col-sm-5">
@@ -375,25 +375,16 @@ require('../../php_function.php');
       $('#secondModal').modal("hide");
       $.alert(" Pressed" + formData);
       $.post("subjectSql.php", formData, () => {}, "text").done(function(data) {
-        //$.alert("List " + data);
+        $.alert("List " + data);
         $("#modalSecondForm")[0].reset();
       }, "text").fail(function() {
         $.alert("fail in place of error");
       })
     });
     $(document).on('click', '.copySubject', function() {
-      var x = $("#sel_batch").val();
-      var y = $("#sel_program").val();
-      //$.alert("Add Subject" + x + "-" + y);
-      if (x === "" || y == "") $.alert("Please select Program and Batch");
-      else {
-
-        $('#modal_titleSecond').html("Copy Subject [<?php echo $myProgAbbri . '-' . $myBatchName . ']'; ?> ");
-        $('#originalProgram').val(y);
-        $('#originalBatch').val(x);
-        $('#actionSecond').val("copySubject");
-        $('#secondModal').modal('show');
-      }
+      $('#modal_titleSecond').html("Copy Subject [<?php echo $myProgAbbri . '-' . $myBatchName . ']'; ?> ");
+      $('#actionSecond').val("copySubject");
+      $('#secondModal').modal('show');
     });
     $(document).on('click', '.vac', function() {
       var id = $(this).attr("data-id");
@@ -791,7 +782,7 @@ require('../../php_function.php');
                 $sql_batch = "select * from batch where batch_status='0' order by batch desc";
                 $result_batch = $conn->query($sql_batch);
                 if ($result_batch) {
-                  echo '<select class="form-control form-control-sm" name="copy_batch" id="copy_batch" required>';
+                  echo '<select class="form-control form-control-sm" name="newBatch" id="newBatch" required>';
                   while ($rows_batch = $result_batch->fetch_assoc()) {
                     $select_id = $rows_batch['batch_id'];
                     $select_name = $rows_batch['batch'];
@@ -807,7 +798,7 @@ require('../../php_function.php');
             <div class="form-group row">
               <label class="control-label col-sm-4" for="batch">Copy Semester:</label>
               <div class="col-sm-8">
-                <input type="number" class="form-control form-control-sm" id="copy_semester" name="copy_semester" placeholder="Semester">
+                <input type="number" class="form-control form-control-sm" id="newSemester" name="newSemester" placeholder="Semester">
               </div>
             </div>
           </div>
@@ -816,8 +807,6 @@ require('../../php_function.php');
         <!-- Modal footer -->
         <div class="modal-footer">
           <input type="hidden" id="actionSecond" name="action">
-          <input type="hidden" id="originalProgram" name="programId">
-          <input type="hidden" id="originalBatch" name="batchId">
           <button type="submit" class="btn btn-secondary btn-sm">Submit</button>
           <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
         </div> <!-- Modal Footer Closed-->

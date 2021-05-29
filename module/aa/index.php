@@ -20,16 +20,14 @@ require('../../php_function.php');
       <div class="row">
         <div class="col-sm-2">
           <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-            <a class="list-group-item list-group-item-action active bs" id="list-bs-list" data-toggle="list" href="#list-bs" role="tab" aria-controls="bs"> Batch/Session </a>
-            <a class="list-group-item list-group-item-action po" id="list-po-list" data-toggle="list" href="#list-po" role="tab" aria-controls="po"> Programme Outcome </a>
-            <!-- <a class="list-group-item list-group-item-action sub" id="list-sub-list" data-toggle="list" href="#list-sub" role="tab" aria-controls="sub"> Courses/Subjects </a>
-            <a class="list-group-item list-group-item-action co" id="list-co-list" data-toggle="list" href="#list-co" role="tab" aria-controls="co"> Course Outcome </a>
-            <a class="list-group-item list-group-item-action copo" id="list-copo-list" data-toggle="list" href="#list-copo" role="tab" aria-controls="copo"> CO-PO Map </a> -->
+            <a class="list-group-item list-group-item-action active bs" id="list-bs-list" data-toggle="list" href="#list-bs"> Batch/Session </a>
+            <a class="list-group-item list-group-item-action po" id="list-po-list" data-toggle="list" href="#list-po"> Programme Outcome </a>
+            <a class="list-group-item list-group-item-action fs" id="list-fs-list" data-toggle="list" href="#list-fs"> Faculty Specializations </a>
           </div>
         </div>
         <div class="col-10">
           <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="list-bs" role="tabpanel" aria-labelledby="list-bs-list">
+            <div class="tab-pane fade show active" id="list-bs">
               <div class="row">
                 <div class="col-sm-6">
                   <button class="btn btn-secondary btn-sm addBatch">New Batch</button>
@@ -42,7 +40,7 @@ require('../../php_function.php');
                 </div>
               </div>
             </div>
-            <div class="tab-pane fade show" id="list-po" role="tabpanel" aria-labelledby="list-po-list">
+            <div class="tab-pane fade show" id="list-po">
               <div class="row">
                 <div class="col-sm-8">
                   <button class="btn btn-sm btn-secondary m-0 addPo">Add PO</button>
@@ -55,50 +53,14 @@ require('../../php_function.php');
                 </div>
               </div>
             </div>
-            <div class="tab-pane fade" id="list-sub" role="tabpanel" aria-labelledby="list-sub-list">
+            <div class="tab-pane fade" id="list-fs">
+              
               <div class="row">
-                <div class="col-sm-8 p-0">
-                  <button class="btn btn-sm btn-secondary addSubject">New Subject</button>
-                  <button class="btn btn-sm btn-warning copySubject">Copy Subject</button>
-                  <button class="btn btn-sm btn-primary uploadSubject">Upload Subject</button>
+                <div class="col-sm-8">Form to add New Sp and Faculty List with Specialization
                 </div>
-                <div class="col-sm-4">
-                  <div>
-                    <h5>Semester Wise Subject Summary</h5>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-8">
-                  <div id="subShowList"></div>
-                </div>
-                <div class="col-sm-4">
-                  <div id="subjectSummary"></div>
-                </div>
+                
               </div>
             </div>
-            <div class="tab-pane fade show" id="list-co" role="tabpanel" aria-labelledby="list-co-list">
-              <div class="row">
-                <div class="col-sm-12">
-                  <button class="btn btn-sm btn-secondary addCO m-0">Add</button>
-                  <button class="btn btn-sm btn-primary uploadCo">Upload CO</button>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-9">
-                  <span style="text-align:left" id="coShowList"></span>
-                </div>
-              </div>
-            </div>
-
-            <div class="tab-pane fade show" id="list-copo" role="tabpanel" aria-labelledby="list-copo-list">
-              <div class="row">
-                <div class="col-sm-8">
-                  <span style="text-align:left" id="copoMap"></span>
-                </div>
-              </div>
-            </div>
-
           </div>
         </div>
       </div>

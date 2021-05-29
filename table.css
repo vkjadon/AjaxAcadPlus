@@ -49,6 +49,11 @@ table.tableRowHead-sm {
   font-size: small;
 }
 
+td.click a {
+  display:block;
+  width:100%;
+}
+
 tr.rejected{
   color: rgba(230, 22, 56, 0.884);
   font-style: italic;
