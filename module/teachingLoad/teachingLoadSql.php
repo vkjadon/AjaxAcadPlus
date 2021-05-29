@@ -142,8 +142,8 @@ if (isset($_POST['action'])) {
           $staff_id = $rowsStaff['staff_id'];
           if ($staff_id > 0) {
             echo getField($conn, $staff_id, 'staff', 'staff_id', 'staff_name');
-            echo '<a href="#" class="openModalUpdateStaff" id="' . $rowsStaff['tl_id'] . '" data-group="' . $i . '"><i class="fa fa-edit" aria-hidden="true"></i></a>';
-            if ($result_staff->num_rows > 1) echo '<a href="#" class="unassign" id="' . $rowsStaff['tl_id'] . '"><i class="fa fa-times" aria-hidden="true" style="color:red"></i></a>';
+            //echo '<a href="#" class="openModalUpdateStaff" id="' . $rowsStaff['tl_id'] . '" data-group="' . $i . '"><i class="fa fa-edit" aria-hidden="true"></i></a>';
+            if ($result_staff->num_rows > 1) echo '<a href="#" class="unassign" data-tl="' . $rowsStaff['tl_id'] . '"><i class="fa fa-times" aria-hidden="true" style="color:red"></i></a>';
             echo ',&nbsp;';
           }
         }
@@ -284,20 +284,22 @@ if (isset($_POST['action'])) {
   } elseif ($_POST['action'] == "subAllChoices") {
     $tlg_id=$_POST['tlg_id'];
     $subject_id=getField($conn, $tlg_id, $tn_tlg, "tlg_id", "subject_id");
-    echo '<h5>'.getField($conn, $subject_id, "subject", "subject_id", "subject_name").'</h5>';
+    echo '<h6>'.getField($conn, $subject_id, "subject", "subject_id", "subject_name").'</h6>';
 
-    $sql = "select sc.*, s.staff_name from staff s, $tn_sc sc where sc.tlg_id='$tlg_id' and sc.staff_id=s.staff_id order by sc.choice";
+    $sql = "select sc.*, s.staff_name, s.user_id from staff s, $tn_sc sc where sc.tlg_id='$tlg_id' and sc.staff_id=s.staff_id order by sc.choice";
     $result = $conn->query($sql);
     while ($rows = $result->fetch_assoc()) {
       $tlgId = $rows['tlg_id'];
-      $staff = $rows['staff_name'];
       $choice = $rows['choice'];
       echo '<div class="row border">';
-      echo '<div class="col-sm-1 p-1 text-white text-center"><a href="#"><h5>'.$choice.'</h5></a></div>';
-      echo '<div class="col-sm-9 p-1"><h6>'.$staff.'</h6></div>';
-      echo '<div class="col-sm-2 p-1 text-white text-center"><a href="#"> Add </a></div>';
+      echo '<div class="col-sm-1 p-1 text-center"><h5><b>'.$choice.'</h5></b></div>';
+      echo '<div class="col-sm-9 p-1">['.$rows['user_id'].'] '.$rows['staff_name'].'</div>';
       echo '</div>';
     }
+  } elseif ($_POST['action'] == "tlDelete") {
+    echo "TlId " . $_POST['tl_id'];
+    $sql = "update $tn_tl set tl_status='9' where tl_id='" . $_POST['tl_id'] . "'";
+    $conn->query($sql);
   }
 }
 

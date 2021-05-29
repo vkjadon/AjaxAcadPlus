@@ -330,6 +330,19 @@ require('../../phpFunction/teachingLoadFunction.php');
       $(".classForm").show()
       $('#firstModal').modal('show');
     });
+    $(document).on('click', '.unassign', function() {
+      var tl_id=$(this).attr("data-tl")
+      $.alert("Class Modal" + tl_id);
+      $.post("teachingLoadSql.php", {
+        tl_id: tl_id,
+        action: "tlDelete"
+      }, function(mydata, mystatus) {
+        //$.alert("List " + mydata);
+        tlList();
+      }, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
 
     $(document).on('submit', '#modalForm', function(event) {
       event.preventDefault(this);
