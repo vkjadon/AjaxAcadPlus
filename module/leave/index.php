@@ -10,11 +10,132 @@ require('../../php_function.php');
 <link rel="stylesheet" href="leave.css">
 <head>
  <title>Admin Login : ClassConnect</title>
+<<<<<<< HEAD
  <?php
  require("../css.php");
  ?>
 
 
+||||||| merged common ancestors
+ <?php require("../css.php"); ?>
+ <style>
+  #card_leave body {
+   background-color: #bcd9f5
+  }
+
+  #card_leave .card {
+   max-width: 25rem;
+   padding: 0;
+   border: none;
+   border-radius: 0.5rem
+  }
+
+  #card_leave a.active {
+   border-bottom: 2px solid #55c57a
+  }
+
+  #card_leave .nav-link {
+   color: rgb(110, 110, 110);
+   font-weight: 500
+  }
+
+  #card_leave .nav-link:hover {
+   color: #55c57a
+  }
+
+  #card_leave .nav-pills .nav-link.active {
+   color: black;
+   background-color: white;
+   border-radius: 0.5rem 0.5rem 0 0;
+   font-weight: 600
+  }
+
+  #card_leave .tab-content {
+   padding-bottom: 1.3rem
+  }
+
+  #card_leave .form-control {
+   background-color: rgb(241, 243, 247);
+   border: none
+  }
+
+  #card_leave span {
+   margin-left: 0.5rem;
+   padding: 1px 10px;
+   color: white;
+   background-color: rgb(143, 143, 143);
+   border-radius: 4px;
+   font-weight: 600
+  }
+
+  #card_leave .third {
+   padding: 0 1.5rem 0 1.5rem
+  }
+
+  #card_leave label {
+   font-weight: 500;
+   color: rgb(104, 104, 104)
+  }
+
+  #card_leave .btn-success {
+   float: right
+  }
+
+  #card_leave .form-control:focus {
+   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 7px rgba(0, 0, 0, 0.2)
+  }
+
+  #card_leave select {
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   text-indent: 1px;
+   text-overflow: ""
+  }
+
+  #card_leave ul {
+   list-style: none;
+   margin-top: 1rem;
+   padding-inline-start: 0
+  }
+
+  #card_leave .search {
+   padding: 0 1rem 0 1rem
+  }
+
+  #card_leave .ccontent li .wrapp {
+   padding: 0.3rem 1rem 0.001rem 1rem
+  }
+
+  #card_leave .ccontent li .wrapp div {
+   font-weight: 600
+  }
+
+  #card_leave .ccontent li .wrapp p {
+   font-weight: 360
+  }
+
+  #card_leave .ccontent li:hover {
+   background-color: rgb(117, 93, 255);
+   color: white
+  }
+
+  #card_leave .addinfo {
+   padding: 0 1rem
+  }
+
+  #card_leave .btn {
+   color: white;
+   float: right;
+   background-color: #228B22;
+
+  }
+ </style>
+
+=======
+ <?php require("../css.php"); ?>
+<link rel="stylesheet" href="leave.css">
+ 
+>>>>>>> 12bbd678382e5d31f1ffb55032d9b500bb07a6cb
 </head>
 
 <body>
@@ -23,11 +144,6 @@ require('../../php_function.php');
  <div class="container-fluid moduleBody">
   <div class="row">
    <div class="col-2">
-    <?php
-    $url = $setUrl . '/acadplus/api/check_dept_head.php?u=' . $myUn . '&&p=' . $myPwd;
-    $dept_head = check_dept_head($url);
-    // echo $dept_head.$myUn.$myId.$setUrl;
-    ?>
     <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
      <a class="list-group-item list-group-item-action active ccfList" id="list-ccf-list" data-toggle="list" href="#list-ccf" role="tab" aria-controls="ccf">Compensatory Claim Form/Status</a>
      <a class="list-group-item list-group-item-action lt" id="list-lt-list" data-toggle="list" href="#list-lt" role="tab" aria-controls="lt">Leave Type</a>
@@ -35,12 +151,8 @@ require('../../php_function.php');
      <a class="list-group-item list-group-item-action lf" id="list-lf-list" data-toggle="list" href="#list-lf" role="tab" aria-controls="lf">Leave Form</a>
      <a class="list-group-item list-group-item-action ss" id="list-ss-list" data-toggle="list" href="#list-ss" role="tab" aria-controls="ss">Special Staff</a>
 
-     <?php
-     if ($dept_head == '1') {
-      echo '<a class="list-group-item list-group-item-action ccfApprove" id="list-laf-list" data-toggle="list" href="#list-laf" role="tab" aria-controls="laf">Leave Forward/Approve Request</a>';
-      echo '<a class="list-group-item list-group-item-action leaveReport" id="list-lr-list" data-toggle="list" href="#list-lr" role="tab" aria-controls="lr">Leave Report</a>';
-     }
-     ?>
+    <a class="list-group-item list-group-item-action ccfApprove" id="list-laf-list" data-toggle="list" href="#list-laf" role="tab" aria-controls="laf">Leave Forward/Approve Request</a>
+    <a class="list-group-item list-group-item-action leaveReport" id="list-lr-list" data-toggle="list" href="#list-lr" role="tab" aria-controls="lr">Leave Report</a>
     </div>
    </div>
 
@@ -77,7 +189,8 @@ require('../../php_function.php');
           <li class="nav-item">
            <a class="nav-link" id="pills_leaveDuration" data-toggle="pill" href="#pills_duration" role="tab" aria-controls="pills_duration" aria-selected="false">Leave Duration</a>
           </li>
-         </ul> <!-- content -->
+         </ul> 
+         <!-- content -->
          <div class="tab-content" id="pills-tabContent p-3">
           <div class="tab-pane fade show active" id="pills_type" role="tabpanel" aria-labelledby="pills_leaveType">
            <div class="row">
@@ -707,6 +820,7 @@ require('../../php_function.php');
   }, "json").fail(function() {
    $.alert("fail in place of error");
   })
+  
   // Leave duration table
   $.post("leaveSql.php", {
    action: "leaveDurationList",

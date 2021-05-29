@@ -3,6 +3,7 @@ session_start();
 require("../../config_database.php");
 require('../../config_variable.php');
 require('../../php_function.php');
+require('../../phpFunction/teachingLoadFunction.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,6 +11,7 @@ require('../../php_function.php');
 <head>
   <title>Outcome Based Education : ClassConnect</title>
   <?php require("../css.php"); ?>
+  <link rel="stylesheet" href="teachingLoad.css">
 
 </head>
 
@@ -18,33 +20,94 @@ require('../../php_function.php');
   <div class="container-fluid moduleBody">
     <div class="row">
       <div class="col-2">
-        <div class="card text-center selectPanel">
-          <span id="panelId"></span>
-          <span class="m-1 p-0" id="selectPanelTitle"></span>
-          <div class="col">
-            <p class="selectClass">
-              <?php
-              $sql = "select * from class where session_id='$mySes' and dept_id='$myDept'";
-              selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
-              ?>
-            </p>
-          </div>
+        <span id="panelId"></span>
+        <?php
+        $sql = "select * from class where session_id='$mySes' and dept_id='$myDept'";
+        selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
+        ?>
 
-        </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active cc" id="list-cc-list" data-toggle="list" href="#list-cc" role="tab" aria-controls="cc"> Class Groups </a>
+          <a class="list-group-item list-group-item-action semLoad" id="list-semLoad-list" data-toggle="list" href="#list-semLoad" role="tab" aria-controls="semLoad"> Semester Load </a>
+          <a class="list-group-item list-group-item-action subChoice" id="list-subChoice-list" data-toggle="list" href="#list-subChoice" role="tab" aria-controls="subChoice"> Subject Choice Filling </a>
           <a class="list-group-item list-group-item-action tl" id="list-tl-list" data-toggle="list" href="#list-tl" role="tab" aria-controls="tl"> Assign Load </a>
         </div>
       </div>
       <div class="col-10">
         <div class="tab-content" id="nav-tabContent">
-          <div class="tab-pane show active" id="list-cc" role="tabpanel" aria-labelledby="list-cc-list">
+          <div class="tab-pane show active" id="list-cc" role="tabpanel">
             <div class="row">
               <div class="col-6 mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addClass">New</button>
                 <p id="clList"></p>
               </div>
               <div class="col-6 mt-1 mb-1" id="classSubject"></div>
             </div>
+          </div>
+          <div class="tab-pane fade" id="list-semLoad" role="tabpanel">
+            <div class="col-8 mt-1 mb-1">
+              <div class="container card shadow d-flex justify-content-center mt-2" id="card_tl">
+                <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab">
+                  <?php
+                  $sql = "select * from class where session_id='$mySes' and program_id='$myProg' and class_status='0' order by class_semester";
+                  $result = $conn->query($sql);
+                  $count = 0;
+                  while ($rowsClass = $result->fetch_assoc()) {
+                    $class_id[$count] = $rowsClass["class_id"];
+                    $class_name[$count] = $rowsClass["class_name"];
+                    if ($count == '0') $active = 'active';
+                    else $active = '';
+                    echo '<li class="nav-item">
+                    <a class="nav-link ' . $active . '" data-toggle="pill" href="#p' . $class_name[$count] . '">' . $class_name[$count] . '</a></li>';
+                    $count++;
+                  }
+                  ?>
+                  <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#setSchedule">Set Schedule</a>
+                  </li>
+                </ul>
+                <div class="tab-content" id="pills-tabContent p-3">
+                  <?php
+                  for ($i = 0; $i < $count; $i++) {
+                    if ($i == '0') $active = 'show active';
+                    else $active = '';
+                    echo '<div class="tab-pane fade ' . $active . '" id="p' . $class_name[$i] . '">';
+                    sessionLoad($conn, $class_id[$i], $tn_tlg);
+                    echo '</div>';
+                  }
+                  ?>
+                  <div class="tab-pane fade" id="setSchedule">
+                    <form class="form-horizontal" id="setScheduleForm">
+                      <div class="row">
+                        <div class="col-6">
+                          <div class="form-group">
+                            <label>Chioce Filling Start</label>
+                            <input type="date" class="form-control form-control-sm" id="choiceFrom" name="choiceFrom">
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="form-group">
+                            <label>Choice Filling End</label>
+                            <input type="date" class="form-control form-control-sm" id="choiceTo" name="choiceTo">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-6">
+                          <b><i>Schedule will be Set for the Default Programme</i></b>
+                        </div>
+                        <input type="hidden" id="actionSetSchedule" name="actionSetSchedule">
+                        <div class="col-6">
+                          <button type="submit" class="btn btn-sm">Submit</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="list-subChoice" role="tabpanel" aria-labelledby="list-subChoice-list">
+            <div class="col-8 mt-1 mb-1"></div>
           </div>
           <div class="tab-pane fade" id="list-tl" role="tabpanel" aria-labelledby="list-tl-list">
             <div class="col-8 mt-1 mb-1" id="tlList"></div>
@@ -84,13 +147,8 @@ require('../../php_function.php');
 
     $(document).on('click', '.tl', function() {
       //$.alert("TL");
-      $("#selectPanelTitle").text("Assign Staff Panel");
       $("#panelId").html("TL");
-      $(".selectProgram").hide();
-      $(".selectPanel").show();
-      $(".selectClass").show();
-      var classId = $("#sel_class").val();
-      tlList(classId);
+      tlList();
     });
 
     $(document).on('click', '.clList, .cc', function() {
@@ -294,10 +352,11 @@ require('../../php_function.php');
       }
     });
 
-    function tlList(x) {
-      //$.alert("Class " + x);
+    function tlList() {
+      var classId = $("#sel_class").val();
+      $.alert("Class " + classId);
       $.post("teachingLoadSql.php", {
-        classId: x,
+        classId: classId,
         action: "tl"
       }, function(mydata, mystatus) {
         $("#tlList").show();

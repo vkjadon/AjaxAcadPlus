@@ -1,0 +1,85 @@
+  #card_tl body {
+   background-color: #bcd9f5
+  }
+
+  #card_tl .card {
+   max-width: 25rem;
+   padding: 0;
+   border: none;
+   border-radius: 0.5rem
+  }
+
+  #card_tl a.active {
+   border-bottom: 2px solid #55c57a
+  }
+
+  #card_tl .nav-link {
+   color: rgb(110, 110, 110);
+   font-weight: 500
+  }
+
+  #card_tl .nav-link:hover {
+   color: #55c57a
+  }
+
+  #card_tl .nav-pills .nav-link.active {
+   color: black;
+   background-color: white;
+   border-radius: 0.5rem 0.5rem 0 0;
+   font-weight: 600
+  }
+
+  #card_tl .tab-content {
+   padding-bottom: 1.3rem
+  }
+
+  #card_tl .form-control {
+   background-color: rgb(241, 243, 247);
+   border: none
+  }
+
+  #card_tl span {
+   margin-left: 0.5rem;
+   padding: 1px 10px;
+   color: white;
+   background-color: rgb(143, 143, 143);
+   border-radius: 4px;
+   font-weight: 600
+  }
+
+  #card_tl .third {
+   padding: 0 1.5rem 0 1.5rem
+  }
+
+  #card_tl label {
+   font-weight: 500;
+   color: rgb(104, 104, 104)
+  }
+
+  #card_tl .btn-success {
+   float: right
+  }
+
+  #card_tl .form-control:focus {
+   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 7px rgba(0, 0, 0, 0.2)
+  }
+
+  #card_tl select {
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   text-indent: 1px;
+   text-overflow: ""
+  }
+
+  #card_tl ul {
+   list-style: none;
+   margin-top: 1rem;
+   padding-inline-start: 0
+  }
+
+  #card_tl .btn {
+   color: white;
+   float: right;
+   background-color: #228B22;
+
+  }

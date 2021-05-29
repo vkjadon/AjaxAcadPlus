@@ -20,63 +20,66 @@ require('../../php_function.php');
       <div class="row">
         <div class="col-sm-2">
           <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-            <a class="list-group-item list-group-item-action active bs" id="list-bs-list" data-toggle="list" href="#list-bs" role="tab" aria-controls="bs"> Batch/Session </a>
-            <a class="list-group-item list-group-item-action po" id="list-po-list" data-toggle="list" href="#list-po" role="tab" aria-controls="po"> Programme Outcome </a>
-            <!-- <a class="list-group-item list-group-item-action sub" id="list-sub-list" data-toggle="list" href="#list-sub" role="tab" aria-controls="sub"> Courses/Subjects </a>
+            <a class="list-group-item list-group-item-action show active sub" id="list-sub-list" data-toggle="list" href="#list-sub" role="tab" aria-controls="sub"> Courses/Subjects </a>
+            <a class="list-group-item list-group-item-action se" id="list-se-list" data-toggle="list" href="#list-se" role="tab" aria-controls="se">Session Electives</a>
+            <a class="list-group-item list-group-item-action subReport" id="list-subReport-list" data-toggle="list" href="#list-subReport" role="tab" aria-controls="subReport"> Subject Report </a>
             <a class="list-group-item list-group-item-action co" id="list-co-list" data-toggle="list" href="#list-co" role="tab" aria-controls="co"> Course Outcome </a>
-            <a class="list-group-item list-group-item-action copo" id="list-copo-list" data-toggle="list" href="#list-copo" role="tab" aria-controls="copo"> CO-PO Map </a> -->
+            <a class="list-group-item list-group-item-action copo" id="list-copo-list" data-toggle="list" href="#list-copo" role="tab" aria-controls="copo"> CO-PO Map </a>
           </div>
         </div>
         <div class="col-10">
           <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="list-bs" role="tabpanel" aria-labelledby="list-bs-list">
+
+            <div class="tab-pane fade show active" id="list-sub" role="tabpanel" aria-labelledby="list-sub-list">
               <div class="row">
-                <div class="col-sm-6">
-                  <button class="btn btn-secondary btn-sm addBatch">New Batch</button>
-                  <p style="text-align: center;" id="batchShowList"></p>
-                </div>
-                <div class="col-6">
-                  <button class="btn btn-secondary btn-sm addSessionButton">New Session</button>
-                  <input type="hidden" id="batchId" name="batchId">
-                  <p id="batchSession"></p>
-                </div>
-              </div>
-            </div>
-            <div class="tab-pane fade show" id="list-po" role="tabpanel" aria-labelledby="list-po-list">
-              <div class="row">
-                <div class="col-sm-8">
-                  <button class="btn btn-sm btn-secondary m-0 addPo">Add PO</button>
-                  <button class="btn btn-sm btn-primary uploadPo">Upload PO</button>
-                  <div class="p-2" id="poShowList"></div>
-                </div>
-                <div class="col-sm-4 mt-2">
-                  <h5>PO Summary [Batch - <?php echo $myBatchName; ?>]</h5>
-                  <div id="poSummary"></div>
-                </div>
-              </div>
-            </div>
-            <div class="tab-pane fade" id="list-sub" role="tabpanel" aria-labelledby="list-sub-list">
-              <div class="row">
-                <div class="col-sm-8 p-0">
+                <div class="col-sm-7">
                   <button class="btn btn-sm btn-secondary addSubject">New Subject</button>
                   <button class="btn btn-sm btn-warning copySubject">Copy Subject</button>
                   <button class="btn btn-sm btn-primary uploadSubject">Upload Subject</button>
-                </div>
-                <div class="col-sm-4">
-                  <div>
-                    <h5>Semester Wise Subject Summary</h5>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-8">
                   <div id="subShowList"></div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-5">
+                  <button class="btn btn-sm btn-default btn-block disabled">Assign Elective to Elective/CBCS Pool</button>
+                  <div id="electiveList"></div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="list-se" role="tabpanel" aria-labelledby="list-se-list">
+
+              <div class="row">
+                <div class="col-sm-6">
+                <button class="btn btn-sm btn-default btn-block disabled">Set Elective/CBCS Schedule</button>
+                  <div id="electivePool"></div>
+                </div>
+                <div class="col-sm-5">
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="list-subReport" role="tabpanel" aria-labelledby="list-subReport-list">
+
+              <div class="row">
+                <div class="col-sm-7">
+                  <h5>Subject List</h5>
+                  <table class="table table-striped table-bordered list-table-xs" id="subReport">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Subject Code</th>
+                        <th>Subject Name</th>
+                        <th>L-T-P</th>
+                        <th>Credit</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+                <div class="col-sm-5">
+                  <h5>Subject Summary</h5>
                   <div id="subjectSummary"></div>
                 </div>
               </div>
             </div>
+
             <div class="tab-pane fade show" id="list-co" role="tabpanel" aria-labelledby="list-co-list">
               <div class="row">
                 <div class="col-sm-12">
@@ -90,7 +93,6 @@ require('../../php_function.php');
                 </div>
               </div>
             </div>
-
             <div class="tab-pane fade show" id="list-copo" role="tabpanel" aria-labelledby="list-copo-list">
               <div class="row">
                 <div class="col-sm-8">
@@ -115,27 +117,26 @@ require('../../php_function.php');
 
     $('[data-toggle="tooltip"]').tooltip();
     $(".topBarTitle").text("Academics");
-    batchList();
     coList();
+    subjectList();
+    electiveList();
+    subReport();
 
     $(document).on("change", "#sel_subject", function() {
       coList();
     });
-    // Left Panel Block
-    $(document).on('click', '.bs', function() {
-      batchList();
+    $(document).on('click', '.sub', function() {
+      subjectList();
+      electiveList();
     });
-    $(document).on('click', '.po', function() {
-      $('#action').val("addPo");
-      poList();
-      poSummary();
+
+    $(document).on('click', '.se', function() {
+      electivePool();
     });
+
     $(document).on('click', '.co', function() {
       $('#action').val("addCo");
       coList();
-    });
-    $(document).on('click', '.sub', function() {
-      subjectList();
     });
 
     $(document).on('submit', '#modalForm', function(event) {
@@ -144,7 +145,7 @@ require('../../php_function.php');
       var staff = $("#sel_staff").val();
       var action = $("#action").val();
       var batch = $("#newBatch").val();
-      var selBatch = $("#batchId").val();
+      var selBatch = $("#sel_batch").val();
       var selSubject = $("#sel_subject").val();
       var poc = $("#poCode").val();
       var poS = $("#poStatemnt").val();
@@ -192,10 +193,11 @@ require('../../php_function.php');
         var formData = $(this).serialize();
         $('#firstModal').modal('hide');
         //$.alert(" Pressed" + formData);
-        $.post("aaSql.php", formData, () => {}, "text").done(function(data) {
+        $.post("subjectSql.php", formData, () => {}, "text").done(function(data) {
           //$.alert("List " + data);
           if (action == "addSubject" || action == "updateSubject") {
             subjectList();
+            electiveList();
           } else if (action == "addBatch" || action == "updateBatch") {
             batchList();
           } else if (action == "addPo" || action == "updatePo") {
@@ -203,7 +205,7 @@ require('../../php_function.php');
           } else if (action == "addCo" || action == "updateCo") {
             coList();
           } else if (action == "addSession" || action == "updateSession") {
-            batchSession(selBatch);
+            batchSession(<?php echo $myBatch; ?>);
           }
           $("#modalForm")[0].reset();
         }, "text").fail(function() {
@@ -236,7 +238,7 @@ require('../../php_function.php');
     $(document).on('click', '.co_idE', function() {
       var id = $(this).attr('id');
       // $.alert("Id " + id);
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         action: "fetchCo",
         coId: id
       }, () => {}, "json").done(function(data) {
@@ -264,144 +266,11 @@ require('../../php_function.php');
       coList();
     });
 
-    // Manage Program Outcome
-    $(document).on('click', '.addPo', function() {
-      $('#modal_title').html("Add PO [<?php echo $myProgAbbri; ?> - <?php echo $myBatchName; ?>]");
-      $('#action').val("addPo");
-      $('#firstModal').modal('show');
-      $('.subjectForm').hide();
-      $('.batchForm').hide();
-      $('.poForm').show();
-      $('.coForm').hide();
-      $('.sessionForm').hide();
-      $('.selectPanel').show();
-      $("#modalForm")[0].reset();
-    });
-    $(document).on('click', '.po_idD', function() {
-      $.alert("Disabled");
-    });
-    $(document).on('click', '.po_idE', function() {
-      var id = $(this).attr('id');
-      $.alert("Id " + id);
-      $.post("aaSql.php", {
-        action: "fetchPo",
-        poId: id
-      }, () => {}, "json").done(function(data) {
-        //$.alert("List ");
-        $('#modal_title').text("Update PO [" + id + "]");
-        $("#poCode").val(data.po_code);
-        $("#poStatement").val(data.po_name);
-        $("#poSno").val(data.po_sno);
-        $("#action").val("updatePo");
-        $('#modalId').val(id);
-        $('#firstModal').modal('show');
-        $('.batchForm').hide();
-        $('.subjectForm').hide();
-        $('.poForm').show();
-        $('.coForm').hide();
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
-    // Manage Session
-    $(document).on('click', '.session_idD', function() {
-      $.alert("Disabled");
-    });
-    $(document).on('click', '.addSessionButton', function(event) {
-      var selBatch=$("#batchId").val();
-      $.alert("New Session ");
-      $('#modal_title').text("Add Session" + selBatch);
-      $('#batchIdModal').val(selBatch);
-      $('#action').val("addSession");
-      $("#firstModal").modal('show');
-      $(".batchForm").hide();
-      $(".poForm").hide();
-      $(".coForm").hide();
-      $(".subjectForm").hide();
-      $(".sessionForm").show();
-    });
-    $(document).on('click', '.batch_idSession', function() {
-      var id = $(this).attr('data-id');
-      //$.alert("Process Id " + id);
-      batchSession(id);
-    });
-    $(document).on('click', '.session_idE', function() {
-      var id = $(this).attr('data-id');
-      $.alert("Id " + id);
-      $.post("aaSql.php", {
-        action: "fetchSession",
-        sessionId: id
-      }, () => {}, "json").done(function(data) {
-        //$.alert("List " + data.batch);
-        $("#session_name").val(data.session_name);
-        $("#session_remarks").val(data.session_remarks);
-        $("#session_start").val(data.session_start);
-        $("#session_end").val(data.session_end);
-        $('#modal_title').text("Update Session [" + id + "]");
-        $('#action').val("updateSession");
-        $('#modalId').val(id);
-
-        $(".batchForm").hide();
-        $(".poForm").hide();
-        $(".coForm").hide();
-        $(".subjectForm").hide();
-        $(".sessionForm").show();
-
-        $('#submitModalForm').html("Submit");
-        $('#firstModal').modal().show;
-
-
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
-    // Manage Batch
-    $(document).on('click', '.addBatch', function() {
-      $('#modal_title').text("Add Batch");
-      $('#action').val("addBatch");
-      $('#firstModal').modal('show');
-      $('.subjectForm').hide();
-      $('.batchForm').show();
-      $('.poForm').hide();
-      $('.coForm').hide();
-      $('.sessionForm').hide();
-    });
-    $(document).on('click', '.batch_idD', function() {
-      $.alert("Disabled");
-    });
-    $(document).on('click', '.batch_idE', function() {
-      var id = $(this).attr('id');
-      //$.alert("Id " + id);
-      $.post("aaSql.php", {
-        action: "fetchBatch",
-        batchId: id
-      }, () => {}, "json").done(function(data) {
-        //$.alert("List " + data.batch);
-        $("#newBatch").val(data.batch);
-        $('#modal_title').text("Update Batch [" + id + "]");
-        $('#action').val("updateBatch");
-        $('#modalId').val(id);
-        $(".batchForm").show();
-        $(".poForm").hide();
-        $(".coForm").hide();
-        $(".subjectForm").hide();
-        $(".sessionForm").hide();
-        $('#submitModalForm').html("Submit");
-        $('#firstModal').modal().show;
-
-
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
     // Manage Subject
     $(document).on('click', '.subject_idD', function() {
       var id = $(this).attr("data-id");
       $.alert("Disabled " + id);
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         id: id,
         action: "deleteSubject"
       }, function(data, status) {
@@ -410,12 +279,11 @@ require('../../php_function.php');
       }, "text").fail(function() {
         $.alert("Error in BatchSession Function");
       })
-
     });
     $(document).on('click', '.subject_idR', function() {
       var id = $(this).attr("data-id");
       $.alert("Disabled " + id);
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         id: id,
         action: "resetSubject"
       }, function(data, status) {
@@ -428,7 +296,7 @@ require('../../php_function.php');
     $(document).on('click', '.subject_idE', function() {
       var id = $(this).attr("data-id");
       //$.alert("Id " + id);
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         action: "fetchSubject",
         subjectId: id
       }, () => {}, "json").done(function(data) {
@@ -481,13 +349,9 @@ require('../../php_function.php');
         }
 
         $('#firstModal').modal('show');
-        $('.batchForm').hide();
         $('.subjectForm').show();
-        $('.poForm').hide();
         $('.coForm').hide();
-        $('.sessionForm').hide();
 
-        //$("#ccform").html(mydata);
       }, "text").fail(function() {
         $.alert("fail in place of error");
       })
@@ -501,10 +365,7 @@ require('../../php_function.php');
         $('#batchIdModal').val(x);
         $('#action').val("addSubject");
         $('#firstModal').modal('show');
-        $('.batchForm').hide();
-        $('.poForm').hide();
         $('.coForm').hide();
-        $('.sessionForm').hide();
         $('.subjectForm').show();
       }
     });
@@ -513,7 +374,7 @@ require('../../php_function.php');
       var formData = $(this).serialize();
       $('#secondModal').modal("hide");
       $.alert(" Pressed" + formData);
-      $.post("aaSql.php", formData, () => {}, "text").done(function(data) {
+      $.post("subjectSql.php", formData, () => {}, "text").done(function(data) {
         //$.alert("List " + data);
         $("#modalSecondForm")[0].reset();
       }, "text").fail(function() {
@@ -538,38 +399,78 @@ require('../../php_function.php');
       var id = $(this).attr("data-id");
       var code = $(this).attr("data-code");
       var field = $(this).attr("data-field");
-      $.alert("Disabled " + id);
-      $.post("aaSql.php", {
+      var action = $(this).attr("data-action");
+      var ep = $(this).attr("data-ep");
+      //$.alert("Disabled " + id + " Code " + code + " Action " + action);
+      $.post("subjectSql.php", {
         id: id,
+        ep: ep,
         code: code,
         field: field,
-        action: "vac"
+        action: action
       }, function(data, status) {
         //$.alert("Data" + data)
-        subjectList();
+        if (action === "vac") subjectList();
+        else if (action === "se") electiveList();
+        else electivePool();
       }, "text").fail(function() {
         $.alert("Error in BatchSession Function");
       })
 
     });
     // Functions
-    function batchSession(x) {
-      //$.alert("Batch " + x);
-      $.post("aaSql.php", {
-        action: "batchSession",
-        batchId: x
-      }, function(data, status) {
-        //$.alert("Data" + data)
-        $("#batchSession").html(data);
-        $("#batchId").val(x);
-      }, "text").fail(function() {
-        $.alert("Error in BatchSession Function");
+
+    function subReport() {
+      $.post("subjectSql.php", {
+        action: "subReport",
+      }, () => {}, "json").done(function(data) {
+        var table_row = '';
+        $.each(data, function(key, value) {
+          //$.alert(value.subject_name);
+          table_row += '<tr>';
+          table_row += '<td>' + value.subject_id + '</td>';
+          table_row += '<td>' + value.subject_code + '</td>';
+          table_row += '<td>' + value.subject_name + '</td>';
+          table_row += '<td>' + value.subject_lecture + '-' + value.subject_tutorial + '-' + value.subject_practical + '</td>';
+          table_row += '<td>' + value.subject_credit + '</td>';
+          table_row += '</tr>';
+        });
+        $("#subReport").append(table_row);
+
+      }).fail(function() {
+        $.alert("fail in place of error");
       })
+    }
+
+    function electiveList() {
+      //$.alert(" Select a Batch X = " + x);
+      $.post("subjectSql.php", {
+        action: "electiveList"
+      }, function(mydata, mystatus) {
+        //$.alert("List " + mydata);
+        $("#electiveList").html(mydata);
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+      subjectSummary();
+    }
+
+    function electivePool() {
+      //$.alert(" Pool ");
+      $.post("subjectSql.php", {
+        action: "electivePool"
+      }, function(mydata, mystatus) {
+        //$.alert("List " + mydata);
+        $("#electivePool").html(mydata);
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+      subjectSummary();
     }
 
     function subjectList() {
       //$.alert(" Select a Batch X = " + x);
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         action: "subList"
       }, function(mydata, mystatus) {
         //$.alert("List " + mydata);
@@ -581,7 +482,7 @@ require('../../php_function.php');
     }
 
     function subjectSummary() {
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         action: "subjectSummary"
       }, () => {}, "text").done(function(result, status) {
         //$.alert(status+result);
@@ -591,46 +492,10 @@ require('../../php_function.php');
       })
     }
 
-    function batchList() {
-      //$.alert("In List Function"+ x + y);
-      $.post("aaSql.php", {
-        action: "batchList"
-      }, function(mydata, mystatus) {
-        $("#batchShowList").show();
-        //$.alert("List " + mydata);
-        $("#batchShowList").html(mydata);
-      }, "text").fail(function() {
-        $.alert("Error !!");
-      })
-    }
-
-    function poList() {
-      $.post("aaSql.php", {
-        action: "poList"
-      }, function(mydata, mystatus) {
-        $("#poShowList").show();
-        //$.alert("List " + mydata);
-        $("#poShowList").html(mydata);
-      }, "text").fail(function() {
-        $.alert("Error !!");
-      })
-    }
-
-    function poSummary() {
-      $.post("aaSql.php", {
-        action: "poSummary"
-      }, function(mydata, mystatus) {
-        //$.alert("List " + mydata);
-        $("#poSummary").html(mydata);
-      }, "text").fail(function() {
-        $.alert("Error !!");
-      })
-    }
-
     function selectSubject() {
       var x = $("#sel_batch").val();
       $.alert("Batch In SelSub Function" + x);
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         batch_id: x,
         action: "selectSubject"
       }, function(mydata, mystatus) {
@@ -644,7 +509,7 @@ require('../../php_function.php');
 
     function coList() {
       // $.alert("In List Function" + x);
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         action: "coList"
       }, function(mydata, mystatus) {
         $("#coShowList").show();
@@ -653,7 +518,7 @@ require('../../php_function.php');
       }, "text").fail(function() {
         $.alert("Error !!");
       })
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         action: "copoMap"
       }, function(mydata, mystatus) {
         //$.alert("List " + mydata);
@@ -668,7 +533,7 @@ require('../../php_function.php');
       var x = $("#sel_school").val();
       var y = $("#sel_batch").val();
       //$.alert("In Program Select List Function" + x);
-      $.post("aaSql.php", {
+      $.post("subjectSql.php", {
         actionSession: "programSelectList",
         schoolId: x,
         batchId: y
@@ -704,13 +569,6 @@ require('../../php_function.php');
       $('#actionUpload').val('uploadSubject');
       $('#formModal').modal('show');
     });
-    $(document).on('click', '.uploadPo', function() {
-      // $.alert("Upload PO");
-      $('#actionUpload').val('uploadPO')
-      $('#button_action').show().val('Update PO');
-      $('#formModal').modal('show');
-      $('#modal_uploadTitle').html("Upload PO [<?php echo $myProgAbbri . '-' . $myBatchName . ']'; ?>");
-    });
     $(document).on('click', '.uploadCo', function() {
       // $.alert("Session From");
       $('#actionUpload').val('uploadCO')
@@ -738,8 +596,6 @@ require('../../php_function.php');
       $("#formModal")[0].reset;
       $('#formModal').modal('hide');
     });
-
-
   });
 </script>
 
@@ -756,71 +612,124 @@ require('../../php_function.php');
         </div> <!-- Modal Header Closed-->
         <!-- Modal body -->
         <div class="modal-body">
-          <div class="batchForm">
-            <div class="form-horizontal">
-              <div class="form-group">
-                <div class="row">
-                  <div class="col-sm-4">
-                    Batch<input type="text" class="form-control form-control-sm" id="newBatch" name="newBatch" placeholder="Batch">
-                  </div>
-                  <div class="col-sm-4">
-                    Batch<input type="text" class="form-control form-control-sm" id="newBatch" name="newBatch" placeholder="Batch">
-                  </div>
+          <div class="subjectForm">
+            <div class="row">
+              <div class="col-7">
+                <div class="form-group">
+                  Subject Name
+                  <input type="text" class="form-control form-control-sm" id="subject_name" name="subject_name" placeholder="Subject Name">
                 </div>
+              </div>
+              <div class="col-5">
+                <div class="form-group">
+                  Subject Code
+                  <input type="text" class="form-control form-control-sm" id="subject_code" name="subject_code" placeholder="Subject Code">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3">
+                <div class="form-group">
+                  Semester
+                  <input type="number" class="form-control form-control-sm" id="subject_semester" name="subject_semester" placeholder="Semester">
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="form-group">
+                  SNo
+                  <input type="number" class="form-control form-control-sm" id="subject_sno" name="subject_sno" placeholder="SNo">
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="form-group">
+                  Internal
+                  <input type="text" class="form-control form-control-sm" id="subject_internal" name="subject_internal" placeholder="Internal">
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="form-group">
+                  External
+                  <input type="text" class="form-control form-control-sm" id="subject_external" name="subject_external" placeholder="External">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3">
+                <div class="form-group">
+                  Lecture
+                  <input type="number" class="form-control form-control-sm" id="subject_lecture" name="subject_lecture" placeholder="subject_lecture">
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="form-group">
+                  Tutorial
+                  <input type="text" class="form-control form-control-sm" id="subject_tutorial" name="subject_tutorial" placeholder="subject_tutorial">
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="form-group">
+                  Practical
+                  <input type="text" class="form-control form-control-sm" id="subject_practical" name="subject_practical" placeholder="subject_practical">
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="form-group">
+                  Credit
+                  <input type="text" class="form-control form-control-sm" id="subject_credit" name="subject_credit" placeholder="Credit">
+                </div>
+              </div>
+
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col">
+                <div class="form-check-inline">
+                  <input type="radio" class="form-check-input" checked id="stDC" name="subject_type" title="Core Subject" value="DC">DC
+                </div>
+                <div class="form-check-inline">
+                  <input type="radio" class="form-check-input" id="stDE" name="subject_type" title="Elective Subject" value="DE">DE
+                </div>
+                <div class="form-check-inline">
+                  <input type="radio" class="form-check-input" id="stDP" name="subject_type" title="Elective Pool" value="EP">EP
+                </div>
+                <div class="form-check-inline">
+                  <input type="radio" class="form-check-input" id="stGB" name="subject_type" title="Governing Body" value="EP">GB
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col">
+                <div class="form-check-inline">
+                  <input type="radio" class="form-check-input" checked id="scTh" name="subject_category" value="Theory">Theory
+                </div>
+                <div class="form-check-inline">
+                  <input type="radio" class="form-check-input" id="scPr" name="subject_category" value="Practical">Practical
+                </div>
+                <div class="form-check-inline">
+                  <input type="radio" class="form-check-input" id="scPrj" name="subject_category" value="Project">Project
+                </div>
+                <div class="form-check-inline">
+                  <input type="radio" class="form-check-input" id="scFW" name="subject_category" value="FieldWork">Field Project
+                </div>
+                <div class="form-check-inline">
+                  <input type="radio" class="form-check-input" id="scTW" name="subject_category" value="ThesisWork">Thesis Work
+                </div>
+                <div class="form-check-inline">
+                  <input type="radio" class="form-check-input" id="scIn" name="subject_category" value="Internship">Internship
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col">
+                <ul>
+                  <li>EP (Elective Pool) is Elective subjects List for a Particular DE (Elective)</li>
+                  <li>GB (Governing Body). The subjects suggested by UGC/AICTE etc</li>
+                </ul>
               </div>
             </div>
           </div>
-
-          <div class="sessionForm">
-            <div class="row">
-              <div class="col-6">
-                <div class="form-group">
-                  Session Name
-                  <input type="text" class="form-control form-control-sm" id="session_name" name="session_name" placeholder="Session Name">
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="form-group">
-                  Session Remarks
-                  <input type="text" class="form-control form-control-sm" id="session_remarks" name="session_remarks" placeholder="Remarks">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                Start Date
-                <input type="date" class="form-control form-control-sm" id="session_start" name="session_start" placeholder="Strat Date" value="<?php echo $submit_date; ?>">
-              </div>
-              <div class="col-6">
-                End Date
-                <input type="date" class="form-control form-control-sm" id="session_end" name="session_end" placeholder="Strat Date" value="<?php echo $submit_date; ?>">
-              </div>
-            </div>
-          </div>
-
-          <div class="poForm">
-            <div class="row">
-              <div class="col-6">
-                <div class="form-group">
-                  Enter Code
-                  <input type="text" class="form-control form-control-sm" id="poCode" name="poCode" placeholder="PO Code">
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="form-group">
-                  Serial Order of PO
-                  <input type="text" class="form-control form-control-sm" id="poSno" name="poSno" placeholder="Serial Order">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12">
-                PO statement
-                <input type="text" class="form-control form-control-sm" id="poStatement" name="poStatement" placeholder="Enter PO Statement">
-              </div>
-            </div>
-          </div>
-
           <div class="coForm">
             <div class="row">
               <div class="col-6">

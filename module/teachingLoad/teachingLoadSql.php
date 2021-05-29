@@ -149,7 +149,6 @@ if (isset($_POST['action'])) {
         echo '<td>';
         echo '<button class="btn-info btn-xs openModalAssignStaff" id="' . $rows['tlg_id'] . '" data-group="' . $i . '" data-subject="' . $rows['subject_name'] . '" data-type="' . $tlgType . '">+</button>';
         echo '</td>';
-
         echo '</tr>';
       }
     }

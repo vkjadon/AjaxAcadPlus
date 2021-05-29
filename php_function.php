@@ -594,7 +594,10 @@ function get_schoolSession($conn, $ay_id)
   while ($rows = $result->fetch_assoc()) {
     $sub_array = array();
     $sub_array["id"] = $rows['session_id'];
+    $sub_array["ay_id"] = $rows['ay_id'];
     $sub_array["name"] = $rows['session_name'];
+    $sub_array["start"] = $rows['session_start'];
+    $sub_array["end"] = $rows['session_end'];
     $sub_array["school_id"] = $rows['school_id'];
     $data[] = $sub_array;
   }
@@ -741,7 +744,6 @@ function get_subjectAttendance($conn, $tn_sa, $tn_sas, $tlId, $studentId)
   $output = array($delivered, $present);
   return $output;
 }
-
 function get_subjectResource($conn, $tn_res, $subject_id)
 {
   $sql = "select * from $tn_res where subject_id='$subject_id' and rsb_status='0'";

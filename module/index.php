@@ -8,7 +8,7 @@ if (!isset($myScl)) {
 	$_SESSION['mysclid'] = $myScl;
 }
 if (!isset($myDept)) {
-	$sql="select dept_id from staff_service where staff_id='$myId' and ss_status='0'";
+	$sql = "select dept_id from staff_service where staff_id='$myId' and ss_status='0'";
 	$myDept = getFieldValue($conn, "dept_id", $sql);
 	$_SESSION['mydeptid'] = $myDept;
 }
@@ -16,6 +16,16 @@ if (!isset($mySes)) {
 	$sql = "select * from session_school where school_id='$myScl'";
 	$mySes = getFieldValue($conn, "session_id", $sql);
 	$_SESSION['mysid'] = $mySes;
+}
+if (!isset($myProg)) {
+	$sql = "select p.* from program p, dept_program dp where p.program_id=dp.program_id and dp.dept_id='$myDept' and p.program_status='0' order by p.sp_abbri";
+	$myProg = getFieldValue($conn, "program_id", $sql);
+	$_SESSION['mypid'] = $myProg;
+}
+if (!isset($myBatch)) {
+	$sql = "select * from batch where batch_status='0' order by batch desc";
+	$myBatch = getFieldValue($conn, "batch_id", $sql);
+	$_SESSION['myBatch'] = $myBatch;
 }
 ?>
 <!DOCTYPE html>
@@ -49,7 +59,7 @@ if (!isset($mySes)) {
 				\frac{1+sin(x)}{y}
 			</div>
 			<p>This equation <span lang="latex">\frac{1+sin(x)}{x^3}</span>
-appears on the same line at the text.</p>
+				appears on the same line at the text.</p>
 		</div>
 		<div class="navbar navbar-expand-md navbar-dark bg-dark fixed-bottom">
 			<div>
