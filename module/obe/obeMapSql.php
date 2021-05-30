@@ -330,7 +330,7 @@ if (isset($_POST['actionMap'])) {
           $csFrom = "";
           $csTo = "";
         }
-        echo '<td><input type="text" class="coScale" size="4" data-tag="F"  data-coScale="' . $j . '" data-co="' . $co_id[$i] . '" value="' . $csFrom . '"></td>';
+        echo '<td><input type="time" class="coScale" size="4" data-tag="F"  data-coScale="' . $j . '" data-co="' . $co_id[$i] . '" value="' . $csFrom . '"></td>';
         echo '<td><input type="text" class="coScale" size="4" data-tag="T" data-coScale="' . $j . '" data-co="' . $co_id[$i] . '" value="' . $csTo . '"></td>';
       }
       echo '</tr>';

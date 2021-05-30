@@ -88,6 +88,12 @@ div.minWidth100 {
     font-weight: bold;
 }
 
+.ttText {
+    color: rgba(69, 40, 231, 0.911);
+    font-size: 11px;
+    line-height: 0px;
+
+}
 .inputLabel{
     color: rgba(65, 62, 75, 0.911);
     font-style: italic;

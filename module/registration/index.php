@@ -7,78 +7,76 @@ require('../../php_function.php');
 <!DOCTYPE html>
 <html lang="en">
 
-<style>
-  input[type=text] {
-    border: none;
-    border-bottom: 2px solid;
-    word-wrap: break-word;
-  }
-</style>
-
 <head>
   <title>Outcome Based Education : ClassConnect</title>
-  <?php require("../css.php");?>
-  
+  <?php require("../css.php"); ?>
+
 </head>
 
 <body>
   <?php require("../topBar.php"); ?>
-  <div class="container-fluid">
+  <div class="container-fluid moduleBody">
     <div class="row">
       <div class="col-2">
-        <div class="selectPanel">
-          <p class="selectClass">
-            <span class="m-1 p-0" id="selectPanelTitle"></span>
-            <?php
-            $sql = "select * from class where session_id='$mySes' and program_id='$myProg'";
-            selectList($conn, "Select Class", array(0, "class_id", "class_name", "", "sel_class"), $sql)
-            ?>
-          </p>
-        </div>
+        <?php
+        $sql = "select * from class where session_id='$mySes' and program_id='$myProg'";
+        selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
+        ?>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-          <a class="list-group-item list-group-item-action active cr" id="list-cr-list" data-toggle="list" href="#list-cr" role="tab" aria-controls="cr"> Class Registration </a>
-          <a class="list-group-item list-group-item-action sr" id="list-sr-list" data-toggle="list" href="#list-sr" role="tab" aria-controls="sr"> Subject Registration </a>
+          <a class="list-group-item list-group-item-action active cr" id="list-cr-list" data-toggle="list" href="#list-cr" role="tab"> Class Registration </a>
+          <a class="list-group-item list-group-item-action stdReg" id="list-stdReg-list" data-toggle="list" href="#list-stdReg" role="tab"> Student Registration </a>
+          <a class="list-group-item list-group-item-action sr" id="list-sr-list" data-toggle="list" href="#list-sr" role="tab"> Subject Registration </a>
+
         </div>
       </div>
       <div class="col-10">
         <div class="tab-content" id="nav-tabContent">
-          <div class="tab-pane show active" id="list-cc" role="tabpanel" aria-labelledby="list-cc-list">
+          <div class="tab-pane show active" id="list-cr" role="tabpanel">
             <div class="row">
               <div class="col-6">
                 <p id="sbpList"></p>
               </div>
               <div class="col-6">
                 <p class="mb-0">
-                  <h5>&nbsp;</h5>
+                <h5>&nbsp;</h5>
                 </p>
                 <p id="classSubjectList"></p>
                 <p id="studentSubjectList"></p>
               </div>
             </div>
           </div>
+          <div class="tab-pane fade" id="list-stdReg">
+            <div class="col-6 mt-1 mb-1"></div>
+          </div>
 
-          <div class="tab-pane fade" id="list-tl" role="tabpanel" aria-labelledby="list-tl-list">
-            <div class="col-6 mt-1 mb-1" id="crsList"></div>
+          <div class="tab-pane fade" id="list-sr" role="tabpanel" aria-labelledby="list-sr-list">
+            <div class="col-6 mt-1 mb-1" id="crsList"> </div>
           </div>
         </div>
       </div>
     </div>
   </div>
 </body>
-<?php require("../js.php");?>
+<?php require("../js.php"); ?>
 
 <script>
   $(document).ready(function() {
 
     $(".topBarTitle").text("Registration");
-    $("#selectPanelTitle").text("Student Registration");
+    sbpList("25", "0");
+    classSubject();
 
     $(document).on('change', '#sel_class', function() {
-      var classId = $("#sel_class").val();
-      if (classId > 0) sbpList(classId, "25", "0");
-      else $.alert(" Select a Class ");
+      sbpList("25", "0");
+      classSubject();
     });
 
+    $(document).on('click', '.cr', function() {
+      $.alert("Registration");
+      sbpList("25", "0");
+      classSubject();
+    });
+    
     $(document).on('click', '.register', function() {
       var classId = $("#sel_class").val();
       var rpp = $("#rpp").val();
@@ -96,7 +94,7 @@ require('../../php_function.php');
         classId: classId
       }, function(data, status) {
         $.alert(data);
-        sbpList(classId, rpp, startRecord);
+        sbpList(rpp, startRecord);
       }, "text").fail(function() {
         $.alert("Fail");
       })
@@ -107,7 +105,7 @@ require('../../php_function.php');
       var startRecord = $(this).attr('data-start');
       var rpp = $("#rpp").val();
       //$.alert("rpp " + rpp + " Class " + classId);
-      if (classId > 0) sbpList(classId, rpp, startRecord);
+      if (classId > 0) sbpList(rpp, startRecord);
       else $.alert("Select a Class ");
     });
 
@@ -131,11 +129,10 @@ require('../../php_function.php');
       })
     });
 
-    $(document).on('click', '.checkAll', function() {
-      $('.sbp').prop('checked', true); // Checks it
-    });
-    $(document).on('click', '.uncheckAll', function() {
-      $('.sbp').prop('checked', false); // Unchecks it
+    $(document).on('click', '.checkUnCheck', function() {
+      var status = $(this).is(":checked");
+      if (status == false) $('.sbp').prop('checked', false); // Unchecks it
+      else $('.sbp').prop('checked', true); // Unchecks it
     });
 
     $(document).on('click', '.classSubject', function() {
@@ -169,7 +166,7 @@ require('../../php_function.php');
       var stdId = $(this).attr('data-std');
       var subId = $(this).val();
       var status = $(this).is(":checked");
-      //$.alert("Subject Check Box StdId " + stdId + " Sub " + subId + " Status" + status);
+      $.alert("Subject Check Box StdId " + stdId + " Sub " + subId + " Status" + status);
       $.post('registrationSql.php', {
         action: "updateSub",
         stdId: stdId,
@@ -194,7 +191,8 @@ require('../../php_function.php');
       })
     }
 
-    function sbpList(x, y, z) {
+    function sbpList(y, z) {
+      var x=$("#sel_class").val();
       //$.alert("In Class-Subject Function Class Id" + x);
       $.post("registrationSql.php", {
         action: "sbpList",
@@ -210,7 +208,8 @@ require('../../php_function.php');
       })
     }
 
-    function classSubject(x) {
+    function classSubject() {
+      var x=$("#sel_class").val();
       //$.alert("In Class-Subject Function Class Id" + x);
       $.post("registrationSql.php", {
         action: "clSub",

@@ -25,12 +25,11 @@ if (isset($_POST['action'])) {
     $sql = "select * from student where program_id='$myProg' and batch_id='$batch_id' and student_status='0' limit $startRecord, $rpp";
 
     $result = $conn->query($sql);
-    echo '<button class="btn btn-secondary btn-square-sm checkAll">Check All</button>';
-    echo '<button class="btn btn-danger btn-square-sm uncheckAll">UnCheck All</button>';
-    echo '<button class="btn btn-secondary btn-square-sm classSubject">Class Subjects</button>';
     echo '<span id="currentRecord">' . $startRecord . '</span>';
     echo '<table class="table list-table-xs mb-0">';
-    echo '<tr><th>#</th><th></th><th>Id</th><th>RollNo</th><th>Name</th><th>Class</th><th>RegDate</th><th>Action</th></tr>';
+    echo '<tr><th>#</th><th>';
+    echo '<input type="checkbox" class="checkUnCheck">';
+    echo '</th><th>Id</th><th>RollNo</th><th>Name</th><th>Class</th><th>RegDate</th><th>Action</th></tr>';
     while ($rows = $result->fetch_assoc()) {
       $id = $rows['student_id'];
       $check_status = getField($conn, $id, $tn_rc, 'student_id', 'student_id');
@@ -55,14 +54,13 @@ if (isset($_POST['action'])) {
       echo '</tr>';
     }
     echo '</table>';
-    echo '<button class="btn btn-success btn-square-sm mt-0 register">Register</button>';
     //echo "sddsd";
   } elseif ($_POST['action'] == 'register') {
     $id = $_POST["checkboxes_value"];
     $classId = $_POST["classId"];
     echo  " Class $classId";
 
-    $sql = "select tl.tl_id from $tn_tlg tlg, $tn_tl tl where tlg.tlg_id=tl.tlg_id and tlg.class_id='$classId'";
+    $sql = "select tl.tl_id from $tn_tlg tlg, $tn_tl tl where tlg.tlg_id=tl.tlg_id and tlg.class_id='$classId' and tlg.tlg_status='0' and tl.tl_status='0'";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     $i = 0;
@@ -109,6 +107,8 @@ if (isset($_POST['action'])) {
       echo '<td>' . $array["data"][$i]["code"] . '</td>';
       echo '</tr>';
     }
+    echo '</table>';
+    echo '<button class="btn btn-success btn-square-sm mt-0 register">Register</button>';
   } elseif ($_POST['action'] == 'stdSub') {
     $student_id = $_POST['stdId'];
     $class_id = $_POST['classId'];
@@ -118,10 +118,9 @@ if (isset($_POST['action'])) {
     $student_name = getFieldValue($conn, 'student_name', $sql);
     echo '<h5 class="text-center">' . $student_name . '[' . $student_id . ']</h5>';
     echo '<table class="table list-table-xs mb-0">';
-    echo '<tr><th>#</th><th></th><th>Id</th><th>Subject</th><th>Code</th><th>Cr</th><th>Class</th></tr>';
+    echo '<tr><th>#</th><th></th><th>Tlg</th><th>Tl</th><th>Sub</th><th>Code</th><th>Subject</th><th>Type</th><th>Cr</th><th>Class</th></tr>';
 
-
-    $sql = "select tl.tl_id, sb.* from $tn_tlg tlg, $tn_tl tl, subject sb where tlg.tlg_id=tl.tlg_id and tlg.subject_id=sb.subject_id and tlg.class_id='$class_id'";
+    $sql = "select tl.tl_id, sb.*, tlg.* from $tn_tlg tlg, $tn_tl tl, subject sb where tlg.tlg_id=tl.tlg_id and tlg.subject_id=sb.subject_id and tlg.class_id='$class_id' and tlg.tlg_status='0' and tl.tl_status='0' and sb.subject_status='0' group by tlg.tlg_id";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     $i = 0;
@@ -140,9 +139,12 @@ if (isset($_POST['action'])) {
         echo '<td><input type="checkbox" class="stdsubCheckbox" data-std="' . $student_id . '" value="' . $rs_tl . '" checked></td>';
         $totalCredit += $subject_credit;
       }
+      echo '<td>' . $rowArray["tlg_id"] . '</td>';
+      echo '<td>' . $rs_tl . '</td>';
       echo '<td>' . $subject_id . '</td>';
-      echo '<td>' . $rowArray["subject_name"] . '</td>';
       echo '<td>' . $rowArray["subject_code"] . '</td>';
+      echo '<td>' . $rowArray["subject_name"] . '</td>';
+      echo '<td>' . $rowArray["tlg_type"] . '</td>';
       echo '<td>' . $subject_credit . '</td>';
       if ($check_status == "") echo '<td>--</td>';
       else {

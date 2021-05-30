@@ -55,14 +55,17 @@ if (isset($mySes)) {
   $tn_sbt = 'subject_topic'.$mySes;
   check_tn_sbt($conn, $tn_sbt);
 
-  $tn_tlg = 'tl_group'.$mySes;
-  check_tn_tlg($conn, $tn_tlg);
-
   $tn_tl = 'teaching_load'.$mySes;
   check_tn_tl($conn, $tn_tl);
 
   $tn_tt = 'time_table'.$mySes;
   check_tn_tt($conn, $tn_tt);
+
+  $tn_ttp = 'time_table_period';
+  check_tn_ttp($conn, $tn_ttp);
+
+  $tn_tlg = 'tl_group'.$mySes;
+  check_tn_tlg($conn, $tn_tlg);
 
 } else {
   $tn_eac = 'ea_claim';

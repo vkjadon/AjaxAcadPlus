@@ -33,6 +33,9 @@ if (isset($_POST['action'])) {
     for ($i = 1; $i <= $class_period; $i++) {
       echo '<td>';
       echo $i;
+      $sql = "select ttp_start from time_table_period where class_id='$classId' and ttp_day='$dayId' and ttp_period='$i'";
+      $ttp_start = getFieldValue($conn, "ttp_start", $sql);
+      echo ' <input type="time" class="periodTime" data-period="' . $i . '" data-day="' . $dayId . '" data-class="' . $classId . '" value="' . $ttp_start . '">';
       echo '</td>';
     }
     echo '</tr>';
@@ -104,85 +107,80 @@ if (isset($_POST['action'])) {
     $sql = "delete from $tn_tt where tl_id='$tlId' and tt_day='$dayId' and tt_period='$period'";
     $conn->query($sql);
     slotLoad($conn, $tn_tt, $tn_tlg, $tn_tl, $classId, $dayId, $period, "0");
+  } elseif ($_POST["action"] == "ttTime") {
+    $sql = "update time_table_period set ttp_start='" . $_POST['ttTime'] . "' where class_id='" . $_POST['classId'] . "' and ttp_day='" . $_POST['day'] . "' and ttp_period='" . $_POST['period'] . "'";
+    $result = $conn->query($sql);
+    if (!$result) $conn->error;
+    elseif ($conn->affected_rows == '0') $sql = "insert into time_table_period (class_id, ttp_day, ttp_period, ttp_start, update_id) values('" . $_POST['classId'] . "', '" . $_POST['day'] . "', '" . $_POST['period'] . "', '" . $_POST['ttTime'] . "', '$myId')";
+    $result = $conn->query($sql);
+    if (!$result) $conn->error;
   }
 }
 function slotLoad($conn, $tn_tt, $tn_tlg, $tn_tl, $classId, $dayId, $period, $dropButton)
 {
+  // $dropButton = 0; -> For Display in Time Table
+  // $dropButton = 1; ->  For Display the Clash Data in Resolve Clash Modal Form
+  // tt_clash=0; -> No Clash
+  // tt_clash=1; -> Staff Clash tt_clash=2; -> Class Allowed
+  // tt_clash=3; -> Class Clash with T/P of the smae Lecture class  tt_clash=4; -> Class Allowed
+  // tt_clash=5; -> Class Group Clash  tt_clash=6; -> Class Allowed
+
+  // Query to find the Allotted Schedule for the Class-Day-Period
+
   $sql = "select tt.* from $tn_tt tt, $tn_tl tl, $tn_tlg tlg where tt.tl_id=tl.tl_id and tl.tlg_id=tlg.tlg_id and tlg.class_id='$classId' and tt.tt_day='$dayId' and tt.tt_period='$period'";
   $result = $conn->query($sql);
-  $clash = 0; $sno=0;
+  $clashStaff = 0;
+  $clashClass = 0;
   if ($result && $result->num_rows > 0) {
     while ($rows = $result->fetch_assoc()) {
-      $sno++;
       $tl_id = $rows['tl_id'];
       $staff_id = getField($conn, $tl_id, $tn_tl, 'tl_id', 'staff_id');
       $tlg_id = getField($conn, $tl_id, $tn_tl, 'tl_id', 'tlg_id');
       $tl_group = getField($conn, $tl_id, $tn_tl, 'tl_id', 'tl_group');
-      $tlg_type=getField($conn, $tlg_id, $tn_tlg, 'tlg_id', 'tlg_type');
+      $tlg_type = getField($conn, $tlg_id, $tn_tlg, 'tlg_id', 'tlg_type');
       $subject_id = getField($conn, $tlg_id, $tn_tlg, 'tlg_id', 'subject_id');
       $subject_code = getField($conn, $subject_id, 'subject', 'subject_id', 'subject_code');
       $staff_name = getField($conn, $staff_id, 'staff', 'staff_id', 'staff_name');
-      //echo '<span>' . $subject_code . ' <b>[G-' . $tl_group . ']</b><br>' . $staff_name . '</span>';
+      if ($dropButton == '0') echo '<span class="ttText">' . $subject_code . ' <b>[' . $tlg_type . 'G-' . $tl_group . ']</b> ' . $staff_name . '</span>';
 
       // Check Staff Clashes with the existing TimeTable
-      $sqlClash = "select tt.* from $tn_tt tt, $tn_tl tl where tt.tl_id=tl.tl_id and tl.staff_id='$staff_id' and tt.tt_day='$dayId' and tt.tt_period='$period'";
-      $resultClash = $conn->query($sqlClash);
-      if ($resultClash->num_rows > 1) {
-        $clash = '1';
-        if ($dropButton == '1') {
-          echo '<div class="col-12">';
-          echo '<table class="table list-table-xs">';
-          echo '<tr><th>Load '.$sno.'</th><th>Staff</th><th>Class</th><th>Group</th><th>Code</th></tr>';
-          while ($rowsClash = $resultClash->fetch_assoc()) {
-            $tl = $rowsClash['tl_id'];
-            
-            $staff_id = getField($conn, $tl, $tn_tl, 'tl_id', 'staff_id');
-            $tlg_id = getField($conn, $tl, $tn_tl, 'tl_id', 'tlg_id');
-            $tl_group = getField($conn, $tl, $tn_tl, 'tl_id', 'tl_group');
-            $type=getField($conn, $tlg_id, $tn_tlg, 'tlg_id', 'tlg_type');
-            $cl=getField($conn, $tlg_id, $tn_tlg, 'tlg_id', 'class_id');
-            $clN=getField($conn, $cl, "class", 'class_id', 'class_name');
-            $clS=getField($conn, $cl, "class", 'class_id', 'class_section');
-            $subject_id = getField($conn, $tlg_id, $tn_tlg, 'tlg_id', 'subject_id');
-            $subject_code = getField($conn, $subject_id, 'subject', 'subject_id', 'subject_code');
-            $staff_name = getField($conn, $staff_id, 'staff', 'staff_id', 'staff_name');
-            
-            echo '<tr>';
-            echo '<td><button class="btn btn-light btn-square-sm dropClashButton"  data-tlDrop="' . $tl . '" data-dayDrop="' . $dayId . '" data-periodDrop="' . $period . '">Drop</button></td>';
-            echo '<td>' . $staff_name . '</td>';
-            echo '<td>' . $clN . '[' . $clS . ']</td>';
-            echo '<td>['.$type.'G-' . $tl_group . ']</td>';
-            echo '<td>' . $subject_code . '</td>';
-            echo '</tr>';
-          }
-        }
-      }
+      $sqlClashStaff = "select tt.*, tl.* from $tn_tt tt, $tn_tl tl where tt.tl_id=tl.tl_id and tl.staff_id='$staff_id' and tt.tt_day='$dayId' and tt.tt_period='$period'";
+      if ($conn->query($sqlClashStaff)->num_rows > 1) $clashStaff = 1;
 
-      // Check Class Clashes with the existing TimeTable
-      $sqlClash = "select tt.* from $tn_tt tt, $tn_tl tl, $tn_tlg tlg where tt.tl_id=tl.tl_id and tl.tlg_id=tlg.tlg_id and tlg.class_id='$classId' and tlg.tlg_type='L' and tt.tt_day='$dayId' and tt.tt_period='$period'";
-      $resultClash = $conn->query($sqlClash);
-      if ($resultClash->num_rows > 1) {
-        $clash = '1';
-        while ($rowsClash = $resultClash->fetch_assoc()) {
-          $tl_id = $rowsClash['tl_id'];
-          $staff_id = getField($conn, $tl_id, $tn_tl, 'tl_id', 'staff_id');
-          $tlg_id = getField($conn, $tl_id, $tn_tl, 'tl_id', 'tlg_id');
-          $tl_group = getField($conn, $tl_id, $tn_tl, 'tl_id', 'tl_group');
-          //$tlg_type=getField($conn, $tlg_id, $tn_tlg, 'tlg_id', 'tlg_type');
-          $subject_id = getField($conn, $tlg_id, $tn_tlg, 'tlg_id', 'subject_id');
-          $subject_code = getField($conn, $subject_id, 'subject', 'subject_id', 'subject_code');
-          $staff_name = getField($conn, $staff_id, 'staff', 'staff_id', 'staff_name');
-          echo '<span class="bg-warning">' . $subject_code . ' <b>[G-' . $tl_group . ']</b><br>' . $staff_name . '</span>';
-        }
-      }
+      $sqlClashClass = "select tt.* from $tn_tt tt, $tn_tl tl, $tn_tlg tlg where tt.tl_id=tl.tl_id and tl.tlg_id=tlg.tlg_id and tlg.class_id='$classId' and tlg.tlg_type='L' and tt.tt_day='$dayId' and tt.tt_period='$period'";
+      if ($conn->query($sqlClashClass)->num_rows > 1) $clashClass = 1;
 
-      if ($clash == '1' && $dropButton == '0') echo '<span class="bg-warning">' . $subject_code . ' <b>['.$tlg_type.'G-' . $tl_group . ']</b><br>' . $staff_name . '</span>';
-      elseif ($dropButton == '0') echo '<span>' . $subject_code . ' <b>['.$tlg_type.'G-' . $tl_group . ']</b><br>' . $staff_name . '</span>';
-      if ($result->num_rows > 1) echo '<br>';
+      // Following block will be executed for Clash Resolve Modal Form
+      if ($dropButton == '1') {
+        echo '<div class="row border p-1 m-1">';
+        echo '<div class="col-sm-5">' . $staff_name . '</div>';
+        echo '<div class="col-sm-2">[' . $tlg_type . 'G-' . $tl_group . ']</div>';
+        echo '<div class="col-sm-3">' . $subject_code . '</div>';
+        echo '<div class="col-sm-2"><a class="dropClashButton"  data-tlDrop="' . $tl_id . '" data-dayDrop="' . $dayId . '" data-periodDrop="' . $period . '"><i class="fa fa-trash"></i></a></div>';
+        echo '</div>';
+      }
+      if ($result->num_rows > 1 && $dropButton == '0') echo '<br>';
     }
-    if ($clash == '1' && $dropButton == '0') echo '<br><button class="btn btn-info btn-square-sm resolveClashButton" data-tlId="' . $tl_id . '" data-day="' . $dayId . '" data-period="' . $period . '">Resolve</button>';
+    if ($clashClass == '1' || $clashStaff == '1') $clash = 1;
+    else $clash = 0;
+    // To Show Resolve Button for Clashes
+    if ($clash == '1' && $dropButton == '0') echo '<br><a href="#" class="atag resolveClashButton" data-tlId="' . $tl_id . '" data-day="' . $dayId . '" data-period="' . $period . '"><span class="warning">Resolve</span></a>';
+    elseif ($dropButton == '0') echo '<a href="#" class="atag resolveClashButton" data-tlId="' . $tl_id . '" data-day="' . $dayId . '" data-period="' . $period . '"><span class="warning"><i class="fa fa-trash"></i></span></a>';
   } else {
     echo '<span>--</span>';
   }
+  if ($clashStaff == '1') {
+    //echo "Staff Clash";
+    $result = $conn->query($sqlClashStaff);
+    while ($rowsTT = $result->fetch_assoc()) {
+      $tlg_id=$rowsTT['tlg_id'];
+      $clashClassId=getField($conn, $tlg_id, $tn_tlg, "tlg_id", "class_id");
+      $subject_id=getField($conn, $tlg_id, $tn_tlg, "tlg_id", "subject_id");
+      if($clashClassId<>$classId)
+      {
+        echo '<br>'.getField($conn, $clashClassId, "class", "class_id", "class_name");
+        echo ' ['.getField($conn, $subject_id, "subject", "subject_id", "subject_code").']';
+      }
+    }
+  }
 }
-

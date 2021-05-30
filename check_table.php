@@ -1,49 +1,5 @@
 <?php
 //echo "Check Tables";
-function check_tn_sc($conn, $table)
-{
-  $sql = "select * from $table";
-  $result = $conn->query($sql);
-  if (!$result) {
-    echo "Table Missing $table";
-    $query =
-      'tlg_id INT(4) NULL, 
-    staff_id INT(5) NULL,
-    choice INT(1) NULL,
-    UNIQUE(tlg_id, staff_id)';
-    $sql = "CREATE TABLE $table ($query)";
-    $result = $conn->query($sql);
-    if (!$result) echo $conn->error;
-  }
-  //else echo "Table Exists";
-}
-function check_tn_sbt($conn, $table)
-{
-  $sql = "select * from $table";
-  $result = $conn->query($sql);
-  if (!$result) {
-    //echo "Table Missing $table";
-    $query =
-      'sbt_id INT(5) NOT NULL AUTO_INCREMENT,
-    subject_id INT(5) NULL,
-    sbt_name TEXT NULL,
-    sbt_sno INT(2) NULL,
-    sbt_weight INT(2) NULL,
-    sbt_slot INT(2) NULL,
-    sbt_type INT(2) NULL,
-    sbt_syllabus INT(1) NULL,
-    update_ts timestamp,
-    update_id INT(5) NULL,
-    sbt_status INT(1) NULL,
-    PRIMARY KEY (sbt_id),
-    UNIQUE(subject_id, sbt_name)';
-
-    $sql = "CREATE TABLE $table ($query)";
-    $result = $conn->query($sql);
-    if (!$result) echo $conn->error;
-  }
-  //else echo "Table Exists";
-}
 function check_tn_rs($conn, $table)
 {
   $sql = "select * from $table";
@@ -90,26 +46,52 @@ function check_tn_rc($conn, $table)
   }
   //else echo "Table Exists";
 }
-function check_tn_tt($conn, $table)
+function check_tn_sc($conn, $table)
 {
   $sql = "select * from $table";
   $result = $conn->query($sql);
   if (!$result) {
     //echo "Table Missing $table";
+    // Auto Increment not Required
     $query =
-      'tl_id INT(5) NULL,
-    tt_day VARCHAR(10) NULL,
-    tt_period INT(1) NULL,
-    il_id INT(4) NOT NULL,
-    update_id INT(5) NULL,
-    update_ts timestamp NULL,
-    UNIQUE(tl_id, tt_day, tt_period)';
+      'tlg_id INT(4) NULL, 
+    staff_id INT(5) NULL,
+    choice INT(1) NULL,
+    UNIQUE(tlg_id, staff_id)';
     $sql = "CREATE TABLE $table ($query)";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
   }
   //else echo "Table Exists";
 }
+function check_tn_sbt($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'sbt_id INT(5) NOT NULL AUTO_INCREMENT,
+    subject_id INT(5) NULL,
+    sbt_name TEXT NULL,
+    sbt_sno INT(2) NULL,
+    sbt_weight INT(2) NULL,
+    sbt_slot INT(2) NULL,
+    sbt_type INT(2) NULL,
+    sbt_syllabus INT(1) NULL,
+    update_ts timestamp,
+    update_id INT(5) NULL,
+    sbt_status INT(1) NULL,
+    PRIMARY KEY (sbt_id),
+    UNIQUE(subject_id, sbt_name)';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+
 function check_tn_sas($conn, $table)
 {
   $sql = "select * from $table";
@@ -138,6 +120,7 @@ function check_tn_sa($conn, $table)
   $result = $conn->query($sql);
   if (!$result) {
     echo "Table Missing $table";
+    // Auto Increment not Required
     $query =
       'sas_id INT(5) NULL,
     student_id INT(5) NULL,
@@ -191,6 +174,49 @@ function check_tn_tlg($conn, $table)
     PRIMARY KEY (tlg_id),
     UNIQUE(subject_id, class_id, tlg_type)';
 
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+function check_tn_tt($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    // Auto Increment not Required
+    $query =
+      'tl_id INT(5) NULL,
+    tt_day VARCHAR(10) NULL,
+    tt_period INT(1) NULL,
+    il_id INT(4) NULL,
+    tt_clash INT(1) NULL,
+    update_id INT(5) NULL,
+    update_ts timestamp Default current_timestamp,
+    UNIQUE(tl_id, tt_day, tt_period)';
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+function check_tn_ttp($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    // Auto Increment not Required
+    $query =
+      'class_id INT(5) NULL,
+    ttp_day VARCHAR(10) NULL,
+    ttp_period INT(1) NULL,
+    ttp_start TIME NULL,
+    update_id INT(5) NULL,
+    update_ts timestamp DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(class_id, ttp_day, ttp_period)';
     $sql = "CREATE TABLE $table ($query)";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;

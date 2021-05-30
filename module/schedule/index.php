@@ -20,19 +20,14 @@ require('../../php_function.php');
       <div class="col-2">
         <div class="card text-center selectPanel">
           <span id="panelId"></span>
-          <span class="m-1 p-0" id="selectPanelTitle"></span>
-          <div class="col">
-            <p class="selectClass">
-              <?php
-              $sql = "select * from class where session_id='$mySes' and dept_id='$myDept'";
-              selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
-              ?>
-            </p>
-          </div>
+          <?php
+          $sql = "select * from class where session_id='$mySes' and dept_id='$myDept'";
+          selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
+          ?>
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
 
-          <a class="list-group-item list-group-item-action tt" id="list-tt-list" data-toggle="list" href="#list-tt" role="tab" aria-controls="tt"> Time Table </a>
+          <a class="list-group-item list-group-item-action show active tt" id="list-tt-list" data-toggle="list" href="#list-tt" role="tab" aria-controls="tt"> Time Table </a>
 
           <a class="list-group-item list-group-item-action stt" id="list-stt-list" data-toggle="list" href="#list-stt" role="tab" aria-controls="stt"> Show Time-Table </a>
 
@@ -42,8 +37,8 @@ require('../../php_function.php');
       </div>
       <div class="col-10">
         <div class="tab-content" id="nav-tabContent">
-          
-          <div class="tab-pane fade" id="list-tt" role="tabpanel" aria-labelledby="list-tt-list">
+
+          <div class="tab-pane show active" id="list-tt" role="tabpanel" aria-labelledby="list-tt-list">
             <div id="dayList"></div>
             <div id="mondayList"></div>
             <div id="tuesdayList"></div>
@@ -112,10 +107,11 @@ require('../../php_function.php');
     });
 
     $(".topBarTitle").text("Schedule");
+    var classId = $("#sel_class").val();
+    ttList(classId);
+
     var x = $("#sel_program").val();
     classList(x);
-    $(".selectClass").hide();
-    //$(".selectPanel").hide();
     $("#panelId").hide();
 
     $(document).on('click', '.stt', function() {
@@ -143,15 +139,28 @@ require('../../php_function.php');
 
     $(document).on('click', '.tt', function() {
       //$.alert("TL");
-      $("#selectPanelTitle").text("Time Table Panel");
       $("#panelId").html("TT");
-      $(".selectPanel").show();
-      $(".selectProgram").hide();
-      $(".selectClass").show();
       var classId = $("#sel_class").val();
       ttList(classId);
     });
 
+    $(document).on('blur', '.periodTime', function() {      
+      var periodTime = $(this).val();
+      var classId = $(this).attr("data-class");
+      var day = $(this).attr("data-day");
+      var period = $(this).attr("data-period");
+      //Confirm Alert Plugin shows Alert Box twice
+      //alert(" Time " + periodTime);
+      $.post("scheduleSql.php", {
+        ttTime: periodTime,
+        classId: classId,
+        day: day,
+        period: period,
+        action: "ttTime"
+      }, function() {}, "text").done(function(mydata, mystatus) {
+        //alert(mydata);
+      })
+    });
 
     $(document).on('click', '.sclSTT, .checkAllSTT, .uncheckAllSTT', function() {
       var checkboxes_value = [];
