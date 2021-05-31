@@ -4,7 +4,14 @@ include('../../config_database.php');
 include('../../config_variable.php');
 include('../../php_function.php');
 //echo "Action " . $_POST['action'];
-
+if ($_POST['actionUpdateAssMethod'] == "updateAM") {
+  // echo "Update Assessment Method Block";
+  $fields = ['am_id', 'am_name', 'am_code', 'am_weight', 'am_weight_po', 'am_type'];
+  $values = [$_POST['amId'], data_check($_POST['am_name']), data_check($_POST['am_code']), data_check($_POST['am_weight']), data_check($_POST['am_weight_po']), data_check($_POST['am_type'])];
+  $status = 'am_status';
+  $dup_alert = " Method Name Alreday Exists !! ";
+  updateUniqueData($conn, 'assessment_method', $fields, $values, $dup_alert);
+}
 if (isset($_POST['action'])) {
   if ($_POST['action'] == "addAssessmentMethod") {
     //echo "Add Assessment Method Block";
@@ -14,27 +21,15 @@ if (isset($_POST['action'])) {
     $dup = "select * from assessment_method where am_name='" . data_check($_POST["am_name"]) . "' and $status='0'";
     $dup_alert = "Method Name Alreday Exists !!";
     addData($conn, 'assessment_method', 'am_id', $fields, $values, $status, $dup, $dup_alert);
-  } elseif ($_POST['action'] == "updateAM") {
-    echo "Update Assessment Method Block" . $_POST['modalId'];
-    $fields = ['am_id', 'am_name', 'am_code', 'am_weight', 'am_weight_po', 'am_type'];
-    $values = [$_POST['modalId'], data_check($_POST['am_name']), data_check($_POST['am_code']), data_check($_POST['am_weight']), data_check($_POST['am_weight_po']), data_check($_POST['am_type'])];
-    $status = 'am_status';
-    $dup_alert = " Method Name Alreday Exists !! ";
-    updateUniqueData($conn, 'assessment_method', $fields, $values, $dup_alert);
   } elseif ($_POST['action'] == "assessmentMethodList") {
-    //echo "List - Block ";    
+    //echo "List - Block ";
     $sql = "select  * from assessment_method where am_status='0' order by am_name";
-    $tableId = 'am_id';
-
-    $statusDecode = array("status" => "am_status", "0" => "Active", "1" => "Removed");
-    $button = array("1", "1", "0", "0");
-
-    $fields = array("am_name", "am_code", "am_weight", "am_weight_po", "am_type", "am_status");
-    $dataType = array("0", "0", "0", "0", "0", "0");
-    $header = array("Id", "Method", "Type", "Weight(COA)", "Weight(POA)", "Assessment Type", "Status");
-
-    //echo "<h5> Assessment Method List </h5>";
-    getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
+    $result = $conn->query($sql);
+    $json_array = array();
+    while ($rowArray = $result->fetch_assoc()) {
+      $json_array[] = $rowArray;
+    }
+    echo json_encode($json_array);
   } elseif ($_POST['action'] == 'fetchAM') {
     //echo "Add Assessment Method Block";
     $id = $_POST['amId'];
@@ -52,19 +47,13 @@ if (isset($_POST['action'])) {
     $dup_alert = "Method Name Alreday Exists !!";
     addData($conn, 'assessment_technique', 'at_id', $fields, $values, $status, $dup, $dup_alert);
   } elseif ($_POST['action'] == "assessmentTechniqueList") {
-    //echo "AT List - Block ";    
     $sql = "select at.*, am.* from assessment_technique at, assessment_method am where am.am_id=at.am_id and at.at_status='0' order by at.at_outcome, at.at_name";
-    $tableId = 'at_id';
-
-    $statusDecode = array("status" => "at_status", "0" => "Active", "1" => "Removed");
-    $button = array("1", "0", "0", "0");
-
-    $fields = array("at_name", "am_name", "at_outcome", "at_type", "at_status");
-    $dataType = array("0", "0", "0", "0", "0");
-    $header = array("Id", "Assessment Technique", "Assessment Method", "Outcome", "Technique Type", "Status");
-
-    //echo "<h5> Assessment Technique List </h5>";
-    getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
+    $result = $conn->query($sql);
+    $json_array = array();
+    while ($rowArray = $result->fetch_assoc()) {
+      $json_array[] = $rowArray;
+    }
+    echo json_encode($json_array);
   } elseif ($_POST['action'] == 'fetchAT') {
     //echo "Add Assessment Method Block";
     $id = $_POST['atId'];
@@ -89,7 +78,7 @@ if (isset($_POST['action'])) {
     $dup_alert = "PO Feedback for the Program and Batch Alreday Exists !!";
     addData($conn, 'po_feedback', 'pf_id', $fields, $values, $status, $dup, $dup_alert);
   } elseif ($_POST['action'] == "pofList") {
-    //echo "POF List - Block "; 
+    //echo "POF List - Block ";
     $sql = "select pf.* from po_feedback pf where pf.pf_status='0' order by pf.pf_name";
     $tableId = 'pf_id';
 
@@ -127,7 +116,7 @@ if (isset($_POST['action'])) {
     $dup_alert = "Assessment Name for the Subejct Alreday Exists !!";
     addData($conn, 'assessment_design', 'ad_id', $fields, $values, $status, $dup, $dup_alert);
   } elseif ($_POST['action'] == "assessmentDesignList") {
-    //echo "AT List - Block "; 
+    //echo "AT List - Block ";
     $sql = "select ad.*, at.*, sb.subject_code from assessment_design ad, assessment_technique at, subject sb where ad.subject_id=sb.subject_id and ad.at_id=at.at_id and sb.program_id='$myProg' and sb.batch_id='$myBatch' and ad.ad_status='0' order by ad.ad_name";
     //$result=$conn->query($sql);
     //echo $result->num_rows;
@@ -142,7 +131,6 @@ if (isset($_POST['action'])) {
 
     //echo "<h5> Assessment Technique List </h5>";
     getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
-
   } elseif ($_POST['action'] == 'fetchAD') {
     //echo "Add Assessment Method Block";
     $id = $_POST['adId'];
@@ -242,29 +230,29 @@ if (isset($_POST['action'])) {
     echo "Action " . $_POST['action'];
     $po_id = $_POST['poId'];
 
-    $sql="select * from po_scale where po_id='$po_id' and ps_scale='1'";
-    $result=$conn->query($sql);
-    $row=$result->fetch_assoc();
-    $ps1From=$row['ps_from'];
-    $ps1To=$row['ps_to'];
+    $sql = "select * from po_scale where po_id='$po_id' and ps_scale='1'";
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+    $ps1From = $row['ps_from'];
+    $ps1To = $row['ps_to'];
 
-    $sql="select * from po_scale where po_id='$po_id' and ps_scale='2'";
-    $result=$conn->query($sql);
-    $row=$result->fetch_assoc();
-    $ps2From=$row['ps_from'];
-    $ps2To=$row['ps_to'];
+    $sql = "select * from po_scale where po_id='$po_id' and ps_scale='2'";
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+    $ps2From = $row['ps_from'];
+    $ps2To = $row['ps_to'];
 
-    $sql="select * from po_scale where po_id='$po_id' and ps_scale='3'";
-    $result=$conn->query($sql);
-    $row=$result->fetch_assoc();
-    $ps3From=$row['ps_from'];
-    $ps3To=$row['ps_to'];
+    $sql = "select * from po_scale where po_id='$po_id' and ps_scale='3'";
+    $result = $conn->query($sql);
+    $row = $result->fetch_assoc();
+    $ps3From = $row['ps_from'];
+    $ps3To = $row['ps_to'];
 
     $sqlPO = "select * from program_outcome where program_id='$myProg' and batch_id='$myBatch' and po_status='0'";
     $resultPO = $conn->query($sqlPO);
     while ($rowsPO = $resultPO->fetch_assoc()) {
-      $po= $rowsPO['po_id'];
-      echo $po.' - ';
+      $po = $rowsPO['po_id'];
+      echo $po . ' - ';
       $sql = "INSERT INTO po_scale (po_id, ps_scale, ps_from, ps_to) VALUES('$po', '1', '$ps1From', '$ps1To')";
       $result = $conn->query($sql);
       if (!$result) {
@@ -296,7 +284,7 @@ if (isset($_POST['action'])) {
     }
   } elseif ($_POST['action'] == 'pofSelect') {
     //echo "POF Select Block";
-    $program_id = $_POST['programId'];    
+    $program_id = $_POST['programId'];
     $batch_id = $_POST['batchId'];
     $sql = "select * from po_feedback where batch_id='$batch_id' and program_id='$program_id' and pf_status='0' order by pf_name";
     selectList($conn, 'Select an Assessment ', array('1', 'pf_id', 'pf_name', 'pf_id', 'sel_pf'), $sql);
@@ -318,5 +306,5 @@ if (isset($_POST['action'])) {
         if (!$res) echo $conn->error;
       }
     }
-  } 
+  }
 }
