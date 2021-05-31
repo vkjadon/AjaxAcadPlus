@@ -32,8 +32,9 @@ if (isset($_POST['action'])) {
 
     //echo "$programId - $mySes";
   } else if ($_POST['action'] == 'addClass') {
-    $fields = ['session_id', 'program_id', 'dept_id',  'class_name', 'class_section', 'batch_id', 'class_semester', 'class_shift', 'submit_id'];
-    $values = [$mySes, $myProg, $myDept, data_check($_POST['class_name']), data_check($_POST['class_section']), $myBatch, data_check($_POST['class_semester']), $_POST['class_shift'], $myId];
+    echo "MySes".$mySes;
+    $fields = ['session_id', 'program_id', 'dept_id',  'class_name', 'class_section', 'batch_id', 'class_semester', 'class_shift', 'submit_id', 'class_group', 'class_status'];
+    $values = [$mySes, $myProg, $myDept, data_check($_POST['class_name']), data_check($_POST['class_section']), $myBatch, data_check($_POST['class_semester']), $_POST['class_shift'], $myId, $_POST['class_group'], '0'];
     $status = 'class_status';
     $dup = "select * from class where class_name='" . data_check($_POST["class_name"]) . "' and class_section='" . data_check($_POST["class_section"]) . "' and session_id='$mySes' and $status='0'";
     $dup_alert = "Duplicate Class Name for the Session Exists.";
@@ -46,8 +47,8 @@ if (isset($_POST['action'])) {
     echo json_encode($output);
   } elseif ($_POST['action'] == "updateClass") {
     //echo "Update Class " . $_POST['modalId'];
-    $fields = ['class_id', 'class_name', 'class_shift', 'class_semester', 'class_section'];
-    $values = [$_POST['modalId'], data_check($_POST['class_name']), $_POST['class_shift'], data_check($_POST['class_semester']), data_check($_POST['class_section'])];
+    $fields = ['class_id', 'class_name', 'class_shift', 'class_semester', 'class_section', 'class_group'];
+    $values = [$_POST['modalId'], data_check($_POST['class_name']), $_POST['class_shift'], data_check($_POST['class_semester']), data_check($_POST['class_section']), data_check($_POST['class_group'])];
     $status = 'class_status';
     $dup_alert = " Class Name, Section Alreday Exists for this Session !! ";
     updateUniqueData($conn, 'class', $fields, $values, $dup_alert);
@@ -59,15 +60,15 @@ if (isset($_POST['action'])) {
     $class_semester = getField($conn, $classId, "class", "class_id", "class_semester");
     $program_id = getField($conn, $classId, "class", "class_id", "program_id");
 
-    echo "Cl $classId -B $batch_id -Sem $class_semester -P $program_id $tn_tlg";
+    //echo "Cl $classId -B $batch_id -Sem $class_semester -P $program_id $tn_tlg";
 
     $sql = "select * from subject where program_id='$program_id' and batch_id='$batch_id' and subject_semester='$class_semester'";
     $result = $conn->query($sql);
     $i = 1;
-    echo '<button class="btn btn-secondary btn-square-sm checkAll">Check All</button>';
-    echo '<button class="btn btn-danger btn-square-sm uncheckAll">UnCheck All</button>';
+    $class_name = getField($conn, $classId, "class", "class_id", "class_name");
+    echo '<h5>' . $class_name . '</h5>';
     echo '<table class="table list-table-xs">';
-    echo '<tr><th></th><th>#</th><th>Code</th><th>Name</th><th>L-T-P</th><th>LG</th><th>TG</th><th>PG</th></tr>';
+    echo '<tr><th>#</th><th>Code</th><th>Name</th><th>L-T-P</th><th>LG</th><th>TG</th><th>PG</th></tr>';
     while ($rows = $result->fetch_assoc()) {
 
       $subject_id = $rows['subject_id'];
@@ -76,7 +77,6 @@ if (isset($_POST['action'])) {
       $P = $rows['subject_practical'];
 
       echo '<tr>';
-      echo '<td><input type="checkbox" class="scb" id="sub' . $rows['subject_id'] . '"></td>';
       echo '<td>' . $i++ . '</td>';
       echo '<td>' . $rows['subject_code'] . '</td>';
       echo '<td>' . $rows['subject_name'] . '</td>';
@@ -121,7 +121,7 @@ if (isset($_POST['action'])) {
     $result = $conn->query($sql);
     if (!$result) die("Could not List the Teaching Load!");
     echo '<table  class="list-table-xs table-striped">';
-    echo '<thead><th>#</th><th>TlgId</th><th>Subject</th><th>Type</th><th>Grp</th><th>Staff</th><th>Assign</th><th>Choice</th></thead>';
+    echo '<thead><th>#</th><th>TlgId</th><th>Code</th><th>Subject</th><th>Type</th><th>Grp</th><th>Staff</th><th>Assign</th><th>Choice</th></thead>';
     while ($rows = $result->fetch_assoc()) {
       $groups = $rows['tlg_group'];
       for ($i = 1; $i <= $groups; $i++) {
@@ -129,6 +129,7 @@ if (isset($_POST['action'])) {
         echo '<tr>';
         echo '<td>' . $sno++ . '</td>';
         echo '<td>' . $rows['tlg_id'] . '</td>';
+        echo '<td>' . $rows['subject_code'] . '</td>';
         echo '<td>' . $rows['subject_name'] . '</td>';
         if ($tlgType == 'L') echo '<td>' . $tlgType . '-' . $rows['subject_lecture'] . '</td><td>LG-' . $i . '</td>';
         elseif ($tlgType == 'T') echo '<td>' . $tlgType . '-' . $rows['subject_tutorial'] . '</td><td>TG-' . $i . '</td>';
@@ -273,7 +274,7 @@ if (isset($_POST['action'])) {
       $choice = $rows['choice'];
       echo '<div class="card mb-1 p-0">';
       echo '<div class="row">';
-      echo '<div class="col-sm-3 pr-0 mr-0 bg-danger text-white"><h3>'.$choice.'</h3>';
+      echo '<div class="col-sm-3 pr-0 mr-0 bg-danger text-white"><h3>' . $choice . '</h3>';
       echo getField($conn, $class_id, "class", "class_id", "class_name");
       echo '</div>';
       echo '<div class="col-sm-9 p-0"><h5>';
@@ -282,9 +283,9 @@ if (isset($_POST['action'])) {
       echo '</div></div>';
     }
   } elseif ($_POST['action'] == "subAllChoices") {
-    $tlg_id=$_POST['tlg_id'];
-    $subject_id=getField($conn, $tlg_id, $tn_tlg, "tlg_id", "subject_id");
-    echo '<h6>'.getField($conn, $subject_id, "subject", "subject_id", "subject_name").'</h6>';
+    $tlg_id = $_POST['tlg_id'];
+    $subject_id = getField($conn, $tlg_id, $tn_tlg, "tlg_id", "subject_id");
+    echo '<h6>' . getField($conn, $subject_id, "subject", "subject_id", "subject_name") . '</h6>';
 
     $sql = "select sc.*, s.staff_name, s.user_id from staff s, $tn_sc sc where sc.tlg_id='$tlg_id' and sc.staff_id=s.staff_id order by sc.choice";
     $result = $conn->query($sql);
@@ -292,8 +293,8 @@ if (isset($_POST['action'])) {
       $tlgId = $rows['tlg_id'];
       $choice = $rows['choice'];
       echo '<div class="row border">';
-      echo '<div class="col-sm-1 p-1 text-center"><h5><b>'.$choice.'</h5></b></div>';
-      echo '<div class="col-sm-9 p-1">['.$rows['user_id'].'] '.$rows['staff_name'].'</div>';
+      echo '<div class="col-sm-1 p-1 text-center"><h5><b>' . $choice . '</h5></b></div>';
+      echo '<div class="col-sm-9 p-1">[' . $rows['user_id'] . '] ' . $rows['staff_name'] . '</div>';
       echo '</div>';
     }
   } elseif ($_POST['action'] == "tlDelete") {
@@ -307,12 +308,21 @@ function tlg($conn, $tn_tlg, $subject_id, $classId, $tlg_type)
 {
   //echo "Table $tn_tlg";
   $dup = "select * from $tn_tlg where subject_id='$subject_id' and class_id='$classId' and tlg_type='$tlg_type'";
-  addData($conn, $tn_tlg, "tlg_id", array("class_id", "subject_id", "tlg_type", "tlg_group"), array($classId, $subject_id, $tlg_type, "1"), "tlg_status", $dup, "NULL");
-
-  $sql = "select * from $tn_tlg where subject_id='" . $subject_id . "' and class_id='$classId' and tlg_type='$tlg_type' and tlg_status='0' order by tlg_group desc";
-  $id = getFieldValue($conn, "tlg_id", $sql);
-
-  $value = getFieldValue($conn, "tlg_group", $sql);
+  $result_dup = $conn->query($dup);
+  $rows_count = $result_dup->num_rows;
+  //echo $rows_count;
+  if ($rows_count == 0) {
+    $sql_in = "insert into $tn_tlg (class_id, subject_id, tlg_type, tlg_group, tlg_status) values('$classId', '$subject_id', '$tlg_type', '1', '0')";
+    //  echo $sql_in;
+    $conn->query($sql_in);
+    $id = $conn->insert_id;
+    $value = '1';
+  } else {
+    $sql = "select * from $tn_tlg where subject_id='" . $subject_id . "' and class_id='$classId' and tlg_type='$tlg_type' and tlg_status='0' order by tlg_group desc";
+    //echo $conn->query($sql)->num_rows;
+    $id = getFieldValue($conn, "tlg_id", $sql);
+    $value = getFieldValue($conn, "tlg_group", $sql);
+  }
   echo '<a href="#" class="decrement" id="' . $id . '" data-value="' . $value . '"><i class="fa fa-angle-double-left"></i></a>';
   echo '<span class="' . $id . '">' . $value . '</span>';
   echo '<a href="#" class="increment" id="' . $id . '" data-value="' . $value . '"><i class="fa fa-angle-double-right"></i></a>';

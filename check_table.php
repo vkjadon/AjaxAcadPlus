@@ -1,5 +1,34 @@
 <?php
 //echo "Check Tables";
+function check_tn_class($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'class_id INT(5) NOT NULL AUTO_INCREMENT,
+    session_id INT(3) NULL,
+    program_id INT(3) NULL,
+    batch_id INT(3) NULL,
+    dept_id INT(3) NULL,
+    class_name VARCHAR(18) NULL,
+    class_section VARCHAR(2) NULL,
+    class_shift VARCHAR(10) NULL,
+    class_semester INT(2) NULL,
+    class_group INT(1) NULL,
+    submit_ts timestamp default current_timestamp(),
+    submit_id INT(5) NULL,
+    class_status INT(1) NULL,
+    PRIMARY KEY (class_id),
+    UNIQUE(session_id, program_id, batch_id, class_name, class_section, class_shift)';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
 function check_tn_rs($conn, $table)
 {
   $sql = "select * from $table";

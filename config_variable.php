@@ -32,7 +32,7 @@ if (isset($mySes)) {
   //check_tn_rs($conn, $tn_tl);
 
   $tn_class = 'class';
-  //check_tn_rs($conn, $tn_tl);
+  check_tn_class($conn, $tn_class);
 
   $tn_eac = 'ea_claim'.$mySes;
   //check_tn_eac($conn, $tn_eac);

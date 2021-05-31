@@ -35,6 +35,15 @@ require('../../php_function.php');
             <div class="row">
               <div class="col-6">
                 <p id="sbpList"></p>
+                <span style="font-size: 12px;">
+                <ul>
+                <li>The Students will be registered in the Class and Group.</li>
+                <li>These are the default classes and groups for all academic purposes.</li>
+                <li>The Class and Group can be changed for different Subjects.</li>
+                <li>The <i>Daily Class Attendance</i> and <i>Subject Marks Entry</i> will be entered for the Class they are registered for that Subject.</li>
+                <li>So, Class wise students list will consider Class Registration and the Subject wise data entry will consider Subject Registration.</li>
+                </ul>
+                </span>
               </div>
               <div class="col-6">
                 <p class="mb-0">
@@ -72,7 +81,7 @@ require('../../php_function.php');
     });
 
     $(document).on('click', '.cr', function() {
-      $.alert("Registration");
+      //$.alert("Registration");
       sbpList("25", "0");
       classSubject();
     });

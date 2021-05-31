@@ -21,7 +21,7 @@ require('../../php_function.php');
         <div class="card text-center selectPanel">
           <span id="panelId"></span>
           <?php
-          $sql = "select * from class where session_id='$mySes' and dept_id='$myDept'";
+          $sql = "select * from class where session_id='$mySes' and dept_id='$myDept' order by class_name";
           selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
           ?>
         </div>
@@ -116,12 +116,8 @@ require('../../php_function.php');
 
     $(document).on('click', '.stt', function() {
       $("#panelId").html("STT");
-      $(".selectClass").hide();
-      $(".selectProgram").show();
       $("#clListProgram").show();
-      var programId = $("#sel_program").val();
-      //$.alert("Prog" +  programId);
-      sessionClass(programId);
+      sessionClass();
     });
 
     $(document).on('click', '.cs', function() {
@@ -357,9 +353,8 @@ require('../../php_function.php');
       var classId = $("#sel_class").val();
       var panelId = $("#panelId").text();
       //$.alert("Panel Id " + panelId);
-      if (classId > 0 && panelId == "TL") tlList(classId);
-      else if (classId > 0 && panelId == "TT") ttList(classId);
-      else $.alert("Class " + classId);
+      if (panelId == "TL") tlList(classId);
+      else ttList(classId);
     });
 
     $(document).on('click', '.increDecre', function() {
@@ -656,14 +651,13 @@ require('../../php_function.php');
       })
     }
 
-    function sessionClass(x) {
+    function sessionClass() {
       var panelId = $('#panelId').text();
       if (panelId == "STT") var actionText = 'sessionClassListSTT';
       else var actionText = 'sessionClassList';
       //$.alert("In List Function " + actionText + "Panel " + panelId);
       $.post("createScheduleSql.php", {
-        action: actionText,
-        programId: x
+        action: actionText
       }, function(data, status) {
         //$.alert("Success " + data);
         if (panelId == "STT") $("#sessionClassListSTT").html(data);
