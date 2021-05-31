@@ -10,6 +10,9 @@ require('../../php_function.php');
 <head>
  <title>Outcome Based Education : ClassConnect</title>
  <?php require("../css.php"); ?>
+ <link rel="stylesheet" href="obe.css">
+
+
 
 </head>
 
@@ -27,46 +30,232 @@ require('../../php_function.php');
    <div class="col-10">
     <div class="tab-content" id="nav-tabContent">
      <div class="tab-pane fade show active" id="list-as" role="tabpanel" aria-labelledby="list-as-list">
-      <div class="col">
-       <!-- Nav tabs -->
-       <ul class="nav nav-tabs">
-        <li class="nav-item">
-         <a class="nav-link tabLink active" id="assessmentMethodPanel" data-toggle="tab" href="#showMethodPanel">Assessment Method </a>
-        </li>
-        <li class="nav-item">
-         <a class="nav-link tabLink" data-toggle="tab" href="#showATPanel">Assessment Technique</a>
-        </li>
-        <li class="nav-item">
-         <a class="nav-link tabLink poScale" data-toggle="tab" href="#showScalePanel">PO Scale</a>
-        </li>
-        <li class="nav-item">
-         <a class="nav-link pof" data-toggle="tab" href="#showPOFPanel">PO Feedback</a>
-        </li>
-       </ul>
-       <!-- Tab panes -->
-       <div class="tab-content">
-        <div class="tab-pane container show active p-0 m-0" id="showMethodPanel">
-         <button class="btn btn-info btn-square-sm mt-1 addMethod">Add New</button>
-         <div class="col p-0 m-0">
-          <p id="assessmentMethodShowList"></p>
+      <div class="row">
+       <div class="col-5">
+        <div class="container card shadow d-flex justify-content-center mt-2" id="card_obe">
+         <!-- nav options -->
+         <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
+          <li class="nav-item">
+           <a class="nav-link active" id="pills_assMethod" data-toggle="pill" href="#pills_method" role="tab" aria-controls="pills_method" aria-selected="true">Assessment Method</a>
+          </li>
+          <li class="nav-item">
+           <a class="nav-link" id="pills_assTechnique" data-toggle="pill" href="#pills_technique" role="tab" aria-controls="pills_technique" aria-selected="false">Assessment Technique</a>
+          </li>
+          <li class="nav-item">
+           <a class="nav-link" id="pills_poScale" data-toggle="pill" href="#pills_scale" role="tab" aria-controls="pills_scale" aria-selected="false">PO Scale</a>
+          </li>
+          <li class="nav-item">
+           <a class="nav-link" id="pills_poFeedback" data-toggle="pill" href="#pills_feedback" role="tab" aria-controls="pills_feedback" aria-selected="false">PO Feedback</a>
+          </li>
+         </ul>
+         <div class="tab-content" id="pills-tabContent p-3">
+          <div class="tab-pane fade show active" id="pills_method" role="tabpanel" aria-labelledby="pills_assMethod">
+           <form class="form-horizontal" id="assessmentMethodForm">
+            <div class="row">
+             <div class="col-12">
+              <div class="form-group">
+               <label>Assessment Method Name</label>
+               <input type="text" class="form-control form-control-sm" id="am_nameM" name="am_name" placeholder="Name of Assessment Method">
+              </div>
+             </div>
+            </div>
+            <div class="row">
+             <div class="col-6">
+              <div class="form-group">
+               <label>CO Weight (%)</label>
+               <input type="number" class="form-control form-control-sm" id="am_weight" name="am_weight" placeholder="CO Weight in %">
+              </div>
+             </div>
+             <div class="col-6">
+              <div class="form-group">
+               <label>PO Weight (%)</label>
+               <input type="number" class="form-control form-control-sm" id="am_weight_po" name="am_weight_po" placeholder="PO Weight in %">
+              </div>
+             </div>
+            </div>
+            <hr>
+            <div class="row">
+             <div class="col">
+              <label for="">Method Type</label>
+              <div class="form-group">
+               <div class="form-check-inline">
+                <input type="radio" class="form-check-input" checked id="amDirect" name="am_code" value="Direct">Direct
+               </div>
+               <div class="form-check-inline">
+                <input type="radio" class="form-check-input" id="amIndirect" name="am_code" value="Indirect">Indirect
+               </div>
+              </div>
+             </div>
+             <hr>
+             <div class="col">
+              <label for="">Weightage Type</label>
+              <div class="form-group">
+               <div class="form-check-inline">
+                <input type="radio" class="form-check-input" checked id="amFixed" name="am_type" value="Fixed">Fixed
+               </div>
+               <div class="form-check-inline">
+                <input type="radio" class="form-check-input" id="amFlexible" name="am_type" value="Flexible">Flexible
+               </div>
+              </div>
+             </div>
+            </div>
+            <hr>
+            <div class="form-group">
+             <i>Assessment Method is generally Direct Method and Indirect Method. The weightage can be adjusted. The weightage provided here is the default Weightage. If Weight Type is fixed Faculty cannot Change the weightage and if it is flexible, faculty can adjust it.</i>
+            </div>
+            <input type="hidden" id="actionAddAssMethod" name="actionAddAssMethod">
+            <input type="hidden" id="amId" name="amId">
+            <input type="hidden" id="actionUpdateAssMethod" name="actionUpdateAssMethod">
+            <button type="submit" class="btn btn-sm">Submit</button>
+           </form>
+          </div>
+          <div class="tab-pane fade" id="pills_technique" role="tabpanel" aria-labelledby="pills_assTechnique">
+           <form class="form-horizontal" id="assessmentTechniqueForm">
+            <div class="row">
+             <div class="col-6">
+              <div class="form-group">
+               <label>Technique Name</label>
+               <input type="text" class="form-control form-control-sm" id="at_name" name="at_name" placeholder="Name of Assessment Technique">
+              </div>
+             </div>
+             <div class="col-6">
+              <div class="form-group">
+               <label>Method</label>
+               <?php
+               $sql = "select * from assessment_method where am_status='0'";
+               $data = array("0", "am_id", "am_name", "", "sel_am");
+               selectList($conn, "Select Method", $data, $sql);
+               ?>
+              </div>
+             </div>
+            </div>
+            <hr>
+            <div class="row">
+             <div class="col">
+              <label>Outcome</label>
+              <div class="form-group">
+               <div class="form-check-inline">
+                <input type="radio" class="form-check-input" checked id="atCO" name="at_outcome" value="CO">CO
+               </div>
+               <div class="form-check-inline">
+                <input type="radio" class="form-check-input" id="atPO" name="at_outcome" value="PO">PO
+               </div>
+              </div>
+             </div>
+             <hr>
+             <div class="col">
+              <label>Assessment Technique Type</label>
+              <div class="form-group">
+               <div class="form-check-inline">
+                <input type="radio" class="form-check-input" checked id="atFixed" name="at_type" value="Fixed">Fixed
+               </div>
+               <div class="form-check-inline">
+                <input type="radio" class="form-check-input" id="atFlexible" name="at_type" value="Flexible">Flexible
+               </div>
+              </div>
+             </div>
+            </div>
+            <hr>
+            <div class="form-group">
+             <i>Assessment Techniques are generally Examination, Submissive, Feedback/Survey, Rubric based. Each Technique is essentially attached to Assessment Method. If Technique Type is fixed Faculty cannot Change the Assessment Method attached to it and if it is flexible, faculty can change it.</i>
+            </div>
+            <button type="submit" class="btn btn-sm">Submit</button>
+           </form>
+          </div>
+          <div class="tab-pane fade" id="pills_scale" role="tabpanel" aria-labelledby="pills_poScale">
+          </div>
+          <div class="tab-pane fade" id="pills_feedback" role="tabpanel" aria-labelledby="pills_poFeedback">
+           <form class="form-horizontal" id="POFForm">
+            <div class="row">
+             <div class="col-12">
+              <div class="form-group">
+               <label>PO Feedback Name</label>
+               <input type="text" class="form-control form-control-sm" id="pf_name" name="pf_name" placeholder="Name of PO Feedback">
+              </div>
+             </div>
+            </div>
+            <div class="row">
+             <div class="col-4">
+              <div class="form-group">
+               <label>Question</label>
+               <input type="number" class="form-control form-control-sm" id="pf_question" name="pf_question" placeholder="Question">
+              </div>
+             </div>
+             <div class="col-4">
+              <div class="form-group">
+               <label>MM</label>
+               <input type="number" class="form-control form-control-sm" id="pf_mm" name="pf_mm" placeholder="Max Marks">
+              </div>
+             </div>
+             <div class="col-4">
+              <div class="form-group">
+               <label>Weight(%)</label>
+               <input type="number" step="0.5" class="form-control form-control-sm" id="pf_weight" name="pf_weight" placeholder="Weight out of 100%">
+              </div>
+             </div>
+            </div>
+            <hr>
+            <div class="form-group">
+             <i>The Feedbacks are taken from Alumni, Employer, and Graduating Students. These are part of indirect method of calculating PO attainment.</i>
+            </div>
+            <button type="submit" class="btn btn-sm">Submit</button>
+           </form>
+          </div>
          </div>
         </div>
-        <div class="tab-pane fade" id="showATPanel">
-         <button class="btn btn-info btn-square-sm mt-1 addAT">Add New</button>
-         <div class="col p-0 m-0">
-          <div id="assessmentTechniqueShowList"></div>
-         </div>
+       </div>
+       <div class="col-7">
+        <div class="container card shadow d-flex justify-content-center mt-2">
+         <table class="table table-bordered table-striped list-table-xs w-auto mt-3" id="assMethodTable">
+          <tr class="align-center">
+           <th><i class="fas fa-edit"></i></th>
+           <th>Method</th>
+           <th>Type</th>
+           <th>Weight(COA) </th>
+           <th>Weight(POA)</th>
+           <th>Assessment Type</th>
+           <th><i class="fas fa-trash"></i></th>
+          </tr>
+         </table>
         </div>
-        <div class="tab-pane fade" id="showScalePanel">
-         <button class="btn btn-info btn-square-sm mt-1" id="poScaleButton">Show PO Scale</button>
-         <div class="p-0 m-0" id="poShowScale"></div>
+        <div class="container card shadow d-flex justify-content-center mt-2">
+         <table class="table table-bordered table-striped list-table-xs w-auto mt-3" id="assTechniqueTable">
+          <tr class="align-center">
+           <th><i class="fas fa-edit"></i></th>
+           <th>Assessment Technique</th>
+           <th>Assessment Method</th>
+           <th>Outcome</th>
+           <th>Technique Type</th>
+           <th><i class="fas fa-trash"></i></th>
+          </tr>
+         </table>
         </div>
-        <div class="tab-pane fade" id="showPOFPanel">
-         <button class="btn btn-info btn-square-sm mt-1 addPOF">Add PO Feedback</button>
-         <div class="col p-0 m-0">
-          <p id="pofShowList"></p>
-         </div>
+        <div class="container card shadow d-flex justify-content-center mt-2">
+         <table class="table table-bordered table-striped list-table-xs w-auto mt-3" id="poFeedbackTable">
+          <tr class="align-center">
+           <th><i class="fas fa-edit"></i></th>
+           <th>Feedback</th>
+           <th>Question</th>
+           <th>Max Marks</th>
+           <th>Weightage(%)</th>
+           <th><i class="fas fa-trash"></i></th>
+          </tr>
+         </table>
         </div>
+        <!-- <div class="container card shadow d-flex justify-content-center mt-2">
+         <table class="table table-bordered table-striped list-table-xs w-auto mt-3" id="assMethodTable">
+          <tr class="align-center">
+           <th><i class="fas fa-edit"></i></th>
+           <th>Id</th>
+           <th>Method</th>
+           <th>Type</th>
+           <th>Weight(COA) </th>
+           <th>Weight(POA)</th>
+           <th>Assessment Type</th>
+           <th><i class="fas fa-trash"></i></th>
+          </tr>
+         </table>
+        </div> -->
        </div>
       </div>
      </div>
@@ -210,13 +399,39 @@ require('../../php_function.php');
   $('[data-toggle="tooltip"]').tooltip();
   assessmentMethodList();
   assessmentTechniqueList();
-  assessmentDesignList();
-  $(".topBarTitle").text("OBE");
+  $('#assMethodTable').show();
+  $('#assTechniqueTable').hide();
+  $('#poFeedbackTable').hide();
   $(document).on('change', '#sel_subject', function() {
    //$.alert("Subject Changed ");
    copoMap();
    coScale();
    coMMTable();
+
+  });
+
+  $(document).on('click', '#pills_assMethod', function() {
+   $('#assMethodTable').show();
+   $('#assTechniqueTable').hide();
+   $('#poFeedbackTable').hide();
+  });
+
+  $(document).on('click', '#pills_assTechnique', function() {
+   $('#assMethodTable').hide();
+   $('#assTechniqueTable').show();
+   $('#poFeedbackTable').hide();
+  });
+
+  $(document).on('click', '#pills_poScale', function() {
+   $('#assMethodTable').hide();
+   $('#assTechniqueTable').hide();
+   $('#poFeedbackTable').hide();
+  });
+
+  $(document).on('click', '#pills_poFeedback', function() {
+   $('#assMethodTable').hide();
+   $('#assTechniqueTable').hide();
+   $('#poFeedbackTable').show();
   });
 
   $(document).on('click', '.as', function() {
@@ -359,20 +574,16 @@ require('../../php_function.php');
    $('.POFForm').hide();
   });
 
-  $(document).on('click', '.at_idE', function() {
-   var id = $(this).attr('id');
-   $.alert("Id " + id);
+  $(document).on('click', '.editAssTechnique', function() {
+   var id = $(this).attr('data-assTechnique');
    $.post("obeSql.php", {
     atId: id,
     action: "fetchAT"
    }, () => {}, "json").done(function(data) {
     //$.alert("List " + data.am_name);
     console.log(data);
-    $('#modal_title').text("Update Assessment Technique [" + id + "]");
     $('#at_name').val(data.at_name);
-
     $('#action').val("updateAT");
-    $('#modalId').val(id);
 
     var atType = data.at_type;
     if (atType == 'Fixed') {
@@ -391,14 +602,6 @@ require('../../php_function.php');
     var amId = data.am_id;
     //$.alert("amId " + amId);
     $("#sel_am option[value='" + amId + "']").attr("selected", "selected");
-
-    $('.assessmentMethodForm').hide();
-    $('.assessmentDesignForm').hide();
-    $('.assessmentTechniqueForm').show();
-    $('.aucoForm').hide();
-    $('.auMarksForm').hide();
-    $('.POFForm').hide();
-    $('#firstModal').modal('show');
 
    }, "text").fail(function() {
     $.alert("fail in place of error");
@@ -474,8 +677,8 @@ require('../../php_function.php');
    }
   });
 
-  $(document).on('click', '.am_idE', function() {
-   var id = $(this).attr('id');
+  $(document).on('click', '.editAssMethod', function() {
+   var id = $(this).attr('data-assMethod');
    $.alert("Id " + id);
    $.post("obeSql.php", {
     amId: id,
@@ -483,13 +686,11 @@ require('../../php_function.php');
    }, () => {}, "json").done(function(data) {
     //$.alert("List " + data.am_name);
     console.log(data);
-    $('#modal_title').text("Update Assessment Method [" + id + "]");
     $('#am_nameM').val(data.am_name);
     $('#am_weight').val(data.am_weight);
     $('#am_weight_po').val(data.am_weight_po);
-
-    $('#action').val("updateAM");
-    $('#modalId').val(id);
+    $('#actionUpdateAssMethod').val("updateAM");
+    $('#amId').val(id);
 
     var amType = data.am_type;
     if (amType == 'Fixed') {
@@ -504,19 +705,66 @@ require('../../php_function.php');
     } else if (amCode == 'Indirect') {
      document.getElementById("amIndirect").checked = true;
     }
-
-    $('.assessmentMethodForm').show();
-    $('.assessmentTechniqueForm').hide();
-    $('.assessmentDesignForm').hide();
-    $('.aucoForm').hide();
-    $('.auMarksForm').hide();
-    $('.POFForm').hide();
-
-    $('#firstModal').modal('show');
    }, "text").fail(function() {
     $.alert("fail in place of error");
    })
   });
+
+  $(document).on('submit', '#assessmentMethodForm', function(event) {
+   event.preventDefault(this);
+   var action = $("#action").val();
+   //$.alert("Form Submitted " + action);
+   var error = "NO";
+   // var error_msg = "";
+   // if (action == "addAssessmentMethod" || action == "updateAM") {
+   //  if ($('#am_nameM').val() === "") {
+   //   error = "YES";
+   //   error_msg = "Method name cannot be blank";
+   //  }
+   // } else if (action == "addAT" || action == "updateAT") {
+   //  if ($('#at_name').val() === "") {
+   //   error = "YES";
+   //   error_msg = "Technique Name cannot be blank";
+   //  }
+   // } else if (action == "addPOF" || action == "updatePOF") {
+   //  if ($('#pof_name').val() === "") {
+   //   error = "YES";
+   //   error_msg = "PO Feedback Name cannot be blank";
+   //  }
+   // } else if (action == "addAD" || action == "updateAD") {
+   //  if ($("#ad_name").val() === "" || $("#sel_subjectAD").val() === "" || $("#sel_at").val() === "") {
+   //   error = "YES";
+   //   error_msg = "Design Name/Subject/Technique cannot be blank";
+   //  }
+   // } else if (action == "addAUCO" && $("#auco_weight").val() === "") {
+   //  error = "YES";
+   //  error_msg = "Value Cannot be blank";
+   // } else if (action == "addAUMarks" && $("#au_marks").val() === "") {
+   //  error = "YES";
+   //  error_msg = "AU/Q Marks Cannot be blank";
+   // }
+   if (error == "NO") {
+    var formData = $(this).serialize();
+    $.alert(formData);
+    $.post("obeSql.php", formData, () => {}, "text").done(function(data) {
+     //$.alert(data);
+     // if (action == "addAssessmentMethod" || action == "updateAM") assessmentMethodList();
+     // else if (action == "addAT" || action == "updateAT") assessmentTechniqueList();
+     // else if (action == "addAD" || action == "updateAD") assessmentDesignList();
+     // else if (action == "addAUCO" || action == "addAUMarks") aucoMap();
+     // else if (action == "addPOF" || action == "updatePOF") pofList();
+     // $('#firstModal').modal('hide');
+     // $('#modalForm')[0].reset();
+    }, "text").done(function(mydata, mystatus) {
+     $.alert("Data" + mydata);
+    }).fail(function() {
+     $.alert("fail in place of error");
+    })
+   } else {
+    $.alert(error_msg);
+   }
+  });
+
 
   $(document).on('submit', '#modalForm', function(event) {
    event.preventDefault(this);
@@ -792,31 +1040,61 @@ require('../../php_function.php');
    })
   }
 
+  // function assessmentMethodList() {
+  //  //$.alert("Assessment List Function");
+  //  $.post("obeSql.php", {
+  //   action: "assessmentMethodList"
+  //  }, function(mydata, mystatus) {
+  //   $("#assessmentMethodShowList").hide();
+  //   //$.alert("List " + mydata);
+  //   $("#assessmentMethodShowList").html(mydata);
+  //   $("#assessmentMethodShowList").show();
+  //  }, "text").fail(function() {
+  //   $.alert("Error !!");
+  //  })
+  // }
+
   function assessmentMethodList() {
-   //$.alert("Assessment List Function");
    $.post("obeSql.php", {
-    action: "assessmentMethodList"
-   }, function(mydata, mystatus) {
-    $("#assessmentMethodShowList").hide();
-    //$.alert("List " + mydata);
-    $("#assessmentMethodShowList").html(mydata);
-    $("#assessmentMethodShowList").show();
-   }, "text").fail(function() {
-    $.alert("Error !!");
-   })
+   action: "assessmentMethodList",
+  }, () => {}, "json").done(function(data) {
+   var assMethod = '';
+   $.each(data, function(key, value) {
+    assMethod += '<tr>';
+    assMethod += '<td><a href="#" class="fas fa-edit editAssMethod" data-assMethod="' + value.am_id + '"></a></td>';
+    assMethod += '<td>' + value.am_name + '</td>';
+    assMethod += '<td>' + value.am_type + '</td>';
+    assMethod += '<td>' + value.am_weight + '</td>';
+    assMethod += '<td>' + value.am_weight_po + '</td>';
+    assMethod += '<td>' + value.am_code + '</td>';
+    assMethod += '<td><a href="#" class="fas fa-trash"></a></td>';
+    assMethod += '</tr>';
+   });
+   $("#assMethodTable").append(assMethod);
+  }, "json").fail(function() {
+   $.alert("fail in place of error");
+  })
   }
 
   function assessmentTechniqueList() {
-   //$.alert("AT List Function");
    $.post("obeSql.php", {
-    action: "assessmentTechniqueList"
-   }, function(mydata, mystatus) {
-    $("#assessmentTechniqueShowList").show();
-    //$.alert("List " + mydata);
-    $("#assessmentTechniqueShowList").html(mydata);
-   }, "text").fail(function() {
-    $.alert("Error !!");
-   })
+   action: "assessmentTechniqueList",
+  }, () => {}, "json").done(function(data) {
+   var assTech = '';
+   $.each(data, function(key, value) {
+    assTech += '<tr>';
+    assTech += '<td><a href="#" class="fas fa-edit editAssTechnique" data-assTechnique="' + value.at_id + '"></a></td>';
+    assTech += '<td>' + value.at_name + '</td>';
+    assTech += '<td>' + value.am_name + '</td>';
+    assTech += '<td>' + value.at_outcome + '</td>';
+    assTech += '<td>' + value.at_type + '</td>';
+    assTech += '<td><a href="#" class="fas fa-trash"></a></td>';
+    assTech += '</tr>';
+   });
+   $("#assTechniqueTable").append(assTech);
+  }, "json").fail(function() {
+   $.alert("fail in place of error");
+  })
   }
 
   function assessmentDesignList() {
@@ -950,106 +1228,6 @@ require('../../php_function.php');
 
     <!-- Modal body -->
     <div class="modal-body">
-     <div class="assessmentMethodForm">
-      <div class="row">
-       <div class="col-12">
-        <div class="form-group">
-         Assessment Method Name
-         <input type="text" class="form-control form-control-sm" id="am_nameM" name="am_name" placeholder="Name of Assessment Method">
-        </div>
-       </div>
-      </div>
-      <div class="row">
-       <div class="col-6">
-        <div class="form-group">
-         CO Weight (%)
-         <input type="number" class="form-control form-control-sm" id="am_weight" name="am_weight" placeholder="CO Weight in %">
-        </div>
-       </div>
-       <div class="col-6">
-        <div class="form-group">
-         PO Weight (%)
-         <input type="number" class="form-control form-control-sm" id="am_weight_po" name="am_weight_po" placeholder="PO Weight in %">
-        </div>
-       </div>
-      </div>
-      <hr>
-      <div class="row">
-       <div class="col">
-        <div class="form-check-inline"> Method Type </div>
-        <div class="form-check-inline">
-         <input type="radio" class="form-check-input" checked id="amDirect" name="am_code" value="Direct">Direct
-        </div>
-        <div class="form-check-inline">
-         <input type="radio" class="form-check-input" id="amIndirect" name="am_code" value="Indirect">Indirect
-        </div>
-       </div>
-      </div>
-      <hr>
-      <div class="row">
-       <div class="col">
-        <div class="form-check-inline"> Weightage Type </div>
-        <div class="form-check-inline">
-         <input type="radio" class="form-check-input" checked id="amFixed" name="am_type" value="Fixed">Fixed
-        </div>
-        <div class="form-check-inline">
-         <input type="radio" class="form-check-input" id="amFlexible" name="am_type" value="Flexible">Flexible
-        </div>
-       </div>
-      </div>
-      <hr>
-      <div class="form-group">
-       <i>Assessment Method is generally Direct Method and Indirect Method. The weightage can be adjusted. The weightage provided here is the default Weightage. If Weight Type is fixed Faculty cannot Change the weightage and if it is flexible, faculty can adjust it.</i>
-      </div>
-     </div>
-     <div class="assessmentTechniqueForm">
-      <div class="row">
-       <div class="col-6">
-        <div class="form-group">
-         Technique Name
-         <input type="text" class="form-control form-control-sm" id="at_name" name="at_name" placeholder="Name of Assessment Technique">
-        </div>
-       </div>
-       <div class="col-6">
-        <div class="form-group">
-         Method
-         <?php
-         $sql = "select * from assessment_method where am_status='0'";
-         $data = array("0", "am_id", "am_name", "", "sel_am");
-         selectList($conn, "Select Method", $data, $sql);
-         ?>
-        </div>
-       </div>
-      </div>
-      <hr>
-      <div class="row">
-       <div class="col">
-        <div class="form-check-inline"> Outcome </div>
-        <div class="form-check-inline">
-         <input type="radio" class="form-check-input" checked id="atCO" name="at_outcome" value="CO">CO
-        </div>
-        <div class="form-check-inline">
-         <input type="radio" class="form-check-input" id="atPO" name="at_outcome" value="PO">PO
-        </div>
-       </div>
-      </div>
-      <hr>
-      <div class="row">
-       <div class="col">
-        <div class="form-check-inline"> Assessment Technique Type </div>
-        <div class="form-check-inline">
-         <input type="radio" class="form-check-input" checked id="atFixed" name="at_type" value="Fixed">Fixed
-        </div>
-        <div class="form-check-inline">
-         <input type="radio" class="form-check-input" id="atFlexible" name="at_type" value="Flexible">Flexible
-        </div>
-       </div>
-      </div>
-      <hr>
-      <div class="form-group">
-       <i>Assessment Techniques are generally Examination, Submissive, Feedback/Survey, Rubric based. Each Technique is essentially attached to Assessment Method. If Technique Type is fixed Faculty cannot Change the Assessment Method attached to it and if it is flexible, faculty can change it.</i>
-      </div>
-     </div>
      <div class="assessmentDesignForm">
       <div class="row">
        <div class="col-6">
@@ -1139,40 +1317,6 @@ require('../../php_function.php');
       <hr>
       <div class="form-group">
        <i>If more questions are grouped to form an Assessment Unit, total marks of the questions are to be added. The marks will be distributed proportionately to each CO in case more than one COs are mapped to AU/Q.</i>
-      </div>
-     </div>
-     <div class="POFForm">
-      <div class="row">
-       <div class="col-12">
-        <div class="form-group">
-         PO Feedback Name
-         <input type="text" class="form-control form-control-sm" id="pf_name" name="pf_name" placeholder="Name of PO Feedback">
-        </div>
-       </div>
-      </div>
-      <div class="row">
-       <div class="col-4">
-        <div class="form-group">
-         Ques
-         <input type="number" class="form-control form-control-sm" id="pf_question" name="pf_question" placeholder="Question">
-        </div>
-       </div>
-       <div class="col-4">
-        <div class="form-group">
-         MM
-         <input type="number" class="form-control form-control-sm" id="pf_mm" name="pf_mm" placeholder="Max Marks">
-        </div>
-       </div>
-       <div class="col-4">
-        <div class="form-group">
-         Weight(%)
-         <input type="number" step="0.5" class="form-control form-control-sm" id="pf_weight" name="pf_weight" placeholder="Weight out of 100%">
-        </div>
-       </div>
-      </div>
-      <hr>
-      <div class="form-group">
-       <i>The Feedbacks are taken from Alumni, Employer, and Graduating Students. These are part of indirect method of calculating PO attainment.</i>
       </div>
      </div>
     </div> <!-- Modal Body Closed-->
