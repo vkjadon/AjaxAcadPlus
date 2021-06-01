@@ -24,7 +24,7 @@ require('../../php_function.php');
         ?>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active cr" id="list-cr-list" data-toggle="list" href="#list-cr" role="tab"> Class Registration </a>
-          <a class="list-group-item list-group-item-action subjectRegistration" id="list-subjectRegistration-list" data-toggle="list" href="#list-subjectRegistration" role="tab"> Subject Registration </a>
+          <a class="list-group-item list-group-item-action subReg" id="list-subReg-list" data-toggle="list" href="#list-subReg" role="tab"> Subject Registration </a>
           <a class="list-group-item list-group-item-action stdReg" id="list-stdReg-list" data-toggle="list" href="#list-stdReg" role="tab"> Student Registration </a>
 
         </div>
@@ -90,9 +90,9 @@ require('../../php_function.php');
               </div>
             </div>
           </div>
-          <div class="tab-pane fade" id="list-subjectRegistration">
+          <div class="tab-pane fade" id="list-subReg">
             <div class="row">
-              <div class="col-6 mt-1 mb-1">
+              <div class="col- mt-1 mb-1">
                 <p id="classList"></p>
               </div>
               <div class="col-6 mt-1 mb-1">
@@ -123,7 +123,7 @@ require('../../php_function.php');
       classList("25", "0");
     });
 
-    $(document).on('click', '.subjectRegistration', function() {
+    $(document).on('click', '.subReg', function() {
       //$.alert("Registration");
       classList("25", "0");
       classSubject();
@@ -190,6 +190,31 @@ require('../../php_function.php');
       })
     });
 
+    $(document).on('click', '.subjectRegistration', function() {
+      var checkboxes_value = [];
+      $('.sbp').each(function() {
+        if (this.checked) {
+          checkboxes_value.push($(this).val());
+        }
+      });
+      var status = $(this).is(":checked");
+      var tlId = $(this).val();
+      $.alert("Register Pressed " + status + tlId);
+
+      $.post("registrationSql.php", {
+        tl: tlId,
+        checkboxes_value: checkboxes_value,
+        status: status,
+        action: "subjectRegistration"
+      }, function(data, status) {
+        $.alert(data);
+        // sbpList(rpp, startRecord);
+      }, "text").fail(function() {
+        $.alert("Fail");
+      })
+
+    });
+
     $(document).on('change', '.sbp_rpp, .cl_rpp', function() {
       var classId = $("#sel_class").val();
       var startRecord = $(this).attr('data-start');
@@ -230,11 +255,11 @@ require('../../php_function.php');
       else $('.sbp').prop('checked', true); // Unchecks it
     });
 
-    $(document).on('click', '.classSubject', function() {
-      var id = $('#sel_class').val();
-      //$.alert("Class  Id " + id);
-      classSubject(id);
-    });
+    // $(document).on('click', '.classSubject', function() {
+    //   var id = $('#sel_class').val();
+    //   //$.alert("Class  Id " + id);
+    //   classSubject(id);
+    // });
 
     $(document).on('click', '.updateClassButton', function() {
       var rsId = $(this).val();

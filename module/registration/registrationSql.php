@@ -94,13 +94,6 @@ if (isset($_POST['action'])) {
       if (!$conn->query($sql)->num_rows) {
         $sql = "insert into $tn_rc (student_id, class_id, rc_group, rc_date, submit_id, rc_status) values('$id[$i]','$classId', '$class_group', '$submit_date','$myId', '0')";
         $result = $conn->query($sql);
-        for ($j = 0; $j < count($tl); $j++) {
-          $sql = "select * from $tn_rs where student_id='$id[$i]' and tl_id='$tl[$j]'";
-          if (!$conn->query($sql)->num_rows) {
-            $sql = "insert into $tn_rs (student_id, tl_id, update_id, rs_status) values('$id[$i]','$tl[$j]','$myId', '0')";
-            $result = $conn->query($sql);
-          }
-        }
       }
     }
   } elseif ($_POST['action'] == 'updateRegistration') {
@@ -131,7 +124,7 @@ if (isset($_POST['action'])) {
     $result = $conn->query($sql);
     echo '<table class="table list-table-xs mb-0">';
     echo '<tr><th>#</th><th>';
-    echo '<input type="checkbox" class="checkUnCheck">';
+    echo '<input type="checkbox" class="checkUnCheck" data-tag="cl">';
     echo '</th><th>Id</th><th>RollNo</th><th>Name</th><th>Group</th><th>RegDate</th><th>Action</th></tr>';
     while ($rows = $result->fetch_assoc()) {
       $id = $rows['student_id'];
@@ -150,7 +143,7 @@ if (isset($_POST['action'])) {
       echo '<td>' . $student_name . '</td>';
       echo '<td>' . $regClassGroup . '</td>';
       echo '<td>' . date("d-m-Y", strtotime($regDate)) . '</td>';
-      echo '<td><button class="btn btn-secondary btn-square-sm studentSubjectButton" id="' . $id . '">Update Subject</button></td>';
+      echo '<td><button class="btn btn-secondary btn-square-sm studentSubjectButton" id="' . $id . '">Update</button></td>';
       echo '</tr>';
     }
     echo '</table>';
@@ -158,33 +151,25 @@ if (isset($_POST['action'])) {
   } elseif ($_POST['action'] == 'clSub') {
     $class_id = $_POST['classId'];
     //echo "Class $class_id";
-    $class_name = getField($conn, $class_id, "class", "class_id", "class_name");
     $class_group = getField($conn, $class_id, "class", "class_id", "class_group");
     for ($group = 1; $group <= $class_group; $group++) {
-      $sql = "select tlg.*, tl.* from $tn_tlg tlg, $tn_tl tl where tlg.class_id='$class_id' and tl.tlg_id=tlg.tlg_id and tl.tl_group='$group' and tlg.tlg_status='0' and tl.tl_status='0' order by tlg.tlg_type, tlg.subject_id";
+      subjectList($conn, $tn_tlg, $tn_tl, $class_id, $group, "L");
+      subjectList($conn, $tn_tlg, $tn_tl, $class_id, $group, "T");
+      subjectList($conn, $tn_tlg, $tn_tl, $class_id, $group, "P");
+    }
+  } elseif ($_POST['action'] == 'subjectRegistration') {
+    $id = $_POST["checkboxes_value"];
+    $tl = $_POST["tl"];
+    $status = $_POST["status"];
+
+    for ($i = 0; $i < count($id); $i++) {
+      echo $id[$i] . 'TL  - ' . $tl . ' Status ' . $status;
+      echo '<br>';
+      if($status=="false")$sql = "delete from $tn_rs where student_id='$id[$i]' and tl_id='$tl'";
+      else $sql = "insert into $tn_rs (student_id, tl_id, update_id) values('$id[$i]','$tl','$myId')";
+      echo "All Insert and Dlete";
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
-      echo '<h5>Subject List for Class : ' . $class_name . '[' . $class_id . ']</h5>';
-      echo '<table class="table list-table-xs">';
-      echo '<tr><th>#</th><th>Id</th><th>Code</th><th>Subject</th><th>Group</th><th>Std</th></tr>';
-      $count = 1;
-      while ($rowsSubject = $result->fetch_assoc()) {
-        $tl_id = $rowsSubject["tl_id"];
-        $subject_id = $rowsSubject["subject_id"];
-        $subject_code = getField($conn, $subject_id, "subject", "subject_id", "subject_code");
-        $subject_name = getField($conn, $subject_id, "subject", "subject_id", "subject_name");
-        $sql = "select * from $tn_rs where tl_id='$tl_id'";
-        $registeredStudents = getRowCount($conn, $sql);
-        echo '<tr>';
-        echo '<td>' . $count++ . '</td>';
-        echo '<td>' . $tl_id . '-' . $subject_id . '</td>';
-        echo '<td>' . $subject_code . '</td>';
-        echo '<td>' . $subject_name . '</td>';
-        echo '<td>' . $rowsSubject["tlg_type"] . 'G-' . $rowsSubject["tl_group"] . '</td>';
-        echo '<td>' . $registeredStudents . '</td>';
-        echo '</tr>';
-      }
-      echo '</table>';
     }
   } elseif ($_POST['action'] == 'stdSub') {
     $student_id = $_POST['stdId'];
@@ -207,8 +192,8 @@ if (isset($_POST['action'])) {
       $subject_credit = $rowArray["subject_credit"];
 
       //echo $rs_tl;
-      $sql = "select * from $tn_rs where student_id='$student_id' and tl_id='$rs_tl' and rs_status='0'";
-      $check_status = getFieldValue($conn, 'rs_id', $sql);
+      $sql = "select * from $tn_rs where student_id='$student_id' and tl_id='$rs_tl'";
+      $check_status = getFieldValue($conn, 'student_id', $sql);
       echo '<tr>';
       echo '<td>' . ($i + 1) . '</td>';
       if ($check_status == "") echo '<td><input type="checkbox" class="stdsubCheckbox" data-std="' . $student_id . '" value="' . $rs_tl . '"></td>';
@@ -249,5 +234,32 @@ if (isset($_POST['action'])) {
       $sql = "insert into $tn_rs (student_id, tl_id, update_id, rs_status) values('$student_id','$tl_id','$myId', '0')";
       $conn->query($sql);
     }
+  }
+}
+function subjectList($conn, $tn_tlg, $tn_tl, $class_id, $group, $tlg_type)
+{
+  $class_name = getField($conn, $class_id, "class", "class_id", "class_name");
+  $sql = "select tlg.*, tl.* from $tn_tlg tlg, $tn_tl tl where tlg.class_id='$class_id' and tl.tlg_id=tlg.tlg_id and tl.tl_group='$group' and tlg.tlg_type='$tlg_type' and tlg.tlg_status='0' and tl.tl_status='0' order by tlg.tlg_type, tlg.subject_id";
+  $result = $conn->query($sql);
+  if (!$result) echo $conn->error;
+  if ($result->num_rows > 0) {
+    echo '<h5>Subject List for Class : ' . $class_name . '[' . $tlg_type . 'G-' . $group . ']</h5>';
+    echo '<table class="table list-table-xs">';
+    echo '<tr><th></th><th>#</th><th>Id</th><th>Code</th><th>Subject</th></tr>';
+    $count = 1;
+    while ($rowsSubject = $result->fetch_assoc()) {
+      $tl_id = $rowsSubject["tl_id"];
+      $subject_id = $rowsSubject["subject_id"];
+      $subject_code = getField($conn, $subject_id, "subject", "subject_id", "subject_code");
+      $subject_name = getField($conn, $subject_id, "subject", "subject_id", "subject_name");
+      echo '<tr>';
+      echo '<td><input type="checkbox" class="subjectRegistration" value="' . $tl_id . '"></td>';
+      echo '<td>' . $count++ . '</td>';
+      echo '<td>' . $tl_id . '-' . $subject_id . '</td>';
+      echo '<td>' . $subject_code . '</td>';
+      echo '<td>' . $subject_name . '</td>';
+      echo '</tr>';
+    }
+    echo '</table>';
   }
 }
