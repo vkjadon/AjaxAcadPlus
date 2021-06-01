@@ -380,10 +380,18 @@ function getTableRow($conn, $sql, $arrayField)
 
 function getMaxValue($conn, $sql)
 {
+  // $sql to have order by DESC
   $result = $conn->query($sql);
   if ($result) {
     $row = $result->fetch_assoc();
     return $row["max"];
+  } else return FALSE;
+}
+function getRowCount($conn, $sql)
+{
+  $result = $conn->query($sql);
+  if ($result) {
+    return $result->num_rows;
   } else return FALSE;
 }
 function status_decode($status)
@@ -455,7 +463,7 @@ function dayList($dummy1, $dummy2)
   <label class="form-check-label" for="Sun">Sunday</label>
   </div>';
 }
-function paginationBar($conn, $sqlAll, $rpp)
+function paginationBar($conn, $sqlAll, $rpp, $id, $tag)
 {
   $result = $conn->query($sqlAll);
   $num_rows = $result->num_rows;
@@ -464,12 +472,11 @@ function paginationBar($conn, $sqlAll, $rpp)
 
   for ($i = 1; $i <= $page; $i++) {
     $startRecord = ($i - 1) * $rpp;
-    echo '<li class="page-item pageLink" id="page' . $i . '" data-start="' . $startRecord . '"><a class="page-link" href="#"><span class="btn btn-info btn-square-sm">' . $i . '</span></a></li>';
+    echo '<li class="page-item pageLink" id="page' . $tag . $i . '" data-start="' . $startRecord . '" data-tag="' . $tag . '"><a class="page-link" href="#"><span class="btn btn-info btn-square-sm">' . $i . '</span></a></li>';
   }
   echo '</ul></div>';
-  echo '<div class="col-2"><select class="form-control form-control-sm rpp" id="rpp" name="rpp">
+  echo '<div class="col-2"><select class="form-control form-control-sm ' . $id . '" id="' . $id . '" data-tag="' . $tag . '" name="rpp">
   <option value="' . $rpp . '">' . $rpp . '</option>
-  <option value="3">3</option>
   <option value="5">5</option>
   <option value="15">15</option>
   <option value="25">25</option>
@@ -542,6 +549,29 @@ function get_batchJson($conn)
   return json_encode($output);
 }
 function get_classSubject($conn, $class_id)
+{
+  $batch_id = getField($conn, $class_id, "class", "class_id", "batch_id");
+  $class_semester = getField($conn, $class_id, "class", "class_id", "class_semester");
+  $program_id = getField($conn, $class_id, "class", "class_id", "program_id");
+
+  $sql = "select * from subject where program_id='$program_id' and batch_id='$batch_id' and subject_semester='$class_semester'";
+  $result = $conn->query($sql);
+  if (!$result) die(" The script could not be Loadded! Please report!");
+  $data = array();
+  while ($rows = $result->fetch_assoc()) {
+    $sub_array = array();
+    $sub_array["id"] = $rows['subject_id'];
+    $sub_array["name"] = $rows['subject_name'];
+    $sub_array["code"] = $rows['subject_code'];
+    $sub_array["credit"] = $rows['subject_credit'];
+    $data[] = $sub_array;
+  }
+  $output = array(
+    "data" => $data
+  );
+  return json_encode($output);
+}
+function get_tlList($conn, $class_id)
 {
   $batch_id = getField($conn, $class_id, "class", "class_id", "batch_id");
   $class_semester = getField($conn, $class_id, "class", "class_id", "class_semester");

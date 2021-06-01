@@ -9,7 +9,7 @@ if (isset($_POST['action'])) {
   if ($_POST['action'] == 'clList') {
     $sql = "select cl.*, p.sp_abbri, b.batch from class cl, program p, batch b where cl.program_id=p.program_id and cl.batch_id=b.batch_id and cl.session_id='$mySes' and cl.program_id='$myProg' order by cl.class_semester";
     $result = $conn->query($sql);
-    echo '<table class="table list-table-xs"><tr><th>Id</th><th></th><th>Name</th><th>Sem</th><th>Shift</th><th>Prog</th><th>Batch</th><th><i class="fa fa-trash"></i></th><th>Action</th></tr>';
+    echo '<table class="table list-table-xs"><tr><th>Id</th><th></th><th>Name</th><th>Sem</th><th>Shift</th><th>Prog</th><th>Group</th><th>Batch</th><th><i class="fa fa-trash"></i></th><th>Action</th></tr>';
     while ($rowArray = $result->fetch_assoc()) {
       $id = $rowArray["class_id"];
       $batch_id = $rowArray["batch_id"];
@@ -20,6 +20,7 @@ if (isset($_POST['action'])) {
       echo '<td>' . $rowArray["class_semester"] . '</td>';
       echo '<td>' . $rowArray["class_shift"] . '</td>';
       echo '<td>' . $rowArray["sp_abbri"] . '</td>';
+      echo '<td>' . $rowArray["class_group"] . '</td>';
       echo '<td>';
       echo '<a href="#" class="increDecre" id="' . $id . '" data-value="' . ($batch_id - 1) . '"><i class="fa fa-angle-double-left"></i></a> ';
       echo $rowArray["batch"];

@@ -343,7 +343,7 @@ function dayList($dummy1, $dummy2)
   <label class="form-check-label" for="Sun">Sunday</label>
   </div>';
 }
-function paginationBar($conn, $sqlAll, $rpp)
+function paginationBar($conn, $sqlAll, $rpp, $id)
 {
   $result = $conn->query($sqlAll);
   $num_rows = $result->num_rows;
@@ -356,7 +356,7 @@ function paginationBar($conn, $sqlAll, $rpp)
     echo '<li class="page-item pageLink" id="page' . $i . '" data-start="' . $startRecord . '"><a class="page-link" href="#">' . $i . '</a></li>';
   }
   echo '</ul></div>';
-  echo '<div class="col-2"><select class="form-control form-control-sm rpp" id="rpp" name="rpp">
+  echo '<div class="col-2"><select class="form-control form-control-sm '.$id.'" id="'.$id.'" name="rpp">
   <option value="' . $rpp . '">' . $rpp . '</option>
   <option value="3">3</option>
   <option value="5">5</option>

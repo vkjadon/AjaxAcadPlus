@@ -377,7 +377,7 @@ require('../../phpFunction/teachingLoadFunction.php');
             if (classId > 0) tlList(classId);
             else $.alert(" Select Class ");
           } else {
-            //$.alert("Updated");
+            $.alert("Updated" + data);
             $("#dept" + tlg_id).html(data)
           }
           $('#firstModal').modal('hide');
