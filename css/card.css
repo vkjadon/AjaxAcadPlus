@@ -1,0 +1,92 @@
+  #myCard body {
+   background-color: #bcd9f5
+  }
+
+  #myCard .card {
+   max-width: 25rem;
+   padding: 0;
+   border: none;
+   border-radius: 0.5rem
+  }
+
+  #myCard a.active {
+   border-bottom: 2px solid #55c57a
+  }
+
+  #myCard .nav-link {
+   color: rgb(110, 110, 110);
+   font-weight: 500
+  }
+
+  #myCard .nav-link:hover {
+   color: #55c57a
+  }
+
+  #myCard .nav-pills .nav-link.active {
+   color: black;
+   background-color: white;
+   border-radius: 0.5rem 0.5rem 0 0;
+   font-weight: 600
+  }
+
+  #myCard .tab-content {
+   padding-bottom: 1.3rem
+  }
+
+  #myCard .form-control {
+   background-color: rgb(241, 243, 247);
+   border: none
+  }
+
+  #myCard span {
+   margin-left: 0.5rem;
+   padding: 1px 10px;
+   color: white;
+   background-color: rgb(143, 143, 143);
+   border-radius: 4px;
+   font-weight: 600
+  }
+
+  #myCard .third {
+   padding: 0 1.5rem 0 1.5rem
+  }
+
+  #myCard label {
+   font-weight: 500;
+   color: rgb(104, 104, 104)
+  }
+
+  #myCard .card-title {
+    font-weight: 500;
+    text-align: center;
+   border-bottom: 2px solid #55c57a;
+   color: rgb(104, 104, 104)
+   }
+
+  #myCard .btn-success {
+   float: right
+  }
+
+  #myCard .form-control:focus {
+   box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.075) inset, 0px 0px 7px rgba(0, 0, 0, 0.2)
+  }
+
+  #myCard select {
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   text-indent: 1px;
+   text-overflow: ""
+  }
+
+  #myCard ul {
+   list-style: none;
+   margin-top: 1rem;
+   padding-inline-start: 0
+  }
+
+  #myCard .btn {
+   color: white;
+   float: right;
+   background-color: #228B22;
+
+  }
