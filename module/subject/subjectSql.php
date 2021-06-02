@@ -98,7 +98,8 @@ if (isset($_POST['action'])) {
       $type = $array["data"][$i]["subject_type"];
       $status = $array["data"][$i]["subject_status"];
 
-      echo '<div class="row border border-primary mb-1 cardBodyText">';
+      echo '<div class="card myCard mb-2">';
+      echo '<div class="row cardBodyText">';
       echo '<div class="col-sm-2 p-1 mb-0 bg-two">';
       echo 'ID:' . $subject_id . ' <b>[' . $sno . ']</b>';
       echo '<a href="#" class="float-right subject_idE" data-id="' . $subject_id . '"><i class="fa fa-edit"></i></a>';
@@ -135,6 +136,7 @@ if (isset($_POST['action'])) {
       echo '<br>';
       if ($status == "9") echo '<a href="#" class="float-right subject_idR" data-id="' . $subject_id . '">Removed</a>';
       else echo '<a href="#" class="float-right subject_idD" data-id="' . $subject_id . '"><i class="fa fa-trash"></i></a>';
+      echo '</div>';
       echo '</div>';
       echo '</div>';
     }

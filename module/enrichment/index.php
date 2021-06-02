@@ -24,6 +24,7 @@ require('../../php_function.php');
             <a class="list-group-item list-group-item-action active master" id="list-master-list" data-toggle="list" href="#list-master"> Guest Lecture </a>
             <a class="list-group-item list-group-item-action  bs" id="list-bs-list" data-toggle="list" href="#list-bs"> Industrial Visit </a>
             <a class="list-group-item list-group-item-action po" id="list-po-list" data-toggle="list" href="#list-po"> Collaborative Event </a>
+            <a class="list-group-item list-group-item-action po" id="list-po-list" data-toggle="list" href="#list-po"> MOU Events </a>
           </div>
         </div>
         <div class="col-10">
@@ -63,37 +64,8 @@ require('../../php_function.php');
               </div>
             </div>
             <div class="tab-pane fade" id="list-bs">
-              <div class="row">
-                <div class="col-sm-6">
-                  <button class="btn btn-secondary btn-sm addBatch">New Batch</button>
-                  <p style="text-align: center;" id="batchShowList"></p>
-                </div>
-                <div class="col-6">
-                  <button class="btn btn-secondary btn-sm addSessionButton">New Session</button>
-                  <input type="hidden" id="batchId" name="batchId">
-                  <p id="batchSession"></p>
-                </div>
-              </div>
             </div>
             <div class="tab-pane fade show" id="list-po">
-              <div class="row">
-                <div class="col-sm-8">
-                  <button class="btn btn-sm btn-secondary m-0 addPo">Add PO</button>
-                  <button class="btn btn-sm btn-primary uploadPo">Upload PO</button>
-                  <div class="p-2" id="poShowList"></div>
-                </div>
-                <div class="col-sm-4 mt-2">
-                  <h5>PO Summary [Batch - <?php echo $myBatchName; ?>]</h5>
-                  <div id="poSummary"></div>
-                </div>
-              </div>
-            </div>
-            <div class="tab-pane fade" id="list-fs">
-
-              <div class="row">
-                <div class="col-sm-8">Form to add New Sp and Faculty List with Specialization
-                </div>
-              </div>
             </div>
           </div>
         </div>
