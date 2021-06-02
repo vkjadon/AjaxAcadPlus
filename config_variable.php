@@ -40,9 +40,6 @@ if (isset($mySes)) {
   $tn_rc = 'registration_class'.$mySes;
   check_tn_rc($conn, $tn_rc);
 
-  $tn_res = 'resource_subject'.$mySes;
-  //check_tn_rs($conn, $tn_tl);
-
   $tn_rs = 'registration_subject'.$mySes;
   check_tn_rs($conn, $tn_rs);
 
@@ -55,6 +52,9 @@ if (isset($mySes)) {
   $tn_sc = 'subject_choice'.$mySes;
   check_tn_sc($conn, $tn_sc);
   
+  $tn_sr = 'subject_resource'.$mySes;
+  check_tn_sr($conn, $tn_sr);
+
   $tn_tl = 'teaching_load'.$mySes;
   check_tn_tl($conn, $tn_tl);
 

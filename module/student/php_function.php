@@ -567,7 +567,7 @@ function get_subjectResource($conn, $tn_res, $subject_id)
   $sql = "select * from $tn_res where subject_id='$subject_id' and rsb_status='0'";
 
   $result = $conn->query($sql);
-  if (!$result) die(" The script could not be Loadded! Please report!");
+  if (!$result) die(" The script (Resources) could not be Loadded! Please report!");
   $data = array();
   while ($rows = $result->fetch_assoc()) {
     $sub_array = array();

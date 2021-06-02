@@ -773,20 +773,20 @@ function get_subjectAttendance($conn, $tn_sa, $tn_sas, $tlId, $studentId)
   $output = array($delivered, $present);
   return $output;
 }
-function get_subjectResource($conn, $tn_res, $subject_id)
+function get_subjectResource($conn, $tn_sr, $subject_id)
 {
-  $sql = "select * from $tn_res where subject_id='$subject_id' and rsb_status='0'";
+  $sql = "select * from $tn_sr where subject_id='$subject_id' and sr_status='0'";
 
   $result = $conn->query($sql);
-  if (!$result) die(" The script could not be Loadded! Please report!");
+  if (!$result) die(" The script (Resources) could not be Loadded! Please report!");
   $data = array();
   while ($rows = $result->fetch_assoc()) {
     $sub_array = array();
-    $sub_array["id"] = $rows['rsb_id'];
-    $sub_array["name"] = $rows['rsb_name'];
-    $sub_array["type"] = $rows['rsb_type'];
-    $sub_array["url"] = $rows['rsb_url'];
-    $sub_array["rtId"] = $rows['rsb_id'];
+    $sub_array["id"] = $rows['sr_id'];
+    $sub_array["name"] = $rows['sr_name'];
+    $sub_array["type"] = $rows['sr_type'];
+    $sub_array["url"] = $rows['sr_url'];
+    $sub_array["rtId"] = $rows['sr_id'];
     $data[] = $sub_array;
   }
   $output = array(

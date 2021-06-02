@@ -41,6 +41,12 @@ require('../../php_function.php');
                       <li class="nav-item">
                         <a class="nav-link tabLink" data-toggle="pill" href="#ss" data-tag="ss">Staff Specialization</a>
                       </li>
+                      <li class="nav-item">
+                        <a class="nav-link tabLink" data-toggle="pill" href="#obam" data-tag="obam">OBA Methods </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link tabLink" data-toggle="pill" href="#obat" data-tag="obat">OBA Technique</a>
+                      </li>
                     </ul>
 
                     <div class="tab-content" id="pills-tabContent p-3">
