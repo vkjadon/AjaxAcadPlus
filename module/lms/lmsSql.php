@@ -131,20 +131,19 @@ if (isset($_POST['action'])) {
     $tlId = $_POST['tlId'];
     $sbt_name = $_POST['sbt_name'];
     $sbt_weight = $_POST['sbt_weight'];
-    $sbt_type = $_POST['sbt_type'];
-
-    //echo "TL Id - $tlId";
+  
+    echo "TL Id - $tlId";
     $tlgId = getField($conn, $tlId, $tn_tl, "tl_id", "tlg_id");
     $subject_id = getField($conn, $tlgId, $tn_tlg, "tlg_id", "subject_id");
     $tlg_type = getField($conn, $tlgId, $tn_tlg, "tlg_id", "tlg_type");
 
-    $sql = "select max(sbt_sno) as max from $tn_sbt where subject_id='$subject_id' and tlg_type='$tlg_type' and sbt_status='0'";
+    $sql = "select max(sbt_sno) as max from $tn_sbt where subject_id='$subject_id' and sbt_type='$tlg_type' and sbt_status='0'";
     $max_sno = getMaxValue($conn, $sql) + 1;
     //echo "Max $max_sno | Type $tlg_type";
-    $dup = "select * from subject_topic where subject_id='$subject_id' and tlg_type='$tlg_type' and sbt_name='$sbt_name' and sbt_status='0'";
+    $dup = "select * from $tn_sbt where subject_id='$subject_id' and sbt_type='$tlg_type' and sbt_name='$sbt_name' and sbt_status='0'";
     $dup_alert = "Duplicate Exists";
-    $fields = array("subject_id", "sbt_name", "sbt_weight", "sbt_type", "tlg_type", "sbt_sno", "sbt_status", "submit_id");
-    $values = array($subject_id, $sbt_name, $sbt_weight, $sbt_type, $tlg_type, $max_sno, "0", $myId);
+    $fields = array("subject_id", "sbt_name", "sbt_weight", "sbt_type", "sbt_sno", "sbt_status", "update_id");
+    $values = array($subject_id, $sbt_name, $sbt_weight, $tlg_type, $max_sno, "0", $myId);
     addData($conn, $tn_sbt, "sbt_id", $fields, $values, "sbt_status", $dup, $dup_alert);
   } elseif ($_POST['action'] == "swap") {
     $selectedId = $_POST['sbtId'];

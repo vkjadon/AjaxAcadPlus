@@ -8,7 +8,7 @@ include('../../php_function.php');
 if (isset($_POST['action'])) {
   if ($_POST['action'] == 'studentClassSubjectList') {
     $sasId = $_POST['sasId'];
-    //echo $tlId;
+    //echo "SAS ".$sasId;
     $tlId = getField($conn, $sasId, $tn_sas, "sas_id", "tl_id");
     $date = getField($conn, $sasId, $tn_sas, "sas_id", "sas_date");
     $period = getField($conn, $sasId, $tn_sas, "sas_id", "sas_period");
@@ -17,6 +17,8 @@ if (isset($_POST['action'])) {
     $subjectId = getField($conn, $tlgId, $tn_tlg, "tlg_id", "subject_id");
     $classId = getField($conn, $tlgId, $tn_tlg, "tlg_id", "class_id");
     $tlgType = getField($conn, $tlgId, $tn_tlg, "tlg_id", "tlg_type");
+
+    //echo "tlId ".$tlId.'<br>OK';
 
     $current_ts = strtotime($date);
     $dayofDate = date("D", $current_ts);
@@ -29,49 +31,12 @@ if (isset($_POST['action'])) {
     $tn_sa = 'student_attendance' . $classId;
     //sa_attendance=0 mean present and sa_attendance=1 means Absent
 
-    echo '<div class="card-deck mb-2">';
-    echo '<div class="card" style="height: 150px;">
-      <div class="card-body mb-0">
-      <h5 class="card-title"  data-tl="' . $tlId . '">' . $date . '[' . $dayofDate . '] Period :' . $period . ' </h5>
-      <h6 class="card-subtitle mb-2 text-muted">' . $subject_name . ' [' . $subjectId . ']</h6>
-      <h6 class="card-subtitle mb-2 text-muted">' . $className . ' [' . $class_section . ' ]<b>[' . $tlgType . 'G-' . $tlGroup . ']</b></h6>
-      </div></div>';
-    echo '<div class="card overflow-auto" style="height: 150px;">
-      <div class="card-body mb-0">';
-    $sql = "select * from $tn_sbt where subject_id='$subjectId' and tlg_type='$tlgType' and sbt_status='0' order by sbt_sno";
-    echo '<table class="table list-table-xs">';
-    $result = $conn->query($sql);
-    while ($rows = $result->fetch_assoc()) {
-      $sbtId = $rows["sbt_id"];
-
-      $sqlST = "select * from $tn_ccd where sas_id='$sasId' and sbt_id='$sbtId'";
-      //echo $conn->query($sqlST)->num_rows;
-      if ($conn->query($sqlST)->num_rows > 0) $checked = 'checked';
-      else $checked = "";
-
-      echo '<tr><td><input type="checkbox" class="sasST" ' . $checked . ' name="sas_st" data-sasST="' . $sbtId . '" data-sas="' . $sasId . '"></td><td>' . $sbtId . '</td><td>' . $rows["sbt_name"] . '</td>';
-      echo '</tr>';
-    }
-    echo '</table>';
-    echo '</div></div>';
-    echo '<div class="card" style="height: 150px;">
-      <div class="card-body mb-0">
-      <div id="attStats">';
-    $sql = "select * from $tn_sa where sa_attendance='0' and sas_id='$sasId'";
-    $result = $conn->query($sql);
-    echo '<h5>Present : ' . $result->num_rows . '</h5>';
-    $sql = "select * from $tn_sa where sa_attendance='1' and sas_id='$sasId'";
-    $result = $conn->query($sql);
-    echo '<h5>Absent : ' . $result->num_rows . '</h5>';
-    echo '<button class="btn btn-danger btn-square-xs lock" data-sas="' . $sasId . '" >LOCK</button>';
-    echo '</div>
-      </div></div>';
-    echo '</div>';
-    $json = get_studentClassSubjectList($conn, $tn_rs, $subjectId, $classId, $tlGroup);
+    $json = get_studentClassSubjectList($conn, $tn_rs, $tlId);
     //echo $json;
     $array = json_decode($json, true);
     $student = count($array["data"]);
     $sno = 1;
+    echo '<div class="row">';
     echo '<div class="col-8 p-0">';
     echo '<table class="table list-table-xs">';
     echo '<tr><th>#</th><th>Id</th><th>Name</th><th>RollNo</th><th>Status</th><th>DoReg</th>';
@@ -101,11 +66,58 @@ if (isset($_POST['action'])) {
       <input type="checkbox" class="markAttendance" ' . $checked . ' data-sas="' . $sasId . '" data-std="' . $student_id . '" data-sa="' . $sa . '">
       <span class="slider round"></span>
     </label>';
-    if($output[0]==0)echo '</td><td>' . $regDate . '</td><td>' . $output[1] . '</td><td>' . $output[0] . '</td><td>--</td>';
-    else echo '</td><td>' . $regDate . '</td><td>' . $output[1] . '</td><td>' . $output[0] . '</td><td>' . ceil(($output[1] / $output[0]) * 100) . '</td>';
+      if ($output[0] == 0) echo '</td><td>' . $regDate . '</td><td>' . $output[1] . '</td><td>' . $output[0] . '</td><td>--</td>';
+      else echo '</td><td>' . $regDate . '</td><td>' . $output[1] . '</td><td>' . $output[0] . '</td><td>' . ceil(($output[1] / $output[0]) * 100) . '</td>';
       echo '</tr>';
     }
     echo '</table>';
+    echo '</div>';
+
+    echo '<div class="col-4">';
+    echo '<div class="row">';
+    echo '<div class="col-sm-8 mr-0 pr-0">';
+
+    echo '<div class="card mb-2">
+      <div class="card-body mb-0">
+      <h5 class="card-title"  data-tl="' . $tlId . '">' . $date . '[' . $dayofDate . ']  :' . $period . ' </h5>
+      <h6 class="card-subtitle mb-2 text-muted">' . $subject_name . ' [' . $subjectId . ']</h6>
+      <h6 class="card-subtitle mb-2 text-muted">' . $className . ' [' . $class_section . ' ]<b>[' . $tlgType . 'G-' . $tlGroup . ']</b></h6>
+      </div></div>';
+    echo '</div>';
+    echo '<div class="col">';
+    echo '<div class="card mb=2">
+      <div class="card-body mb-0">
+      <div id="attStats">';
+    $sql = "select * from $tn_sa where sa_attendance='0' and sas_id='$sasId'";
+    $result = $conn->query($sql);
+    echo '<h6>P : ' . $result->num_rows . '</h6>';
+    $sql = "select * from $tn_sa where sa_attendance='1' and sas_id='$sasId'";
+    $result = $conn->query($sql);
+    echo '<h6>A : ' . $result->num_rows . '</h6>';
+    echo '<button class="btn btn-danger btn-square-xs lock" data-sas="' . $sasId . '" >LOCK</button>';
+    echo '</div>
+      </div></div>';
+    echo '</div>';
+    echo '</div>';
+    echo '<div class="card mb-2 overflow-auto" style="height: 250px;">
+      <div class="card-body">';
+    $sql = "select * from $tn_sbt where subject_id='$subjectId' and sbt_type='$tlgType' and sbt_status='0' order by sbt_sno";
+    echo '<table class="table list-table-xs">';
+    $result = $conn->query($sql);
+    while ($rows = $result->fetch_assoc()) {
+      $sbtId = $rows["sbt_id"];
+
+      $sqlST = "select * from $tn_ccd where sas_id='$sasId' and sbt_id='$sbtId'";
+      //echo $conn->query($sqlST)->num_rows;
+      if ($conn->query($sqlST)->num_rows > 0) $checked = 'checked';
+      else $checked = "";
+
+      echo '<tr><td><input type="checkbox" class="sasST" ' . $checked . ' name="sas_st" data-sasST="' . $sbtId . '" data-sas="' . $sasId . '"></td><td>' . $sbtId . '</td><td>' . $rows["sbt_name"] . '</td>';
+      echo '</tr>';
+    }
+    echo '</table>';
+    echo '</div></div>';
+    
     echo '</div>';
   } elseif ($_POST['action'] == 'showSchedule') {
     $from = $_POST['scheduleFrom'];
@@ -118,17 +130,19 @@ if (isset($_POST['action'])) {
       $current_ts = strtotime($from) + $k * 24 * 60 * 60;
       $current_date = date("Y-m-d", $current_ts);
       $dayofDate = date("D", $current_ts);
+      echo '<div class="row">';
+      echo '<div class="col-2 m-0 p-0">';
+      echo '<div class="card mb-2">';
+      echo '<div class="card-header"><h4 class="card-title">' . date("d-M", $current_ts) . '</h4></div>';
+      echo '<div class="card-body">' . $dayofDate . '</div>';
+      echo '</div></div>';
 
-      echo '<h6>' . $dayofDate . '[' . date("d-M", $current_ts) . ']</h6>';
-      echo '<table class="table list-table-xxs">';
-      echo '<tr><th>#</th><th>Id</th><th>Period</th><th>Load</th><th>Action</th><th>Last Updated</th><th>Absent</th></tr>';
-      $sql = "select sas.*, tl.tl_id, tl.tl_group, tlg.* from $tn_sas sas, $tn_tl tl, $tn_tlg tlg where sas.tl_id=tl.tl_id and tl.tlg_id=tlg.tlg_id and sas.staff_id='$myId' and sas.sas_date='$current_date' and sas_status='0'";
+      $sql = "select sas.*, tl.tl_id, tl.tl_group, tlg.* from $tn_sas sas, $tn_tl tl, $tn_tlg tlg where sas.tl_id=tl.tl_id and tl.tlg_id=tlg.tlg_id and sas.staff_id='$myId' and sas.sas_date='$current_date' and sas_status='0' order by sas.sas_period";
       $result = $conn->query($sql);
       $sno = 0;
       if ($result && $result->num_rows > 0) {
         while ($rows = $result->fetch_assoc()) {
           $sno++;
-          echo '<tr><td>' . $sno . '</td><td>' . $rows['sas_id'] . '</td><td>' . $rows['sas_period'] . '</td><td>';
           $sas_id = $rows['sas_id'];
           $tl_id = $rows['tl_id'];
           $tl_group = $rows['tl_group'];
@@ -140,27 +154,33 @@ if (isset($_POST['action'])) {
 
           $class_id = $rows['class_id'];
           $class_name = getField($conn, $class_id, 'class', 'class_id', 'class_name');
-          
-          $sas_mark = $rows['sas_mark'];
-          
-          //echo '<span>' . $subject_code . ' <b>[G-' . $tl_group . ']</b><br>' . $staff_name . '</span>';
+          $class_section = getField($conn, $class_id, 'class', 'class_id', 'class_section');
 
-          echo '<div id="sas' . $sas_id . '">' . $class_name . ' [' . $subject_code . ' ]<b>[' . $tlg_type . 'G-' . $tl_group . ']</b>';
-          echo '</div>';
-          echo '</td><td align="center">';
-          if($sas_mark=='0')echo '<button class="btn btn-danger btn-block btn-square-xs showAttendanceList" data-tl="' . $tl_id . '" data-sas="' . $sas_id . '">Mark/Update</button>';
-          else echo '<button class="btn btn-info btn-block btn-square-xs unlockRequest" data-sas="' . $sas_id . '">Unlock Request</button>';
-          echo '</td><td>';
+          $sas_mark = $rows['sas_mark'];
+
+
           $tn_sa = 'student_attendance' . $class_id;
           check_tn_sa($conn, $tn_sa);
 
           $check = getField($conn, $sas_id, $tn_sa, "sas_id", "student_id");
-          if (strlen($check) > 0) echo getField($conn, $sas_id, $tn_sas, "sas_id", "update_ts");;
-          echo '</td><td>';
-          echo '</td></tr>';
+          if (strlen($check) > 0) $update_ts = getField($conn, $sas_id, $tn_sas, "sas_id", "update_ts");;
+
+          echo '<div class="col-2"><div class="card mb-2 p-0">';
+          echo 'Id:'.$rows['sas_id'];
+      echo '<div class="card-body m-0 p-2">
+      <h5 class="card-title m-0">Period : ' . $rows['sas_period'] . ' </h5>
+      <h6 class="text-muted m-0 pt-2">' . $class_name . ' [' . $class_section . ' ]<b>[' . $tlg_type . 'G-' . $tl_group . ']</b></h6>
+      <h6 class="text-muted m-0 pt-2">' . $subject_code . ' [' . $subject_id . ']</h6>';
+          echo '</div>';
+      echo '<div class="card-footer m-0 p-0">';
+
+          if ($sas_mark == '0') echo '<button class="btn btn-danger btn-block m-0 p-0 showAttendanceList" data-tl="' . $tl_id . '" data-sas="' . $sas_id . '">Mark/Update</button>';
+          else echo '<button class="btn btn-info btn-block btn-square-xs unlockRequest" data-sas="' . $sas_id . '">Unlock Request</button>';
+          echo '</div></div>';
+          echo '</div>';
         }
+        echo '</div>';
       }
-      echo '</table>';
     }
   } elseif ($_POST['action'] == 'markAttendance') {
     $sasId = $_POST['sasId'];
@@ -172,18 +192,17 @@ if (isset($_POST['action'])) {
     $classId = getField($conn, $tlgId, $tn_tlg, "tlg_id", "class_id");
     $tn_sa = 'student_attendance' . $classId;
     $mark_status = getField($conn, $sasId, $tn_sas, "sas_id", "sas_mark");
-    if($mark_status==0){
-    $sql = "update $tn_sa set sa_attendance='$status' where sas_id='$sasId' and student_id='$student_id'";
-    $conn->query($sql);
-    $sql = "select * from $tn_sa where sa_attendance='0' and sas_id='$sasId'";
-    $result = $conn->query($sql);
-    echo '<h5>Present : ' . $result->num_rows . '</h5>';
-    $sql = "select * from $tn_sa where sa_attendance='1' and sas_id='$sasId'";
-    $result = $conn->query($sql);
-    echo '<h5>Absent : ' . $result->num_rows . '</h5>';
-    echo '<button class="btn btn-danger btn-square-xs lock" data-sas="' . $sasId . '">LOCK</button>';
-    }
-    else echo "<h5>The attendance is Locked.</h5><h6> The changes will not be Saved!!</h5>";
+    if ($mark_status == 0) {
+      $sql = "update $tn_sa set sa_attendance='$status' where sas_id='$sasId' and student_id='$student_id'";
+      $conn->query($sql);
+      $sql = "select * from $tn_sa where sa_attendance='0' and sas_id='$sasId'";
+      $result = $conn->query($sql);
+      echo '<h6>P : ' . $result->num_rows . '</h6>';
+      $sql = "select * from $tn_sa where sa_attendance='1' and sas_id='$sasId'";
+      $result = $conn->query($sql);
+      echo '<h6>A : ' . $result->num_rows . '</h6>';
+      echo '<button class="btn btn-danger btn-square-xs lock" data-sas="' . $sasId . '">LOCK</button>';
+    } else echo "<h5>The attendance is Locked.</h5><h6> The changes will not be Saved!!</h5>";
   } elseif ($_POST['action'] == "addST") {
     $sasId = $_POST['sasId'];
     $sbtId = $_POST['stId'];
@@ -193,7 +212,7 @@ if (isset($_POST['action'])) {
     if ($stAction == 'add') $sql = "insert into $tn_ccd (sas_id, sbt_id) values('$sasId','$sbtId')";
     else $sql = "delete from $tn_ccd where sas_id='$sasId' and sbt_id='$sbtId'";
     $mark_status = getField($conn, $sasId, $tn_sas, "sas_id", "sas_mark");
-    if($mark_status==0)$conn->query($sql);
+    if ($mark_status == 0) $conn->query($sql);
   } elseif ($_POST['action'] == "lockAtt") {
     $sasId = $_POST['sasId'];
     echo "SSS $sasId";

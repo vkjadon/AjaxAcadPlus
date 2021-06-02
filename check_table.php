@@ -1,5 +1,22 @@
 <?php
 //echo "Check Tables";
+function check_tn_ccd($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'sas_id INT(5) NULL,
+    sbt_id INT(5) NULL,
+    UNIQUE(sas_id, sbt_id)';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
 function check_tn_class($conn, $table)
 {
   $sql = "select * from $table";

@@ -92,10 +92,10 @@ require('../../php_function.php');
           </div>
           <div class="tab-pane fade" id="list-subReg">
             <div class="row">
-              <div class="col- mt-1 mb-1">
+              <div class="col-7 mt-1 mb-1">
                 <p id="classList"></p>
               </div>
-              <div class="col-6 mt-1 mb-1">
+              <div class="col-5 mt-1 mb-1">
                 <p id="classSubjectList"></p>
               </div>
             </div>
@@ -192,14 +192,14 @@ require('../../php_function.php');
 
     $(document).on('click', '.subjectRegistration', function() {
       var checkboxes_value = [];
-      $('.sbp').each(function() {
+      $('.cl').each(function() {
         if (this.checked) {
           checkboxes_value.push($(this).val());
         }
       });
       var status = $(this).is(":checked");
       var tlId = $(this).val();
-      $.alert("Register Pressed " + status + tlId);
+      //$.alert("Register Pressed " + status + tlId);
 
       $.post("registrationSql.php", {
         tl: tlId,
@@ -207,7 +207,7 @@ require('../../php_function.php');
         status: status,
         action: "subjectRegistration"
       }, function(data, status) {
-        $.alert(data);
+        //$.alert(data);
         // sbpList(rpp, startRecord);
       }, "text").fail(function() {
         $.alert("Fail");
@@ -251,49 +251,37 @@ require('../../php_function.php');
 
     $(document).on('click', '.checkUnCheck', function() {
       var status = $(this).is(":checked");
-      if (status == false) $('.sbp').prop('checked', false); // Unchecks it
-      else $('.sbp').prop('checked', true); // Unchecks it
-    });
-
-    // $(document).on('click', '.classSubject', function() {
-    //   var id = $('#sel_class').val();
-    //   //$.alert("Class  Id " + id);
-    //   classSubject(id);
-    // });
-
-    $(document).on('click', '.updateClassButton', function() {
-      var rsId = $(this).val();
-      var subjectName = $(this).attr('data-subject');
-      var className = $(this).attr('data-class');
-      var classGroup = $(this).attr('data-group');
-      $.alert("Registration Subject Id" + rsId);
-      $('#modal_title').text("Update Class and Group");
-      $('#action').val("updateClass");
-      $('#subjectName').html(subjectName);
-      $('#className').html(className);
-      $('#classGroup').html(classGroup);
-      $('#firstModal').modal('show');
+      var tag = $(this).attr("data-tag");
+      if (tag=="cl") {
+        if (status == false) $('.cl').prop('checked', false); // Unchecks it
+        else $('.cl').prop('checked', true); // Unchecks it
+      } else {
+        if (status == false) $('.sbp').prop('checked', false); // Unchecks it
+        else $('.sbp').prop('checked', true); // Unchecks it
+      }
     });
 
     $(document).on('click', '.studentSubjectButton', function() {
       var id = $('#sel_class').val();
       var stdId = $(this).attr("id");
       //$.alert("StdId" + stdId);
-      studentSubject(id, stdId);
+      studentSubject(stdId);
     });
 
     $(document).on('click', '.stdsubCheckbox', function() {
       var stdId = $(this).attr('data-std');
       var subId = $(this).val();
       var status = $(this).is(":checked");
-      $.alert("Subject Check Box StdId " + stdId + " Sub " + subId + " Status" + status);
+      //$.alert("Subject Check Box StdId " + stdId + " Sub " + subId + " Status" + status);
       $.post('registrationSql.php', {
         action: "updateSub",
         stdId: stdId,
         subId: subId,
         status: status
       }, function(data, status) {
-        $.alert("Registration Updated !! " + data);
+        //$.alert("Registration Updated !! " + data);
+        studentSubject(stdId);
+
       }, "text")
     });
 
@@ -314,11 +302,10 @@ require('../../php_function.php');
       })
     }
 
-    function studentSubject(x, y) {
+    function studentSubject(y) {
       // $.alert("In Student-Subject Function Student Id" + x);
       $.post("registrationSql.php", {
         action: "stdSub",
-        classId: x,
         stdId: y
       }, function(data, status) {
         //$.alert("Success " + data);
@@ -360,58 +347,5 @@ require('../../php_function.php');
     }
   });
 </script>
-
-<!-- Modal Section-->
-<div class="modal" id="firstModal">
-  <div class="modal-dialog modal-md">
-    <form class="form-horizontal" id="modalForm">
-      <div class="modal-content bg-secondary text-white">
-
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title" id="modal_title"></h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div> <!-- Modal Header Closed-->
-
-        <!-- Modal body -->
-        <div class="modal-body">
-          <div class="updateClassModalForm">
-            <div class="row">
-              <label class="col-md-3 text-right"><b>Subject</b></label>
-              <div class="col-md-8" id="subjectName"></div>
-            </div>
-            <div class="row">
-              <label class="col-md-3 text-right"><b>Class</b></label>
-              <div class="col-md-3" id="className"></div>
-              <label class="col-md-3 text-right"><b>Group</b></label>
-              <div class="col-md-3" id="classGroup"></div>
-            </div>
-            <div class="row">
-              <label class="col-md-3 text-right"><b>Class</b></label>
-              <div class="col-md-3">
-                <?php
-                $sql = "select cl.* from class cl where cl.session_id='$mySes' and cl.class_status='0' order by class_name";
-                selectList($conn, "Select Department", array("0", "class_id", "class_name", "class_section", "sel_classM"), $sql);
-                ?></div>
-              <label class="col-md-3 text-right"><b>Group</b></label>
-              <div class="col-md-3">
-                <input type="text" class="form-control form-control-sm" id="tl_groupM" name="tl_groupM">
-              </div>
-            </div>
-          </div>
-        </div> <!-- Modal Body Closed-->
-
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <input type="hidden" id="modalId" name="modalId">
-          <input type="hidden" id="action" name="action">
-          <button type="submit" class="btn btn-success btn-sm" id="submitModalForm">Submit</button>
-          <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
-        </div> <!-- Modal Footer Closed-->
-      </div> <!-- Modal Conent Closed-->
-
-    </form>
-  </div> <!-- Modal Dialog Closed-->
-</div> <!-- Modal Closed-->
 
 </html>

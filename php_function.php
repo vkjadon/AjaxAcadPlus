@@ -741,16 +741,15 @@ function get_subjectAssessmentList($conn, $subjectId, $tn_ad)
   );
   return json_encode($output);
 }
-function get_studentClassSubjectList($conn, $tn_rs, $subjectId, $classId, $tlGroup)
+function get_studentClassSubjectList($conn, $tn_rs, $tl_id)
 {
-  $sql = "select * from $tn_rs where class_id='$classId' and subject_id='$subjectId' and tl_group='$tlGroup' and rs_status='0'";
-
+  $sql = "select * from $tn_rs where tl_id='$tl_id'";
+  
   $result = $conn->query($sql);
-  if (!$result) die(" The script could not be Loadded! Please report!");
+  if (!$result) die(" The script could not be Loadded! Unable to populate Student List !");
   $data = array();
   while ($rows = $result->fetch_assoc()) {
     $sub_array = array();
-    $sub_array["id"] = $rows['rs_id'];
     $sub_array["student"] = $rows['student_id'];
     $sub_array["date"] = $rows['rs_date'];
     $data[] = $sub_array;

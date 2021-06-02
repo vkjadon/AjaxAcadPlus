@@ -3,6 +3,9 @@ session_start();
 require("../../config_database.php");
 require('../../config_variable.php');
 require('../../php_function.php');
+$session_start=getField($conn, $mySes, "session", "session_id", "session_start");
+$session_end=getField($conn, $mySes, "session", "session_id", "session_end");
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,7 +40,6 @@ require('../../php_function.php');
       </div>
       <div class="col-10">
         <div class="tab-content" id="nav-tabContent">
-
           <div class="tab-pane show active" id="list-tt" role="tabpanel" aria-labelledby="list-tt-list">
             <div id="dayList"></div>
             <div id="mondayList"></div>
@@ -61,10 +63,10 @@ require('../../php_function.php');
                 <div id="showScheduleForm">
                   <div class="row">
                     <div class="col">
-                      <input type="date" class="form-control form-control-sm" id="date_from" name="date_from" min="2021-01-01" value="<?php echo date("Y-m-d", time()); ?>">
+                      <input type="date" class="form-control form-control-sm" id="date_from" name="date_from" min="<?php echo $session_start; ?>" value="<?php echo date("Y-m-d", time()); ?>">
                     </div>
                     <div class="col">
-                      <input type="date" class="form-control form-control-sm" id="date_to" name="date_to" max="2021-04-01" value="<?php echo date("Y-m-d", time()); ?>">
+                      <input type="date" class="form-control form-control-sm" id="date_to" name="date_to" max="<?php echo $session_end; ?>" value="<?php echo date("Y-m-d", time()); ?>">
                     </div>
                     <div class="col">
                       <input type="hidden" id="schedule_action" name="schedule_action">
@@ -140,7 +142,7 @@ require('../../php_function.php');
       ttList(classId);
     });
 
-    $(document).on('blur', '.periodTime', function() {      
+    $(document).on('blur', '.periodTime', function() {
       var periodTime = $(this).val();
       var classId = $(this).attr("data-class");
       var day = $(this).attr("data-day");
