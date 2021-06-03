@@ -5,12 +5,21 @@ include('../../config_variable.php');
 include('../../php_function.php');
 //echo "Action " . $_POST['action'];
 if ($_POST['actionUpdateAssMethod'] == "updateAM") {
-  // echo "Update Assessment Method Block";
   $fields = ['am_id', 'am_name', 'am_code', 'am_weight', 'am_weight_po', 'am_type'];
   $values = [$_POST['amId'], data_check($_POST['am_name']), data_check($_POST['am_code']), data_check($_POST['am_weight']), data_check($_POST['am_weight_po']), data_check($_POST['am_type'])];
   $status = 'am_status';
   $dup_alert = " Method Name Alreday Exists !! ";
   updateUniqueData($conn, 'assessment_method', $fields, $values, $dup_alert);
+  $affectedRows = $conn->affected_rows;
+  // echo "affected rows $affectedRows";
+  if ($affectedRows == 0) {
+    $fields = ['am_name', 'am_code', 'am_weight', 'am_weight_po', 'am_type'];
+    $values = [data_check($_POST['am_name']), data_check($_POST['am_code']), data_check($_POST['am_weight']), data_check($_POST['am_weight_po']), data_check($_POST['am_type'])];
+    $status = 'am_status';
+    $dup = "select * from assessment_method where am_name='" . data_check($_POST["am_name"]) . "' and $status='0'";
+    $dup_alert = "Method Name Alreday Exists !!";
+    addData($conn, 'assessment_method', 'am_id', $fields, $values, $status, $dup, $dup_alert);
+  }
 }
 if (isset($_POST['action'])) {
   if ($_POST['action'] == "addAssessmentMethod") {
