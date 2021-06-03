@@ -10,3 +10,4 @@
 <link rel="stylesheet" href="../../style.css">
 <link rel="stylesheet" href="../../table.css">
 <link rel="stylesheet" href="../../toggle.css">
+<link rel="stylesheet" href="../../css/card.css">

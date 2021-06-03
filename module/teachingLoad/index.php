@@ -22,7 +22,7 @@ require('../../phpFunction/teachingLoadFunction.php');
       <div class="col-2">
         <span id="panelId"></span>
         <?php
-        $sql = "select * from class where session_id='$mySes' and dept_id='$myDept'";
+        $sql = "select * from class where session_id='$mySes' and dept_id='$myDept' order by class_semester";
         selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
         ?>
 
@@ -39,6 +39,7 @@ require('../../phpFunction/teachingLoadFunction.php');
             <div class="row">
               <div class="col-6 mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addClass">New</button>
                 <p id="clList"></p>
+                The Semester and Batch cannot be edited once the Teaching Load Groups are created.
               </div>
               <div class="col-6 mt-1 mb-1" id="classSubject"></div>
             </div>
@@ -232,7 +233,7 @@ require('../../phpFunction/teachingLoadFunction.php');
       }, function(data, status) {
         var newValue = Number(value) + 1;
         $("." + id).html(newValue);
-        //$.alert("Updated !! " + data);
+        //$.alert("Updated !! " + newValue);
       }, "text").fail(function() {
         $.alert("Error !!");
       })
@@ -376,7 +377,7 @@ require('../../phpFunction/teachingLoadFunction.php');
             if (classId > 0) tlList(classId);
             else $.alert(" Select Class ");
           } else {
-            //$.alert("Updated");
+            $.alert("Updated" + data);
             $("#dept" + tlg_id).html(data)
           }
           $('#firstModal').modal('hide');
@@ -551,9 +552,14 @@ require('../../phpFunction/teachingLoadFunction.php');
               </div>
             </div>
             <div class="row">
-
+            <div class="col-3">
+                <div class="form-group">
+                  Group
+                  <input type="number" class="form-control form-control-sm" id="class_group" name="class_group" value="1" placeholder="Group">
+                </div>
+              </div>
               <div class="col">
-                <div class="form-check-inline"> Class Shift </div>
+                <p>Class Shift</p>
                 <div class="form-check-inline">
                   <input type="radio" class="form-check-input" checked id="morning" name="class_shift" value="Morning">Morning
                 </div>

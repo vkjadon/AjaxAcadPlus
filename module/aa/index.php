@@ -10,6 +10,8 @@ require('../../php_function.php');
 <head>
   <title>Outcome Based Education : ClassConnect</title>
   <?php require('../css.php'); ?>
+  <link rel="stylesheet" href="aa.css">
+
 </head>
 
 <body>
@@ -20,14 +22,90 @@ require('../../php_function.php');
       <div class="row">
         <div class="col-sm-2">
           <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-            <a class="list-group-item list-group-item-action active bs" id="list-bs-list" data-toggle="list" href="#list-bs"> Batch/Session </a>
+            <a class="list-group-item list-group-item-action active master" id="list-master-list" data-toggle="list" href="#list-master"> Academic Master Data </a>
+            <a class="list-group-item list-group-item-action  bs" id="list-bs-list" data-toggle="list" href="#list-bs"> Batch/Session </a>
             <a class="list-group-item list-group-item-action po" id="list-po-list" data-toggle="list" href="#list-po"> Programme Outcome </a>
-            <a class="list-group-item list-group-item-action fs" id="list-fs-list" data-toggle="list" href="#list-fs"> Faculty Specializations </a>
           </div>
         </div>
         <div class="col-10">
           <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show active" id="list-bs">
+
+            <div class="tab-pane show active" id="list-master" role="tabpanel">
+              <div class="row">
+                <div class="col-7 mt-1 mb-1">
+                  <div class="container card shadow d-flex justify-content-center mt-2" id="card_aa">
+                    <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab">
+                      <li class="nav-item">
+                        <a class="nav-link active tabLink" data-toggle="pill" href="#rt" data-tag="rt">Resource Type</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link tabLink" data-toggle="pill" href="#ss" data-tag="ss">Staff Specialization</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link tabLink" data-toggle="pill" href="#obam" data-tag="obam">OBA Methods </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link tabLink" data-toggle="pill" href="#obat" data-tag="obat">OBA Technique</a>
+                      </li>
+                    </ul>
+
+                    <div class="tab-content" id="pills-tabContent p-3">
+                      <div class="tab-pane show active" id="rt">
+                        <form class="form-horizontal" id="rtForm">
+                          <div class="row">
+                            <div class="col-6">
+                              <div class="form-group">
+                                <label>Resource Type</label>
+                                <input type="text" class="form-control form-control-sm" id="resource_type" name="resource_type">
+                              </div>
+                            </div>
+                            <div class="col-6">
+                              <div class="form-group">
+                                <label>Remarks</label>
+                                <input type="text" class="form-control form-control-sm" id="resource_remarks" name="resource_remarks">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col">
+                              <button type="submit" class="btn btn-sm">Submit</button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                      <div class="tab-pane fade" id="ss">
+                        <form class="form-horizontal" id="fsForm">
+                          <div class="row">
+                            <div class="col-6">
+                              <div class="form-group">
+                                <label>Staff Specialization</label>
+                                <input type="text" class="form-control form-control-sm" id="ss_name" name="ss_name">
+                              </div>
+                            </div>
+                            <div class="col-6">
+                              <div class="form-group">
+                                <label>Remarks</label>
+                                <input type="text" class="form-control form-control-sm" id="ss_remarks" name="ss_remarks">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col">
+                              <button type="submit" class="btn btn-sm">Submit</button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="col-5 mt-1 mb-1">
+                  <p id="tabList"></p>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="list-bs">
               <div class="row">
                 <div class="col-sm-6">
                   <button class="btn btn-secondary btn-sm addBatch">New Batch</button>
@@ -54,11 +132,10 @@ require('../../php_function.php');
               </div>
             </div>
             <div class="tab-pane fade" id="list-fs">
-              
+
               <div class="row">
                 <div class="col-sm-8">Form to add New Sp and Faculty List with Specialization
                 </div>
-                
               </div>
             </div>
           </div>
@@ -78,11 +155,7 @@ require('../../php_function.php');
     $('[data-toggle="tooltip"]').tooltip();
     $(".topBarTitle").text("Academics");
     batchList();
-    coList();
 
-    $(document).on("change", "#sel_subject", function() {
-      coList();
-    });
     // Left Panel Block
     $(document).on('click', '.bs', function() {
       batchList();
@@ -92,37 +165,21 @@ require('../../php_function.php');
       poList();
       poSummary();
     });
-    $(document).on('click', '.co', function() {
-      $('#action').val("addCo");
-      coList();
-    });
-    $(document).on('click', '.sub', function() {
-      subjectList();
-    });
+    
 
     $(document).on('submit', '#modalForm', function(event) {
       event.preventDefault(this);
-      var sn = $("#subject_name").val();
-      var staff = $("#sel_staff").val();
       var action = $("#action").val();
       var batch = $("#newBatch").val();
       var selBatch = $("#batchId").val();
-      var selSubject = $("#sel_subject").val();
       var poc = $("#poCode").val();
       var poS = $("#poStatemnt").val();
-      var coc = $("#coCode").val();
-      var coS = $("#coStatemnt").val();
 
       var sessionName = $("#session_name").val();
 
       var error = "NO";
       var error_msg = "";
-      if (action == "addSubject" || action == "updateSubject") {
-        if ($('#subject_name').val() === "" || $('#subject_semester').val() === "") {
-          error = "YES";
-          error_msg = "Subject Name and Semester cannot be blank";
-        }
-      } else if (action == "addSession" || action == "updateSession") {
+      if (action == "addSession" || action == "updateSession") {
         if ($("#session_name").val() == "") {
           error = "YES";
           error_msg = "Session cannot be Blank!!";
@@ -140,15 +197,7 @@ require('../../php_function.php');
           error = "YES";
           error_msg = "Enter PO Code and PO to Proceed !!";
         }
-      } else if (action == "addCo" || action == "updateCo") {
-        if (selSubject === "") {
-          error = "YES";
-          error_msg = "Please Select Subject to Proceed";
-        } else if (coc === "" || coS === "") {
-          error = "YES";
-          error_msg = "Enter CO Code and CO to Proceed !!";
-        }
-      }
+      } 
 
       if (error == "NO") {
         var formData = $(this).serialize();
@@ -156,14 +205,10 @@ require('../../php_function.php');
         //$.alert(" Pressed" + formData);
         $.post("aaSql.php", formData, () => {}, "text").done(function(data) {
           //$.alert("List " + data);
-          if (action == "addSubject" || action == "updateSubject") {
-            subjectList();
-          } else if (action == "addBatch" || action == "updateBatch") {
+          if (action == "addBatch" || action == "updateBatch") {
             batchList();
           } else if (action == "addPo" || action == "updatePo") {
             poList();
-          } else if (action == "addCo" || action == "updateCo") {
-            coList();
           } else if (action == "addSession" || action == "updateSession") {
             batchSession(selBatch);
           }
@@ -174,56 +219,6 @@ require('../../php_function.php');
       } else {
         $.alert(error_msg);
       }
-    });
-
-    // Manage Course Outcome
-    $(document).on('click', '.addCO', function() {
-      x = $('#sel_subject').val();
-      //$.alert("x" + x);
-      $('#subjectIdModal').val(x);
-      $('#modal_title').text("Course Outcome");
-      $('#action').val("addCo");
-      $('#firstModal').modal('show');
-      $('.subjectForm').hide();
-      $('.batchForm').hide();
-      $('.sessionForm').hide();
-      $('.poForm').hide();
-      $('.coForm').show();
-      $("#modalForm")[0].reset();
-      $('.selectPanel').show();
-    });
-    $(document).on('click', '.co_idD', function() {
-      $.alert("Disabled");
-    });
-    $(document).on('click', '.co_idE', function() {
-      var id = $(this).attr('id');
-      // $.alert("Id " + id);
-      $.post("aaSql.php", {
-        action: "fetchCo",
-        coId: id
-      }, () => {}, "json").done(function(data) {
-        //$.alert("List " + data);
-        $('#modal_title').text("Update CO [" + id + "]");
-        $("#coCode").val(data.co_code);
-        $("#coStatement").val(data.co_name);
-        $("#coSno").val(data.co_sno);
-        $("#action").val("updateCo");
-        $('#modalId').val(id);
-        $('#firstModal').modal('show');
-        $('.batchForm').hide();
-        $('.subjectForm').hide();
-        $('.poForm').hide();
-        $('.coForm').show();
-
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-    $(document).on("change", "#sel_subject", function() {
-      var subject_id = $("#sel_subject").val();
-      // $.alert("Changed Subject " + subject_id);
-      $("#hiddenSubjectCO").val(subject_id);
-      coList();
     });
 
     // Manage Program Outcome
@@ -271,7 +266,7 @@ require('../../php_function.php');
       $.alert("Disabled");
     });
     $(document).on('click', '.addSessionButton', function(event) {
-      var selBatch=$("#batchId").val();
+      var selBatch = $("#batchId").val();
       $.alert("New Session ");
       $('#modal_title').text("Add Session" + selBatch);
       $('#batchIdModal').val(selBatch);
@@ -359,161 +354,7 @@ require('../../php_function.php');
       })
     });
 
-    // Manage Subject
-    $(document).on('click', '.subject_idD', function() {
-      var id = $(this).attr("data-id");
-      $.alert("Disabled " + id);
-      $.post("aaSql.php", {
-        id: id,
-        action: "deleteSubject"
-      }, function(data, status) {
-        $.alert("Data" + data)
-        subjectList();
-      }, "text").fail(function() {
-        $.alert("Error in BatchSession Function");
-      })
-
-    });
-    $(document).on('click', '.subject_idR', function() {
-      var id = $(this).attr("data-id");
-      $.alert("Disabled " + id);
-      $.post("aaSql.php", {
-        id: id,
-        action: "resetSubject"
-      }, function(data, status) {
-        //$.alert("Data" + data)
-        subjectList();
-      }, "text").fail(function() {
-        $.alert("Error in BatchSession Function");
-      })
-    });
-    $(document).on('click', '.subject_idE', function() {
-      var id = $(this).attr("data-id");
-      //$.alert("Id " + id);
-      $.post("aaSql.php", {
-        action: "fetchSubject",
-        subjectId: id
-      }, () => {}, "json").done(function(data) {
-        //$.alert("List " + data.inst_name);
-
-        $('#modal_title').text("Update Subject [" + id + "]");
-
-        $('#action').val("updateSubject");
-        $('#modalId').val(id);
-        $('#subject_name').val(data.subject_name);
-        $('#subject_code').val(data.subject_code);
-        $('#subject_semester').val(data.subject_semester);
-        $('#subject_credit').val(data.subject_credit);
-        $('#subject_lecture').val(data.subject_lecture);
-        $('#subject_tutorial').val(data.subject_tutorial);
-        $('#subject_practical').val(data.subject_practical);
-        $('#subject_internal').val(data.subject_internal);
-        $('#subject_external').val(data.subject_external);
-        $('#subject_sno').val(data.subject_sno);
-        var staff = data.staff_id;
-        //$.alert("Staff " + staff);
-        $("#sel_staff option[value='" + staff + "']").attr("selected", "selected");
-        var subType = data.subject_type;
-        if (subType == 'DE') {
-          document.getElementById("stDE").checked = true;
-        } else if (subType == 'OE') {
-          document.getElementById("stOE").checked = true;
-        } else if (subType == 'DC') {
-          document.getElementById("stDC").checked = true;
-        } else if (subType == 'OC') {
-          document.getElementById("stOC").checked = true;
-        }
-
-        var subMode = data.subject_mode;
-        if (subMode == 'Online') {
-          document.getElementById("smOn").checked = true;
-        } else if (subMode == 'Offline') {
-          document.getElementById("smOff").checked = true;
-        }
-
-        var subCat = data.subject_category;
-        if (subCat == 'Theory') {
-          document.getElementById("scTh").checked = true;
-        } else if (subCat == 'Practical') {
-          document.getElementById("scPr").checked = true;
-        } else if (subCat == 'Project') {
-          document.getElementById("scPrj").checked = true;
-        } else if (subCat == 'Field Work') {
-          document.getElementById("scFW").checked = true;
-        }
-
-        $('#firstModal').modal('show');
-        $('.batchForm').hide();
-        $('.subjectForm').show();
-        $('.poForm').hide();
-        $('.coForm').hide();
-        $('.sessionForm').hide();
-
-        //$("#ccform").html(mydata);
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-    $(document).on('click', '.addSubject', function() {
-      var x = $("#sel_batch").val();
-      //$.alert("Add Subject" + x);
-      if (x === "") $.alert("Please select Batch !!");
-      else {
-        $('#modal_title').html("Add Subject [<?php echo $myProgAbbri . '-' . $myBatchName . ']'; ?> ");
-        $('#batchIdModal').val(x);
-        $('#action').val("addSubject");
-        $('#firstModal').modal('show');
-        $('.batchForm').hide();
-        $('.poForm').hide();
-        $('.coForm').hide();
-        $('.sessionForm').hide();
-        $('.subjectForm').show();
-      }
-    });
-    $(document).on('submit', '#modalSecondForm', function(event) {
-      event.preventDefault(this);
-      var formData = $(this).serialize();
-      $('#secondModal').modal("hide");
-      $.alert(" Pressed" + formData);
-      $.post("aaSql.php", formData, () => {}, "text").done(function(data) {
-        //$.alert("List " + data);
-        $("#modalSecondForm")[0].reset();
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-    $(document).on('click', '.copySubject', function() {
-      var x = $("#sel_batch").val();
-      var y = $("#sel_program").val();
-      //$.alert("Add Subject" + x + "-" + y);
-      if (x === "" || y == "") $.alert("Please select Program and Batch");
-      else {
-
-        $('#modal_titleSecond').html("Copy Subject [<?php echo $myProgAbbri . '-' . $myBatchName . ']'; ?> ");
-        $('#originalProgram').val(y);
-        $('#originalBatch').val(x);
-        $('#actionSecond').val("copySubject");
-        $('#secondModal').modal('show');
-      }
-    });
-    $(document).on('click', '.vac', function() {
-      var id = $(this).attr("data-id");
-      var code = $(this).attr("data-code");
-      var field = $(this).attr("data-field");
-      $.alert("Disabled " + id);
-      $.post("aaSql.php", {
-        id: id,
-        code: code,
-        field: field,
-        action: "vac"
-      }, function(data, status) {
-        //$.alert("Data" + data)
-        subjectList();
-      }, "text").fail(function() {
-        $.alert("Error in BatchSession Function");
-      })
-
-    });
+    
     // Functions
     function batchSession(x) {
       //$.alert("Batch " + x);
@@ -526,30 +367,6 @@ require('../../php_function.php');
         $("#batchId").val(x);
       }, "text").fail(function() {
         $.alert("Error in BatchSession Function");
-      })
-    }
-
-    function subjectList() {
-      //$.alert(" Select a Batch X = " + x);
-      $.post("aaSql.php", {
-        action: "subList"
-      }, function(mydata, mystatus) {
-        //$.alert("List " + mydata);
-        $("#subShowList").html(mydata);
-      }, "text").fail(function() {
-        $.alert("Error !!");
-      })
-      subjectSummary();
-    }
-
-    function subjectSummary() {
-      $.post("aaSql.php", {
-        action: "subjectSummary"
-      }, () => {}, "text").done(function(result, status) {
-        //$.alert(status+result);
-        $("#subjectSummary").html(result);
-      }, "text").fail(function() {
-        $.alert("Error 123 !!");
       })
     }
 
@@ -589,43 +406,6 @@ require('../../php_function.php');
       })
     }
 
-    function selectSubject() {
-      var x = $("#sel_batch").val();
-      $.alert("Batch In SelSub Function" + x);
-      $.post("aaSql.php", {
-        batch_id: x,
-        action: "selectSubject"
-      }, function(mydata, mystatus) {
-        //$.alert("List " + mydata);
-        //$(".selectSubject").show();
-        $(".selectSubject").html(mydata);
-      }, "text").fail(function() {
-        $.alert("Error !!");
-      })
-    }
-
-    function coList() {
-      // $.alert("In List Function" + x);
-      $.post("aaSql.php", {
-        action: "coList"
-      }, function(mydata, mystatus) {
-        $("#coShowList").show();
-        //$.alert("List " + mydata);
-        $("#coShowList").html(mydata);
-      }, "text").fail(function() {
-        $.alert("Error !!");
-      })
-      $.post("aaSql.php", {
-        action: "copoMap"
-      }, function(mydata, mystatus) {
-        //$.alert("List " + mydata);
-        $("#copoMap").html(mydata);
-      }, "text").fail(function() {
-        $.alert("Error !!");
-      })
-
-    }
-
     function programSelectList() {
       var x = $("#sel_school").val();
       var y = $("#sel_batch").val();
@@ -654,31 +434,12 @@ require('../../php_function.php');
       else return dateYmd;
     }
 
-    $(document).on('click', '.uploadSubject', function() {
-      //$.alert("Session From");
-      //var batch = $(this).attr("data-batch");
-      $('#modal_uploadTitle').html("Upload Subject [<?php echo $myProgAbbri . '-' . $myBatchName . ']'; ?> ");
-      //$('#program').val(program);
-      //$('#batch').val(batch);
-      var y = $("#sel_batch").val();
-      $("#batch_idUpload").val(y);
-      $('#button_action').show().val('Update Subject');
-      $('#actionUpload').val('uploadSubject');
-      $('#formModal').modal('show');
-    });
     $(document).on('click', '.uploadPo', function() {
       // $.alert("Upload PO");
       $('#actionUpload').val('uploadPO')
       $('#button_action').show().val('Update PO');
       $('#formModal').modal('show');
       $('#modal_uploadTitle').html("Upload PO [<?php echo $myProgAbbri . '-' . $myBatchName . ']'; ?>");
-    });
-    $(document).on('click', '.uploadCo', function() {
-      // $.alert("Session From");
-      $('#actionUpload').val('uploadCO')
-      $('#button_action').show().val('Update CO');
-      $('#formModal').modal('show');
-      $('#modal_uploadTitle').text("Upload CO  [<?php echo $myProgAbbri . '-' . $myBatchName . ']'; ?>");
     });
     $(document).on('submit', '#upload_csv', function(event) {
       event.preventDefault();
@@ -781,39 +542,14 @@ require('../../php_function.php');
                 <input type="text" class="form-control form-control-sm" id="poStatement" name="poStatement" placeholder="Enter PO Statement">
               </div>
             </div>
-          </div>
-
-          <div class="coForm">
-            <div class="row">
-              <div class="col-6">
-                <div class="form-group">
-                  Enter Code
-                  <input type="text" class="form-control form-control-sm" id="coCode" name="coCode" placeholder="CO Code">
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="form-group">
-                  Serial Order of CO
-                  <input type="text" class="form-control form-control-sm" id="coSno" name="coSno" placeholder="Serial Order">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12">
-                CO statement
-                <input type="text" class="form-control form-control-sm" id="coStatement" name="coStatement" placeholder="Enter CO Statement">
-              </div>
-            </div>
-          </div>
+          </div>          
         </div> <!-- Modal Body Closed-->
-
         <!-- Modal footer -->
         <div class="modal-footer">
           <input type="hidden" id="modalId" name="modalId">
           <input type="hidden" id="action" name="action">
           <input type="hidden" id="batchIdModal" name="batchIdModal">
           <input type="hidden" id="programIdModal" name="programIdModal">
-          <input type="hidden" id="subjectIdModal" name="subjectIdModal">
           <button type="submit" class="btn btn-secondary" id="submitModalForm">Submit</button>
           <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
         </div> <!-- Modal Footer Closed-->
@@ -824,61 +560,6 @@ require('../../php_function.php');
 </div> <!-- Modal Closed-->
 
 <!-- Modal Section-->
-<div class="modal" id="secondModal">
-  <div class="modal-dialog modal-md">
-    <form class="form-horizontal" id="modalSecondForm">
-      <div class="modal-content">
-
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title" id="modal_titleSecond"></h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div> <!-- Modal Header Closed-->
-        <!-- Modal body -->
-        <div class="modal-body">
-          <div class="copySubjectForm">
-            <div class="form-group row">
-              <label class="control-label col-4" for="batch">Copy to Batch:</label>
-              <div class="col-sm-8">
-                <?php
-                $sql_batch = "select * from batch where batch_status='0' order by batch desc";
-                $result_batch = $conn->query($sql_batch);
-                if ($result_batch) {
-                  echo '<select class="form-control form-control-sm" name="copy_batch" id="copy_batch" required>';
-                  while ($rows_batch = $result_batch->fetch_assoc()) {
-                    $select_id = $rows_batch['batch_id'];
-                    $select_name = $rows_batch['batch'];
-                    echo '<option value="' . $select_id . '">' . $select_name . '</option>';
-                  }
-                  //echo '<option value="ALL">ALL</option>';
-                  echo '</select>';
-                } else echo $conn->error;
-                if ($result_batch->num_rows == 0) echo 'No Data Found';
-                ?>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="control-label col-sm-4" for="batch">Copy Semester:</label>
-              <div class="col-sm-8">
-                <input type="number" class="form-control form-control-sm" id="copy_semester" name="copy_semester" placeholder="Semester">
-              </div>
-            </div>
-          </div>
-        </div> <!-- Modal Body Closed-->
-
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <input type="hidden" id="actionSecond" name="action">
-          <input type="hidden" id="originalProgram" name="programId">
-          <input type="hidden" id="originalBatch" name="batchId">
-          <button type="submit" class="btn btn-secondary btn-sm">Submit</button>
-          <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
-        </div> <!-- Modal Footer Closed-->
-      </div> <!-- Modal Conent Closed-->
-    </form>
-  </div> <!-- Modal Dialog Closed-->
-</div> <!-- Modal Closed-->
-
 <div class="modal" id="formModal">
   <div class="modal-dialog modal-md">
     <form class="form-horizontal" id="upload_csv">

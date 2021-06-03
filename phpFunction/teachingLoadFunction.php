@@ -3,6 +3,9 @@ function sessionLoad($conn, $classId, $tn_tlg)
 {
   $sno = 1;
   //echo "Classs $classId";
+  //$batch_id=getField($conn, $classId, "class", "class_id", "batch_id");
+  //The subjects are populated from Load Groups not from the Subjects for selected Class
+
   $sql = "select tlg.*, sb.* from $tn_tlg tlg, subject sb where tlg.subject_id=sb.subject_id and tlg.class_id='$classId' and tlg.tlg_status='0' group by tlg.subject_id order by tlg.subject_id, tlg.tlg_type";
   $result = $conn->query($sql);
   if (!$result) die("Could not List the Teaching Load!");
@@ -28,6 +31,8 @@ function sessionLoad($conn, $classId, $tn_tlg)
     echo '</tr>';
   }
   echo '</table>';
+  echo 'The subjects are populated from "Load Groups" not from the Subjects for selected Class. So, remove the subjects from here if any extra subjects are shown in the "Load Group"';
+  // Use Subject Id and Class Id to delete so that all Lecture, Tutorial and Practical Groups are deleted for that Class 
 }
 function subjectChoice($conn, $tn_tlg, $myDept)
 {

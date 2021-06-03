@@ -343,7 +343,7 @@ function dayList($dummy1, $dummy2)
   <label class="form-check-label" for="Sun">Sunday</label>
   </div>';
 }
-function paginationBar($conn, $sqlAll, $rpp)
+function paginationBar($conn, $sqlAll, $rpp, $id)
 {
   $result = $conn->query($sqlAll);
   $num_rows = $result->num_rows;
@@ -356,7 +356,7 @@ function paginationBar($conn, $sqlAll, $rpp)
     echo '<li class="page-item pageLink" id="page' . $i . '" data-start="' . $startRecord . '"><a class="page-link" href="#">' . $i . '</a></li>';
   }
   echo '</ul></div>';
-  echo '<div class="col-2"><select class="form-control form-control-sm rpp" id="rpp" name="rpp">
+  echo '<div class="col-2"><select class="form-control form-control-sm '.$id.'" id="'.$id.'" name="rpp">
   <option value="' . $rpp . '">' . $rpp . '</option>
   <option value="3">3</option>
   <option value="5">5</option>
@@ -567,7 +567,7 @@ function get_subjectResource($conn, $tn_res, $subject_id)
   $sql = "select * from $tn_res where subject_id='$subject_id' and rsb_status='0'";
 
   $result = $conn->query($sql);
-  if (!$result) die(" The script could not be Loadded! Please report!");
+  if (!$result) die(" The script (Resources) could not be Loadded! Please report!");
   $data = array();
   while ($rows = $result->fetch_assoc()) {
     $sub_array = array();

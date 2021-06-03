@@ -1,21 +1,70 @@
 <?php
 //echo "Check Tables";
-function check_tn_rs($conn, $table)
+function check_tn_ccd($conn, $table)
 {
   $sql = "select * from $table";
   $result = $conn->query($sql);
   if (!$result) {
     //echo "Table Missing $table";
     $query =
-      'rs_id INT(5) NOT NULL AUTO_INCREMENT,
-    student_id INT(5) NULL,
-    tl_id INT(4) NULL,
-    rs_date DATE,
+      'sas_id INT(5) NULL,
+    sbt_id INT(5) NULL,
+    UNIQUE(sas_id, sbt_id)';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+function check_tn_class($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'class_id INT(5) NOT NULL AUTO_INCREMENT,
+    session_id INT(3) NULL,
+    program_id INT(3) NULL,
+    batch_id INT(3) NULL,
+    dept_id INT(3) NULL,
+    class_name VARCHAR(18) NULL,
+    class_section VARCHAR(2) NULL,
+    class_shift VARCHAR(10) NULL,
+    class_semester INT(2) NULL,
+    class_group INT(1) NULL,
+    submit_ts timestamp default current_timestamp(),
+    submit_id INT(5) NULL,
+    class_status INT(1) NULL,
+    PRIMARY KEY (class_id),
+    UNIQUE(session_id, program_id, batch_id, class_name, class_section, class_shift)';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+
+function check_tn_sr($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+    'sr_id INT(5) NULL AUTO_INCREMENT,
+    subject_id INT(5) NULL,
+    rt_id INT(2) NULL,
+    sr_name VARCHAR(100) NULL,
+    sr_type VARCHAR(10) NULL,
+    sr_url TINYTEXT NULL,
     update_ts timestamp,
-    update_id INT(5) NULL,
-    rs_status INT(1) NULL,
-    PRIMARY KEY (rs_id),
-    UNIQUE(student_id, tl_id)';
+    submit_id INT(5) NULL,
+    sr_status INT(1) NULL,
+    PRIMARY KEY (sr_id),
+    UNIQUE(subject_id, rt_id, sr_name)';
 
     $sql = "CREATE TABLE $table ($query)";
     $result = $conn->query($sql);
@@ -39,6 +88,29 @@ function check_tn_rc($conn, $table)
     rc_status INT(1) NULL,
     PRIMARY KEY (rc_id),
     UNIQUE(student_id, class_id)';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+function check_tn_rs($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'rs_id INT(5) NOT NULL AUTO_INCREMENT,
+    student_id INT(5) NULL,
+    tl_id INT(4) NULL,
+    rs_date DATE,
+    update_ts timestamp,
+    update_id INT(5) NULL,
+    rs_status INT(1) NULL,
+    PRIMARY KEY (rs_id),
+    UNIQUE(student_id, tl_id)';
 
     $sql = "CREATE TABLE $table ($query)";
     $result = $conn->query($sql);

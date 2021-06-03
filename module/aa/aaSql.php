@@ -332,8 +332,9 @@ if (isset($_POST['action'])) {
       $po_sno = $array["data"][$i]["po_sno"];
       $po_name = $array["data"][$i]["po_name"];
       $status = $array["data"][$i]["po_status"];
+      echo '<div class="card myCard">';
 
-      echo '<div class="row shadow border border-primary mb-1 cardBodyText">';
+      echo '<div class="row border border-primary mb-1 cardBodyText">';
       echo '<div class="col-sm-3 mb-0 bg-two">';
       echo 'ID : ' . $po_id;
       echo '<a href="#" class="float-right po_idE" data-id="' . $po_id . '"><i class="fa fa-edit"></i></a>';
@@ -347,6 +348,7 @@ if (isset($_POST['action'])) {
       echo '<div class="col-sm-1">';
       if ($status == "9") echo '<a href="#" class="float-right po_idR" data-id="' . $po_id . '">Removed</a>';
       else echo '<a href="#" class="float-right po_idD" data-id="' . $po_id . '"><i class="fa fa-trash"></i></a>';
+      echo '</div>';
       echo '</div>';
       echo '</div>';
     }

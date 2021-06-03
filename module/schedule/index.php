@@ -3,6 +3,9 @@ session_start();
 require("../../config_database.php");
 require('../../config_variable.php');
 require('../../php_function.php');
+$session_start=getField($conn, $mySes, "session", "session_id", "session_start");
+$session_end=getField($conn, $mySes, "session", "session_id", "session_end");
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,7 +24,7 @@ require('../../php_function.php');
         <div class="card text-center selectPanel">
           <span id="panelId"></span>
           <?php
-          $sql = "select * from class where session_id='$mySes' and dept_id='$myDept'";
+          $sql = "select * from class where session_id='$mySes' and dept_id='$myDept' order by class_name";
           selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
           ?>
         </div>
@@ -37,7 +40,6 @@ require('../../php_function.php');
       </div>
       <div class="col-10">
         <div class="tab-content" id="nav-tabContent">
-
           <div class="tab-pane show active" id="list-tt" role="tabpanel" aria-labelledby="list-tt-list">
             <div id="dayList"></div>
             <div id="mondayList"></div>
@@ -61,10 +63,10 @@ require('../../php_function.php');
                 <div id="showScheduleForm">
                   <div class="row">
                     <div class="col">
-                      <input type="date" class="form-control form-control-sm" id="date_from" name="date_from" min="2021-01-01" value="<?php echo date("Y-m-d", time()); ?>">
+                      <input type="date" class="form-control form-control-sm" id="date_from" name="date_from" min="<?php echo $session_start; ?>" value="<?php echo date("Y-m-d", time()); ?>">
                     </div>
                     <div class="col">
-                      <input type="date" class="form-control form-control-sm" id="date_to" name="date_to" max="2021-04-01" value="<?php echo date("Y-m-d", time()); ?>">
+                      <input type="date" class="form-control form-control-sm" id="date_to" name="date_to" max="<?php echo $session_end; ?>" value="<?php echo date("Y-m-d", time()); ?>">
                     </div>
                     <div class="col">
                       <input type="hidden" id="schedule_action" name="schedule_action">
@@ -116,12 +118,8 @@ require('../../php_function.php');
 
     $(document).on('click', '.stt', function() {
       $("#panelId").html("STT");
-      $(".selectClass").hide();
-      $(".selectProgram").show();
       $("#clListProgram").show();
-      var programId = $("#sel_program").val();
-      //$.alert("Prog" +  programId);
-      sessionClass(programId);
+      sessionClass();
     });
 
     $(document).on('click', '.cs', function() {
@@ -144,7 +142,7 @@ require('../../php_function.php');
       ttList(classId);
     });
 
-    $(document).on('blur', '.periodTime', function() {      
+    $(document).on('blur', '.periodTime', function() {
       var periodTime = $(this).val();
       var classId = $(this).attr("data-class");
       var day = $(this).attr("data-day");
@@ -357,9 +355,8 @@ require('../../php_function.php');
       var classId = $("#sel_class").val();
       var panelId = $("#panelId").text();
       //$.alert("Panel Id " + panelId);
-      if (classId > 0 && panelId == "TL") tlList(classId);
-      else if (classId > 0 && panelId == "TT") ttList(classId);
-      else $.alert("Class " + classId);
+      if (panelId == "TL") tlList(classId);
+      else ttList(classId);
     });
 
     $(document).on('click', '.increDecre', function() {
@@ -656,14 +653,13 @@ require('../../php_function.php');
       })
     }
 
-    function sessionClass(x) {
+    function sessionClass() {
       var panelId = $('#panelId').text();
       if (panelId == "STT") var actionText = 'sessionClassListSTT';
       else var actionText = 'sessionClassList';
       //$.alert("In List Function " + actionText + "Panel " + panelId);
       $.post("createScheduleSql.php", {
-        action: actionText,
-        programId: x
+        action: actionText
       }, function(data, status) {
         //$.alert("Success " + data);
         if (panelId == "STT") $("#sessionClassListSTT").html(data);

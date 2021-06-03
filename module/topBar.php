@@ -1,4 +1,3 @@
-
 <?php
 // echo "My School in SetDefault $myScl";
 $myName = getField($conn, $myId, "staff", "staff_id", "staff_name");
@@ -91,15 +90,29 @@ if (!isset($myBatch)) $myBatch = '';
 									<a href="<?php echo $codePath . '/module/teachingLoad/'; ?>" class="dropdown-item p-1">Teaching Load</a>
 								</div>
 								<div class="col-6">
-								<a href="<?php echo $codePath . '/module/schedule/'; ?>" class="dropdown-item p-1">Schedule</a>
+									<a href="<?php echo $codePath . '/module/schedule/'; ?>" class="dropdown-item p-1">Schedule</a>
 									<a href="<?php echo $codePath . '/module/registration/'; ?>" class="dropdown-item p-1">Registration</a>
 									<a href="<?php echo $codePath . '/module/lms/'; ?>" class="dropdown-item p-1">LMS</a>
-									<a href="<?php echo $codePath . '/module/online/'; ?>" class="dropdown-item p-1">Online Assessment</a>
+									<a href="<?php echo $codePath . '/module/enrichment/'; ?>" class="dropdown-item p-1">Enrichment</a>
 								</div>
 							</div>
 						</div>
 					</li>
-
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Assessment</a>
+						<div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
+							<div class="row bg-one">
+								<div class="col-6">
+									<a href="<?php echo $codePath . '/module/online/'; ?>" class="dropdown-item p-1">Online Assessment</a>
+								</div>
+								<div class="col-6">
+									<a href="<?php echo $codePath . '/module/online/'; ?>" class="dropdown-item p-1">Online Assessment</a>
+									<a href="<?php echo $codePath . '/module/attainment/'; ?>" class="dropdown-item p-1"> CO Attainment </a>
+									<a href="<?php echo $codePath . '/module/obeFeedback/'; ?>" class="dropdown-item p-1"> OBE Feedback </a>
+								</div>
+							</div>
+						</div>
+					</li>
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Examination</a>
 						<div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
@@ -159,14 +172,7 @@ if (!isset($myBatch)) $myBatch = '';
 							</div>
 						</div>
 					</li>
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">OBE</a>
-						<div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
-							<a href="<?php echo $codePath . '/module/obe/'; ?>" class="dropdown-item p-1"> CO Attainment </a>
-							<a href="<?php echo $codePath . '/module/obeFeedback/'; ?>" class="dropdown-item p-1"> OBE Feedback </a>
-							<a href="<?php echo $codePath . '/module/obe/'; ?>" class="dropdown-item p-1"> PO Attainment </a>
-						</div>
-					</li>
+
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown">eOffice</a>
 						<div class="dropdown-menu">

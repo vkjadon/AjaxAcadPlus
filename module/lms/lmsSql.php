@@ -131,20 +131,19 @@ if (isset($_POST['action'])) {
     $tlId = $_POST['tlId'];
     $sbt_name = $_POST['sbt_name'];
     $sbt_weight = $_POST['sbt_weight'];
-    $sbt_type = $_POST['sbt_type'];
-
-    //echo "TL Id - $tlId";
+  
+    echo "TL Id - $tlId";
     $tlgId = getField($conn, $tlId, $tn_tl, "tl_id", "tlg_id");
     $subject_id = getField($conn, $tlgId, $tn_tlg, "tlg_id", "subject_id");
     $tlg_type = getField($conn, $tlgId, $tn_tlg, "tlg_id", "tlg_type");
 
-    $sql = "select max(sbt_sno) as max from $tn_sbt where subject_id='$subject_id' and tlg_type='$tlg_type' and sbt_status='0'";
+    $sql = "select max(sbt_sno) as max from $tn_sbt where subject_id='$subject_id' and sbt_type='$tlg_type' and sbt_status='0'";
     $max_sno = getMaxValue($conn, $sql) + 1;
     //echo "Max $max_sno | Type $tlg_type";
-    $dup = "select * from subject_topic where subject_id='$subject_id' and tlg_type='$tlg_type' and sbt_name='$sbt_name' and sbt_status='0'";
+    $dup = "select * from $tn_sbt where subject_id='$subject_id' and sbt_type='$tlg_type' and sbt_name='$sbt_name' and sbt_status='0'";
     $dup_alert = "Duplicate Exists";
-    $fields = array("subject_id", "sbt_name", "sbt_weight", "sbt_type", "tlg_type", "sbt_sno", "sbt_status", "submit_id");
-    $values = array($subject_id, $sbt_name, $sbt_weight, $sbt_type, $tlg_type, $max_sno, "0", $myId);
+    $fields = array("subject_id", "sbt_name", "sbt_weight", "sbt_type", "sbt_sno", "sbt_status", "update_id");
+    $values = array($subject_id, $sbt_name, $sbt_weight, $tlg_type, $max_sno, "0", $myId);
     addData($conn, $tn_sbt, "sbt_id", $fields, $values, "sbt_status", $dup, $dup_alert);
   } elseif ($_POST['action'] == "swap") {
     $selectedId = $_POST['sbtId'];
@@ -170,18 +169,18 @@ if (isset($_POST['action'])) {
     $subject_id = $_POST['subjectId'];
     echo "Subject $subject_id Id $myId";
 
-    $fields = ['rsb_name', 'rt_id', 'subject_id', 'rsb_url', 'rsb_type', 'submit_id', 'rsb_status'];
+    $fields = ['sr_name', 'rt_id', 'subject_id', 'sr_url', 'sr_type', 'submit_id', 'sr_status'];
     $values = [data_check($_POST['rsb_name']), $_POST['sel_rt'], $subject_id, data_check($_POST['rsb_url']), $_POST['rsb_type'], $myId, '0'];
-    $status = 'rsb_status';
-    $dup = "select * from resource_subject where rsb_name='" . data_check($_POST["rsb_name"]) . "' and subject_id='$subject_id' and rt_id='" . data_check($_POST['sel_rt']) . "' and submit_id='$myId' and $status='0'";
+    $status = 'sr_status';
+    $dup = "select * from $tn_sr where sr_name='" . data_check($_POST["rsb_name"]) . "' and subject_id='$subject_id' and rt_id='" . data_check($_POST['sel_rt']) . "' and submit_id='$myId' and $status='0'";
     $dup_alert = "Duplicate Resource Type Name Exists.";
-    addData($conn, 'resource_subject', 'rsb_id', $fields, $values, $status, $dup, $dup_alert);
+    addData($conn, $tn_sr, 'sr_id', $fields, $values, $status, $dup, $dup_alert);
     //echo "OK";
   } elseif ($_POST['action'] == "resList") {
     $subject_id = $_POST['subjectId'];
     //echo "Sub $subject_id";
     $subject = getField($conn, $subject_id, "subject", "subject_id", "subject_name");
-    $json = get_subjectResource($conn, $tn_res, $subject_id);
+    $json = get_subjectResource($conn, $tn_sr, $subject_id);
     //echo $json;
     $array = json_decode($json, true);
 
@@ -203,8 +202,8 @@ if (isset($_POST['action'])) {
         $sql="select * from resource_class where class_id='$class_id' and rsb_id='$rsbId'";
         $result=$conn->query($sql);
         $class = getField($conn, $class_id, "class", "class_id", "class_name");
-        if($result->num_rows==0)echo '<input type="checkbox" class="resClass" name="res_class" data-resCl="' . $class_id . '" data-rsb="' . $rsbId . '">' . $class . '[' . $class_id . ']';
-        else echo '<input type="checkbox" class="resClass" checked name="res_class" data-resCl="' . $class_id . '" data-rsb="' . $rsbId . '">' . $class . '[' . $class_id . ']';
+        if($result->num_rows==0)echo ' <input type="checkbox" class="resClass" name="res_class" data-resCl="' . $class_id . '" data-rsb="' . $rsbId . '">' . $class . '[' . $class_id . ']';
+        else echo ' <input type="checkbox" class="resClass" checked name="res_class" data-resCl="' . $class_id . '" data-rsb="' . $rsbId . '">' . $class . '[' . $class_id . ']';
       }
       echo '</td>';
       echo '</tr>';

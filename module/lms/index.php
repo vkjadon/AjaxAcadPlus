@@ -3,6 +3,8 @@ session_start();
 require("../../config_database.php");
 require('../../config_variable.php');
 require('../../php_function.php');
+$session_start = getField($conn, $mySes, "session", "session_id", "session_start");
+$session_end = getField($conn, $mySes, "session", "session_id", "session_end");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +19,7 @@ require('../../php_function.php');
 
 <head>
   <title>Outcome Based Education : ClassConnect</title>
-  <?php require("../css.php");?>
+  <?php require("../css.php"); ?>
 </head>
 
 <body>
@@ -25,13 +27,7 @@ require('../../php_function.php');
   <div class="container-fluid moduleBody">
     <div class="row">
       <div class="col-2">
-        <div class="card text-center selectPanel">
-          <span id="panelId"></span>
-          <span class="m-1 p-0" id="selectPanelTitle"></span>
-          <div class="col">
-            <p class="mySubjectList"></p>
-          </div>
-        </div>
+        <span id="panelId"></span>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active at" id="list-at-list" data-toggle="list" href="#list-at" role="tab" aria-controls="at"> Academic Tasks </a>
           <a class="list-group-item list-group-item-action att" id="list-att-list" data-toggle="list" href="#list-att" role="tab" aria-controls="att"> Attendance </a>
@@ -59,15 +55,15 @@ require('../../php_function.php');
           <div class="tab-pane fade" id="list-att" role="tabpanel" aria-labelledby="list-att-list">
             <div id="showScheduleForm">
               <div class="row mt-1">
-                <div class="col">
-                  <input type="date" class="form-control form-control-sm" id="date_from" name="date_from" min="2021-01-01" value="<?php echo date("Y-m-d", time()); ?>">
+                <div class="col-sm-2 p-0 m-0">
+                  <input type="date" class="form-control form-control-md" id="date_from" name="date_from" min="<?php echo $session_start; ?>" value="<?php echo date("Y-m-d", time()); ?>">
                 </div>
-                <div class="col">
-                  <input type="date" class="form-control form-control-sm" id="date_to" name="date_to" max="2021-03-02" value="<?php echo date("Y-m-d", time()); ?>">
+                <div class="col-sm-2 p-0 m-0">
+                  <input type="date" class="form-control form-control-md" id="date_to" name="date_to" max="<?php echo $session_end; ?>" value="<?php echo date("Y-m-d", time()); ?>">
                 </div>
-                <div class="col">
+                <div class="col-sm-2 p-0 m-0">
                   <input type="hidden" id="schedule_action" name="schedule_action">
-                  <button class="btn btn-info btn-square-sm scheduleButton"></button>
+                  <button class="btn btn-info btn-md m-0 scheduleButton"></button>
                 </div>
               </div>
             </div>
@@ -93,7 +89,6 @@ require('../../php_function.php');
       </div>
     </div>
   </div>
-  </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -105,7 +100,6 @@ require('../../php_function.php');
 <script>
   $(document).ready(function() {
 
-    $(".topBarTitle").text("LMS");
     mtlList();
     $('.selectPanel').hide()
     $('#topicList').hide()
@@ -175,7 +169,7 @@ require('../../php_function.php');
       var sasId = $(this).attr("data-sas");
       var studentId = $(this).attr("data-std");
       var checkboxStatus = $(this).is(":checked");
-      $.alert(" sasId " + sasId + " Student " + studentId + checkboxStatus);
+      //$.alert(" sasId " + sasId + " Student " + studentId + checkboxStatus);
       $.post("attSql.php", {
         sasId: sasId,
         studentId: studentId,
@@ -453,7 +447,7 @@ require('../../php_function.php');
     });
 
     function resourceList(subjectId) {
-      //$.alert("In List Function" + subjectId);
+      $.alert("In Resource List Function" + subjectId);
       $.post("lmsSql.php", {
         action: "resList",
         subjectId: subjectId
@@ -822,6 +816,5 @@ require('../../php_function.php');
     </form>
   </div> <!-- Modal Dialog Closed-->
 </div> <!-- Modal Closed-->
-
 
 </html>

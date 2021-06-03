@@ -26,13 +26,13 @@ if (isset($mySes)) {
   //check_tn_ad($conn, $tn_ad);
 
   $tn_ccd = 'cc_detail'.$mySes;
-  //check_tn_ccd($conn, $tn_ccd);
+  check_tn_ccd($conn, $tn_ccd);
 
   $tn_cco = 'cc_outcome';
   //check_tn_rs($conn, $tn_tl);
 
   $tn_class = 'class';
-  //check_tn_rs($conn, $tn_tl);
+  check_tn_class($conn, $tn_class);
 
   $tn_eac = 'ea_claim'.$mySes;
   //check_tn_eac($conn, $tn_eac);
@@ -40,20 +40,20 @@ if (isset($mySes)) {
   $tn_rc = 'registration_class'.$mySes;
   check_tn_rc($conn, $tn_rc);
 
-  $tn_res = 'resource_subject'.$mySes;
-  //check_tn_rs($conn, $tn_tl);
-
   $tn_rs = 'registration_subject'.$mySes;
   check_tn_rs($conn, $tn_rs);
 
   $tn_sas = 'student_attendance_setup' . $mySes;
   check_tn_sas($conn, $tn_sas);
 
-  $tn_sc = 'subject_choice'.$mySes;
-  check_tn_sc($conn, $tn_sc);
-
   $tn_sbt = 'subject_topic'.$mySes;
   check_tn_sbt($conn, $tn_sbt);
+
+  $tn_sc = 'subject_choice'.$mySes;
+  check_tn_sc($conn, $tn_sc);
+  
+  $tn_sr = 'subject_resource'.$mySes;
+  check_tn_sr($conn, $tn_sr);
 
   $tn_tl = 'teaching_load'.$mySes;
   check_tn_tl($conn, $tn_tl);
@@ -75,3 +75,4 @@ if (isset($mySes)) {
 $submit_date = date("Y-m-d", time());
 $submit_ts = date("Y-m-d h:i:s", time());
 $today_ts = time();
+

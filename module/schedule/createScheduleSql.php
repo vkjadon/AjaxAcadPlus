@@ -102,8 +102,6 @@ if (isset($_POST['action'])) {
     $array = json_decode($json, true);
     echo '<table class="table list-table-xs mb-0">';
     echo '<tr>';
-    echo '<td><button class="btn btn-secondary btn-square-sm checkAllSTT">Check All</button>';
-    echo '<button class="btn btn-danger btn-square-sm uncheckAllSTT">UnCheck All</button></td>';
     for ($i = 0; $i < count($array["data"]); $i++) {
       echo '<td><input type="checkbox" class="sclSTT" id="STT' . $array["data"][$i]["id"] . '" value="' . $array["data"][$i]["id"] . '">' . $array["data"][$i]["name"] . '[' . $array["data"][$i]["section"] . ']</td>';
     }
