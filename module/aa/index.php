@@ -29,51 +29,67 @@ require('../../php_function.php');
         </div>
         <div class="col-10">
           <div class="tab-content" id="nav-tabContent">
-
             <div class="tab-pane show active" id="list-master" role="tabpanel">
               <div class="row">
                 <div class="col-7 mt-1 mb-1">
                   <div class="container card shadow d-flex justify-content-center mt-2" id="card_aa">
                     <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab">
                       <li class="nav-item">
-                        <a class="nav-link active tabLink" data-toggle="pill" href="#rt" data-tag="rt">Resource Type</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link tabLink" data-toggle="pill" href="#ss" data-tag="ss">Staff Specialization</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link tabLink" data-toggle="pill" href="#obam" data-tag="obam">OBA Methods </a>
+                        <a class="nav-link active tabLink" data-toggle="pill" href="#nr" data-tag="nr">Name-Remarks</a>
                       </li>
                       <li class="nav-item">
                         <a class="nav-link tabLink" data-toggle="pill" href="#obat" data-tag="obat">OBA Technique</a>
                       </li>
                     </ul>
-
                     <div class="tab-content" id="pills-tabContent p-3">
-                      <div class="tab-pane show active" id="rt">
-                        <form class="form-horizontal" id="rtForm">
-                          <div class="row">
-                            <div class="col-6">
-                              <div class="form-group">
-                                <label>Resource Type</label>
-                                <input type="text" class="form-control form-control-sm" id="resource_type" name="resource_type">
-                              </div>
-                            </div>
-                            <div class="col-6">
-                              <div class="form-group">
-                                <label>Remarks</label>
-                                <input type="text" class="form-control form-control-sm" id="resource_remarks" name="resource_remarks">
-                              </div>
+                      <div class="tab-pane show active" id="nr">
+                        <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                              <input type="radio" checked class="headName" id="rt" name="headName" value="rt">
+                              <label>Resource Type</label>
                             </div>
                           </div>
-                          <div class="row">
-                            <div class="col">
-                              <button type="submit" class="btn btn-sm">Submit</button>
+                          <div class="col">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="ss" name="headName" value="ss">
+                              <label> Specialization</label>
                             </div>
                           </div>
-                        </form>
+                          <div class="col">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="cce" name="headName" value="cce">
+                              <label>CoCur Event</label>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="obaM" name="headName" value="obaM">
+                              <label>OBA Method</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-6">
+                            <div class="form-group">
+                              <label>Name</label>
+                              <input type="text" class="form-control form-control-sm" id="name" name="name">
+                            </div>
+                          </div>
+                          <div class="col-6">
+                            <div class="form-group">
+                              <label>Remarks</label>
+                              <input type="text" class="form-control form-control-sm" id="remarks" name="remarks">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col">
+                            <button type="submit" class="btn btn-sm nrSubmit">Submit</button>
+                          </div>
+                        </div>
                       </div>
-                      <div class="tab-pane fade" id="ss">
+                      <div class="tab-pane fade" id="obat">
                         <form class="form-horizontal" id="fsForm">
                           <div class="row">
                             <div class="col-6">
@@ -97,11 +113,10 @@ require('../../php_function.php');
                         </form>
                       </div>
                     </div>
-
                   </div>
                 </div>
                 <div class="col-5 mt-1 mb-1">
-                  <p id="tabList"></p>
+                  <p id="masterNameList"></p>
                 </div>
               </div>
             </div>
@@ -155,6 +170,7 @@ require('../../php_function.php');
     $('[data-toggle="tooltip"]').tooltip();
     $(".topBarTitle").text("Academics");
     batchList();
+    masterNameList();
 
     // Left Panel Block
     $(document).on('click', '.bs', function() {
@@ -165,7 +181,37 @@ require('../../php_function.php');
       poList();
       poSummary();
     });
-    
+
+    $(document).on('click', '.headName', function(event) {
+      var headName = $("input[name='headName']:checked").val();
+      //$.alert(" Pressed" + headName);
+      $.post("aaSql.php", {
+        headName: headName,
+        action: "masterList"
+      }, function() {}, "text").done(function(data, status) {
+        masterNameList();
+        //$.alert("List " + data);
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
+    $(document).on('click', '.nrSubmit', function(event) {
+      var headName = $("input[name='headName']:checked").val();
+      var name = $("#name").val();
+      var remarks = $("#remarks").val();
+      $.alert(" Pressed" + headName + name + remarks);
+      $.post("aaSql.php", {
+        name: name,
+        remarks: remarks,
+        headName: headName,
+        action: "headName"
+      }, function(data, status) {}, "text").done(function(data) {
+        $.alert("List " + data);
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
 
     $(document).on('submit', '#modalForm', function(event) {
       event.preventDefault(this);
@@ -197,7 +243,7 @@ require('../../php_function.php');
           error = "YES";
           error_msg = "Enter PO Code and PO to Proceed !!";
         }
-      } 
+      }
 
       if (error == "NO") {
         var formData = $(this).serialize();
@@ -354,7 +400,7 @@ require('../../php_function.php');
       })
     });
 
-    
+
     // Functions
     function batchSession(x) {
       //$.alert("Batch " + x);
@@ -391,6 +437,21 @@ require('../../php_function.php');
         //$.alert("List " + mydata);
         $("#poShowList").html(mydata);
       }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+    }
+
+    function masterNameList() {
+      var headName = $("input[name='headName']:checked").val();
+      //$.alert("Master Name " + headName);
+
+      $.post("aaSql.php", {
+        headName: headName,
+        action: "masterNameList"
+      }, function() {}, "text").done(function(data, status) {
+        $("#masterNameList").html(data);
+        //$.alert("Updated");
+      }).fail(function() {
         $.alert("Error !!");
       })
     }
@@ -542,7 +603,7 @@ require('../../php_function.php');
                 <input type="text" class="form-control form-control-sm" id="poStatement" name="poStatement" placeholder="Enter PO Statement">
               </div>
             </div>
-          </div>          
+          </div>
         </div> <!-- Modal Body Closed-->
         <!-- Modal footer -->
         <div class="modal-footer">

@@ -42,6 +42,11 @@ if (!isset($myBatch)) $myBatch = '';
 					//echo "School ".$myScl;
 					?></span>
 			</div>
+			<div class="col mr-2">
+
+				<a href="" class="float-right">&nbsp; Forms &nbsp;</a>
+				<a href="" class="float-right">&nbsp; Downloads &nbsp;</a>
+			</div>
 		</div>
 
 	</div>
@@ -104,42 +109,32 @@ if (!isset($myBatch)) $myBatch = '';
 							<div class="row bg-one">
 								<div class="col-6">
 									<a href="<?php echo $codePath . '/module/online/'; ?>" class="dropdown-item p-1">Online Assessment</a>
-								</div>
-								<div class="col-6">
-									<a href="<?php echo $codePath . '/module/online/'; ?>" class="dropdown-item p-1">Online Assessment</a>
 									<a href="<?php echo $codePath . '/module/attainment/'; ?>" class="dropdown-item p-1"> CO Attainment </a>
 									<a href="<?php echo $codePath . '/module/obeFeedback/'; ?>" class="dropdown-item p-1"> OBE Feedback </a>
 								</div>
-							</div>
-						</div>
-					</li>
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Examination</a>
-						<div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
-							<div class="row">
 								<div class="col-6">
 									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item p-1"> Exam Setting </a>
 									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item p-1"> Conduct </a>
 									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item p-1"> Evaluation </a>
-								</div>
-								<div class="col-6">
 									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item p-1"> Internal Assessment </a>
 									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item p-1"> Semester Result </a>
 								</div>
 							</div>
 						</div>
 					</li>
+
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="hr/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">HR</a>
+						<a class="nav-link dropdown-toggle" href="hr/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Staff</a>
 						<div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
 							<div class="row">
 								<div class="col-6">
-									<a href="<?php echo $codePath . '/module/hr/'; ?>" class="dropdown-item p-1"> Staff </a>
+									<a href="<?php echo $codePath . '/module/hr/'; ?>" class="dropdown-item p-1"> Recruitment </a>
+									<a href="<?php echo $codePath . '/module/hr/'; ?>" class="dropdown-item p-1"> Manage Staff </a>
 									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item p-1"> Leave </a>
 								</div>
 								<div class="col-6">
 									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item p-1"> Support </a>
-									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item p-1"> Mentoring </a>
+									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item p-1"> Research </a>
 								</div>
 							</div>
 						</div>
@@ -153,6 +148,7 @@ if (!isset($myBatch)) $myBatch = '';
 									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item p-1"> SMS </a>
 								</div>
 								<div class="col-6">
+									<a href="<?php echo $codePath . '/module/office/'; ?>" class="dropdown-item p-1"> eOffice </a>
 									<a href="<?php echo $codePath . '/module/feedback/'; ?>" class="dropdown-item p-1"> Feedback </a>
 								</div>
 							</div>
@@ -165,6 +161,7 @@ if (!isset($myBatch)) $myBatch = '';
 								<div class="col-6">
 									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item p-1"> Activities </a>
 									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item p-1"> Hostel </a>
+									<a href="<?php echo $codePath . '/module/alumni/'; ?>" class="dropdown-item p-1"> Transport </a>
 								</div>
 								<div class="col-6">
 									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item p-1"> Mentoring </a>
@@ -172,11 +169,38 @@ if (!isset($myBatch)) $myBatch = '';
 							</div>
 						</div>
 					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown">Registry</a>
+						<div class="dropdown-menu dropdown-default menuDouble">
+							<div class="row bg-one">
+								<div class="col-6">
+									<a href="<?php echo $codePath . '/module/alumni/'; ?>" class="dropdown-item p-1"> Accounts </a>
+									<a href="<?php echo $codePath . '/module/alumni/'; ?>" class="dropdown-item p-1"> Fee </a>
+								</div>
+								<div class="col-6">
+									<a href="<?php echo $codePath . '/module/alumni/'; ?>" class="dropdown-item p-1"> Store </a>
+									<a href="<?php echo $codePath . '/module/alumni/'; ?>" class="dropdown-item p-1"> Manintenance </a>
+
+								</div>
+							</div>
+						</div>
+					</li>
 
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown">eOffice</a>
-						<div class="dropdown-menu">
-							<a href="<?php echo $codePath . '/module/office/'; ?>" class="dropdown-item p-1"> eOffice </a>
+						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown">Centers</a>
+						<div class="dropdown-menu dropdown-default menuDouble">
+							<div class="row bg-one">
+								<div class="col-6">
+									<a href="<?php echo $codePath . '/module/tpc/'; ?>" class="dropdown-item p-1"> TPC </a>
+									<a href="<?php echo $codePath . '/module/alumni/'; ?>" class="dropdown-item p-1"> Alumni </a>
+								</div>
+								<div class="col-6">
+									<a href="<?php echo $codePath . '/module/alumni/'; ?>" class="dropdown-item p-1"> Store </a>
+									<a href="<?php echo $codePath . '/module/alumni/'; ?>" class="dropdown-item p-1"> Manintenance </a>
+									<a href="<?php echo $codePath . '/module/alumni/'; ?>" class="dropdown-item p-1"> Accounts </a>
+									<a href="<?php echo $codePath . '/module/alumni/'; ?>" class="dropdown-item p-1"> Fee </a>
+								</div>
+							</div>
 						</div>
 					</li>
 				</ul>

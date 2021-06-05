@@ -37,11 +37,20 @@ if (isset($mySes)) {
   $tn_eac = 'ea_claim'.$mySes;
   //check_tn_eac($conn, $tn_eac);
 
+  $tn_org = 'organization';
+  check_tn_org($conn, $tn_org);
+
+  $tn_mn = 'master_name';
+  check_tn_mn($conn, $tn_mn);
+
   $tn_rc = 'registration_class'.$mySes;
   check_tn_rc($conn, $tn_rc);
 
   $tn_rs = 'registration_subject'.$mySes;
   check_tn_rs($conn, $tn_rs);
+
+  $tn_rp = 'resource_person';
+  check_tn_rp($conn, $tn_rp);
 
   $tn_sas = 'student_attendance_setup' . $mySes;
   check_tn_sas($conn, $tn_sas);
