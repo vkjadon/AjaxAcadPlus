@@ -402,6 +402,7 @@ require('../../php_function.php');
   $('#assMethodTable').show();
   $('#assTechniqueTable').hide();
   $('#poFeedbackTable').hide();
+
   $(document).on('change', '#sel_subject', function() {
    //$.alert("Subject Changed ");
    copoMap();
@@ -712,57 +713,16 @@ require('../../php_function.php');
 
   $(document).on('submit', '#assessmentMethodForm', function(event) {
    event.preventDefault(this);
-   var action = $("#action").val();
    //$.alert("Form Submitted " + action);
-   var error = "NO";
-   // var error_msg = "";
-   // if (action == "addAssessmentMethod" || action == "updateAM") {
-   //  if ($('#am_nameM').val() === "") {
-   //   error = "YES";
-   //   error_msg = "Method name cannot be blank";
-   //  }
-   // } else if (action == "addAT" || action == "updateAT") {
-   //  if ($('#at_name').val() === "") {
-   //   error = "YES";
-   //   error_msg = "Technique Name cannot be blank";
-   //  }
-   // } else if (action == "addPOF" || action == "updatePOF") {
-   //  if ($('#pof_name').val() === "") {
-   //   error = "YES";
-   //   error_msg = "PO Feedback Name cannot be blank";
-   //  }
-   // } else if (action == "addAD" || action == "updateAD") {
-   //  if ($("#ad_name").val() === "" || $("#sel_subjectAD").val() === "" || $("#sel_at").val() === "") {
-   //   error = "YES";
-   //   error_msg = "Design Name/Subject/Technique cannot be blank";
-   //  }
-   // } else if (action == "addAUCO" && $("#auco_weight").val() === "") {
-   //  error = "YES";
-   //  error_msg = "Value Cannot be blank";
-   // } else if (action == "addAUMarks" && $("#au_marks").val() === "") {
-   //  error = "YES";
-   //  error_msg = "AU/Q Marks Cannot be blank";
-   // }
-   if (error == "NO") {
+    $("#actionUpdateAssMethod").val("updateAM")
     var formData = $(this).serialize();
-    $.alert(formData);
-    $.post("obeSql.php", formData, () => {}, "text").done(function(data) {
-     //$.alert(data);
-     // if (action == "addAssessmentMethod" || action == "updateAM") assessmentMethodList();
-     // else if (action == "addAT" || action == "updateAT") assessmentTechniqueList();
-     // else if (action == "addAD" || action == "updateAD") assessmentDesignList();
-     // else if (action == "addAUCO" || action == "addAUMarks") aucoMap();
-     // else if (action == "addPOF" || action == "updatePOF") pofList();
-     // $('#firstModal').modal('hide');
-     // $('#modalForm')[0].reset();
-    }, "text").done(function(mydata, mystatus) {
-     $.alert("Data" + mydata);
+    // $.alert(formData);
+    $.post("obeSql.php", formData, () => {}, "text").done(function(data) {}, "text").done(function(mydata, mystatus) {
+     // $.alert("Data" + mydata);
+     assessmentMethodList();
     }).fail(function() {
      $.alert("fail in place of error");
     })
-   } else {
-    $.alert(error_msg);
-   }
   });
 
 
@@ -823,7 +783,6 @@ require('../../php_function.php');
 
   $(document).on('click', '.addMethod', function() {
    $.alert("Add Assessment Method");
-   $('#modal_title').text("Add Assessment Method");
    $('#action').val("addAssessmentMethod");
    $('#firstModal').modal('show');
    $('.assessmentMethodForm').show();
@@ -1040,61 +999,47 @@ require('../../php_function.php');
    })
   }
 
-  // function assessmentMethodList() {
-  //  //$.alert("Assessment List Function");
-  //  $.post("obeSql.php", {
-  //   action: "assessmentMethodList"
-  //  }, function(mydata, mystatus) {
-  //   $("#assessmentMethodShowList").hide();
-  //   //$.alert("List " + mydata);
-  //   $("#assessmentMethodShowList").html(mydata);
-  //   $("#assessmentMethodShowList").show();
-  //  }, "text").fail(function() {
-  //   $.alert("Error !!");
-  //  })
-  // }
-
   function assessmentMethodList() {
    $.post("obeSql.php", {
-   action: "assessmentMethodList",
-  }, () => {}, "json").done(function(data) {
-   var assMethod = '';
-   $.each(data, function(key, value) {
-    assMethod += '<tr>';
-    assMethod += '<td><a href="#" class="fas fa-edit editAssMethod" data-assMethod="' + value.am_id + '"></a></td>';
-    assMethod += '<td>' + value.am_name + '</td>';
-    assMethod += '<td>' + value.am_type + '</td>';
-    assMethod += '<td>' + value.am_weight + '</td>';
-    assMethod += '<td>' + value.am_weight_po + '</td>';
-    assMethod += '<td>' + value.am_code + '</td>';
-    assMethod += '<td><a href="#" class="fas fa-trash"></a></td>';
-    assMethod += '</tr>';
-   });
-   $("#assMethodTable").append(assMethod);
-  }, "json").fail(function() {
-   $.alert("fail in place of error");
-  })
+    action: "assessmentMethodList",
+   }, () => {}, "json").done(function(data) {
+    var assMethod = '';
+    $.each(data, function(key, value) {
+     assMethod += '<tr>';
+     assMethod += '<td><a href="#" class="fas fa-edit editAssMethod" data-assMethod="' + value.am_id + '"></a></td>';
+     assMethod += '<td>' + value.am_name + '</td>';
+     assMethod += '<td>' + value.am_type + '</td>';
+     assMethod += '<td>' + value.am_weight + '</td>';
+     assMethod += '<td>' + value.am_weight_po + '</td>';
+     assMethod += '<td>' + value.am_code + '</td>';
+     assMethod += '<td><a href="#" class="fas fa-trash"></a></td>';
+     assMethod += '</tr>';
+    });
+    $("#assMethodTable").append(assMethod);
+   }, "json").fail(function() {
+    $.alert("fail in place of error");
+   })
   }
 
   function assessmentTechniqueList() {
    $.post("obeSql.php", {
-   action: "assessmentTechniqueList",
-  }, () => {}, "json").done(function(data) {
-   var assTech = '';
-   $.each(data, function(key, value) {
-    assTech += '<tr>';
-    assTech += '<td><a href="#" class="fas fa-edit editAssTechnique" data-assTechnique="' + value.at_id + '"></a></td>';
-    assTech += '<td>' + value.at_name + '</td>';
-    assTech += '<td>' + value.am_name + '</td>';
-    assTech += '<td>' + value.at_outcome + '</td>';
-    assTech += '<td>' + value.at_type + '</td>';
-    assTech += '<td><a href="#" class="fas fa-trash"></a></td>';
-    assTech += '</tr>';
-   });
-   $("#assTechniqueTable").append(assTech);
-  }, "json").fail(function() {
-   $.alert("fail in place of error");
-  })
+    action: "assessmentTechniqueList",
+   }, () => {}, "json").done(function(data) {
+    var assTech = '';
+    $.each(data, function(key, value) {
+     assTech += '<tr>';
+     assTech += '<td><a href="#" class="fas fa-edit editAssTechnique" data-assTechnique="' + value.at_id + '"></a></td>';
+     assTech += '<td>' + value.at_name + '</td>';
+     assTech += '<td>' + value.am_name + '</td>';
+     assTech += '<td>' + value.at_outcome + '</td>';
+     assTech += '<td>' + value.at_type + '</td>';
+     assTech += '<td><a href="#" class="fas fa-trash"></a></td>';
+     assTech += '</tr>';
+    });
+    $("#assTechniqueTable").append(assTech);
+   }, "json").fail(function() {
+    $.alert("fail in place of error");
+   })
   }
 
   function assessmentDesignList() {
