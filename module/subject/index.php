@@ -266,6 +266,9 @@ require('../../php_function.php');
       coList();
     });
 
+
+
+    
     // Manage Subject
     $(document).on('click', '.subject_idD', function() {
       var id = $(this).attr("data-id");
