@@ -230,4 +230,10 @@ if ($_POST['action'] == 'add') {
   $sql = "insert into special_staff (staff_id, approver_id, forwarder_id) values ('$staff_id', '$approver_id', '$forwarder_id')";
   $conn->query($sql);
   echo $conn->error;
+} elseif ($_POST['action'] == 'fetchLeaveType') {
+  $id = $_POST['ltId'];
+  $sql = "SELECT * FROM leave_type where leave_typeid='$id'";
+  $result = $conn->query($sql);
+  $output = $result->fetch_assoc();
+  echo json_encode($output);
 }
