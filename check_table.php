@@ -199,6 +199,32 @@ function check_tn_rs($conn, $table)
   //else echo "Table Exists";
 }
 
+function check_tn_respStaff($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+    'rs_id INT(5) NOT NULL AUTO_INCREMENT,
+    rs_code VARCHAR(20) NULL,
+    staff_id INT(4) NULL,
+    unit_id INT(4) NULL,
+    rs_from_date DATE,
+    rs_to_date DATE,
+    update_ts timestamp,
+    update_id INT(5) NULL,
+    rs_status INT(1) NULL,
+    PRIMARY KEY (rs_id),
+    UNIQUE(rs_code, staff_id, unit_id, rs_from_date)';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+
 function check_tn_sa($conn, $table)
 {
   $sql = "select * from $table";

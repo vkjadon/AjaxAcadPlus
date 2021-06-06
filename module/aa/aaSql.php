@@ -209,15 +209,36 @@ if (isset($_POST['action'])) {
     $nameField = $tag . '_name';
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
-    echo '<select class="form-control form-control-sm" id="' . $tag . '" name="' . $tag . '" required>';
+    echo '<select class="form-control form-control-sm" id="selectId" name="selectId" required>';
     // echo '<option>Select a Grid</option>';
     while ($rowsArray = $result->fetch_assoc()) {
       $id = $rowsArray[$idField];
       $name = $rowsArray[$nameField];
-      if($tag=='program')echo '<option value="' . $id . '">' . $rowsArray["program_abbri"] . '('.$rowsArray["sp_name"].')</option>';
-      elseif($tag=='class')echo '<option value="' . $id . '">' . $rowsArray["class_name"] . '('.$rowsArray["class_section"].')</option>';
+      if ($tag == 'program') echo '<option value="' . $id . '">' . $rowsArray["program_abbri"] . '(' . $rowsArray["sp_name"] . ')</option>';
+      elseif ($tag == 'class') echo '<option value="' . $id . '">' . $rowsArray["class_name"] . '(' . $rowsArray["class_section"] . ')</option>';
       else echo '<option value="' . $id . '">' . $name . '</option>';
     }
     echo '</select>';
+  } elseif ($_POST['action'] == "searchStaff") {
+    $output = '';
+    $sql = "select * from staff where staff_name LIKE '%" . $_POST["searchString"] . "%'";
+    $result = $conn->query($sql);
+    if(!$result)echo $conn->error;
+    $output = '<ul class="list-group p-0 m-0">';
+    if ($result) {
+      while ($row = $result->fetch_assoc()) {
+        $output .= '<li class="list-group-item list-group-item-action staffAutoList"  data-staff="' . $row["staff_id"] . '" >' . $row["staff_name"] . ' ['.$row["user_id"].']</li>';
+      }
+    } else {
+      $output .= '<li>Staff Not Found</li>';
+    }
+    $output .= '</ul>';
+    echo $output;
+  } elseif ($_POST["action"] == "respName") {
+    echo $_POST["respName"];
+    echo $_POST["staffId"];
+    echo $_POST["respRemarks"];
+    echo $_POST["selectId"];
+    // $conn->query($sql);
   }
 }

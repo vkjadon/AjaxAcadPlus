@@ -337,3 +337,10 @@ textarea {
     font: 25px/30px 'DIGITAL', Helvetica;
     background: linear-gradient(90deg, #000, #555);
 }
+.overlapList {
+    position: fixed; /* Sit on top of the page content */
+    width: 250px;
+    background-color: rgba(0, 0, 0, 0.089); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+  }

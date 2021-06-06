@@ -32,7 +32,7 @@ require('../../php_function.php');
             <div class="tab-pane show active" id="list-master" role="tabpanel">
               <div class="row">
                 <div class="col-7 mt-1 mb-1">
-                  <div class="container card shadow d-flex justify-content-center mt-2" id="card_aa">
+                  <div class="container card shadow d-flex justify-content-center mt-2 myCard">
                     <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab">
                       <li class="nav-item">
                         <a class="nav-link active tabLink" data-toggle="pill" href="#nr" data-tag="nr">Name-Remarks</a>
@@ -47,19 +47,19 @@ require('../../php_function.php');
                           <div class="col">
                             <div class="form-group">
                               <input type="radio" checked class="headName" id="rt" name="headName" value="rt">
-                              <label>Resource Type</label>
+                              Resource Type
                             </div>
                           </div>
                           <div class="col">
                             <div class="form-group">
                               <input type="radio" class="headName" id="ss" name="headName" value="ss">
-                              <label> Specialization</label>
+                              Specialization
                             </div>
                           </div>
                           <div class="col">
                             <div class="form-group">
                               <input type="radio" class="headName" id="cce" name="headName" value="cce">
-                              <label>CoCur Event</label>
+                              CoCur Event
                             </div>
                           </div>
                         </div>
@@ -67,19 +67,19 @@ require('../../php_function.php');
                           <div class="col">
                             <div class="form-group">
                               <input type="radio" class="headName" id="am" name="headName" value="am">
-                              <label>Assessment Method</label>
+                              Assessment Method
                             </div>
                           </div>
                           <div class="col">
                             <div class="form-group">
                               <input type="radio" class="headName" id="at" name="headName" value="at">
-                              <label>Assessment Technique</label>
+                              Assessment Technique
                             </div>
                           </div>
                           <div class="col">
                             <div class="form-group">
                               <input type="radio" class="headName" id="ac" name="headName" value="ac">
-                              <label>Assessment Components</label>
+                              Assessment Components
                             </div>
                           </div>
                         </div>
@@ -108,25 +108,25 @@ require('../../php_function.php');
                           <div class="col">
                             <div class="form-group">
                               <input type="radio" checked class="respName" id="school" name="respName" value="school">
-                              <label> Inst. Head </label>
+                              Inst. Head
                             </div>
                           </div>
                           <div class="col">
                             <div class="form-group">
                               <input type="radio" class="respName" id="department" name="respName" value="department">
-                              <label>Dept. Head </label>
+                              Dept. Head
                             </div>
                           </div>
                           <div class="col">
                             <div class="form-group">
                               <input type="radio" class="respName" id="program" name="respName" value="program">
-                              <label> Prog. Head </label>
+                              Prog. Head
                             </div>
                           </div>
                           <div class="col">
                             <div class="form-group">
                               <input type="radio" class="respName" id="class" name="respName" value="class">
-                              <label>Class InCharge </label>
+                              Class InCharge
                             </div>
                           </div>
                         </div>
@@ -140,20 +140,41 @@ require('../../php_function.php');
                           <div class="col-3">
                             <div class="form-group">
                               <label>Staff</label>
-                              <input type="text" class="form-control form-control-sm" id="staff" name="staff">
+                              <input type="text" class="form-control form-control-sm" id="staffSearch" name="staffSearch" placeholder="Search Staff" aria-label="Search">
+                              <p class='list-group overlapList' id="staffAutoList"></p>
                             </div>
                           </div>
-
                           <div class="col-3">
                             <div class="form-group">
+                              <label>Office Order</label>
+                              <input type="text" class="form-control form-control-sm" id="respOrder" name="respOrder">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-3 pr-1">
+                            <div class="form-group">
+                              <label>Effective From</label>
+                              <input type="date" class="form-control form-control-sm" id="respFrom" name="respFrom" value="<?php echo $submit_date; ?>">
+                            </div>
+                          </div>
+                          <div class="col-3 pl-1">
+                            <div class="form-group">
+                              <label>Effective Till</label>
+                              <input type="date" class="form-control form-control-sm" id="respTo" name="respTo" value="<?php echo $submit_date; ?>">
+                            </div>
+                          </div>
+                          <div class="col-6">
+                            <div class="form-group">
                               <label>Remarks</label>
-                              <input type="text" class="form-control form-control-sm" id="repRemarks" name="repRemarks">
+                              <input type="text" class="form-control form-control-sm" id="respRemarks" name="respRemarks">
                             </div>
                           </div>
                         </div>
                         <div class="row">
                           <div class="col">
-                            <button type="submit" class="btn btn-sm resSubmit">Submit</button>
+                            <input type="hidden" id="staffId" name="staffId">
+                            <button type="submit" class="btn btn-sm respSubmit">Submit</button>
                           </div>
                         </div>
                       </div>
@@ -219,6 +240,37 @@ require('../../php_function.php');
     masterNameList();
     selectList("school");
 
+    //Auto Search Block
+    $('#staffSearch').keyup(function() {
+      var searchString = $(this).val();
+      //$.alert(searchString);
+      if (searchString != '') {
+        $.ajax({
+          url: "aaSql.php",
+          method: "POST",
+          data: {
+            action: "searchStaff",
+            searchString: searchString
+          },
+          success: function(data) {
+            //$.alert("List - " + data)
+            $('#staffAutoList').fadeIn();
+            $('#staffAutoList').html(data);
+          }
+        });
+      } else {
+        $('#staffAutoList').fadeOut();
+        $('#staffAutoList').html("");
+      }
+    });
+
+    $(document).on('click', '.staffAutoList', function() {
+      $('#staffSearch').val($(this).text());
+      var staffId = $(this).attr("data-staff");
+      $('#staffId').val(staffId);
+      $('#staffAutoList').fadeOut();
+    });
+
     // Left Panel Block
     $(document).on('click', '.bs', function() {
       batchList();
@@ -270,6 +322,25 @@ require('../../php_function.php');
         remarks: remarks,
         headName: headName,
         action: "headName"
+      }, function(data, status) {}, "text").done(function(data) {
+        $.alert("List " + data);
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
+    $(document).on('click', '.respSubmit', function(event) {
+      var respName = $("input[name='respName']:checked").val();
+      var staffId = $("#staffId").val();
+      var selectId = $("#selectId").val();
+      var respRemarks = $("#respRemarks").val();
+      $.alert(" Res " + respName + " Staff " + staffId + " SelId " + selectId);
+      $.post("aaSql.php", {
+        selectId: selectId,
+        respName: respName,
+        respRemarks: respRemarks,
+        staffId: staffId,
+        action: "respName"
       }, function(data, status) {}, "text").done(function(data) {
         $.alert("List " + data);
       }).fail(function() {

@@ -55,6 +55,9 @@ if (isset($mySes)) {
   $tn_rp = 'resource_person';
   check_tn_rp($conn, $tn_rp);
 
+  $tn_respStaff = 'responsibility_staff';
+  check_tn_respStaff($conn, $tn_respStaff);
+
   $tn_sas = 'student_attendance_setup' . $mySes;
   check_tn_sas($conn, $tn_sas);
 
