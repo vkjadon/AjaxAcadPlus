@@ -180,8 +180,8 @@ if (isset($_POST['action'])) {
     echo '<div class="card myCard m-2">';
 
     while ($row_mn = $result->fetch_assoc()) {
-      $mn_id=$row_mn["mn_id"];
-      $status=$row_mn["mn_status"];
+      $mn_id = $row_mn["mn_id"];
+      $status = $row_mn["mn_status"];
       echo '<div class="row m-2">';
       echo '<div class="col-sm-3 mb-0 bg-two">';
       echo 'ID : ' . $mn_id;
@@ -199,5 +199,25 @@ if (isset($_POST['action'])) {
       echo '</div>';
     }
     echo '</div>';
+  } elseif ($_POST['action'] == 'selectList') {
+    $tag = $_POST['tag'];
+    if ($tag == 'school') $sql = "select * from school where school_status='0' order by school_name";
+    elseif ($tag == 'dept') $sql = "select * from department where dept_status='0' order by dept_name";
+    elseif ($tag == 'program') $sql = "select * from program where program_status='0' order by program_name";
+    elseif ($tag == 'class') $sql = "select * from class where class_status='0' and session_id='$mySes' order by class_name";
+    $idField = $tag . '_id';
+    $nameField = $tag . '_name';
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+    echo '<select class="form-control form-control-sm" id="' . $tag . '" name="' . $tag . '" required>';
+    // echo '<option>Select a Grid</option>';
+    while ($rowsArray = $result->fetch_assoc()) {
+      $id = $rowsArray[$idField];
+      $name = $rowsArray[$nameField];
+      if($tag=='program')echo '<option value="' . $id . '">' . $rowsArray["program_abbri"] . '('.$rowsArray["sp_name"].')</option>';
+      elseif($tag=='class')echo '<option value="' . $id . '">' . $rowsArray["class_name"] . '('.$rowsArray["class_section"].')</option>';
+      else echo '<option value="' . $id . '">' . $name . '</option>';
+    }
+    echo '</select>';
   }
 }

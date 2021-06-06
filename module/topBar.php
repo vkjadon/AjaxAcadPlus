@@ -44,7 +44,7 @@ if (!isset($myBatch)) $myBatch = '';
 			</div>
 			<div class="col mr-2">
 
-				<a href="" class="float-right">&nbsp; Forms &nbsp;</a>
+				<a href="<?php echo $codePath . '/module/forms/'; ?>" class="float-right">&nbsp; Forms &nbsp;</a>
 				<a href="" class="float-right">&nbsp; Downloads &nbsp;</a>
 			</div>
 		</div>
@@ -83,7 +83,6 @@ if (!isset($myBatch)) $myBatch = '';
 							</div>
 						</div>
 					</li>
-
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Academics</a>
 						<div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
@@ -108,7 +107,9 @@ if (!isset($myBatch)) $myBatch = '';
 						<div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
 							<div class="row bg-one">
 								<div class="col-6">
+									<a href="<?php echo $codePath . '/module/assessment/'; ?>" class="dropdown-item p-1">Assessment Design</a>
 									<a href="<?php echo $codePath . '/module/online/'; ?>" class="dropdown-item p-1">Online Assessment</a>
+									<a href="<?php echo $codePath . '/module/obaSettings/'; ?>" class="dropdown-item p-1"> OBA Settings </a>
 									<a href="<?php echo $codePath . '/module/attainment/'; ?>" class="dropdown-item p-1"> CO Attainment </a>
 									<a href="<?php echo $codePath . '/module/obeFeedback/'; ?>" class="dropdown-item p-1"> OBE Feedback </a>
 								</div>
@@ -122,7 +123,6 @@ if (!isset($myBatch)) $myBatch = '';
 							</div>
 						</div>
 					</li>
-
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="hr/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Staff</a>
 						<div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">

@@ -24,7 +24,10 @@ if (isset($mySes)) {
 
   $tn_ad = 'assessment_design';
   //check_tn_ad($conn, $tn_ad);
-
+  
+  $tn_amap = 'assessment_map';
+  check_tn_amap($conn, $tn_amap);
+  
   $tn_ccd = 'cc_detail'.$mySes;
   check_tn_ccd($conn, $tn_ccd);
 

@@ -34,7 +34,7 @@ require('../../php_function.php');
 
      <div class="tab-pane fade show active" id="list-r" role="tabpanel" aria-labelledby="list-r-list">
       <div class="row">
-       <div class="col-5">
+       <div class="col-8">
         <div class="container card shadow d-flex justify-content-center mt-2" id="card_responsibility">
          <!-- nav options -->
          <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
@@ -42,11 +42,18 @@ require('../../php_function.php');
            <a class="nav-link active" id="pills_deptHead" data-toggle="pill" href="#pills_head" role="tab" aria-controls="pills_head" aria-selected="true">Department Head</a>
           </li>
           <li class="nav-item">
+           <a class="nav-link" id="pills_programIncharge" data-toggle="pill" href="#pills_programIncharge" role="tab" aria-controls="pills_programIncharge" aria-selected="false">Program In-charge</a>
+          </li>
+          <li class="nav-item">
            <a class="nav-link" id="pills_classIncharge" data-toggle="pill" href="#pills_incharge" role="tab" aria-controls="pills_incharge" aria-selected="false">Class Incharge</a>
           </li>
           <li class="nav-item">
            <a class="nav-link" id="pills_academicAssistant" data-toggle="pill" href="#pills_assistant" role="tab" aria-controls="pills_assistant" aria-selected="false">Academic Assistant</a>
           </li>
+          <li class="nav-item">
+           <a class="nav-link" id="pills_subjectCoordinator" data-toggle="pill" href="#pills_subjectCoordinator" role="tab" aria-controls="pills_subjectCoordinator" aria-selected="false">Subject Coordinator</a>
+          </li>
+          
          </ul>
          <div class="tab-content" id="pills-tabContent p-3">
           <div class="tab-pane fade show active" id="pills_head" role="tabpanel" aria-labelledby="pills_deptHead">

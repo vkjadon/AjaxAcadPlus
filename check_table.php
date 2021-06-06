@@ -1,5 +1,30 @@
 <?php
 //echo "Check Tables";
+
+function check_tn_amap($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+    'ac_id INT(5) NULL,
+    at_id INT(5) NULL,
+    amap_grid INT(2) NULL,
+    amap_internal VARCHAR(10) NULL,
+    amap_weightage FLOAT NULL,
+    update_ts timestamp default current_timestamp(),
+    update_id INT(1) NULL,
+    amap_status INT(1) NULL,
+    UNIQUE(ac_id, at_id, amap_grid)';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+
 function check_tn_ccd($conn, $table)
 {
   $sql = "select * from $table";

@@ -38,7 +38,7 @@ require('../../php_function.php');
                         <a class="nav-link active tabLink" data-toggle="pill" href="#nr" data-tag="nr">Name-Remarks</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link tabLink" data-toggle="pill" href="#obat" data-tag="obat">OBA Technique</a>
+                        <a class="nav-link tabLink" data-toggle="pill" href="#res" data-tag="res">Responsibility</a>
                       </li>
                     </ul>
                     <div class="tab-content" id="pills-tabContent p-3">
@@ -62,10 +62,24 @@ require('../../php_function.php');
                               <label>CoCur Event</label>
                             </div>
                           </div>
+                        </div>
+                        <div class="row">
                           <div class="col">
                             <div class="form-group">
-                              <input type="radio" class="headName" id="obaM" name="headName" value="obaM">
-                              <label>OBA Method</label>
+                              <input type="radio" class="headName" id="am" name="headName" value="am">
+                              <label>Assessment Method</label>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="at" name="headName" value="at">
+                              <label>Assessment Technique</label>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="ac" name="headName" value="ac">
+                              <label>Assessment Components</label>
                             </div>
                           </div>
                         </div>
@@ -89,28 +103,59 @@ require('../../php_function.php');
                           </div>
                         </div>
                       </div>
-                      <div class="tab-pane fade" id="obat">
-                        <form class="form-horizontal" id="fsForm">
-                          <div class="row">
-                            <div class="col-6">
-                              <div class="form-group">
-                                <label>Staff Specialization</label>
-                                <input type="text" class="form-control form-control-sm" id="ss_name" name="ss_name">
-                              </div>
-                            </div>
-                            <div class="col-6">
-                              <div class="form-group">
-                                <label>Remarks</label>
-                                <input type="text" class="form-control form-control-sm" id="ss_remarks" name="ss_remarks">
-                              </div>
+                      <div class="tab-pane fade" id="res">
+                        <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                              <input type="radio" checked class="respName" id="school" name="respName" value="school">
+                              <label> Inst. Head </label>
                             </div>
                           </div>
-                          <div class="row">
-                            <div class="col">
-                              <button type="submit" class="btn btn-sm">Submit</button>
+                          <div class="col">
+                            <div class="form-group">
+                              <input type="radio" class="respName" id="department" name="respName" value="department">
+                              <label>Dept. Head </label>
                             </div>
                           </div>
-                        </form>
+                          <div class="col">
+                            <div class="form-group">
+                              <input type="radio" class="respName" id="program" name="respName" value="program">
+                              <label> Prog. Head </label>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="form-group">
+                              <input type="radio" class="respName" id="class" name="respName" value="class">
+                              <label>Class InCharge </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-6">
+                            <div class="form-group">
+                              <label class="selectLabel"></label>
+                              <p class="selectList"></p>
+                            </div>
+                          </div>
+                          <div class="col-3">
+                            <div class="form-group">
+                              <label>Staff</label>
+                              <input type="text" class="form-control form-control-sm" id="staff" name="staff">
+                            </div>
+                          </div>
+
+                          <div class="col-3">
+                            <div class="form-group">
+                              <label>Remarks</label>
+                              <input type="text" class="form-control form-control-sm" id="repRemarks" name="repRemarks">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col">
+                            <button type="submit" class="btn btn-sm resSubmit">Submit</button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -169,8 +214,10 @@ require('../../php_function.php');
 
     $('[data-toggle="tooltip"]').tooltip();
     $(".topBarTitle").text("Academics");
+    $(".selectLabel").text("School");
     batchList();
     masterNameList();
+    selectList("school");
 
     // Left Panel Block
     $(document).on('click', '.bs', function() {
@@ -180,6 +227,23 @@ require('../../php_function.php');
       $('#action').val("addPo");
       poList();
       poSummary();
+    });
+
+    $(document).on('click', '.respName', function(event) {
+      var respName = $("input[name='respName']:checked").val();
+      $(".selectLabel").text(respName);
+      //$.alert(" Pressed" + respName);
+
+      $.post("aaSql.php", {
+        respName: respName,
+        action: "respList"
+      }, function() {}, "text").done(function(data, status) {
+        // respNameList();
+        selectList(respName);
+        //$.alert("List " + data);
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
     });
 
     $(document).on('click', '.headName', function(event) {
@@ -402,6 +466,20 @@ require('../../php_function.php');
 
 
     // Functions
+    function selectList(tag) {
+      //$.alert("In List Function");
+      if (tag == "department") tag = "dept";
+      $.post("aaSql.php", {
+        tag: tag,
+        action: "selectList"
+      }, function() {}, "text").done(function(data, status) {
+        //$.alert(data);
+        $(".selectList").html(data);
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+    }
+
     function batchSession(x) {
       //$.alert("Batch " + x);
       $.post("aaSql.php", {

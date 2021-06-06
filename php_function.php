@@ -378,6 +378,17 @@ function getTableRow($conn, $sql, $arrayField)
   return json_encode($output);
 }
 
+function getMaxField($conn, $table, $field)
+{
+  // $sql to have order by DESC
+  $sql="select max($field) as max from $table";
+  $result = $conn->query($sql);
+  if ($result) {
+    $row = $result->fetch_assoc();
+    return $row["max"];
+  } else return FALSE;
+}
+
 function getMaxValue($conn, $sql)
 {
   // $sql to have order by DESC
