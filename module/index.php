@@ -55,11 +55,7 @@ if (!isset($myBatch)) {
 				//echo "Dept $myDept School $myScl Session $mySes";
 				?>
 			</div>
-			<div lang="latex">
-				\frac{1+sin(x)}{y}
-			</div>
-			<p>This equation <span lang="latex">\frac{1+sin(x)}{x^3}</span>
-				appears on the same line at the text.</p>
+
 		</div>
 		<div class="navbar navbar-expand-md navbar-dark bg-dark fixed-bottom">
 			<div>
