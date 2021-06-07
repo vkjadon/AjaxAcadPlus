@@ -12,7 +12,7 @@ if ($result) {
     $update_ts = $rowsArray['update_ts'];
     $update_id = $rowsArray['update_id'];
   }
-}else echo $conn->error;
+} else echo $conn->error;
 
 ?>
 <!DOCTYPE html>
@@ -138,22 +138,22 @@ if ($result) {
                         <div class="col-3">
                           <div class="form-group">
                             <label>Short Leave</label>
-                            <input type="text" class="form-control form-control-sm" value="<?php echo $short_leave;?>"/>
+                            <input type="text" class="form-control form-control-sm" value="<?php echo $short_leave; ?>" />
                           </div>
                         </div>
                         <div class="col-3">
                           <div class="form-group">
                             <label>Half Day</label>
-                            <input type="text" class="form-control form-control-sm" type="text" value="<?php echo $half_day;?>" />
+                            <input type="text" class="form-control form-control-sm" type="text" value="<?php echo $half_day; ?>" />
                           </div>
                         </div>
                         <div class="col-6 text-center">
                           Last updated by</br>
                           <label>
-                          <?php
-                          echo getField($conn, $update_id, "staff", "staff_id", "staff_name");
-                          echo '<br>'.date("d-m-Y h-m", strtotime($update_ts));
-                          ?>
+                            <?php
+                            echo getField($conn, $update_id, "staff", "staff_id", "staff_name");
+                            echo '<br>' . date("d-m-Y h-m", strtotime($update_ts));
+                            ?>
                           </label>
                         </div>
                       </div>
@@ -191,21 +191,6 @@ if ($result) {
             </div>
           </div>
 
-          <div class="tab-pane fade" id="list-laf" role="tabpanel" aria-labelledby="list-laf-list">
-            <div class="card">
-              <div class="card-header">
-                <h5>Compensatory Claim Request</h5>
-              </div>
-
-              <div class="card-body">
-                <p id="ccfForwarderPendingTitle"></p>
-                <p id="ccfForwarderPendingList"></p>
-                <p id="ccfApproverPendingTitle"></p>
-                <p id="ccfApproverPendingList"></p>
-              </div>
-            </div>
-          </div>
-
           <div class="tab-pane fade" id="list-lc" role="tabpanel" aria-labelledby="list-lc-list">
             <div class="row">
               <div class="col-5">
@@ -221,37 +206,12 @@ if ($result) {
                       <form class="form-horizontal" id="addLeaveSetup">
                         <div class="form-group">
                           <?php
-                          $sql_ly = "select * from leave_year where ly_status='C'";
-                          $result = $conn->query($sql_ly);
-                          while ($rows = $result->fetch_assoc()) {
-                            $from = $rows['ly_from'];
-                            $to = $rows['ly_to'];
-                            $ly_id = $rows['ly_id'];
-                          }
-                          $ly_from = date("d-m-Y", strtotime($from));
-                          $ly_to = date("d-m-Y", strtotime($to));
-                          // echo 'Leave Cycle : ' . $ly_from . ' to ' . $ly_to . '';
-                          $month_from = date("F", strtotime($ly_from));
-                          $month_fromN = date("m", strtotime($ly_from));
-                          $month_fromN *= 1;
-                          $month_to = date("F", strtotime($ly_to));
-                          $year_to = date("Y", strtotime($ly_to));
-                          $year_from = date("Y", strtotime($ly_from));
-                          echo '<div class="row">';
-                          echo '<div class="col-12">';
-                          echo '<h6 class="mb-3" align="center">Leave Cycle : ' . $month_from . ' ' . $year_from . ' to ' . $month_to . ' ' . $year_to . '</h6>';
-                          echo '</div></div>';
+                          $months = array(" ", "January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
                           echo '<div class="row">';
                           echo '<div class="col-6">';
                           echo '<select class="form-control form-control-sm" name="sel_month" id="sel_month" required>';
                           echo '<option selected disabled>Select Month</option>';
-                          $months = array(" ", "January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
-                          for ($i = 0; $i < 12; $i++) {
-                            if ($month_fromN == 13) $month_fromN = 1;
-                            // echo $months[$month_fromN];
-                            echo '<option value="' . $month_fromN . '">' . $months[$month_fromN] . '</option>';
-                            $month_fromN++;
-                          }
+                          for ($i = 1; $i < 13; $i++) echo '<option value="' . $i . '">' . $months[$i] . '</option>';
                           echo '</select>';
                           echo '</div>';
                           ?>
@@ -262,11 +222,7 @@ if ($result) {
                           if ($result) {
                             echo '<select class="form-control form-control-sm" name="sql_lt" id="sql_lt" required>';
                             echo '<option selected disabled>Select Leave Type</option>';
-                            while ($rows = $result->fetch_assoc()) {
-                              $select_id = $rows['lt_id'];
-                              $select_name = $rows['lt_name'];
-                              echo '<option value="' . $select_id . '">' . $select_name . '</option>';
-                            }
+                            while ($rows = $result->fetch_assoc())echo '<option value="' . $rows['lt_id'] . '">' . $rows['lt_name'] . '</option>';
                             echo '</select>';
                             echo '</div></div>';
                           } else echo $conn->error;
@@ -313,6 +269,21 @@ if ($result) {
                     <th>Gender</th>
                   </table>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="list-laf" role="tabpanel" aria-labelledby="list-laf-list">
+            <div class="card">
+              <div class="card-header">
+                <h5>Compensatory Claim Request</h5>
+              </div>
+
+              <div class="card-body">
+                <p id="ccfForwarderPendingTitle"></p>
+                <p id="ccfForwarderPendingList"></p>
+                <p id="ccfApproverPendingTitle"></p>
+                <p id="ccfApproverPendingList"></p>
               </div>
             </div>
           </div>

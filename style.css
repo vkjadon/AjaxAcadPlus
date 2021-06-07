@@ -15,6 +15,7 @@ body {
 
 .bg-two {
     background-color: #ced8e7;
+    columns: #1a4a77fd;
 }
 
 .bg-one {
@@ -239,6 +240,13 @@ textarea {
     color: #703d3d;
 }
 
+.vkj{
+    padding: 2px;
+    font-weight: normal;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: small;
+    color: #703d3d;
+}
 /* Button css*/
 .btn-round-sm {
     padding: 2px 6px;

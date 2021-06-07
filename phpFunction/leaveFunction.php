@@ -4,10 +4,10 @@ function get_extraAttendanceJson($conn, $tn_eac)
   $sql = "select eac.* from $tn_eac eac where eac_status<9 order by eac.eac_status, eac.eac_date";
 
   $result = $conn->query($sql);
-  if (!$result){
+  if (!$result) {
     echo $result->error;
     die(" The script could not be Loadded In Get Extra Attendance! Please report!");
-  } 
+  }
   $data = array();
   while ($rows = $result->fetch_assoc()) {
     $sub_array = array();
@@ -33,10 +33,10 @@ function get_classEAJson($conn, $tn_eac)
   $sql = "select eac.* from $tn_eac eac where eac_status<9 order by eac.eac_status, eac.eac_date";
 
   $result = $conn->query($sql);
-  if (!$result){
+  if (!$result) {
     echo $result->error;
     die(" The script could not be Loadded In Get Extra Attendance! Please report!");
-  } 
+  }
   $data = array();
   while ($rows = $result->fetch_assoc()) {
     $sub_array = array();
@@ -57,3 +57,4 @@ function get_classEAJson($conn, $tn_eac)
   );
   return json_encode($output);
 }
+
