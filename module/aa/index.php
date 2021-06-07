@@ -23,6 +23,7 @@ require('../../php_function.php');
         <div class="col-sm-2">
           <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
             <a class="list-group-item list-group-item-action active master" id="list-master-list" data-toggle="list" href="#list-master"> Academic Master Data </a>
+            <a class="list-group-item list-group-item-action responsibility" id="list-responsibility-list" data-toggle="list" href="#list-responsibility"> Asign Responsibility </a>
             <a class="list-group-item list-group-item-action  bs" id="list-bs-list" data-toggle="list" href="#list-bs"> Batch/Session </a>
           </div>
         </div>
@@ -37,7 +38,7 @@ require('../../php_function.php');
                         <a class="nav-link active tabLink" data-toggle="pill" href="#nr" data-tag="nr">Name-Remarks</a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link tabLink" data-toggle="pill" href="#res" data-tag="res">Responsibility</a>
+                        <a class="nav-link tabLink" data-toggle="pill" href="#res" data-tag="res">New Tab</a>
                       </li>
                     </ul>
                     <div class="tab-content" id="pills-tabContent p-3">
@@ -103,79 +104,6 @@ require('../../php_function.php');
                         </div>
                       </div>
                       <div class="tab-pane fade" id="res">
-                        <div class="row">
-                          <div class="col">
-                            <div class="form-group">
-                              <input type="radio" checked class="respName" id="school" name="respName" value="school">
-                              Inst. Head
-                            </div>
-                          </div>
-                          <div class="col">
-                            <div class="form-group">
-                              <input type="radio" class="respName" id="department" name="respName" value="department">
-                              Dept. Head
-                            </div>
-                          </div>
-                          <div class="col">
-                            <div class="form-group">
-                              <input type="radio" class="respName" id="program" name="respName" value="program">
-                              Prog. Head
-                            </div>
-                          </div>
-                          <div class="col">
-                            <div class="form-group">
-                              <input type="radio" class="respName" id="class" name="respName" value="class">
-                              Class InCharge
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-6">
-                            <div class="form-group">
-                              <label class="selectLabel"></label>
-                              <p class="selectList"></p>
-                            </div>
-                          </div>
-                          <div class="col-3">
-                            <div class="form-group">
-                              <label>Staff</label>
-                              <input type="text" class="form-control form-control-sm" id="staffSearch" name="staffSearch" placeholder="Search Staff" aria-label="Search">
-                              <p class='list-group overlapList' id="staffAutoList"></p>
-                            </div>
-                          </div>
-                          <div class="col-3">
-                            <div class="form-group">
-                              <label>Office Order</label>
-                              <input type="text" class="form-control form-control-sm" id="respOrder" name="respOrder">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-3 pr-1">
-                            <div class="form-group">
-                              <label>Effective From</label>
-                              <input type="date" class="form-control form-control-sm" id="respFrom" name="respFrom" value="<?php echo $submit_date; ?>">
-                            </div>
-                          </div>
-                          <div class="col-3 pl-1">
-                            <div class="form-group">
-                              <label>Effective Till</label>
-                              <input type="date" class="form-control form-control-sm" id="respTo" name="respTo" value="<?php echo $submit_date; ?>">
-                            </div>
-                          </div>
-                          <div class="col-6">
-                            <div class="form-group">
-                              <label>Remarks</label>
-                              <input type="text" class="form-control form-control-sm" id="respRemarks" name="respRemarks">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col">
-                            <input type="hidden" id="staffId" name="staffId">
-                            <button type="submit" class="btn btn-sm respSubmit">Submit</button>
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -185,6 +113,92 @@ require('../../php_function.php');
                 </div>
               </div>
             </div>
+            <div class="tab-pane fade" id="list-responsibility" role="tabpanel">
+              <div class="row">
+                <div class="col-7 mt-1 mb-1">
+                  <div class="container card mt-2 myCard">
+                    <h5 class="card-title p-2 mb-0">Assign Responsibilty</h5>
+                    <div class="row">
+                      <div class="col">
+                        <div class="form-group">
+                          <input type="radio" checked class="respName" id="school" name="respName" value="school">
+                          Inst. Head
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-group">
+                          <input type="radio" class="respName" id="department" name="respName" value="department">
+                          Dept. Head
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-group">
+                          <input type="radio" class="respName" id="program" name="respName" value="program">
+                          Prog. Head
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-group">
+                          <input type="radio" class="respName" id="class" name="respName" value="class">
+                          Class InCharge
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="form-group">
+                          <label class="selectLabel"></label>
+                          <p class="selectList"></p>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="form-group">
+                          <label>Staff</label>
+                          <input type="text" class="form-control form-control-sm" id="staffSearch" name="staffSearch" placeholder="Search Staff" aria-label="Search">
+                          <p class='list-group overlapList' id="staffAutoList"></p>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="form-group">
+                          <label>Office Order</label>
+                          <input type="text" class="form-control form-control-sm" id="respOrder" name="respOrder">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-3 pr-1">
+                        <div class="form-group">
+                          <label>Effective From</label>
+                          <input type="date" class="form-control form-control-sm" id="respFrom" name="respFrom" value="<?php echo $submit_date; ?>">
+                        </div>
+                      </div>
+                      <div class="col-3 pl-1">
+                        <div class="form-group">
+                          <label>Effective Till</label>
+                          <input type="date" class="form-control form-control-sm" id="respTo" name="respTo" value="<?php echo $submit_date; ?>">
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group">
+                          <label>Remarks</label>
+                          <input type="text" class="form-control form-control-sm" id="respRemarks" name="respRemarks">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <input type="hidden" id="staffId" name="staffId">
+                        <button type="submit" class="btn btn-sm respSubmit">Submit</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-5 mt-1 mb-1">
+                  <p id="resourcePersonList"></p>
+                </div>
+              </div>
+            </div>
+
             <div class="tab-pane fade" id="list-bs">
               <div class="row">
                 <div class="col-sm-6">
@@ -218,7 +232,7 @@ require('../../php_function.php');
     batchList();
     masterNameList();
     selectList("school");
-
+    batchSession(<?php echo $myBatch;?>)
     //Auto Search Block
     $('#staffSearch').keyup(function() {
       var searchString = $(this).val();
@@ -562,5 +576,97 @@ require('../../php_function.php');
     }
   });
 </script>
+<!-- Modal Section-->
+<div class="modal" id="firstModal">
+  <div class="modal-dialog">
+    <form class="form-horizontal" id="modalForm">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal_title"></h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div> <!-- Modal Header Closed-->
+        <!-- Modal body -->
+        <div class="modal-body">
+          <div class="batchForm">
+            <div class="form-horizontal">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-sm-4">
+                    Batch<input type="text" class="form-control form-control-sm" id="newBatch" name="newBatch" placeholder="Batch">
+                  </div>
+                  <div class="col-sm-4">
+                    Batch<input type="text" class="form-control form-control-sm" id="newBatch" name="newBatch" placeholder="Batch">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sessionForm">
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group">
+                  Session Name
+                  <input type="text" class="form-control form-control-sm" id="session_name" name="session_name" placeholder="Session Name">
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  Session Remarks
+                  <input type="text" class="form-control form-control-sm" id="session_remarks" name="session_remarks" placeholder="Remarks">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                Start Date
+                <input type="date" class="form-control form-control-sm" id="session_start" name="session_start" placeholder="Strat Date" value="<?php echo $submit_date; ?>">
+              </div>
+              <div class="col-6">
+                End Date
+                <input type="date" class="form-control form-control-sm" id="session_end" name="session_end" placeholder="Strat Date" value="<?php echo $submit_date; ?>">
+              </div>
+            </div>
+          </div>
+
+          <div class="poForm">
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group">
+                  Enter Code
+                  <input type="text" class="form-control form-control-sm" id="poCode" name="poCode" placeholder="PO Code">
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  Serial Order of PO
+                  <input type="text" class="form-control form-control-sm" id="poSno" name="poSno" placeholder="Serial Order">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                PO statement
+                <input type="text" class="form-control form-control-sm" id="poStatement" name="poStatement" placeholder="Enter PO Statement">
+              </div>
+            </div>
+          </div>
+        </div> <!-- Modal Body Closed-->
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <input type="hidden" id="modalId" name="modalId">
+          <input type="hidden" id="action" name="action">
+          <input type="hidden" id="batchIdModal" name="batchIdModal">
+          <input type="hidden" id="programIdModal" name="programIdModal">
+          <button type="submit" class="btn btn-secondary" id="submitModalForm">Submit</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div> <!-- Modal Footer Closed-->
+      </div> <!-- Modal Conent Closed-->
+
+    </form>
+  </div> <!-- Modal Dialog Closed-->
+</div> <!-- Modal Closed-->
 
 </html>
