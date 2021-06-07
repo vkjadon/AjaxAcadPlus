@@ -184,14 +184,14 @@ if ($_POST['action'] == 'add') {
   $leaveValue = $_POST['leaveValue'];
   $lyIdHidden = $_POST['lyIdHidden'];
   if ($leaveGender == 'Both') {
-    $sql = "insert into leave_setup (ls_month, leave_typeid, ls_value, ly_id, ls_gender) values ('$sel_month', '$leaveType', '$leaveValue', '$lyIdHidden', 'Female')";
+    $sql = "insert into leave_setup (ls_month, lt_id, ls_value, ly_id, ls_gender) values ('$sel_month', '$leaveType', '$leaveValue', '$lyIdHidden', 'Female')";
     $conn->query($sql);
     echo $conn->error;
-    $sql = "insert into leave_setup (ls_month, leave_typeid, ls_value, ly_id, ls_gender) values ('$sel_month', '$leaveType', '$leaveValue', '$lyIdHidden', 'Male')";
+    $sql = "insert into leave_setup (ls_month, lt_id, ls_value, ly_id, ls_gender) values ('$sel_month', '$leaveType', '$leaveValue', '$lyIdHidden', 'Male')";
     $conn->query($sql);
     echo $conn->error;
   } else {
-    $sql = "insert into leave_setup (ls_month, leave_typeid, ls_value, ly_id, ls_gender) values ('$sel_month', '$leaveType', '$leaveValue', '$lyIdHidden', '$leaveGender')";
+    $sql = "insert into leave_setup (ls_month, lt_id, ls_value, ly_id, ls_gender) values ('$sel_month', '$leaveType', '$leaveValue', '$lyIdHidden', '$leaveGender')";
     $conn->query($sql);
     echo $conn->error;
   }
@@ -203,12 +203,12 @@ if ($_POST['action'] == 'add') {
   $leaveTypeStaff = $_POST['leaveTypeStaff'];
   $leaveReason = $_POST['leaveReason'];
   $submitDate = date("Y-m-d");
-  $sql = "insert into leave_ledger (leave_from, leave_to, leave_timeFrom, leave_timeTo, leave_typeid, leave_reason, staff_id, submit_date) values ('$leaveFromDate', '$leaveToDate', '$leaveToTime', '$leaveFromTime', '$leaveTypeStaff', '$leaveReason', '$myId' ,'$submitDate')";
+  $sql = "insert into leave_ledger (leave_from, leave_to, leave_timeFrom, leave_timeTo, lt_id, leave_reason, staff_id, submit_date) values ('$leaveFromDate', '$leaveToDate', '$leaveToTime', '$leaveFromTime', '$leaveTypeStaff', '$leaveReason', '$myId' ,'$submitDate')";
   $conn->query($sql);
   echo $conn->error;
 } elseif ($_POST['action'] == 'leaveSetupList') {
   $lt_id = $_POST['lt_id'];
-  $sql = "select ls.*, lt.leave_type from leave_setup ls, leave_type lt where lt.leave_typeid=ls.leave_typeid";
+  $sql = "select ls.*, lt.lt_name from leave_setup ls, lt_name lt where lt.lt_id=ls.lt_id";
   $result = $conn->query($sql);
   $json_array = array();
   while ($rowArray = $result->fetch_assoc()) {
@@ -217,7 +217,7 @@ if ($_POST['action'] == 'add') {
   echo json_encode($json_array);
 } elseif ($_POST['action'] == 'fetchLeaveSetup') {
   $id = $_POST['lsId'];
-  $sql = "select ls.*, lt.leave_type FROM leave_setup ls, leave_type lt where lt.leave_typeid=ls.leave_typeid and ls.ls_id='$id'";
+  $sql = "select ls.*, lt.lt_name FROM leave_setup ls, lt_name lt where lt.lt_id=ls.lt_id and ls.ls_id='$id'";
   $result = $conn->query($sql);
   $output = $result->fetch_assoc();
   echo json_encode($output);
@@ -230,7 +230,7 @@ if ($_POST['action'] == 'add') {
   }
   echo json_encode($json_array);
 } elseif ($_POST['action'] == 'leaveApplicationList') {
-  $sql = "select ll.*, lt.leave_type from leave_ledger ll, leave_type lt where lt.leave_typeid=ll.leave_typeid";
+  $sql = "select ll.*, lt.lt_name from leave_ledger ll, lt_name lt where lt.lt_id=ll.lt_id";
   $result = $conn->query($sql);
   $json_array = array();
   while ($rowArray = $result->fetch_assoc()) {
@@ -246,7 +246,7 @@ if ($_POST['action'] == 'add') {
   echo $conn->error;
 } elseif ($_POST['action'] == 'fetchLeaveType') {
   $id = $_POST['ltId'];
-  $sql = "SELECT  * FROM leave_type where leave_typeid='$id'";
+  $sql = "SELECT  * FROM lt_name where lt_id='$id'";
   $result = $conn->query($sql);
   $output = $result->fetch_assoc();
   echo json_encode($output);
