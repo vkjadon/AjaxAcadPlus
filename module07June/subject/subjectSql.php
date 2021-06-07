@@ -321,7 +321,125 @@ if (isset($_POST['action'])) {
     $dataType = array("0");
     $sql = "select * from batch order by batch desc";
     getListCard($conn, $tableId, $fields, $dataType, $sql, $statusDecode, $button);
-  }elseif ($_POST["action"] == "selectSubject") {
+  } elseif ($_POST["action"] == "addCo") {
+    //echo "Add Session ";
+    $fields = ['subject_id', 'co_name', 'co_code', 'co_sno'];
+    $values = [$_POST['subjectIdModal'], data_check($_POST['coStatement']), data_check($_POST['coCode']), data_check($_POST['coSno'])];
+    $status = 'co_status';
+    $dup = "select * from course_outcome where co_sno='" . data_check($_POST["co_sno"]) . "' and subject_id='" . $_POST["subjectId"] . "'  and $status='0'";
+    $dup_alert = "Serial Number Alreday Exists ! Please Check the Order!!";
+    addData($conn, 'course_outcome', 'co_id', $fields, $values, $status, $dup, $dup_alert);
+  } elseif ($_POST['action'] == 'fetchCo') {
+    //  echo "$id";
+    $id = $_POST['coId'];
+    $sql = "select * FROM course_outcome where co_id='$id'";
+    $result = $conn->query($sql);
+    $output = $result->fetch_assoc();
+    echo json_encode($output);
+  } elseif ($_POST['action'] == 'updateCo') {
+    $fields = ['co_id', 'co_code', 'co_name', 'co_sno'];
+    $values = [$_POST['modalId'], data_check($_POST['coCode']), data_check($_POST['coStatement']), data_check($_POST['coSno'])];
+    $dup = "select * from course_outcome where co_sno='" . $_POST["coSno"] . "' and co_name='" . $_POST["coStatement"] . "' and subject_id='" . $_POST["subjectIdModal"] . "'";
+    $dup_alert = "Could Not Update - Duplicate Entries";
+    updateData($conn, 'course_outcome', $fields, $values, $dup, $dup_alert);
+  } elseif ($_POST["action"] == "coList") {
+    //    echo "MyId- $myId";
+
+    $sqlSub = "select sb.* from subject sb where sb.program_id='$myProg' and sb.batch_id='$myBatch' and sb.subject_status='0' and subject_semester>0 order by sb.subject_semester, sb.subject_sno";
+    $resultSub = $conn->query($sqlSub);
+    while ($subArray = $resultSub->fetch_assoc()) {
+      $subject_id = $subArray["subject_id"];
+      $subject_name = $subArray["subject_name"];
+      $subject_code = $subArray["subject_code"];
+
+      echo '<div class="row shadow border border-primary mb-1">';
+      echo '<div class="col-sm-3 mb-0 bg-two inputLabel">';
+      echo 'Sem ' . $subArray["subject_semester"];
+      echo '</div>';
+      echo '<div class="col-sm-9 mb-0 bg-two inputLabel">';
+      echo $subject_name . '[' . $subject_code . ']';
+      echo '</div>';
+
+      $sqlCO = "select co.* from course_outcome co where co.subject_id='$subject_id' and co.co_status='0' order by co.co_sno, co.co_code";
+      $resultCO = $conn->query($sqlCO);
+      while ($coArray = $resultCO->fetch_assoc()) {
+        $co_id = $coArray["co_id"];
+        $co_code = $coArray["co_code"];
+        $co_sno = $coArray["co_sno"];
+        $co_name = $coArray["co_name"];
+        $status = $coArray["co_status"];
+
+        echo '<div class="col-sm-1 cardBodyText">';
+        echo '<div><b>' . $co_code . $co_sno . '</b></div>';
+        echo '</div>';
+
+        echo '<div class="col-sm-10 cardBodyText">';
+        echo '<div class="cardBodyText"><b>' . $co_name . '</b></div>';
+        echo '</div>';
+
+        echo '<div class="col-sm-1">';
+        echo '<a href="#" class="float-right co_idE" data-id="' . $co_id . '"><i class="fa fa-edit"></i></a>';
+        if ($status == "9") echo '<a href="#" class="float-right co_idR" data-id="' . $co_id . '">Removed</a>';
+        else echo '<a href="#" class="float-right co_idD" data-id="' . $co_id . '"><i class="fa fa-trash"></i></a>';
+        echo '</div>';
+      }
+      echo '</div>';
+    }
+  } elseif ($_POST["action"] == "copoMap") {
+    //    echo "MyId- $myId";
+    $sql = "select * from program_outcome where program_id='$myProg' and batch_id='$myBatch' and po_status='0'";
+    $result = $conn->query($sql);
+    if ($result) {
+      $i = 0;
+      while ($row = $result->fetch_assoc()) {
+        $poArray[$i] = $row["po_id"];
+        $i++;
+      }
+      $totalPO = $i;
+    }
+
+    $sqlSub = "select sb.* from subject sb where sb.program_id='$myProg' and sb.batch_id='$myBatch' and sb.subject_status='0' and subject_semester>0 order by sb.subject_semester, sb.subject_sno";
+    $resultSub = $conn->query($sqlSub);
+    while ($subArray = $resultSub->fetch_assoc()) {
+      $subject_id = $subArray["subject_id"];
+      $subject_name = $subArray["subject_name"];
+      $subject_code = $subArray["subject_code"];
+
+      echo '<div class="row shadow border border-primary mb-1">';
+      echo '<div class="col-sm-3 mb-0 bg-two inputLabel">';
+      echo 'Sem ' . $subArray["subject_semester"];
+      echo '</div>';
+      echo '<div class="col-sm-9 mb-0 bg-two inputLabel">';
+      echo $subject_name . '[' . $subject_code . ']';
+      echo '</div>';
+
+      $sqlCO = "select co.* from course_outcome co where co.subject_id='$subject_id' and co.co_status='0' order by co.co_sno, co.co_code";
+      echo '<table class="table table-bordered list-table-xxs"><tr><td>CO</td>';
+      $count = 1;
+      for ($i = 0; $i < $totalPO; $i++) {
+        $po_id = $poArray[$i];
+        echo '<td><span>PO' . $count++ . ' </span></td>';
+      }
+      echo '</tr>';
+      echo '<tr>';
+      $resultCO = $conn->query($sqlCO);
+      while ($coArray = $resultCO->fetch_assoc()) {
+        $co_id = $coArray["co_id"];
+        $co_code = $coArray["co_code"];
+        $co_sno = $coArray["co_sno"];
+        echo '<td><b>' . $co_code . $co_sno . '</b></td>';
+        $count = 1;
+        for ($i = 0; $i < $totalPO; $i++) {
+          $po_id = $poArray[$i];
+          $sqlPO = "select * from copo_map where po_id='$po_id' and co_id='$co_id'";
+          echo '<td><span class="warning">' . getFieldValue($conn, "copo_scale", $sqlPO) . ' </span></td>';
+        }
+        echo '</tr>';
+      }
+      echo '</table>';
+      echo '</div>';
+    }
+  } elseif ($_POST["action"] == "selectSubject") {
     $sql = "select * from subject where subject_status='0' and program_id='$myProg' and batch_id='" . $_POST['batch_id'] . "' order by subject_semester, subject_name ";
     selectList($conn, 'Sel Subject', array('0', 'subject_id', 'subject_name', 'subject_code', 'sel_subject'), $sql);
   } elseif ($_POST['action'] == 'subReport') {

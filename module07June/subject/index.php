@@ -23,6 +23,8 @@ require('../../php_function.php');
             <a class="list-group-item list-group-item-action show active sub" id="list-sub-list" data-toggle="list" href="#list-sub" role="tab" aria-controls="sub"> Courses/Subjects </a>
             <a class="list-group-item list-group-item-action se" id="list-se-list" data-toggle="list" href="#list-se" role="tab" aria-controls="se">Session Electives</a>
             <a class="list-group-item list-group-item-action subReport" id="list-subReport-list" data-toggle="list" href="#list-subReport" role="tab" aria-controls="subReport"> Subject Report </a>
+            <a class="list-group-item list-group-item-action co" id="list-co-list" data-toggle="list" href="#list-co" role="tab" aria-controls="co"> Course Outcome </a>
+            <a class="list-group-item list-group-item-action copo" id="list-copo-list" data-toggle="list" href="#list-copo" role="tab" aria-controls="copo"> CO-PO Map </a>
           </div>
         </div>
         <div class="col-10">
@@ -77,6 +79,28 @@ require('../../php_function.php');
                 </div>
               </div>
             </div>
+
+            <div class="tab-pane fade show" id="list-co" role="tabpanel" aria-labelledby="list-co-list">
+              <div class="row">
+                <div class="col-sm-12">
+                  <button class="btn btn-sm btn-secondary addCO m-0">Add</button>
+                  <button class="btn btn-sm btn-primary uploadCo">Upload CO</button>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-9">
+                  <span style="text-align:left" id="coShowList"></span>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade show" id="list-copo" role="tabpanel" aria-labelledby="list-copo-list">
+              <div class="row">
+                <div class="col-sm-8">
+                  <span style="text-align:left" id="copoMap"></span>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -93,6 +117,7 @@ require('../../php_function.php');
 
     $('[data-toggle="tooltip"]').tooltip();
     $(".topBarTitle").text("Academics");
+    coList();
     subjectList();
     electiveList();
     subReport();
@@ -107,6 +132,11 @@ require('../../php_function.php');
 
     $(document).on('click', '.se', function() {
       electivePool();
+    });
+
+    $(document).on('click', '.co', function() {
+      $('#action').val("addCo");
+      coList();
     });
 
     $(document).on('submit', '#modalForm', function(event) {
@@ -186,6 +216,49 @@ require('../../php_function.php');
       }
     });
 
+    // Manage Course Outcome
+    $(document).on('click', '.addCO', function() {
+      x = $('#sel_subject').val();
+      //$.alert("x" + x);
+      $('#subjectIdModal').val(x);
+      $('#modal_title').text("Course Outcome");
+      $('#action').val("addCo");
+      $('#firstModal').modal('show');
+      $('.subjectForm').hide();
+      $('.batchForm').hide();
+      $('.sessionForm').hide();
+      $('.poForm').hide();
+      $('.coForm').show();
+      $("#modalForm")[0].reset();
+      $('.selectPanel').show();
+    });
+    $(document).on('click', '.co_idD', function() {
+      $.alert("Disabled");
+    });
+    $(document).on('click', '.co_idE', function() {
+      var id = $(this).attr('id');
+      // $.alert("Id " + id);
+      $.post("subjectSql.php", {
+        action: "fetchCo",
+        coId: id
+      }, () => {}, "json").done(function(data) {
+        //$.alert("List " + data);
+        $('#modal_title').text("Update CO [" + id + "]");
+        $("#coCode").val(data.co_code);
+        $("#coStatement").val(data.co_name);
+        $("#coSno").val(data.co_sno);
+        $("#action").val("updateCo");
+        $('#modalId').val(id);
+        $('#firstModal').modal('show');
+        $('.batchForm').hide();
+        $('.subjectForm').hide();
+        $('.poForm').hide();
+        $('.coForm').show();
+
+      }, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
     $(document).on("change", "#sel_subject", function() {
       var subject_id = $("#sel_subject").val();
       // $.alert("Changed Subject " + subject_id);
@@ -193,6 +266,9 @@ require('../../php_function.php');
       coList();
     });
 
+
+
+    
     // Manage Subject
     $(document).on('click', '.subject_idD', function() {
       var id = $(this).attr("data-id");
@@ -336,8 +412,8 @@ require('../../php_function.php');
       })
 
     });
-
     // Functions
+
     function subReport() {
       $.post("subjectSql.php", {
         action: "subReport",
@@ -423,6 +499,28 @@ require('../../php_function.php');
       }, "text").fail(function() {
         $.alert("Error !!");
       })
+    }
+
+    function coList() {
+      // $.alert("In List Function" + x);
+      $.post("subjectSql.php", {
+        action: "coList"
+      }, function(mydata, mystatus) {
+        $("#coShowList").show();
+        //$.alert("List " + mydata);
+        $("#coShowList").html(mydata);
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+      $.post("subjectSql.php", {
+        action: "copoMap"
+      }, function(mydata, mystatus) {
+        //$.alert("List " + mydata);
+        $("#copoMap").html(mydata);
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+
     }
 
     function programSelectList() {

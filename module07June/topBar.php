@@ -234,3 +234,55 @@ if (!isset($myBatch)) $myBatch = '';
 	});
 </script>
 
+<div class="modal" id="firstModal">
+	<div class="modal-dialog modal-md">
+		<form class="form-horizontal" id="modalForm">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<div class="staffForm">
+						<div class="row">
+							<div class="col-12 text-center">
+								<h4 class="modal-title" id="modal_title"></h4>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+								<div class="form-group">
+									Staff Name
+									<input type="text" class="form-control form-control-sm" id="sName" name="sName" placeholder="Staff Name">
+								</div>
+							</div>
+							<div class="col-6">
+								<div class="form-group">
+									Date of Joining
+									<input type="date" class="form-control form-control-sm" id="sDoj" name="sDoj" placeholder="Date of Joining">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-6">
+								<div class="form-group">
+									Email
+									<input type="text" class="form-control form-control-sm" id="sEmail" name="sEmail" placeholder="Staff Email Id">
+								</div>
+							</div>
+							<div class="col-6">
+								<div class="form-group">
+									Mobile Number
+									<input type="text" class="form-control form-control-sm" id="sMobile" name="sMobile" placeholder="Staff Mobile Number">
+								</div>
+							</div>
+						</div>
+					</div>
+					<input type="hidden" id="modalId" name="modalId">
+					<input type="hidden" id="action" name="action">
+					<input type="hidden" id="deptIdModal" name="deptIdModal">
+					<input type="hidden" id="stfIdModal" name="stfIdModal">
+					<button type="submit" class="btn btn-success btn-sm" id="submitModalForm">Submit</button>
+					<button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
+				</div> <!-- Modal Footer Closed-->
+			</div> <!-- Modal Conent Closed-->
+		</form>
+	</div> <!-- Modal Dialog Closed-->
+</div> <!-- Modal Closed-->

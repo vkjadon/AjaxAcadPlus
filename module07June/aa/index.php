@@ -24,6 +24,7 @@ require('../../php_function.php');
           <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
             <a class="list-group-item list-group-item-action active master" id="list-master-list" data-toggle="list" href="#list-master"> Academic Master Data </a>
             <a class="list-group-item list-group-item-action  bs" id="list-bs-list" data-toggle="list" href="#list-bs"> Batch/Session </a>
+            <a class="list-group-item list-group-item-action po" id="list-po-list" data-toggle="list" href="#list-po"> Programme Outcome </a>
           </div>
         </div>
         <div class="col-10">
@@ -198,6 +199,26 @@ require('../../php_function.php');
                 </div>
               </div>
             </div>
+            <div class="tab-pane fade show" id="list-po">
+              <div class="row">
+                <div class="col-sm-8">
+                  <button class="btn btn-sm btn-secondary m-0 addPo">Add PO</button>
+                  <button class="btn btn-sm btn-primary uploadPo">Upload PO</button>
+                  <div class="p-2" id="poShowList"></div>
+                </div>
+                <div class="col-sm-4 mt-2">
+                  <h5>PO Summary [Batch - <?php echo $myBatchName; ?>]</h5>
+                  <div id="poSummary"></div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="list-fs">
+
+              <div class="row">
+                <div class="col-sm-8">Form to add New Sp and Faculty List with Specialization
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -253,6 +274,11 @@ require('../../php_function.php');
     // Left Panel Block
     $(document).on('click', '.bs', function() {
       batchList();
+    });
+    $(document).on('click', '.po', function() {
+      $('#action').val("addPo");
+      poList();
+      poSummary();
     });
 
     $(document).on('click', '.respName', function(event) {
@@ -380,6 +406,46 @@ require('../../php_function.php');
       } else {
         $.alert(error_msg);
       }
+    });
+
+    // Manage Program Outcome
+    $(document).on('click', '.addPo', function() {
+      $('#modal_title').html("Add PO [<?php echo $myProgAbbri; ?> - <?php echo $myBatchName; ?>]");
+      $('#action').val("addPo");
+      $('#firstModal').modal('show');
+      $('.subjectForm').hide();
+      $('.batchForm').hide();
+      $('.poForm').show();
+      $('.coForm').hide();
+      $('.sessionForm').hide();
+      $('.selectPanel').show();
+      $("#modalForm")[0].reset();
+    });
+    $(document).on('click', '.po_idD', function() {
+      $.alert("Disabled");
+    });
+    $(document).on('click', '.po_idE', function() {
+      var id = $(this).attr('id');
+      $.alert("Id " + id);
+      $.post("aaSql.php", {
+        action: "fetchPo",
+        poId: id
+      }, () => {}, "json").done(function(data) {
+        //$.alert("List ");
+        $('#modal_title').text("Update PO [" + id + "]");
+        $("#poCode").val(data.po_code);
+        $("#poStatement").val(data.po_name);
+        $("#poSno").val(data.po_sno);
+        $("#action").val("updatePo");
+        $('#modalId').val(id);
+        $('#firstModal').modal('show');
+        $('.batchForm').hide();
+        $('.subjectForm').hide();
+        $('.poForm').show();
+        $('.coForm').hide();
+      }, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
     });
 
     // Manage Session
@@ -518,6 +584,18 @@ require('../../php_function.php');
       })
     }
 
+    function poList() {
+      $.post("aaSql.php", {
+        action: "poList"
+      }, function(mydata, mystatus) {
+        $("#poShowList").show();
+        //$.alert("List " + mydata);
+        $("#poShowList").html(mydata);
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+    }
+
     function masterNameList() {
       var headName = $("input[name='headName']:checked").val();
       //$.alert("Master Name " + headName);
@@ -529,6 +607,17 @@ require('../../php_function.php');
         $("#masterNameList").html(data);
         //$.alert("Updated");
       }).fail(function() {
+        $.alert("Error !!");
+      })
+    }
+
+    function poSummary() {
+      $.post("aaSql.php", {
+        action: "poSummary"
+      }, function(mydata, mystatus) {
+        //$.alert("List " + mydata);
+        $("#poSummary").html(mydata);
+      }, "text").fail(function() {
         $.alert("Error !!");
       })
     }
@@ -560,7 +649,163 @@ require('../../php_function.php');
       if (fmt == "dmY") return date;
       else return dateYmd;
     }
+
+    $(document).on('click', '.uploadPo', function() {
+      // $.alert("Upload PO");
+      $('#actionUpload').val('uploadPO')
+      $('#button_action').show().val('Update PO');
+      $('#formModal').modal('show');
+      $('#modal_uploadTitle').html("Upload PO [<?php echo $myProgAbbri . '-' . $myBatchName . ']'; ?>");
+    });
+    $(document).on('submit', '#upload_csv', function(event) {
+      event.preventDefault();
+      var formData = $(this).serialize();
+      $('#subjectList').hide();
+      //$.alert(formData);
+      // action and test_id are passed as hidden
+      $.ajax({
+        url: "uploadSubjectSql.php",
+        method: "POST",
+        data: new FormData(this),
+        contentType: false, // The content type used when sending data to the server.
+        cache: false, // To unable request pages to be cached
+        processData: false, // To send DOMDocument or non processed data file it is set to false
+        success: function(data) {
+          $.alert("List " + data);
+        }
+      })
+      $("#formModal")[0].reset;
+      $('#formModal').modal('hide');
+    });
+
+
   });
 </script>
+
+<!-- Modal Section-->
+<div class="modal" id="firstModal">
+  <div class="modal-dialog">
+    <form class="form-horizontal" id="modalForm">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal_title"></h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div> <!-- Modal Header Closed-->
+        <!-- Modal body -->
+        <div class="modal-body">
+          <div class="batchForm">
+            <div class="form-horizontal">
+              <div class="form-group">
+                <div class="row">
+                  <div class="col-sm-4">
+                    Batch<input type="text" class="form-control form-control-sm" id="newBatch" name="newBatch" placeholder="Batch">
+                  </div>
+                  <div class="col-sm-4">
+                    Batch<input type="text" class="form-control form-control-sm" id="newBatch" name="newBatch" placeholder="Batch">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sessionForm">
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group">
+                  Session Name
+                  <input type="text" class="form-control form-control-sm" id="session_name" name="session_name" placeholder="Session Name">
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  Session Remarks
+                  <input type="text" class="form-control form-control-sm" id="session_remarks" name="session_remarks" placeholder="Remarks">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                Start Date
+                <input type="date" class="form-control form-control-sm" id="session_start" name="session_start" placeholder="Strat Date" value="<?php echo $submit_date; ?>">
+              </div>
+              <div class="col-6">
+                End Date
+                <input type="date" class="form-control form-control-sm" id="session_end" name="session_end" placeholder="Strat Date" value="<?php echo $submit_date; ?>">
+              </div>
+            </div>
+          </div>
+
+          <div class="poForm">
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group">
+                  Enter Code
+                  <input type="text" class="form-control form-control-sm" id="poCode" name="poCode" placeholder="PO Code">
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  Serial Order of PO
+                  <input type="text" class="form-control form-control-sm" id="poSno" name="poSno" placeholder="Serial Order">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                PO statement
+                <input type="text" class="form-control form-control-sm" id="poStatement" name="poStatement" placeholder="Enter PO Statement">
+              </div>
+            </div>
+          </div>
+        </div> <!-- Modal Body Closed-->
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <input type="hidden" id="modalId" name="modalId">
+          <input type="hidden" id="action" name="action">
+          <input type="hidden" id="batchIdModal" name="batchIdModal">
+          <input type="hidden" id="programIdModal" name="programIdModal">
+          <button type="submit" class="btn btn-secondary" id="submitModalForm">Submit</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        </div> <!-- Modal Footer Closed-->
+      </div> <!-- Modal Conent Closed-->
+
+    </form>
+  </div> <!-- Modal Dialog Closed-->
+</div> <!-- Modal Closed-->
+
+<!-- Modal Section-->
+<div class="modal" id="formModal">
+  <div class="modal-dialog modal-md">
+    <form class="form-horizontal" id="upload_csv">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal_uploadTitle"></h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div> <!-- Modal Header Closed-->
+
+        <!-- Modal body -->
+        <div class="modal-body">
+          <div class="form-group">
+            <div class="row">
+              <div class="col-sm-10">
+                <input type="file" name="csv_upload" />
+              </div>
+            </div>
+          </div>
+        </div> <!-- Modal Body Closed-->
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <input type="hidden" name="action" id="actionUpload">
+          <input type="submit" name="button_action" id="button_action" class="btn btn-success btn-sm" />
+          <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+        </div> <!-- Modal Footer Closed-->
+      </div> <!-- Modal Conent Closed-->
+    </form>
+  </div> <!-- Modal Dialog Closed-->
+</div>
 
 </html>

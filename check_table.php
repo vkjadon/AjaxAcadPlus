@@ -212,6 +212,7 @@ function check_tn_respStaff($conn, $table)
     unit_id INT(4) NULL,
     rs_from_date DATE,
     rs_to_date DATE,
+    rs_remarks TEXT NULL,
     update_ts timestamp,
     update_id INT(5) NULL,
     rs_status INT(1) NULL,
