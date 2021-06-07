@@ -2,6 +2,7 @@ table.list-table-xs {
     width: 100%;
     border-collapse: collapse;
     padding-bottom: 0%;
+    color: rgba(63, 75, 97, 0.815);
 }
 
 table.list-table-xs th {
@@ -9,6 +10,7 @@ table.list-table-xs th {
     font-size: small;
     font-weight: bold;
     padding: 10px 10px 10px;
+    color: rgba(0, 0, 0, 0.815);
 }
 
 table.list-table-xs tr {

@@ -73,6 +73,35 @@ function check_tn_class($conn, $table)
   //else echo "Table Exists";
 }
 
+function check_tn_lt($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'lt_id INT(2) NOT NULL AUTO_INCREMENT,
+    lt_name VARCHAR(50) NULL,
+    lt_abbri VARCHAR(4) NULL,
+    lt_male INT(3) NULL,
+    lt_female INT(3) NULL,
+    lt_monthly INT(2) NULL,
+    lt_check INT(1) NULL,
+    lt_carry INT(1) NULL,
+    lt_max INT(3) NULL,
+    update_ts timestamp,
+    update_id INT(5) NULL,
+    lt_status INT(1) NULL,
+    PRIMARY KEY (lt_id),
+    UNIQUE(lt_name)';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+
 function check_tn_org($conn, $table)
 {
   $sql = "select * from $table";

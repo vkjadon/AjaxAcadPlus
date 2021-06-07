@@ -40,6 +40,9 @@ if (isset($mySes)) {
   $tn_eac = 'ea_claim'.$mySes;
   //check_tn_eac($conn, $tn_eac);
 
+  $tn_lt = 'leave_type';
+  check_tn_lt($conn, $tn_lt);
+  
   $tn_org = 'organization';
   check_tn_org($conn, $tn_org);
 
