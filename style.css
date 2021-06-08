@@ -15,8 +15,7 @@ body {
 }
 
 .bg-two {
-    background-color: #ced8e7;
-    columns: #1a4a77fd;
+    background-color: #999;
 }
 
 .bg-three {
@@ -195,6 +194,14 @@ textarea {
 
 
 /* a tag */
+
+#navbarDropdownMenuLink{
+    color: #fbfdff;
+}
+
+.navbar-brand{
+    color: #ffee00;
+}
 
 .atag {
     padding: 4px;
