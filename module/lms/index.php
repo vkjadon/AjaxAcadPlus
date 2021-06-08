@@ -88,6 +88,9 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
         </div>
       </div>
     </div>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <?php require("../bottom_bar.php"); ?>
   </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>

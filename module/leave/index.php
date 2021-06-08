@@ -274,21 +274,6 @@ if ($result) {
             </div>
           </div>
 
-          <div class="tab-pane fade" id="list-laf" role="tabpanel" aria-labelledby="list-laf-list">
-            <div class="card">
-              <div class="card-header">
-                <h5>Compensatory Claim Request</h5>
-              </div>
-
-              <div class="card-body">
-                <p id="ccfForwarderPendingTitle"></p>
-                <p id="ccfForwarderPendingList"></p>
-                <p id="ccfApproverPendingTitle"></p>
-                <p id="ccfApproverPendingList"></p>
-              </div>
-            </div>
-          </div>
-
           <div class="tab-pane fade" id="list-lf" role="tabpanel" aria-labelledby="list-lf-list">
             <div class="row">
               <div class="col-5">
@@ -298,6 +283,9 @@ if ($result) {
                     <li class="nav-item">
                       <a class="nav-link active" id="pills_leaveForm" data-toggle="pill" href="#pills_form" role="tab" aria-controls="pills_form" aria-selected="true">Leave Form</a>
                     </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="pills_leaveBalance" data-toggle="pill" href="#pills_balance" role="tab" aria-controls="pills_balance" aria-selected="true">Leave Balance</a>
+                    </li>
                   </ul> <!-- content -->
                   <div class="tab-content" id="pills-tabContent p-3">
                     <div class="tab-pane fade show active" id="pills_form" role="tabpanel" aria-labelledby="pills_leaveForm">
@@ -305,28 +293,15 @@ if ($result) {
                         <div class="row">
                           <div class="col-6">
                             <div class="form-group">
-                              <label>FROM DATE </label>
-                              <input type="date" class="form-control form-control-sm" id="leaveFromDate" name="leaveFromDate" placeholder="">
+                              <label>From </label>
+                              <input type="datetime-local" class="form-control form-control-sm" id="leaveFromDate" name="leaveFromDate" value="<?php echo date("d-m-Y h:i:s", time());?>">
                             </div>
                           </div>
+                          
                           <div class="col-6">
                             <div class="form-group">
-                              <label>TO DATE</label>
-                              <input type="date" class="form-control form-control-sm" id="leaveToDate" name="leaveToDate" placeholder="">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-6">
-                            <div class="form-group">
-                              <label>FROM TIME</label>
-                              <input type="time" class="form-control form-control-sm" id="leaveFromTime" name="leaveFromTime" placeholder="">
-                            </div>
-                          </div>
-                          <div class="col-6">
-                            <div class="form-group">
-                              <label>TO TIME</label>
-                              <input type="time" class="form-control form-control-sm" id="leaveToTime" name="leaveToTime" placeholder="">
+                              <label>To</label>
+                              <input type="datetime-local" class="form-control form-control-sm" id="leaveToDate" name="leaveToDate" value="<?php echo date("d-m-Y h:i:s", time());?>">
                             </div>
                           </div>
                         </div>
@@ -364,42 +339,53 @@ if ($result) {
                         <button type="submit" class="btn btn-sm">Submit</button>
                       </form>
                     </div>
+                    <div class="tab-pane fade" id="pills_balance" role="tabpanel" aria-labelledby="pills_balance">
+                      <div class="row">
+                        <div class="col-12">
+                          <table class="table table-striped list-table-xs mt-2" id="leaveBalanceTable">
+                            <tr class="align-center">
+                              <th>Leave Type </th>
+                              <th>Credit</th>
+                              <th>Debit</th>
+                              <th>Balance</th>
+                            </tr>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
               <div class="col-7">
-                <div class="container card shadow d-flex justify-content-center mt-2">
-                  <h2 class="card-header-title mt-2">Leave Balance</h2>
-                  <table class="table table-bordered table-striped list-table-sm mt-2" id="leaveBalanceTable">
+                <div class="container card shadow mt-2 ml-0 myCard">
+                  <label>Leave Application Status</label>
+                  <table class="table table-striped list-table-xs mt-2" id="leaveApplicationTable">
                     <tr class="align-center">
-                      <th>Leave Type </th>
-                      <th>Credit</th>
-                      <th>Debit</th>
-                      <th>Balance</th>
+                      <th>Id</th>
+                      <th>From</th>
+                      <th>To</th>
+                      <th>Days</th>
+                      <th>Type</th>
+                      <th>Submit</th>
+                      <th>Status</th>
+                      <th>Action</th>
                     </tr>
                   </table>
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-12">
-                <div class="container card shadow d-flex justify-content-center mt-2 ml-0">
-                  <h2 class="card-header-title mt-2">Leave Application Status</h2>
-                  <table class="table table-bordered table-striped list-table-sm mt-2" id="leaveApplicationTable">
-                    <tr class="align-center">
-                      <th>ID</th>
-                      <th>FROM</th>
-                      <th>TO</th>
-                      <th>LD</th>
-                      <th>Leave Type</th>
-                      <th>Apply Date</th>
-                      <th>Apply Time</th>
-                      <th>Load Status</th>
-                      <th>Approval Status</th>
-                      <th>Action</th>
-                    </tr>
-                  </table>
-                </div>
+          </div>
+          <div class="tab-pane fade" id="list-laf" role="tabpanel" aria-labelledby="list-laf-list">
+            <div class="card">
+              <div class="card-header">
+                <h5>Compensatory Claim Request</h5>
+              </div>
+
+              <div class="card-body">
+                <p id="ccfForwarderPendingTitle"></p>
+                <p id="ccfForwarderPendingList"></p>
+                <p id="ccfApproverPendingTitle"></p>
+                <p id="ccfApproverPendingList"></p>
               </div>
             </div>
           </div>
@@ -540,6 +526,7 @@ if ($result) {
         </div>
       </div>
     </div>
+    <?php require("../bottom_bar.php");?>
   </div>
 </body>
 

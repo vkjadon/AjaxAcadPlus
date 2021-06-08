@@ -121,26 +121,12 @@ if ($_POST['action'] == 'addLeaveType') {
   $result = $conn->query($sql);
   $output = $result->fetch_assoc();
   echo json_encode($output);
-} elseif ($_POST['action'] == 'leaveSetupList') {
-  $sql = "select ls.*, lt.lt_name from leave_setup ls, leave_type lt where lt.lt_id=ls.lt_id order by ls_year desc, ls_month desc";
-  $result = $conn->query($sql);
-  $json_array = array();
-  while ($rowArray = $result->fetch_assoc()) {
-    $json_array[] = $rowArray;
-  }
-  echo json_encode($json_array);
 } elseif ($_POST['action'] == 'setCurrentLeaveYear') {
   $sql = "update leave_year set ly_status='A'";
   $result = $conn->query($sql);
   $id  = $_POST['id'];
   $sql = "update leave_year set ly_status='C' where ly_id = '$id' ";
   $result = $conn->query($sql);
-} elseif ($_POST['action'] == 'fetchLeaveSetup') {
-  $id = $_POST['lsId'];
-  $sql = "select ls.*, lt.lt_name FROM leave_setup ls, leave_type lt where lt.lt_id=ls.lt_id and ls.ls_id='$id'";
-  $result = $conn->query($sql);
-  $output = $result->fetch_assoc();
-  echo json_encode($output);
 } elseif ($_POST['action'] == 'addLeaveSetup') {
   $ls_year = $_POST['lsYear'];
   $ls_month = $_POST['sel_month'];
@@ -153,6 +139,20 @@ if ($_POST['action'] == 'addLeaveType') {
   $conn->query($sql);
   echo $conn->error;
 
+} elseif ($_POST['action'] == 'leaveSetupList') {
+  $sql = "select ls.*, lt.lt_name from leave_setup ls, leave_type lt where lt.lt_id=ls.lt_id order by ls_year desc, ls_month desc";
+  $result = $conn->query($sql);
+  $json_array = array();
+  while ($rowArray = $result->fetch_assoc()) {
+    $json_array[] = $rowArray;
+  }
+  echo json_encode($json_array);
+} elseif ($_POST['action'] == 'fetchLeaveSetup') {
+  $id = $_POST['lsId'];
+  $sql = "select ls.*, lt.lt_name FROM leave_setup ls, leave_type lt where lt.lt_id=ls.lt_id and ls.ls_id='$id'";
+  $result = $conn->query($sql);
+  $output = $result->fetch_assoc();
+  echo json_encode($output);
 } elseif ($_POST['action'] == 'addStaffLeave') {
   $leaveFromDate = $_POST['leaveFromDate'];
   $leaveToDate = $_POST['leaveToDate'];
