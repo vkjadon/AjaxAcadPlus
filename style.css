@@ -7,7 +7,7 @@ body {
     padding-top: 20px;
 }
 .folder {
-    color: rgba(235, 222, 48, 0.726);
+    color: rgb(235, 223, 48);
 }
 
 .bg-one {
@@ -199,8 +199,12 @@ textarea {
     color: #fbfdff;
 }
 
+#navbarDropdownMenuLink-333{
+    color: #1ffdea;
+}
+
 .navbar-brand{
-    color: #ffee00;
+    color: #00ffff;
 }
 
 .atag {
@@ -238,6 +242,8 @@ textarea {
 
 .list-group-mine .active {
     background-color: #999;
+    color: #00ffff;
+
 }
 
 .nav-link {

@@ -232,10 +232,10 @@ if ($result) {
                           ?>
                         </div>
                         <div class="row">
-                        <div class="col-4">
+                          <div class="col-4">
                             <div class="form-group">
                               <label>Year</label>
-                              <input type="number" class="form-control form-control-sm" id="lsMale" name="lsMale" min="2020" value="<?php echo date("Y", time());?>">
+                              <input type="number" class="form-control form-control-sm" id="lsYear" name="lsYear" min="2020" value="<?php echo date("Y", time()); ?>">
                             </div>
                           </div>
                           <div class="col-4">
@@ -252,9 +252,9 @@ if ($result) {
                           </div>
                         </div>
                     </div>
-                    <input type="hidden" id="actionLeaveSetup" name="action">
-                    <input type="hidden" id="lyIdHidden" name="lyIdHidden" value="<?php echo $ly_id ?>">
-                    <button class="btn btn-sm m-0 addLeaveSetup" type="submit">Submit</button>
+                    <input type="hidden" id="lsId" name="lsId" value="0">
+                    <input type="hidden" id="actionLeaveSetup" name="action" value="addLeaveSetup">
+                    <button class="btn btn-sm m-0" type="submit">Submit</button>
                     </form>
                   </div>
                 </div>
@@ -265,6 +265,7 @@ if ($result) {
                     <th><i class="fas fa-edit"></i></th>
                     <th>Leave Type</th>
                     <th>Month</th>
+                    <th>Year</th>
                     <th>Male</th>
                     <th>Female</th>
                   </table>
@@ -655,7 +656,6 @@ if ($result) {
       $('#leaveTypeTable').show();
       $('#leaveDurationTable').hide();
     });
-
     $(document).on('submit', '#leaveTypeForm', function(event) {
       event.preventDefault(this);
       //$.alert("Form Submitted ");
@@ -769,6 +769,16 @@ if ($result) {
         $.alert("Could Not Fetch");
       })
     });
+    $(document).on('click', '.currentLeaveYear', function() {
+      var id = $(this).attr("data-leaveYearButton");
+      $.alert('hello' + id);
+      $.post("leaveSql.php", {
+        id: id,
+        action: "setCurrentLeaveYear"
+      }, function(data) {}, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
 
     function leaveYearTable() {
       // Leave Year Table
@@ -791,21 +801,26 @@ if ($result) {
       })
     }
 
-    $(document).on('click', '.currentLeaveYear', function() {
-      var id = $(this).attr("data-leaveYearButton");
-      $.alert('hello' + id);
-      $.post("leaveSql.php", {
-        id: id,
-        action: "setCurrentLeaveYear"
-      }, function(data) {}, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
     // Leave Credit
     $(document).on('click', '.lc', function() {
 
     });
+
+    $(document).on('submit', '#addLeaveSetup', function() {
+      event.preventDefault(this);
+      if ($("#sel_month").val() === null) $.alert("Month Required !!");
+      else if ($("#sel_lt").val() === null) $.alert(" Leave Type Required !!");
+      else {
+        var formData = $(this).serialize();
+        $.alert("Form Submitted " + formData)
+        $.post("leaveSql.php", formData, function() {}, "text").done(function(data, success) {
+          //$.alert(data)
+          $("#addLeaveSetup")[0].reset();
+          leaveSetupTable()
+        })
+      }
+    });
+
     $(document).on('click', '.editLeaveSetup', function() {
       var id = $(this).attr('data-leaveSetup');
       $.alert("Id " + id);
@@ -815,6 +830,7 @@ if ($result) {
       }, () => {}, "json").done(function(data) {
         $('#sel_month').val(data.ls_month);
         $('#sel_lt').val(data.lt_id);
+        $('#lsYear').val(data.ls_year);
         $('#lsMale').val(data.ls_male);
         $('#lsFemale').val(data.ls_female);
         $('#lsId').val(id);
@@ -833,6 +849,7 @@ if ($result) {
           leave_setup += '<td><a href="#" class="fas fa-edit editLeaveSetup" data-leaveSetup="' + value.ls_id + '"></a></td>';
           leave_setup += '<td>' + value.lt_name + '</td>';
           leave_setup += '<td>' + GetMonthName(value.ls_month) + '</td>';
+          leave_setup += '<td>' + value.ls_year + '</td>';
           leave_setup += '<td>' + value.ls_male + '</td>';
           leave_setup += '<td>' + value.ls_female + '</td>';
           leave_setup += '</tr>';
@@ -883,18 +900,6 @@ if ($result) {
       })
     });
 
-    $(document).on('submit', '#addLeaveSetup', function() {
-      event.preventDefault(this);
-      var sel_month = $('#sel_month').val()
-      var lt = $('#sql_lt').val()
-      $("#actionLeaveSetup").val("addLeaveSetup")
-      var formData = $(this).serialize();
-      // $.alert("Form Submitted " + formData)
-      $.post("leaveSql.php", formData, function() {}, "text").done(function(data, success) {
-        // $.alert(data)
-        leaveSetupTable()
-      })
-    });
 
     $(document).on('click', '#pills_leaveType', function() {
       $('#leaveYearTable').hide();
