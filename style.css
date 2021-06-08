@@ -10,7 +10,7 @@ body {
     color: rgba(235, 222, 48, 0.726);
 }
 
-.grey-bg {
+.bg-one {
     background-color: #fbfdff;
 }
 
@@ -19,7 +19,7 @@ body {
     columns: #1a4a77fd;
 }
 
-.bg-one {
+.bg-three {
     background-color: #699bcafd;
 }
 
@@ -226,11 +226,11 @@ textarea {
 
 .list-group-mine .list-group-item:hover {
     background-color: rgb(221, 224, 226);
-    border-color: rgb(114, 28, 212);
+    /* border-color: rgb(114, 28, 212); */
 }
 
 .list-group-mine .active {
-    border-color: rgb(42, 67, 207);
+    background-color: #999;
 }
 
 .nav-link {
