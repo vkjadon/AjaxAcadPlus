@@ -203,7 +203,7 @@ if ($result) {
           <div class="tab-pane fade" id="list-lc" role="tabpanel" aria-labelledby="list-lc-list">
             <div class="row">
               <div class="col-5">
-                <div class="container card shadow d-flex justify-content-center mt-2" id="card_leave">
+                <div class="container card myCard mt-2">
                   <!-- nav options -->
                   <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
                     <li class="nav-item">
@@ -289,7 +289,7 @@ if ($result) {
           <div class="tab-pane fade" id="list-lf" role="tabpanel" aria-labelledby="list-lf-list">
             <div class="row">
               <div class="col-5">
-                <div class="container card shadow d-flex justify-content-center mt-2" id="card_leave">
+                <div class="container card mt-2 myCard">
                   <!-- nav options -->
                   <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
                     <li class="nav-item">
