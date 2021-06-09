@@ -216,6 +216,7 @@ require('../../php_function.php');
         </div>
       </div>
     </div>
+    <?php require("../bottom_bar.php");?>
   </div>
   <h1>&nbsp;</h1>
 </body>

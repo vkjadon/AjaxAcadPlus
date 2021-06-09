@@ -18,7 +18,7 @@ require('../../php_function.php');
 
 <head>
   <title>Outcome Based Education : ClassConnect</title>
-  <?php require("../css.php");?>
+  <?php require("../css.php"); ?>
 
 </head>
 
@@ -79,10 +79,14 @@ require('../../php_function.php');
         </div>
       </div>
     </div>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <?php require("../bottom_bar.php"); ?>
+
   </div>
 </body>
 
-<?php require("../js.php");?>
+<?php require("../js.php"); ?>
 
 
 <script>
@@ -96,9 +100,9 @@ require('../../php_function.php');
     });
 
     $(document).on('change', '#sel_program', function() {
-      var programId=$("#sel_program").val();
+      var programId = $("#sel_program").val();
       //$.alert("Program " + programId);
-      if(programId=="ALL")$.alert("ALL Program Disabled!!");
+      if (programId == "ALL") $.alert("ALL Program Disabled!!");
       else classSelectList();
     });
 
@@ -196,10 +200,10 @@ require('../../php_function.php');
     });
 
     function classSelectList() {
-      var programId=$("#sel_program").val();
+      var programId = $("#sel_program").val();
       //$.alert("In Class List " + programId);
       $.post("attendanceReportSql.php", {
-        programId:programId,
+        programId: programId,
         action: "class"
       }, function(data, status) {
         //$.alert("Success " + data);
@@ -208,6 +212,7 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
+
     function programSelectList() {
       //$.alert("In program List");
       $.post("attendanceReportSql.php", {
@@ -218,9 +223,10 @@ require('../../php_function.php');
       }, "text").fail(function() {
         $.alert("Error !!");
       })
-    }    
+    }
+
     function classStudentList() {
-      var classId=$("#sel_class").val();
+      var classId = $("#sel_class").val();
       //$.alert("In Class Student List");
       $.post("attendanceReportSql.php", {
         classId: classId,
@@ -244,6 +250,7 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
+
     function sasEACReport() {
       //$.alert("In SAS Claim Report");
       $.post("attendanceReportSql.php", {
@@ -255,6 +262,7 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
+
     function eaClaimList() {
       //$.alert("In Claim List");
       $.post("approvalSql.php", {
@@ -266,6 +274,7 @@ require('../../php_function.php');
         $.alert("Error !!");
       })
     }
+
     function getFormattedDate(ts, fmt) {
       var a = new Date(ts);
       var day = a.getDate();

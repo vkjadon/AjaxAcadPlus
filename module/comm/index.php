@@ -76,6 +76,9 @@ require('../../php_function.php');
         </div>
       </div>
     </div>
+    <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <?php require("../bottom_bar.php");?>
   </div>
 </body>
 <?php require("../js.php");?>

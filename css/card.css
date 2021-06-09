@@ -76,8 +76,9 @@
   }
 
   .myCard .btn {
-   color: white;
+   color: rgb(145, 236, 236);
    float: right;
-   background-color: #228B22;
+   font-weight: bold;
+   background-color: #4d5252cb;
 
   }

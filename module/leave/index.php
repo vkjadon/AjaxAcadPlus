@@ -24,25 +24,33 @@ if ($result) {
   <?php require("../css.php"); ?>
   <link rel="stylesheet" href="leave.css">
 </head>
+<style>
+  .full-height {
+    height: 700px;
+    background: white;
+  }
+</style>
 
 <body>
   <?php require("../topBar.php"); ?>
 
   <div class="container-fluid moduleBody">
     <div class="row">
-      <div class="col-2">
+      <div class="col-2 p-0 m-0 pl-2 full-height">
+        <div class="mt-3">
+          <h5>Leave</h5>
+        </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-          <a class="list-group-item list-group-item-action active lt" id="list-lt-list" data-toggle="list" href="#list-lt" role="tab" aria-controls="lt">Leave Type</a>
+          <a class="list-group-item list-group-item-action active lt" id="list-lt-list" data-toggle="list" href="#list-lt" role="tab" aria-controls="lt">Master Data</a>
+          <a class="list-group-item list-group-item-action ss" id="list-ss-list" data-toggle="list" href="#list-ss" role="tab" aria-controls="ss">Special Staff</a>
           <a class="list-group-item list-group-item-action lc" id="list-lc-list" data-toggle="list" href="#list-lc" role="tab" aria-controls="lc">Leave Credit</a>
           <a class="list-group-item list-group-item-action lf" id="list-lf-list" data-toggle="list" href="#list-lf" role="tab" aria-controls="lf">Leave Form</a>
-          <a class="list-group-item list-group-item-action ss" id="list-ss-list" data-toggle="list" href="#list-ss" role="tab" aria-controls="ss">Special Staff</a>
-          <a class="list-group-item list-group-item-action ccfList" id="list-ccf-list" data-toggle="list" href="#list-ccf" role="tab" aria-controls="ccf">Compensatory Claim Form/Status</a>
-          <a class="list-group-item list-group-item-action ccfApprove" id="list-laf-list" data-toggle="list" href="#list-laf" role="tab" aria-controls="laf">Leave Forward/Approve Request</a>
+          <a class="list-group-item list-group-item-action ccfApprove" id="list-laf-list" data-toggle="list" href="#list-laf" role="tab" aria-controls="laf">Process Leave</a>
           <a class="list-group-item list-group-item-action leaveReport" id="list-lr-list" data-toggle="list" href="#list-lr" role="tab" aria-controls="lr">Leave Report</a>
         </div>
       </div>
 
-      <div class="col-10">
+      <div class="col-10 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane fade show active" id="list-lt" role="tabpanel" aria-labelledby="list-lt-list">
             <div class="row">
@@ -194,7 +202,7 @@ if ($result) {
           <div class="tab-pane fade" id="list-lc" role="tabpanel" aria-labelledby="list-lc-list">
             <div class="row">
               <div class="col-5">
-                <div class="container card shadow d-flex justify-content-center mt-2" id="card_leave">
+                <div class="container card myCard mt-2">
                   <!-- nav options -->
                   <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
                     <li class="nav-item">
@@ -232,10 +240,10 @@ if ($result) {
                           ?>
                         </div>
                         <div class="row">
-                        <div class="col-4">
+                          <div class="col-4">
                             <div class="form-group">
                               <label>Year</label>
-                              <input type="number" class="form-control form-control-sm" id="lsMale" name="lsMale" min="2020" value="<?php echo date("Y", time());?>">
+                              <input type="number" class="form-control form-control-sm" id="lsYear" name="lsYear" min="2020" value="<?php echo date("Y", time()); ?>">
                             </div>
                           </div>
                           <div class="col-4">
@@ -252,19 +260,23 @@ if ($result) {
                           </div>
                         </div>
                     </div>
-                    <input type="hidden" id="actionLeaveSetup" name="action">
-                    <input type="hidden" id="lyIdHidden" name="lyIdHidden" value="<?php echo $ly_id ?>">
-                    <button class="btn btn-sm m-0 addLeaveSetup" type="submit">Submit</button>
+                    <input type="hidden" id="lsId" name="lsId" value="0">
+                    <input type="hidden" id="actionLeaveSetup" name="action" value="addLeaveSetup">
+                    <button class="btn btn-sm m-0" type="submit">Submit</button>
                     </form>
                   </div>
                 </div>
               </div>
               <div class="col-7">
-                <div class="container card shadow d-flex justify-content-center mt-2">
-                  <table class="table table-bordered table-striped list-table-xs mt-3" id="leaveSetupTable">
+                <div class="container card shadow mt-2 mb-2 myCard">
+                  <label>Leave Credit</label>
+                </div>
+                <div class="container card shadow m-0 myCard">
+                  <table class="table table-bordered table-striped list-table-xs mt-3 leaveSetupTable" id="leaveSetupTable">
                     <th><i class="fas fa-edit"></i></th>
                     <th>Leave Type</th>
                     <th>Month</th>
+                    <th>Year</th>
                     <th>Male</th>
                     <th>Female</th>
                   </table>
@@ -273,29 +285,20 @@ if ($result) {
             </div>
           </div>
 
-          <div class="tab-pane fade" id="list-laf" role="tabpanel" aria-labelledby="list-laf-list">
-            <div class="card">
-              <div class="card-header">
-                <h5>Compensatory Claim Request</h5>
-              </div>
-
-              <div class="card-body">
-                <p id="ccfForwarderPendingTitle"></p>
-                <p id="ccfForwarderPendingList"></p>
-                <p id="ccfApproverPendingTitle"></p>
-                <p id="ccfApproverPendingList"></p>
-              </div>
-            </div>
-          </div>
-
           <div class="tab-pane fade" id="list-lf" role="tabpanel" aria-labelledby="list-lf-list">
             <div class="row">
               <div class="col-5">
-                <div class="container card shadow d-flex justify-content-center mt-2" id="card_leave">
+                <div class="container card mt-2 myCard">
                   <!-- nav options -->
                   <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
                     <li class="nav-item">
                       <a class="nav-link active" id="pills_leaveForm" data-toggle="pill" href="#pills_form" role="tab" aria-controls="pills_form" aria-selected="true">Leave Form</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" id="pills_leaveBalance" data-toggle="pill" href="#pills_balance" role="tab" aria-controls="pills_balance" aria-selected="true">Leave Balance</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link pills_cpl" data-toggle="pill" href="#pills_cpl" role="tab" aria-controls="pills_claim" aria-selected="true">CPL Claim</a>
                     </li>
                   </ul> <!-- content -->
                   <div class="tab-content" id="pills-tabContent p-3">
@@ -304,40 +307,27 @@ if ($result) {
                         <div class="row">
                           <div class="col-6">
                             <div class="form-group">
-                              <label>FROM DATE </label>
-                              <input type="date" class="form-control form-control-sm" id="leaveFromDate" name="leaveFromDate" placeholder="">
+                              <label>From </label>
+                              <input type="datetime-local" class="form-control form-control-sm" id="leaveFrom" name="leaveFrom" value="<?php echo date("d-m-Y h:i:s", time()); ?>">
                             </div>
                           </div>
+
                           <div class="col-6">
                             <div class="form-group">
-                              <label>TO DATE</label>
-                              <input type="date" class="form-control form-control-sm" id="leaveToDate" name="leaveToDate" placeholder="">
+                              <label>To</label>
+                              <input type="datetime-local" class="form-control form-control-sm" id="leaveTo" name="leaveTo" value="<?php echo date("d-m-Y h:i:s", time()); ?>">
                             </div>
                           </div>
                         </div>
                         <div class="row">
                           <div class="col-6">
-                            <div class="form-group">
-                              <label>FROM TIME</label>
-                              <input type="time" class="form-control form-control-sm" id="leaveFromTime" name="leaveFromTime" placeholder="">
-                            </div>
-                          </div>
-                          <div class="col-6">
-                            <div class="form-group">
-                              <label>TO TIME</label>
-                              <input type="time" class="form-control form-control-sm" id="leaveToTime" name="leaveToTime" placeholder="">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-12">
                             <div class="form-group">
                               <label>Leave Type</label>
                               <?php
                               $sql_lt = "select * from leave_type";
                               $result = $conn->query($sql_lt);
                               if ($result) {
-                                echo '<select class="form-control form-control-sm" name="leaveTypeStaff" id="leaveTypeStaff" required>';
+                                echo '<select class="form-control form-control-sm" name="sel_lt" id="sel_lt" required>';
                                 echo '<option selected disabled>Select Leave Type</option>';
                                 while ($rows = $result->fetch_assoc()) {
                                   $select_id = $rows['lt_id'];
@@ -350,16 +340,67 @@ if ($result) {
                               ?>
                             </div>
                           </div>
+                          <div class="col-6">
+                            <div class="form-group">
+                              <label>Days</label>
+                              <input type="number" class="form-control form-control-sm" id="leaveDays" name="leaveDays" step="0.25" value="1">
+                            </div>
+                          </div>
                         </div>
                         <div class="row">
                           <div class="col-12">
                             <div class="form-group">
                               <label>Reason</label>
-                              <textarea class="form-control" id="leaveReason" name="leaveReason" rows="3"></textarea>
+                              <input type="text" class="form-control form-control-sm" id="leaveReason" name="leaveReason">
                             </div>
                           </div>
                         </div>
-                        <input type="hidden" id="actionLeaveForm" name="actionLeaveForm">
+                        <input type="hidden" id="actionLeaveForm" name="action" value="addLeave">
+                        <button type="submit" class="btn btn-sm">Submit</button>
+                      </form>
+                    </div>
+                    <div class="tab-pane fade" id="pills_balance" role="tabpanel" aria-labelledby="pills_balance">
+                      <div class="row">
+                        <div class="col-12">
+                          <table class="table table-striped list-table-xs mt-2" id="leaveBalanceTable">
+                            <tr class="align-center">
+                              <th>Leave Type </th>
+                              <th>Credit</th>
+                              <th>Debit</th>
+                              <th>Balance</th>
+                            </tr>
+                          </table>
+                          <a href="#" class="atag leaveCredit">Credit Details</a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills_cpl" role="tabpanel" aria-labelledby="pills_cpl">
+                      <form class="form-horizontal" id="cplForm">
+                        <div class="row">
+                          <div class="col-6">
+                            <div class="form-group">
+                              <label>CPL Date </label>
+                              <input type="date" class="form-control form-control-sm" id="cplDate" name="cplDate" value="<?php echo $submit_date; ?>">
+                            </div>
+                          </div>
+
+                          <div class="col-6">
+                            <div class="form-group">
+                              <label>Order Reference</label>
+                              <input type="text" class="form-control form-control-sm" id="cplOrder" name="cplOrder" placeholder="Reference of Duty Order">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="form-group">
+                              <label>Reason</label>
+                              <input type="text" class="form-control form-control-sm" id="cplReason" name="cplReason">
+                            </div>
+                          </div>
+                        </div>
+                        <input type="hidden" id="actionCPLForm" name="action" value="addCPL">
                         <button type="submit" class="btn btn-sm">Submit</button>
                       </form>
                     </div>
@@ -367,38 +408,54 @@ if ($result) {
                 </div>
               </div>
               <div class="col-7">
-                <div class="container card shadow d-flex justify-content-center mt-2">
-                  <h2 class="card-header-title mt-2">Leave Balance</h2>
-                  <table class="table table-bordered table-striped list-table-sm mt-2" id="leaveBalanceTable">
+                <div class="container card shadow mt-2 mb-2 myCard">
+                  <label><span class="leaveTableTitle" id="leaveTableTitle">Leave Application Status</span></label>
+                </div>
+                <div class="container card shadow m-0 myCard">
+                  <table class="table table-striped list-table-xs mt-2" id="leaveApplicationTable">
                     <tr class="align-center">
-                      <th>Leave Type </th>
-                      <th>Credit</th>
-                      <th>Debit</th>
-                      <th>Balance</th>
+                      <th>Id</th>
+                      <th>From</th>
+                      <th>To</th>
+                      <th>Days</th>
+                      <th>Type</th>
+                      <th>Submit</th>
+                      <th>Status</th>
+                      <th>Action</th>
                     </tr>
+                  </table>
+                  <table class="table table-bordered table-striped list-table-xs mt-3 leaveSetupTable">
+                    <th><i class="fas fa-edit"></i></th>
+                    <th>Leave Type</th>
+                    <th>Month</th>
+                    <th>Year</th>
+                    <th>Male</th>
+                    <th>Female</th>
+                  </table>
+
+                  <table class="table table-bordered table-striped list-table-xs mt-3 cplTable">
+                    <th><i class="fas fa-edit"></i></th>
+                    <th>Claim Date</th>
+                    <th>Order</th>
+                    <th>Reason</th>
+                    <th>Claimed On</th>
+                    <th>Status</th>
                   </table>
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-12">
-                <div class="container card shadow d-flex justify-content-center mt-2 ml-0">
-                  <h2 class="card-header-title mt-2">Leave Application Status</h2>
-                  <table class="table table-bordered table-striped list-table-sm mt-2" id="leaveApplicationTable">
-                    <tr class="align-center">
-                      <th>ID</th>
-                      <th>FROM</th>
-                      <th>TO</th>
-                      <th>LD</th>
-                      <th>Leave Type</th>
-                      <th>Apply Date</th>
-                      <th>Apply Time</th>
-                      <th>Load Status</th>
-                      <th>Approval Status</th>
-                      <th>Action</th>
-                    </tr>
-                  </table>
-                </div>
+          </div>
+          <div class="tab-pane fade" id="list-laf" role="tabpanel" aria-labelledby="list-laf-list">
+            <div class="card">
+              <div class="card-header">
+                <h5>Compensatory Claim Request</h5>
+              </div>
+
+              <div class="card-body">
+                <p id="ccfForwarderPendingTitle"></p>
+                <p id="ccfForwarderPendingList"></p>
+                <p id="ccfApproverPendingTitle"></p>
+                <p id="ccfApproverPendingList"></p>
               </div>
             </div>
           </div>
@@ -539,6 +596,7 @@ if ($result) {
         </div>
       </div>
     </div>
+    <?php require("../bottom_bar.php"); ?>
   </div>
 </body>
 
@@ -548,9 +606,10 @@ if ($result) {
   $(document).ready(function() {
 
     leaveTypeList();
-    leaveYearTable();
-    //leaveApplicationStatusTable();
     leaveSetupTable();
+    leaveApplicationTable();
+    cplTable();
+
     $('#leaveYearTable').hide();
 
     $('#staffSearch').keyup(function() {
@@ -655,7 +714,11 @@ if ($result) {
       $('#leaveTypeTable').show();
       $('#leaveDurationTable').hide();
     });
-
+    $(document).on('click', '#pills_leaveType', function() {
+      $('#leaveYearTable').hide();
+      $('#leaveTypeTable').show();
+      $('#leaveDurationTable').hide();
+    });
     $(document).on('submit', '#leaveTypeForm', function(event) {
       event.preventDefault(this);
       //$.alert("Form Submitted ");
@@ -738,6 +801,7 @@ if ($result) {
 
     // Leave Year Block
     $(document).on('click', '#pills_leaveYear', function() {
+      leaveYearTable();
       $('#leaveYearTable').show();
       $('#leaveTypeTable').hide();
       $('#leaveDurationTable').hide();
@@ -769,6 +833,16 @@ if ($result) {
         $.alert("Could Not Fetch");
       })
     });
+    $(document).on('click', '.currentLeaveYear', function() {
+      var id = $(this).attr("data-leaveYearButton");
+      $.alert('hello' + id);
+      $.post("leaveSql.php", {
+        id: id,
+        action: "setCurrentLeaveYear"
+      }, function(data) {}, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
 
     function leaveYearTable() {
       // Leave Year Table
@@ -791,20 +865,27 @@ if ($result) {
       })
     }
 
-    $(document).on('click', '.currentLeaveYear', function() {
-      var id = $(this).attr("data-leaveYearButton");
-      $.alert('hello' + id);
-      $.post("leaveSql.php", {
-        id: id,
-        action: "setCurrentLeaveYear"
-      }, function(data) {}, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
+    // Leave Duration
+    $(document).on('click', '#pills_leaveDuration', function() {
+      $('#leaveYearTable').hide();
+      $('#leaveTypeTable').hide();
+      $('#leaveDurationTable').show();
     });
 
     // Leave Credit
-    $(document).on('click', '.lc', function() {
-
+    $(document).on('submit', '#addLeaveSetup', function() {
+      event.preventDefault(this);
+      if ($("#sel_month").val() === null) $.alert("Month Required !!");
+      else if ($("#sel_lt").val() === null) $.alert(" Leave Type Required !!");
+      else {
+        var formData = $(this).serialize();
+        $.alert("Form Submitted " + formData)
+        $.post("leaveSql.php", formData, function() {}, "text").done(function(data, success) {
+          //$.alert(data)
+          $("#addLeaveSetup")[0].reset();
+          leaveSetupTable()
+        })
+      }
     });
     $(document).on('click', '.editLeaveSetup', function() {
       var id = $(this).attr('data-leaveSetup');
@@ -815,6 +896,7 @@ if ($result) {
       }, () => {}, "json").done(function(data) {
         $('#sel_month').val(data.ls_month);
         $('#sel_lt').val(data.lt_id);
+        $('#lsYear').val(data.ls_year);
         $('#lsMale').val(data.ls_male);
         $('#lsFemale').val(data.ls_female);
         $('#lsId').val(id);
@@ -824,6 +906,7 @@ if ($result) {
     });
 
     function leaveSetupTable() {
+      $(".leaveTableTitle").text("Leave Credit Record");
       $.post("leaveSql.php", {
         action: "leaveSetupList"
       }, () => {}, "json").done(function(data) {
@@ -833,34 +916,134 @@ if ($result) {
           leave_setup += '<td><a href="#" class="fas fa-edit editLeaveSetup" data-leaveSetup="' + value.ls_id + '"></a></td>';
           leave_setup += '<td>' + value.lt_name + '</td>';
           leave_setup += '<td>' + GetMonthName(value.ls_month) + '</td>';
+          leave_setup += '<td>' + value.ls_year + '</td>';
           leave_setup += '<td>' + value.ls_male + '</td>';
           leave_setup += '<td>' + value.ls_female + '</td>';
           leave_setup += '</tr>';
         });
-        $("#leaveSetupTable").find("tr:gt(0)").remove()
-        $("#leaveSetupTable").append(leave_setup);
+        $(".leaveSetupTable").find("tr:gt(0)").remove()
+        $(".leaveSetupTable").append(leave_setup);
       }, "json").fail(function() {
         $.alert("fail in place of error");
       })
     }
 
+    // Leave Application Form
+    $(document).on('click', '.lf, #pills_leaveForm', function() {
+      // $.alert("Leave Form Clicked")
+      $(".leaveTableTitle").text("Leave Application Status");
+      $("#leaveApplicationTable").show();
+      leaveBalanceList()
+      $(".leaveSetupTable").hide();
+      $(".cplTable").hide();
+    });
+    $(document).on('click', '.leaveCredit, .lc', function() {
+      $(".leaveTableTitle").text("Leave Credit Record");
+      $(".leaveSetupTable").show();
+      $("#leaveApplicationTable").hide();
+      $(".cplTable").hide();
+    });
+    $(document).on('submit', '#leaveStaffForm', function() {
+      event.preventDefault(this);
+      var formData = $(this).serialize();
+      $.alert("Form Submitted " + formData)
+      $.post("leaveSql.php", formData, function() {}, "text").done(function(data, success) {
+        // $.alert(data)
+        leaveApplicationTable()
+        $("#leaveStaffForm")[0].reset();
+      })
+    });
+    $(document).on('click', '.pills_cpl', function() {
+      // $.alert("CPL Claim  Clicked")
+      $(".leaveTableTitle").text("CPL Claim Status");
+      $("#leaveApplicationTable").hide();
+      $(".leaveSetupTable").hide();
+      $(".cplTable").show();
+    });
+    $(document).on('submit', '#cplForm', function() {
+      event.preventDefault(this);
+      var formData = $(this).serialize();
+      $.alert("CPL Form Submitted " + formData)
+      $.post("leaveSql.php", formData, function() {}, "text").done(function(data, success) {
+        // $.alert(data)
+        cplTable();
+        $("#leaveStaffForm")[0].reset();
+      })
+    });
+
+    function leaveApplicationTable() {
+      $.post("leaveSql.php", {
+        action: "leaveApplicationList",
+      }, () => {}, "json").done(function(data) {
+        //$.alert("sds");
+        var leave_application = '';
+        $.each(data, function(key, value) {
+          leave_application += '<tr>';
+          leave_application += '<td>' + value.ll_id + '</td>';
+          leave_application += '<td>' + getFormattedDate(value.ll_from, "dmY") + '[';
+          leave_application += getTime(value.ll_from, "dmY") + ']</td>';
+          leave_application += '<td>' + getFormattedDate(value.ll_to, "dmY") + '[';
+          leave_application += getTime(value.ll_to, "dmY") + ']</td>';
+          leave_application += '<td>' + value.ll_days + '</td>';
+          leave_application += '<td>' + value.lt_name + '</td>';
+          leave_application += '<td>' + getFormattedDate(value.update_ts, "dmY") + '</td>';
+          leave_application += '</tr>';
+        });
+        $("#leaveApplicationTable").find("tr:gt(0)").remove()
+        $("#leaveApplicationTable").append(leave_application);
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    }
+
+    function leaveBalanceList() {
+      // $.alert("Leave Balane");
+      $.post("leaveSql.php", {
+        action: "leaveBalance",
+      }, () => {}, "text").done(function(data, status) {
+        const myObj = JSON.parse(data);
+        var lbList = '';
+        $.each(myObj, function(key, value) {
+          lbList += '<tr>';
+          lbList += '<td>' + value.lt_name + '</td>';
+          lbList += '<td>' + value.ls_male + '</td>';
+          lbList += '<td>--</td>';
+          lbList += '<td>--</td>';
+          lbList += '</tr>';
+
+        })
+        $("#leaveBalanceTable").find("tr:gt(0)").remove()
+        $("#leaveBalanceTable").append(lbList);
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    }
+
+    function cplTable() {
+      $.post("leaveSql.php", {
+        action: "cplList",
+      }, () => {}, "json").done(function(data) {
+        // $.alert("sds");
+        var cpl = '';
+        $.each(data, function(key, value) {
+          cpl += '<tr>';
+          cpl += '<td>' + value.lc_id + '</td>';
+          cpl += '<td>' + getFormattedDate(value.lc_date, "dmY") + '</td>';
+          cpl += '<td>' + value.lc_order + '</td>';
+          cpl += '<td>' + value.lc_reason + '</td>';
+          cpl += '<td>' + getFormattedDate(value.update_ts, "dmY") + '[';
+          cpl += getTime(value.update_ts, "dmY") + ']</td>';
+          cpl += '<td>' + value.lc_status + '</td>';
+          cpl += '</tr>';
+        });
+        $(".cplTable").find("tr:gt(0)").remove()
+        $(".cplTable").append(cpl);
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    }
+
     //Compensatory
-    $(document).on('click', '.ccfList', function() {
-      $('#list-lt').hide();
-      $('#list-ccf').show();
-      $('#list-lf').hide();
-      $('#list-lc').hide();
-      $('#list-ss').hide();
-      ccfList();
-    });
-
-    $(document).on('click', '.lf', function(event) {
-
-    });
-
-    $(document).on('click', '.ss', function(event) {});
-
-
     $(document).on('submit', '#specialStaffForm', function() {
       event.preventDefault(this);
       $("#actionSpecialStaffForm").val("specialStaff")
@@ -869,44 +1052,6 @@ if ($result) {
       $.post("leaveSql.php", formData, function() {}, "text").done(function(data, success) {
         $.alert(data)
       })
-    });
-
-
-    $(document).on('submit', '#leaveStaffForm', function() {
-      event.preventDefault(this);
-      $.alert('hello');
-      $("#actionLeaveForm").val("addStaffLeave")
-      var formData = $(this).serialize();
-      $.alert("Form Submitted " + formData)
-      $.post("leaveSql.php", formData, function() {}, "text").done(function(data, success) {
-        $.alert(data)
-      })
-    });
-
-    $(document).on('submit', '#addLeaveSetup', function() {
-      event.preventDefault(this);
-      var sel_month = $('#sel_month').val()
-      var lt = $('#sql_lt').val()
-      $("#actionLeaveSetup").val("addLeaveSetup")
-      var formData = $(this).serialize();
-      // $.alert("Form Submitted " + formData)
-      $.post("leaveSql.php", formData, function() {}, "text").done(function(data, success) {
-        // $.alert(data)
-        leaveSetupTable()
-      })
-    });
-
-    $(document).on('click', '#pills_leaveType', function() {
-      $('#leaveYearTable').hide();
-      $('#leaveTypeTable').show();
-      $('#leaveDurationTable').hide();
-    });
-
-    $(document).on('click', '#pills_leaveDuration', function() {
-      $('#leaveYearTable').hide();
-      $('#leaveTypeTable').hide();
-      $('#leaveDurationTable').show();
-
     });
 
     $(document).on('click', '.ccfApprove', function() {
@@ -1098,48 +1243,6 @@ if ($result) {
       })
     });
 
-    function leaveApplicationStatusTable() {
-      //Leave Application Status Table
-      $.post("leaveSql.php", {
-        action: "leaveApplicationList",
-      }, () => {}, "json").done(function(data) {
-        var leave_application = '';
-        $.each(data, function(key, value) {
-          leave_application += '<tr>';
-          leave_application += '<td>' + value.ll_id + '</td>';
-          leave_application += '<td>' + getFormattedDate(value.leave_from, "dmY") + '</td>';
-          leave_application += '<td>' + getFormattedDate(value.leave_to, "dmY") + '</td>';
-          leave_application += '<td>' + +'</td>';
-          leave_application += '<td>' + value.lt_name + '</td>';
-          leave_application += '<td>' + getFormattedDate(value.submit_date, "dmY") + '</td>';
-          leave_application += '<td>' + value.submit_time + '</td>';
-          leave_application += '</tr>';
-        });
-        $("#leaveApplicationTable").append(leave_application);
-      }, "json").fail(function() {
-        $.alert("fail in place of error");
-      })
-    }
-
-
-    function leaveDurationTable() {
-      // Leave duration table
-      $.post("leaveSql.php", {
-        action: "leaveDurationList",
-      }, () => {}, "json").done(function(data) {
-        var leave_duration = '';
-        $.each(data, function(key, value) {
-          leave_duration += '<tr>'
-          leave_duration += '<td><a href="#" class="fas fa-edit editLeaveDuration" data-leaveDuration="' + value.lt_id + '"></a></td>';
-          leave_duration += '<td>' + value.ld_name + '</td>';
-          leave_duration += '<td>' + value.ld_value + '</td>';
-          leave_duration += '</tr>';
-        });
-        $("#leaveDurationTable").append(leave_duration);
-      }, "json").fail(function() {
-        $.alert("fail in place of error");
-      })
-    }
 
     function ccfForwarderPendingList() {
       //$.alert("In List Function");
@@ -1230,6 +1333,12 @@ if ($result) {
       var dateYmd = year + '-' + month + '-' + day;
       if (fmt == "dmY") return date;
       else return dateYmd;
+    }
+
+    function getTime(ts) {
+      var a = new Date(ts);
+      var time = a.getHours() + ':' + a.getMinutes();
+      return time;
     }
 
     function GetMonthName(monthNumber) {
