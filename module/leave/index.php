@@ -25,18 +25,21 @@ if ($result) {
   <link rel="stylesheet" href="leave.css">
 </head>
 <style>
-.full-height {
-  height: 700px;
-  background:white;
-}
+  .full-height {
+    height: 700px;
+    background: white;
+  }
 </style>
+
 <body>
   <?php require("../topBar.php"); ?>
 
   <div class="container-fluid moduleBody">
     <div class="row">
       <div class="col-2 p-0 m-0 pl-2 full-height">
-        <div class="mt-4"><h4>Leave</h4></div>
+        <div class="mt-3">
+          <h5>Leave</h5>
+        </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active lt" id="list-lt-list" data-toggle="list" href="#list-lt" role="tab" aria-controls="lt">Leave Type</a>
           <a class="list-group-item list-group-item-action lc" id="list-lc-list" data-toggle="list" href="#list-lc" role="tab" aria-controls="lc">Leave Credit</a>
@@ -48,7 +51,7 @@ if ($result) {
         </div>
       </div>
 
-      <div class="col-10">
+      <div class="col-10 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane fade show active" id="list-lt" role="tabpanel" aria-labelledby="list-lt-list">
             <div class="row">
@@ -266,8 +269,11 @@ if ($result) {
                 </div>
               </div>
               <div class="col-7">
-                <div class="container card shadow d-flex justify-content-center mt-2">
-                  <table class="table table-bordered table-striped list-table-xs mt-3" id="leaveSetupTable">
+                <div class="container card shadow mt-2 mb-2 myCard">
+                  <label>Leave Credit</label>
+                </div>
+                <div class="container card shadow m-0 myCard">
+                  <table class="table table-bordered table-striped list-table-xs mt-3 leaveSetupTable" id="leaveSetupTable">
                     <th><i class="fas fa-edit"></i></th>
                     <th>Leave Type</th>
                     <th>Month</th>
@@ -362,6 +368,7 @@ if ($result) {
                               <th>Balance</th>
                             </tr>
                           </table>
+                          <a href="#" class="atag leaveCredit">Leave Credit</a>
                         </div>
                       </div>
                     </div>
@@ -369,8 +376,10 @@ if ($result) {
                 </div>
               </div>
               <div class="col-7">
-                <div class="container card shadow mt-2 ml-0 myCard">
-                  <label>Leave Application Status</label>
+                <div class="container card shadow mt-2 mb-2 myCard">
+                  <label><span class="leaveTableTitle" id="leaveTableTitle">Leave Application Status</span></label>
+                </div>
+                <div class="container card shadow m-0 myCard">
                   <table class="table table-striped list-table-xs mt-2" id="leaveApplicationTable">
                     <tr class="align-center">
                       <th>Id</th>
@@ -382,6 +391,16 @@ if ($result) {
                       <th>Status</th>
                       <th>Action</th>
                     </tr>
+                  </table>
+                </div>
+                <div class="container card myCard m-0">
+                  <table class="table table-bordered table-striped list-table-xs mt-3 leaveSetupTable">
+                    <th><i class="fas fa-edit"></i></th>
+                    <th>Leave Type</th>
+                    <th>Month</th>
+                    <th>Year</th>
+                    <th>Male</th>
+                    <th>Female</th>
                   </table>
                 </div>
               </div>
@@ -846,6 +865,7 @@ if ($result) {
     });
 
     function leaveSetupTable() {
+      $(".leaveTableTitle").text("Leave Credit Record");
       $.post("leaveSql.php", {
         action: "leaveSetupList"
       }, () => {}, "json").done(function(data) {
@@ -860,15 +880,28 @@ if ($result) {
           leave_setup += '<td>' + value.ls_female + '</td>';
           leave_setup += '</tr>';
         });
-        $("#leaveSetupTable").find("tr:gt(0)").remove()
-        $("#leaveSetupTable").append(leave_setup);
+        $(".leaveSetupTable").find("tr:gt(0)").remove()
+        $(".leaveSetupTable").append(leave_setup);
       }, "json").fail(function() {
         $.alert("fail in place of error");
       })
     }
 
     // Leave Application Form
+    $(document).on('click', '.lf, #pills_leaveForm', function() {
+      // $.alert("Leave Form Clicked")
+      $(".leaveTableTitle").text("Leave Application Status");
+      $("#leaveApplicationTable").show();
+      leaveBalanceList()
+      $(".leaveSetupTable").hide();
+    });
+    
+    $(document).on('click', '.leaveCredit, .lc', function() {
+      $(".leaveTableTitle").text("Leave Credit Record");
+      $(".leaveSetupTable").show();
+      $("#leaveApplicationTable").hide();
 
+    });
     $(document).on('submit', '#leaveStaffForm', function() {
       event.preventDefault(this);
       var formData = $(this).serialize();
@@ -883,19 +916,45 @@ if ($result) {
       $.post("leaveSql.php", {
         action: "leaveApplicationList",
       }, () => {}, "json").done(function(data) {
-        $.alert("sds");
+        //$.alert("sds");
         var leave_application = '';
         $.each(data, function(key, value) {
           leave_application += '<tr>';
           leave_application += '<td>' + value.ll_id + '</td>';
-          leave_application += '<td>' + getFormattedDate(value.ll_from, "dmY") + '</td>';
-          leave_application += '<td>' + getFormattedDate(value.ll_to, "dmY") + '</td>';
-          leave_application += '<td>' + value.ll_days +'</td>';
+          leave_application += '<td>' + getFormattedDate(value.ll_from, "dmY") + '[';
+          leave_application += getTime(value.ll_from, "dmY") + ']</td>';
+          leave_application += '<td>' + getFormattedDate(value.ll_to, "dmY") + '[';
+          leave_application += getTime(value.ll_to, "dmY") + ']</td>';
+          leave_application += '<td>' + value.ll_days + '</td>';
           leave_application += '<td>' + value.lt_name + '</td>';
           leave_application += '<td>' + getFormattedDate(value.update_ts, "dmY") + '</td>';
           leave_application += '</tr>';
         });
+        $("#leaveApplicationTable").find("tr:gt(0)").remove()
         $("#leaveApplicationTable").append(leave_application);
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    }
+
+    function leaveBalanceList() {
+      // $.alert("Leave Balane");
+      $.post("leaveSql.php", {
+        action: "leaveBalance",
+      }, () => {}, "text").done(function(data, status) {
+         const myObj = JSON.parse(data);
+        var lbList = '';
+        $.each(myObj, function(key, value) {
+          lbList += '<tr>';
+          lbList += '<td>'+value.lt_name+'</td>';
+          lbList += '<td>'+value.ls_male+'</td>';
+          lbList += '<td>--</td>';
+          lbList += '<td>--</td>';
+          lbList += '</tr>';
+
+        })
+        $("#leaveBalanceTable").find("tr:gt(0)").remove()
+        $("#leaveBalanceTable").append(lbList);
       }).fail(function() {
         $.alert("fail in place of error");
       })
@@ -1194,6 +1253,12 @@ if ($result) {
       var dateYmd = year + '-' + month + '-' + day;
       if (fmt == "dmY") return date;
       else return dateYmd;
+    }
+
+    function getTime(ts) {
+      var a = new Date(ts);
+      var time = a.getHours() + ':' + a.getMinutes();
+      return time;
     }
 
     function GetMonthName(monthNumber) {

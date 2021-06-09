@@ -153,12 +153,12 @@ if ($_POST['action'] == 'addLeaveType') {
   $output = $result->fetch_assoc();
   echo json_encode($output);
 } elseif ($_POST['action'] == 'addLeave') {
-  $ll_from = date("Y-m-d h:i:s", strtotime($_POST['leaveFrom']));
+  $ll_from = date("Y-m-d H:i:s", strtotime($_POST['leaveFrom']));
   $ll_to = date("Y-m-d h:i:s", strtotime($_POST['leaveTo']));
   $ll_days = $_POST['leaveDays'];
   $lt_id = $_POST['sel_lt'];
   $ll_reason = $_POST['leaveReason'];
-  // echo $ll_from;
+  echo $ll_from;
   //echo ' Date '.date("d-m-Y", strtotime($ll_from)).' Time '.date("h-i", strtotime($ll_from));
   $sql = "insert into leave_ledger (lt_id, ll_from, ll_to, ll_days, ll_reason, staff_id, ll_status) values ('$lt_id', '$ll_from', '$ll_to', '$ll_days', '$ll_reason', '$myId' ,'0')";
   $result = $conn->query($sql);
@@ -171,6 +171,20 @@ if ($_POST['action'] == 'addLeaveType') {
     $json_array[] = $rowArray;
   }
   echo json_encode($json_array);
+} elseif ($_POST['action'] == 'leaveBalance') {
+  $sql = "select sum(ls.ls_male) as sum, lt.* from leave_setup ls, leave_type lt where lt.lt_id=ls.lt_id group by lt.lt_id";
+  $result = $conn->query($sql);
+  $data = array();
+  if ($result) {
+    while ($rowsArray = $result->fetch_assoc()) {
+      $subArray = array();
+      $subArray["lt_name"] = $rowsArray["lt_name"];
+      $subArray["ls_male"] = $rowsArray["sum"];
+      $data[]= $subArray;
+    }
+  } 
+  $jsonOutput = json_encode($data);
+  echo $jsonOutput;
 } elseif ($_POST['action'] == 'specialStaff') {
   $staff_id = $_POST['specialStaffIdHidden'];
   $approver_id = $_POST['approverIdHidden'];
