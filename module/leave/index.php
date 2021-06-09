@@ -41,12 +41,11 @@ if ($result) {
           <h5>Leave</h5>
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-          <a class="list-group-item list-group-item-action active lt" id="list-lt-list" data-toggle="list" href="#list-lt" role="tab" aria-controls="lt">Leave Type</a>
+          <a class="list-group-item list-group-item-action active lt" id="list-lt-list" data-toggle="list" href="#list-lt" role="tab" aria-controls="lt">Master Data</a>
+          <a class="list-group-item list-group-item-action ss" id="list-ss-list" data-toggle="list" href="#list-ss" role="tab" aria-controls="ss">Special Staff</a>
           <a class="list-group-item list-group-item-action lc" id="list-lc-list" data-toggle="list" href="#list-lc" role="tab" aria-controls="lc">Leave Credit</a>
           <a class="list-group-item list-group-item-action lf" id="list-lf-list" data-toggle="list" href="#list-lf" role="tab" aria-controls="lf">Leave Form</a>
-          <a class="list-group-item list-group-item-action ss" id="list-ss-list" data-toggle="list" href="#list-ss" role="tab" aria-controls="ss">Special Staff</a>
-          <a class="list-group-item list-group-item-action ccfList" id="list-ccf-list" data-toggle="list" href="#list-ccf" role="tab" aria-controls="ccf">Compensatory Claim Form/Status</a>
-          <a class="list-group-item list-group-item-action ccfApprove" id="list-laf-list" data-toggle="list" href="#list-laf" role="tab" aria-controls="laf">Leave Forward/Approve Request</a>
+          <a class="list-group-item list-group-item-action ccfApprove" id="list-laf-list" data-toggle="list" href="#list-laf" role="tab" aria-controls="laf">Process Leave</a>
           <a class="list-group-item list-group-item-action leaveReport" id="list-lr-list" data-toggle="list" href="#list-lr" role="tab" aria-controls="lr">Leave Report</a>
         </div>
       </div>
@@ -298,6 +297,9 @@ if ($result) {
                     <li class="nav-item">
                       <a class="nav-link" id="pills_leaveBalance" data-toggle="pill" href="#pills_balance" role="tab" aria-controls="pills_balance" aria-selected="true">Leave Balance</a>
                     </li>
+                    <li class="nav-item">
+                      <a class="nav-link pills_cpl" data-toggle="pill" href="#pills_cpl" role="tab" aria-controls="pills_claim" aria-selected="true">CPL Claim</a>
+                    </li>
                   </ul> <!-- content -->
                   <div class="tab-content" id="pills-tabContent p-3">
                     <div class="tab-pane fade show active" id="pills_form" role="tabpanel" aria-labelledby="pills_leaveForm">
@@ -368,9 +370,39 @@ if ($result) {
                               <th>Balance</th>
                             </tr>
                           </table>
-                          <a href="#" class="atag leaveCredit">Leave Credit</a>
+                          <a href="#" class="atag leaveCredit">Credit Details</a>
                         </div>
                       </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills_cpl" role="tabpanel" aria-labelledby="pills_cpl">
+                      <form class="form-horizontal" id="cplForm">
+                        <div class="row">
+                          <div class="col-6">
+                            <div class="form-group">
+                              <label>CPL Date </label>
+                              <input type="date" class="form-control form-control-sm" id="cplDate" name="cplDate" value="<?php echo $submit_date; ?>">
+                            </div>
+                          </div>
+
+                          <div class="col-6">
+                            <div class="form-group">
+                              <label>Order Reference</label>
+                              <input type="text" class="form-control form-control-sm" id="cplOrder" name="cplOrder" placeholder="Reference of Duty Order">
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="form-group">
+                              <label>Reason</label>
+                              <input type="text" class="form-control form-control-sm" id="cplReason" name="cplReason">
+                            </div>
+                          </div>
+                        </div>
+                        <input type="hidden" id="actionCPLForm" name="action" value="addCPL">
+                        <button type="submit" class="btn btn-sm">Submit</button>
+                      </form>
                     </div>
                   </div>
                 </div>
@@ -392,8 +424,6 @@ if ($result) {
                       <th>Action</th>
                     </tr>
                   </table>
-                </div>
-                <div class="container card myCard m-0">
                   <table class="table table-bordered table-striped list-table-xs mt-3 leaveSetupTable">
                     <th><i class="fas fa-edit"></i></th>
                     <th>Leave Type</th>
@@ -401,6 +431,15 @@ if ($result) {
                     <th>Year</th>
                     <th>Male</th>
                     <th>Female</th>
+                  </table>
+
+                  <table class="table table-bordered table-striped list-table-xs mt-3 cplTable">
+                    <th><i class="fas fa-edit"></i></th>
+                    <th>Claim Date</th>
+                    <th>Order</th>
+                    <th>Reason</th>
+                    <th>Claimed On</th>
+                    <th>Status</th>
                   </table>
                 </div>
               </div>
@@ -569,6 +608,8 @@ if ($result) {
     leaveTypeList();
     leaveSetupTable();
     leaveApplicationTable();
+    cplTable();
+
     $('#leaveYearTable').hide();
 
     $('#staffSearch').keyup(function() {
@@ -894,20 +935,38 @@ if ($result) {
       $("#leaveApplicationTable").show();
       leaveBalanceList()
       $(".leaveSetupTable").hide();
+      $(".cplTable").hide();
     });
-    
     $(document).on('click', '.leaveCredit, .lc', function() {
       $(".leaveTableTitle").text("Leave Credit Record");
       $(".leaveSetupTable").show();
       $("#leaveApplicationTable").hide();
-
+      $(".cplTable").hide();
     });
     $(document).on('submit', '#leaveStaffForm', function() {
       event.preventDefault(this);
       var formData = $(this).serialize();
       $.alert("Form Submitted " + formData)
       $.post("leaveSql.php", formData, function() {}, "text").done(function(data, success) {
-        $.alert(data)
+        // $.alert(data)
+        leaveApplicationTable()
+        $("#leaveStaffForm")[0].reset();
+      })
+    });
+    $(document).on('click', '.pills_cpl', function() {
+      // $.alert("CPL Claim  Clicked")
+      $(".leaveTableTitle").text("CPL Claim Status");
+      $("#leaveApplicationTable").hide();
+      $(".leaveSetupTable").hide();
+      $(".cplTable").show();
+    });
+    $(document).on('submit', '#cplForm', function() {
+      event.preventDefault(this);
+      var formData = $(this).serialize();
+      $.alert("CPL Form Submitted " + formData)
+      $.post("leaveSql.php", formData, function() {}, "text").done(function(data, success) {
+        // $.alert(data)
+        cplTable();
         $("#leaveStaffForm")[0].reset();
       })
     });
@@ -942,12 +1001,12 @@ if ($result) {
       $.post("leaveSql.php", {
         action: "leaveBalance",
       }, () => {}, "text").done(function(data, status) {
-         const myObj = JSON.parse(data);
+        const myObj = JSON.parse(data);
         var lbList = '';
         $.each(myObj, function(key, value) {
           lbList += '<tr>';
-          lbList += '<td>'+value.lt_name+'</td>';
-          lbList += '<td>'+value.ls_male+'</td>';
+          lbList += '<td>' + value.lt_name + '</td>';
+          lbList += '<td>' + value.ls_male + '</td>';
           lbList += '<td>--</td>';
           lbList += '<td>--</td>';
           lbList += '</tr>';
@@ -960,10 +1019,31 @@ if ($result) {
       })
     }
 
+    function cplTable() {
+      $.post("leaveSql.php", {
+        action: "cplList",
+      }, () => {}, "json").done(function(data) {
+        // $.alert("sds");
+        var cpl = '';
+        $.each(data, function(key, value) {
+          cpl += '<tr>';
+          cpl += '<td>' + value.lc_id + '</td>';
+          cpl += '<td>' + getFormattedDate(value.lc_date, "dmY") + '</td>';
+          cpl += '<td>' + value.lc_order + '</td>';
+          cpl += '<td>' + value.lc_reason + '</td>';
+          cpl += '<td>' + getFormattedDate(value.update_ts, "dmY") + '[';
+          cpl += getTime(value.update_ts, "dmY") + ']</td>';
+          cpl += '<td>' + value.lc_status + '</td>';
+          cpl += '</tr>';
+        });
+        $(".cplTable").find("tr:gt(0)").remove()
+        $(".cplTable").append(cpl);
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    }
+
     //Compensatory
-    $(document).on('click', '.ccfList', function() {
-      ccfList();
-    });
     $(document).on('submit', '#specialStaffForm', function() {
       event.preventDefault(this);
       $("#actionSpecialStaffForm").val("specialStaff")

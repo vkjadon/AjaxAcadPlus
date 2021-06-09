@@ -185,6 +185,23 @@ if ($_POST['action'] == 'addLeaveType') {
   } 
   $jsonOutput = json_encode($data);
   echo $jsonOutput;
+} elseif ($_POST['action'] == 'addCPL') {
+  $lc_date = $_POST['cplDate'];
+  $lc_order = $_POST['cplOrder'];
+  $lc_reason = $_POST['cplReason'];
+  echo $lc_date;
+  //echo ' Date '.date("d-m-Y", strtotime($ll_from)).' Time '.date("h-i", strtotime($ll_from));
+  $sql = "insert into leave_claim (lc_date, lc_order, lc_reason, staff_id, update_id, lc_status) values ('$lc_date', '$lc_order', '$lc_reason', '$myId' , '$myId' , '0')";
+  $result = $conn->query($sql);
+  if (!$result) $conn->error;
+} elseif ($_POST['action'] == 'cplList') {
+  $sql = "select * from leave_claim order by update_ts desc";
+  $result = $conn->query($sql);
+  $json_array = array();
+  while ($rowArray = $result->fetch_assoc()) {
+    $json_array[] = $rowArray;
+  }
+  echo json_encode($json_array);
 } elseif ($_POST['action'] == 'specialStaff') {
   $staff_id = $_POST['specialStaffIdHidden'];
   $approver_id = $_POST['approverIdHidden'];
@@ -211,17 +228,6 @@ if ($_POST['action'] == 'addLeaveType') {
 
   $sql = "update leave_ccf set lccf_status='1' where lccf_id='" . $_POST["deleteId"] . "'";
   $result = $conn->query($sql);
-} elseif ($_POST["action"] == "ccfList") {
-  //echo "MyId- $myId";
-  $tableId = 'lccf_id';
-  $fields = array("lccf_claim_date", "lccf_reason", "lccf_status");
-  $dataType = array("1", "0", "0");
-  $header = array("Id", "ClaimDate", "Reason", "Status");
-  $statusDecode = array("status" => "lccf_status", "0" => "Saved", "1" => "Withdrawn", "2" => "Forwarded", "3" => "Approved", "8" => "Rejected by Forwarder", "9" => "Rejected by Approver");
-  $button = array("1", "1", "1", "0");
-
-  $sql = "SELECT * from leave_ccf where staff_id='$myId' order by lccf_claim_date desc";
-  getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
 } elseif ($_POST["action"] == "ccfForwarderPendingList" || $_POST["action"] == "ccfApproverPendingList") {
   //echo "MyId- $myId";
   $tableId = 'lccf_id';
