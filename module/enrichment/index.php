@@ -265,6 +265,26 @@ require('../../php_function.php');
       //$("#resourcePersonForm").hide();
     });
 
+    function organizationList() {
+      // Leave Year Table
+      $.post("enrichmentSql.php", {
+        action: "organizationList",
+      }, () => {}, "json").done(function(data) {
+        var org = '';
+        $.each(data, function(key, value) {
+          org += '<tr>';
+          org += '<td><a href="#" class="fas fa-edit editLeaveYear" data-leaveYear="' + value.ly_id + '"></a></td>';
+          org += '<td>' + getFormattedDate(value.ly_from, "dmY") + '</td>';
+          org += '<td>' + getFormattedDate(value.ly_to, "dmY") + '</td>';
+          org += '<td><button type="button" class="btn btn-sm btn-primary currentLeaveYear" data-leaveYearButton="' + value.ly_id + '">Set Current</button></td>';
+          org += '</tr>';
+        });
+        $("#leaveYearTable").append(leave_year);
+      }, "json").fail(function() {
+        $.alert("fail in place of error");
+      })
+    }
+
     function resourcePersonList(x) {
       // $.alert("In List Function" + x);
       $.post("enrichmentSql.php", {
