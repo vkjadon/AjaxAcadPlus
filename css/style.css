@@ -93,6 +93,18 @@ div.minWidth100 {
     font-weight: bold;
 }
 
+.approve {
+    color: rgba(71, 165, 62, 0.911);
+    font-style: italic;
+    font-size: small;
+    font-weight: bold;
+}
+.under-process {
+    color: rgba(85, 75, 226, 0.911);
+    font-style: italic;
+    font-size: small;
+    font-weight: bold;
+}
 .ttText {
     color: rgba(69, 40, 231, 0.911);
     font-size: 11px;
@@ -178,12 +190,12 @@ textarea {
     padding-right: 2px;
 }
 
-.fa-check {
+.fa-check, .fa-check-circle {
     color: rgba(64, 216, 25, 0.911);
     padding-right: 2px;
 }
 
-.fa-times {
+.fa-times, .fa-times-circle {
     color: rgba(207, 37, 45, 0.911);
     padding-right: 2px;
 }

@@ -43,8 +43,16 @@
   }
 
   .myCard label {
+   font-style: italic;
    font-weight:bold;
-   color: rgb(104, 104, 104)
+   color: rgb(110, 83, 83);
+   margin: 0px;
+   }
+
+  .myCard .card-title-xs {
+   font-weight:bold;
+   color: rgb(104, 104, 104);  
+   margin: 6px;
   }
 
   .myCard .card-title {
@@ -79,6 +87,12 @@
    color: rgb(145, 236, 236);
    float: right;
    font-weight: bold;
-   background-color: #4d5252cb;
-
+   background-color: #757a7acb;
   }
+  .myCard .btn-approve {
+    color: rgb(145, 236, 236);
+    float: right;
+    font-weight: bold;
+    background-color: #d35b5bfd;
+   }
+   

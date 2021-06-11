@@ -6,11 +6,15 @@ include('../../php_function.php');
 //echo $_POST['action'];
 /*
 0 - Saved
-1 - Withdrwan
-2 - Forwarded
-3 - Approved
-8 - Rejected by Forwarder
-9 - Rejected by Approver
+1 - Load/Duty Adjusted
+2 - Additional Recommendation Requested (multiple)
+3 - Additional Recommendation Received (All)
+4 - Forwarded
+5 - Approved
+7 - Rejected by Forwarder
+8 - Rejected by Approver
+9 - Withdrwan
+
 Once Rejected, A new application is to be submitted.
 */
 
@@ -135,7 +139,7 @@ if ($_POST['action'] == 'addLeaveType') {
   $ls_female = $_POST['lsFemale'];
   $ls_id = $_POST['lsId'];
   if ($ls_id == 0) $sql = "insert into leave_setup (ls_year, ls_month, lt_id, ls_male, ls_female, update_id) values ('$ls_year', '$ls_month', '$lt_id', '$ls_male', '$ls_female', '$myId')";
-  else $sql = "update leave_setup set ls_year='$ls_year', ls_month='$ls_month', lt_id='$lt_id',  ls_male='$ls_male',  ls_female='$ls_female', update_id='$myId'";
+  else $sql = "update leave_setup set ls_year='$ls_year', ls_month='$ls_month', lt_id='$lt_id',  ls_male='$ls_male',  ls_female='$ls_female', update_id='$myId' where ls_id='$ls_id'";
   $conn->query($sql);
   echo $conn->error;
 } elseif ($_POST['action'] == 'leaveSetupList') {
@@ -148,7 +152,7 @@ if ($_POST['action'] == 'addLeaveType') {
   echo json_encode($json_array);
 } elseif ($_POST['action'] == 'fetchLeaveSetup') {
   $id = $_POST['lsId'];
-  $sql = "select ls.*, lt.lt_name FROM leave_setup ls, leave_type lt where lt.lt_id=ls.lt_id and ls.ls_id='$id'";
+  $sql = "select ls.*, lt.* FROM leave_setup ls, leave_type lt where lt.lt_id=ls.lt_id and ls.ls_id='$id'";
   $result = $conn->query($sql);
   $output = $result->fetch_assoc();
   echo json_encode($output);
@@ -158,13 +162,15 @@ if ($_POST['action'] == 'addLeaveType') {
   $ll_days = $_POST['leaveDays'];
   $lt_id = $_POST['sel_lt'];
   $ll_reason = $_POST['leaveReason'];
+  if (isset($_POST['sel_staff'])) $staff_id = isset($_POST['sel_staff']);
+  else $staff_id = $myId;
   echo $ll_from;
   //echo ' Date '.date("d-m-Y", strtotime($ll_from)).' Time '.date("h-i", strtotime($ll_from));
-  $sql = "insert into leave_ledger (lt_id, ll_from, ll_to, ll_days, ll_reason, staff_id, ll_status) values ('$lt_id', '$ll_from', '$ll_to', '$ll_days', '$ll_reason', '$myId' ,'0')";
+  $sql = "insert into leave_ledger (staff_id, lt_id, ll_from, ll_to, ll_days, ll_reason, update_id, ll_status) values ('$staff_id', '$lt_id', '$ll_from', '$ll_to', '$ll_days', '$ll_reason', '$myId' ,'0')";
   $result = $conn->query($sql);
   if (!$result) $conn->error;
 } elseif ($_POST['action'] == 'leaveApplicationList') {
-  $sql = "select ll.*, lt.lt_name from leave_ledger ll, leave_type lt where lt.lt_id=ll.lt_id";
+  $sql = "select ll.*, lt.lt_name, s.staff_name, s.user_id from leave_ledger ll, leave_type lt, staff s where lt.lt_id=ll.lt_id and ll.staff_id=s.staff_id";
   $result = $conn->query($sql);
   $json_array = array();
   while ($rowArray = $result->fetch_assoc()) {
@@ -180,22 +186,25 @@ if ($_POST['action'] == 'addLeaveType') {
       $subArray = array();
       $subArray["lt_name"] = $rowsArray["lt_name"];
       $subArray["ls_male"] = $rowsArray["sum"];
-      $data[]= $subArray;
+      $data[] = $subArray;
     }
-  } 
+  }
   $jsonOutput = json_encode($data);
   echo $jsonOutput;
 } elseif ($_POST['action'] == 'addCPL') {
   $lc_date = $_POST['cplDate'];
   $lc_order = $_POST['cplOrder'];
   $lc_reason = $_POST['cplReason'];
+  if (isset($_POST['sel_staff'])) $staff_id = isset($_POST['sel_staff']);
+  else $staff_id = $myId;
+
   echo $lc_date;
   //echo ' Date '.date("d-m-Y", strtotime($ll_from)).' Time '.date("h-i", strtotime($ll_from));
-  $sql = "insert into leave_claim (lc_date, lc_order, lc_reason, staff_id, update_id, lc_status) values ('$lc_date', '$lc_order', '$lc_reason', '$myId' , '$myId' , '0')";
+  $sql = "insert into leave_claim (lc_date, lc_order, lc_reason, staff_id, update_id, lc_status) values ('$lc_date', '$lc_order', '$lc_reason', '$staff_id' , '$myId' , '0')";
   $result = $conn->query($sql);
   if (!$result) $conn->error;
 } elseif ($_POST['action'] == 'cplList') {
-  $sql = "select * from leave_claim order by update_ts desc";
+  $sql = "select lc.*, s.staff_name, s.user_id from leave_claim lc, staff s where lc.staff_id=s.staff_id order by update_ts desc";
   $result = $conn->query($sql);
   $json_array = array();
   while ($rowArray = $result->fetch_assoc()) {
@@ -209,83 +218,23 @@ if ($_POST['action'] == 'addLeaveType') {
   $sql = "insert into special_staff (staff_id, approver_id, forwarder_id) values ('$staff_id', '$approver_id', '$forwarder_id')";
   $conn->query($sql);
   echo $conn->error;
-} elseif ($_POST['action'] == 'add') {
-  //echo "MyId- $myId";
-  $fields = ['lccf_claim_date', 'lccf_reason', 'staff_id', 'submit_date', 'submit_id'];
-  $values = [data_check($_POST['duty_date']), data_check($_POST['reason']), $myId, $submit_date, $myId];
-  $status = 'lccf_status';
-  $dup = "select * from leave_ccf where staff_id='$myId' and lccf_claim_date='" . data_check($_POST["duty_date"]) . "' and $status='0'";
-  addData($conn, 'leave_ccf', 'lccf_id', $fields, $values, $status, $dup, '');
-} elseif ($_POST['action'] == 'edit') {
-  $fields = ['lccf_id', 'lccf_claim_date', 'lccf_reason', 'update_ts'];
-  $values = [$_POST['id'], data_check($_POST['duty_date']), data_check($_POST['reason']), $submit_ts];
-  $dup = "select * from leave_ccf where staff_id='$myId' and lccf_claim_date='" . data_check($_POST["duty_date"]) . "' and lccf_status='0'";
-  $dup_alert = "Duplicate Found!!";
-  updateData($conn, 'leave_ccf', $fields, $values, $dup, $dup_alert);
+} elseif ($_POST['action'] == 'lrDetails') {
+  $sql = "select ll.*, lt.lt_name, s.staff_name, s.user_id from leave_ledger ll, leave_type lt, staff s where lt.lt_id=ll.lt_id and ll.staff_id=s.staff_id and ll.ll_id='" . $_POST['ll_id'] . "'";
+  $result = $conn->query($sql);
+  $rowArray = $result->fetch_assoc();
+  echo json_encode($rowArray);
+} elseif ($_POST['action'] == 'llStatusUpdate') {
+  $id = $_POST['modalId'];
+  $status = $_POST['llStatus'];
+  $comments = $_POST['comments'];
+  $reason = getField($conn, $id, "leave_ledger", "ll_id", "ll_reason");
+  $reason=$reason.' '.$comments;
+  $sql = "update leave_ledger set ll_reason='$reason', update_ts='$submit_ts', ll_status='$status' where ll_id='$id'";
+  $result = $conn->query($sql);
 } elseif ($_POST['action'] == 'delete') {
   echo "MyId- $myId";
   $update_ts = time();
 
   $sql = "update leave_ccf set lccf_status='1' where lccf_id='" . $_POST["deleteId"] . "'";
   $result = $conn->query($sql);
-} elseif ($_POST["action"] == "ccfForwarderPendingList" || $_POST["action"] == "ccfApproverPendingList") {
-  //echo "MyId- $myId";
-  $tableId = 'lccf_id';
-  $fields = array("staff_name", "lccf_claim_date", "lccf_reason", "lccf_status");
-  $dataType = array("0", "1", "0", "0");
-  $header = array("Id", "Staff", "ClaimDate", "Reason", "Status");
-  $statusDecode = array("status" => "lccf_status", "0" => "Saved", "1" => "Withdrawn", "2" => "Forwarded", "3" => "Approved", "8" => "Rejected by Forwarder", "9" => "Rejected by Approver");
-  $button = array("0", "0", "0", "1");
-
-  if ($_POST["action"] == "ccfForwarderPendingList") $sql = "SELECT lc.*, s.staff_name from leave_ccf lc, staff s where lc.staff_id=s.staff_id and lccf_status='0' order by lc.lccf_claim_date desc";
-  else $sql = "SELECT lc.*, s.staff_name from leave_ccf lc, staff s where lc.staff_id=s.staff_id and lccf_status='2' order by lc.lccf_claim_date desc";
-  getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
-} elseif ($_POST['action'] == 'fetch') {
-  $id = $_POST['lccfId'];
-  $sql = "SELECT * FROM leave_ccf where lccf_id='$id'";
-  $result = $conn->query($sql);
-  $output = $result->fetch_assoc();
-  echo json_encode($output);
-} elseif ($_POST['action'] == 'approve') {
-  $id = $_POST['modal_lccfId'];
-  $status = $_POST['modal_status'];
-  $previous_comments = $_POST['modal_comments'];
-  $comments = $_POST['comments'];
-
-  if ($status == '0') {
-
-    $comments = $previous_comments . '<br><b>Forwarding Comments on ' . date("d-m-Y", time()) . '</b><br>' . $comments;
-    if ($_POST['approve'] == '1') {
-      $newStatus = '2';
-      $comments .= ' (<b>Forwarded</b>)';
-    } else {
-      $newStatus = '8';
-      $comments .= ' (<b>Rejected</b>)';
-    }
-    $sql = "update leave_ccf set lccf_reason='$comments', lccf_forwarder_ts='$submit_ts', lccf_status='$newStatus' where lccf_id='$id'";
-    $result = $conn->query($sql);
-  } elseif ($status == '2') {
-    $comments = $previous_comments . '<br><b>Approving Comments on ' . date("d-m-Y", time()) . '</b><br>' . $comments;
-    if ($_POST['approve'] == '1') {
-      $newStatus = '3';
-      $comments .= ' (<b>Approved</b>)';
-    } else {
-      $newStatus = '9';
-      $comments .= ' (<b>Rejected</b>)';
-    }
-    $sql = "update leave_ccf set lccf_reason='$comments', lccf_approver_ts='$submit_ts', lccf_status='$newStatus' where lccf_id='$id'";
-    $result = $conn->query($sql);
-  } else $update = $status;
-} elseif ($_POST['action'] == 'leaveReport') {
-  $lf = $_POST['lf'];
-  $lt = $_POST['lt'];
-  $deptId = $_POST['deptId'];
-  $url = $setUrl . '/acadplus/api/leave/leave_report.php?u=' . $myUn . '&&p=' . $myPwd . '&&lf=' . $lf . '&&lt=' . $lt . '&&deptId=' . $deptId;
-  $curl = curl_init();
-  curl_setopt($curl, CURLOPT_URL, $url);
-  curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-  $output = curl_exec($curl);
-  //$output=json_decode($output, true);
-  curl_close($curl);
-  echo $output;
 }
