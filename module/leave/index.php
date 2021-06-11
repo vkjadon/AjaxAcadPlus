@@ -824,7 +824,6 @@ if ($result) {
           ltt_name += '<td>' + value.lt_max + '</td>';
           ltt_name += '</tr>';
         });
-
         $("#leaveTypeTable").find("tr:gt(0)").remove();
         $("#leaveTypeTable").append(ltt_name);
       }).fail(function() {
