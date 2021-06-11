@@ -36,18 +36,21 @@ if (isset($_POST['rpAction'])) {
       echo '</div>';
       echo '</div>';
     }
-  } elseif ($_POST['orgAction'] == 'organizationList') {
-    $id = $_POST['orgId'];
-    $sql = "SELECT  * FROM organization where org_id='$id'";
+  }
+}
+if (isset($_POST['orgAction'])) {
+  if ($_POST['orgAction'] == 'orgList') {
+    $sql = "select * from organization";
     $result = $conn->query($sql);
-    $output = $result->fetch_assoc();
-    echo json_encode($output);
-  } elseif ($_POST['addOrg'] == 'organizationList') {
-    $sql = "insert into organization (org_name, org_url, org_mobile, org_email, org_address, org_contact, org_status) values('" . data_check($_POST['org_name']) . "','" . data_check($_POST['org_url']) . "','" . data_check($_POST['org_mobile']) . "','" . data_check($_POST['org_email']) . "','" . data_check($_POST['rp_address']) . "','" . data_check($_POST['rp_about']) . "','$myId','0')";
+    $json_array = array();
+    while ($output = $result->fetch_assoc()) {
+      $json_array[] = $output;
+    }
+    echo json_encode($json_array);
+  } elseif ($_POST['orgAction'] == 'addOrg') {
+    $sql = "insert into organization (org_name, org_url, org_mobile, org_email, org_address, org_about,update_id, org_status) values('" . data_check($_POST['org_name']) . "','" . data_check($_POST['org_url']) . "','" . data_check($_POST['org_mobile']) . "','" . data_check($_POST['org_email']) . "','" . data_check($_POST['org_address']) . "','" . data_check($_POST['org_about']) . "','$myId','0')";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     echo "Added";
   }
-}
-if (isset($_POST['orgAction'])) {
 }
