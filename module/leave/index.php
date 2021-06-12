@@ -17,20 +17,11 @@ if ($result) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="leave.css">
 
 <head>
-  <title>Admin Login : ClassConnect</title>
+  <title>Leave Module : ClassConnect</title>
   <?php require("../css.php"); ?>
-  <link rel="stylesheet" href="leave.css">
 </head>
-<style>
-  .full-height {
-    height: 700px;
-    background: white;
-  }
-</style>
-
 <body>
   <?php require("../topBar.php"); ?>
 
@@ -44,12 +35,14 @@ if ($result) {
           <a class="list-group-item list-group-item-action lf" id="list-lf-list" data-toggle="list" href="#list-lf" role="tab" aria-controls="lf">Leave Form</a>
           <a class="list-group-item list-group-item-action lc" id="list-lc-list" data-toggle="list" href="#list-lc" role="tab" aria-controls="lc">Leave Credit</a>
           <a class="list-group-item list-group-item-action pl" id="list-pl-list" data-toggle="list" href="#list-pl" role="tab" aria-controls="pl">Process Leave</a>
-          <a class="list-group-item list-group-item-action leaveReport" id="list-lr-list" data-toggle="list" href="#list-lr" role="tab" aria-controls="lr">Leave Report</a>
+          <a class="list-group-item list-group-item-action lr" id="list-lr-list" data-toggle="list" href="#list-lr" role="tab" aria-controls="lr">Leave Report</a>
           <a class="list-group-item list-group-item-action lt" id="list-lt-list" data-toggle="list" href="#list-lt" role="tab" aria-controls="lt">Master Data</a>
         </div>
+        <div class="mr-2">
+          <?php require("../searchBar.php"); ?>
+        </div>
       </div>
-      <div class="col-10">
-        <?php require("../searchBar.php");?>
+      <div class="col-10 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="list-lf" role="tabpanel" aria-labelledby="list-lf-list">
             <div class="row">
@@ -361,30 +354,47 @@ if ($result) {
             </div>
           </div>
           <div class="tab-pane fade" id="list-lr" role="tabpanel" aria-labelledby="list-lr-list">
-            <form class="form-horizontal" id="leaveReportForm">
-              <div class="row">
-                <div class="col-6">
-                  <div class="container card myCard">
-                    <div class="row mt-3">
-                      <div class="col-6">
-                        <div class="form-group">
-                          <input type="date" class="form-control form-control-sm" id="report_from" name="report_from" value="<?php echo date("Y-m-d", time()); ?>">
-                        </div>
-                      </div>
-                      <div class="col-6">
-                        <div class="form-group">
-                          <input type="date" class="form-control form-control-sm" id="report_to" name="report_to" value="<?php echo date("Y-m-d", time()); ?>">
-                        </div>
+            <div class="row">
+              <div class="col-4">
+                <div class="container card myCard">
+                  <div class="row">
+                    <div class="col-5 pt-3 pr-0">
+                      <div class="form-group">
+                        <input type="date" class="form-control form-control-sm reportFormText" id="report_from" name="report_from" value="<?php echo date("Y-m-d", time()); ?>">
                       </div>
                     </div>
-                    <input type="submit" class="btn btn-sm" name="submit" value="Show">
+                    <div class="col-5 pt-3 pl-1 pr-1">
+                      <div class="form-group">
+                        <input type="date" class="form-control form-control-sm reportFormText" id="report_to" name="report_to" value="<?php echo date("Y-m-d", time()); ?>">
+                      </div>
+                    </div>
+                    <div class="col-2 pt-3 pl-0">
+                      <div class="form-group">
+                        <input type="submit" class="btn btn-sm reportFormButton" name="submit" value="Show">
+                      </div>
+                    </div>
                   </div>
-
                 </div>
-                <div class="col-6">
+
+              </div>
+              <div class="col-3 p-0">
+                <div class="container card myCard">
+                  <div class="row">
+                    <div class="col-9 pt-3 pr-0">
+                      <div class="form-group">
+                        <input type="text" class="form-control form-control-sm reportFormText" id="staffReport" name="staffReport" placeholder="StaffId/UserId">
+                      </div>
+                    </div>
+
+                    <div class="col-3 pt-3 pl-0">
+                      <div class="form-group">
+                        <input type="submit" class="btn btn-sm reportFormButton" name="submit" value="Show">
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </form>
+            </div>
             <div class="container card myCard mt-2">
               <!-- nav options -->
               <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
@@ -398,24 +408,27 @@ if ($result) {
               <!-- content -->
               <div class="tab-content" id="pills-tabContent p-3">
                 <div class="tab-pane fade show active" id="pills_deptReport" role="tabpanel" aria-labelledby="pills_deptReport">
-                  <?php
-                  $sql = "select * from department where dept_status='0'";
-                  echo selectList($conn, "Select Department", array(0, "dept_id", "dept_name", "dept_abbri", "sel_reportDept"), $sql); ?>
+                  <table class="table table-striped list-table-xs mt-2" id="leaveReportTable">
+                    <tr class="align-center">
+                      <th>Id</th>
+                      <th>Name</th>
+                      <th>UserId</th>
+                      <th>Leave Type</th>
+                      <th>From</th>
+                      <th>To</th>
+                      <th>Days</th>
+                      <th>Submitted On</th>
+                    </tr>
+                  </table>
                 </div>
                 <div class="tab-pane fade" id="pills_staffReport" role="tabpanel" aria-labelledby="pills_staffReport">
-                  <form class="form-horizontal" id="staffReportForm">
-                    <div class="row">
-                      <div class="col-12">
-                        <div class="input-group md-form form-sm form-2 mt-1">
-                          <input name="staffSearch" id="staffReport" class="form-control form-control-sm" type="text" placeholder="Search Staff" aria-label="Search">
-                          <div class="input-group-append">
-                            <span class="input-group-text cyan lighten-3" id="basic-text1"><i class="fas fa-search text-grey" aria-hidden="true"></i></span>
-                          </div>
-                        </div>
-                        <div class='list-group' id="staffReportAutoList"></div>
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="input-group md-form form-sm form-2 mt-1">
+
                       </div>
                     </div>
-                  </form>
+                  </div>
                 </div>
               </div>
             </div>
@@ -611,10 +624,10 @@ if ($result) {
                 <div class="container card shadow d-flex justify-content-center mt-2" id="card_leave">
                   <!-- nav options -->
                   <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
-                    
+
                   </ul> <!-- content -->
                   <div class="tab-content" id="pills-tabContent p-3">
-                    
+
                   </div>
                 </div>
               </div>
@@ -1022,7 +1035,7 @@ if ($result) {
         var table = '';
         $.each(data, function(key, value) {
           var status = value.ll_status;
-          table += '<tr class="' + lrStatusTextClass[status] + '">';
+          table += '<tr>';
           table += '<td>' + value.ll_id + '</td>';
           table += '<td>' + getFormattedDate(value.ll_from, "dmY") + '<br>[';
           table += getTime(value.ll_from, "dmY") + ']</td>';
@@ -1031,7 +1044,7 @@ if ($result) {
           table += '<td>' + value.ll_days + '</td>';
           table += '<td>' + value.lt_name + '</td>';
           table += '<td>' + getFormattedDate(value.update_ts, "dmY") + '</td>';
-          table += '<td>' + lrStatusText[status] + '</td>';
+          table += '<td class="' + lrStatusTextClass[status] + '">' + lrStatusText[status] + '</td>';
           if (status < "2") table += '<td><button type="button" class="btn btn-sm  btn-block ulrButton" data-llId="' + value.ll_id + '">Withdraw</button></td>';
           else if (status == "5") table += '<td><button type="button" class="btn btn-sm btn-block btn-approve ulrButton" data-llId="' + value.ll_id + '">Update</button></td>';
           else table += '<td><label>--</label></td>';
@@ -1212,54 +1225,48 @@ if ($result) {
       })
     }
 
-    $(document).on('click', '.lccf_idI', function() {
-
-      var id = $(this).attr('id');
-      //$.alert("lccf " + id);
-
-      $.post("leaveSql.php", {
-        lccfId: id,
-        action: "fetch"
-      }, function() {}, "json").done(function(data) {
-        //$.alert("List " + data.lccf_claim_date);
-
-        $('#modal_title').text("CPL Claim Application [" + id + "]");
-        $('#remarks').hide();
-        $('#submitModalForm').hide();
-
-        claim_date = getFormattedDate(data.lccf_claim_date, "dmY");
-        $('#modal_dutyDate').html(claim_date);
-
-        submit_date = getFormattedDate(data.submit_ts, "dmY");
-        $('#modal_submitTs').html(submit_date);
-
-        update_date = getFormattedDate(data.update_ts, "dmY");
-        $('#modal_updateTs').html(update_date);
-
-        if (data.lccf_status == 2) {
-          forward_date = getFormattedDate(data.lccf_forward_ts, "dmY");
-          $('#modal_forwardDate').html("Forwarded On " + forward_date);
-        } else {
-          $('#modal_forwardDate').text("Forwarding Awaited");
-        }
-
-        if (data.lccf_status == 3) {
-          approval_date = getFormattedDate(data.lccf_approver_ts, "dmY");
-          $('#modal_approvalDate').html("Approved On " + approval_date);
-        } else {
-          $('#modal_approvalDate').text("Approval Awaited");
-        }
-        $('#modal_remarks').html(data.lccf_reason);
-
-        $('#firstModal').modal('show');
-
-        //$("#ccform").html(mydata);
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
+    // Leave Report
+    $(document).on("click", ".lr", function() {
+      //$.alert("Leave Report");
+      leaveReportList();
     });
 
-    $(document).on('click', '.lccf_idD', function() {
+    $(document).on("submit", "#leaveReportForm", function() {
+      event.preventDefault(this);
+      //$.alert("Leave Report");
+    });
+
+    function leaveReportList() {
+      $.post("leaveSql.php", {
+        action: "leaveApplicationList",
+      }, () => {}, "json").done(function(data) {
+        //$.alert("sds");
+        var table = '';
+        $.each(data, function(key, value) {
+          var status = value.ll_status;
+          if (status == 5) {
+            table += '<tr>';
+            table += '<td>' + value.ll_id + '</td>';
+            table += '<td>' + value.staff_name + '</td>';
+            table += '<td>' + value.user_id + '</td>';
+            table += '<td>' + value.lt_name + '</td>';
+            table += '<td>' + getFormattedDate(value.ll_from, "dmY") + '<br>[';
+            table += getTime(value.ll_from, "dmY") + ']</td>';
+            table += '<td>' + getFormattedDate(value.ll_to, "dmY") + '<br>[';
+            table += getTime(value.ll_to, "dmY") + ']</td>';
+            table += '<td>' + value.ll_days + '</td>';
+            table += '<td>' + getFormattedDate(value.update_ts, "dmY") + '</td>';
+            table += '</tr>';
+          }
+        });
+        $("#leaveReportTable").find("tr:gt(0)").remove()
+        $("#leaveReportTable").append(table);
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    }
+
+    $(document).on('click', '.deleteLeave', function() {
       var deleteId = $(this).attr('id');
       //$.alert("FDID " + deleteId);
       $.confirm({
@@ -1284,34 +1291,6 @@ if ($result) {
           },
         }
       });
-    });
-
-    $(document).on('click', '.lccf_idE', function() {
-      $('#ccform').hide();
-      var id = $(this).attr("id");
-      //$.alert("Edit  Clicked !!"+id);
-      $.post("leaveSql.php", {
-        lccfId: id,
-        action: "fetch"
-      }, function(requestData, requestStatus) {}, "json").done(function(data) {
-        //$.alert("List "+ data.lccf_claim_date);
-
-        $('#duty_date').val(data.lccf_claim_date);
-        $('#reason').val(data.lccf_reason);
-        $('#lccfId').val(id);
-        $('#action').val("edit");
-        if (data.lccf_status > 0) {
-          $('#ccfSubmit').hide();
-        } else {
-          $('#ccfSubmit').show();
-        }
-
-        $("#ccform").show();
-
-        //$("#ccform").html(mydata);
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
     });
 
     function getFormattedDate(ts, fmt) {

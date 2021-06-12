@@ -3,6 +3,26 @@ body {
     padding-top: 1px;
     background-color: #eceff352;
 }
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: ""
+}
+.form-control {
+    background-color: rgb(241, 243, 247);
+    border: none
+}
+.form-control:focus {
+    box-shadow: 0px 1px 1px rgba(209, 84, 84, 0.075) inset, 0px 0px 7px rgba(0, 0, 0, 0.2)
+}
+
+.full-height {
+    height: 700px;
+    background: white;
+}
+
 .leftLinkBody {
     margin-top: 1rem;
     /* padding-top: 100px; */

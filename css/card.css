@@ -38,6 +38,19 @@
    border: none
   }
 
+  .myCard .reportFormButton {
+    float: right;
+    padding: 4px;
+    margin: 4px;
+    margin-top: 2px;
+   }
+
+  .myCard .reportFormText {
+    font-size: 10px;
+    padding: 1px;
+    margin: 1px;
+  }
+
   .myCard .third {
    padding: 0 1.5rem 0 1.5rem
   }
