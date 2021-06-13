@@ -69,10 +69,10 @@
         $.post("check_user.php", formData, function(mydata, mystatus) {
           //alert(" success " + mydata.found);
         }, "json").done(function(data, mystatus) {
-          alert("Id " + data.user+ " User Found " +data.student);
+          //alert("Id " + data.user+ " User Found " +data.student);
           if(data.user>0)
           {
-            alert(data.user+data.found);
+            //alert(data.user+data.found);
             location.href = "module/";
           }
           else if(data.student>0)

@@ -17,16 +17,66 @@ require('../../php_function.php');
 	<div class="container-fluid moduleBody">
 		<div class="row">
 			<div class="col-2 p-0 m-0 pl-2 full-height">
+				<div class="mt-2">
+					<h5>Feedback</h5>
+				</div>
+
 				<div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-					<a class="list-group-item list-group-item-action active fq" id="list-fq-list" data-toggle="list" href="#list-fq" role="tab"> Feedback Question </a>
-					<a class="list-group-item list-group-item-action df" id="list-df-list" data-toggle="list" href="#list-df" role="tab"> Design Feedback </a>
+					<a class="list-group-item list-group-item-action active df" id="list-df-list" data-toggle="list" href="#list-df" role="tab"> Design Feedback </a>
+					<a class="list-group-item list-group-item-action fq" id="list-fq-list" data-toggle="list" href="#list-fq" role="tab"> Feedback Question </a>
 					<a class="list-group-item list-group-item-action sf" id="list-sf-list" data-toggle="list" href="#list-sf" role="tab"> Schedule Feedback </a>
 					<a class="list-group-item list-group-item-action fr" id="list-fr-list" data-toggle="list" href="#list-fr" role="tab"> Feedback Report</a>
 				</div>
 			</div>
 			<div class="col-10 leftLinkBody">
 				<div class="tab-content" id="nav-tabContent">
-					<div class="tab-pane show active" id="list-fq" role="tabpanel">
+					<div class="tab-pane show active" id="list-df" role="tabpanel">
+						<div class="row">
+							<div class="col-5">
+								<div class="container card myCard mt-2">
+									<div class="row mt-2">
+										<div class="col">
+											<label>Select/Design Template</label>
+										</div>
+									</div>
+									<form class="form-horizontal" id="addTemplateForm">
+										<div class="row mt-2">
+											<div class="col-6">
+												<div class="form-group">
+													<label>Feedback Type</label>
+													<?php
+													$sql = "select * from master_name where mn_code='ft' and mn_status='0' order by mn_name";
+													selectList($conn, "Select Feedback Type", array("1", "mn_id", "mn_name", "", "sel_ft"), $sql);
+													?>
+												</div>
+											</div>
+											<div class="col-6">
+												<div class="form-group">
+													<label>Template Name </label>
+													<input type="text" class="form-control form-control-sm" id="template_name" name="template_name" placeholder="Template Name">
+												</div>
+											</div>
+
+										</div>
+										<input type="hidden" name="action" value="addTemplate">
+										<button type="submit" class="btn btn-sm">Submit</button>
+									</form>
+								</div>
+								<div class="container card shadow mt-2 mb-2 myCard">
+									<label>Feedback Statistics</label>
+									<div class="row">
+										<div class="col">
+											<span class="footerNote"> The Feeback is taken for any existing Template. So, if existing templates do not satisfy your requirements, please, create a New template. Previously used templates can not be edited. </span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-7 p-0">
+								<div class="templateList"></div>
+							</div>
+						</div>
+					</div>
+					<div class="tab-pane fade" id="list-fq" role="tabpanel">
 						<div class="row">
 							<div class="col-6 pr-0">
 								<div class="container card mt-2 myCard">
@@ -58,23 +108,29 @@ require('../../php_function.php');
 												</div>
 											</div>
 											<div class="row">
-												<div class="col-9 pr-1">
+												<div class="col-7 pr-1">
 													<div class="form-group">
-														<input type="text" class="form-control form-control-sm option">
+														<label>Option</label>
+														<input type="text" class="form-control form-control-sm option" data-tag="fo_statement">
 													</div>
 												</div>
-												<div class="col-1 p-0 pr-1">
+												<div class="col-2 p-0 pr-1">
 													<div class="form-group">
-														<input type="number" class="form-control form-control-sm score">
+														<label>Score</label>
+														<input type="number" class="form-control form-control-sm score" data-tag="fo_score">
 													</div>
 												</div>
-												<div class="col-1 p-0 pr-1">
+												<div class="col-2 p-0 pr-1">
 													<div class="form-group">
-														<input type="number" class="form-control form-control-sm sno">
+														<label>Order</label>
+														<input type="number" class="form-control form-control-sm sno" data-tag="fo_sno">
 													</div>
 												</div>
 												<div class="col-1 p-0">
 													<div class="form-group">
+														<input type="hidden" id="fq_id" name="fq_id">
+														<input type="hidden" id="fo_sno" name="fo_sno">
+														<label>&nbsp;</label>
 														<a href="#" class="atag p-0 m-0 addOption">
 															<h3><i class="fa fa-floppy-o"></i></h3>
 														</a>
@@ -83,7 +139,7 @@ require('../../php_function.php');
 											</div>
 											<div class="row">
 												<div class="col-12">
-													<label class="footer">A question once added can not be deleted. You can edit it only before it is added to any on the Feedback.</label>
+													<label class="footer">A question once added can not be deleted. You can edit it only before it is added to any one of the Feedback.</label>
 												</div>
 											</div>
 										</div>
@@ -111,119 +167,40 @@ require('../../php_function.php');
 								</div>
 								<div class="container card m-0 myCard">
 									<div class="row">
-										<div class="col">
-											<label>Statement</label>
-											<div class="testQuestionText"></div>
+										<div class="col-2 pr-1">
+											<label>Question</label>
+										</div>
+										<div class="col pl-1">
+											<div class="currentQuestionStatement testQuestionText"></div>
 										</div>
 									</div>
-									<div class="row mt-3">
-										<div class="col">
-											<label>Options</label>
+									<div class="row mt-1">
+										<div class="col-2 pr-1">
+											<div class="addQuestionToDatabaseButton"></div>
+										</div>
+										<div class="col pl-1">
 											<table class="table table-striped list-table-xs" id="questionOptionTable">
 												<tr class="align-center">
 													<th>#</th>
 													<th>Order</th>
-													<th>Statement</th>
+													<th>Option</th>
 													<th>Score</th>
 													<th><i class="fas fa-edit"></i></th>
 													<th><i class="fas fa-trash"></i></th>
 												</tr>
 											</table>
 											<div class="questionOption"></div>
-											<div class="addQuestionToDatabaseButton"></div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-						<span class="questionList"></span>
 					</div>
-					<div class="tab-pane fade" id="list-df" role="tabpanel">
-						<div class="row">
-							<div class="col-5">
-								<div class="container card myCard mt-2">
-									<!-- nav options -->
-									<ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
-										<li class="nav-item">
-											<a class="nav-link active" id="pills_leaveType" data-toggle="pill" href="#pills_type" role="tab" aria-controls="pills_type" aria-selected="true">Leave Credit</a>
-										</li>
-									</ul> <!-- content -->
-									<div class="tab-content" id="pills-tabContent p-3">
-										<div class="tab-pane fade show active" id="pills_type" role="tabpanel" aria-labelledby="pills_leaveType">
-											<form class="form-horizontal" id="addLeaveSetup">
-												<div class="row">
-													<?php
-													$months = array(" ", "January", "Feburary", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
-													echo '<div class="col-6">';
-													echo '<div class="form-group">';
-													echo '<select class="form-control form-control-sm" name="sel_month" id="sel_month" required>';
-													echo '<option selected disabled>Select Month</option>';
-													for ($i = 1; $i < 13; $i++) echo '<option value="' . $i . '">' . $months[$i] . '</option>';
-													echo '</select>';
-													echo '</div>';
-													echo '</div>';
-													?>
-													<?php
-													$sql_lt = "select * from leave_type where lt_status='0' order by lt_name";
-													$result = $conn->query($sql_lt);
-													echo '<div class="col-6">';
-													echo '<div class="form-group">';
-													if ($result) {
-														echo '<select class="form-control form-control-sm" name="sel_lt" id="sel_lt" required>';
-														echo '<option selected disabled>Select Leave Type</option>';
-														while ($rows = $result->fetch_assoc()) echo '<option value="' . $rows['lt_id'] . '">' . $rows['lt_name'] . '</option>';
-														echo '</select>';
-													} else echo $conn->error;
-													echo '</div></div>';
-													if ($result->num_rows == 0) echo 'No Data Found';
-													?>
-												</div>
-												<div class="row">
-													<div class="col-4">
-														<div class="form-group">
-															<label>Year</label>
-															<input type="number" class="form-control form-control-sm" id="lsYear" name="lsYear" min="2020" value="<?php echo date("Y", time()); ?>">
-														</div>
-													</div>
-													<div class="col-4">
-														<div class="form-group">
-															<label>Male</label>
-															<input type="number" class="form-control form-control-sm" id="lsMale" name="lsMale" value="0">
-														</div>
-													</div>
-													<div class="col-4">
-														<div class="form-group">
-															<label>Female</label>
-															<input type="number" class="form-control form-control-sm" id="lsFemale" name="lsFemale" value="0">
-														</div>
-													</div>
-												</div>
-										</div>
-										<input type="hidden" id="lsId" name="lsId" value="0">
-										<input type="hidden" id="actionLeaveSetup" name="action" value="addLeaveSetup">
-										<button class="btn btn-sm m-0" type="submit">Submit</button>
-										</form>
-									</div>
-								</div>
-							</div>
-							<div class="col-7">
-								<div class="container card shadow mt-2 mb-2 myCard">
-									<label>Leave Credit</label>
-								</div>
-								<div class="container card shadow m-0 myCard">
-									<table class="table table-bordered table-striped list-table-xs mt-3 leaveSetupTable" id="leaveSetupTable">
-										<th><i class="fas fa-edit"></i></th>
-										<th>Leave Type</th>
-										<th>Month</th>
-										<th>Year</th>
-										<th>Male</th>
-										<th>Female</th>
-									</table>
-								</div>
-							</div>
-						</div>
-					</div>
+
 				</div>
+				<a href="#" class="atag showQuestion">Question List</a>
+				<span class="questionList"></span>
+
 			</div>
 		</div>
 		<p>&nbsp;</p>
@@ -248,7 +225,139 @@ require('../../php_function.php');
 	$(document).ready(function() {
 		currentQuestion()
 		questionList()
+		$(".questionList").hide()
 
+		$(".showQuestion").click(function() {
+			$(".questionList").toggle();
+			// $("#action").val("addTest")
+		});
+
+		// Feedback Template Block
+		$(document).on("click", ".df", function() {
+			$(".addToTemplate").show()
+			$(".setActive").hide()
+			$(".questionList").hide()
+		})
+		$(document).on("change", "#sel_ft", function() {
+			var ft_id = $("#sel_ft").val();
+			if (ft_id == "") $.alert("Select a FeedBack Type to Proceed!!");
+			else templateList()
+		})
+		$(document).on("submit", "#addTemplateForm", function() {
+			event.preventDefault(this);
+			//$.alert("Form Submitted ");
+			var formData = $(this).serialize();
+			$.alert(formData);
+			$.post("feedbackSql.php", formData, () => {}, "text").done(function(mydata, mystatus) {
+				$.alert(mydata);
+				// $('#addTemplateForm')[0].reset();
+			}).fail(function() {
+				$.alert("fail in place of error");
+			})
+		})
+		$(document).on("click", ".addToTemplate", function() {
+			var fq_id = $(this).attr("data-fq")
+			$.alert("Question Id " + fq_id);
+			$.post("feedbackSQL.php", {
+				fq_id: fq_id,
+				action: "addToTemplate"
+			}, function() {}, "text").done(function(data, status) {
+				$.alert(data);
+				// questionList()
+			})
+		})
+		$(document).on("click", ".setActiveTemplate", function() {
+			var template_id = $(this).attr("data-template")
+			//$.alert("Question Id " + fq_id);
+			$.post("feedbackSQL.php", {
+				template_id: template_id,
+				action: "setActiveTemplate"
+			}, function() {}, "text").done(function(data, status) {
+				$.alert(data);
+				templateList()
+			})
+		})
+		$(document).on("click", ".showTemplateModal", function() {
+			var template_id = $(this).attr("data-template")
+			$.alert("Question Id " + template_id);
+			$.post("feedbackSQL.php", {
+				template_id: template_id,
+				action: "templateQuestionList"
+			}, function() {}, "json").done(function(data, status) {
+				// $.alert(data);
+				var card = '';
+				$.each(data, function(key, value) {
+					var template_name = value.fq_statement;
+					card += '<div class="row mt-2">';
+					card += '<div class="col">';
+					card += template_name;
+					// card += "Id" + value.fq_id + "count" + count;
+					card += '</div>';
+					card += '</div>';
+				})
+				$(".showTemplate").html(card);
+				$('#firstModal').modal('show');
+
+			})
+		})
+
+		function templateList() {
+			var ft_id = $("#sel_ft").val();
+			// $.alert("Fb Type " + ft_id);
+			$.post("feedbackSql.php", {
+				ft_id: ft_id,
+				action: "templateList"
+			}, function() {}, "json").done(function(data, status) {
+				if (data.success == "0") {
+					var success = "No Template Found! Please create a Template by adding Template Name to Start"
+					$(".templateList").html(success)
+
+				} else {
+					var card = '';
+					var count = 1;
+					var cols = 3;
+					$.each(data, function(key, value) {
+						var template_name = value.template_name;
+						if (template_name != null) {
+							var template_id = value.template_id;
+							if (count == 1) card += '<div class="row mt-2">';
+							card += '<div class="col-6">';
+							if (value.template_status == "0") card += '<div class="container card myCard bg-two text-white">';
+							else card += '<div class="container card myCard">';
+							card += '<div class="testQuestionText">';
+							card += template_name;
+							// card += "Id" + value.fq_id + "count" + count;
+							card += '</div>';
+							card += '<div class="row">';
+							if (value.template_status == "0") {
+								card += '<button class="btn btn-sm btn-active showTemplateModal"  data-template="' + template_id + '">Show</button>'
+								card += '<button class="btn btn-sm btn-active showTemplateModal">Use</button>'
+							} else {
+								card += '<button class="btn btn-sm showTemplateModal" data-template="' + template_id + '">Show</button>'
+								card += '<button class="btn btn-sm setActiveTemplate" data-template="' + template_id + '">Active</button>'
+								card += '<button class="btn btn-sm showTemplateModal">Use</button>'
+							}
+							card += '</div>'
+
+							card += '</div>';
+							card += '</div>';
+							count++
+							if (count == cols) {
+								card += '</div>';
+								count = 1;
+							}
+						}
+					})
+					$(".templateList").html(card);
+				}
+			})
+		}
+		// Feedback Question Block
+		$(document).on("click", ".fq", function() {
+			$(".setActive").show()
+			$(".addToTemplate").hide()
+			$(".questionList").hide()
+		})
 		$(document).on("click", ".addQuestion", function() {
 			var statement = $("#statement").val();
 			if (statement == "") $.alert("Statement is Blank");
@@ -257,7 +366,7 @@ require('../../php_function.php');
 				//$(this).find("i.fa").removeClass("fa-floppy-o");
 				$("#statement").addClass("statement");
 
-				//$.alert("Question Save Clicked " + statement);
+				$.alert("Question Save Clicked " + statement);
 				$.post("feedbackSQL.php", {
 					statement: statement,
 					action: "addStatement"
@@ -267,7 +376,6 @@ require('../../php_function.php');
 				})
 			}
 		})
-
 		$(document).on("click", ".addOption", function() {
 			var option = $(".option").val();
 			var score = $(".score").val();
@@ -275,8 +383,8 @@ require('../../php_function.php');
 
 			if (option == "") $.alert("Option is Blank")
 			else {
-				$(this).find("i.fa").removeClass("fa-floppy-o");
-				$(this).find("i.fa").addClass("fa-times-circle");
+				// $(this).find("i.fa").removeClass("fa-floppy-o");
+				// $(this).find("i.fa").addClass("fa-times-circle");
 				$.alert("Option" + option + "Score" + score + " sno " + sno)
 
 				$.post("feedbackSql.php", {
@@ -296,7 +404,6 @@ require('../../php_function.php');
 				})
 			}
 		})
-
 		$(document).on("blur", ".statement", function() {
 			var statement = $("#statement").val();
 			if (statement == "") $.alert("Statement is Blank");
@@ -306,32 +413,71 @@ require('../../php_function.php');
 					statement: statement,
 					action: "updateStatement"
 				}, function() {}, "text").done(function(data, status) {
-					$.alert(data);
+					//$.alert(data);
 					currentQuestion()
 				})
 			}
 		})
-
-		$(document).on("click", ".acceptQuestionButton", function() {
-			$.alert("Question Id ");
+		$(document).on("blur", ".option, .sno, .score", function() {
+			var tag = $(this).attr("data-tag");
+			if (tag == "fo_statement") var value = $(".option").val();
+			else if (tag == "fo_score") var value = $(".score").val();
+			else var value = $(".sno").val();
+			var fq_id = $("#fq_id").val();
+			var fo_sno = $("#fo_sno").val();
+			//$.alert("Tag " + tag + " value " + value + " Fq " + fq_id);
 			$.post("feedbackSQL.php", {
-				action: "acceptQuestion"
+				fq_id: fq_id,
+				fo_sno: fo_sno,
+				tag: tag,
+				value: value,
+				action: "updateOption"
 			}, function() {}, "text").done(function(data, status) {
-				$.alert(data);
+				//$.alert(data);
 				currentQuestion()
 			})
 		})
-
+		$(document).on("click", ".acceptQuestionButton", function() {
+			// $.alert("Question Id ");
+			$("#statement").removeClass("statement");
+			$.post("feedbackSQL.php", {
+				action: "acceptQuestion"
+			}, function() {}, "text").done(function(data, status) {
+				//$.alert(data);
+				currentQuestion()
+				questionList()
+			})
+		})
 		$(document).on("click", ".setActive", function() {
 			var fq_id = $(this).attr("data-fq")
-			$.alert("Question Id " + fq_id);
+			//$.alert("Question Id " + fq_id);
 			$.post("feedbackSQL.php", {
 				fq_id: fq_id,
 				action: "setActive"
 			}, function() {}, "text").done(function(data, status) {
-				$.alert(data);
+				//$.alert(data);
 				currentQuestion()
 				questionList()
+			})
+		})
+		$(document).on("click", ".editOption", function() {
+			var fq_id = $(this).attr("data-fq")
+			var fo_sno = $(this).attr("data-fo")
+			$("#fq_id").val(fq_id)
+			$("#fo_sno").val(fo_sno)
+
+			// $.alert("Question Id " + fq_id + " Option sno" + fo_sno);
+			$.post("feedbackSQL.php", {
+				fq_id: fq_id,
+				fo_sno: fo_sno,
+				action: "fetchOption"
+			}, function() {}, "json").done(function(data, status) {
+				// $.alert(data.fo_statement);
+				$(".option").val(data.fo_statement)
+				$(".score").val(data.fo_score)
+				$(".sno").val(data.fo_sno)
+				// currentQuestion()
+				// questionList()
 			})
 		})
 
@@ -339,14 +485,19 @@ require('../../php_function.php');
 			$.post("feedbackSql.php", {
 				action: "fetchCurrentQuestion"
 			}, function() {}, "json").done(function(data, status) {
-				// $.alert("Current Question" + data);
-				$(".testQuestionText").html(data.fq_statement)
+				//$.alert("Current Question" + data.fq_statement);
+				$(".currentQuestionStatement").html(data.fq_statement)
 				// $("#currentQuestion").html(data.fq_statement)
 				// Following statements are required if any incomplete question is in the database
-				$("#statement").val(data.fq_statement)
-				$("#statement").addClass("statement");
-				var fq_id = data.fq_id;
-				$(".addQuestion").hide()
+				if (data.fq_statement == "No Question is Active") {
+					$("#statement").val("")
+					$(".addQuestion").show()
+				} else {
+					$("#statement").val(data.fq_statement)
+					$("#statement").addClass("statement");
+					// var fq_id = data.fq_id;
+					$(".addQuestion").hide()
+				}
 			});
 			$.post("feedbackSql.php", {
 				action: "fetchCurrentQuestionOption"
@@ -360,30 +511,16 @@ require('../../php_function.php');
 					option += '<td>' + value.fo_sno + '</td>';
 					option += '<td>' + value.fo_statement + '</td>';
 					option += '<td>' + value.fo_score + '</td>';
-					option += '<td><a href="#" class="editOption" data-fq="' + value.fq_id + '" data-fo="' + value.fq_sno + '"><i class="fa fa-edit"></i></a></td>';
-					option += '<td><a href="#" class="trashOption" data-fq="' + value.fq_id + '" data-fo="' + value.fq_sno + '"><i class="fa fa-trash"></i></a></td>';
+					option += '<td><a href="#" class="editOption" data-fq="' + value.fq_id + '" data-fo="' + value.fo_sno + '"><i class="fa fa-edit"></i></a></td>';
+					option += '<td><a href="#" class="trashOption" data-fq="' + value.fq_id + '" data-fo="' + value.fo_sno + '"><i class="fa fa-trash"></i></a></td>';
 					option += '</tr>';
 					count++;
 				})
 				$("#questionOptionTable").find("tr:gt(0)").remove();
 				$("#questionOptionTable").append(option)
-				if (count > 2) $(".addQuestionToDatabaseButton").html('<button class="btn btn-sm acceptQuestionButton">Add Question</button>')
-				else $(".addQuestionToDatabaseButton").html("Add Options")
+				if (count > 2) $(".addQuestionToDatabaseButton").html('<button class="btn btn-sm btn-block acceptQuestionButton m-1 p-1">Add</button>')
+				// else $(".addQuestionToDatabaseButton").html("Add Options")
 			});
-			var row = '';
-			row += '<input type="text" class="form-control form-control-sm option">';
-			$(".newOption").html(row);
-			var row = '';
-			row += '<input type="number" class="form-control form-control-sm score">';
-			// $("#options").find("tr:gt(0)").remove();
-			$(".newScore").html(row);
-			var row = '';
-			row += '<input type="number" class="form-control form-control-sm sno">';
-			// $("#options").find("tr:gt(0)").remove();
-			$(".newSno").html(row);
-			var row = '';
-			row += '<a href="#" class="atag p-0 m-0 addOption"><h3><i class="fa fa-floppy-o"></i></h3></a>';
-			$(".newSaveOption").html(row);
 		}
 
 		function questionList() {
@@ -399,13 +536,13 @@ require('../../php_function.php');
 					card += '<div class="col-3 pr-0">';
 					card += '<div class="container card myCard" style="height:100px">';
 					card += '<div class="row">';
-					card += '<div class="col"><a href="#" class="setActive" data-fq="' + value.fq_id + '">Active</a></div>'
-					card += '<div class="col"><a href="#" class="">Add to Test</a></div>'
+					card += '<div class="col"><a href="#" class="setActive" data-fq="' + value.fq_id + '">Active</a>'
+					card += '<a href="#" class="addToTemplate" data-fq="' + value.fq_id + '">Template</a></div>'
 					card += '</div>'
 
 					card += '<div class="testQuestionText">';
 					card += value.fq_statement;
-					card += "Id" + value.fq_id + "count" + count;
+					// card += "Id" + value.fq_id + "count" + count;
 					card += '</div>';
 					card += '</div>';
 					card += '</div>';
@@ -416,6 +553,8 @@ require('../../php_function.php');
 					}
 				})
 				$(".questionList").html(card);
+				$(".setActive").hide()
+
 			});
 		}
 
@@ -431,5 +570,30 @@ require('../../php_function.php');
 		}
 	});
 </script>
+<!-- Modal Section-->
+<div class="modal" id="firstModal">
+  <div class="modal-dialog modal-md">
+    <form class="form-horizontal" id="modalForm">
+      <div class="modal-content">
+        <!-- Modal body -->
+          <div class="card myCard ml-3 mr-3 mt-3 mb-1">
+            <div class="card-title"><h5>Template Questions</h5></div>
+            <div class="row mb-2">
+              <div class="col ml-2">
+                <div class="showTemplate"></div>
+              </div>
+            </div>
+          </div>
+        <div class="card myCard">
+          <div class="row">
+            <div class="col">
+              <button class="btn btn-sm btn-approve" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div> <!-- Modal Conent Closed-->
+    </form>
+  </div> <!-- Modal Dialog Closed-->
+</div> <!-- Modal Closed-->
 
 </html>
