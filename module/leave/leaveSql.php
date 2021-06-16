@@ -182,7 +182,7 @@ if ($_POST['action'] == 'addLeaveType') {
       $subArray["ls_male"] = $rowsArray["sum"];
       $data[]= $subArray;
     }
-  } 
+  }
   $jsonOutput = json_encode($data);
   echo $jsonOutput;
 } elseif ($_POST['action'] == 'addCPL') {

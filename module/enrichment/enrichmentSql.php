@@ -54,3 +54,24 @@ if (isset($_POST['orgAction'])) {
     echo "Added";
   }
 }
+if (isset($_POST['action'])) {
+  if ($_POST['action'] == 'selectList') {
+    $tag = $_POST['tag'];
+    if ($tag == 'rp') $sql = "select * from resource_person where rp_status='0'";
+    elseif ($tag == 'org') $sql = "select * from organization where org_status='0'";
+    $idField = $tag . '_id';
+    $nameField = $tag . '_name';
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+    echo '<select class="form-control form-control-sm" id="selectId" name="selectId" required>';
+    // echo '<option>Select a Grid</option>';
+    while ($rowsArray = $result->fetch_assoc()) {
+      $id = $rowsArray[$idField];
+      $name = $rowsArray[$nameField];
+      if ($tag == 'rp') echo '<option value="' . $id . '">' . $rowsArray["rp_name"] . '(' . $rowsArray["rp_name"] . ')</option>';
+      elseif ($tag == 'org') echo '<option value="' . $id . '">' . $rowsArray["org_name"] . '(' . $rowsArray["org_name"] . ')</option>';
+      else echo '<option value="' . $id . '">' . $name . '</option>';
+    }
+    echo '</select>';
+  }
+}

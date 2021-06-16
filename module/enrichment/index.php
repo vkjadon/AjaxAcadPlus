@@ -154,7 +154,7 @@ require('../../php_function.php');
          </form>
         </div>
        </div>
-       <div class="container card shadow m-0 myCard">
+       <div class="col-5 container card shadow m-0 myCard">
         <table class="table table-bordered table-striped list-table-xs mt-3" id="organList">
          <th>Org Name</th>
         </table>
@@ -168,18 +168,24 @@ require('../../php_function.php');
          <h5 class="card-title p-2 mb-0"> Co-Curricular Activity Form</h5>
          <form class="form-horizontal" id="basicInfoForm">
           <div class="row mt-2">
+           <div class="col pr-1">
+            <div class="form-group">
+             <input type="radio" checked class="actName" id="rp" name="actName" value="rp">
+             Guest Lecture
+            </div>
+           </div>
+           <div class="col pr-1">
+            <div class="form-group">
+             <input type="radio" class="actName" id="org" name="actName" value="org">
+             Industrial Visit
+            </div>
+           </div>
+          </div>
+          <div class="row mt-2">
            <div class="col-6">
             <div class="form-group">
-             <label>Activity Type</label>
-             <?php
-             $sql = "select * from master_name where mn_code='cce' and mn_status='0' order by mn_name";
-             $result = $conn->query($sql);
-             echo '<select class="form-control form-control-sm" name="sel_cce">';
-             while ($rowCCE = $result->fetch_assoc()) {
-              echo '<option>' . $rowCCE["mn_name"] . '</option>';
-             }
-             echo '</select>';
-             ?>
+             <label class="selectLabel"></label>
+             <p class="selectList"></p>
             </div>
            </div>
            <div class="col-6">
@@ -251,6 +257,9 @@ require('../../php_function.php');
   $("#orgAction").val("addOrg")
   resourcePersonList();
   organizationList();
+  $(".selectLabel").text("Resource Person");
+  selectList("rp");
+
 
   // Resource Person Block
   $(document).on('submit', '#resourcePersonForm', function(event) {
@@ -287,15 +296,15 @@ require('../../php_function.php');
   });
 
   function organizationList() {
-   $.alert('hello');
+   // $.alert('hello');
    $.post("enrichmentSql.php", {
     orgAction: "orgList",
    }, () => {}, "json").done(function(data) {
     var table = '';
-    $.alert(data);
+    // $.alert(data);
     $.each(data, function(key, value) {
      table += '<tr>';
-     table += '<td>' + data.org_name + '</td>';
+     table += '<td>' + value.org_name + '</td>';
      table += '</tr>';
     });
     $("#organList").find("tr:gt(0)").remove()
@@ -304,6 +313,40 @@ require('../../php_function.php');
     $.alert("fail in place of error");
    })
   }
+
+  //Co cur Block
+  $(document).on('click', '.actName', function(event) {
+   var actName = $("input[name='actName']:checked").val();
+   if (actName=='rp') $(".selectLabel").text("Resource Person");
+   else $(".selectLabel").text("Organization");
+   // $.alert("Pressed" + actName);
+
+   $.post("enrichmentSql.php", {
+    actName: actName,
+   }, function() {}, "text").done(function(data, status) {
+    // respNameList();
+    selectList(actName);
+    //$.alert("List " + data);
+   }).fail(function() {
+    $.alert("fail in place of error");
+   })
+  });
+
+  function selectList(tag) {
+   //$.alert("In List Function");
+   // if (tag == "department") tag = "dept";
+   $.post("enrichmentSql.php", {
+    tag: tag,
+    action: "selectList"
+   }, function() {}, "text").done(function(data, status) {
+    //$.alert(data);
+    $(".selectList").html(data);
+   }).fail(function() {
+    $.alert("Error !!");
+   })
+  }
+
+
 
   function getFormattedDate(ts, fmt) {
    var a = new Date(ts);
