@@ -1,8 +1,30 @@
-body {
+html, body {
     font-size: 14px;
     padding-top: 1px;
-    background-color: #eceff352;
+    background-color: #dfdfdf52;
+    height: 100%;
+    margin: 0;
 }
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: ""
+}
+.form-control {
+    background-color: rgb(241, 243, 247);
+    border: none
+}
+.form-control:focus {
+    box-shadow: 0px 1px 1px rgba(209, 84, 84, 0.075) inset, 0px 0px 7px rgba(0, 0, 0, 0.2)
+}
+
+.full-height {
+    background: rgb(255, 255, 255);
+    height: 1000px;
+}
+
 .leftLinkBody {
     margin-top: 1rem;
     /* padding-top: 100px; */
@@ -93,6 +115,18 @@ div.minWidth100 {
     font-weight: bold;
 }
 
+.approve {
+    color: rgba(71, 165, 62, 0.911);
+    font-style: italic;
+    font-size: small;
+    font-weight: bold;
+}
+.under-process {
+    color: rgba(85, 75, 226, 0.911);
+    font-style: italic;
+    font-size: small;
+    font-weight: bold;
+}
 .ttText {
     color: rgba(69, 40, 231, 0.911);
     font-size: 11px;
@@ -165,6 +199,17 @@ textarea {
     padding-left: 2px;
     padding-right: 2px;
 }
+a.fa.fa-pencil-alt, a.fa.fa-edit {
+    color: rgba(18, 200, 206, 0.911);
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+a.fa.fa-circle {
+    color: rgba(56, 59, 240, 0.911);
+    padding-left: 2px;
+    padding-right: 2px;
+}
 
 .fa-exclamation-triangle {
     color: rgba(245, 7, 19, 0.911);
@@ -178,12 +223,12 @@ textarea {
     padding-right: 2px;
 }
 
-.fa-check {
+.fa-check, .fa-check-circle {
     color: rgba(64, 216, 25, 0.911);
     padding-right: 2px;
 }
 
-.fa-times {
+.fa-times, .fa-times-circle {
     color: rgba(207, 37, 45, 0.911);
     padding-right: 2px;
 }

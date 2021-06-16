@@ -299,9 +299,10 @@ require('../../php_function.php');
    // $.alert('hello');
    $.post("enrichmentSql.php", {
     orgAction: "orgList",
-   }, () => {}, "json").done(function(data) {
+   }, () => {}, "json").done(function(data, status) {
     var table = '';
     // $.alert(data);
+    //$.alert(data);
     $.each(data, function(key, value) {
      table += '<tr>';
      table += '<td>' + value.org_name + '</td>';

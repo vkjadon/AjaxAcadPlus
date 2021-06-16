@@ -84,6 +84,14 @@ require('../../php_function.php');
                           </div>
                         </div>
                         <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="ft" name="headName" value="ft">
+                              Feedback Type
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
                           <div class="col-6">
                             <div class="form-group">
                               <label>Name</label>
@@ -216,7 +224,7 @@ require('../../php_function.php');
         </div>
       </div>
     </div>
-    <?php require("../bottom_bar.php");?>
+    <?php require("../bottom_bar.php"); ?>
   </div>
   <h1>&nbsp;</h1>
 </body>
@@ -233,7 +241,7 @@ require('../../php_function.php');
     batchList();
     masterNameList();
     selectList("school");
-    batchSession(<?php echo $myBatch;?>)
+    batchSession(<?php echo $myBatch; ?>)
     //Auto Search Block
     $('#staffSearch').keyup(function() {
       var searchString = $(this).val();
