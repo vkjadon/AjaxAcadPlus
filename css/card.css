@@ -9,6 +9,11 @@
    border-radius: 0.5rem
   }
 
+  .myCard .card .currentCard {
+    color: rgb(210, 227, 233);
+    background-color: #2e4355;
+   }
+
   .myCard a.active {
    border-bottom: 2px solid #6bf5ee
   }

@@ -20,17 +20,19 @@ require('../../php_function.php');
 				<div class="mt-2">
 					<h5>Feedback</h5>
 				</div>
-
 				<div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-					<a class="list-group-item list-group-item-action active df" id="list-df-list" data-toggle="list" href="#list-df" role="tab"> Design Feedback </a>
-					<a class="list-group-item list-group-item-action fq" id="list-fq-list" data-toggle="list" href="#list-fq" role="tab"> Feedback Question </a>
+					<a class="list-group-item list-group-item-action active ft" id="list-ft-list" data-toggle="list" href="#list-ft" role="tab"> Feedback Template </a>
 					<a class="list-group-item list-group-item-action sf" id="list-sf-list" data-toggle="list" href="#list-sf" role="tab"> Schedule Feedback </a>
+					<a class="list-group-item list-group-item-action fq" id="list-fq-list" data-toggle="list" href="#list-fq" role="tab"> Feedback Question </a>
 					<a class="list-group-item list-group-item-action fr" id="list-fr-list" data-toggle="list" href="#list-fr" role="tab"> Feedback Report</a>
+				</div>
+				<div class="mr-2">
+					<?php require("../searchBar.php"); ?>
 				</div>
 			</div>
 			<div class="col-10 leftLinkBody">
 				<div class="tab-content" id="nav-tabContent">
-					<div class="tab-pane show active" id="list-df" role="tabpanel">
+					<div class="tab-pane show active" id="list-ft" role="tabpanel">
 						<div class="row">
 							<div class="col-5">
 								<div class="container card myCard mt-2">
@@ -76,6 +78,103 @@ require('../../php_function.php');
 							</div>
 						</div>
 					</div>
+					<div class="tab-pane fade" id="list-sf" role="tabpanel">
+						<div class="row">
+							<div class="col-5 pr-0">
+								<div class="container card mt-2 myCard">
+									<!-- nav options -->
+									<ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
+										<li class="nav-item">
+											<a class="nav-link active" data-toggle="pill" href="#pills_af" role="tab">Feedback</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link aClass" data-toggle="pill" href="#pills_aClass" role="tab">Class</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link aARCR" data-toggle="pill" href="#pills_aARCR" role="tab">AR/CR</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link aEvent" data-toggle="pill" href="#pills_aEvent" role="tab">Event</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link aStaff" data-toggle="pill" href="#pills_aStaff" role="tab">Staff</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link aBatch" data-toggle="pill" href="#pills_aBatch" role="tab">Batch</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link aIndustry" data-toggle="pill" href="#pills_aIndustry" role="tab">Industry</a>
+										</li>
+									</ul> <!-- content -->
+									<div class="tab-content" id="pills-tabContent p-3">
+										<div class="tab-pane fade show active" id="pills_af" role="tabpanel">
+											<form class="form-horizontal" id="updateFeedbackForm">
+												<div class="row">
+													<div class="col">
+														<div class="form-group">
+															<label>Feedback Name </label>
+															<input type="text" class="form-control form-control-sm" id="feedback_name" name="feedback_name" placeholder="Feedback Name">
+														</div>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-6">
+														<div class="form-group">
+															<label>Feedback Open </label>
+															<input type="datetime-local" class="form-control form-control-sm" id="feedback_open" name="feedback_open" value="<?php echo $submit_ts; ?>">
+														</div>
+													</div>
+													<div class="col-6">
+														<div class="form-group">
+															<label>Feedback Close </label>
+															<input type="datetime-local" class="form-control form-control-sm" id="feedback_close" name="feedback_close">
+														</div>
+													</div>
+												</div>
+												<input type="hidden" name="action" value="updateFeedback">
+												<button type="submit" class="btn btn-sm">Submit</button>
+											</form>
+										</div>
+										<div class="tab-pane fade" id="pills_aClass" role="tabpanel">
+											<div id="programClassTable"></div>
+										</div>
+										<div class="tab-pane fade" id="pills_aARCR" role="tabpanel">
+											<div>Only Submit Button with Cut-Off Attendance</div>
+										</div>
+										<div class="tab-pane fade" id="pills_aEvent" role="tabpanel">
+											<div>Select from List and Schedule/Cutoff. Registered participants/attendees will be allowed to take</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-7">
+								<div class="container card mt-2 mb-2 myCard">
+									<div class="card-title-xs leaveTableTitle">Feedback List</div>
+								</div>
+								<div class="container card m-0 myCard">
+									<div class="row mt-1">
+
+										<div class="col">
+											<table class="table table-striped list-table-xs" id="feedbackTable">
+												<tr class="align-center">
+													<th><i class="fas fa-edit"></i></th>
+													<th>#</th>
+													<th>Id</th>
+													<th>Type</th>
+													<th>Template</th>
+													<th> Name</th>
+													<th> Open</th>
+													<th> Close</th>
+													<th><i class="fas fa-trash"></i></th>
+												</tr>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
 					<div class="tab-pane fade" id="list-fq" role="tabpanel">
 						<div class="row">
 							<div class="col-6 pr-0">
@@ -223,20 +322,165 @@ require('../../php_function.php');
 
 <script>
 	$(document).ready(function() {
+		$(function() {
+			$('[data-toggle="popover"]').popover()
+			$('[data-toggle="tooltip"]').tooltip()
+		})
+
 		currentQuestion()
 		questionList()
 		$(".questionList").hide()
+		$(".setActive").hide()
 
 		$(".showQuestion").click(function() {
 			$(".questionList").toggle();
 			// $("#action").val("addTest")
 		});
+		// Add Participants
+		$(document).on("click", ".aClass", function() {
+			programClassList()
+			// $.alert("Program Class List");
+		})
+		$(document).on("click", ".fpClass", function() {
+			var classId = $(this).attr("data-class")
+			var status = $(this).is(":checked");
+			// $.alert("Participant Class Id " + classId + status);
+			$.post("feedbackSql.php", {
+				classId: classId,
+				status: status,
+				action: "participantClass"
+			}, function() {}, "text").done(function(data, status) {
+				// $.alert(data)
+			})
+		})
 
+		function programClassList() {
+			var program_id = $("#sel_program").val();
+			//$.alert("Fb Type In Feedback  " + program_id);
+			$.post("feedbackSql.php", {
+				program_id: program_id,
+				action: "programClassList"
+			}, function() {}, "json").done(function(data, status) {
+				// $.alert(data)
+				var card = '';
+				var count = 1;
+				$.each(data, function(key, value) {
+					card += '<div class="row border m-1">';
+					card += '<div class="col">';
+					card += '<div class="row">';
+					card += '<div class="col-sm-5">';
+					card += '<input type="checkbox" class="fpClass" data-class="' + value.class_id + '"> ' + value.class_name;
+					card += '</div>';
+					card += '<div class="col-sm-2 p-1">';
+					card += '<input type="text" class="form-control form-control-sm" data-toggle="popover" title="Cut-Off Attentance" name="fp_cutoff">';
+					card += '</div>';
+					card += '<div class="col-sm-5 p-1">';
+					card += '<input type="datetime-local" class="form-control form-control-sm" name="fp_open_date">';
+					card += '</div>';
+					card += '</div>';
+					card += '<div class="row">';
+					card += '<div class="col-sm-3">';
+					card += '<button class="btn btn-sm">UPDATE</button>';
+					card += '</div>';
+					card += '<div class="col-sm-4">';
+					card += '</div>';
+					card += '<div class="col-sm-5 p-1">';
+					card += '<input type="datetime-local" class="form-control form-control-sm" name="fp_close_date">';
+					card += '</div>';
+					card += '</div>';
+					card += '</div>';
+					card += '</div>';
+				})
+				// $("#programClassTable").find("tr:gt(0)").remove();
+				$("#programClassTable").html(card);
+			})
+		}
+
+		// Add Feedback
+		$(document).on("click", ".sf", function() {
+			feedbackList()
+			// $.alert("ft");
+		})
+		$(document).on("click", ".editFeedback", function() {
+			var feedback_id = $(this).attr("data-fb")
+			// $().removeClass();
+			$(".editFeedback").removeClass('fa-circle')
+			$(".editFeedback").addClass('fa-pencil-alt')
+
+			$(this).removeClass('fa-pencil-alt');
+			$(this).addClass('fa-circle')
+
+			// feedbackList()
+			// $.alert("Edit - Fetch " + feedback_id);
+			$.post("feedbackSql.php", {
+				feedback_id: feedback_id,
+				action: "fetchFeedback"
+			}, function() {}, "json").done(function(data, status) {
+				//$.alert(" Update " + feedback_id);
+				$("#feedback_name").val(data.feedback_name)
+				$("#feedback_open").val(data.feedback_open)
+				$("#feedback_close").val(data.feedback_close)
+			})
+
+		})
+		$(document).on("submit", "#updateFeedbackForm", function() {
+			event.preventDefault(this);
+			//$.alert("Form Submitted ");
+			var formData = $(this).serialize();
+			$.alert(formData);
+			$.post("feedbackSql.php", formData, () => {}, "text").done(function(mydata, mystatus) {
+				$.alert(mydata);
+				$('#updateFeedbackForm')[0].reset();
+			}).fail(function() {
+				$.alert("fail in place of error");
+			})
+		})
+
+		function feedbackList() {
+			var ft_id = $("#sel_ft").val();
+			// $.alert("Fb Type In Feedback  " + ft_id);
+			$.post("feedbackSql.php", {
+				ft_id: ft_id,
+				action: "feedbackList"
+			}, function() {}, "json").done(function(data, status) {
+				if (data.success == "0") {
+					var success = "No Feedback Found for this Session. Please select a Template using Feedback Template to Proceed"
+					$("#feedbackTable").html(success)
+
+				} else {
+					// $("#feedbackTable").html("Found")
+					var card = '';
+					var count = 1;
+					$.each(data, function(key, value) {
+						var open = value.feedback_open
+						var close = value.feedback_close
+						var status = value.feedback_status
+						if (open != null) {
+							card += '<tr>';
+							card += '<td><a href="#" class="editFeedback fa fa-pencil-alt" data-fb="' + value.feedback_id + '"></td>';
+							card += '<td>' + count++ + '</td>';
+							card += '<td>' + value.feedback_id + '</td>';
+							card += '<td>' + value.mn_name + '</td>';
+							card += '<td>' + value.template_name + '</td>';
+							card += '<td>' + value.feedback_name + '</td>';
+							card += '<td>' + getFormattedDate(open, "dmY") + '[' + getTime(open) + ']</td>';
+							card += '<td>' + getFormattedDate(close, "dmY") + '[' + getTime(close) + ']</td>';
+							card += '<td><a href="#" class="trashFeedback" data-fb="' + value.feedback_id + '"><i class="fa fa-trash"></i></td>';
+							card += '</tr>';
+						}
+					})
+					$("#feedbackTable").find("tr:gt(0)").remove();
+					$("#feedbackTable").append(card);
+				}
+			})
+		}
 		// Feedback Template Block
-		$(document).on("click", ".df", function() {
+		$(document).on("click", ".ft", function() {
+			// $.alert("ft");
 			$(".addToTemplate").show()
 			$(".setActive").hide()
 			$(".questionList").hide()
+
 		})
 		$(document).on("change", "#sel_ft", function() {
 			var ft_id = $("#sel_ft").val();
@@ -300,6 +544,17 @@ require('../../php_function.php');
 
 			})
 		})
+		$(document).on("click", ".useTemplate", function() {
+			var template_id = $(this).attr("data-template")
+			//$.alert("Question Id " + fq_id);
+			$.post("feedbackSQL.php", {
+				template_id: template_id,
+				action: "useTemplate"
+			}, function() {}, "text").done(function(data, status) {
+				$.alert(data);
+				// templateList()
+			})
+		})
 
 		function templateList() {
 			var ft_id = $("#sel_ft").val();
@@ -322,7 +577,7 @@ require('../../php_function.php');
 							var template_id = value.template_id;
 							if (count == 1) card += '<div class="row mt-2">';
 							card += '<div class="col-6">';
-							if (value.template_status == "0") card += '<div class="container card myCard bg-two text-white">';
+							if (value.template_status == "0") card += '<div class="container card myCard currentCard">';
 							else card += '<div class="container card myCard">';
 							card += '<div class="testQuestionText">';
 							card += template_name;
@@ -331,11 +586,10 @@ require('../../php_function.php');
 							card += '<div class="row">';
 							if (value.template_status == "0") {
 								card += '<button class="btn btn-sm btn-active showTemplateModal"  data-template="' + template_id + '">Show</button>'
-								card += '<button class="btn btn-sm btn-active showTemplateModal">Use</button>'
 							} else {
 								card += '<button class="btn btn-sm showTemplateModal" data-template="' + template_id + '">Show</button>'
 								card += '<button class="btn btn-sm setActiveTemplate" data-template="' + template_id + '">Active</button>'
-								card += '<button class="btn btn-sm showTemplateModal">Use</button>'
+								card += '<button class="btn btn-sm useTemplate" data-template="' + template_id + '">Use</button>'
 							}
 							card += '</div>'
 
@@ -457,7 +711,9 @@ require('../../php_function.php');
 			}, function() {}, "text").done(function(data, status) {
 				//$.alert(data);
 				currentQuestion()
-				questionList()
+				// questionList()
+				$(".addToTemplate").hide()
+
 			})
 		})
 		$(document).on("click", ".editOption", function() {
@@ -553,8 +809,7 @@ require('../../php_function.php');
 					}
 				})
 				$(".questionList").html(card);
-				$(".setActive").hide()
-
+				//$(".setActive").hide()
 			});
 		}
 
@@ -568,32 +823,41 @@ require('../../php_function.php');
 			if (fmt == "dmY") return date;
 			else return dateYmd;
 		}
+
+		function getTime(ts) {
+			var a = new Date(ts);
+			var time = a.getHours() + ':' + a.getMinutes();
+			return time;
+		}
+
 	});
 </script>
 <!-- Modal Section-->
 <div class="modal" id="firstModal">
-  <div class="modal-dialog modal-md">
-    <form class="form-horizontal" id="modalForm">
-      <div class="modal-content">
-        <!-- Modal body -->
-          <div class="card myCard ml-3 mr-3 mt-3 mb-1">
-            <div class="card-title"><h5>Template Questions</h5></div>
-            <div class="row mb-2">
-              <div class="col ml-2">
-                <div class="showTemplate"></div>
-              </div>
-            </div>
-          </div>
-        <div class="card myCard">
-          <div class="row">
-            <div class="col">
-              <button class="btn btn-sm btn-approve" data-dismiss="modal">Close</button>
-            </div>
-          </div>
-        </div>
-      </div> <!-- Modal Conent Closed-->
-    </form>
-  </div> <!-- Modal Dialog Closed-->
+	<div class="modal-dialog modal-md">
+		<form class="form-horizontal" id="modalForm">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="card myCard ml-3 mr-3 mt-3 mb-1">
+					<div class="card-title">
+						<h5>Template Questions</h5>
+					</div>
+					<div class="row mb-2">
+						<div class="col ml-2">
+							<div class="showTemplate"></div>
+						</div>
+					</div>
+				</div>
+				<div class="card myCard">
+					<div class="row">
+						<div class="col">
+							<button class="btn btn-sm btn-approve" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div> <!-- Modal Conent Closed-->
+		</form>
+	</div> <!-- Modal Dialog Closed-->
 </div> <!-- Modal Closed-->
 
 </html>

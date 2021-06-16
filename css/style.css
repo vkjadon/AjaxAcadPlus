@@ -1,7 +1,9 @@
-body {
+html, body {
     font-size: 14px;
     padding-top: 1px;
-    background-color: #eceff352;
+    background-color: #dfdfdf52;
+    height: 100%;
+    margin: 0;
 }
 
 select {
@@ -19,8 +21,8 @@ select {
 }
 
 .full-height {
-    height: 700px;
-    background: white;
+    background: rgb(255, 255, 255);
+    height: 1000px;
 }
 
 .leftLinkBody {
@@ -194,6 +196,17 @@ textarea {
 
 .fa-trash {
     color: rgba(245, 7, 19, 0.911);
+    padding-left: 2px;
+    padding-right: 2px;
+}
+a.fa.fa-pencil-alt, a.fa.fa-edit {
+    color: rgba(18, 200, 206, 0.911);
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+a.fa.fa-circle {
+    color: rgba(56, 59, 240, 0.911);
     padding-left: 2px;
     padding-right: 2px;
 }
