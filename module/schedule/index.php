@@ -1,8 +1,6 @@
 <?php
-session_start();
-require("../../config_database.php");
-require('../../config_variable.php');
-require('../../php_function.php');
+require('../requireSubModule.php');
+
 $session_start=getField($conn, $mySes, "session", "session_id", "session_start");
 $session_end=getField($conn, $mySes, "session", "session_id", "session_end");
 

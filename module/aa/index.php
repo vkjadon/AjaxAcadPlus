@@ -1,8 +1,5 @@
 <?php
-session_start();
-require("../../config_database.php");
-require('../../config_variable.php');
-require('../../php_function.php');
+require('../requireSubModule.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">

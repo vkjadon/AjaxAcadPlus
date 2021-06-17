@@ -1,8 +1,6 @@
 <?php
-session_start();
-include('../../config_database.php');
-include('../../config_variable.php');
-include('../../php_function.php');
+require('../requireSubModule.php');
+
 include('../../phpFunction/onlineFunction.php');
 //echo $_POST['action'];
 if (isset($_POST['action'])) {

@@ -1,8 +1,5 @@
 <?php
-session_start();
-include('../../config_database.php');
-include('../../config_variable.php');
-include('../../php_function.php');
+require('../requireSubModule.php');
 //echo "Action Map " . $_POST['actionMap'];
 $myProgAbbri = getField($conn, $myProg, "program", "program_id", "sp_abbri");
 if (isset($_POST['actionMap'])) {

@@ -1,8 +1,5 @@
 <?php
-session_start();
-include('../../config_database.php');
-include('../../config_variable.php');
-include('../../php_function.php');
+require('../requireSubModule.php');
 //echo "Action " . $_POST['action'];
 if ($_POST['actionUpdateAssMethod'] == "updateAM") {
   $fields = ['am_id', 'am_name', 'am_code', 'am_weight', 'am_weight_po', 'am_type'];

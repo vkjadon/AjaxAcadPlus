@@ -1,9 +1,8 @@
 <?php
 session_start();
 //manage_subjectSql.php
-include('../../config_database.php');
-include('../../config_variable.php');
-include('../../php_function.php');
+require('../requireSubModule.php');
+
 $output = '';
 
 if (!empty($_FILES["csv_upload"]["name"])) {

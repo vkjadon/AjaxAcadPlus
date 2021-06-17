@@ -1,9 +1,7 @@
 <?php
 session_start();
-require("../../config_database.php");
-require('../../config_variable.php');
+require('../requireSubModule.php');
 require('../../phpFunction/leaveFunction.php');
-require('../../php_function.php');
 ?>
 <!DOCTYPE html>
 <html lang="en">

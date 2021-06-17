@@ -1,16 +1,18 @@
-<?php session_start(); ?>
+<?php 
+session_start();
+require("util/config_database.php"); 
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <title>AcadPlus</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <?php require("css.php");?>
 </head>
-<?php require("config_database.php"); ?>
-<?php // require("config_variable.php"); ?>
 
 <body>
-  <h1 class="display-3"> AcadPlus LMS </h1>
+  <h1 class="display-3"> ClassConnect </h1>
   <div class="container">
     <h1>&nbsp;</h1>
     <div class="row">
@@ -25,33 +27,31 @@
           die();
         }
         ?>
-        <img src="<?php echo $setLogo;?>"> 
-        <?php // echo $myFolder;?>       
+        <img src="<?php //echo $setLogo;?>"> 
+        <?php //echo $myFolder;?>       
       </div>
       <div class="col-4">
-        <div class="card bg-secondary text-white">
-          <h3 class="text-center">AcadPlus Login</h1>
+        <div class="card myCard">
             <div class="card-body">
+            <h3 class="card-title">Connect</h3>
               <form method="post" id="userForm">
                 <div class="form-group">
-                  <label>Username</label>
+                  <label>User Id (Email for OTP)</label>
                   <input type="text" name="username" minlength="5" id="username" class="form-control" />
-                  <span id="username_error" class="text-warning"></span>
                   <label>Password</label>
                   <input type="password" name="userpassword" id="userpassword" class="form-control" />
-                  <span id="userpassword_error" class="text-warning"></span>
                 </div>
 
                 <div class="form-group">
                 <input type="hidden" name="action" id="action" value="checkUser" />
-                <input type="submit" name="userlogin" id="userlogin" class="btn btn-info btn-block" value="Login" />
+                <button class="btn btn-sm" name="userlogin" id="userlogin">Login</button>
+                <span><a href="#" class="atag otp">OTP Login</a></span>
                 </div>
               </form>
             </div>
         </div>
       </div>
     </div>
-
   </div>
   </div>
 
@@ -66,10 +66,11 @@
         event.preventDefault(this);
         var formData = $(this).serialize();
         //alert(formData);
-        $.post("check_user.php", formData, function(mydata, mystatus) {
+        $.post("util/check_user.php", formData, function(mydata, mystatus) {
           //alert(" success " + mydata.found);
         }, "json").done(function(data, mystatus) {
-          //alert("Id " + data.user+ " User Found " +data.student);
+          // alert(data);
+          // alert("Id " + data.user+ " User Found " +data.student);
           if(data.user>0)
           {
             //alert(data.user+data.found);

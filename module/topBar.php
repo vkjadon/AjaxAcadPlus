@@ -36,14 +36,17 @@ if (!isset($myBatch)) $myBatch = '';
 				?>
 			</div>
 			<div class="col mr-2">
-				<span class="float-right">
-					<?php
-					echo $myProgAbbri . '[' . $myProg . ']-' . $myBatchName . '[' . $myBatch . ']';
-					//echo "School ".$myScl;
-					?></span>
+				<?php
+				echo $myProgAbbri . '[' . $myProg . ']-' . $myBatchName . '[' . $myBatch . ']';
+				//echo "School ".$myScl;
+				?>
 			</div>
-			<div class="col mr-2">
+			<div class="col float-right">
+				<input type="text" class="form-control form-control-sm" id="indexSearch" name="indexSearch" placeholder="Search Staff" aria-label="Search">
+				<p class='list-group overlapList' id="indexAutoList"></p>
+			</div>
 
+			<div class="col mr-2">
 				<a href="<?php echo $codePath . '/module/forms/'; ?>" class="float-right">&nbsp; Forms &nbsp;</a>
 				<a href="" class="float-right">&nbsp; Downloads &nbsp;</a>
 				<a href="<?php echo $codePath . '/eoffice/'; ?>" class="float-right" target="_blank">&nbsp; eOffice &nbsp;</a>
@@ -230,10 +233,11 @@ if (!isset($myBatch)) $myBatch = '';
 				<ul class="navbar-nav ml-auto nav-flex-icons">
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<i class="fas fa-user"></i> Profile </a>
+							<i class="fas fa-user"></i> <?php echo $myName; ?> </a>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="navbarDropdownMenuLink-333">
 							<a class="dropdown-item pb-1" href="<?php echo $codePath . '/module/profile/'; ?>">My Account</a>
+							<a class="dropdown-item pb-1" href="<?php echo $codePath . '/module/profile/'; ?>">Profile</a>
 							<a class="dropdown-item pb-1" href="<?php echo $codePath . '/logout.php'; ?>">Logout</a>
 						</div>
 					</li>

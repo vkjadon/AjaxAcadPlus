@@ -455,9 +455,9 @@ function get_classSubject($conn, $class_id)
   return json_encode($output);
 }
 
-function get_sessionClass($conn, $ses, $dept )
+function get_sessionClass($conn, $ses, $prog )
 {
-  $sql = "select cl.*, b.* from class cl, batch b where cl.batch_id=b.batch_id and cl.session_id='$ses' and dept_id='$dept' order by cl.class_semester";
+  $sql = "select cl.* from class cl where cl.session_id='$ses' and program_id='$prog' order by cl.class_semester";
 
   $result = $conn->query($sql);
   if (!$result) die(" The script could not be Loadded! Please report!");

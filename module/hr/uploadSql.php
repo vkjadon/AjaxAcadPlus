@@ -1,7 +1,6 @@
 <?php
-session_start();
-include('../../config_database.php');
-include('../../config_variable.php');
+require('../requireSubModule.php');
+
 
 if (!empty($_FILES["upload_qualification"]["name"])) {
     $output = '';
