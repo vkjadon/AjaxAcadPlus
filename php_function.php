@@ -197,12 +197,11 @@ function getListCard($conn, $tableId, $fields, $dataType, $sql, $statusDecode, $
     die(" The script could not be Loadded! Please report!");
   }
   //echo '<div class="card-columns">';
-  echo '<div class="row">';
+  echo '<div class="row m-2">';
   while ($rows = $result->fetch_assoc()) {
     $data = "";
     echo '<div class="col-sm-4 mb-2">';
-    echo '<div class="card">
-    <div class="card-body">';
+    echo '<div class="card myCard">';
     $id = $rows[$tableId];
     for ($j = 0; $j < $fieldCount; $j++) {
       $fieldName = $fields[$j];
@@ -222,12 +221,11 @@ function getListCard($conn, $tableId, $fields, $dataType, $sql, $statusDecode, $
       elseif ($button[$i] == 'D') echo '<a href="#" class="float-right ' . $tableId . 'D" id="' . $id . '"><i class="fa fa-trash"></i></a>';
       else echo '<a href="#" class="atag ' . $tableId . $button[$i] . '" data-id="' . $id . '" ' . $data . '>' . $button[$i] . '</a>';
     }
-    echo '</div></div></div>';
+    echo '</div></div>';
     echo '</div>';
     echo '</div>';
   }
   echo '</div>';
-  //echo '</div>';
 }
 function updateField($conn, $table, $fields, $values, $echo)
 {

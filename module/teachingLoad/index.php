@@ -16,7 +16,7 @@ require('../../phpFunction/teachingLoadFunction.php');
   <?php require("../topBar.php"); ?>
   <div class="container-fluid moduleBody">
     <div class="row">
-      <div class="col-2">
+    <div class="col-2 p-0 m-0 pl-2 full-height">
         <span id="panelId"></span>
         <?php
         $sql = "select * from class where session_id='$mySes' and dept_id='$myDept' order by class_semester";
@@ -30,7 +30,7 @@ require('../../phpFunction/teachingLoadFunction.php');
           <a class="list-group-item list-group-item-action tl" id="list-tl-list" data-toggle="list" href="#list-tl" role="tab" aria-controls="tl"> Assign Load </a>
         </div>
       </div>
-      <div class="col-10">
+      <div class="col-10 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="list-cc" role="tabpanel">
             <div class="row">

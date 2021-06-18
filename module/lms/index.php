@@ -24,7 +24,7 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
   <?php require("../topBar.php"); ?>
   <div class="container-fluid moduleBody">
     <div class="row">
-      <div class="col-2">
+    <div class="col-2 p-0 m-0 pl-2 full-height">
         <span id="panelId"></span>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active at" id="list-at-list" data-toggle="list" href="#list-at" role="tab" aria-controls="at"> Academic Tasks </a>
@@ -32,7 +32,7 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
           <a class="list-group-item list-group-item-action de" id="list-de-list" data-toggle="list" href="#list-de" role="tab" aria-controls="de"> Design Assessment </a>
         </div>
       </div>
-      <div class="col-10">
+      <div class="col-10 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="list-at" role="tabpanel" aria-labelledby="list-at-list">
             <div class="row">

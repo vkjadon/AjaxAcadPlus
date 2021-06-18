@@ -15,7 +15,7 @@ require('../requireSubModule.php');
   <?php require("../topBar.php"); ?>
   <div class="container-fluid moduleBody">
     <div class="row">
-      <div class="col-2">
+    <div class="col-2 p-0 m-0 pl-2 full-height">
         <?php
         $sql = "select * from class where session_id='$mySes' and program_id='$myProg'";
         selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
@@ -27,7 +27,7 @@ require('../requireSubModule.php');
 
         </div>
       </div>
-      <div class="col-10">
+      <div class="col-10 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="list-cr" role="tabpanel">
             <div class="row">

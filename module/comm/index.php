@@ -22,12 +22,12 @@ require('../requireSubModule.php');
   <?php require("../topBar.php"); ?>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-2">
+    <div class="col-2 p-0 m-0 pl-2 full-height">
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action cs" id="list-cs-list" data-toggle="list" href="#list-cs" role="tab" aria-controls="cs"> Show Classes </a>
         </div>
       </div>
-      <div class="col-10">
+      <div class="col-10 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane fade" id="list-stt" role="tabpanel" aria-labelledby="list-stt-list">
             <div id="sessionClassListSTT">Show TimeTable</div>

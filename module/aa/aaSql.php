@@ -13,8 +13,8 @@ if (isset($_POST['action'])) {
     $sql = "select * from batch order by batch desc";
     getListCard($conn, $tableId, $fields, $dataType, $sql, $statusDecode, $button);
   } elseif ($_POST["action"] == "addBatch") {
-    $fields = ['batch'];
-    $values = [data_check($_POST['newBatch'])];
+    $fields = ['batch', 'update_id', 'batch_status'];
+    $values = [data_check($_POST['newBatch']), $myId, '0'];
     $status = 'batch_status';
     $dup = "select * from batch where batch='" . data_check($_POST["newBatch"]) . "'";
     $dup_alert = " Batch already Exists !!";
@@ -41,9 +41,7 @@ if (isset($_POST['action'])) {
     //echo count($array);
     //echo count($array["data"]);
     for ($i = 0; $i < count($array["data"]); $i++) {
-      echo '<div class="card mb-1">';
-      echo '<div class="card-body mb-0 pb-0">';
-      echo '<div class="row">';
+      echo '<div class="row m-2">';
       echo '<div class="col-sm-2">';
       $school_id = $array["data"][$i]["school_id"];
       $school_abbri = getField($conn, $school_id, "school", "school_id", "school_abbri");
@@ -66,7 +64,6 @@ if (isset($_POST['action'])) {
       echo '</div>';
       echo '<div class="col-sm-2">';
       echo '<a href="#" class="float-right session_idD" data-id="' . $array["data"][$i]["id"] . '"><i class="fa fa-trash"></i></a>';
-      echo '</div>';
       echo '</div>';
       echo '</div></div>';
     }

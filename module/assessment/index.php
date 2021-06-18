@@ -16,14 +16,14 @@ require('../requireSubModule.php');
 
     <div class="container-fluid moduleBody">
       <div class="row">
-        <div class="col-sm-2">
+      <div class="col-2 p-0 m-0 pl-2 full-height">
           <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
             <a class="list-group-item list-group-item-action active am" id="list-am-list" data-toggle="list" href="#list-am" role="tab" aria-controls="am"> Assessment Master (DAA)</a>
             <a class="list-group-item list-group-item-action sa" id="list-sa-list" data-toggle="list" href="#list-sa" role="tab" aria-controls="sa"> Subject Assessment (SC) </a>
             <a class="list-group-item list-group-item-action da" id="list-da-list" data-toggle="list" href="#list-da" role="tab" aria-controls="da"> Design Assessment (SF/TF) </a>
           </div>
         </div>
-        <div class="col-10">
+        <div class="col-10 leftLinkBody">
           <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane show active" id="list-am" role="tabpanel">
               <div class="row">

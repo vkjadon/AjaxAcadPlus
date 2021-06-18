@@ -18,14 +18,14 @@ require('../requireSubModule.php');
 
     <div class="container-fluid moduleBody">
       <div class="row">
-        <div class="col-sm-2">
+      <div class="col-2 p-0 m-0 pl-2 full-height">
           <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
             <a class="list-group-item list-group-item-action po" id="list-po-list" data-toggle="list" href="#list-po"> Programme Outcome </a>
             <a class="list-group-item list-group-item-action co" id="list-co-list" data-toggle="list" href="#list-co" role="tab" aria-controls="co"> Course Outcome </a>
             <a class="list-group-item list-group-item-action copo" id="list-copo-list" data-toggle="list" href="#list-copo" role="tab" aria-controls="copo"> CO-PO Map </a>
           </div>
         </div>
-        <div class="col-10">
+        <div class="col-10 leftLinkBody">
           <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show" id="list-po">
               <div class="row">

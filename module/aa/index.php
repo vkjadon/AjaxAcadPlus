@@ -17,14 +17,14 @@ require('../requireSubModule.php');
 
     <div class="container-fluid moduleBody">
       <div class="row">
-        <div class="col-sm-2">
+      <div class="col-2 p-0 m-0 pl-2 full-height">
           <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
             <a class="list-group-item list-group-item-action active master" id="list-master-list" data-toggle="list" href="#list-master"> Academic Master Data </a>
             <a class="list-group-item list-group-item-action responsibility" id="list-responsibility-list" data-toggle="list" href="#list-responsibility"> Asign Responsibility </a>
             <a class="list-group-item list-group-item-action  bs" id="list-bs-list" data-toggle="list" href="#list-bs"> Batch/Session </a>
           </div>
         </div>
-        <div class="col-10">
+        <div class="col-10 leftLinkBody">
           <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane show active" id="list-master" role="tabpanel">
               <div class="row">
@@ -203,17 +203,20 @@ require('../requireSubModule.php');
                 </div>
               </div>
             </div>
-
-            <div class="tab-pane fade" id="list-bs">
+            <div class="tab-pane fade" id="list-bs" role="tabpanel">
               <div class="row">
                 <div class="col-sm-6">
-                  <button class="btn btn-secondary btn-sm addBatch">New Batch</button>
-                  <p style="text-align: center;" id="batchShowList"></p>
+                  <div class="card myCard">
+                    <button class="btn btn-sm addBatch">New Batch</button>
+                    <p style="text-align: center;" id="batchShowList"></p>
+                  </div>
                 </div>
                 <div class="col-6">
-                  <button class="btn btn-secondary btn-sm addSessionButton">New Session</button>
-                  <input type="hidden" id="batchId" name="batchId">
-                  <p id="batchSession"></p>
+                  <div class="card myCard">
+                    <button class="btn btn-sm addSessionButton">New Session</button>
+                    <input type="hidden" id="batchId" name="batchId">
+                    <p id="batchSession"></p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -385,7 +388,7 @@ require('../requireSubModule.php');
         $('#firstModal').modal('hide');
         //$.alert(" Pressed" + formData);
         $.post("aaSql.php", formData, () => {}, "text").done(function(data) {
-          //$.alert("List " + data);
+          $.alert("List " + data);
           if (action == "addBatch" || action == "updateBatch") {
             batchList();
           } else if (action == "addPo" || action == "updatePo") {

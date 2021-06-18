@@ -17,14 +17,14 @@ require('../requireSubModule.php');
  <?php require("../topBar.php"); ?>
  <div class="container-fluid moduleBody">
   <div class="row">
-   <div class="col-2">
+  <div class="col-2 p-0 m-0 pl-2 full-height">
     <div class="list-group list-group-mine" id="list-tab" role="tablist">
      <a class="list-group-item list-group-item-action active as" id="list-as-list" data-toggle="list" href="#list-as" role="tab" aria-controls="as"> Assessment Strategy </a>
      <a class="list-group-item list-group-item-action coa" id="list-coa-list" data-toggle="list" href="#list-coa" role="tab" aria-controls="coa"> CO Attainment </a>
      <a class="list-group-item list-group-item-action poa" id="list-poa-list" data-toggle="list" href="#list-poa" role="tab" aria-controls="poa"> PO Attainment </a>
     </div>
    </div>
-   <div class="col-10">
+   <div class="col-10 leftLinkBody">
     <div class="tab-content" id="nav-tabContent">
      <div class="tab-pane fade show active" id="list-as" role="tabpanel" aria-labelledby="list-as-list">
       <div class="row">

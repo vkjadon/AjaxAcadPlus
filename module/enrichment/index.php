@@ -18,7 +18,7 @@ require('../../php_function.php');
 
  <div class="container-fluid moduleBody">
   <div class="row">
-   <div class="col-sm-2">
+  <div class="col-2 p-0 m-0 pl-2 full-height">
     <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
      <a class="list-group-item list-group-item-action active rp" id="list-rp-list" data-toggle="list" href="#list-rp" role="tab" aria-controls="rp"> Resource Person </a>
      <a class="list-group-item list-group-item-action org" id="list-org-list" data-toggle="list" href="#list-org" role="tab" aria-controls="org"> Organization </a>
@@ -28,7 +28,7 @@ require('../../php_function.php');
 
     </div>
    </div>
-   <div class="col-10">
+   <div class="col-10 leftLinkBody">
     <div class="tab-content" id="nav-tabContent">
      <div class="tab-pane show active" id="list-rp" role="tabpanel">
       <div class="row">

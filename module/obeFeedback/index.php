@@ -23,7 +23,7 @@ require('../requireSubModule.php');
 <?php require("../topBar.php");?>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-2">
+    <div class="col-2 p-0 m-0 pl-2 full-height">
         <div class="selectPanel">
           <p class="selectPanel m-1 p-0" id="selectPanelTitle"></p>
           <div class="col">
@@ -40,7 +40,7 @@ require('../requireSubModule.php');
 
         </div>
       </div>
-      <div class="col-10">
+      <div class="col-10 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane" id="list-ar" role="tabpanel" aria-labelledby="list-ar-list">
             <button class="btn btn-warning btn-round-sm mt-1 mb-2" id="addStudentButton"> Students </button>

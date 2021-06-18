@@ -66,7 +66,7 @@ require('../requireSubModule.php');
   <div class="container-fluid moduleBody">
     <span id="panelId"></span>
     <div class="row">
-      <div class="col-sm-2">
+    <div class="col-2 p-0 m-0 pl-2 full-height">
         <div class="list-group list-group-mine" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active as" id="list-as-list" data-toggle="list" href="#list-as" role="tab" aria-controls="as"> Add Staff </a>
           <a class="list-group-item list-group-item-action sq" id="list-sq-list" data-toggle="list" href="#list-sq" role="tab" aria-controls="sq"> Staff Qualification </a>
@@ -74,7 +74,7 @@ require('../requireSubModule.php');
           <em>Add staff not to be assigned designation and department. The staff to be assigned these from Role/Responsibility Tab.</em>
         </div>
       </div>
-      <div class="col-sm-10">
+      <div class="col-sm-10 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane fade show active" id="list-as" role="tabpanel" aria-labelledby="list-as-list">
             <div class="row">

@@ -24,7 +24,7 @@ require('../../phpFunction/leaveFunction.php');
   <?php require("../topBar.php"); ?>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-2">
+    <div class="col-2 p-0 m-0 pl-2 full-height">
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
 
           <a class="list-group-item list-group-item-action active sea" id="list-ea-list" data-toggle="list" href="#list-sea" role="tab" aria-controls="sea">Subject Extra Attendance </a>
@@ -34,7 +34,7 @@ require('../../phpFunction/leaveFunction.php');
 
       </div>
 
-      <div class="col-10">
+      <div class="col-10 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
 
           <div class="tab-pane show active" id="list-sea" role="tabpanel" aria-labelledby="list-sea-list">

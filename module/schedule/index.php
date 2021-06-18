@@ -18,7 +18,7 @@ $session_end=getField($conn, $mySes, "session", "session_id", "session_end");
   <?php require("../topBar.php"); ?>
   <div class="container-fluid moduleBody">
     <div class="row">
-      <div class="col-2">
+    <div class="col-2 p-0 m-0 pl-2 full-height">
         <div class="card text-center selectPanel">
           <span id="panelId"></span>
           <?php
@@ -36,7 +36,7 @@ $session_end=getField($conn, $mySes, "session", "session_id", "session_end");
 
         </div>
       </div>
-      <div class="col-10">
+      <div class="col-10 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="list-tt" role="tabpanel" aria-labelledby="list-tt-list">
             <div id="dayList"></div>

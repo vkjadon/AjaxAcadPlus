@@ -52,7 +52,7 @@ require('../requireSubModule.php');
  <?php require("../topBar.php"); ?>
  <div class="container-fluid moduleBody">
   <div class="row">
-   <div class="col-2">
+  <div class="col-2 p-0 m-0 pl-2 full-height">
     <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
      <a class="list-group-item list-group-item-action active si" id="list-si-list" data-toggle="list" href="#list-si" role="tab" aria-controls="si"> Setup Institute </a>
      <a class="list-group-item list-group-item-action mis" id="list-mis-list" data-toggle="list" href="#list-mis" role="tab" aria-controls="mis"> Manage School </a>
@@ -62,7 +62,7 @@ require('../requireSubModule.php');
     </div>
    </div>
 
-   <div class="col-10 m-0 p-0">
+   <div class="col-10 leftLinkBody">
     <div class="tab-content" id="nav-tabContent">
      <div class="tab-pane fade show active" id="list-si" role="tabpanel" aria-labelledby="list-si-list">
       <div class="row">
