@@ -8,7 +8,7 @@ function check_tn_amap($conn, $table)
   if (!$result) {
     //echo "Table Missing $table";
     $query =
-    'ac_id INT(5) NULL,
+      'ac_id INT(5) NULL,
     at_id INT(5) NULL,
     amap_grid INT(2) NULL,
     amap_internal VARCHAR(10) NULL,
@@ -60,8 +60,8 @@ function check_tn_class($conn, $table)
     class_shift VARCHAR(10) NULL,
     class_semester INT(2) NULL,
     class_group INT(1) NULL,
-    submit_ts timestamp default current_timestamp(),
-    submit_id INT(5) NULL,
+    update_ts timestamp default current_timestamp(),
+    update_id INT(5) NULL,
     class_status INT(1) NULL,
     PRIMARY KEY (class_id),
     UNIQUE(session_id, program_id, batch_id, class_name, class_section, class_shift)';
@@ -89,7 +89,7 @@ function check_tn_lt($conn, $table)
     lt_check INT(1) NULL,
     lt_carry INT(1) NULL,
     lt_max INT(3) NULL,
-    update_ts timestamp,
+    update_ts timestamp Default current_timestamp,
     update_id INT(5) NULL,
     lt_status INT(1) NULL,
     PRIMARY KEY (lt_id),
@@ -116,7 +116,7 @@ function check_tn_org($conn, $table)
     org_email VARCHAR(50) NULL,
     org_address TEXT NULL,
     org_contact TEXT NULL,
-    update_ts timestamp,
+    update_ts timestamp Default current_timestamp,
     update_id INT(5) NULL,
     org_status INT(1) NULL,
     PRIMARY KEY (org_id),
@@ -164,8 +164,8 @@ function check_tn_rc($conn, $table)
     student_id INT(5) NULL,
     class_id INT(4) NULL,
     rc_date DATE,
-    submit_id INT(5) NULL,
-    submit_ts timestamp NOT NULL,
+    update_id INT(5) NULL,
+    update_ts timestamp Default current_timestamp,
     rc_status INT(1) NULL,
     PRIMARY KEY (rc_id),
     UNIQUE(student_id, class_id)';
@@ -191,7 +191,7 @@ function check_tn_rp($conn, $table)
     rp_email VARCHAR(50) NULL,
     rp_address TEXT NULL,
     rp_about TEXT NULL,
-    update_ts timestamp,
+    update_ts timestamp Default current_timestamp,
     update_id INT(5) NULL,
     rp_status INT(1) NULL,
     PRIMARY KEY (rp_id),
@@ -215,7 +215,7 @@ function check_tn_rs($conn, $table)
     student_id INT(5) NULL,
     tl_id INT(4) NULL,
     rs_date DATE,
-    update_ts timestamp,
+    update_ts timestamp Default current_timestamp,
     update_id INT(5) NULL,
     rs_status INT(1) NULL,
     PRIMARY KEY (rs_id),
@@ -235,14 +235,14 @@ function check_tn_respStaff($conn, $table)
   if (!$result) {
     //echo "Table Missing $table";
     $query =
-    'rs_id INT(5) NOT NULL AUTO_INCREMENT,
+      'rs_id INT(5) NOT NULL AUTO_INCREMENT,
     rs_code VARCHAR(20) NULL,
     staff_id INT(4) NULL,
     unit_id INT(4) NULL,
     rs_from_date DATE,
     rs_to_date DATE,
     rs_remarks TEXT NULL,
-    update_ts timestamp,
+    update_ts timestamp Default current_timestamp,
     update_id INT(5) NULL,
     rs_status INT(1) NULL,
     PRIMARY KEY (rs_id),
@@ -284,7 +284,7 @@ function check_tn_sas($conn, $table)
     tl_id INT(5) NULL,
     sas_period INT(2) NULL,
     sas_date DATE,
-    update_ts timestamp NULL,
+    update_ts timestamp Default current_timestamp,
     staff_id INT(5) NULL,
     sas_mark INT(1) NULL,
     sas_status INT(1) NULL,
@@ -296,6 +296,57 @@ function check_tn_sas($conn, $table)
   }
 }
 
+function check_tn_std($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    echo "Table Missing $table";
+    // Auto Increment not Required
+    $query =
+      'student_id INT(5) NOT NULL AUTO_INCREMENT,
+    batch_id int(3) NULL,
+    program_id int(3) NULL,
+    student_name varchar(50) NULL,
+    student_rollno varchar(20) NULL,
+    student_mobile varchar(10) NULL,
+    student_email varchar(50) NULL,
+    student_dob date NULL,
+    update_ts timestamp Default current_timestamp,
+    update_id int(4) NULL,
+    student_status int(1) NULL,
+    PRIMARY KEY (student_id),
+    UNIQUE(student_rollno)';
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+function check_tn_si($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    echo "Table Missing $table";
+    // Auto Increment not Required
+    $query =
+      'si_id INT(5) not null auto_increment ,
+    student_id INT(5) NULL,
+    si_fname varchar(100) NULL,
+    si_mname varchar(100) NULL,
+    si_address text NULL,
+    update_ts timestamp Default current_timestamp,
+    update_id int(4) NULL,
+    si_status int(1) NULL,
+    PRIMARY KEY (si_id),
+    UNIQUE(student_id)';
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
 function check_tn_sbt($conn, $table)
 {
   $sql = "select * from $table";
@@ -311,7 +362,7 @@ function check_tn_sbt($conn, $table)
     sbt_slot INT(2) NULL,
     sbt_type INT(2) NULL,
     sbt_syllabus INT(1) NULL,
-    update_ts timestamp,
+    update_ts timestamp Default current_timestamp,
     update_id INT(5) NULL,
     sbt_status INT(1) NULL,
     PRIMARY KEY (sbt_id),
@@ -350,14 +401,14 @@ function check_tn_sr($conn, $table)
   if (!$result) {
     //echo "Table Missing $table";
     $query =
-    'sr_id INT(5) NULL AUTO_INCREMENT,
+      'sr_id INT(5) NULL AUTO_INCREMENT,
     subject_id INT(5) NULL,
     rt_id INT(2) NULL,
     sr_name VARCHAR(100) NULL,
     sr_type VARCHAR(10) NULL,
     sr_url TINYTEXT NULL,
-    update_ts timestamp,
-    submit_id INT(5) NULL,
+    update_ts timestamp Default current_timestamp,
+    update_id INT(5) NULL,
     sr_status INT(1) NULL,
     PRIMARY KEY (sr_id),
     UNIQUE(subject_id, rt_id, sr_name)';
@@ -368,6 +419,7 @@ function check_tn_sr($conn, $table)
   }
   //else echo "Table Exists";
 }
+
 function check_tn_tl($conn, $table)
 {
   $sql = "select * from $table";
@@ -379,8 +431,8 @@ function check_tn_tl($conn, $table)
     tlg_id INT(5) NULL,
     tl_group INT(5) NULL,
     staff_id INT(5) NULL,
-    submit_id INT(5) NULL,
-    submit_ts timestamp NULL,
+    update_id INT(5) NULL,
+    update_ts timestamp Default current_timestamp,
     tl_status INT(1) NULL,
     PRIMARY KEY (tl_id),
     UNIQUE(tlg_id, tl_group, staff_id)';
@@ -391,6 +443,7 @@ function check_tn_tl($conn, $table)
   }
   //else echo "Table Exists";
 }
+
 function check_tn_tlg($conn, $table)
 {
   $sql = "select * from $table";
@@ -404,8 +457,8 @@ function check_tn_tlg($conn, $table)
     tlg_type VARCHAR(1) NULL,
     tlg_group INT(1) NULL,
     dept_id INT(1) NULL,
-    submit_id INT(5) NULL,
-    submit_ts timestamp NULL,
+    update_id INT(5) NULL,
+    update_ts timestamp Default current_timestamp,
     tlg_status INT(1) NULL,
     PRIMARY KEY (tlg_id),
     UNIQUE(subject_id, class_id, tlg_type)';
@@ -416,6 +469,7 @@ function check_tn_tlg($conn, $table)
   }
   //else echo "Table Exists";
 }
+
 function check_tn_tt($conn, $table)
 {
   $sql = "select * from $table";

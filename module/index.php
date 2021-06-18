@@ -11,7 +11,7 @@ if (!isset($myDept)) {
 	$_SESSION['mydeptid'] = $myDept;
 }
 if (!isset($mySes)) {
-	$sql = "select * from session_school where school_id='$myScl'";
+	$sql = "select * from session where school_id='$myScl'";
 	$mySes = getFieldValue($conn, "session_id", $sql);
 	$_SESSION['mysid'] = $mySes;
 }

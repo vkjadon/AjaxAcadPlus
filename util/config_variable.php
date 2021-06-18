@@ -71,8 +71,14 @@ if (isset($mySes)) {
   $tn_sc = 'subject_choice'.$mySes;
   check_tn_sc($conn, $tn_sc);
   
+  $tn_si = 'student_info';
+  check_tn_si($conn, $tn_si);
+  
   $tn_sr = 'subject_resource'.$mySes;
   check_tn_sr($conn, $tn_sr);
+
+  $tn_std = 'student';
+  check_tn_std($conn, $tn_std);
 
   $tn_tl = 'teaching_load'.$mySes;
   check_tn_tl($conn, $tn_tl);

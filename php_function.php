@@ -309,6 +309,7 @@ function getFieldValue($conn, $fieldName, $sql)
   $result = $conn->query($sql);
   if (!$result) {
     echo $conn->error;
+    echo "<br>".$sql.'<br>';
     die("Opps! Some Error occured !! Please contact Administrator !");
   }
   $rows = $result->fetch_assoc();
@@ -326,6 +327,7 @@ function getField($conn, $getId, $tableName, $id, $name)
   $result = $conn->query($sql);
   if (!$result) {
     echo $conn->error;
+    echo "<br>".$name.'<br>';
     die("Opps! Some Error occured !! Please contact Administrator !");
   } else {
     $num_rows = $result->num_rows;
@@ -347,7 +349,8 @@ function getFieldArray($conn,  $getId, $tableName, $id, $name)
   $i = 0;
   if (!$result) {
     echo $conn->error;
-    die("Opps! Some Error occured !! Please contact Administrator !");
+    echo " <br> ".$name;
+    die("<br>Opps! Some Error occured !! Please contact Administrator !");
   } else {
     $output = array();
     while ($rows = $result->fetch_assoc()) {
