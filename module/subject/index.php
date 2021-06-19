@@ -16,7 +16,8 @@ require('../requireSubModule.php');
 
     <div class="container-fluid moduleBody">
       <div class="row">
-      <div class="col-2 p-0 m-0 pl-2 full-height">
+        <div class="col-2 p-0 m-0 pl-2 full-height">
+          <h5 class="pt-3">Manage Subjects</h5>
           <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
             <a class="list-group-item list-group-item-action show active sub" id="list-sub-list" data-toggle="list" href="#list-sub" role="tab" aria-controls="sub"> Courses/Subjects </a>
             <a class="list-group-item list-group-item-action se" id="list-se-list" data-toggle="list" href="#list-se" role="tab" aria-controls="se">Session Electives</a>
@@ -25,29 +26,35 @@ require('../requireSubModule.php');
         </div>
         <div class="col-10 leftLinkBody">
           <div class="tab-content" id="nav-tabContent">
-
             <div class="tab-pane fade show active" id="list-sub" role="tabpanel" aria-labelledby="list-sub-list">
               <div class="row">
                 <div class="col-sm-7">
-                  <button class="btn btn-sm btn-secondary addSubject">New Subject</button>
-                  <button class="btn btn-sm btn-warning copySubject">Copy Subject</button>
-                  <button class="btn btn-sm btn-primary uploadSubject">Upload Subject</button>
-                  <div id="subShowList"></div>
+                  <div class="mt-1 mb-1">
+                    <h3>
+                      <a class="fa fa-plus-circle p-0 addSubject"></a>
+                      <a class="fa fa-arrow-circle-up p-0 uploadSubject"></a>
+                      <a class="fa fa-copy p-0 copySubject"></a>
+                    </h3>
+                  </div>
+                  <div class="card myCard m-2 p-2">
+                    <div id="subShowList"></div>
+                  </div>
                 </div>
                 <div class="col-sm-5">
-                  <button class="btn btn-sm btn-default btn-block disabled">Assign Elective to Elective/CBCS Pool</button>
-                  <div id="electiveList"></div>
+                  <h5>Elective List</h5>
+                  <div class="card myCard">
+                    <div id="electiveList"></div>
+                  </div>
                 </div>
               </div>
             </div>
             <div class="tab-pane fade" id="list-se" role="tabpanel" aria-labelledby="list-se-list">
-
               <div class="row">
-                <div class="col-sm-6">
-                  <button class="btn btn-sm btn-default btn-block disabled">Set Elective/CBCS Schedule</button>
+                <div class="col-sm-8">
+                  <h5 class="disabled">Set Elective/CBCS Schedule</h5>
                   <div id="electivePool"></div>
                 </div>
-                <div class="col-sm-5">
+                <div class="col-sm-4">
                 </div>
               </div>
             </div>
@@ -57,17 +64,20 @@ require('../requireSubModule.php');
               <div class="row">
                 <div class="col-sm-7">
                   <h5>Subject List</h5>
-                  <table class="table table-striped table-bordered list-table-xs" id="subReport">
-                    <thead>
-                      <tr>
-                        <th>#</th>
-                        <th>Subject Code</th>
-                        <th>Subject Name</th>
-                        <th>L-T-P</th>
-                        <th>Credit</th>
-                      </tr>
-                    </thead>
-                  </table>
+                  <div class="card myCard p-2">
+                    
+                    <table class="table table-striped table-bordered list-table-xs" id="subReport">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Subject Code</th>
+                          <th>Subject Name</th>
+                          <th>L-T-P</th>
+                          <th>Credit</th>
+                        </tr>
+                      </thead>
+                    </table>
+                  </div>
                 </div>
                 <div class="col-sm-5">
                   <h5>Subject Summary</h5>
@@ -511,42 +521,29 @@ require('../requireSubModule.php');
         <div class="modal-body">
           <div class="subjectForm">
             <div class="row">
-              <div class="col-7">
+              <div class="col-6">
                 <div class="form-group">
                   Subject Name
                   <input type="text" class="form-control form-control-sm" id="subject_name" name="subject_name" placeholder="Subject Name">
                 </div>
               </div>
-              <div class="col-5">
+              <div class="col-2">
                 <div class="form-group">
-                  Subject Code
+                  Code
                   <input type="text" class="form-control form-control-sm" id="subject_code" name="subject_code" placeholder="Subject Code">
                 </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-3">
+
+              <div class="col-2">
                 <div class="form-group">
                   Semester
                   <input type="number" class="form-control form-control-sm" id="subject_semester" name="subject_semester" placeholder="Semester">
                 </div>
               </div>
-              <div class="col-3">
+              <div class="col-2">
                 <div class="form-group">
                   SNo
                   <input type="number" class="form-control form-control-sm" id="subject_sno" name="subject_sno" placeholder="SNo">
-                </div>
-              </div>
-              <div class="col-3">
-                <div class="form-group">
-                  Internal
-                  <input type="text" class="form-control form-control-sm" id="subject_internal" name="subject_internal" placeholder="Internal">
-                </div>
-              </div>
-              <div class="col-3">
-                <div class="form-group">
-                  External
-                  <input type="text" class="form-control form-control-sm" id="subject_external" name="subject_external" placeholder="External">
                 </div>
               </div>
             </div>
@@ -591,29 +588,6 @@ require('../requireSubModule.php');
                 </div>
                 <div class="form-check-inline">
                   <input type="radio" class="form-check-input" id="stGB" name="subject_type" title="Governing Body" value="EP">GB
-                </div>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col">
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" checked id="scTh" name="subject_category" value="Theory">Theory
-                </div>
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="scPr" name="subject_category" value="Practical">Practical
-                </div>
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="scPrj" name="subject_category" value="Project">Project
-                </div>
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="scFW" name="subject_category" value="FieldWork">Field Project
-                </div>
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="scTW" name="subject_category" value="ThesisWork">Thesis Work
-                </div>
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="scIn" name="subject_category" value="Internship">Internship
                 </div>
               </div>
             </div>

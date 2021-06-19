@@ -114,11 +114,11 @@ if (isset($_POST['action'])) {
 			$inst_abbri = $array["data"][$i]["inst_abbri"];
 			$inst_url = $array["data"][$i]["inst_url"];
 
-			echo '<div class="card">
+			echo '<div class="card myCard">
       <div class="card-body mb-0">
-      <h5 class="card-title" >' . $inst_name . '[' . $inst_id . ']</h5>
+      <h5>' . $inst_name . '[' . $inst_id . ']</h5>
       <h6 class="card-subtitle mb-2 text-muted">' . $inst_url . ' [' . $inst_abbri . ']</h6>
-      <a href="#" class="btn btn-info btn-sm basicInfoUni" data-inst="' . $inst_id . '">Basic Info</a>
+      <h3><a href="#" class="fa fa-info-circle basicInfoUni" data-inst="' . $inst_id . '"></a></h3>
       </div></div>';
 		}
 	} elseif ($_POST["action"] == "schoolList") {
@@ -135,11 +135,11 @@ if (isset($_POST['action'])) {
 			$school_abbri = $array["data"][$i]["school_abbri"];
 			$school_url = $array["data"][$i]["school_url"];
 
-			echo '<div class="card">
+			echo '<div class="card myCard mb-1">
       <div class="card-body mb-0">
-      <h5 class="card-title" >' . $school_name . '[' . $school_id . ']</h5>
+      <h5>' . $school_name . ' [' . $school_id . ']</h5>
       <h6 class="card-subtitle mb-2 text-muted">' . $school_url . ' [' . $school_abbri . ']</h6>
-      <a href="#" class="btn btn-info btn-sm basicInfoCollege" data-school="' . $school_id . '">Basic Info</a>
+      <h3><a href="#" class="fa fa-info-circle basicInfoCollege" data-school="' . $school_id . '"></a></h3>
       </div></div>';
 		}
 	} elseif ($_POST["action"] == "deptList") {
@@ -155,16 +155,15 @@ if (isset($_POST['action'])) {
 			$dept_abbri = $array["data"][$i]["dept_abbri"];
 			$dept_doi = $array["data"][$i]["dept_doi"];
 
-			echo '<div class="card">
+			echo '<div class="card myCard mb-1">
    		<div class="card-body mb-0">
 				<div class="row">
-					<div class="col-9">
-   					<h7>' . $dept_name . '</h7>[' . $dept_abbri . ']<br>
-	 					<h8 class="card-subtitle mb-2 text-muted">Head : -- </h8>
+					<div class="col-10">
+   					<h5>' . $dept_name . '</h5> [' . $dept_abbri . ']<br>
+						<h6 class="cardBodyText">' . date("d-m-Y", strtotime($dept_doi)) . ' Head : -- </h6>
 	 				</div>
-					<div class="col-3 text-center">
+					<div class="col-2 text-center">
 						<a href="#" class="fa fa-edit editDept" data-dept="' . $dept_id . '"></a>
-						<h6 class="cardBodyText">' . date("d-m-Y", strtotime($dept_doi)) . '</h6>
 					</div>
 				</div>
    		</div>
@@ -188,9 +187,9 @@ if (isset($_POST['action'])) {
 			$sp_abbri = $array["data"][$i]["sp_abbri"];
 			$Cr = '';
 			$status = '';
-
-			echo '<div class="row border border-primary mb-2 ml-2 cardBodyText">';
-			echo '<div class="col-sm-2 mb-0 bg-two">';
+			echo '<div class="card myCard">';
+			echo '<div class="row ml-2">';
+			echo '<div class="col-sm-2 mb-0">';
 			echo 'ID : ' . $program_id . '';
 			echo '<a href="#" class="float-right program_idE" data-id="' . $program_id . '"><i class="fa fa-edit"></i></a>';
 			echo '<div><b>' . $array["data"][$i]["program_abbri"] . '</b>
@@ -216,6 +215,7 @@ if (isset($_POST['action'])) {
 			else echo '<a href="#" class="program_idD" data-id="' . $program_id . '"><i class="fa fa-trash"></i></a>';
 			echo ' <h6 class="cardBodyText">' . $array["data"][$i]["program_start"] . '</h6>';
 
+			echo '</div>';
 			echo '</div>';
 			echo '</div>';
 		}

@@ -16,34 +16,46 @@ require('../../phpFunction/teachingLoadFunction.php');
   <?php require("../topBar.php"); ?>
   <div class="container-fluid moduleBody">
     <div class="row">
-    <div class="col-2 p-0 m-0 pl-2 full-height">
+      <div class="col-2 p-0 m-0 pl-2 full-height">
+        <h5 class="pt-3">Teaching Load</h5>
         <span id="panelId"></span>
-        <?php
-        $sql = "select * from class where session_id='$mySes' and dept_id='$myDept' order by class_semester";
-        selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
-        ?>
-
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active cc" id="list-cc-list" data-toggle="list" href="#list-cc" role="tab" aria-controls="cc"> Class Groups </a>
           <a class="list-group-item list-group-item-action semLoad" id="list-semLoad-list" data-toggle="list" href="#list-semLoad" role="tab" aria-controls="semLoad"> Semester Load </a>
           <a class="list-group-item list-group-item-action subChoice" id="list-subChoice-list" data-toggle="list" href="#list-subChoice" role="tab" aria-controls="subChoice"> Subject Choice Filling </a>
           <a class="list-group-item list-group-item-action tl" id="list-tl-list" data-toggle="list" href="#list-tl" role="tab" aria-controls="tl"> Assign Load </a>
         </div>
+        <?php
+        $sql = "select * from class where session_id='$mySes' and dept_id='$myDept' order by class_semester";
+        selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
+        ?>
       </div>
       <div class="col-10 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="list-cc" role="tabpanel">
             <div class="row">
-              <div class="col-6 mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addClass">New</button>
-                <p id="clList"></p>
+              <div class="col-6 mt-1 mb-1">
+                <div class="mt-1 mb-1">
+                  <h3>
+                    <a class="fa fa-plus-circle p-0 addClass"></a> Classes
+                  </h3>
+                </div>
+                <div class="card myCard p-2">
+                  <div id="clList"></div>
+                </div>
                 The Semester and Batch cannot be edited once the Teaching Load Groups are created.
               </div>
-              <div class="col-6 mt-1 mb-1" id="classSubject"></div>
+              <div class="col-6 mt-1 mb-1">
+                <h3>Create Groups of the Class</h3>
+                <div class="card myCard">
+                  <div class="p-2" id="classSubject"></div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="tab-pane fade" id="list-semLoad" role="tabpanel">
             <div class="col-8 mt-1 mb-1">
-              <div class="container card shadow d-flex justify-content-center mt-2" id="card_tl">
+              <div class="container card myCard" id="card_tl">
                 <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab">
                   <?php
                   $sql = "select * from class where session_id='$mySes' and program_id='$myProg' and class_status='0' order by class_semester";
@@ -106,8 +118,15 @@ require('../../phpFunction/teachingLoadFunction.php');
           </div>
           <div class="tab-pane fade" id="list-subChoice" role="tabpanel" aria-labelledby="list-subChoice-list">
             <div class="row">
-              <div class="col-8 mt-1 mb-1" id="subjectChoiceList"></div>
-              <div class="col-4 mt-1 mb-1" id="myChoiceList"></div>
+              <div class="col-8 mt-1 mb-1">
+                <div class="container card myCard p-2" id="card_tl">
+                  <h3>Choice Filling Form</h3>
+                  <div id="subjectChoiceList"></div>
+                </div>
+              </div>
+              <div class="col-4 mt-1 mb-1">
+                <div id="myChoiceList"></div>
+              </div>
             </div>
           </div>
           <div class="tab-pane fade" id="list-tl" role="tabpanel" aria-labelledby="list-tl-list">
@@ -329,7 +348,7 @@ require('../../phpFunction/teachingLoadFunction.php');
       $('#firstModal').modal('show');
     });
     $(document).on('click', '.unassign', function() {
-      var tl_id=$(this).attr("data-tl")
+      var tl_id = $(this).attr("data-tl")
       $.alert("Class Modal" + tl_id);
       $.post("teachingLoadSql.php", {
         tl_id: tl_id,
@@ -549,7 +568,7 @@ require('../../phpFunction/teachingLoadFunction.php');
               </div>
             </div>
             <div class="row">
-            <div class="col-3">
+              <div class="col-3">
                 <div class="form-group">
                   Group
                   <input type="number" class="form-control form-control-sm" id="class_group" name="class_group" value="1" placeholder="Group">
@@ -571,12 +590,11 @@ require('../../phpFunction/teachingLoadFunction.php');
               <div class="col">
                 <?php
                 $sql = "select * from department where dept_status='0' and dept_type='0' order by dept_abbri";
-                selectList($conn, "Select New Department", array("0", "dept_id", "dept_abbri", "dept_id", "sel_dept"), $sql);
+                selectList($conn, "", array("2", "dept_id", "dept_abbri", "dept_id", "sel_dept"), $sql);
                 ?>
               </div>
             </div>
           </div>
-
           <div class="assignStaff">
             <div class="row">
               <label class="col-md-3 text-right"><b>Subject</b></label>

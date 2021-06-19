@@ -17,16 +17,128 @@ require('../requireSubModule.php');
 
     <div class="container-fluid moduleBody">
       <div class="row">
-      <div class="col-2 p-0 m-0 pl-2 full-height">
+        <div class="col-2 p-0 m-0 pl-2 full-height">
+          <h5 class="pt-3">Academics</h5>
           <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-            <a class="list-group-item list-group-item-action active master" id="list-master-list" data-toggle="list" href="#list-master"> Academic Master Data </a>
+            <a class="list-group-item list-group-item-action active bs" id="list-bs-list" data-toggle="list" href="#list-bs"> Batch/Session </a>
             <a class="list-group-item list-group-item-action responsibility" id="list-responsibility-list" data-toggle="list" href="#list-responsibility"> Asign Responsibility </a>
-            <a class="list-group-item list-group-item-action  bs" id="list-bs-list" data-toggle="list" href="#list-bs"> Batch/Session </a>
+            <a class="list-group-item list-group-item-action  master" id="list-master-list" data-toggle="list" href="#list-master"> Academic Master Data </a>
           </div>
         </div>
         <div class="col-10 leftLinkBody">
           <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane show active" id="list-master" role="tabpanel">
+            <div class="tab-pane show active" id="list-bs" role="tabpanel">
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="mt-1 mb-1">
+                    <h3>
+                      <a class="fa fa-plus-circle p-0 addBatch"></a>
+                    </h3>
+                  </div>
+                  <div class="card myCard">
+                    <p style="text-align: center;" id="batchShowList"></p>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="mt-1 mb-1">
+                    <h3>
+                      <a class="fa fa-plus-circle p-0 addSessionButton"></a>
+                    </h3>
+                  </div>
+
+                  <div class="card myCard">
+                    <input type="hidden" id="batchId" name="batchId">
+                    <p id="batchSession"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="list-responsibility" role="tabpanel">
+              <div class="row">
+                <div class="col-7 mt-1 mb-1">
+                  <div class="container card mt-2 myCard">
+                    <h5 class="p-2 mb-2">Assign Responsibilty</h5>
+                    <div class="row">
+                      <div class="col">
+                        <div class="form-group">
+                          <input type="radio" checked class="respName" id="school" name="respName" value="school">
+                          Inst. Head
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-group">
+                          <input type="radio" class="respName" id="department" name="respName" value="department">
+                          Dept. Head
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-group">
+                          <input type="radio" class="respName" id="program" name="respName" value="program">
+                          Prog. Head
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-group">
+                          <input type="radio" class="respName" id="class" name="respName" value="class">
+                          Class InCharge
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="form-group">
+                          <label class="selectLabel"></label>
+                          <p class="selectList"></p>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="form-group">
+                          <label>Staff</label>
+                          <input type="text" class="form-control form-control-sm" id="staffSearch" name="staffSearch" placeholder="Search Staff" aria-label="Search">
+                          <p class='list-group overlapList' id="staffAutoList"></p>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="form-group">
+                          <label>Office Order</label>
+                          <input type="text" class="form-control form-control-sm" id="respOrder" name="respOrder">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-3 pr-1">
+                        <div class="form-group">
+                          <label>Effective From</label>
+                          <input type="date" class="form-control form-control-sm" id="respFrom" name="respFrom" value="<?php echo $submit_date; ?>">
+                        </div>
+                      </div>
+                      <div class="col-3 pl-1">
+                        <div class="form-group">
+                          <label>Effective Till</label>
+                          <input type="date" class="form-control form-control-sm" id="respTo" name="respTo" value="<?php echo $submit_date; ?>">
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <div class="form-group">
+                          <label>Remarks</label>
+                          <input type="text" class="form-control form-control-sm" id="respRemarks" name="respRemarks">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col">
+                        <input type="hidden" id="staffId" name="staffId">
+                        <button type="submit" class="btn btn-sm respSubmit">Submit</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-5 mt-1 mb-1">
+                  <p id="resourcePersonList"></p>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="list-master" role="tabpanel">
               <div class="row">
                 <div class="col-7 mt-1 mb-1">
                   <div class="container card shadow d-flex justify-content-center mt-2 myCard">
@@ -115,108 +227,6 @@ require('../requireSubModule.php');
                 </div>
                 <div class="col-5 mt-1 mb-1">
                   <p id="masterNameList"></p>
-                </div>
-              </div>
-            </div>
-            <div class="tab-pane fade" id="list-responsibility" role="tabpanel">
-              <div class="row">
-                <div class="col-7 mt-1 mb-1">
-                  <div class="container card mt-2 myCard">
-                    <h5 class="card-title p-2 mb-0">Assign Responsibilty</h5>
-                    <div class="row">
-                      <div class="col">
-                        <div class="form-group">
-                          <input type="radio" checked class="respName" id="school" name="respName" value="school">
-                          Inst. Head
-                        </div>
-                      </div>
-                      <div class="col">
-                        <div class="form-group">
-                          <input type="radio" class="respName" id="department" name="respName" value="department">
-                          Dept. Head
-                        </div>
-                      </div>
-                      <div class="col">
-                        <div class="form-group">
-                          <input type="radio" class="respName" id="program" name="respName" value="program">
-                          Prog. Head
-                        </div>
-                      </div>
-                      <div class="col">
-                        <div class="form-group">
-                          <input type="radio" class="respName" id="class" name="respName" value="class">
-                          Class InCharge
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-6">
-                        <div class="form-group">
-                          <label class="selectLabel"></label>
-                          <p class="selectList"></p>
-                        </div>
-                      </div>
-                      <div class="col-3">
-                        <div class="form-group">
-                          <label>Staff</label>
-                          <input type="text" class="form-control form-control-sm" id="staffSearch" name="staffSearch" placeholder="Search Staff" aria-label="Search">
-                          <p class='list-group overlapList' id="staffAutoList"></p>
-                        </div>
-                      </div>
-                      <div class="col-3">
-                        <div class="form-group">
-                          <label>Office Order</label>
-                          <input type="text" class="form-control form-control-sm" id="respOrder" name="respOrder">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-3 pr-1">
-                        <div class="form-group">
-                          <label>Effective From</label>
-                          <input type="date" class="form-control form-control-sm" id="respFrom" name="respFrom" value="<?php echo $submit_date; ?>">
-                        </div>
-                      </div>
-                      <div class="col-3 pl-1">
-                        <div class="form-group">
-                          <label>Effective Till</label>
-                          <input type="date" class="form-control form-control-sm" id="respTo" name="respTo" value="<?php echo $submit_date; ?>">
-                        </div>
-                      </div>
-                      <div class="col-6">
-                        <div class="form-group">
-                          <label>Remarks</label>
-                          <input type="text" class="form-control form-control-sm" id="respRemarks" name="respRemarks">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col">
-                        <input type="hidden" id="staffId" name="staffId">
-                        <button type="submit" class="btn btn-sm respSubmit">Submit</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-5 mt-1 mb-1">
-                  <p id="resourcePersonList"></p>
-                </div>
-              </div>
-            </div>
-            <div class="tab-pane fade" id="list-bs" role="tabpanel">
-              <div class="row">
-                <div class="col-sm-6">
-                  <div class="card myCard">
-                    <button class="btn btn-sm addBatch">New Batch</button>
-                    <p style="text-align: center;" id="batchShowList"></p>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="card myCard">
-                    <button class="btn btn-sm addSessionButton">New Session</button>
-                    <input type="hidden" id="batchId" name="batchId">
-                    <p id="batchSession"></p>
-                  </div>
                 </div>
               </div>
             </div>

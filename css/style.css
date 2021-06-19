@@ -194,23 +194,40 @@ textarea {
     font-size: small;
 }
 
-.fa-trash {
-    color: rgba(245, 7, 19, 0.911);
-    padding-left: 2px;
-    padding-right: 2px;
-}
 a.fa.fa-pencil-alt, a.fa.fa-edit {
     color: rgba(18, 200, 206, 0.911);
     padding-left: 2px;
     padding-right: 2px;
 }
 
-a.fa.fa-circle {
-    color: rgba(56, 59, 240, 0.911);
+a.fa.fa-circle, a.fa.fa-copy {
+    color: rgba(97, 204, 97, 0.911);
     padding-left: 2px;
     padding-right: 2px;
 }
 
+a.fa.fa-info-circle {
+    color: #699bcafd;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+a.fa.fa-plus-circle {
+    color: rgba(34, 166, 170, 0.911);
+    padding-left: 2px;
+    padding-right: 2px;
+}
+a.fa.fa-arrow-circle-up, a.fa.fa-arrow-circle-right {
+    color: rgba(72, 83, 151, 0.911);
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.fa-trash {
+    color: rgba(245, 7, 19, 0.911);
+    padding-left: 2px;
+    padding-right: 2px;
+}
 .fa-exclamation-triangle {
     color: rgba(245, 7, 19, 0.911);
     padding-left: 2px;
@@ -337,6 +354,25 @@ a.fa.fa-circle {
 .btn-square {
     margin: 0px;
     border-radius: 0px;
+}
+
+.btn {
+    color: rgb(91, 248, 248);
+    float: right;
+    font-weight: bold;
+    background-color: #757a7acb;
+}
+.btn-approve {
+     color: rgb(122, 248, 248);
+     float: right;
+     font-weight: bold;
+     background-color: #d35b5bfd;
+}
+.btn-active {
+    color: rgb(127, 145, 145);
+     float: right;
+     font-weight: bold;
+     background-color: #84faf4fd;
 }
 
 .card-square {

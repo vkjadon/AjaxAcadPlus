@@ -25,7 +25,7 @@ if (isset($_POST['action'])) {
       echo ' <a href="#" class="increDecre" id="' . $id . '" data-value="' . ($batch_id + 1) . '"><i class="fa fa-angle-double-right"></i></a> ';
       echo '</td>';
       echo '<td><a href="#" class="class_idD" id="' . $id . '"><i class="fa fa-trash"></i></a></td>';
-      echo '<td><a href="#" class="class_idP" id="' . $id . '">Groups</a></td>';
+      echo '<td><h3 class="p-0 m-0"><a href="#" class="fa fa-arrow-circle-right class_idP" id="' . $id . '"></a></h3></td>';
       echo '</tr>';
     }
 
@@ -58,6 +58,7 @@ if (isset($_POST['action'])) {
     $batch_id = getField($conn, $classId, "class", "class_id", "batch_id");
     $class_semester = getField($conn, $classId, "class", "class_id", "class_semester");
     $program_id = getField($conn, $classId, "class", "class_id", "program_id");
+    $dept_id = getField($conn, $classId, "class", "class_id", "dept_id");
 
     //echo "Cl $classId -B $batch_id -Sem $class_semester -P $program_id $tn_tlg";
 
@@ -65,7 +66,6 @@ if (isset($_POST['action'])) {
     $result = $conn->query($sql);
     $i = 1;
     $class_name = getField($conn, $classId, "class", "class_id", "class_name");
-    echo '<h5>' . $class_name . '</h5>';
     echo '<table class="table list-table-xs">';
     echo '<tr><th>#</th><th>Code</th><th>Name</th><th>L-T-P</th><th>LG</th><th>TG</th><th>PG</th></tr>';
     while ($rows = $result->fetch_assoc()) {
@@ -82,21 +82,19 @@ if (isset($_POST['action'])) {
       echo '<td>' . $L . '-' . $T . '-' . $P . '</td>';
 
       echo '<td>';
-      if ($L > 0) tlg($conn, $tn_tlg, $subject_id, $classId, "L");
+      if ($L > 0) tlg($conn, $tn_tlg, $subject_id, $classId, $dept_id, $myId, "L");
       echo '</td>';
 
       echo '<td>';
-      if ($T > 0) tlg($conn, $tn_tlg, $subject_id, $classId, "T");
+      if ($T > 0) tlg($conn, $tn_tlg, $subject_id, $classId, $dept_id, $myId, "T");
       echo '</td>';
 
       echo '<td>';
-      if ($P > 0) tlg($conn, $tn_tlg, $subject_id, $classId, "P");
+      if ($P > 0) tlg($conn, $tn_tlg, $subject_id, $classId, $dept_id, $myId, "P");
       echo '</td>';
 
       echo '</tr>';
     }
-    $sql = "update $tn_tlg set dept_id='$myDept' where dept_id=0 and class_id='$classId'";
-    $conn->query($sql);
     echo '</table>';
   } elseif ($_POST['action'] == 'increDecre') {
     $value = $_POST['value'];
@@ -210,18 +208,21 @@ if (isset($_POST['action'])) {
     echo getField($conn, $_POST['sel_dept'], "department", "dept_id", "dept_abbri"); // return to update the display
   } elseif ($_POST['action'] == "subChoiceList") {
     $sno = 1;
-    $sql = "select tlg.*, sb.* from $tn_tlg tlg, subject sb where tlg.subject_id=sb.subject_id and dept_id='$myDept' and tlg.tlg_type='L' and tlg.tlg_status='0' order by tlg.subject_id, tlg.tlg_type";
+    $sql = "select tlg.*, sb.* from $tn_tlg tlg, subject sb where tlg.subject_id=sb.subject_id and dept_id='$myDept' and tlg.tlg_type='L' and tlg.tlg_status='0' and sb.subject_type<>'DE' order by tlg.subject_id, tlg.tlg_type";
     $result = $conn->query($sql);
     if (!$result) die("Could not List the Teaching Load!");
     echo '<table  class="list-table-xs table-striped">';
-    echo '<thead><th>#</th><th>TlgId</th><th>Subject</th><th>Class</th><th>Weekly Load</th><th>Groups</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></thead>';
+    echo '<thead><th>#</th><th>TlgId</th><th>Code</th><td>Type</td><th>Subject</th><th>Class</th><th>Weekly Load</th><th>Groups</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></thead>';
     while ($rows = $result->fetch_assoc()) {
       $tlgId = $rows['tlg_id'];
       $tlgGroup = $rows['tlg_group'];
       $class_id = $rows['class_id'];
+      $subject_type = $rows['subject_type'];
       echo '<tr>';
       echo '<td>' . $sno++ . '</td>';
       echo '<td>' . $rows['tlg_id'] . '</td>';
+      echo '<td>' . $subject_type. '</td>';
+      echo '<td>' . $rows['subject_code'] . '</td>';
       echo '<td>' . $rows['subject_name'] . '</td>';
       echo '<td><div id="dept' . $tlgId . '">';
       echo getField($conn, $class_id, "class", "class_id", "class_name");
@@ -303,7 +304,7 @@ if (isset($_POST['action'])) {
   }
 }
 
-function tlg($conn, $tn_tlg, $subject_id, $classId, $tlg_type)
+function tlg($conn, $tn_tlg, $subject_id, $classId, $dept_id, $myId, $tlg_type)
 {
   //echo "Table $tn_tlg";
   $dup = "select * from $tn_tlg where subject_id='$subject_id' and class_id='$classId' and tlg_type='$tlg_type'";
@@ -311,7 +312,7 @@ function tlg($conn, $tn_tlg, $subject_id, $classId, $tlg_type)
   $rows_count = $result_dup->num_rows;
   //echo $rows_count;
   if ($rows_count == 0) {
-    $sql_in = "insert into $tn_tlg (class_id, subject_id, tlg_type, tlg_group, tlg_status) values('$classId', '$subject_id', '$tlg_type', '1', '0')";
+    $sql_in = "insert into $tn_tlg (class_id, subject_id, tlg_type, tlg_group, dept_id, update_id, tlg_status) values('$classId', '$subject_id', '$tlg_type', '1', '$dept_id', '$myId', '0')";
     //  echo $sql_in;
     $conn->query($sql_in);
     $id = $conn->insert_id;

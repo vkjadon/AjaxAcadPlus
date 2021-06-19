@@ -6,19 +6,22 @@ function sessionLoad($conn, $classId, $tn_tlg)
   //$batch_id=getField($conn, $classId, "class", "class_id", "batch_id");
   //The subjects are populated from Load Groups not from the Subjects for selected Class
 
-  $sql = "select tlg.*, sb.* from $tn_tlg tlg, subject sb where tlg.subject_id=sb.subject_id and tlg.class_id='$classId' and tlg.tlg_status='0' group by tlg.subject_id order by tlg.subject_id, tlg.tlg_type";
+  $sql = "select tlg.*, sb.* from $tn_tlg tlg, subject sb where tlg.subject_id=sb.subject_id and tlg.class_id='$classId' and tlg.tlg_status='0' and sb.subject_type<>'DE' group by tlg.subject_id order by tlg.subject_id, tlg.tlg_type";
   $result = $conn->query($sql);
   if (!$result) die("Could not List the Teaching Load!");
   echo '<table  class="list-table-xs table-striped">';
-  echo '<thead><th>#</th><th>TlgId</th><th>Subject</th><th>Type-Load</th><th>Groups</th><th>Department</th><th>Update</th></thead>';
+  echo '<thead><th>#</th><th>TlgId</th><th>Code</th><td>Type</td><th>Subject</th><th>Type-Load</th><th>Groups</th><th>Department</th><th>Update</th></thead>';
   while ($rows = $result->fetch_assoc()) {
     $tlgId = $rows['tlg_id'];
     $tlgType = $rows['tlg_type'];
     $tlgGroup = $rows['tlg_group'];
     $dept_id = $rows['dept_id'];
+    $subject_type = $rows['subject_type'];
     echo '<tr>';
     echo '<td>' . $sno++ . '</td>';
     echo '<td>' . $rows['tlg_id'] . '</td>';
+    echo '<td>' . $rows['subject_code'] . '</td>';
+    echo '<td>' . $subject_type . '</td>';
     echo '<td>' . $rows['subject_name'] . '</td>';
     if ($tlgType == 'L') echo '<td>' . $tlgType . '-' . $rows['subject_lecture'] . '</td><td>' . $tlgGroup . '</td>';
     else echo '<td>' . $tlgType . '-' . $rows['subject_practical'] . '</td><td>' . $tlgGroup . '</td>';
@@ -38,11 +41,11 @@ function subjectChoice($conn, $tn_tlg, $myDept)
 {
   $sno = 1;
   //echo "Classs $classId";
-  $sql = "select tlg.*, sb.* from $tn_tlg tlg, subject sb where tlg.subject_id=sb.subject_id and dept_id='$myDept' and tlg.tlg_type='L' and tlg.tlg_status='0' order by tlg.subject_id, tlg.tlg_type";
+  $sql = "select tlg.*, sb.* from $tn_tlg tlg, subject sb where tlg.subject_id=sb.subject_id and dept_id='$myDept' and tlg.tlg_type='L' and tlg.tlg_status='0' and sb.subject_type<>'DE'  order by tlg.subject_id, tlg.tlg_type";
   $result = $conn->query($sql);
   if (!$result) die("Could not List the Teaching Load!");
   echo '<table  class="list-table-xs table-striped">';
-  echo '<thead><th>#</th><th>TlgId</th><th>Subject</th><th>Class</th><th>Weekly Load</th><th>Groups</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></thead>';
+  echo '<thead><th>#</th><th>TlgId</th><th>Code</th><td>Type</td><th>Subject</th><th>Class</th><th>Weekly Load</th><th>Groups</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></thead>';
   while ($rows = $result->fetch_assoc()) {
     $tlgId = $rows['tlg_id'];
     $tlgGroup = $rows['tlg_group'];

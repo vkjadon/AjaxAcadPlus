@@ -197,7 +197,7 @@ function getListCard($conn, $tableId, $fields, $dataType, $sql, $statusDecode, $
     die(" The script could not be Loadded! Please report!");
   }
   //echo '<div class="card-columns">';
-  echo '<div class="row m-2">';
+  echo '<div class="row m-2 mt-3">';
   while ($rows = $result->fetch_assoc()) {
     $data = "";
     echo '<div class="col-sm-4 mb-2">';
@@ -210,12 +210,12 @@ function getListCard($conn, $tableId, $fields, $dataType, $sql, $statusDecode, $
       if ($fieldName == $statusDecode["status"]) echo '<div class="col">' . $statusDecode[$fieldValue] . '</div>';
       else {
         if ($dataType[$j] == "0") {
-          if ($j == 0) echo '<div class="col"><div class="card-title"><h3>' . $fieldValue . '</h3></div></div>';
-          else echo '<div class="col">' . $fieldValue . '</div>';
+          if ($j == 0) echo '<div class="col m-2"><div><h3>' . $fieldValue . '</h3></div></div>';
+          else echo '<div class="col m-2">' . $fieldValue . '</div>';
         } elseif ($dataType[$j] == "1") echo '<div class="col">' . date("d-M-Y", strtotime($fieldValue)) . '</div>';
       }
     }
-    echo '<div class="row"><div class="col">';
+    echo '<div class="row p-2"><div class="col">';
     for ($i = 0; $i < $buttonCount; $i++) {
       if ($button[$i] == 'E') echo '<a href="#" class="float-left ' . $tableId . 'E" id="' . $id . '"><i class="fa fa-edit"></i></a>';
       elseif ($button[$i] == 'D') echo '<a href="#" class="float-right ' . $tableId . 'D" id="' . $id . '"><i class="fa fa-trash"></i></a>';

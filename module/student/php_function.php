@@ -22,7 +22,7 @@ function selectList($conn, $selectTitle, $data, $sql)
   if ($result) {
     if ($required == '0') echo '<select class="form-control form-control-sm ' . $name . '" name="' . $idName . '" id="' . $idName . '">';
     else echo '<select class="form-control form-control-sm ' . $name . '" name="' . $idName . '" id="' . $idName . '" required>';
-    if (strlen($selectTitle) > 2) echo '<option value="">' . $selectTitle . '</option>';
+    if (strlen($selectTitle) > 2) echo '<option value="" disabled>' . $selectTitle . '</option>';
     while ($rows = $result->fetch_assoc()) {
       $select_id = $rows[$id];
       $select_name = $rows[$name];

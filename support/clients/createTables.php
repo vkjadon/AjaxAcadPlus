@@ -226,7 +226,7 @@
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     else{
-      $sql="insert into department (sno, dept_name, dept_abbri, dept_url, dept_email, dept_mobile, update_id, dept_status) values('1','Default School- Please Change', 'NDept', 'https://classconnect.in', 'eisoftech.in@gmail.com', '9872993230', '1', '0')";
+      $sql="insert into department (sno, dept_name, dept_abbri, dept_type, dept_url, dept_email, dept_mobile, update_id, dept_status) values('1','Default School- Please Change', 'NDept', '0', 'https://classconnect.in', 'eisoftech.in@gmail.com', '9872993230', '1', '0')";
       $conn->query($sql);
     }
   }

@@ -23,32 +23,26 @@ if (isset($_SESSION['myStdId']) > 0) $myStdId = $_SESSION["myStdId"];
 
 if (isset($mySes)) {
 
-  $tn_ad = 'assessment_design';
-  //check_tn_ad($conn, $tn_ad);
-  
-  $tn_amap = 'assessment_map';
-  check_tn_amap($conn, $tn_amap);
+  // check_tn_ad($conn, 'assessment_design');
+  check_tn_amap($conn, 'assessment_map');
+  //check_tn_rs($conn, 'cc_outcome');
+  check_tn_class($conn, "class");
+  check_tn_lt($conn, "leave_type");
+  check_tn_org($conn, 'organization');
+  check_tn_mn($conn, 'master_name');
+  check_tn_rp($conn, 'resource_person');
+  check_tn_respStaff($conn, 'responsibility_staff');
+  check_tn_si($conn, "student_info");
+  check_tn_std($conn, "student");
+  check_tn_sub($conn, "subject");
+  check_tn_subaddon($conn, "subject_addon");
+  check_tn_subelective($conn, "subject_elective");
   
   $tn_ccd = 'cc_detail'.$mySes;
   check_tn_ccd($conn, $tn_ccd);
 
-  $tn_cco = 'cc_outcome';
-  //check_tn_rs($conn, $tn_tl);
-
-  $tn_class = 'class';
-  check_tn_class($conn, $tn_class);
-
   $tn_eac = 'ea_claim'.$mySes;
   //check_tn_eac($conn, $tn_eac);
-
-  $tn_lt = 'leave_type';
-  check_tn_lt($conn, $tn_lt);
-  
-  $tn_org = 'organization';
-  check_tn_org($conn, $tn_org);
-
-  $tn_mn = 'master_name';
-  check_tn_mn($conn, $tn_mn);
 
   $tn_rc = 'registration_class'.$mySes;
   check_tn_rc($conn, $tn_rc);
@@ -56,29 +50,17 @@ if (isset($mySes)) {
   $tn_rs = 'registration_subject'.$mySes;
   check_tn_rs($conn, $tn_rs);
 
-  $tn_rp = 'resource_person';
-  check_tn_rp($conn, $tn_rp);
-
-  $tn_respStaff = 'responsibility_staff';
-  check_tn_respStaff($conn, $tn_respStaff);
-
   $tn_sas = 'student_attendance_setup' . $mySes;
   check_tn_sas($conn, $tn_sas);
-
+  
   $tn_sbt = 'subject_topic'.$mySes;
   check_tn_sbt($conn, $tn_sbt);
 
   $tn_sc = 'subject_choice'.$mySes;
   check_tn_sc($conn, $tn_sc);
-  
-  $tn_si = 'student_info';
-  check_tn_si($conn, $tn_si);
-  
+
   $tn_sr = 'subject_resource'.$mySes;
   check_tn_sr($conn, $tn_sr);
-
-  $tn_std = 'student';
-  check_tn_std($conn, $tn_std);
 
   $tn_tl = 'teaching_load'.$mySes;
   check_tn_tl($conn, $tn_tl);
@@ -86,7 +68,7 @@ if (isset($mySes)) {
   $tn_tt = 'time_table'.$mySes;
   check_tn_tt($conn, $tn_tt);
 
-  $tn_ttp = 'time_table_period';
+  $tn_ttp = 'time_table_period'.$mySes;
   check_tn_ttp($conn, $tn_ttp);
 
   $tn_tlg = 'tl_group'.$mySes;

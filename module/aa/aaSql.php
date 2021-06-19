@@ -178,9 +178,9 @@ if (isset($_POST['action'])) {
       $mn_id = $row_mn["mn_id"];
       $status = $row_mn["mn_status"];
       echo '<div class="row m-2">';
-      echo '<div class="col-sm-3 mb-0 bg-two">';
-      echo 'ID : ' . $mn_id;
-      echo '<a href="#" class="float-right po_idE" data-id="' . $mn_id . '"><i class="fa fa-edit"></i></a>';
+      echo '<div class="col-sm-2 p-0 pl-1">';
+      echo '<a href="#" class="po_idE" data-id="' . $mn_id . '"><i class="fa fa-edit"></i></a>';
+      echo ' [' . $mn_id.']';
       echo '</div>';
 
       echo '<div class="col-sm-8">';
@@ -230,7 +230,7 @@ if (isset($_POST['action'])) {
     $output .= '</ul>';
     echo $output;
   } elseif ($_POST["action"] == "respName") {
-    $sql="insert into $tn_respStaff (rs_code, staff_id, unit_id, rs_from_date, rs_to_date, rs_remarks, update_id, rs_status) values('".$_POST["respName"]."', '".$_POST["staffId"]."', '".$_POST["selectId"]."', '".$_POST["respFrom"]."', '".$_POST["respTo"]."', '".$_POST["respRemarks"]."', '$myId', '0')";
+    $sql="insert into responsibility_staff (rs_code, staff_id, unit_id, rs_from_date, rs_to_date, rs_remarks, update_id, rs_status) values('".$_POST["respName"]."', '".$_POST["staffId"]."', '".$_POST["selectId"]."', '".$_POST["respFrom"]."', '".$_POST["respTo"]."', '".$_POST["respRemarks"]."', '$myId', '0')";
     $conn->query($sql);
   }
 }
