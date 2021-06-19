@@ -98,20 +98,22 @@ if (isset($_POST['action'])) {
     $json = get_sessionClass($conn, $mySes, $myDept);
     //echo $json;
     $array = json_decode($json, true);
-    echo '<table class="table list-table-xs mb-0">';
-    echo '<tr>';
+    
     for ($i = 0; $i < count($array["data"]); $i++) {
-      echo '<td><input type="checkbox" class="sclSTT" id="STT' . $array["data"][$i]["id"] . '" value="' . $array["data"][$i]["id"] . '">' . $array["data"][$i]["name"] . '[' . $array["data"][$i]["section"] . ']</td>';
+      echo '<input type="checkbox" class="sclSTT" id="STT' . $array["data"][$i]["id"] . '" value="' . $array["data"][$i]["id"] . '"> ' . $array["data"][$i]["name"] . '[' . $array["data"][$i]["section"] . '] ';
     }
-    echo '</tr>';
-    echo '</table>';
+    
     //echo '<button class="btn btn-success btn-square-sm mt-0 scheduleFormButton">Show Schedule Form</button>';
   } elseif ($_POST['action'] == 'showTimeTable') {
     $id = $_POST['checkboxes_value'];
-    $day = array("Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
+    $day = array("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun");
     for ($i = 0; $i < count($id); $i++) {
       echo '<table class="table list-table-xs">';
-      echo '<tr><td><h5>' . getField($conn, $id[$i], 'class', 'class_id', 'class_name') . '</h5></td></tr>';
+      echo '<thead><td><h5>' . getField($conn, $id[$i], 'class', 'class_id', 'class_name') . '</h5></td>';
+      echo '<td colspan="2">CI </td>';
+      echo '<td colspan="2">CR </td>';
+      echo '<td colspan="2">Room </td>';
+      echo '</thead>';
       for ($k = 0; $k < count($day); $k++) {
         echo '<tr><td>' . $day[$k] . '</td>';
         $classId = $id[$i];

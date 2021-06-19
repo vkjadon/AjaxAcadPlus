@@ -1,8 +1,8 @@
 <?php
 require('../requireSubModule.php');
 
-$session_start=getField($conn, $mySes, "session", "session_id", "session_start");
-$session_end=getField($conn, $mySes, "session", "session_id", "session_end");
+$session_start = getField($conn, $mySes, "session", "session_id", "session_start");
+$session_end = getField($conn, $mySes, "session", "session_id", "session_end");
 
 ?>
 <!DOCTYPE html>
@@ -18,39 +18,44 @@ $session_end=getField($conn, $mySes, "session", "session_id", "session_end");
   <?php require("../topBar.php"); ?>
   <div class="container-fluid moduleBody">
     <div class="row">
-    <div class="col-2 p-0 m-0 pl-2 full-height">
-        <div class="card text-center selectPanel">
-          <span id="panelId"></span>
+      <div class="col-2 p-0 m-0 pl-2 full-height">
+        <h5 class="pt-3">Schedule</h5>
+        <span id="panelId"></span>
+        <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
+          <a class="list-group-item list-group-item-action show active tt" id="list-tt-list" data-toggle="list" href="#list-tt" role="tab" aria-controls="tt"> Time Table </a>
+          <a class="list-group-item list-group-item-action stt" id="list-stt-list" data-toggle="list" href="#list-stt" role="tab" aria-controls="stt"> Show Time-Table </a>
+          <a class="list-group-item list-group-item-action cs" id="list-cs-list" data-toggle="list" href="#list-cs" role="tab" aria-controls="cs"> Create Schedule </a>
+        </div>
+        <div class="mr-2">
           <?php
           $sql = "select * from class where session_id='$mySes' and dept_id='$myDept' order by class_name";
           selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
           ?>
         </div>
-        <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-
-          <a class="list-group-item list-group-item-action show active tt" id="list-tt-list" data-toggle="list" href="#list-tt" role="tab" aria-controls="tt"> Time Table </a>
-
-          <a class="list-group-item list-group-item-action stt" id="list-stt-list" data-toggle="list" href="#list-stt" role="tab" aria-controls="stt"> Show Time-Table </a>
-
-          <a class="list-group-item list-group-item-action cs" id="list-cs-list" data-toggle="list" href="#list-cs" role="tab" aria-controls="cs"> Create Schedule </a>
-
-        </div>
       </div>
       <div class="col-10 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="list-tt" role="tabpanel" aria-labelledby="list-tt-list">
-            <div id="dayList"></div>
-            <div id="mondayList"></div>
-            <div id="tuesdayList"></div>
-            <div id="wednesdayList"></div>
-            <div id="thursdayList"></div>
-            <div id="fridayList"></div>
-            <div id="saturdayList"></div>
-            <div id="sundayList"></div>
+            <div class="container card myCard p-2 mb-2">
+              <div id="dayList"></div>
+            </div>
+            <div class="container card myCard p-2">
+              <div id="mondayList"></div>
+              <div id="tuesdayList"></div>
+              <div id="wednesdayList"></div>
+              <div id="thursdayList"></div>
+              <div id="fridayList"></div>
+              <div id="saturdayList"></div>
+              <div id="sundayList"></div>
+            </div>
           </div>
           <div class="tab-pane fade" id="list-stt" role="tabpanel" aria-labelledby="list-stt-list">
-            <div id="sessionClassListSTT">Show TimeTable</div>
+            <div class="container card myCard p-2 mb-2">
+              <div id="sessionClassListSTT"></div>
+            </div>
+            <div class="container card myCard p-2">
             <p id="showTimeTable"></p>
+            </div>
           </div>
           <div class="tab-pane fade" id="list-cs" role="tabpanel" aria-labelledby="list-cs-list">
             <div class="row">
@@ -84,7 +89,8 @@ $session_end=getField($conn, $mySes, "session", "session_id", "session_end");
     </div>
     <p>&nbsp;</p>
     <p>&nbsp;</p>
-    <?php require("../bottom_bar.php"); ?>  </div>
+    <?php require("../bottom_bar.php"); ?>
+  </div>
 </body>
 <?php require("../js.php"); ?>
 
@@ -117,7 +123,6 @@ $session_end=getField($conn, $mySes, "session", "session_id", "session_end");
 
     $(document).on('click', '.stt', function() {
       $("#panelId").html("STT");
-      $("#clListProgram").show();
       sessionClass();
     });
 
@@ -129,7 +134,6 @@ $session_end=getField($conn, $mySes, "session", "session_id", "session_end");
       $(".selectPanel").show();
       $(".selectClass").hide();
       $(".selectProgram").show();
-      $("#clListProgram").show();
       var programId = $("#sel_program").val();
       sessionClass(programId);
     });

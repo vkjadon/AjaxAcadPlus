@@ -131,7 +131,12 @@ require('../../phpFunction/teachingLoadFunction.php');
           </div>
           <div class="tab-pane fade" id="list-tl" role="tabpanel" aria-labelledby="list-tl-list">
             <div class="row">
-              <div class="col-9 mt-1 mb-1" id="tlList"></div>
+              <div class="col-9 mt-1 mb-1">
+                <h5>Assign Teaching Load</h5>
+                <div class="container card myCard p-2" id="card_tl">
+                  <div id="tlList"></div>
+                </div>
+              </div>
               <div class="col-3 mt-1 mb-1" id="subAllChoices"></div>
             </div>
           </div>
@@ -366,7 +371,7 @@ require('../../phpFunction/teachingLoadFunction.php');
       var action = $("#action").val();
       var tlg_id = $("#tlg_idM").val();
 
-      //$.alert("Form Submitted " + action);
+      // $.alert("Form Submitted " + action + " TlgId " + tlg_id);
       var error = "NO";
       var error_msg = "";
       if (action == "addClass" || action == "updateClass") {
@@ -382,9 +387,9 @@ require('../../phpFunction/teachingLoadFunction.php');
       }
       if (error == "NO") {
         var formData = $(this).serialize();
-        //$.alert(formData);
+        // $.alert(formData);
         $.post("teachingLoadSql.php", formData, () => {}, "text").done(function(data) {
-          //$.alert(data);
+          $.alert(data);
           if (action == "addClass" || action == "updateClass") {
             var x = $("#sel_program").val();
             classList(x);

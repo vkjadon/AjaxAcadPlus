@@ -31,7 +31,7 @@ if (isset($_POST['action'])) {
     for ($i = 1; $i <= $class_period; $i++) {
       echo '<td>';
       echo $i;
-      $sql = "select ttp_start from time_table_period where class_id='$classId' and ttp_day='$dayId' and ttp_period='$i'";
+      $sql = "select ttp_start from $tn_ttp where class_id='$classId' and ttp_day='$dayId' and ttp_period='$i'";
       $ttp_start = getFieldValue($conn, "ttp_start", $sql);
       echo ' <input type="time" class="periodTime" data-period="' . $i . '" data-day="' . $dayId . '" data-class="' . $classId . '" value="' . $ttp_start . '">';
       echo '</td>';
@@ -47,9 +47,9 @@ if (isset($_POST['action'])) {
     echo '<tr align="center">';
     for ($i = 1; $i <= $class_period; $i++) {
       echo '<td>';
-      echo '<button class="btn btn-square-sm btn-secondary uploadTTLink" data-type="L" data-day="' . $dayId . '" data-period="' . $i . '">L</button>';
-      echo '<button class="btn btn-square-sm btn-danger uploadTTLink" data-type="T" data-day="' . $dayId . '" data-period="' . $i . '">T</button>';
-      echo '<button class="btn btn-square-sm btn-info uploadTTLink" data-type="P" data-day="' . $dayId . '" data-period="' . $i . '">P</button>';
+      echo '<button class="btn btn-square-sm uploadTTLink" data-type="P" data-day="' . $dayId . '" data-period="' . $i . '">P</button>';
+      echo '<button class="btn btn-square-sm btn-info uploadTTLink" data-type="T" data-day="' . $dayId . '" data-period="' . $i . '">T</button>';
+      echo '<button class="btn btn-square-sm uploadTTLink" data-type="L" data-day="' . $dayId . '" data-period="' . $i . '">L</button>';
       echo '</td>';
     }
     echo '</tr>';
@@ -106,10 +106,10 @@ if (isset($_POST['action'])) {
     $conn->query($sql);
     slotLoad($conn, $tn_tt, $tn_tlg, $tn_tl, $classId, $dayId, $period, "0");
   } elseif ($_POST["action"] == "ttTime") {
-    $sql = "update time_table_period set ttp_start='" . $_POST['ttTime'] . "' where class_id='" . $_POST['classId'] . "' and ttp_day='" . $_POST['day'] . "' and ttp_period='" . $_POST['period'] . "'";
+    $sql = "update $tn_ttp set ttp_start='" . $_POST['ttTime'] . "' where class_id='" . $_POST['classId'] . "' and ttp_day='" . $_POST['day'] . "' and ttp_period='" . $_POST['period'] . "'";
     $result = $conn->query($sql);
     if (!$result) $conn->error;
-    elseif ($conn->affected_rows == '0') $sql = "insert into time_table_period (class_id, ttp_day, ttp_period, ttp_start, update_id) values('" . $_POST['classId'] . "', '" . $_POST['day'] . "', '" . $_POST['period'] . "', '" . $_POST['ttTime'] . "', '$myId')";
+    elseif ($conn->affected_rows == '0') $sql = "insert into $tn_ttp (class_id, ttp_day, ttp_period, ttp_start, update_id) values('" . $_POST['classId'] . "', '" . $_POST['day'] . "', '" . $_POST['period'] . "', '" . $_POST['ttTime'] . "', '$myId')";
     $result = $conn->query($sql);
     if (!$result) $conn->error;
   }

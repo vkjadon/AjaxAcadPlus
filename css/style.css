@@ -194,7 +194,7 @@ textarea {
     font-size: small;
 }
 
-a.fa.fa-pencil-alt, a.fa.fa-edit {
+a.fa.fa-pencil-alt, a.fa.fa-edit, a.fa.fa-users, a.fa.fa-th-list {
     color: rgba(18, 200, 206, 0.911);
     padding-left: 2px;
     padding-right: 2px;
@@ -358,19 +358,16 @@ a.fa.fa-arrow-circle-up, a.fa.fa-arrow-circle-right {
 
 .btn {
     color: rgb(91, 248, 248);
-    float: right;
     font-weight: bold;
     background-color: #757a7acb;
 }
 .btn-approve {
      color: rgb(122, 248, 248);
-     float: right;
      font-weight: bold;
      background-color: #d35b5bfd;
 }
 .btn-active {
     color: rgb(127, 145, 145);
-     float: right;
      font-weight: bold;
      background-color: #84faf4fd;
 }

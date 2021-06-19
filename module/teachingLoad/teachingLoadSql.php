@@ -32,7 +32,7 @@ if (isset($_POST['action'])) {
     //echo "$programId - $mySes";
   } else if ($_POST['action'] == 'addClass') {
     echo "MySes".$mySes;
-    $fields = ['session_id', 'program_id', 'dept_id',  'class_name', 'class_section', 'batch_id', 'class_semester', 'class_shift', 'submit_id', 'class_group', 'class_status'];
+    $fields = ['session_id', 'program_id', 'dept_id',  'class_name', 'class_section', 'batch_id', 'class_semester', 'class_shift', 'update_id', 'class_group', 'class_status'];
     $values = [$mySes, $myProg, $myDept, data_check($_POST['class_name']), data_check($_POST['class_section']), $myBatch, data_check($_POST['class_semester']), $_POST['class_shift'], $myId, $_POST['class_group'], '0'];
     $status = 'class_status';
     $dup = "select * from class where class_name='" . data_check($_POST["class_name"]) . "' and class_section='" . data_check($_POST["class_section"]) . "' and session_id='$mySes' and $status='0'";
@@ -118,19 +118,19 @@ if (isset($_POST['action'])) {
     $result = $conn->query($sql);
     if (!$result) die("Could not List the Teaching Load!");
     echo '<table  class="list-table-xs table-striped">';
-    echo '<thead><th>#</th><th>TlgId</th><th>Code</th><th>Subject</th><th>Type</th><th>Grp</th><th>Staff</th><th>Assign</th><th>Choice</th></thead>';
+    echo '<thead align="center"><th>#</th><th>TlgId</th><th>Code</th><th>Subject</th><th>Type</th><th>Grp</th><th>Staff</th><th>Assign</th><th>Choice</th></thead>';
     while ($rows = $result->fetch_assoc()) {
       $groups = $rows['tlg_group'];
       for ($i = 1; $i <= $groups; $i++) {
         $tlgType = $rows['tlg_type'];
         echo '<tr>';
-        echo '<td>' . $sno++ . '</td>';
-        echo '<td>' . $rows['tlg_id'] . '</td>';
-        echo '<td>' . $rows['subject_code'] . '</td>';
+        echo '<td align="center">' . $sno++ . '</td>';
+        echo '<td align="center">' . $rows['tlg_id'] . '</td>';
+        echo '<td align="center">' . $rows['subject_code'] . '</td>';
         echo '<td>' . $rows['subject_name'] . '</td>';
-        if ($tlgType == 'L') echo '<td>' . $tlgType . '-' . $rows['subject_lecture'] . '</td><td>LG-' . $i . '</td>';
-        elseif ($tlgType == 'T') echo '<td>' . $tlgType . '-' . $rows['subject_tutorial'] . '</td><td>TG-' . $i . '</td>';
-        else echo '<td>' . $tlgType . '-' . $rows['subject_practical'] . '</td><td>PG-' . $i . '</td>';
+        if ($tlgType == 'L') echo '<td align="center">' . $tlgType . '-' . $rows['subject_lecture'] . '</td><td align="center">LG-' . $i . '</td>';
+        elseif ($tlgType == 'T') echo '<td align="center">' . $tlgType . '-' . $rows['subject_tutorial'] . '</td><td align="center">TG-' . $i . '</td>';
+        else echo '<td align="center">' . $tlgType . '-' . $rows['subject_practical'] . '</td><td align="center">PG-' . $i . '</td>';
         $sql_staff = "SELECT * FROM $tn_tl WHERE tlg_id ='" . $rows['tlg_id'] . "' and tl_group='$i' and tl_status='0'";
         $result_staff = $conn->query($sql_staff);
         $counter = 0;
@@ -146,11 +146,11 @@ if (isset($_POST['action'])) {
           }
         }
         echo '</td>';
-        echo '<td>';
-        echo '<button class="btn btn-info btn-sm openModalAssignStaff" id="' . $rows['tlg_id'] . '" data-group="' . $i . '" data-subject="' . $rows['subject_name'] . '" data-type="' . $tlgType . '">Assign</button>';
+        echo '<td align="center">';
+        echo '<h3 class="m-0 p-0"><a class="fa fa-users openModalAssignStaff" id="' . $rows['tlg_id'] . '" data-group="' . $i . '" data-subject="' . $rows['subject_name'] . '" data-type="' . $tlgType . '"></a></h3>';
         echo '</td>';
-        echo '<td>';
-        echo '<button class="btn btn-success btn-sm subAllChoices" data-tlg="' . $rows['tlg_id'] . '">Choices</button>';
+        echo '<td align="center">';
+        echo '<h3 class="m-0 p-0"><a class="fa fa-th-list subAllChoices" data-tlg="' . $rows['tlg_id'] . '"></a></h3>';
         echo '</td>';
         echo '</tr>';
       }
@@ -169,7 +169,7 @@ if (isset($_POST['action'])) {
     echo "Rows affetced -- " . $conn->affected_rows;
     if ($conn->affected_rows == 0) {
       echo "No row affected";
-      $sql = "insert into $tn_tl (tlg_id, staff_id, tl_group, submit_id, tl_status) values('$tlg_id','$staff_id', '$tl_group', '$myId', 'A')";
+      $sql = "insert into $tn_tl (tlg_id, staff_id, tl_group, update_id, tl_status) values('$tlg_id','$staff_id', '$tl_group', '$myId', 'A')";
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
       else 'Added';
