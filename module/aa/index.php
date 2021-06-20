@@ -199,6 +199,18 @@ require('../requireSubModule.php');
                               Feedback Type
                             </div>
                           </div>
+                          <div class="col">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="qt" name="headName" value="qt">
+                              Qualification Type
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="nn" name="headName" value="nn">
+                              NewName
+                            </div>
+                          </div>
                         </div>
                         <div class="row">
                           <div class="col-6">

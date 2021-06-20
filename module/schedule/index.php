@@ -40,6 +40,9 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
               <div id="dayList"></div>
             </div>
             <div class="container card myCard p-2">
+              <div class="waiting">Please click action button to load...
+                <img src="../../images/wating2.gif" width="40%">
+              </div>
               <div id="mondayList"></div>
               <div id="tuesdayList"></div>
               <div id="wednesdayList"></div>
@@ -54,41 +57,56 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
               <div id="sessionClassListSTT"></div>
             </div>
             <div class="container card myCard p-2">
-            <p id="showTimeTable"></p>
+            <div class="waiting">Please click action button to load...
+                <img src="../../images/wating2.gif" width="40%">
+              </div>
+              <p id="showTimeTable"></p>
             </div>
           </div>
           <div class="tab-pane fade" id="list-cs" role="tabpanel" aria-labelledby="list-cs-list">
             <div class="row">
               <div class="col-3 mt-1 mb-1">
-                <p id="sessionClassList"></p>
-              </div>
-              <div class="col-9 mt-1 mb-1">
-                <div id="showScheduleForm">
+                <div class="container card myCard p-2 mb-2" id="showScheduleForm">
+                  <div class="form-group">
+                    <div class="col">
+                      <label>Schedule Start Date</label>
+                      <input type="date" class="form-control form-control-sm" id="schedule_from" name="schedule_from" min="<?php echo $session_start; ?>" value="<?php echo date("Y-m-d", time()); ?>">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col">
+                      <label>Schedule Last Date</label>
+                      <input type="date" class="form-control form-control-sm" id="schedule_to" name="schedule_to" max="<?php echo $session_end; ?>" value="<?php echo date("Y-m-d", time()); ?>">
+                    </div>
+                  </div>
                   <div class="row">
-                    <div class="col">
-                      <input type="date" class="form-control form-control-sm" id="date_from" name="date_from" min="<?php echo $session_start; ?>" value="<?php echo date("Y-m-d", time()); ?>">
+                    <div class="col pr-0">
+                      <div class="form-group">
+                        <button class="btn btn-sm createScheduleButton">Create Schedule</button>
+                      </div>
                     </div>
-                    <div class="col">
-                      <input type="date" class="form-control form-control-sm" id="date_to" name="date_to" max="<?php echo $session_end; ?>" value="<?php echo date("Y-m-d", time()); ?>">
-                    </div>
-                    <div class="col">
-                      <input type="hidden" id="schedule_action" name="schedule_action">
-                      <button class="btn btn-info btn-square-sm scheduleButton"></button>
+                    <div class="col pl-0">
+                      <div class="form-group">
+                        <button class="btn btn-sm showScheduleButton">Show Schedule</button>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <p id="ssClass"></p>
-                <p id="createScheduleForm"></p>
-                <p id="createScheduleOutput"></p>
-                <p id="showSchedule"></p>
+              </div>
+              <div class="col-9 mt-1 mb-1">
+                <div class="container card myCard p-2 mb-2">
+                  <div id="waiting">Please click action button to load...
+                    <img src="../../images/wating2.gif" width="40%">
+                  </div>
+                  <p id="createScheduleOutput"></p>
+                  <p id="showSchedule"></p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
     <?php require("../bottom_bar.php"); ?>
   </div>
 </body>
@@ -97,29 +115,10 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
 
 <script>
   $(document).ready(function() {
-    $(document).on('click', '.checkAll', function() {
-      var id = $("#panelId").text();
-      //$.alert("Panel Id" + id);
-      if (id == "CS") $('.sclCS').prop('checked', true); // Checks it
-      else $('.scb').prop('checked', true); // Checks it
-
-    });
-
-    $(document).on('click', '.uncheckAll', function() {
-      var id = $("#panelId").text();
-      //$.alert("Panel Id" + id);
-      if (id == "CS") $('.sclCS').prop('checked', false);
-      else $('.scb').prop('checked', false);
-
-    });
-
     $(".topBarTitle").text("Schedule");
-    var classId = $("#sel_class").val();
-    ttList(classId);
-
-    var x = $("#sel_program").val();
-    classList(x);
     $("#panelId").hide();
+    var classId = $("#sel_class").val();
+    ttList();
 
     $(document).on('click', '.stt', function() {
       $("#panelId").html("STT");
@@ -129,20 +128,14 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
     $(document).on('click', '.cs', function() {
       //$.alert("TL");
       $("#selectPanelTitle").text("Create Schedule");
-      $('#showScheduleForm').hide();
       $("#panelId").html("CS");
-      $(".selectPanel").show();
-      $(".selectClass").hide();
-      $(".selectProgram").show();
-      var programId = $("#sel_program").val();
-      sessionClass(programId);
     });
 
     $(document).on('click', '.tt', function() {
-      //$.alert("TL");
       $("#panelId").html("TT");
       var classId = $("#sel_class").val();
-      ttList(classId);
+      // $.alert("TL" + classId);
+      ttList();
     });
 
     $(document).on('blur', '.periodTime', function() {
@@ -163,7 +156,7 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
       })
     });
 
-    $(document).on('click', '.sclSTT, .checkAllSTT, .uncheckAllSTT', function() {
+    $(document).on('click', '.sclSTT', function() {
       var checkboxes_value = [];
       $('.sclSTT').each(function() {
         if (this.checked) {
@@ -194,7 +187,7 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
       var formData = $(this).serialize();
       //$.alert(formData);
       $.post("createScheduleSql.php", formData, () => {}, "text").done(function(data) {
-        $.alert("Form Submitted " + data);
+        // $.alert("Form Submitted " + data);
         $('#substituteModal').modal('hide');
         $('#modalFormSub')[0].reset();
       }).fail(function() {
@@ -206,7 +199,7 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
       var sasDate = $(this).attr("data-date");
       var sasPeriod = $(this).attr("data-period");
       var classId = $(this).attr("data-class");
-      $.alert("Substitute Pressed " + sasDate + " Period " + sasPeriod + " Class " + classId);
+      // $.alert("Substitute Pressed " + sasDate + " Period " + sasPeriod + " Class " + classId);
       $.post("createScheduleSql.php", {
         action: "tlDataSub",
         classId: classId,
@@ -253,7 +246,7 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
 
     $(document).on('click', '.dropSchedule', function() {
       var sasId = $(this).attr("data-sas");
-      //$.alert("Drop Schedule Pressed " + sasId);
+      // $.alert("Drop Schedule Pressed " + sasId);
 
       $.post("createScheduleSql.php", {
         action: "dropSchedule",
@@ -264,36 +257,6 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
       }, "text").fail(function() {
         $.alert("Fail");
       })
-    });
-
-    $(document).on('click', '.scheduleButton', function() {
-      var c = $('#ssClass').text();
-      var action = $('#schedule_action').val();
-      var scheduleFrom = $('#date_from').val();
-      var scheduleTo = $('#date_to').val();
-      //$.alert("Show Schedule Pressed " + c + " Action " + action + "<br>From " + scheduleFrom + " To " + scheduleTo);
-
-      $.post("createScheduleSql.php", {
-        action: action,
-        classId: c,
-        scheduleFrom: scheduleFrom,
-        scheduleTo: scheduleTo
-      }, function(data, status) {
-        $('#showSchedule').show();
-        $('#showSchedule').html(data);
-      }, "text").fail(function() {
-        $.alert("Fail");
-      })
-    });
-
-    $(document).on('click', '.showScheduleForm', function() {
-      $('#showScheduleForm').show();
-      var classId = $(this).attr('id');
-      $('.scheduleButton').html("Show Schedule" + classId);
-      $('#schedule_action').val("showSchedule");
-      $('#ssClass').text(classId);
-      $('#ssClass').hide();
-      //$.alert("Show Schedule Form Pressed " + c);
     });
 
     $(document).on('click', '.sclCS, .checkAll, .uncheckAll', function() {
@@ -323,43 +286,40 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
     });
 
     $(document).on('click', '.createScheduleButton', function() {
-      var checkboxes_value = [];
+      var classId = $('#sel_class').val();
       var scheduleFrom = $('#schedule_from').val();
       var scheduleTo = $('#schedule_to').val();
-      $('.sclCS').each(function() {
-        if (this.checked) {
-          checkboxes_value.push($(this).val());
-        }
-      });
-      $.alert("Create Schedule Pressed " + checkboxes_value + "From " + scheduleFrom + " To " + scheduleTo);
-
+      $.alert("Class " + classId + " From " + scheduleFrom + " To " + scheduleTo);
       $.post("createScheduleSql.php", {
-        action: "createSchedule",
-        checkboxes_value: checkboxes_value,
+        classId: classId,
         scheduleFrom: scheduleFrom,
-        scheduleTo: scheduleTo
+        scheduleTo: scheduleTo,
+        action: "createSchedule"
       }, function(data, status) {
         $('#createScheduleForm').show();
         $('#createScheduleOutput').html(data);
+        $("#waiting").html("");
       }, "text").fail(function() {
         $.alert("Fail");
       })
     });
-
-    $(document).on('change', '#sel_program', function() {
-      var programId = $("#sel_program").val();
-      var panelId = $("#panelId").text();
-      //$.alert("Panel Id " + panelId + programId);
-      if (programId > 0 && panelId == "CS") sessionClass(programId);
-      else if (programId > 0) classList(programId);
-    });
-
-    $(document).on('change', '#sel_class', function() {
-      var classId = $("#sel_class").val();
-      var panelId = $("#panelId").text();
-      //$.alert("Panel Id " + panelId);
-      if (panelId == "TL") tlList(classId);
-      else ttList(classId);
+    $(document).on('click', '.showScheduleButton', function() {
+      var classId = $('#sel_class').val();
+      var scheduleFrom = $('#schedule_from').val();
+      var scheduleTo = $('#schedule_to').val();
+      $.alert("Class " + classId + " From " + scheduleFrom + " To " + scheduleTo);
+      $.post("createScheduleSql.php", {
+        classId: classId,
+        scheduleFrom: scheduleFrom,
+        scheduleTo: scheduleTo,
+        action: "showSchedule"
+      }, function(data, status) {
+        $('#createScheduleForm').show();
+        $('#createScheduleOutput').html(data);
+        $("#waiting").html("");
+      }, "text").fail(function() {
+        $.alert("Fail");
+      })
     });
 
     $(document).on('click', '.increDecre', function() {
@@ -379,17 +339,12 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
       })
     });
 
-    $(document).on('click', '.scb', function() {
-      var id = $(this).attr('id');
-      var status = $(this).is(":checked");
-      $.alert("Subject Check Box Id " + id + "Status" + status);
-    });
-
     $(document).on('click', '.dayName', function() {
       var classId = $("#sel_class").val();
       var classPeriod = $("#classPeriod").val();
       var id = $(this).attr('id');
       var status = $(this).is(":checked");
+      // $(".waiting").show();
       //$.alert("DayName " + id + "Status" + status);
       if (status == true) {
         $.post("scheduleSql.php", {
@@ -422,7 +377,7 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
             $('#sundayList').html(data);
             $('#sundayList').show();
           }
-
+          $(".waiting").hide();
         }, "text").fail(function() {
           $.alert("Failed !!");
         })
@@ -629,10 +584,11 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
       })
     }
 
-    function ttList(x) {
+    function ttList() {
       //$.alert("Class " + x);
+      var classId = $("#sel_class").val();
       $.post("scheduleSql.php", {
-        classId: x,
+        classId: classId,
         action: "tt"
       }, function(mydata, mystatus) {
         //$("#ttList").show();

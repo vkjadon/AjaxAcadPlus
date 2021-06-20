@@ -285,9 +285,10 @@ function check_tn_sas($conn, $table)
     tl_id INT(5) NULL,
     sas_period INT(2) NULL,
     sas_date DATE,
-    update_ts timestamp Default current_timestamp,
     staff_id INT(5) NULL,
     sas_mark INT(1) NULL,
+    update_ts timestamp Default current_timestamp,
+    update_id INT(4) NULL,
     sas_status INT(1) NULL,
     PRIMARY KEY (sas_id),
     UNIQUE(tl_id, sas_period, sas_date)';
@@ -297,30 +298,6 @@ function check_tn_sas($conn, $table)
   }
 }
 
-function check_tn_si($conn, $table)
-{
-  $sql = "select * from $table";
-  $result = $conn->query($sql);
-  if (!$result) {
-    echo "Table Missing $table";
-    // Auto Increment not Required
-    $query =
-      'si_id INT(5) not null auto_increment ,
-    student_id INT(5) NULL,
-    si_fname varchar(100) NULL,
-    si_mname varchar(100) NULL,
-    si_address text NULL,
-    update_ts timestamp Default current_timestamp,
-    update_id int(4) NULL,
-    si_status int(1) NULL,
-    PRIMARY KEY (si_id),
-    UNIQUE(student_id)';
-    $sql = "CREATE TABLE $table ($query)";
-    $result = $conn->query($sql);
-    if (!$result) echo $conn->error;
-  }
-  //else echo "Table Exists";
-}
 function check_tn_sbt($conn, $table)
 {
   $sql = "select * from $table";
@@ -410,6 +387,9 @@ function check_tn_std($conn, $table)
     student_mobile varchar(10) NULL,
     student_email varchar(50) NULL,
     student_dob date NULL,
+    student_gender varchar(1) NULL,
+    student_category varchar(10) NULL,
+    student_address text NULL,
     update_ts timestamp Default current_timestamp,
     update_id int(4) NULL,
     student_status int(1) NULL,
@@ -421,6 +401,36 @@ function check_tn_std($conn, $table)
   }
   //else echo "Table Exists";
 }
+
+function check_tn_stddetail($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    echo "Table Missing $table";
+    // Auto Increment not Required
+    $query =
+      'student_id INT(5) NULL,
+    student_fname varchar(50) NULL,
+    student_mname varchar(50) NULL,
+    student_fmobile varchar(10) NULL,
+    student_mmobile varchar(10) NULL,
+    student_femail varchar(50) NULL,
+    student_memail varchar(50) NULL,
+    student_foccupation varchar(50) NULL,
+    student_moccupation varchar(50) NULL,
+    student_fdesignation varchar(50) NULL,
+    student_mdesignation varchar(50) NULL,
+    update_ts timestamp Default current_timestamp,
+    update_id int(4) NULL,
+    UNIQUE(student_id)';
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+
 function check_tn_sub($conn, $table)
 {
   $sql = "select * from $table";

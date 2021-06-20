@@ -10,8 +10,6 @@ if (isset($_POST['action'])) {
     $array = json_decode($json, true);
     //echo count($array);
     //echo count($array["data"]);
-    echo '<button class="btn btn-secondary btn-square-sm checkAll">Check All</button>';
-    echo '<button class="btn btn-danger btn-square-sm uncheckAll">UnCheck All</button>';
     echo '<table class="table list-table-xs mb-0">';
     echo '<tr><th></th><th>Name</th><th>StdReg</th></tr>';
     for ($i = 0; $i < count($array["data"]); $i++) {
@@ -24,71 +22,39 @@ if (isset($_POST['action'])) {
     }
     echo '</table>';
     //echo '<button class="btn btn-success btn-square-sm mt-0 scheduleFormButton">Show Schedule Form</button>';
-  } elseif ($_POST['action'] == 'createScheduleForm') {
-    $id = $_POST['checkboxes_value'];
-    for ($i = 0; $i < count($id); $i++) {
-      $classId=$id[$i];
-      echo '<button class="btn btn-secondary btn-square-sm" disabled>' . getField($conn, $classId, 'class', 'class_id', 'class_name') . '</button>';
-    }
-    echo '<div class="classForm">
-    <table class="table list-table-xs"><tr><td>
-    <div class="row">
-      <div class="col-5">
-        <div class="form-group">
-          From Date
-          <input type="date" class="form-control form-control-sm schedule_from" id="schedule_from" name="schedule_from" value="' . date("Y-m-d", time()) . '">
-        </div>
-      </div>
-      <div class="col-5">
-        <div class="form-group">
-          To Date
-          <input type="date" class="form-control form-control-sm schedule_to" id="schedule_to" name="schedule_to" value="' . date("Y-m-d", time()) . '">
-        </div>
-      </div>
-      <div class="col-2">
-        <div class="form-group"><br>
-          <button class="btn btn-info btn-square-sm createScheduleButton">Create Schedule</button>
-        </div>
-      </div>
-    </div>
-    </td><tr></table>
-    </div>';
   } elseif ($_POST['action'] == 'createSchedule') {
-    $id = $_POST['checkboxes_value'];
     $from = $_POST['scheduleFrom'];
     $to = $_POST['scheduleTo'];
-    echo "$from - $to";
+    $classId = $_POST['classId'];
+    echo " $from - $to - $classId ";
     $days = (strtotime($to) - strtotime($from)) / (24 * 60 * 60) + 1;
-    for ($i = 0; $i < count($id); $i++) {
-      echo '<button class="btn btn-secondary btn-square-sm" disabled>' . getField($conn, $id[$i], 'class', 'class_id', 'class_name') . '</button>';
-      $classId = $id[$i];
-      for ($j = 0; $j < $days; $j++) {
-        $current_ts = strtotime($from) + $j * 24 * 60 * 60;
-        $current_date = date("Y-m-d", $current_ts);
-        $dayofDate = date("D", $current_ts);
-        //echo "$dayofDate";
-        $json = get_classTimeTableJson($conn, $classId, $tn_tt, $tn_tl, $tn_tlg, $dayofDate);
-        //echo $json;
-        $array = json_decode($json, true);
-        for ($k = 0; $k < count($array["data"]); $k++) {
-          $tlId = $array["data"][$k]["tlId"];
-          $period = $array["data"][$k]["period"];
-          $sql_dup = "select * from $tn_sas where tl_id='$tlId' and sas_period='$period' and sas_date='$current_date'";
-          $result_dup = $conn->query($sql_dup);
-          if ($result_dup->num_rows == '0') {
-            $staff_id = getField($conn, $tlId, $tn_tl, "tl_id", "staff_id");
-            //echo $staff_id;
-            $sql = "insert into $tn_sas (tl_id, sas_period, sas_date, staff_id, update_ts) values('$tlId','$period','$current_date','$staff_id','$submit_ts')";
+    echo getField($conn, $classId, 'class', 'class_id', 'class_name');
+    for ($j = 0; $j < $days; $j++) {
+      $current_ts = strtotime($from) + $j * 24 * 60 * 60;
+      $current_date = date("Y-m-d", $current_ts);
+      $dayofDate = date("D", $current_ts);
+      //echo "$dayofDate";
+      $json = get_classTimeTableJson($conn, $classId, $tn_tt, $tn_tl, $tn_tlg, $dayofDate);
+      //echo $json;
+      $array = json_decode($json, true);
+      for ($k = 0; $k < count($array["data"]); $k++) {
+        $tlId = $array["data"][$k]["tlId"];
+        $period = $array["data"][$k]["period"];
+        $sql_dup = "select * from $tn_sas where tl_id='$tlId' and sas_period='$period' and sas_date='$current_date'";
+        $result_dup = $conn->query($sql_dup);
+        if ($result_dup->num_rows == '0') {
+          $staff_id = getField($conn, $tlId, $tn_tl, "tl_id", "staff_id");
+          //echo $staff_id;
+          $sql = "insert into $tn_sas (tl_id, sas_period, sas_date, staff_id, update_id, sas_status) values('$tlId','$period','$current_date','$staff_id','$myId', '0')";
+          $conn->query($sql);
+        } else {
+          $rows = $result_dup->fetch_assoc();
+          $status = $rows["sas_status"];
+          $sas_id = $rows["sas_id"];
+          //echo "Status $status";
+          if ($status == '1') {
+            $sql = "update $tn_sas set sas_status='0' where sas_id='$sas_id'";
             $conn->query($sql);
-          } else {
-            $rows = $result_dup->fetch_assoc();
-            $status = $rows["sas_status"];
-            $sas_id = $rows["sas_id"];
-            //echo "Status $status";
-            if ($status == '1') {
-              $sql = "update $tn_sas set sas_status='0' where sas_id='$sas_id'";
-              $conn->query($sql);
-            }
           }
         }
       }
@@ -152,7 +118,7 @@ if (isset($_POST['action'])) {
     }
     echo '</table>';
   } elseif ($_POST['action'] == 'showSchedule') {
-    $classId = substr($_POST['classId'], 2);
+    $classId = $_POST['classId'];
     $from = $_POST['scheduleFrom'];
     $to = $_POST['scheduleTo'];
     //echo "$from - $to";
@@ -244,7 +210,7 @@ if (isset($_POST['action'])) {
     //$classId = $_POST['classId'];
     $sasId = $_POST['modalIdSub'];
     $staff_id = $_POST['sub_staff'];
-    $sql="update $tn_sas set staff_id='$staff_id' where sas_id='$sasId'";
+    $sql="update $tn_sas set staff_id='$staff_id', update_ts='$submit_ts', update_id='$myId' where sas_id='$sasId'";
     $conn->query($sql);
     //echo "SasId $sasId $staff_id";
   } elseif ($_POST['action'] == 'subSchedule') {
@@ -253,11 +219,11 @@ if (isset($_POST['action'])) {
     $classId = $_POST['subClassM'];
     $tlId = $_POST['sub'];
     $staff_id=getField($conn, $tlId, $tn_tl, 'tl_id', 'staff_id');
-    echo "SasDate $sasDate Period $sasPeriod Class $classId TLId $tlId";
+    //echo "SasDate $sasDate Period $sasPeriod Class $classId TLId $tlId";
     $sql="update $tn_sas set sas_status='0' where tl_id='$tlId' and staff_id='$staff_id' and sas_period='$sasPeriod' and sas_date='$sasDate'";
     $result=$conn->query($sql);
     if($conn->affected_rows==0){
-      $sql="insert into $tn_sas (tl_id, sas_date, sas_period, staff_id, update_ts) values('$tlId', '$sasDate', '$sasPeriod', '$staff_id', '$submit_ts')";
+      $sql="insert into $tn_sas (tl_id, sas_date, sas_period, staff_id, update_ts, update_id, sas_status) values('$tlId', '$sasDate', '$sasPeriod', '$staff_id', '$submit_ts', '$myId', '0')";
       $conn->query($sql);
       $result=$conn->query($sql);
       if(!$result)echo $conn->error;

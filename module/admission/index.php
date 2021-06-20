@@ -70,8 +70,286 @@ require('../requireSubModule.php');
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="list-as" role="tabpanel" aria-labelledby="list-as-list">
             <div class="row">
-              <div class="col-4">
-                <div class="card myCard">
+              <div class="col-6">
+                <div class="row ml-2">
+                  <h3 class="mb-0 py-0">
+                    <a class="fa fa-plus-circle addStudent"></a>
+                    <a class="fa fa-arrow-circle-up uploadStudent"></a>
+                  </h3>
+                </div>
+                <div class="container card mt-2 myCard">
+                  <!-- nav options -->
+                  <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" data-toggle="pill" href="#pills_home" role="tab" aria-controls="pills_home" aria-selected="true">Home</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="pill" href="#pills_personalInfo" role="tab" aria-controls="pills_personalInfo" aria-selected="true">Personal Info</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="pill" href="#pills_parentsInfo" role="tab" aria-controls="pills_parentsInfo" aria-selected="true">Parents Info</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link pills_qualification" data-toggle="pill" href="#pills_qualification" role="tab" aria-controls="pills_qualification" aria-selected="true">Qualification</a>
+                    </li>
+                  </ul>
+                  <div class="tab-content" id="pills-tabContent p-3">
+                    <div class="tab-pane show active" id="pills_home" role="tabpanel" aria-labelledby="pills_home">
+                      <div class="row p-1">
+                        <div class="col-3 m-0 p-0">
+                          <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="100">
+                        </div>
+                        <div class="col-9 m-0 p-0">
+                          <div class="row p-1">
+                            <div class="col-3 m-0 p-0">
+                              <h7 class="mb-0 ">Name</h7>
+                            </div>
+                            <div class="col-9 text-secondary student_name">
+                              Enter Valid Data
+                            </div>
+                          </div>
+                          <div class="row p-1">
+                            <div class="col-3 m-0 p-0">
+                              <h7 class="mb-0 ">Roll Number</h7>
+                            </div>
+                            <div class="col-9 text-secondary student_rollno">
+                              Enter Valid Data
+                            </div>
+                          </div>
+                          <div class="row p-1">
+                            <div class="col-3 m-0 p-0">
+                              <h7 class="mb-0 ">Email</h7>
+                            </div>
+                            <div class="col-9 text-secondary student_email">
+                              Enter Valid Data
+                            </div>
+                          </div>
+                          <div class="row p-1">
+                            <div class="col-3 m-0 p-0">
+                              <h7 class="mb-0 ">Mobile</h7>
+                            </div>
+                            <div class="col-9 text-secondary student_mobile">
+                              Enter Valid Data
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="pills_personalInfo" role="tabpanel" aria-labelledby="pills_personalInfo">
+                      <input type="hidden" id="studentIdHidden" name="studentIdHidden">
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="row">
+                            <div class="col-4">
+                              <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" class="form-control form-control-sm studentUpdateForm" id="sName" name="sName" placeholder="Name of the Student" data-tag="student_name">
+                              </div>
+                            </div>
+                            <div class="col-4">
+                              <div class="form-group">
+                                <label>Roll Number</label>
+                                <input type="text" class="form-control form-control-sm studentUpdateForm" id="sRno" name="sRno" placeholder="Roll Number of the Student" data-tag="student_rollno">
+                              </div>
+                            </div>
+                            <div class="col-4">
+                              <div class="form-group">
+                                <label>Mobile</label>
+                                <input type="text" class="form-control form-control-sm studentUpdateForm" id="sMobile" name="sMobile" placeholder="Mobile Number of the Student" data-tag="student_mobile">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-6">
+                              <div class="form-group">
+                                <label>Email</label>
+                                <input type="text" class="form-control form-control-sm studentUpdateForm" id="sEmail" name="sEmail" placeholder="Email ID of the Student" data-tag="student_email">
+                              </div>
+                            </div>
+                            <div class="col-6">
+                              <div class="form-group">
+                                <label>Date of Birth</label>
+                                <input type="date" class="form-control form-control-sm studentUpdateForm" id="sDob" name="sDob" placeholder="Date of Birth" data-tag="student_dob">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-6">
+                              <div class="form-check-inline">
+                                <input type="radio" class="form-check-input studentUpdateForm" checked id="male" name="sGender" value="M" data-tag="student_gender">Male
+                              </div>
+                              <div class="form-check-inline">
+                                <input type="radio" class="form-check-input studentUpdateForm" id="female" name="sGender" value="F" data-tag="student_gender">Female
+                              </div>
+                            </div>
+                            <div class="col-6">
+                              <div class="form-check-inline">
+                                <input type="radio" class="form-check-input studentUpdateForm" checked id="obc" name="sCategory" value="OBC" data-tag="student_category">OBC
+                              </div>
+                              <div class="form-check-inline">
+                                <input type="radio" class="form-check-input studentUpdateForm" id="gen" name="sCategory" value="GEN" data-tag="student_category">General
+                              </div>
+                              <div class="form-check-inline">
+                                <input type="radio" class="form-check-input studentUpdateForm" id="sc" name="sCategory" value="SC" data-tag="student_category">SC/ST
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-12">
+                              <div class="form-group">
+                                <label>Address</label>
+                                <input type="text" class="form-control form-control-sm studentUpdateForm" id="sAddress" name="sAddress" placeholder="" data-tag="student_address">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills_parentsInfo" role="tabpanel" aria-labelledby="pills_personalInfo">
+                      <input type="hidden" id="studentIdHidden" name="studentIdHidden">
+                      <div class="row">
+                        <div class="col-4 pr-1">
+                          <div class="form-group">
+                            <label>Father Name</label>
+                            <input type="text" class="form-control form-control-sm studentDetailForm" id="fName" name="fName" placeholder="Name of the Father" data-tag="student_fname">
+                          </div>
+                        </div>
+                        <div class="col-4 pl-1 pr-1">
+                          <div class="form-group">
+                            <label>Occupation</label>
+                            <input type="text" class="form-control form-control-sm studentDetailForm" id="fOccupation" name="fOccupation" placeholder="Occupation of the Father" data-tag="student_foccupation">
+                          </div>
+                        </div>
+                        <div class="col-4 pl-1">
+                          <div class="form-group">
+                            <label>Designation</label>
+                            <input type="text" class="form-control form-control-sm studentDetailForm" id="fDes" name="fDes" placeholder="Designation of the Father" data-tag="student_fdesignation">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4 pr-1">
+                          <div class="form-group">
+                            <label>Mother Name</label>
+                            <input type="text" class="form-control form-control-sm studentDetailForm" id="mName" name="mName" placeholder="Name of the Mother" data-tag="student_mname">
+                          </div>
+                        </div>
+                        <div class="col-4 pr-1 pl-1">
+                          <div class="form-group">
+                            <label>Occupation</label>
+                            <input type="text" class="form-control form-control-sm studentDetailForm" id="mOccupation" name="mOccupation" placeholder="Occupation of the Mother" data-tag="student_moccupation">
+                          </div>
+                        </div>
+                        <div class="col-4 pl-1">
+                          <div class="form-group">
+                            <label>Designation</label>
+                            <input type="text" class="form-control form-control-sm studentDetailForm" id="mDes" name="mDes" placeholder="Designation of the Mother" data-tag="student_mdesignation">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-3 pr-1">
+                          <div class="form-group">
+                            <label>Father Mobile</label>
+                            <input type="text" class="form-control form-control-sm studentDetailForm" id="fMobile" name="fMobile" placeholder="Father's Mobile Number" data-tag="sc_fmobile">
+                          </div>
+                        </div>
+                        <div class="col-3 pl-1 pr-1">
+                          <div class="form-group">
+                            <label>Email</label>
+                            <input type="text" class="form-control form-control-sm studentDetailForm" id="fEmail" name="fEmail" placeholder="Father's Email Address" data-tag="sc_femail">
+                          </div>
+                        </div>
+                        <div class="col-3 pl-1 pr-1">
+                          <div class="form-group">
+                            <label>Mother Mobile</label>
+                            <input type="text" class="form-control form-control-sm studentDetailForm" id="mMobile" name="mMobile" placeholder="Mother's Mobile Number" data-tag="sc_mmobile">
+                          </div>
+                        </div>
+                        <div class="col-3 pl-1">
+                          <div class="form-group">
+                            <label>Email</label>
+                            <input type="text" class="form-control form-control-sm studentDetailForm" id="mEmail" name="mEmail" placeholder="Mother's Email Address" data-tag="sc_memail">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills_qualification" role="tabpanel" aria-labelledby="pills_qualification">
+                      <div class="row">
+                        <div class="col-6">
+                          <div class="form-group">
+                            Qualification
+                            <div class="row">
+                              <div class="col">
+                                <?php
+                                $sql_qualification = "select * from qualification";
+                                $result = $conn->query($sql_qualification);
+                                if ($result) {
+                                  echo '<select class="form-control form-control-sm sQualForm" name="sel_qual" id="sel_qual" data-tag="qualification_id" required>';
+                                  echo '<option selected disabled>Select Qualification</option>';
+                                  while ($rows = $result->fetch_assoc()) {
+                                    $select_id = $rows['qualification_id'];
+                                    $select_name = $rows['qualification_name'];
+                                    echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+                                  }
+                                  echo '</select>';
+                                } else echo $conn->error;
+                                if ($result->num_rows == 0) echo 'No Data Found';
+                                ?>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="form-group">
+                            Institute
+                            <input type="text" class="form-control form-control-sm sQualForm" id="sInst" name="sInst" placeholder="Name of the Institute" data-tag="sq_institute">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-6">
+                          <div class="form-group">
+                            Board
+                            <input type="text" class="form-control form-control-sm sQualForm" id="sBoard" name="sBoard" placeholder="Board" data-tag="sq_board">
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="form-group">
+                            Year of Passing
+                            <input type="text" class="form-control form-control-sm sQualForm" id="sYear" name="sYear" placeholder="Passing Year" data-tag="sq_year">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-4">
+                          <div class="form-group">
+                            Marks Obtained
+                            <input type="text" class="form-control form-control-sm sQualForm" id="sMarksObt" name="sMarksObt" placeholder="Marks Obtained" data-tag="sq_marksObtained">
+                          </div>
+                        </div>
+                        <div class="col-4">
+                          <div class="form-group">
+                            Maximum Marks
+                            <input type="text" class="form-control form-control-sm sQualForm" id="sMaxMarks" name="sMaxMarks" placeholder="Maximum marks" data-tag="sq_marksMax">
+                          </div>
+                        </div>
+                        <div class="col-4">
+                          <div class="form-group">
+                            Percentage/CGPA
+                            <input type="text" class="form-control form-control-sm sQualForm" id="sCgpa" name="sCgpa" placeholder="Percentage/CGPA" data-tag="sq_percentage">
+                          </div>
+                        </div>
+                      </div>
+                      <p style="text-align:center" id="qualificationShowList"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <h5 class="mb-3">Student List</h5>
+                <div class="container card myCard">
                   <div class="input-group md-form form-sm form-2 mt-1">
                     <input name="studentSearch" id="studentSearch" class="form-control my-0 py-1 red-border" type="text" placeholder="Search Student" aria-label="Search">
                     <div class="input-group-append">
@@ -79,307 +357,16 @@ require('../requireSubModule.php');
                     </div>
                   </div>
                   <div class='list-group' id="studentAutoList"></div>
-                  <div class="row">
-                    <div class="col-sm-6">
-                      <button class="btn btn-sm addStudent">New Student</button>
-                    </div>
-                    <div class="col-sm-6">
-                      <button class="btn btn-sm uploadStudent">Upload Student</button>
-                    </div>
-                  </div>
                 </div>
-              </div>
-              <div class="col-8">
-                <div class="card border-info mb-3 studentProfile">
-                  <div class="card-header">Student Profile</div>
-                  <div class="card-body text-primary">
-                    <div class="row">
-                      <div class="col-3">
-                        <div class="card">
-                          <div class="card-body">
-                            <div class="d-flex flex-column align-items-center text-center">
-                              <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="100">
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-9">
-                        <div class="card h-100">
-                          <div class="card-body">
-                            <div class="row">
-                              <div class="col-3">
-                                <h7 class="mb-0 ">Full Name</h7>
-                              </div>
-                              <div class="col-9 text-secondary student_name">
-                                Kenneth Valdez
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="col-3">
-                                <h7 class="mb-0 ">Roll Number</h7>
-                              </div>
-                              <div class="col-9 text-secondary student_rollno">
-                                Kenneth Valdez
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="col-3">
-                                <h7 class="mb-0 ">Email</h7>
-                              </div>
-                              <div class="col-9 text-secondary student_email">
-                                Kenneth Valdez
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="col-3">
-                                <h7 class="mb-0 ">Mobile</h7>
-                              </div>
-                              <div class="col-9 text-secondary student_mobile">
-                                Kenneth Valdez
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-4 mt-1 mb-1">
-                <p id="studentShowList"></p>
-              </div>
-              <div class="col-8">
-                <div id="accordionStudent" class="accordion shadow">
-                  <div class="card">
-                    <div id="headingOne" class="card-header bg-white shadow-sm border-0">
-                      <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">Edit Details</a></h6>
-                    </div>
-                    <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionStudent" class="collapse collapseAccordian">
-                      <div class="card-body">
-                        <form class="form-horizontal">
-                          <input type="hidden" id="studentIdHidden" name="studentIdHidden">
-                          <div class="row">
-                            <div class="col-12">
-                              <div class="studentFormAccordian">
-                                <div class="row">
-                                  <div class="col-4">
-                                    <div class="form-group">
-                                      Student Name
-                                      <input type="text" class="form-control form-control-sm sForm" id="sNameA" name="sNameA" placeholder="Name of the Student" data-tag="student_name">
-                                    </div>
-                                  </div>
-                                  <div class="col-4">
-                                    <div class="form-group">
-                                      Student Roll Number
-                                      <input type="text" class="form-control form-control-sm sForm" id="sRnoA" name="sRnoA" placeholder="Roll Number of the Student" data-tag="student_rollno">
-                                    </div>
-                                  </div>
-                                  <div class="col-4">
-                                    <div class="form-group">
-                                      Mobile Number
-                                      <input type="text" class="form-control form-control-sm sForm" id="sMobileA" name="sMobileA" placeholder="Mobile Number of the Student" data-tag="student_mobile">
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="row">
-                                  <div class="col-6">
-                                    <div class="form-group">
-                                      Email
-                                      <input type="text" class="form-control form-control-sm sForm" id="sEmailA" name="sEmailA" placeholder="Email ID of the Student" data-tag="student_email">
-                                    </div>
-                                  </div>
-                                  <div class="col-6">
-                                    <div class="form-group">
-                                      Date of Birth
-                                      <input type="date" class="form-control form-control-sm sDetailForm" id="sDobA" name="sDobA" placeholder="Date of Birth" data-tag="sd_dob">
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="studentDetailFormAccordian">
-                                <div class="row">
-                                  <div class="col-6">
-                                    <div class="form-group">
-                                      Father Name
-                                      <input type="text" class="form-control form-control-sm sDetailForm" id="fName" name="fName" placeholder="Name of the Father" data-tag="sd_fname">
-                                    </div>
-                                  </div>
-                                  <div class="col-6">
-                                    <div class="form-group">
-                                      Mother Name
-                                      <input type="text" class="form-control form-control-sm sDetailForm" id="mName" name="mName" placeholder="Name of the Mother" data-tag="sd_mname">
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="row">
-                                  <div class="col-6">
-                                    <div class="form-group">
-                                      Father Occupation
-                                      <input type="text" class="form-control form-control-sm sDetailForm" id="fOccupation" name="fOccupation" placeholder="Occupation of the Father" data-tag="sd_foccupation">
-                                    </div>
-                                  </div>
-                                  <div class="col-6">
-                                    <div class="form-group">
-                                      Father Designation
-                                      <input type="text" class="form-control form-control-sm sDetailForm" id="fDes" name="fDes" placeholder="Designation of the Father" data-tag="sd_fdesignation">
-                                    </div>
-                                  </div>
-                                </div>
-                                <hr>
-                                <div class="row">
-                                  <div class="col-6">
-                                    <div class="form-check-inline">
-                                      <input type="radio" class="form-check-input sDetailForm" checked id="male" name="sGender" value="Male" data-tag="sd_gender">Male
-                                    </div>
-                                    <div class="form-check-inline">
-                                      <input type="radio" class="form-check-input sDetailForm" id="female" name="female" value="sGender" data-tag="sd_gender">Female
-                                    </div>
-                                  </div>
-                                  <div class="col-6">
-                                    <div class="form-check-inline">
-                                      <input type="radio" class="form-check-input sDetailForm" checked id="obc" name="sCategory" value="OBC" data-tag="sd_category">OBC
-                                    </div>
-                                    <div class="form-check-inline">
-                                      <input type="radio" class="form-check-input sDetailForm" id="gen" name="sCategory" value="General" data-tag="sd_category">General
-                                    </div>
-                                    <div class="form-check-inline">
-                                      <input type="radio" class="form-check-input sDetailForm" id="sc" name="sCategory" value="SC" data-tag="sd_category">SC
-                                    </div>
-                                    <div class="form-check-inline">
-                                      <input type="radio" class="form-check-input sDetailForm" id="st" name="sCategory" value="ST" data-tag="sd_category">ST
-                                    </div>
-                                  </div>
-                                </div>
-                                <hr>
-                              </div>
-                              <div class="studentContactFormAccordian">
-                                <div class="row">
-                                  <div class="col-6">
-                                    <div class="form-group">
-                                      Father Mobile
-                                      <input type="text" class="form-control form-control-sm sContactForm" id="fMobile" name="fMobile" placeholder="Father's Mobile Number" data-tag="sc_fmobile">
-                                    </div>
-                                  </div>
-                                  <div class="col-6">
-                                    <div class="form-group">
-                                      Mother Mobile
-                                      <input type="text" class="form-control form-control-sm sContactForm" id="mMobile" name="mMobile" placeholder="Mother's Mobile Number" data-tag="sc_mmobile">
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="row">
-                                  <div class="col-6">
-                                    <div class="form-group">
-                                      Father Email
-                                      <input type="text" class="form-control form-control-sm sContactForm" id="fEmail" name="fEmail" placeholder="Father's Email Address" data-tag="sc_femail">
-                                    </div>
-                                  </div>
-                                  <div class="col-6">
-                                    <div class="form-group">
-                                      Mother Email
-                                      <input type="text" class="form-control form-control-sm sContactForm" id="mEmail" name="mEmail" placeholder="Mother's Email Address" data-tag="sc_memail">
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="row">
-                                  <div class="col-12">
-                                    <div class="form-group">
-                                      Address
-                                      <input type="text" class="form-control form-control-sm sContactForm" id="sAddress" name="sAddress" placeholder="" data-tag="sc_address">
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card">
-                    <div id="headingTwo" class="card-header bg-white shadow-sm border-0">
-                      <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" class="d-block position-relative collapsed text-dark text-uppercase collapsible-link py-2">Add Qualification</a></h6>
-                    </div>
-                    <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionStudent" class="collapse collapseAccordian">
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col-12">
-                            <div class="studentQualificationFormAccordian">
-                              <div class="row">
-                                <div class="col-6">
-                                  <div class="form-group">
-                                    Qualification
-                                    <div class="row">
-                                      <div class="col">
-                                        <?php
-                                        $sql_qualification = "select * from qualification";
-                                        $result = $conn->query($sql_qualification);
-                                        if ($result) {
-                                          echo '<select class="form-control form-control-sm sQualForm" name="sel_qual" id="sel_qual" data-tag="qualification_id" required>';
-                                          echo '<option selected disabled>Select Qualification</option>';
-                                          while ($rows = $result->fetch_assoc()) {
-                                            $select_id = $rows['qualification_id'];
-                                            $select_name = $rows['qualification_name'];
-                                            echo '<option value="' . $select_id . '">' . $select_name . '</option>';
-                                          }
-                                          echo '</select>';
-                                        } else echo $conn->error;
-                                        if ($result->num_rows == 0) echo 'No Data Found';
-                                        ?>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="col-6">
-                                  <div class="form-group">
-                                    Institute
-                                    <input type="text" class="form-control form-control-sm sQualForm" id="sInst" name="sInst" placeholder="Name of the Institute" data-tag="sq_institute">
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="row">
-                                <div class="col-6">
-                                  <div class="form-group">
-                                    Board
-                                    <input type="text" class="form-control form-control-sm sQualForm" id="sBoard" name="sBoard" placeholder="Board" data-tag="sq_board">
-                                  </div>
-                                </div>
-                                <div class="col-6">
-                                  <div class="form-group">
-                                    Year of Passing
-                                    <input type="text" class="form-control form-control-sm sQualForm" id="sYear" name="sYear" placeholder="Passing Year" data-tag="sq_year">
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="row">
-                                <div class="col-4">
-                                  <div class="form-group">
-                                    Marks Obtained
-                                    <input type="text" class="form-control form-control-sm sQualForm" id="sMarksObt" name="sMarksObt" placeholder="Marks Obtained" data-tag="sq_marksObtained">
-                                  </div>
-                                </div>
-                                <div class="col-4">
-                                  <div class="form-group">
-                                    Maximum Marks
-                                    <input type="text" class="form-control form-control-sm sQualForm" id="sMaxMarks" name="sMaxMarks" placeholder="Maximum marks" data-tag="sq_marksMax">
-                                  </div>
-                                </div>
-                                <div class="col-4">
-                                  <div class="form-group">
-                                    Percentage/CGPA
-                                    <input type="text" class="form-control form-control-sm sQualForm" id="sCgpa" name="sCgpa" placeholder="Percentage/CGPA" data-tag="sq_percentage">
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <p style="text-align:center" id="qualificationShowList"></p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <div class="container card mt-2 myCard">
+                  <table class="table table-bordered table-striped list-table-xs mt-3" id="studentShowList">
+                    <th><i class="fas fa-edit"></i></th>
+                    <th>Name</th>
+                    <th>RollNo</th>
+                    <th>Mobile</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                  </table>
                 </div>
               </div>
             </div>
@@ -394,7 +381,6 @@ require('../requireSubModule.php');
               </div>
             </div>
           </div>
-
           <div class="tab-pane fade" id="list-cbp" role="tabpanel" aria-labelledby="list-cbp-list">
             <div class="row">
               <div class="col-8">
@@ -552,53 +538,27 @@ require('../requireSubModule.php');
         studentId: stdId,
         action: "fetchStudent"
       }, () => {}, "json").done(function(data) {
-        $(".student_email").text(data.student_email);
-        $(".student_name").text(data.student_name);
-        $(".student_rollno").text(data.student_rollno);
-        $(".student_mobile").text(data.student_mobile);
-        $("#sEmail").val(data.student_email);
         $("#sName").val(data.student_name);
         $("#sRno").val(data.student_rollno);
         $("#sMobile").val(data.student_mobile);
+        $("#sEmail").val(data.student_email);
         $("#sDob").val(data.student_dob);
-        $("#fName").val(data.student_fname);
-        $("#mName").val(data.student_mname);
-        $("#sAdhaar").val(data.student_adhaar);
-        $("#sAddress").val(data.student_address);
         $("#sGender").val(data.student_gender);
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
+        $("#sGender").val(data.student_category);
+        $("#sAddress").val(data.student_address);
+        
+        // $("#sAdhaar").val(data.student_adhaar);
+        $("#fName").val(data.student_fname);
+        $("#fOccupation").val(data.student_foccupation);
+        $("#fDes").val(data.student_fdesignation);
+        $("#mName").val(data.student_mname);
+        $("#mOccupation").val(data.student_moccupation);
+        $("#mDes").val(data.student_mdesignation);
 
-      $.post("admissionSql.php", {
-        studentId: stdId,
-        action: "fetchDetails"
-      }, () => {}, "json").done(function(data) {
-        $("#fName").val(data.sd_fname);
-        $("#mName").val(data.sd_mname);
-        $("#sGender").val(data.sd_gender);
-        $("#sCategory").val(data.sd_category);
-        $("#fOccupation").val(data.sd_foccupation);
-        $("#fDes").val(data.sd_fdesignation);
-        $("#sDob").val(data.sd_dob);
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-
-      $.post("admissionSql.php", {
-        studentId: stdId,
-        action: "fetchContact"
-      }, () => {}, "json").done(function(data) {
-        $("#fEmail").val(data.sc_femail);
-        $("#mEmail").val(data.sc_memail);
-        $("#sAddress").val(data.sc_address);
-        $("#fMobile").val(data.sc_fmobile);
-        $("#mMobile").val(data.sc_mmobile);
       }, "text").fail(function() {
         $.alert("fail in place of error");
       })
     });
-
 
     $(document).on('click', '.sr', function() {
       $('#list-sr').show();
@@ -636,7 +596,6 @@ require('../requireSubModule.php');
       $(".checkitem").prop("checked", $(this).prop("checked"))
     })
 
-
     $(document).on('click', '.as', function() {
       $(".selectPanel").show();
       $('#list-as').show();
@@ -648,11 +607,7 @@ require('../requireSubModule.php');
       $('#modal_title').text("Add Student");
       $('#action').val("addStudent");
       $('#firstModal').modal('show');
-      $('.studentForm').show();
       $('.selectPanel').show();
-      $(".studentContactForm").hide();
-      $(".studentDetailForm").hide();
-      $(".studentQualificationForm").hide();
     });
 
     $(document).on('click', '.uploadStudent', function() {
@@ -684,7 +639,7 @@ require('../requireSubModule.php');
       $('#accordionStudent').show();
       var id = $(this).attr("data-student");
       $("#studentIdHidden").val(id);
-      studentQualificationList(id);
+      // studentQualificationList(id);
 
       $.post("admissionSql.php", {
         studentId: id,
@@ -694,52 +649,29 @@ require('../requireSubModule.php');
         $(".student_name").text(data.student_name);
         $(".student_rollno").text(data.student_rollno);
         $(".student_mobile").text(data.student_mobile);
-        $("#sEmailA").val(data.student_email);
-        $("#sNameA").val(data.student_name);
-        $("#sRnoA").val(data.student_rollno);
-        $("#sMobileA").val(data.student_mobile);
-        $("#sDobA").val(data.student_dob);
-        $("#fName").val(data.student_fname);
-        $("#mName").val(data.student_mname);
-        $("#sAdhaar").val(data.student_adhaar);
-        $("#sAddress").val(data.student_address);
+
+        $("#sName").val(data.student_name);
+        $("#sRno").val(data.student_rollno);
+        $("#sMobile").val(data.student_mobile);
+        $("#sEmail").val(data.student_email);
+        $("#sDob").val(data.student_dob);
         $("#sGender").val(data.student_gender);
+        $("#sGender").val(data.student_category);
+        $("#sAddress").val(data.student_address);
+        
+        // $("#sAdhaar").val(data.student_adhaar);
+        $("#fName").val(data.student_fname);
+        $("#fOccupation").val(data.student_foccupation);
+        $("#fDes").val(data.student_fdesignation);
+        $("#mName").val(data.student_mname);
+        $("#mOccupation").val(data.student_moccupation);
+        $("#mDes").val(data.student_mdesignation);
       }, "text").fail(function() {
         $.alert("fail in place of error");
       })
-
-      $.post("admissionSql.php", {
-        studentId: id,
-        action: "fetchDetails"
-      }, () => {}, "json").done(function(data) {
-        $("#fName").val(data.sd_fname);
-        $("#mName").val(data.sd_mname);
-        $("#sGender").val(data.sd_gender);
-        $("#sCategory").val(data.sd_category);
-        $("#fOccupation").val(data.sd_foccupation);
-        $("#fDes").val(data.sd_fdesignation);
-        $("#sDob").val(data.sd_dob);
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-
-      $.post("admissionSql.php", {
-        studentId: id,
-        action: "fetchContact"
-      }, () => {}, "json").done(function(data) {
-        $("#fEmail").val(data.sc_femail);
-        $("#mEmail").val(data.sc_memail);
-        $("#sAddress").val(data.sc_address);
-        $("#fMobile").val(data.sc_fmobile);
-        $("#mMobile").val(data.sc_mmobile);
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-      $('studentContactFormAccordian').trigger("reset");
-
     });
 
-    $(document).on('blur', '.sForm', function() {
+    $(document).on('blur', '.studentUpdateForm', function() {
       var studentId = $("#studentIdHidden").val()
       var tag = $(this).attr("data-tag")
       var value = $(this).val()
@@ -757,43 +689,23 @@ require('../requireSubModule.php');
       })
     });
 
-    $(document).on('blur', '.sDetailForm', function() {
+    $(document).on('blur', '.studentDetailForm', function() {
       var studentId = $("#studentIdHidden").val()
       var tag = $(this).attr("data-tag")
       var value = $(this).val()
-      // $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
+      $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
       $.post("admissionSql.php", {
-        id_name: "student_id",
-        id: studentId,
         tag: tag,
         student_id: studentId,
         value: value,
         action: "updateDetails"
       }, function(data) {
-        // $.alert("List " + data);
+        $.alert("List " + data);
       }, "text").fail(function() {
         $.alert("fail in place of error");
       })
     });
 
-    $(document).on('blur', '.sContactForm', function() {
-      var studentId = $("#studentIdHidden").val()
-      var tag = $(this).attr("data-tag")
-      var value = $(this).val()
-      // $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
-      $.post("admissionSql.php", {
-        id_name: "student_id",
-        id: studentId,
-        tag: tag,
-        student_id: studentId,
-        value: value,
-        action: "updateContact"
-      }, function(data) {
-        // $.alert("List " + data);
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
 
     $(document).on('blur', '.sQualForm', function() {
       var studentId = $("#studentIdHidden").val()
@@ -836,11 +748,6 @@ require('../requireSubModule.php');
       $('#firstModal').modal('show');
       var stdId = $('#panelId').val();
       $('#stdIdModal').val(stdId);
-      $('.studentForm').hide();
-      $('.selectPanel').show();
-      $(".studentContactForm").hide();
-      $(".studentQualificationForm").show();
-      $(".studentDetailForm").hide();
       $('#action').val("addStudentQualification");
     });
 
@@ -884,9 +791,6 @@ require('../requireSubModule.php');
         $("#action").val("updateStudent");
         $('#modalId').val(id);
         $('#firstModal').modal('show');
-        $(".studentQualificationForm").hide();
-        $(".studentContactForm").hide();
-        $(".studentDetailForm").hide();
 
 
       }, "text").fail(function() {
@@ -956,9 +860,6 @@ require('../requireSubModule.php');
       })
       $('#modal_title').text("Update Contact Details");
       $('#firstModal').modal('show');
-      $(".studentForm").hide();
-      $(".studentContactForm").show();
-      $(".studentDetailForm").hide();
       $('#modalId').val(id);
       $('#action').val("addContact");
     });
@@ -971,11 +872,23 @@ require('../requireSubModule.php');
       //$.alert("In List Function" + y);
       $.post("admissionSql.php", {
         action: "studentList"
-      }, function(mydata, mystatus) {
+      }, function() {}, "json").done(function(data, status) {
         $("#studentShowList").show();
-        // $.alert("List " + mydata);
-        $("#studentShowList").html(mydata);
-      }, "text").fail(function() {
+        // $.alert("List " + data);
+        var listData = '';
+        $.each(data, function(key, value) {
+          listData += '<tr>';
+          listData += '<td><a href="#" class="fa fa-edit editStudent" data-student="' + value.student_id + '"></a></td>';
+          listData += '<td>' + value.student_name + '</td>';
+          listData += '<td>' + value.student_rollno + '</td>';
+          listData += '<td>' + value.student_mobile + '</td>';
+          listData += '<td>' + value.student_email + '</td>';
+          listData += '</tr>';
+        });
+        $("#studentShowList").find("tr:gt(0)").remove();
+        $("#studentShowList").append(listData);
+
+      }).fail(function() {
         $.alert("Error !!");
       })
 
@@ -1031,13 +944,13 @@ require('../requireSubModule.php');
             <div class="row">
               <div class="col-6">
                 <div class="form-group">
-                  Student Name
+                  Name
                   <input type="text" class="form-control form-control-sm" id="sName" name="sName" placeholder="Name of the Student">
                 </div>
               </div>
               <div class="col-6">
                 <div class="form-group">
-                  Student Roll Number
+                  Roll Number
                   <input type="text" class="form-control form-control-sm" id="sRno" name="sRno" placeholder="Roll Number of the Student">
                 </div>
               </div>
@@ -1051,7 +964,7 @@ require('../requireSubModule.php');
               </div>
               <div class="col-6">
                 <div class="form-group">
-                  Mobile Number
+                  Mobile
                   <input type="text" class="form-control form-control-sm" id="sMobile" name="sMobile" placeholder="Mobile Number of the Student">
                 </div>
               </div>

@@ -32,8 +32,8 @@ if (isset($mySes)) {
   check_tn_mn($conn, 'master_name');
   check_tn_rp($conn, 'resource_person');
   check_tn_respStaff($conn, 'responsibility_staff');
-  check_tn_si($conn, "student_info");
   check_tn_std($conn, "student");
+  check_tn_stddetail($conn, "student_detail");
   check_tn_sub($conn, "subject");
   check_tn_subaddon($conn, "subject_addon");
   check_tn_subelective($conn, "subject_elective");

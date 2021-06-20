@@ -76,13 +76,13 @@ if (!isset($myBatch)) $myBatch = '';
 								<div class="row">
 									<div class="col-6">
 										<a href="<?php echo $codePath . '/module/inst/'; ?>" class="dropdown-item pb-1">SetUp Institite</a>
-										<a href="<?php echo $codePath . '/module/admission/'; ?>" class="dropdown-item pb-1">Admission</a>
+										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item pb-1">Users and Links</a>
 									</div>
 									<div class="col-6">
 										<!-- <a href="<?php echo $codePath . '/module/sop/'; ?>" class="dropdown-item pb-1">SOP</a> -->
 										<!-- <a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item pb-1">Committees</a> -->
 										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item pb-1">Infrastructure</a>
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item pb-1">Users and Links</a>
+										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item pb-1">Status Report</a>
 
 									</div>
 								</div>
