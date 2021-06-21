@@ -37,6 +37,7 @@ if (isset($mySes)) {
   check_tn_sub($conn, "subject");
   check_tn_subaddon($conn, "subject_addon");
   check_tn_subelective($conn, "subject_elective");
+  check_tn_user($conn, "user");
   
   $tn_ccd = 'cc_detail'.$mySes;
   check_tn_ccd($conn, $tn_ccd);

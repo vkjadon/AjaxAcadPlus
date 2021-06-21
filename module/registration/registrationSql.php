@@ -6,7 +6,6 @@ $sno = 0;
 if (isset($_POST['action'])) {
   if ($_POST['action'] == 'sbpList') {
     $class_id = $_POST['classId'];
-
     $class_semester = getField($conn, $class_id, "class", "class_id", "class_semester");
     $class_group = getField($conn, $class_id, "class", "class_id", "class_group");
     $batch_id = getField($conn, $class_id, "class", "class_id", "batch_id");
@@ -35,7 +34,7 @@ if (isset($_POST['action'])) {
       $regDate = getField($conn, $id, $tn_rc, 'student_id', 'rc_date');
       $regClassGroup = getField($conn, $id, $tn_rc, 'student_id', 'rc_group');
       $regClass = getField($conn, $id, $tn_rc, 'student_id', 'class_id');
-      $regClass = getField($conn, $regClass, $tn_class, 'class_id', 'class_name');
+      $regClass = getField($conn, $regClass, "class", 'class_id', 'class_name');
       $sno++;
       echo '<tr>';
       echo '<td>' . $sno . '</td>';
@@ -58,15 +57,16 @@ if (isset($_POST['action'])) {
     }
     echo '</table>';
     echo '<div class="row mt-2">';
-    echo '<div class="col-sm-1 pr-0 m-0">';
+    echo '<div class="col-sm-2 pr-0 m-0">';
+    echo '<label>Class Group</label>';
     echo '<select class="form-control form-control-sm" id="sel_cg" name="class_group">';
     for ($group = 1; $group <= $class_group; $group++) {
       echo '<option value="' . $group . '">' . $group . '</option>';
     }
     echo '</select>';
     echo '</div>';
-    echo '<div class="col-sm-4 p-0">';
-    echo '<button class="btn btn-success btn-sm m-0 register">Register</button>';
+    echo '<div class="col-sm-10"><br>';
+    echo '<button class="btn btn-sm m-0 register">Register</button>';
     echo '</div>';
     echo '</div>';
     //echo "sddsd";
@@ -74,25 +74,26 @@ if (isset($_POST['action'])) {
     $id = $_POST["checkboxes_value"];
     $classId = $_POST["classId"];
     $class_group = $_POST["class_group"];
-    echo  " Class $classId $class_group";
+    // echo  " Class $classId $class_group";
 
     $sql = "select tl.tl_id from $tn_tlg tlg, $tn_tl tl where tlg.tlg_id=tl.tlg_id and tlg.class_id='$classId' and tlg.tlg_status='0' and tl.tl_status='0'";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     $i = 0;
     while ($rowArray = $result->fetch_assoc()) {
-      echo $tl[$i] = $rowArray["tl_id"];
+      $tl[$i] = $rowArray["tl_id"];
+      // echo '<br>TL Id '.$tl[$i];
       $i++;
     }
 
     for ($i = 0; $i < count($id); $i++) {
-      echo $id[$i];
-      echo '<br>';
-      $sql = "select * from $tn_rc where student_id='$id[$i]' and rc_status='0'";
-      if (!$conn->query($sql)->num_rows) {
-        $sql = "insert into $tn_rc (student_id, class_id, rc_group, rc_date, submit_id, rc_status) values('$id[$i]','$classId', '$class_group', '$submit_date','$myId', '0')";
-        $result = $conn->query($sql);
-      }
+      // echo '<br>Std Id '.$id[$i];
+      $sql = "select * from $tn_rc where student_id='$id[$i]'";
+      if (!$conn->query($sql)->num_rows) $sql = "insert into $tn_rc (student_id, class_id, rc_group, rc_date, update_id, rc_status) values('$id[$i]','$classId', '$class_group', '$submit_date','$myId', '0')";
+      else $sql = "update $tn_rc set rc_status='0', update_ts='$submit_ts', update_id='$myId' where student_id='$id[$i]'";
+      $result = $conn->query($sql);
+      if (!$result) echo $conn->error;
+      else "Registered";
     }
   } elseif ($_POST['action'] == 'updateRegistration') {
     $id = $_POST["checkboxes_value"];
@@ -141,7 +142,7 @@ if (isset($_POST['action'])) {
       echo '<td>' . $student_name . '</td>';
       echo '<td>' . $regClassGroup . '</td>';
       echo '<td>' . date("d-m-Y", strtotime($regDate)) . '</td>';
-      echo '<td><button class="btn btn-secondary btn-square-sm studentSubjectButton" id="' . $id . '">Update</button></td>';
+      echo '<td><button class="btn btn-secondary btn-square-sm studentSubjectButton" id="' . $id . '">Up3date</button></td>';
       echo '</tr>';
     }
     echo '</table>';

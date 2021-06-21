@@ -164,6 +164,7 @@ function check_tn_rc($conn, $table)
     student_id INT(5) NULL,
     class_id INT(4) NULL,
     rc_date DATE,
+    rc_group INT(2) NULL,
     update_id INT(5) NULL,
     update_ts timestamp Default current_timestamp,
     rc_status INT(1) NULL,
@@ -604,6 +605,26 @@ function check_tn_ttp($conn, $table)
     $sql = "CREATE TABLE $table ($query)";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+function check_tn_user($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'user_password varchar(150) NULL,
+    staff_id int(4) NULL,
+    student_id INT(5) NULL,
+    last_login timestamp DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(staff_id, student_id)';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+
   }
   //else echo "Table Exists";
 }

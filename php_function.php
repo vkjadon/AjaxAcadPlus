@@ -487,7 +487,7 @@ function paginationBar($conn, $sqlAll, $rpp, $id, $tag)
     echo '<li class="page-item pageLink" id="page' . $tag . $i . '" data-start="' . $startRecord . '" data-tag="' . $tag . '"><a class="page-link" href="#"><span class="btn btn-info btn-square-sm">' . $i . '</span></a></li>';
   }
   echo '</ul></div>';
-  echo '<div class="col-2"><select class="form-control form-control-sm ' . $id . '" id="' . $id . '" data-tag="' . $tag . '" name="rpp">
+  echo '<div class="col-2 p-3"><select class="form-control form-control-sm ' . $id . '" id="' . $id . '" data-tag="' . $tag . '" name="rpp">
   <option value="' . $rpp . '">' . $rpp . '</option>
   <option value="5">5</option>
   <option value="15">15</option>

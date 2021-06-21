@@ -15,33 +15,37 @@ require('../requireSubModule.php');
   <?php require("../topBar.php"); ?>
   <div class="container-fluid moduleBody">
     <div class="row">
-    <div class="col-2 p-0 m-0 pl-2 full-height">
-        <?php
-        $sql = "select * from class where session_id='$mySes' and program_id='$myProg'";
-        selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
-        ?>
+      <div class="col-2 p-0 m-0 pl-2 full-height">
+        <h5 class="mt-2">Registration</h5>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active cr" id="list-cr-list" data-toggle="list" href="#list-cr" role="tab"> Class Registration </a>
           <a class="list-group-item list-group-item-action subReg" id="list-subReg-list" data-toggle="list" href="#list-subReg" role="tab"> Subject Registration </a>
           <a class="list-group-item list-group-item-action stdReg" id="list-stdReg-list" data-toggle="list" href="#list-stdReg" role="tab"> Student Registration </a>
-
         </div>
+        <?php
+        $sql = "select * from class where session_id='$mySes' and program_id='$myProg'";
+        selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
+        ?>
       </div>
       <div class="col-10 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="list-cr" role="tabpanel">
             <div class="row">
               <div class="col-8">
-                <p id="sbpList"></p>
-                <span style="font-size: 12px;">
-                  <ul>
-                    <li>The Students will be registered in the Class and Group.</li>
-                    <li>These are the default classes and groups for all academic purposes.</li>
-                    <li>The Class and Group can be changed for different Subjects.</li>
-                    <li>The <i>Daily Class Attendance</i> and <i>Subject Marks Entry</i> will be entered for the Class they are registered for that Subject.</li>
-                    <li>So, Class wise students list will consider Class Registration and the Subject wise data entry will consider Subject Registration.</li>
-                  </ul>
-                </span>
+                <div class="container card myCard">
+                  <p id="sbpList"></p>
+                </div>
+                <div class="container card myCard mt-2">
+                  <span style="font-size: 12px;">
+                    <ul>
+                      <li>The Students will be registered in the Class and Group.</li>
+                      <li>These are the default classes and groups for all academic purposes.</li>
+                      <li>The Class and Group can be changed for different Subjects.</li>
+                      <li>The <i>Daily Class Attendance</i> and <i>Subject Marks Entry</i> will be entered for the Class they are registered for that Subject.</li>
+                      <li>So, Class wise students list will consider Class Registration and the Subject wise data entry will consider Subject Registration.</li>
+                    </ul>
+                  </span>
+                </div>
               </div>
               <div class="col-4">
                 <h5>Update Class Registration</h5>
@@ -91,10 +95,14 @@ require('../requireSubModule.php');
           <div class="tab-pane fade" id="list-subReg">
             <div class="row">
               <div class="col-7 mt-1 mb-1">
-                <p id="classList"></p>
+                <div class="container card myCard">
+                  <p id="classList"></p>
+                </div>
               </div>
               <div class="col-5 mt-1 mb-1">
-                <p id="classSubjectList"></p>
+                <div class="container card myCard">
+                  <p id="classSubjectList"></p>
+                </div>
               </div>
             </div>
           </div>
@@ -147,7 +155,7 @@ require('../requireSubModule.php');
           checkboxes_value.push($(this).val());
         }
       });
-      //$.alert("Register Pressed " + checkboxes_value + "Start " + startRecord + "CG " + class_group);
+      $.alert("Register Pressed " + checkboxes_value + "Start " + startRecord + "CG " + class_group);
       $.post("registrationSql.php", {
         checkboxes_value: checkboxes_value,
         classId: classId,
@@ -155,7 +163,7 @@ require('../requireSubModule.php');
         action: "register"
 
       }, function(data, status) {
-        //$.alert(data);
+        $.alert(data);
         sbpList(rpp, startRecord);
       }, "text").fail(function() {
         $.alert("Fail");
@@ -200,7 +208,7 @@ require('../requireSubModule.php');
       });
       var status = $(this).is(":checked");
       var tlId = $(this).val();
-      //$.alert("Register Pressed " + status + tlId);
+      $.alert("Register Pressed " + status + tlId);
 
       $.post("registrationSql.php", {
         tl: tlId,
@@ -253,7 +261,7 @@ require('../requireSubModule.php');
     $(document).on('click', '.checkUnCheck', function() {
       var status = $(this).is(":checked");
       var tag = $(this).attr("data-tag");
-      if (tag=="cl") {
+      if (tag == "cl") {
         if (status == false) $('.cl').prop('checked', false); // Unchecks it
         else $('.cl').prop('checked', true); // Unchecks it
       } else {
