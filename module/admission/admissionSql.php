@@ -67,12 +67,6 @@ if (isset($_POST['action'])) {
       echo "affected rows $affectedRows";
       if (!$result) echo $conn->error;
       else echo "Updated";
-   } elseif ($_POST['action'] == 'addStudentQualification') {
-      $std_id = $_POST['stdIdModal'];
-      $sql = "insert into student_qualification (student_id, qualification_id, sq_institute, sq_board, sq_year, sq_marksObtained, sq_marksMax, sq_percentage) values ('$_POST[stdIdModal]', '$_POST[sel_qual]', '$_POST[sInst]', '$_POST[sBoard]', '$_POST[sYear]', '$_POST[sMarksObt]', '$_POST[sMaxMarks]', '$_POST[sCgpa]')";
-      $result = $conn->query($sql);
-      if (!$result) echo $conn->error;
-      else echo "Success";
    } elseif ($_POST['action'] == 'studentQualificationList') {
       $tableId = 'sq_id';
 
@@ -81,28 +75,26 @@ if (isset($_POST['action'])) {
       $statusDecode = array("status" => "sq_status", "0" => "Active", "9" => "Inactive");
       $button = array("1", "1", "0", "0");
 
-      $fields = array("qualification_name", "sq_institute", "sq_board", "sq_year", "sq_marksObtained", "sq_marksMax", "sq_percentage");
+      $fields = array("mn_name", "sq_institute", "sq_board", "sq_mo", "sq_mm", "sq_percentage", "sq_year");
       $dataType = array("0", "0", "0", "0", "0", "0", "0");
-      $header = array("Id", "Qualification", "Institute", "Board", "Passing Year", "Marks Obtained", "Maximum Marks", "Percentage/CGPA");
+      $header = array("Id", "Qual", "Inst", "Board", "MO", "MM", "%", "Year");
 
-      if ($stdId > 0) $sql = "select sq.*, q.qualification_name from student_qualification sq, qualification q where q.qualification_id=sq.qualification_id and sq.student_id='$stdId'";
+      if ($stdId > 0) $sql = "select sq.*, mn.mn_name from student_qualification sq, master_name mn where mn.mn_id=sq.mn_id and sq.student_id='$stdId'";
       getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
    } elseif ($_POST['action'] == 'updateStudentQualification') {
-      $id_name = $_POST['id_name'];
       $student_id = $_POST['student_id'];
-      $id = $_POST['id'];
+      $mn_id = $_POST['mn_id'];
       $tag = $_POST['tag'];
       $value = $_POST['value'];
-      $sql = "update student_qualification set $tag='$value' where $id_name='$id' and student_id='$student_id'";
-      $result = $conn->query($sql);
-      $affectedRows = $conn->affected_rows;
-      echo "affected rows $affectedRows";
-      if (!$result) echo $conn->error;
-      elseif ($affectedRows == 0) {
-         $sql = "insert into student_qualification (student_id, qualification_id, $tag) values ('$student_id', '$id, '$value')";
-         $result = $conn->query($sql);
-         if (!$result) echo $conn->error;
-      } else "Updated";
+      $dup="select * from student_qualification where student_id='$student_id' and mn_id='$mn_id'";
+      $result=$conn->query($dup);
+      if($result->num_rows==0){
+         $sql="insert into student_qualification (student_id, mn_id, $tag, update_id, sq_status) values('$student_id','$mn_id', '$value', '$myId','0')";
+      }else{
+         $sql = "update student_qualification set $tag='$value', sq_status='0', update_ts='$submit_ts', update_id='$myId' where student_id='$student_id' and mn_id='$mn_id'";
+      }
+      $conn->query($sql);
+      echo $conn->error;
    } elseif ($_POST['action'] == 'fetchStudentQualification') {
       $sq_id = $_POST['sqId'];
       $sql = "select * FROM student_qualification where sq_id='$sq_id'";

@@ -484,7 +484,7 @@ function paginationBar($conn, $sqlAll, $rpp, $id, $tag)
 
   for ($i = 1; $i <= $page; $i++) {
     $startRecord = ($i - 1) * $rpp;
-    echo '<li class="page-item pageLink" id="page' . $tag . $i . '" data-start="' . $startRecord . '" data-tag="' . $tag . '"><a class="page-link" href="#"><span class="btn btn-info btn-square-sm">' . $i . '</span></a></li>';
+    echo '<li class="page-item pageLink" id="page' . $tag . $i . '" data-start="' . $startRecord . '" data-tag="' . $tag . '"><a class="page-link" href="#"><span class="btn btn-square-sm">' . $i . '</span></a></li>';
   }
   echo '</ul></div>';
   echo '<div class="col-2 p-3"><select class="form-control form-control-sm ' . $id . '" id="' . $id . '" data-tag="' . $tag . '" name="rpp">
@@ -692,7 +692,7 @@ function get_staffClass($conn, $staff_id, $tn_tl, $tn_tlg)
 }
 function get_staffTeachingLoad($conn, $staff_id, $tn_tl, $tn_tlg)
 {
-  $sql = "select tlg.*, tl.* from $tn_tlg tlg, $tn_tl tl where tl.tlg_id=tlg.tlg_id and tl.staff_id='$staff_id' and tlg.tlg_status='0' and tl.tl_status='0' order by tlg.class_id, tlg.subject_id";
+  $sql = "select tlg.*, tl.* from $tn_tlg tlg, $tn_tl tl where tl.tlg_id=tlg.tlg_id and tl.staff_id='$staff_id' and tlg.tlg_status='0' and tl.tl_status='0' order by tlg.class_id, tlg.subject_id, tlg.tlg_type, tl.tl_group";
 
   $result = $conn->query($sql);
   if (!$result) die(" The script could not be Loadded! Please report!");

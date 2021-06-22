@@ -41,25 +41,24 @@ if (isset($_POST['action'])) {
     //echo "$myId - $tn_tl - $tn_tlg";
     $jsonTL = get_staffTeachingLoad($conn, $myId, $tn_tl, $tn_tlg);
     //echo $jsonTL;
+    echo '<div class="row">';
+
     $array = json_decode($jsonTL, true);
     for ($i = 0; $i < count($array["data"]); $i++) {
       $tlId = $array["data"][$i]["tlId"];
       $class_id = $array["data"][$i]["class_id"];
+      $type = $array["data"][$i]["type"];
+      $group = $array["data"][$i]["group"];
       $class = getField($conn, $class_id, "class", "class_id", "class_name");
+      $section = getField($conn, $class_id, "class", "class_id", "class_section");
       $subject_id = $array["data"][$i]["subject_id"];
-      $subject = getField($conn, $subject_id, "subject", "subject_id", "subject_name");
-      $text = "Topics for " . $subject . '[' . $array["data"][$i]["type"] . ']';
-      echo '<div class="card">
-      <div class="card-body mb-0">
-      <h5 class="card-title"  id="cl' . $tlId . '">' . $class . '[' . $class_id . ']</h5>
-      <h6 class="card-subtitle mb-2 text-muted" id="sb' . $tlId . '">' . $subject . ' [' . $subject_id . ']</h6>
-      <a href="#" class="btn btn-info btn-square-sm showSTForm" data-text="' . $text . '" data-tl="' . $tlId . '">Topic</a>
-      <a href="#" class="btn btn-danger btn-square-sm showResourceForm"  data-text="' . $text . '" data-tl="' . $tlId . '" data-sub="' . $subject_id . '">Resource</a>
-      <a href="#" class="btn btn-secondary btn-square-sm showCoverage" data-text="' . $text . '" data-tl="' . $tlId . '">Coverage</a>
-      <a href="#" class="btn btn-warning btn-square-sm showQuizForm"  data-text="' . $text . '" data-tl="' . $tlId . '" data-sub="' . $subject_id . '">Quiz</a>
-      </div></div>';
+      $subject = getField($conn, $subject_id, "subject", "subject_id", "subject_code");
+      echo '<div class="col-6">';
+      echo '<input type="radio" class="sel_subject"  id="cl' . $tlId . '" name="subject" value="' . $tlId . '"> 
+      <span class="smallerText"> ' . $subject . ' ' . $class .'['. $section.'] '.$type.'G-'.$group.'</span>';
+      echo '</div>';
     }
-    echo '<span class="footerNote">Subject Topics will be same for one Subject irrespective of the Class and Faculty. It signifies the Syllabus.</span>';
+    echo '</div>';
   } elseif ($_POST['action'] == "coverage") {
     $tlId = $_POST['tlId'];
     //echo "TL Id - $tlId";
@@ -124,7 +123,6 @@ if (isset($_POST['action'])) {
       echo '</tr>';
     }
     echo '</table>';
-    echo '<span class="footerNote">Syllabus Topics are not editable. These are as approved by BOS. The faculty can add additional Topics in the interest of students based on current trends and industry requirements.</span>';
   } elseif ($_POST['action'] == "addST") {
     $tlId = $_POST['tlId'];
     $sbt_name = $_POST['sbt_name'];

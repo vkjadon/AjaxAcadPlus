@@ -127,11 +127,22 @@ div.minWidth100 {
     font-size: small;
     font-weight: bold;
 }
+.smallText {
+    font-size: small;
+    font-weight: bold;
+}
+.smallerText {
+    font-size: smaller;
+    font-weight: bold;
+}
+.xsText {
+    font-size:x-small;
+    font-weight: bold;
+}
 .ttText {
     color: rgba(69, 40, 231, 0.911);
     font-size: 11px;
     line-height: 0px;
-
 }
 .inputLabel{
     color: rgba(65, 62, 75, 0.911);

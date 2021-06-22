@@ -431,6 +431,34 @@ function check_tn_stddetail($conn, $table)
   }
   //else echo "Table Exists";
 }
+function check_tn_stdqual($conn, $table){
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    echo "Table Missing $table";
+    // Auto Increment not Required
+    $query =
+      'sq_id int(5) NOT NULL AUTO_INCREMENT,
+    student_id INT(5) NULL,
+    mn_id int(3) NULL,
+    sq_institute varchar(100) NULL,
+    sq_board varchar(50) NULL,
+    sq_year int(4) NULL,
+    sq_mo int(4) NULL,
+    sq_mm int(4) NULL,
+    sq_percentage float NULL,
+    sq_cgpa float NULL,
+    update_ts timestamp Default current_timestamp,
+    update_id int(4) NULL,
+    sq_status int(1),
+    PRIMARY KEY(sq_id),
+    UNIQUE(student_id, mn_id)';
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
 
 function check_tn_sub($conn, $table)
 {
@@ -615,10 +643,11 @@ function check_tn_user($conn, $table)
   if (!$result) {
     //echo "Table Missing $table";
     $query =
-      'user_password varchar(150) NULL,
-    staff_id int(4) NULL,
+      'staff_id int(4) NULL,
     student_id INT(5) NULL,
+    user_password varchar(150) NULL,
     last_login timestamp DEFAULT CURRENT_TIMESTAMP,
+    user_status int(1) NULL,
     UNIQUE(staff_id, student_id)';
 
     $sql = "CREATE TABLE $table ($query)";

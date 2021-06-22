@@ -1,14 +1,12 @@
 <?php
 require('../requireSubModule.php');
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <title>Outcome Based Education : ClassConnect</title>
+  <title>ClassConnect : Registration</title>
   <?php require("../css.php"); ?>
-
 </head>
 
 <body>
@@ -20,7 +18,6 @@ require('../requireSubModule.php');
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active cr" id="list-cr-list" data-toggle="list" href="#list-cr" role="tab"> Class Registration </a>
           <a class="list-group-item list-group-item-action subReg" id="list-subReg-list" data-toggle="list" href="#list-subReg" role="tab"> Subject Registration </a>
-          <a class="list-group-item list-group-item-action stdReg" id="list-stdReg-list" data-toggle="list" href="#list-stdReg" role="tab"> Student Registration </a>
         </div>
         <?php
         $sql = "select * from class where session_id='$mySes' and program_id='$myProg'";

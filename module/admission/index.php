@@ -134,7 +134,6 @@ require('../requireSubModule.php');
                           </div>
                         </div>
                       </div>
-
                     </div>
                     <div class="tab-pane fade" id="pills_personalInfo" role="tabpanel" aria-labelledby="pills_personalInfo">
                       <input type="hidden" id="studentIdHidden" name="studentIdHidden">
@@ -144,19 +143,19 @@ require('../requireSubModule.php');
                             <div class="col-4">
                               <div class="form-group">
                                 <label>Name</label>
-                                <input type="text" class="form-control form-control-sm studentUpdateForm" id="sName" name="sName" placeholder="Name of the Student" data-tag="student_name">
+                                <input type="text" class="form-control form-control-sm studentUpdateForm" id="stdName" name="stdName" placeholder="Name of the Student" data-tag="student_name">
                               </div>
                             </div>
                             <div class="col-4">
                               <div class="form-group">
                                 <label>Roll Number</label>
-                                <input type="text" class="form-control form-control-sm studentUpdateForm" id="sRno" name="sRno" placeholder="Roll Number of the Student" data-tag="student_rollno">
+                                <input type="text" class="form-control form-control-sm studentUpdateForm" id="stdRno" name="stdRno" placeholder="Roll Number of the Student" data-tag="student_rollno">
                               </div>
                             </div>
                             <div class="col-4">
                               <div class="form-group">
                                 <label>Mobile</label>
-                                <input type="text" class="form-control form-control-sm studentUpdateForm" id="sMobile" name="sMobile" placeholder="Mobile Number of the Student" data-tag="student_mobile">
+                                <input type="text" class="form-control form-control-sm studentUpdateForm" id="stdMobile" name="stdMobile" placeholder="Mobile Number of the Student" data-tag="student_mobile">
                               </div>
                             </div>
                           </div>
@@ -164,13 +163,13 @@ require('../requireSubModule.php');
                             <div class="col-6">
                               <div class="form-group">
                                 <label>Email</label>
-                                <input type="text" class="form-control form-control-sm studentUpdateForm" id="sEmail" name="sEmail" placeholder="Email ID of the Student" data-tag="student_email">
+                                <input type="text" class="form-control form-control-sm studentUpdateForm" id="stdEmail" name="stdEmail" placeholder="Email ID of the Student" data-tag="student_email">
                               </div>
                             </div>
                             <div class="col-6">
                               <div class="form-group">
                                 <label>Date of Birth</label>
-                                <input type="date" class="form-control form-control-sm studentUpdateForm" id="sDob" name="sDob" placeholder="Date of Birth" data-tag="student_dob">
+                                <input type="date" class="form-control form-control-sm studentUpdateForm" id="Dob" name="Dob" placeholder="Date of Birth" data-tag="student_dob">
                               </div>
                             </div>
                           </div>
@@ -277,20 +276,20 @@ require('../requireSubModule.php');
                     </div>
                     <div class="tab-pane fade" id="pills_qualification" role="tabpanel" aria-labelledby="pills_qualification">
                       <div class="row">
-                        <div class="col-6">
+                        <div class="col-2 pr-1">
                           <div class="form-group">
-                            Qualification
+                            <label>Qual</label>
                             <div class="row">
                               <div class="col">
                                 <?php
-                                $sql_qualification = "select * from qualification";
+                                $sql_qualification = "select * from master_name where mn_code='qt'";
                                 $result = $conn->query($sql_qualification);
                                 if ($result) {
-                                  echo '<select class="form-control form-control-sm sQualForm" name="sel_qual" id="sel_qual" data-tag="qualification_id" required>';
-                                  echo '<option selected disabled>Select Qualification</option>';
+                                  echo '<select class="form-control form-control-sm" name="sel_qual" id="sel_qual" data-tag="qualification_id" required>';
+                                  echo '<option value="">Qualification</option>';
                                   while ($rows = $result->fetch_assoc()) {
-                                    $select_id = $rows['qualification_id'];
-                                    $select_name = $rows['qualification_name'];
+                                    $select_id = $rows['mn_id'];
+                                    $select_name = $rows['mn_name'];
                                     echo '<option value="' . $select_id . '">' . $select_name . '</option>';
                                   }
                                   echo '</select>';
@@ -301,44 +300,42 @@ require('../requireSubModule.php');
                             </div>
                           </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-6 pl-0 pr-1">
                           <div class="form-group">
-                            Institute
+                            <label>Institute</label>
                             <input type="text" class="form-control form-control-sm sQualForm" id="sInst" name="sInst" placeholder="Name of the Institute" data-tag="sq_institute">
                           </div>
                         </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-6">
+                        <div class="col-4 pl-0">
                           <div class="form-group">
-                            Board
+                            <label>Board</label>
                             <input type="text" class="form-control form-control-sm sQualForm" id="sBoard" name="sBoard" placeholder="Board" data-tag="sq_board">
                           </div>
                         </div>
-                        <div class="col-6">
-                          <div class="form-group">
-                            Year of Passing
-                            <input type="text" class="form-control form-control-sm sQualForm" id="sYear" name="sYear" placeholder="Passing Year" data-tag="sq_year">
-                          </div>
-                        </div>
                       </div>
                       <div class="row">
-                        <div class="col-4">
+                        <div class="col-2 pr-1">
                           <div class="form-group">
-                            Marks Obtained
-                            <input type="text" class="form-control form-control-sm sQualForm" id="sMarksObt" name="sMarksObt" placeholder="Marks Obtained" data-tag="sq_marksObtained">
+                            <label>MO</label>
+                            <input type="number" class="form-control form-control-sm sQualForm" id="sMarksObt" name="sMarksObt" placeholder="Marks Obtained" data-tag="sq_mo">
                           </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-2 pl-0 pr-1">
                           <div class="form-group">
-                            Maximum Marks
-                            <input type="text" class="form-control form-control-sm sQualForm" id="sMaxMarks" name="sMaxMarks" placeholder="Maximum marks" data-tag="sq_marksMax">
+                            <label>MM</label>
+                            <input type="text" class="form-control form-control-sm sQualForm" id="sMaxMarks" name="sMaxMarks" placeholder="Maximum marks" data-tag="sq_mm">
                           </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-4 pl-0 pr-1">
                           <div class="form-group">
-                            Percentage/CGPA
+                            <label>Percentage/CGPA</label>
                             <input type="text" class="form-control form-control-sm sQualForm" id="sCgpa" name="sCgpa" placeholder="Percentage/CGPA" data-tag="sq_percentage">
+                          </div>
+                        </div>
+                        <div class="col-4 pl-0">
+                          <div class="form-group">
+                            <label>Year of Passing</label>
+                            <input type="text" class="form-control form-control-sm sQualForm" id="sYear" name="sYear" placeholder="Passing Year" data-tag="sq_year">
                           </div>
                         </div>
                       </div>
@@ -365,7 +362,6 @@ require('../requireSubModule.php');
                     <th>RollNo</th>
                     <th>Mobile</th>
                     <th>Email</th>
-                    <th>Action</th>
                   </table>
                 </div>
               </div>
@@ -538,15 +534,15 @@ require('../requireSubModule.php');
         studentId: stdId,
         action: "fetchStudent"
       }, () => {}, "json").done(function(data) {
-        $("#sName").val(data.student_name);
-        $("#sRno").val(data.student_rollno);
-        $("#sMobile").val(data.student_mobile);
-        $("#sEmail").val(data.student_email);
+        $("#stdName").val(data.student_name);
+        $("#stdRno").val(data.student_rollno);
+        $("#stdMobile").val(data.student_mobile);
+        $("#stdEmail").val(data.student_email);
         $("#sDob").val(data.student_dob);
         $("#sGender").val(data.student_gender);
         $("#sGender").val(data.student_category);
         $("#sAddress").val(data.student_address);
-        
+
         // $("#sAdhaar").val(data.student_adhaar);
         $("#fName").val(data.student_fname);
         $("#fOccupation").val(data.student_foccupation);
@@ -636,10 +632,9 @@ require('../requireSubModule.php');
 
     $(document).on('click', '.editStudent', function() {
       $('.studentProfile').show();
-      $('#accordionStudent').show();
       var id = $(this).attr("data-student");
       $("#studentIdHidden").val(id);
-      // studentQualificationList(id);
+      studentQualificationList();
 
       $.post("admissionSql.php", {
         studentId: id,
@@ -650,15 +645,15 @@ require('../requireSubModule.php');
         $(".student_rollno").text(data.student_rollno);
         $(".student_mobile").text(data.student_mobile);
 
-        $("#sName").val(data.student_name);
-        $("#sRno").val(data.student_rollno);
-        $("#sMobile").val(data.student_mobile);
+        $("#stdName").val(data.student_name);
+        $("#stdRno").val(data.student_rollno);
+        $("#stdMobile").val(data.student_mobile);
         $("#sEmail").val(data.student_email);
         $("#sDob").val(data.student_dob);
         $("#sGender").val(data.student_gender);
         $("#sGender").val(data.student_category);
         $("#sAddress").val(data.student_address);
-        
+
         // $("#sAdhaar").val(data.student_adhaar);
         $("#fName").val(data.student_fname);
         $("#fOccupation").val(data.student_foccupation);
@@ -706,17 +701,16 @@ require('../requireSubModule.php');
       })
     });
 
-
     $(document).on('blur', '.sQualForm', function() {
       var studentId = $("#studentIdHidden").val()
       var qId = $('#sel_qual').val()
       var tag = $(this).attr("data-tag")
       var value = $(this).val()
-      // $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
-      if (qId === null) {
+      // $.alert("Changes " + tag + " Value " + value + " Student " + studentId + " qaul " + qId);
+      if (qId === "" || studentId == "") {
         $.confirm({
           title: 'Encountered an error!',
-          content: 'Please Select Qualification First',
+          content: 'Please Select Qualification and Student ',
           type: 'red',
           typeAnimated: true,
           buttons: {
@@ -729,26 +723,17 @@ require('../requireSubModule.php');
         });
       } else {
         $.post("admissionSql.php", {
-          id_name: "qualification_id",
-          id: qId,
+          mn_id: qId,
           tag: tag,
           student_id: studentId,
           value: value,
           action: "updateStudentQualification"
         }, function(data) {
-          $.alert("List " + data);
+          // $.alert("List " + data);
         }, "text").fail(function() {
           $.alert("fail in place of error");
         })
       }
-    });
-
-    $(document).on('click', '.addStudentQualification', function() {
-      $('#modal_title').text("Add Student Qualifications");
-      $('#firstModal').modal('show');
-      var stdId = $('#panelId').val();
-      $('#stdIdModal').val(stdId);
-      $('#action').val("addStudentQualification");
     });
 
     $(document).on('click', '.sq_idE', function() {
@@ -775,29 +760,6 @@ require('../requireSubModule.php');
       $(".studentForm").hide();
     });
 
-    $(document).on('click', '.student_idE', function() {
-      var id = $(this).attr('id');
-      // $.alert("Id " + id);
-      $.post("admissionSql.php", {
-        action: "fetchStudent",
-        studentId: id
-      }, () => {}, "json").done(function(data) {
-        //$.alert("List ");
-        $('#modal_title').text("Update Student  [" + id + "]");
-        $("#sName").val(data.student_name);
-        $("#sRno").val(data.student_rollno);
-        $("#sEmail").val(data.student_email);
-        $("#sMobile").val(data.student_mobile);
-        $("#action").val("updateStudent");
-        $('#modalId').val(id);
-        $('#firstModal').modal('show');
-
-
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
     $(document).on('submit', '#modalForm', function(event) {
       event.preventDefault(this);
       var action = $("#action").val();
@@ -806,7 +768,7 @@ require('../requireSubModule.php');
       var sEmail = $("#sEmail").val();
       var sRno = $("#sRno").val();
       var stdId = $("#panelId").val();
-
+      $.alert("Name " + sName + " Rno " + stdId);
 
       var error = "NO";
       var error_msg = "";
@@ -894,11 +856,13 @@ require('../requireSubModule.php');
 
     }
 
-    function studentQualificationList(x) {
+    function studentQualificationList() {
+      var studentId = $("#studentIdHidden").val()
+
       // $.alert("In List Function" + x);
       $.post("admissionSql.php", {
-        action: "studentQualificationList",
-        stdId: x
+        stdId: studentId,
+        action: "studentQualificationList"
       }, function(mydata, mystatus) {
         $("#qualificationShowList").show();
         // $.alert("List qulai" + mydata);

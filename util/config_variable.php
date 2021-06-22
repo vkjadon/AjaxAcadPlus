@@ -22,6 +22,8 @@ if (isset($_SESSION["mypid"])) $myProg = $_SESSION['mypid'];
 if (isset($_SESSION['myStdId']) > 0) $myStdId = $_SESSION["myStdId"];
 
 if (isset($mySes)) {
+  $session_start = getField($conn, $mySes, "session", "session_id", "session_start");
+  $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
 
   // check_tn_ad($conn, 'assessment_design');
   check_tn_amap($conn, 'assessment_map');
@@ -34,47 +36,47 @@ if (isset($mySes)) {
   check_tn_respStaff($conn, 'responsibility_staff');
   check_tn_std($conn, "student");
   check_tn_stddetail($conn, "student_detail");
+  check_tn_stdqual($conn, "student_qualification");
   check_tn_sub($conn, "subject");
   check_tn_subaddon($conn, "subject_addon");
   check_tn_subelective($conn, "subject_elective");
   check_tn_user($conn, "user");
-  
-  $tn_ccd = 'cc_detail'.$mySes;
+
+  $tn_ccd = 'cc_detail' . $mySes;
   check_tn_ccd($conn, $tn_ccd);
 
-  $tn_eac = 'ea_claim'.$mySes;
+  $tn_eac = 'ea_claim' . $mySes;
   //check_tn_eac($conn, $tn_eac);
 
-  $tn_rc = 'registration_class'.$mySes;
+  $tn_rc = 'registration_class' . $mySes;
   check_tn_rc($conn, $tn_rc);
 
-  $tn_rs = 'registration_subject'.$mySes;
+  $tn_rs = 'registration_subject' . $mySes;
   check_tn_rs($conn, $tn_rs);
 
   $tn_sas = 'student_attendance_setup' . $mySes;
   check_tn_sas($conn, $tn_sas);
-  
-  $tn_sbt = 'subject_topic'.$mySes;
+
+  $tn_sbt = 'subject_topic' . $mySes;
   check_tn_sbt($conn, $tn_sbt);
 
-  $tn_sc = 'subject_choice'.$mySes;
+  $tn_sc = 'subject_choice' . $mySes;
   check_tn_sc($conn, $tn_sc);
 
-  $tn_sr = 'subject_resource'.$mySes;
+  $tn_sr = 'subject_resource' . $mySes;
   check_tn_sr($conn, $tn_sr);
 
-  $tn_tl = 'teaching_load'.$mySes;
+  $tn_tl = 'teaching_load' . $mySes;
   check_tn_tl($conn, $tn_tl);
 
-  $tn_tt = 'time_table'.$mySes;
+  $tn_tt = 'time_table' . $mySes;
   check_tn_tt($conn, $tn_tt);
 
-  $tn_ttp = 'time_table_period'.$mySes;
+  $tn_ttp = 'time_table_period' . $mySes;
   check_tn_ttp($conn, $tn_ttp);
 
-  $tn_tlg = 'tl_group'.$mySes;
+  $tn_tlg = 'tl_group' . $mySes;
   check_tn_tlg($conn, $tn_tlg);
-
 } else {
   $tn_eac = 'ea_claim';
   $tn_rc = 'registration_class2021';
@@ -83,4 +85,3 @@ if (isset($mySes)) {
 $submit_date = date("Y-m-d", time());
 $submit_ts = date("Y-m-d h:i:s", time());
 $today_ts = time();
-

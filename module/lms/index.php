@@ -1,22 +1,11 @@
 <?php
 require('../requireSubModule.php');
-
-$session_start = getField($conn, $mySes, "session", "session_id", "session_start");
-$session_end = getField($conn, $mySes, "session", "session_id", "session_end");
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
-<style>
-  input[type=text] {
-    border: none;
-    border-bottom: 2px solid;
-    word-wrap: break-word;
-  }
-</style>
-
 <head>
-  <title>Outcome Based Education : ClassConnect</title>
+  <title>ClassConnect:LMS </title>
   <?php require("../css.php"); ?>
 </head>
 
@@ -24,7 +13,8 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
   <?php require("../topBar.php"); ?>
   <div class="container-fluid moduleBody">
     <div class="row">
-    <div class="col-2 p-0 m-0 pl-2 full-height">
+      <div class="col-2 p-0 m-0 pl-2 full-height">
+        <h5 class="mt-2">Teaching - Learning</h5>
         <span id="panelId"></span>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active at" id="list-at-list" data-toggle="list" href="#list-at" role="tab" aria-controls="at"> Academic Tasks </a>
@@ -36,16 +26,139 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="list-at" role="tabpanel" aria-labelledby="list-at-list">
             <div class="row">
-              <div class="col-4 mt-1 mb-1">
-                <p id="mtlList"></p>
+              <div class="col-5 mt-1 mb-1">
+                <div class="container card mt-2 myCard">
+                  <!-- nav options -->
+                  <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" data-toggle="pill" href="#pills_subject" role="tab" aria-controls="pills_subject" aria-selected="true">Subject</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="pill" href="#pills_topics" role="tab" aria-controls="pills_topics" aria-selected="true">Topics</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="pill" href="#pills_resources" role="tab" aria-controls="pills_resources" aria-selected="true">Resources</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="pill" href="#pills_coverage" role="tab" aria-controls="pills_coverage" aria-selected="true">Coverage</a>
+                    </li>
+                  </ul> <!-- content -->
+                  <div class="tab-content" id="pills-tabContent p-3">
+                    <p id="mtlList"></p>
+                    <div class="tab-pane fade show active" id="pills_subject" role="tabpanel" aria-labelledby="pills_subject">
+                      <span class="xsText">
+                        <li>Subject Topics will be same for one Subject irrespective of the Class and Faculty.</li>
+                        <li> It signifies the Syllabus.</li>
+                        <li> You can add any additional topic.</li>
+                      </span>
+                    </div>
+                    <div class="tab-pane fade" id="pills_topics" role="tabpanel" aria-labelledby="pills_topic">
+                      <div class="stForm">
+                        <div class="row">
+                          <div class="col-6 pr-1">
+                            <div class="form-group">
+                              <label>Topic Name</label>
+                              <input type="text" class="form-control form-control-sm" id="sbt_name" name="sbt_name" placeholder="Topic">
+                            </div>
+                          </div>
+                          <div class="col-2 pl-0 pr-1">
+                            <div class="form-group">
+                              <label>Wt (%)</label>
+                              <input type="number" class="form-control form-control-sm" id="sbt_weight" name="sbt_weight" min="1" placeholder="Weight in %">
+                            </div>
+                          </div>
+                          <div class="col-2 pl-0 pr-1">
+                            <div class="form-group">
+                              <label>CHr</label>
+                              <input type="number" class="form-control form-control-sm" id="sbt_slot" name="sbt_slot" min="1" placeholder="Contact Hours Required">
+                            </div>
+                          </div>
+                          <div class="col-2 pl-0">
+                            <div class="form-group">
+                              <label>Unit</label>
+                              <input type="number" class="form-control form-control-sm" id="sbt_unit" name="sbt_unit" min="1" placeholder="Unit Number">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col">
+                            <div class="form-check-inline">
+                              <input type="radio" class="form-check-input" checked id="syllabus" name="sbt_type" value="Syllabus">Syllabus
+                            </div>
+                            <div class="form-check-inline">
+                              <input type="radio" class="form-check-input" id="additional" name="sbt_type" value="Additional">Additional
+                            </div>
+                          </div>
+                          <div class="col-6 pr-1">
+                            <div class="form-group">
+                              <button class="btn btn-sm" id="sbt_name">Submit</button>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills_resources" role="tabpanel" aria-labelledby="pills_topic">
+                      <div class="resForm">
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="form-group">
+                              Resource Title/Name
+                              <input type="text" class="form-control form-control-sm" id="rsb_name" name="rsb_name" placeholder="Title of the Resource">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+                            <div class="form-group">
+                              URL
+                              <input type="text" class="form-control form-control-sm" id="rsb_url" name="rsb_url" placeholder="Complete URL including http://">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-6">
+                            <div class="form-group">
+                              <?php
+                              $sql = "select * from master_name where mn_code='rt'";
+                              selectList($conn, "", array("0", "mn_id", "mn_name", "", "sel_mn"), $sql);
+                              ?>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="form-check-inline">
+                              <input type="radio" class="form-check-input" checked id="private" name="rsb_type" value="Private">
+                              Private
+                            </div>
+                            <div class="form-check-inline">
+                              <input type="radio" class="form-check-input" id="public" name="rsb_type" value="Public">Public
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+                            <span>Private will not allow other faculty to use and share your resource. Public resource will be available for others to share with their classes.</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="col-8 mt-1 mb-1">
-                <div id="topicList">
-                  <button class="btn btn-secondary btn-square-sm mt-1 stSubject" disabled></button>
-                  <button class="btn btn-danger btn-square-sm mt-1 addResource">Resource Type</button>
-                  <button class="btn btn-info btn-square-sm mt-1 addSTButton">New Topic</button>
-                  <button class="btn btn-secondary btn-square-sm mt-1 addResourceButton">New Resource</button>
-                  <div id="stList"></div>
+              <div class="col-7 mt-1 mb-1">
+                <div class="container card mt-2 myCard">
+                  <label>List of Topics</label>
+                  <table class="table list-table-xs" id="stList">
+                    <tr class="align-center">
+                      <th><i class="fas fa-edit"></i></th>
+                      <th>Id</th>
+                      <th width="70%">Topic</th>
+                      <th>Wt</th>
+                      <th>CHr</th>
+                      <th><i class="fas fa-trash"></i></th>
+                    </tr>
+                  </table>
+                  <span class="xsText">Syllabus Topics are not editable. These are as approved by BOS. The faculty can add additional Topics in the interest of students based on current trends and industry requirements.</span>
                 </div>
               </div>
             </div>
@@ -86,18 +199,9 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
         </div>
       </div>
     </div>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
     <?php require("../bottom_bar.php"); ?>
   </div>
 </body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-
 <script>
   $(document).ready(function() {
 
@@ -576,86 +680,6 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
 
         <!-- Modal body -->
         <div class="modal-body">
-          <div class="resForm">
-            <div class="row">
-              <div class="col-12">
-                <div class="form-group">
-                  Resource Title/Name
-                  <input type="text" class="form-control form-control-sm" id="rsb_name" name="rsb_name" placeholder="Title of the Resource">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12">
-                <div class="form-group">
-                  URL
-                  <input type="text" class="form-control form-control-sm" id="rsb_url" name="rsb_url" placeholder="Complete URL including http://">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <div class="form-group">
-                  <?php
-                  $sql = "select * from resource_type where rt_status='0'";
-                  selectList($conn, "", array("0", "rt_id", "rt_name", "", "sel_rt"), $sql);
-                  ?>
-                </div>
-              </div>
-              <div class="col">
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" checked id="private" name="rsb_type" value="Private">
-                  Private
-                </div>
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="public" name="rsb_type" value="Public">Public
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12">
-                <span>Private will not allow other faculty to use and share your resource. Public resource will be available for others to share with their classes.</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="rtForm">
-            <div class="row">
-              <div class="col-5">
-                <div class="form-group">
-                  Resource Type
-                  <input type="text" class="form-control form-control-sm" id="rt_name" name="rt_name" placeholder="Resource Type">
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="stForm">
-            <div class="row">
-              <div class="col-12">
-                <div class="form-group">
-                  Topic Name
-                  <input type="text" class="form-control form-control-sm" id="sbt_nameM" name="sbt_name" placeholder="Topic">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-4">
-                <div class="form-group">
-                  Weight (%)
-                  <input type="text" class="form-control form-control-sm" id="sbt_weightM" name="sbt_weight" placeholder="Weight in %">
-                </div>
-              </div>
-              <div class="col">
-                <div class="form-check-inline"> Type </div>
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" checked id="syllabus" name="sbt_type" value="Syllabus">Syllabus
-                </div>
-                <div class="form-check-inline">
-                  <input type="radio" class="form-check-input" id="additional" name="sbt_type" value="Additional">Additional
-                </div>
-              </div>
-            </div>
-          </div>
 
         </div> <!-- Modal Body Closed-->
 

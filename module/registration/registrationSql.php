@@ -142,7 +142,7 @@ if (isset($_POST['action'])) {
       echo '<td>' . $student_name . '</td>';
       echo '<td>' . $regClassGroup . '</td>';
       echo '<td>' . date("d-m-Y", strtotime($regDate)) . '</td>';
-      echo '<td><button class="btn btn-secondary btn-square-sm studentSubjectButton" id="' . $id . '">Up3date</button></td>';
+      echo '<td><button class="btn btn-square-sm studentSubjectButton" id="' . $id . '">Update</button></td>';
       echo '</tr>';
     }
     echo '</table>';
@@ -165,7 +165,7 @@ if (isset($_POST['action'])) {
       echo $id[$i] . 'TL  - ' . $tl . ' Status ' . $status;
       echo '<br>';
       if ($status == "false") $sql = "delete from $tn_rs where student_id='$id[$i]' and tl_id='$tl'";
-      else $sql = "insert into $tn_rs (student_id, tl_id, rs_date, update_id) values('$id[$i]','$tl','$submit_ts', '$myId')";
+      else $sql = "insert into $tn_rs (student_id, tl_id, rs_date, update_id, rs_status) values('$id[$i]','$tl','$submit_ts', '$myId', '0')";
       echo "All Insert and Dlete";
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
@@ -220,23 +220,20 @@ function subjectList($conn, $tn_tlg, $tn_tl, $class_id, $group, $tlg_type)
   $result = $conn->query($sql);
   if (!$result) echo $conn->error;
   if ($result->num_rows > 0) {
-    echo '<h5>Subject List for Class : ' . $class_name . '[' . $tlg_type . 'G-' . $group . ']</h5>';
+    echo '<label>' . $class_name . '[' . $tlg_type . 'G-' . $group . ']</label>';
     echo '<table class="table list-table-xs">';
-    echo '<tr><th></th><th>#</th><th>Id</th><th>Code</th><th>Subject</th></tr>';
+    echo '<tr>';
     $count = 1;
     while ($rowsSubject = $result->fetch_assoc()) {
       $tl_id = $rowsSubject["tl_id"];
       $subject_id = $rowsSubject["subject_id"];
       $subject_code = getField($conn, $subject_id, "subject", "subject_id", "subject_code");
-      $subject_name = getField($conn, $subject_id, "subject", "subject_id", "subject_name");
-      echo '<tr>';
-      echo '<td><input type="checkbox" class="subjectRegistration" value="' . $tl_id . '"></td>';
-      echo '<td>' . $count++ . '</td>';
-      echo '<td>' . $tl_id . '-' . $subject_id . '</td>';
-      echo '<td>' . $subject_code . '</td>';
-      echo '<td>' . $subject_name . '</td>';
-      echo '</tr>';
+      echo '<td><input type="checkbox" class="subjectRegistration" value="' . $tl_id . '"> ';
+      // echo $count++;
+      // echo ' '.$tl_id . '-' . $subject_id;
+      echo ' ' . $subject_code;
     }
+    echo '</tr>';
     echo '</table>';
   }
 }
