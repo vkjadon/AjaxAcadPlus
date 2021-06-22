@@ -6,7 +6,7 @@ include('../../phpFunction/onlineFunction.php');
 if (isset($_POST['action'])) {
 	if ($_POST['action'] == 'addTest') {
 		if (!$_POST['test_name'] == NULL) {
-			$sql = "insert into test (test_name, test_section, test_status, submit_id) values('" . $_POST['test_name'] . "','1', '1', '$myId')";
+			$sql = "insert into test (test_name, test_section, test_status, update_id) values('" . $_POST['test_name'] . "','1', '1', '$myId')";
 			$result = $conn->query($sql);
 			if ($result) echo "Added Successfully";
 			else {
@@ -25,34 +25,31 @@ if (isset($_POST['action'])) {
 			$test_section = $array["data"][$i]["test_section"];
 			$test_status = $array["data"][$i]["test_status"];
 			if ($test_status == "0") {
-				echo '<div class="card bg-light">
-      	<div class="card-body mt-0 py-1">
+				echo '<div class="container card  myCard p-2 bg-light">
 				<div class="row">
-				<div class="col-10"><input class="form-control testName" data-test="' . $id . '" name="testName" value="' . $test_name . '" data-tag="test_name"><br>
-				<h6 class="text-muted py-1">Section : ';
+				<div class="col-10"><input class="form-control form-control-sm testName" data-test="' . $id . '" name="testName" value="' . $test_name . '" data-tag="test_name"><br>
+				<h6 class="text-muted">Section : ';
 				$sql = "select * from test where test_id='$id'";
 				$value = getFieldValue($conn, "test_section", $sql);
 				echo '<a href="#" class="decrement" id="' . $id . '" data-value="' . $value . '"><i class="fa fa-angle-double-left"></i></a>';
 				echo '<span class="' . $id . '">' . $value . '</span>';
 				echo '<a href="#" class="increment" id="' . $id . '" data-value="' . $value . '"><i class="fa fa-angle-double-right"></i></a></h6>
 					</div><div class="col-2">
-				<button class="btn btn-square-sm mt-0 removeTestButton" data-test="' . $id . '"><i class="fa fa-trash"></i></button>
-					</div></div>
+				<a class="mt-0 removeTestButton" data-test="' . $id . '"><i class="fa fa-trash"></i></a>
+				</div>
 				</div></div>';
 			} else {
-				echo '<div class="card">
-      	<div class="card-body mt-0 py-1">
+				echo '<div class="container card myCard mt-2 p-2">
 				<div class="row">
 				<div class="col-6">
 				<h6>' . $test_name . '[' . $id . ']</h6>
 				</div><div class="col-4">';
 				$sql = "select * from test where test_id='$id'";
 				$value = getFieldValue($conn, "test_section", $sql);
-				echo '<h6 class="text-muted py-1">Sec : ' . $value . '</h6>
+				echo '<h6 class="text-muted">Sec : ' . $value . '</h6>
 					</div><div class="col-2">
-					<button class="btn btn-secondary btn-square-sm mt-0 setActiveButton" data-test="' . $id . '" title="Make this Test Active" data-toggle="tooltip">Active</button>
-				</div></div>
-
+					<button class="btn btn-sm mt-0 setActiveButton" data-test="' . $id . '" title="Make this Test Active" data-toggle="tooltip">Active</button>
+				</div>
 				</div></div>';
 			}
 		}
@@ -73,13 +70,13 @@ if (isset($_POST['action'])) {
 	} elseif ($_POST['action'] == 'setActive') {
 		$id = $_POST['id'];
 		//echo "Jai ho";
-		$sql = "update test set test_status='1' where test_status='0' and submit_id='$myId'";
+		$sql = "update test set test_status='1' where test_status='0' and update_id='$myId'";
 		$conn->query($sql);
 		updateField($conn, "test", array("test_id", "test_status"), array($id, "0"), "1");
-		$sql = "update question_bank set qb_status='1' where qb_status='0' and submit_id='$myId'";
+		$sql = "update question_bank set qb_status='1' where qb_status='0' and update_id='$myId'";
 		$conn->query($sql);
 	} elseif ($_POST['action'] == 'testHeading') {
-		$sql = "select * from test where test_status='0' and submit_id='$myId'";
+		$sql = "select * from test where test_status='0' and update_id='$myId'";
 		$result = $conn->query($sql);
 		if ($result) {
 			$array = $result->fetch_assoc();
@@ -104,7 +101,7 @@ if (isset($_POST['action'])) {
 			echo '</div></div>';
 		}
 	} elseif ($_POST['action'] == 'addQuestion') {
-		$sql = "select * from test where test_status='0' and submit_id='$myId'";
+		$sql = "select * from test where test_status='0' and update_id='$myId'";
 		$result = $conn->query($sql);
 		if ($result) {
 			$array = $result->fetch_assoc();
@@ -117,7 +114,7 @@ if (isset($_POST['action'])) {
 		$actionCode = $_POST['actionCode'];
 		echo "Action Code $actionCode";
 		if ($actionCode == "add") {
-			$sql = "insert into question_bank (qb_level, qb_base, qb_text, submit_id, qb_status) values('1', '1', '$question', '$myId', '1')";
+			$sql = "insert into question_bank (qb_level, qb_base, qb_text, update_id, qb_status) values('1', '1', '$question', '$myId', '1')";
 			$result = $conn->query($sql);
 			if ($result) {
 				echo "Added Successfully";
@@ -144,7 +141,7 @@ if (isset($_POST['action'])) {
 				if ($error == "1062") echo "Duplicate Found !!!";
 			}
 		} else {
-			$sql = "select * from question_bank where qb_status='0' and submit_id='$myId'";
+			$sql = "select * from question_bank where qb_status='0' and update_id='$myId'";
 			$result = $conn->query($sql);
 			if ($result) {
 				$array = $result->fetch_assoc();
@@ -168,7 +165,7 @@ if (isset($_POST['action'])) {
 			}
 		}
 	} elseif ($_POST['action'] == 'addOption') {
-		$sql = "select * from question_bank where qb_status='0' and submit_id='$myId'";
+		$sql = "select * from question_bank where qb_status='0' and update_id='$myId'";
 		$result = $conn->query($sql);
 		if ($result) {
 			$array = $result->fetch_assoc();
@@ -187,7 +184,7 @@ if (isset($_POST['action'])) {
 			if ($error == "1062") echo "Duplicate Found !!!";
 		}
 	} elseif ($_POST['action'] == 'activeQuestion') {
-		$sql = "select * from test where test_status='0' and submit_id='$myId'";
+		$sql = "select * from test where test_status='0' and update_id='$myId'";
 		$result = $conn->query($sql);
 		if ($result) {
 			$array = $result->fetch_assoc();
@@ -217,7 +214,7 @@ if (isset($_POST['action'])) {
 		$output = array("file" => "fileName", "content" => $content);
 		echo json_encode($output);
 	} elseif ($_POST['action'] == 'questionHeading') {
-		$sql = "select * from test where test_status='0' and submit_id='$myId'";
+		$sql = "select * from test where test_status='0' and update_id='$myId'";
 		$result = $conn->query($sql);
 		if ($result) {
 			$array = $result->fetch_assoc();

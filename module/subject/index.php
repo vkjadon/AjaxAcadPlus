@@ -34,6 +34,7 @@ require('../requireSubModule.php');
                       <a class="fa fa-plus-circle p-0 addSubject"></a>
                       <a class="fa fa-arrow-circle-up p-0 uploadSubject"></a>
                       <a class="fa fa-copy p-0 copySubject"></a>
+                      Subjects
                     </h3>
                   </div>
                   <div class="card myCard m-2 p-2">
@@ -58,7 +59,6 @@ require('../requireSubModule.php');
                 </div>
               </div>
             </div>
-
             <div class="tab-pane fade" id="list-subReport" role="tabpanel" aria-labelledby="list-subReport-list">
 
               <div class="row">

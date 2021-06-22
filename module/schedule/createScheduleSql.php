@@ -45,7 +45,7 @@ if (isset($_POST['action'])) {
         if ($result_dup->num_rows == '0') {
           $staff_id = getField($conn, $tlId, $tn_tl, "tl_id", "staff_id");
           //echo $staff_id;
-          $sql = "insert into $tn_sas (tl_id, sas_period, sas_date, staff_id, update_id, sas_status) values('$tlId','$period','$current_date','$staff_id','$myId', '0')";
+          $sql = "insert into $tn_sas (tl_id, sas_period, sas_date, sas_mark, staff_id, update_id, sas_status) values('$tlId','$period','$current_date', '0', '$staff_id','$myId', '0')";
           $conn->query($sql);
         } else {
           $rows = $result_dup->fetch_assoc();

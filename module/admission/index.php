@@ -57,7 +57,7 @@ require('../requireSubModule.php');
   <div class="container-fluid moduleBody">
     <div class="row">
       <div class="col-2 p-0 m-0 pl-2 full-height">
-        <div class="mt-2">
+        <div class="mt-3">
           <h5>Manage Students</h5>
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">

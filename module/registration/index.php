@@ -14,7 +14,7 @@ require('../requireSubModule.php');
   <div class="container-fluid moduleBody">
     <div class="row">
       <div class="col-2 p-0 m-0 pl-2 full-height">
-        <h5 class="mt-2">Registration</h5>
+        <h5 class="mt-3">Registration</h5>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active cr" id="list-cr-list" data-toggle="list" href="#list-cr" role="tab"> Class Registration </a>
           <a class="list-group-item list-group-item-action subReg" id="list-subReg-list" data-toggle="list" href="#list-subReg" role="tab"> Subject Registration </a>

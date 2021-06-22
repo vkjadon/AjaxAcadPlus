@@ -70,7 +70,7 @@ require('../requireSubModule.php');
               <div class="col-4">
                 <div class="row">
                   <div class="col">
-                    <h3><a class="fa fa-plus-circle p-0 addInst"></a></h3>
+                    <h3><a class="fa fa-plus-circle p-0 addInst"></a> University/Group</h3>
                   </div>
                 </div>
                 <div class="row">
@@ -353,7 +353,7 @@ require('../requireSubModule.php');
           <div class="tab-pane fade" id="list-mis" role="tabpanel" aria-labelledby="list-mis-list">
             <div class="row">
               <div class="col-4">
-                <h3><a class="fa fa-plus-circle p-0 addSchool"></a></h3>
+                <h3><a class="fa fa-plus-circle p-0 addSchool"></a> School/Intitution</h3>
                 <div class="mt-1 mb-1">
                   <p id="schoolShowList"></p>
                 </div>
@@ -453,7 +453,7 @@ require('../requireSubModule.php');
             <div class="row">
               <div class="col-6">
                 <div class="mt-1 mb-1">
-                  <h3><a class="fa fa-plus-circle p-0 addDept"></a></h3>
+                  <h3><a class="fa fa-plus-circle p-0 addDept"></a> Department</h3>
                   <div class="mt-1 mb-1">
                     <p id="deptShowList"></p>
                   </div>
@@ -468,6 +468,7 @@ require('../requireSubModule.php');
                   <h3>
                     <a class="fa fa-plus-circle p-0 addProgram"></a>
                     <a class="fa fa-arrow-circle-up p-0 uploadProgram"></a>
+                    Programmes
                   </h3>
                 </div>
               </div>

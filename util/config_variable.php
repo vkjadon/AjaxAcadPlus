@@ -26,7 +26,6 @@ if (isset($mySes)) {
   $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
 
   // check_tn_ad($conn, 'assessment_design');
-  check_tn_amap($conn, 'assessment_map');
   //check_tn_rs($conn, 'cc_outcome');
   check_tn_class($conn, "class");
   check_tn_lt($conn, "leave_type");
@@ -40,7 +39,11 @@ if (isset($mySes)) {
   check_tn_sub($conn, "subject");
   check_tn_subaddon($conn, "subject_addon");
   check_tn_subelective($conn, "subject_elective");
+  check_tn_test($conn, "test");
   check_tn_user($conn, "user");
+
+  $tn_amap = 'assessment_map' . $mySes;
+  check_tn_amap($conn, $tn_amap);
 
   $tn_ccd = 'cc_detail' . $mySes;
   check_tn_ccd($conn, $tn_ccd);
@@ -66,6 +69,9 @@ if (isset($mySes)) {
   $tn_sr = 'subject_resource' . $mySes;
   check_tn_sr($conn, $tn_sr);
 
+  $tn_src = 'subject_resource_class' . $mySes;
+  check_tn_src($conn, $tn_src);
+  
   $tn_tl = 'teaching_load' . $mySes;
   check_tn_tl($conn, $tn_tl);
 

@@ -23,7 +23,6 @@ if (isset($_POST['action'])) {
     echo '<option value="' . $i . '">New Grid</option>';
     echo '</select>';
   } elseif ($_POST['action'] == 'amapList') {
-
     $totalGrids = getMaxField($conn, $tn_amap, "amap_grid");
     //echo $totalGrids;
     for ($i = 1; $i <= $totalGrids; $i++) {
@@ -31,20 +30,28 @@ if (isset($_POST['action'])) {
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
       echo '<div class="row">';
-      echo '<div class="col-sm-2 m-0 p-0">';
+      echo '<div class="col-sm-2 m-0 p-1">';
       echo '<div class="card myCard m-2 text-center">';
       echo '<h4">Grid-'.$i.'</h4>';
       echo '</div>';
       echo '</div>';
       while ($rowsArray = $result->fetch_assoc()) {
         $status = $rowsArray["amap_status"];
-        $ac = getField($conn, $rowsArray["ac_id"], $tn_mn, "mn_id", "mn_name");
-        $at = getField($conn, $rowsArray["at_id"], $tn_mn, "mn_id", "mn_name");
+        $internal = $rowsArray["amap_internal"];
+        $ac = getField($conn, $rowsArray["ac_id"], "master_name", "mn_id", "mn_name");
+        $at = getField($conn, $rowsArray["at_id"], "master_name", "mn_id", "mn_name");
         //echo $ac.'-'.$at;
-        echo '<div class="col m-0 p-0">';
-        echo '<div class="card myCard m-2">';
-        echo '<div class="cardBodyText m-1">' . $ac . '</div>';
-        echo '<div class="cardBodyText m-1">' . $at . '</div>';
+        echo '<div class="col m-1 p-0">';
+        echo '<div class="card myCard">';
+        echo '<div class="row p-1">';
+        echo '<div class="col-8 xsText">' . $ac . '</div>';
+        echo '<div class="col-4 smallText m-0">'.$rowsArray["amap_weightage"].'</div>';
+        echo '</div>';
+        echo '<div class="row p-1">';
+        echo '<div class="col-8 xsText">' . $at . '</div>';
+        if($internal=='internal')echo '<div class="col-4 smallText m-0">I</div>';
+        else echo '<div class="col-4 smallText m-0">E</div>';
+        echo '</div>';
         echo '<div class="row">';
         echo '<div class="col ml-2">';
         echo '<a href="#" class="float-left rp_idE" data-id="' . $rowsArray["ac_id"] . '"><i class="fa fa-edit"></i></a>';

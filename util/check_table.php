@@ -314,11 +314,12 @@ function check_tn_sbt($conn, $table)
     sbt_slot INT(2) NULL,
     sbt_type INT(2) NULL,
     sbt_syllabus INT(1) NULL,
+    sbt_unit INT(2) NULL,
     update_ts timestamp Default current_timestamp,
     update_id INT(5) NULL,
     sbt_status INT(1) NULL,
     PRIMARY KEY (sbt_id),
-    UNIQUE(subject_id, sbt_name)';
+    UNIQUE(subject_id, sbt_name, sbt_type)';
 
     $sql = "CREATE TABLE $table ($query)";
     $result = $conn->query($sql);
@@ -364,6 +365,24 @@ function check_tn_sr($conn, $table)
     sr_status INT(1) NULL,
     PRIMARY KEY (sr_id),
     UNIQUE(subject_id, rt_id, sr_name)';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+
+function check_tn_src($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+    'sr_id INT(5) NULL,
+    class_id INT(4) NULL,
+    UNIQUE(sr_id, class_id)';
 
     $sql = "CREATE TABLE $table ($query)";
     $result = $conn->query($sql);
@@ -543,6 +562,27 @@ function check_tn_subelective($conn, $table)
   }
   //else echo "Table Exists";
 }
+
+function check_tn_test($conn, $table){
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    echo "Table Missing $table";
+    $query =
+      'test_id INT(5) not null auto_increment,
+    test_name varchar(50) NULL,
+    test_section int(1) NULL,
+    update_ts timestamp Default current_timestamp,
+    update_id INT(5) NULL,
+    test_status INT(1) NULL,
+    primary key (test_id),
+    UNIQUE(test_name, update_id)';
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+}
+
 function check_tn_tl($conn, $table)
 {
   $sql = "select * from $table";

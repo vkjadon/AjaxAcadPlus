@@ -67,11 +67,12 @@ require('../requireSubModule.php');
     <span id="panelId"></span>
     <div class="row">
     <div class="col-2 p-0 m-0 pl-2 full-height">
+    <h5 class="pt-3">Manage Staff</h5>
         <div class="list-group list-group-mine" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active as" id="list-as-list" data-toggle="list" href="#list-as" role="tab" aria-controls="as"> Add Staff </a>
           <a class="list-group-item list-group-item-action sq" id="list-sq-list" data-toggle="list" href="#list-sq" role="tab" aria-controls="sq"> Staff Qualification </a>
           <a class="list-group-item list-group-item-action sq" id="list-sq-list" data-toggle="list" href="#list-sq" role="tab" aria-controls="sq"> Role/Responsibility </a>
-          <em>Add staff not to be assigned designation and department. The staff to be assigned these from Role/Responsibility Tab.</em>
+          <span class="xsText mt-5"><em>Add staff not to be assigned designation and department.<br>The staff to be assigned these from Role/Responsibility Tab.</em></span>
         </div>
       </div>
       <div class="col-sm-10 leftLinkBody">

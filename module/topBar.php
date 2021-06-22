@@ -106,7 +106,6 @@ if (!isset($myBatch)) $myBatch = '';
 										<a href="<?php echo $codePath . '/module/schedule/'; ?>" class="dropdown-item pb-1">Schedule</a>
 										<a href="<?php echo $codePath . '/module/registration/'; ?>" class="dropdown-item pb-1">Registration</a>
 										<a href="<?php echo $codePath . '/module/lms/'; ?>" class="dropdown-item pb-1">LMS</a>
-										<a href="<?php echo $codePath . '/module/enrichment/'; ?>" class="dropdown-item pb-1">Enrichment</a>
 									</div>
 								</div>
 							</div>
@@ -121,7 +120,6 @@ if (!isset($myBatch)) $myBatch = '';
 									<div class="col-6">
 										<a href="<?php echo $codePath . '/module/assessment/'; ?>" class="dropdown-item pb-1">Assessment Design</a>
 										<a href="<?php echo $codePath . '/module/online/'; ?>" class="dropdown-item pb-1">Online Assessment</a>
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item pb-1"> Evaluation </a>
 										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item pb-1"> Internal Assessment </a>
 									</div>
 									<div class="col-6">
@@ -166,7 +164,7 @@ if (!isset($myBatch)) $myBatch = '';
 									<div class="col-6">
 										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item pb-1"> Hostel </a>
 										<a href="<?php echo $codePath . '/module/alumni/'; ?>" class="dropdown-item pb-1"> Transport </a>
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item pb-1"> Student's Events </a>
+										<a href="<?php echo $codePath . '/module/enrichment/'; ?>" class="dropdown-item pb-1">Enrichment</a>
 									</div>
 								</div>
 							</div>

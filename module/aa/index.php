@@ -32,7 +32,7 @@ require('../requireSubModule.php');
                 <div class="col-sm-6">
                   <div class="mt-1 mb-1">
                     <h3>
-                      <a class="fa fa-plus-circle p-0 addBatch"></a>
+                      <a class="fa fa-plus-circle p-0 addBatch"></a> Batch
                     </h3>
                   </div>
                   <div class="card myCard">
@@ -42,7 +42,7 @@ require('../requireSubModule.php');
                 <div class="col-6">
                   <div class="mt-1 mb-1">
                     <h3>
-                      <a class="fa fa-plus-circle p-0 addSessionButton"></a>
+                      <a class="fa fa-plus-circle p-0 addSessionButton"></a> Session
                     </h3>
                   </div>
 
@@ -213,13 +213,19 @@ require('../requireSubModule.php');
                           </div>
                         </div>
                         <div class="row">
-                          <div class="col-6">
+                          <div class="col-4 pr-1">
                             <div class="form-group">
                               <label>Name</label>
                               <input type="text" class="form-control form-control-sm" id="name" name="name">
                             </div>
                           </div>
-                          <div class="col-6">
+                          <div class="col-2 pl-0 pr-1">
+                            <div class="form-group">
+                              <label>Abbri</label>
+                              <input type="text" class="form-control form-control-sm" id="abbri" name="abbri">
+                            </div>
+                          </div>
+                          <div class="col-6 pl-0">
                             <div class="form-group">
                               <label>Remarks</label>
                               <input type="text" class="form-control form-control-sm" id="remarks" name="remarks">
@@ -334,15 +340,18 @@ require('../requireSubModule.php');
     $(document).on('click', '.nrSubmit', function(event) {
       var headName = $("input[name='headName']:checked").val();
       var name = $("#name").val();
+      var abbri = $("#abbri").val();
       var remarks = $("#remarks").val();
       $.alert(" Pressed" + headName + name + remarks);
       $.post("aaSql.php", {
         name: name,
+        abbri: abbri,
         remarks: remarks,
         headName: headName,
         action: "headName"
       }, function(data, status) {}, "text").done(function(data) {
         $.alert("List " + data);
+        masterNameList();
       }).fail(function() {
         $.alert("fail in place of error");
       })

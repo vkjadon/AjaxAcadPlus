@@ -1,8 +1,8 @@
 <?php
 function get_testListJson($conn, $myId)
 {
-  if($myId>0)$sql = "select * from test where test_status<9 and submit_id='$myId' order by test_status asc, submit_ts desc";
-  else $sql = "select * from test where test_status<9 order by test_status asc, submit_ts desc";
+  if($myId>0)$sql = "select * from test where test_status<9 and update_id='$myId' order by test_status asc, update_ts desc";
+  else $sql = "select * from test where test_status<9 order by test_status asc, update_ts desc";
   $result = $conn->query($sql);
   if (!$result) {
     echo $result->error;
@@ -14,7 +14,7 @@ function get_testListJson($conn, $myId)
     $sub_array["test_id"] = $rows['test_id'];
     $sub_array["test_name"] = $rows['test_name'];
     $sub_array["test_section"] = $rows['test_section'];
-    $sub_array["submit_ts"] = $rows['submit_ts'];
+    $sub_array["update_ts"] = $rows['update_ts'];
     $sub_array["test_status"] = $rows['test_status'];
     $data[] = $sub_array;
   }

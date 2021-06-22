@@ -14,7 +14,8 @@ require('../requireSubModule.php');
 	<?php require("../topBar.php"); ?>
 	<div class="container-fluid">
 		<div class="row">
-		<div class="col-2 p-0 m-0 pl-2 full-height">
+			<div class="col-2 p-0 m-0 pl-2 full-height">
+				<h5 class="mt-3">Online Assessment</h5>
 				<div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
 					<a class="list-group-item list-group-item-action active mt" id="list-mt-list" data-toggle="list" href="#list-mt" role="tab" aria-controls="mt"> Manage Test </a>
 					<a class="list-group-item list-group-item-action aq" id="list-aq-list" data-toggle="list" href="#list-aq" role="tab" aria-controls="aq"> Add Question </a>
@@ -26,26 +27,20 @@ require('../requireSubModule.php');
 			<div class="col-10 leftLinkBody">
 				<div class="tab-content" id="nav-tabContent">
 					<div class="tab-pane show active" id="list-mt" role="tabpanel" aria-labelledby="list-mt-list">
-						<div class="row">
-							<div class="col-7 mt-1 mb-1"><button class="btn btn-secondary btn-square-sm mt-1 addTestButton">New Test</button>
-								<div class="card" id="addTestDiv">
-									<form id="addTestForm">
-										<div class="card-body bg-secondary">
-											<div class="row">
-												<div class="col-9">
-													<input type="text" name="test_name" id="test_name" data-toggle="tooltip" title="xyz" class="form-control form-control-sm" />
-												</div>
-												<div class="col-3">
-													<input type="hidden" id="action" name="action">
-													<button type="submit" class="btn btn-danger btn-sm submitAddTestForm">Submit</button>
-												</div>
-											</div>
+						<div class="col-5">
+							<div class="container card myCard p-2">
+								<form id="addTestForm">
+									<div class="row">
+										<div class="col-12 mt-1 mb-1">
+											<input type="text" class="form-control form-control-sm" id="test_name" data-toggle="tooltip" title="xyz" name="test_name" />
+											<input type="hidden" id="action" name="action" value="addTest">
+											<button type="submit" class="btn btn-sm submitAddTestForm">Submit</button>
 										</div>
-									</form>
-								</div>
+									</div>
+								</form>
 								<p id="testList"></p>
 							</div>
-							<div class="col-5 mt-1 mb-1" id="testRight">
+							<div class="col-6 mt-1 mb-1" id="testRight">
 							</div>
 						</div>
 					</div>
@@ -109,8 +104,8 @@ require('../requireSubModule.php');
 			</div>
 		</div>
 		<p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <?php require("../bottom_bar.php"); ?>
+		<p>&nbsp;</p>
+		<?php require("../bottom_bar.php"); ?>
 	</div>
 </body>
 <!-- MDB -->
@@ -128,12 +123,33 @@ require('../requireSubModule.php');
 
 <script>
 	$(document).ready(function() {
-		$('[data-toggle="popover"]').popover();
-		$('[data-toggle="tooltip"]').tooltip();
-		//$("#panelId").hide();
-		$("#addTestDiv").hide();
-		//$("#questionForm").hide()
 		testList();
+
+		// Add Test Block
+
+		$(document).on("submit", "#addTestForm", function() {
+			event.preventDefault(this);
+			var formData = $(this).serialize();
+			$.alert("Form Submitted " + formData)
+			$.post("onlineSql.php", formData, function() {}, "text").done(function(data, success) {
+				$.alert(data)
+				$('#addTestForm')[0].reset();
+				$("#addTestDiv").hide();
+				testList()
+			})
+		});
+
+		function testList() {
+			//$.alert("In SAS Claim List");
+			$.post("onlineSql.php", {
+				action: "testList"
+			}, function(data, status) {
+				//$.alert("Success " + data);
+				$("#testList").html(data);
+			}, "text").fail(function() {
+				$.alert("Error !!");
+			})
+		}
 
 		$(".ti").click(function() {
 			//$.alert("Add Question");
@@ -497,10 +513,7 @@ require('../requireSubModule.php');
 			$("#sectionId").val("-")
 		});
 
-		$(".addTestButton").click(function() {
-			$("#addTestDiv").toggle();
-			$("#action").val("addTest")
-		});
+
 		$(document).on("click", ".setActiveButton", function() {
 			var id = $(this).attr("data-test")
 			//$.alert("Id" + id)
@@ -551,17 +564,7 @@ require('../requireSubModule.php');
 				}
 			});
 		});
-		$(document).on("submit", "#addTestForm", function() {
-			event.preventDefault(this);
-			var formData = $(this).serialize();
-			$.alert("Form Submitted " + formData)
-			$.post("onlineSql.php", formData, function() {}, "text").done(function(data, success) {
-				$.alert(data)
-				$('#addTestForm')[0].reset();
-				$("#addTestDiv").hide();
-				testList()
-			})
-		});
+
 		$(document).on('click', '.decrement', function() {
 			var id = $(this).attr('id');
 			var value = $("." + id).text();
@@ -611,6 +614,7 @@ require('../requireSubModule.php');
 				$.alert("Error !!");
 			})
 		}
+
 		function sectionQuestionList() {
 			var selectedSection = $("#selectedSection").text()
 			$.alert("Section  " + selectedSection)
@@ -626,6 +630,7 @@ require('../requireSubModule.php');
 				$.alert("Error !!");
 			})
 		}
+
 		function questionLibrary() {
 			//$.alert("Library  ")
 			$.post("sectionQuestionListSql.php", {
@@ -639,6 +644,7 @@ require('../requireSubModule.php');
 				$.alert("Error !!");
 			})
 		}
+
 		function questionHeading(section) {
 			//$.alert("In SAS Claim List");
 			$.post("onlineSql.php", {
@@ -651,6 +657,7 @@ require('../requireSubModule.php');
 				$.alert("Error !!");
 			})
 		}
+
 		function testHeading() {
 			//$.alert("In SAS Claim List");
 			$.post("onlineSql.php", {
@@ -662,6 +669,7 @@ require('../requireSubModule.php');
 				$.alert("Error !!");
 			})
 		}
+
 		function testQuestionList() {
 			//$.alert("In SAS Claim List");
 			$.post("onlineSql.php", {
@@ -673,17 +681,9 @@ require('../requireSubModule.php');
 				$.alert("Error !!");
 			})
 		}
-		function testList() {
-			//$.alert("In SAS Claim List");
-			$.post("onlineSql.php", {
-				action: "testList"
-			}, function(data, status) {
-				//$.alert("Success " + data);
-				$("#testList").html(data);
-			}, "text").fail(function() {
-				$.alert("Error !!");
-			})
-		}
+
+
+
 		function getFormattedDate(ts, fmt) {
 			var a = new Date(ts);
 			var day = a.getDate();

@@ -129,9 +129,9 @@ if (isset($_POST['action'])) {
       $current_date = date("Y-m-d", $current_ts);
       $dayofDate = date("D", $current_ts);
       echo '<div class="row">';
-      echo '<div class="col-2 m-0 p-0">';
+      echo '<div class="col-2">';
       echo '<div class="card mb-2">';
-      echo '<div class="card-header"><h4 class="card-title">' . date("d-M", $current_ts) . '</h4></div>';
+      echo '<div class="card-header"><h4>' . date("d-M", $current_ts) . '</h4></div>';
       echo '<div class="card-body">' . $dayofDate . '</div>';
       echo '</div></div>';
 
@@ -161,24 +161,24 @@ if (isset($_POST['action'])) {
           check_tn_sa($conn, $tn_sa);
 
           $check = getField($conn, $sas_id, $tn_sa, "sas_id", "student_id");
-          if (strlen($check) > 0) $update_ts = getField($conn, $sas_id, $tn_sas, "sas_id", "update_ts");;
+          if (strlen($check) > 0) $update_ts = getField($conn, $sas_id, $tn_sas, "sas_id", "update_ts");
 
           echo '<div class="col-2"><div class="card mb-2 p-0">';
           echo 'Id:'.$rows['sas_id'];
-      echo '<div class="card-body m-0 p-2">
-      <h5 class="card-title m-0">Period : ' . $rows['sas_period'] . ' </h5>
-      <h6 class="text-muted m-0 pt-2">' . $class_name . ' [' . $class_section . ' ]<b>[' . $tlg_type . 'G-' . $tl_group . ']</b></h6>
-      <h6 class="text-muted m-0 pt-2">' . $subject_code . ' [' . $subject_id . ']</h6>';
+          echo '<div class="card-body m-0 p-2">
+          <h5 class="card-title m-0">Period : ' . $rows['sas_period'] . ' </h5>
+          <h6 class="text-muted m-0 pt-2">' . $class_name . ' [' . $class_section . ' ]<b>[' . $tlg_type . 'G-' . $tl_group . ']</b></h6>
+          <h6 class="text-muted m-0 pt-2">' . $subject_code . ' [' . $subject_id . ']</h6>';
           echo '</div>';
-      echo '<div class="card-footer m-0 p-0">';
+          echo '<div class="card-footer m-0 p-0">';
 
           if ($sas_mark == '0') echo '<button class="btn btn-danger btn-block m-0 p-0 showAttendanceList" data-tl="' . $tl_id . '" data-sas="' . $sas_id . '">Mark/Update</button>';
           else echo '<button class="btn btn-info btn-block btn-square-xs unlockRequest" data-sas="' . $sas_id . '">Unlock Request</button>';
           echo '</div></div>';
           echo '</div>';
         }
-        echo '</div>';
       }
+      echo '</div>';
     }
   } elseif ($_POST['action'] == 'markAttendance') {
     $sasId = $_POST['sasId'];

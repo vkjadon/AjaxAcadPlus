@@ -14,12 +14,13 @@ require('../requireSubModule.php');
   <div class="container-fluid moduleBody">
     <div class="row">
       <div class="col-2 p-0 m-0 pl-2 full-height">
-        <h5 class="mt-2">Teaching - Learning</h5>
+        <h5 class="mt-3">Teaching - Learning</h5>
         <span id="panelId"></span>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active at" id="list-at-list" data-toggle="list" href="#list-at" role="tab" aria-controls="at"> Academic Tasks </a>
           <a class="list-group-item list-group-item-action att" id="list-att-list" data-toggle="list" href="#list-att" role="tab" aria-controls="att"> Attendance </a>
-          <a class="list-group-item list-group-item-action de" id="list-de-list" data-toggle="list" href="#list-de" role="tab" aria-controls="de"> Design Assessment </a>
+          <a class="list-group-item list-group-item-action dc" id="list-dc-list" data-toggle="list" href="#list-dc" role="tab" aria-controls="dc"> Design a Course </a>
+          <!-- <a class="list-group-item list-group-item-action de" id="list-de-list" data-toggle="list" href="#list-de" role="tab" aria-controls="de"> Design Assessment </a> -->
         </div>
       </div>
       <div class="col-10 leftLinkBody">
@@ -31,30 +32,32 @@ require('../requireSubModule.php');
                   <!-- nav options -->
                   <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
                     <li class="nav-item">
-                      <a class="nav-link active" data-toggle="pill" href="#pills_subject" role="tab" aria-controls="pills_subject" aria-selected="true">Subject</a>
+                      <a class="nav-link active showStudentList" data-toggle="pill" href="#pills_subject" role="tab" aria-controls="pills_subject" aria-selected="true">Subject</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" data-toggle="pill" href="#pills_topics" role="tab" aria-controls="pills_topics" aria-selected="true">Topics</a>
+                      <a class="nav-link showSubjectTopic" data-toggle="pill" href="#pills_topics" role="tab" aria-controls="pills_topics" aria-selected="true">Topics</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" data-toggle="pill" href="#pills_resources" role="tab" aria-controls="pills_resources" aria-selected="true">Resources</a>
+                      <a class="nav-link showResource" data-toggle="pill" href="#pills_resources" role="tab" aria-controls="pills_resources" aria-selected="true">Resources</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" data-toggle="pill" href="#pills_coverage" role="tab" aria-controls="pills_coverage" aria-selected="true">Coverage</a>
+                      <a class="nav-link showCoverage" data-toggle="pill" href="#pills_coverage" role="tab" aria-controls="pills_coverage" aria-selected="true">Coverage</a>
                     </li>
                   </ul> <!-- content -->
                   <div class="tab-content" id="pills-tabContent p-3">
                     <p id="mtlList"></p>
                     <div class="tab-pane fade show active" id="pills_subject" role="tabpanel" aria-labelledby="pills_subject">
-                      <span class="xsText">
-                        <li>Subject Topics will be same for one Subject irrespective of the Class and Faculty.</li>
-                        <li> It signifies the Syllabus.</li>
-                        <li> You can add any additional topic.</li>
-                      </span>
+                      <div class="col-12 border">
+                        <span class="xsText">
+                          <li>Subject Topics will be same for one Subject irrespective of the Class and Faculty.</li>
+                          <li> It signifies the Syllabus.</li>
+                          <li> You can add any additional topic.</li>
+                        </span>
+                      </div>
                     </div>
                     <div class="tab-pane fade" id="pills_topics" role="tabpanel" aria-labelledby="pills_topic">
-                      <div class="stForm">
-                        <div class="row">
+                      <div class="stForm border">
+                        <div class="row p-2">
                           <div class="col-6 pr-1">
                             <div class="form-group">
                               <label>Topic Name</label>
@@ -80,44 +83,42 @@ require('../requireSubModule.php');
                             </div>
                           </div>
                         </div>
-                        <div class="row">
+                        <div class="row p-2">
                           <div class="col">
                             <div class="form-check-inline">
-                              <input type="radio" class="form-check-input" checked id="syllabus" name="sbt_type" value="Syllabus">Syllabus
+                              <input type="radio" class="form-check-input" checked id="syllabus" name="sbt_syllabus" value="0">Syllabus
                             </div>
                             <div class="form-check-inline">
-                              <input type="radio" class="form-check-input" id="additional" name="sbt_type" value="Additional">Additional
+                              <input type="radio" class="form-check-input" id="additional" name="sbt_syllabus" value="1">Additional
                             </div>
                           </div>
                           <div class="col-6 pr-1">
                             <div class="form-group">
-                              <button class="btn btn-sm" id="sbt_name">Submit</button>
+                              <button class="btn btn-sm submit_sbt" id="submit_sbt">Submit</button>
                             </div>
                           </div>
 
                         </div>
                       </div>
                     </div>
-                    <div class="tab-pane fade" id="pills_resources" role="tabpanel" aria-labelledby="pills_topic">
-                      <div class="resForm">
-                        <div class="row">
-                          <div class="col-12">
+                    <div class="tab-pane fade" id="pills_resources" role="tabpanel" aria-labelledby="pills_resources">
+                      <div class="resForm border">
+                        <div class="row p-1">
+                          <div class="col-6 pr-1">
                             <div class="form-group">
                               Resource Title/Name
-                              <input type="text" class="form-control form-control-sm" id="rsb_name" name="rsb_name" placeholder="Title of the Resource">
+                              <input type="text" class="form-control form-control-sm" id="sbr_name" name="sbr_name" placeholder="Title of the Resource">
                             </div>
                           </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-12">
+                          <div class="col-6 pl-0">
                             <div class="form-group">
                               URL
-                              <input type="text" class="form-control form-control-sm" id="rsb_url" name="rsb_url" placeholder="Complete URL including http://">
+                              <input type="text" class="form-control form-control-sm" id="sbr_url" name="sbr_url" placeholder="Complete URL including http://">
                             </div>
                           </div>
                         </div>
-                        <div class="row">
-                          <div class="col-6">
+                        <div class="row pl-1">
+                          <div class="col-6 pr-1">
                             <div class="form-group">
                               <?php
                               $sql = "select * from master_name where mn_code='rt'";
@@ -127,61 +128,104 @@ require('../requireSubModule.php');
                           </div>
                           <div class="col">
                             <div class="form-check-inline">
-                              <input type="radio" class="form-check-input" checked id="private" name="rsb_type" value="Private">
+                              <input type="radio" class="form-check-input" checked id="private" name="sbr_type" value="Private">
                               Private
                             </div>
                             <div class="form-check-inline">
-                              <input type="radio" class="form-check-input" id="public" name="rsb_type" value="Public">Public
+                              <input type="radio" class="form-check-input" id="public" name="sbr_type" value="Public">Public
                             </div>
                           </div>
                         </div>
-                        <div class="row">
+                        <div class="row pl-1">
+                          <div class="col">
+                            <div class="form-group">
+                              <button class="btn btn-sm" id="submit_sbResource">Submit</button>
+                            </div>
+                          </div>
                           <div class="col-12">
-                            <span>Private will not allow other faculty to use and share your resource. Public resource will be available for others to share with their classes.</span>
+                            <span class="xsText">Private will not allow other faculty to use and share your resource. Public resource will be available for others to share with their classes.</span>
                           </div>
                         </div>
                       </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills_coverage" role="tabpanel" aria-labelledby="pills_coverage">
                     </div>
                   </div>
                 </div>
               </div>
               <div class="col-7 mt-1 mb-1">
                 <div class="container card mt-2 myCard">
-                  <label>List of Topics</label>
-                  <table class="table list-table-xs" id="stList">
-                    <tr class="align-center">
-                      <th><i class="fas fa-edit"></i></th>
+                  <div class="studentList">
+                    <label>List of Students</label>
+                    <table class="table list-table-xs" id="studentList">
+                      <tr class="align-center">
+                        <th><i class="fas fa-info-circle"></i></th>
+                        <th>Name</th>
+                        <th>Roll No</th>
+                        <th>Mobile</th>
+                        <th>PA</th>
+                        <th>PM</th>
+                      </tr>
+                    </table>
+                  </div>
+                  <div class="subjectTopics">
+                    <label>List of Topics</label>
+                    <table class="table list-table-xs" id="subjectTopicList">
+                      <tr class="align-center">
+                        <th><i class="fas fa-edit"></i></th>
+                        <th>Id</th>
+                        <th width="70%">Topic</th>
+                        <th>Wt</th>
+                        <th>CHr</th>
+                        <th><i class="fas fa-trash"></i></th>
+                      </tr>
+                    </table>
+                    <span class="xsText">Syllabus Topics are not editable. These are as approved by BOS. The faculty can add additional Topics in the interest of students based on current trends and industry requirements.</span>
+                  </div>
+                  <div class="subjectResource">
+                    <label>List of Resources</label>
+                    <table class="table list-table-xs" id="resourceList">
                       <th>Id</th>
-                      <th width="70%">Topic</th>
-                      <th>Wt</th>
-                      <th>CHr</th>
-                      <th><i class="fas fa-trash"></i></th>
-                    </tr>
-                  </table>
-                  <span class="xsText">Syllabus Topics are not editable. These are as approved by BOS. The faculty can add additional Topics in the interest of students based on current trends and industry requirements.</span>
+                      <th>Title</th>
+                      <th>Link</th>
+                      <th><i class="fa fa-upload"></i></th>
+                      <th>Class</th>
+                    </table>
+                    <span class="xsText">You can edit the resource added by you but you can use the Resource (Public) of other and assign to classes you teach.</span>
+                  </div>
+                  <p class="subjectCoverage"></p>
                 </div>
               </div>
             </div>
           </div>
           <div class="tab-pane fade" id="list-att" role="tabpanel" aria-labelledby="list-att-list">
-            <div id="showScheduleForm">
-              <div class="row mt-1">
-                <div class="col-sm-2 p-0 m-0">
-                  <input type="date" class="form-control form-control-md" id="date_from" name="date_from" min="<?php echo $session_start; ?>" value="<?php echo date("Y-m-d", time()); ?>">
-                </div>
-                <div class="col-sm-2 p-0 m-0">
-                  <input type="date" class="form-control form-control-md" id="date_to" name="date_to" max="<?php echo $session_end; ?>" value="<?php echo date("Y-m-d", time()); ?>">
-                </div>
-                <div class="col-sm-2 p-0 m-0">
-                  <input type="hidden" id="schedule_action" name="schedule_action">
-                  <button class="btn btn-info btn-md m-0 scheduleButton"></button>
+            <div class="container card mt-2 myCard">
+              <div class="m-2" id="showScheduleForm">
+                <div class="row">
+                  <div class="col-sm-2 pr-1">
+                    <input type="date" class="form-control form-control-md" id="date_from" name="date_from" min="<?php echo $session_start; ?>" value="<?php echo date("Y-m-d", time()); ?>">
+                  </div>
+                  <div class="col-sm-2 pl-0 pr-1">
+                    <input type="date" class="form-control form-control-md" id="date_to" name="date_to" max="<?php echo $session_end; ?>" value="<?php echo date("Y-m-d", time()); ?>">
+                  </div>
+                  <div class="col-sm-2 pl-0">
+                    <input type="hidden" id="schedule_action" name="schedule_action">
+                    <button class="btn btn-info btn-md m-0 scheduleButton"></button>
+                  </div>
                 </div>
               </div>
             </div>
-            <p class="mt-2" id="showSchedule"></p>
-
-            <div class="mt-2" id="showAttendanceRegister"></div>
-
+            <div class="container card mt-2 myCard">
+              <p class="mt-2" id="showSchedule"></p>
+            </div>
+            <div class="container card mt-2 myCard">
+              <div class="mt-2" id="showAttendanceRegister"></div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="list-dc" role="tabpanel" aria-labelledby="list-dc-list">
+          <div class="container card mt-2 myCard">
+            Coming Soon...
+          </div>
           </div>
           <div class="tab-pane fade" id="list-de" role="tabpanel" aria-labelledby="list-de-list">
             <div class="row">
@@ -195,7 +239,6 @@ require('../requireSubModule.php');
               <div class="col-12" id="stList"></div>
             </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -205,9 +248,152 @@ require('../requireSubModule.php');
 <script>
   $(document).ready(function() {
 
+    $(".subjectCoverage").hide();
+    $(".subjectResource").hide();
+    $(".subjectTopics").hide();
+
     mtlList();
     $('.selectPanel').hide()
     $('#topicList').hide()
+
+    // Teaching Task 
+
+    $(document).on('click', '.showStudentList', function() {
+      $(".subjectCoverage").hide();
+      $(".subjectResource").hide();
+      $(".subjectTopics").hide();
+      // $.alert("Show Subject Topic");
+      $(".studentList").show();
+    });
+    $(document).on('click', '#submit_sbt', function() {
+      var tlId = $("input[name='subject']:checked").val();
+      var sbt_syllabus = $("input[name='sbt_syllabus']:checked").val();
+      var sbt_name = $("#sbt_name").val();
+      var sbt_weight = $("#sbt_weight").val();
+      var sbt_slot = $("#sbt_slot").val();
+      var sbt_unit = $("#sbt_unit").val();
+      $.alert("Name " + sbt_name);
+      $.post("lmsSql.php", {
+        tlId: tlId,
+        sbt_name: sbt_name,
+        sbt_weight: sbt_weight,
+        sbt_slot: sbt_slot,
+        sbt_unit: sbt_unit,
+        sbt_syllabus: sbt_syllabus,
+        action: "addST"
+      }, function(data, status) {
+        $.alert("Success " + data);
+        $('#subjectTopicList').html(data)
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+    });
+
+    $(document).on('click', '.showSubjectTopic', function() {
+      $(".subjectCoverage").hide();
+      $(".subjectResource").hide();
+      $(".studentList").hide();
+      // $.alert("Show Subject Topic");
+      subjectTopicList();
+      $(".subjectTopics").show();
+
+    });
+
+    function subjectTopicList() {
+      var tlId = $("input[name='subject']:checked").val();
+      //$.alert("In List Function" + tlId);
+      $.post("lmsSql.php", {
+        action: "stList",
+        tlId: tlId
+      }, function(data, status) {
+        //$.alert("Success " + data);
+        $('#subjectTopicList').html(data)
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+    }
+
+    $(document).on('click', '#submit_sbResource', function() {
+      var tlId = $("input[name='subject']:checked").val();
+      var sbr_name = $("#sbr_name").val();
+      var sbr_url = $("#sbr_url").val();
+      var mn_id = $("#sel_mn").val();
+      var sbr_type = $("input[name='sbr_type']:checked").val();
+      $.alert("Name " + sbr_name + " tlId " + tlId + " url " + sbr_url + " mn " + mn_id + " sbr_type " + sbr_type);
+      $.post("lmsSql.php", {
+        tlId: tlId,
+        sbr_name: sbr_name,
+        sbr_url: sbr_url,
+        sbr_type: sbr_type,
+        mn_id: mn_id,
+        action: "addRes"
+      }, function(data, status) {
+        $.alert("Success " + data);
+        resourceList();
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+    });
+    $(document).on('click', '.showResource', function() {
+      $(".subjectTopics").hide();
+      $(".subjectCoverage").hide();
+      $(".studentList").hide();
+      // $.alert("ShowCoverage");
+      resourceList();
+      $(".subjectResource").show();
+    });
+
+    function resourceList() {
+      var tlId = $("input[name='subject']:checked").val();
+      // $.alert("In Resource List Function" + subjectId);
+      $.post("lmsSql.php", {
+        tlId: tlId,
+        action: "resList"
+      }, function(data, status) {
+        //$.alert("Success " + data);
+        $('#resourceList').html(data)
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+    }
+
+    function mtlList() {
+      //$.alert("In List Function");
+      $.post("lmsSql.php", {
+        action: "mtlList"
+      }, function(data, status) {
+        //$.alert("Success " + data);
+        $("#mtlList").html(data);
+      }, "text").done(function(data, staus) {
+        // $.alert("dfdf");
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+    }
+    $(document).on('click', '.showCoverage', function() {
+      $(".subjectTopics").hide();
+      $(".subjectResource").hide();
+      $(".studentList").hide();
+      // $.alert("ShowCoverage");
+      courseCoverage();
+      $(".subjectCoverage").show();
+
+    });
+
+    function courseCoverage() {
+      var tlId = $("input[name='subject']:checked").val();
+      // $.alert("In List Function" + tlId);
+      $.post("lmsSql.php", {
+        action: "coverage",
+        tlId: tlId
+      }, function(data, status) {
+        //$.alert("Success " + data);
+
+        $('.subjectCoverage').html(data)
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+    }
 
     $(document).on('click', '.de', function() {
       $('.selectPanel').show()
@@ -257,17 +443,6 @@ require('../requireSubModule.php');
       }).fail(function() {
         $.alert("Error !!");
       })
-    });
-
-    $(document).on('click', '.showCoverage', function() {
-      var text = $(this).attr("data-text");
-      var tlId = $(this).attr("data-tl");
-      //$.alert(" Show ST Form " + text + tlId);
-      $('.stSubject').html(text)
-      courseCoverage(tlId);
-      $(".addSTButton").hide()
-      $(".addResource").hide()
-      $(".addResourceButton").hide()
     });
 
     $(document).on('click', '.markAttendance', function() {
@@ -359,125 +534,6 @@ require('../requireSubModule.php');
       })
     });
 
-    $(document).on('click', '.showSTForm', function() {
-      var text = $(this).attr("data-text");
-      var tlId = $(this).attr("data-tl");
-      //$.alert(" Show ST Form " + text + tlId);
-      $('.stSubject').html(text)
-      $('#panelId').val(tlId)
-      stList(tlId);
-      $(".addSTButton").show()
-      $(".addResource").hide()
-      $(".addResourceButton").hide()
-    });
-
-    $(document).on('click', '.showResourceForm', function() {
-      var text = $(this).attr("data-text");
-      var subjectId = $(this).attr("data-sub");
-      //$.alert(" Show ST Form " + text + tlId + " Subject " + subjectId);
-      $('.stSubject').html(text)
-      $('#panelId').val(subjectId)
-      resourceList(subjectId);
-      $(".addSTButton").hide()
-      $(".addResource").show()
-      $(".addResourceButton").show()
-
-    });
-
-    $(document).on('click', '.addResourceButton', function() {
-      var subjectId = $('#panelId').val()
-      $.alert(" Add Resource Button " + subjectId);
-      $('#modal_title').text("Add Resource");
-      $('#action').val("addRes");
-      $('#modalSubId').val(subjectId);
-      $('#submitModalForm').show();
-      $('#submitModalForm').html("Submit");
-      $(".stForm").hide();
-      $(".rtForm").hide();
-      $(".resForm").show();
-
-      $('#firstModal').modal().show;
-    });
-
-    $(document).on('click', '.addSTButton', function() {
-      var tlId = $('#panelId').val()
-      //$.alert(" Add ST Button " + tlId);
-      $('#modal_title').text("Subject Topic");
-      $('#action').val("addST");
-      $('#modalTLId').val(tlId);
-      $('#submitModalForm').show();
-      $('#submitModalForm').html("Submit");
-      $(".resForm").hide();
-      $(".rtForm").hide();
-      $(".stForm").show();
-      $('#firstModal').modal().show;
-    });
-
-    $(document).on('click', '.addResource', function() {
-      //$.alert(" Modal");
-      $('#modal_title').text("Add New Resource Type");
-      $('#action').val("addRT");
-      $('#submitModalForm').show();
-      $('#submitModalForm').html("Submit");
-      $(".resForm").hide();
-      $(".stForm").hide();
-      $(".rtForm").show();
-      $('#firstModal').modal().show;
-    });
-
-    $(document).on('submit', '#modalForm', function(event) {
-      event.preventDefault(this);
-      var action = $("#action").val();
-      //$.alert("Form Submitted " + action);
-      var error = "NO";
-      var error_msg = "";
-      if (action == "addST" || action == "updateST") {
-        if ($('#st_name').val() === "" || $('#st_weight').val() === "") {
-          error = "YES";
-          error_msg = "Topic Name/Weight cannot be blank";
-        }
-      } else if (action == "addRes" || action == "updateRes") {
-        if ($('#res_name').val() === "") {
-          error = "YES";
-          error_msg = "Resource Name cannot be blank";
-        } else var subjectId = $('#panelId').val()
-      }
-      if (error == "NO") {
-        var formData = $(this).serialize();
-        $.alert(" Form Data " + formData)
-        $.post("lmsSql.php", formData, () => {}, "text").done(function(data) {
-          $.alert(data);
-          $('#firstModal').modal('hide');
-          $('#modalForm')[0].reset();
-          if (action == "addRes" || action == "updateRes") resourceList(subjectId)
-          else rtList();
-        }).fail(function() {
-          $.alert("fail in place of error");
-        })
-      }
-    });
-
-    $(document).on('click', '.rt_idE', function() {
-      var id = $(this).attr('id');
-      // $.alert("Id " + id);
-
-      $.post("lmsSql.php", {
-        rtId: id,
-        action: "fetchRT"
-      }, () => {}, "json").done(function(data) {
-        // $.alert("List " + data.rt_name);
-        console.log("Error ", data);
-        $('#modal_title').text("Update Resource [" + id + "]");
-        $('#rt_name').val(data.rt_name);
-        $('#action').val("updateRt");
-        $('#modalId').val(id);
-        $('#submitModalForm').html("Submit");
-        $('#firstModal').modal().show;
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
     $(document).on('click', '.swapButton', function() {
       var id = $(this).attr('data-sbtId');
       var tlId = $(this).attr('data-tlId');
@@ -551,20 +607,6 @@ require('../requireSubModule.php');
       $('.auMarksForm').hide();
     });
 
-    function resourceList(subjectId) {
-      $.alert("In Resource List Function" + subjectId);
-      $.post("lmsSql.php", {
-        action: "resList",
-        subjectId: subjectId
-      }, function(data, status) {
-        //$.alert("Success " + data);
-        $('#topicList').show()
-        $('#stList').html(data)
-      }, "text").fail(function() {
-        $.alert("Error !!");
-      })
-    }
-
     function studentClassSubjectList(sasId) {
       //$.alert("In List Function");
       $.post("attSql.php", {
@@ -576,48 +618,6 @@ require('../requireSubModule.php');
         $("#showAttendanceRegister").html(data);
       }, "text").done(function(data, staus) {
         //$.alert("dfdf");
-      }).fail(function() {
-        $.alert("Error !!");
-      })
-    }
-
-    function stList(tlId) {
-      //$.alert("In List Function" + tlId);
-      $.post("lmsSql.php", {
-        action: "stList",
-        tlId: tlId
-      }, function(data, status) {
-        //$.alert("Success " + data);
-        $('#topicList').show()
-        $('#stList').html(data)
-      }, "text").fail(function() {
-        $.alert("Error !!");
-      })
-    }
-
-    function courseCoverage(tlId) {
-      //$.alert("In List Function" + tlId);
-      $.post("lmsSql.php", {
-        action: "coverage",
-        tlId: tlId
-      }, function(data, status) {
-        //$.alert("Success " + data);
-        $('#topicList').show()
-        $('#stList').html(data)
-      }, "text").fail(function() {
-        $.alert("Error !!");
-      })
-    }
-
-    function mtlList() {
-      //$.alert("In List Function");
-      $.post("lmsSql.php", {
-        action: "mtlList"
-      }, function(data, status) {
-        //$.alert("Success " + data);
-        $("#mtlList").html(data);
-      }, "text").done(function(data, staus) {
-        // $.alert("dfdf");
       }).fail(function() {
         $.alert("Error !!");
       })
@@ -644,20 +644,6 @@ require('../requireSubModule.php');
       }, function(data, status) {
         //$.alert("Success " + data);
         $("#mySubjectAssessmentList").html(data);
-      }, "text").done(function(data, staus) {
-        // $.alert("dfdf");
-      }).fail(function() {
-        $.alert("Error !!");
-      })
-    }
-
-    function rtList() {
-      // $.alert("In List Function");
-      $.post("lmsSql.php", {
-        action: "rtList"
-      }, function(data, status) {
-        //$.alert("Success " + data);
-        $("#rtList").html(data);
       }, "text").done(function(data, staus) {
         // $.alert("dfdf");
       }).fail(function() {
@@ -703,8 +689,7 @@ require('../requireSubModule.php');
 <div class="modal" id="uploadModal">
   <div class="modal-dialog modal-md">
     <form class="form-horizontal" id="uploadModalForm">
-      <div class="modal-content bg-secondary text-white">
-
+      <div class="modal-content">
         <!-- Modal Header -->
         <div class="modal-header">
           <h4 class="modal-title">Upload Document</h4>

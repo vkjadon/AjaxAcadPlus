@@ -16,18 +16,20 @@ require('../requireSubModule.php');
 
     <div class="container-fluid moduleBody">
       <div class="row">
-      <div class="col-2 p-0 m-0 pl-2 full-height">
+        <div class="col-2 p-0 m-0 pl-2 full-height">
+        <h5 class="mt-3">Assessment</h5>
           <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
             <a class="list-group-item list-group-item-action active am" id="list-am-list" data-toggle="list" href="#list-am" role="tab" aria-controls="am"> Assessment Master (DAA)</a>
             <a class="list-group-item list-group-item-action sa" id="list-sa-list" data-toggle="list" href="#list-sa" role="tab" aria-controls="sa"> Subject Assessment (SC) </a>
             <a class="list-group-item list-group-item-action da" id="list-da-list" data-toggle="list" href="#list-da" role="tab" aria-controls="da"> Design Assessment (SF/TF) </a>
+            <a class="list-group-item list-group-item-action ass" id="list-ass-list" data-toggle="list" href="#list-ass" role="tab" aria-controls="ass"> Assessment Summary Sheet </a>
           </div>
         </div>
         <div class="col-10 leftLinkBody">
           <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane show active" id="list-am" role="tabpanel">
               <div class="row">
-                <div class="col-8 mt-1 mb-1">
+                <div class="col-9 mt-1 mb-1">
                   <div class="container card mt-2 myCard">
                     <h5 class="card-title p-2 mb-0"> Design Assessment Map </h5>
                     <form class="form-horizontal" id="amapForm">
@@ -79,7 +81,7 @@ require('../requireSubModule.php');
 
                         <div class="col">
                           <input type="hidden" id="action" name="action" value="addGrid">
-                          <button type="submit" class="btn btn-sm amap">Next <i class="fa fa-angle-double-right"></i></button>
+                          <button type="submit" class="btn btn-sm amap">Submit</button>
                         </div>
                       </div>
                     </form>
@@ -125,8 +127,8 @@ require('../requireSubModule.php');
       </div>
     </div>
     <p>&nbsp;</p>
-  <p>&nbsp;</p>
-  <?php require("../bottom_bar.php");?>
+    <p>&nbsp;</p>
+    <?php require("../bottom_bar.php"); ?>
 
   </div>
 </body>
