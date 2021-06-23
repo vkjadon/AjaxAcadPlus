@@ -22,7 +22,7 @@ if (isset($_POST['action'])) {
 			echo json_encode($json_array);
 		}
 	} elseif ($_POST['action'] == "fetchCurrentQuestionOption") {
-		$sql = "select fo.* from fq_option fo, feedback_question fq where fo.fq_id=fq.fq_id and fq.update_id='$myId' and fq.fq_status='0'";
+		$sql = "select fo.* from feedback_option fo, feedback_question fq where fo.fq_id=fq.fq_id and fq.update_id='$myId' and fq.fq_status='0'";
 		$result = $conn->query($sql);
 		$json_array = array();
 		while ($rowArray = $result->fetch_assoc()) {
@@ -42,7 +42,7 @@ if (isset($_POST['action'])) {
 			$output = $result->fetch_assoc();
 			$fq_id = $output["fq_id"];
 		}
-		$sql = "insert into fq_option (fq_id, fo_statement, fo_score, fo_sno) values('$fq_id', '" . data_check($_POST['statement']) . "', '" . $_POST['score'] . "', '" . $_POST['sno'] . "')";
+		$sql = "insert into feedback_option (fq_id, fo_statement, fo_score, fo_sno) values('$fq_id', '" . data_check($_POST['statement']) . "', '" . $_POST['score'] . "', '" . $_POST['sno'] . "')";
 		$result = $conn->query($sql);
 		if (!$result) echo $conn->error;
 		else echo "Updated";
@@ -74,18 +74,18 @@ if (isset($_POST['action'])) {
 			echo json_encode($json_array);
 		}
 	} elseif ($_POST['action'] == "fetchOption") {
-		$sql = "select fo.* from fq_option fo where fo.fq_id='" . $_POST['fq_id'] . "' and fo.fo_sno='" . $_POST['fo_sno'] . "'";
+		$sql = "select fo.* from feedback_option fo where fo.fq_id='" . $_POST['fq_id'] . "' and fo.fo_sno='" . $_POST['fo_sno'] . "'";
 		$result = $conn->query($sql);
 		$rowArray = $result->fetch_assoc();
 		echo json_encode($rowArray);
 	} elseif ($_POST['action'] == "updateOption") {
 		$field = $_POST['tag'];
-		$sql = "update fq_option set $field='" . data_check($_POST['value']) . "' where fq_id='" . data_check($_POST['fq_id']) . "' and fo_sno='" . data_check($_POST['fo_sno']) . "'";
+		$sql = "update feedback_option set $field='" . data_check($_POST['value']) . "' where fq_id='" . data_check($_POST['fq_id']) . "' and fo_sno='" . data_check($_POST['fo_sno']) . "'";
 		$result = $conn->query($sql);
 		if (!$result) echo $conn->error;
 		else echo " Value " . $_POST['value'] . ' Tag ' . $_POST['tag'] . ' FQID ' . $_POST['fq_id'] . ' Sno ' . $_POST['fo_sno'];
 	} elseif ($_POST['action'] == "templateList") {
-		$sql = "select * from template where ft_id='" . $_POST['ft_id'] . "' order by template_id desc";
+		$sql = "select * from template where mn_id='" . $_POST['mn_id'] . "' order by template_id desc";
 		$result = $conn->query($sql);
 		if (!$result) echo $conn->error;
 		elseif ($result->num_rows > 0) {
@@ -101,7 +101,7 @@ if (isset($_POST['action'])) {
 	} elseif ($_POST['action'] == "addTemplate") {
 		$sql = "update template set template_status='1' where update_id='$myId'";
 		$result = $conn->query($sql);
-		$sql = "insert into template (ft_id, template_name, update_id, template_status) values('" . $_POST['sel_ft'] . "', '" . $_POST['template_name'] . "', '$myId', '0')";
+		$sql = "insert into template (mn_id, template_name, update_id, template_status) values('" . $_POST['sel_ft'] . "', '" . $_POST['template_name'] . "', '$myId', '0')";
 		$result = $conn->query($sql);
 		if (!$result) echo $conn->error;
 		else echo "Updated";
@@ -149,7 +149,7 @@ if (isset($_POST['action'])) {
 		if (!$result) echo $conn->error;
 		else echo "Updated";
 	} elseif ($_POST['action'] == "feedbackList") {
-		$sql = "select mn.*, t.*, fb.* from feedback fb, template t, master_name mn where fb.session_id='$mySes' and t.template_id=fb.template_id and t.ft_id=mn.mn_id order by feedback_id desc";
+		$sql = "select mn.mn_name, t.template_name, fb.* from feedback fb, template t, master_name mn where fb.session_id='$mySes' and t.template_id=fb.template_id and t.mn_id=mn.mn_id order by feedback_id desc";
 		$result = $conn->query($sql);
 		if (!$result) echo $conn->error;
 		elseif ($result->num_rows > 0) {

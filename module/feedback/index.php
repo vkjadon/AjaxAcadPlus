@@ -63,16 +63,21 @@ require('../requireSubModule.php');
 									</form>
 								</div>
 								<div class="container card shadow mt-2 mb-2 myCard">
-									<label>Feedback Statistics</label>
+									<label>Note:</label>
 									<div class="row">
 										<div class="col">
-											<span class="footerNote"> The Feeback is taken for any existing Template. So, if existing templates do not satisfy your requirements, please, create a New template. Previously used templates can not be edited. </span>
+											<span class="smallerText"> The Feeback is taken for any existing Template. So, if existing templates do not satisfy your requirements, please, create a New template. Previously used templates can be used but are not editable. </span>
 										</div>
 									</div>
 								</div>
 							</div>
-							<div class="col-7 p-0">
-								<div class="templateList"></div>
+							<div class="col-7">
+								<div class="templateList">
+									<div class="container card myCard">
+										<label>Please select the Feedback Type to show the Available Templates.</label>
+										<img src="../../images/wating2.gif" width="40%">
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -89,19 +94,19 @@ require('../requireSubModule.php');
 											<a class="nav-link aClass" data-toggle="pill" href="#pills_aClass" role="tab">Class</a>
 										</li>
 										<li class="nav-item">
-											<a class="nav-link aARCR" data-toggle="pill" href="#pills_aARCR" role="tab">AR/CR</a>
+											<a class="nav-link arcr" data-toggle="pill" href="#pills_arcr" role="tab">AR/CR</a>
 										</li>
 										<li class="nav-item">
-											<a class="nav-link aEvent" data-toggle="pill" href="#pills_aEvent" role="tab">Event</a>
+											<a class="nav-link event" data-toggle="pill" href="#pills_event" role="tab">Event</a>
 										</li>
 										<li class="nav-item">
-											<a class="nav-link aStaff" data-toggle="pill" href="#pills_aStaff" role="tab">Staff</a>
+											<a class="nav-link staff" data-toggle="pill" href="#pills_staff" role="tab">Staff</a>
 										</li>
 										<li class="nav-item">
-											<a class="nav-link aBatch" data-toggle="pill" href="#pills_aBatch" role="tab">Batch</a>
+											<a class="nav-link batch" data-toggle="pill" href="#pills_batch" role="tab">Batch</a>
 										</li>
 										<li class="nav-item">
-											<a class="nav-link aIndustry" data-toggle="pill" href="#pills_aIndustry" role="tab">Industry</a>
+											<a class="nav-link industry" data-toggle="pill" href="#pills_industry" role="tab">Industry</a>
 										</li>
 									</ul> <!-- content -->
 									<div class="tab-content" id="pills-tabContent p-3">
@@ -136,11 +141,20 @@ require('../requireSubModule.php');
 										<div class="tab-pane fade" id="pills_aClass" role="tabpanel">
 											<div id="programClassTable"></div>
 										</div>
-										<div class="tab-pane fade" id="pills_aARCR" role="tabpanel">
-											<div>Only Submit Button with Cut-Off Attendance</div>
+										<div class="tab-pane fade" id="pills_arcr" role="tabpanel">
+											<div>Only Submit Button with Cut-Off Attendance.It will add School Id </div>
 										</div>
-										<div class="tab-pane fade" id="pills_aEvent" role="tabpanel">
-											<div>Select from List and Schedule/Cutoff. Registered participants/attendees will be allowed to take</div>
+										<div class="tab-pane fade" id="pills_event" role="tabpanel">
+											<div>Select from List of Current Events and Schedule/Cutoff. Registered participants/attendees will be allowed to take</div>
+										</div>
+										<div class="tab-pane fade" id="pills_staff" role="tabpanel">
+											<div>Will be sent to School Staff. Add Schedule</div>
+										</div>
+										<div class="tab-pane fade" id="pills_batch" role="tabpanel">
+											<div>Will send to all Alumni. No Schedule to be given</div>
+										</div>
+										<div class="tab-pane fade" id="pills_industry" role="tabpanel">
+											<div>Will send to all Industry. No Schedule to be given</div>
 										</div>
 									</div>
 								</div>
@@ -435,12 +449,13 @@ require('../requireSubModule.php');
 		})
 
 		function feedbackList() {
-			var ft_id = $("#sel_ft").val();
-			// $.alert("Fb Type In Feedback  " + ft_id);
+			var mn_id = $("#sel_ft").val();
+			// $.alert("Fb Type In Feedback  " + mn_id);
 			$.post("feedbackSql.php", {
-				ft_id: ft_id,
+				mn_id: mn_id,
 				action: "feedbackList"
 			}, function() {}, "json").done(function(data, status) {
+				// $.alert(data)
 				if (data.success == "0") {
 					var success = "No Feedback Found for this Session. Please select a Template using Feedback Template to Proceed"
 					$("#feedbackTable").html(success)
@@ -453,7 +468,7 @@ require('../requireSubModule.php');
 						var open = value.feedback_open
 						var close = value.feedback_close
 						var status = value.feedback_status
-						if (open != null) {
+						if (status != null) {
 							card += '<tr>';
 							card += '<td><a href="#" class="editFeedback fa fa-pencil-alt" data-fb="' + value.feedback_id + '"></td>';
 							card += '<td>' + count++ + '</td>';
@@ -481,8 +496,8 @@ require('../requireSubModule.php');
 
 		})
 		$(document).on("change", "#sel_ft", function() {
-			var ft_id = $("#sel_ft").val();
-			if (ft_id == "") $.alert("Select a FeedBack Type to Proceed!!");
+			var mn_id = $("#sel_ft").val();
+			if (mn_id == "") $.alert("Select a FeedBack Type to Proceed!!");
 			else templateList()
 		})
 		$(document).on("submit", "#addTemplateForm", function() {
@@ -555,10 +570,10 @@ require('../requireSubModule.php');
 		})
 
 		function templateList() {
-			var ft_id = $("#sel_ft").val();
-			// $.alert("Fb Type " + ft_id);
+			var mn_id = $("#sel_ft").val();
+			// $.alert("Fb Type " + mn_id);
 			$.post("feedbackSql.php", {
-				ft_id: ft_id,
+				mn_id: mn_id,
 				action: "templateList"
 			}, function() {}, "json").done(function(data, status) {
 				if (data.success == "0") {
@@ -586,9 +601,10 @@ require('../requireSubModule.php');
 								card += '<button class="btn btn-sm btn-active showTemplateModal"  data-template="' + template_id + '">Show</button>'
 							} else {
 								card += '<button class="btn btn-sm showTemplateModal" data-template="' + template_id + '">Show</button>'
-								card += '<button class="btn btn-sm setActiveTemplate" data-template="' + template_id + '">Active</button>'
-								card += '<button class="btn btn-sm useTemplate" data-template="' + template_id + '">Use</button>'
 							}
+							card += '<button class="btn btn-sm setActiveTemplate" data-template="' + template_id + '">Active</button>'
+							card += '<button class="btn btn-sm useTemplate" data-template="' + template_id + '">Use</button>'
+
 							card += '</div>'
 
 							card += '</div>';

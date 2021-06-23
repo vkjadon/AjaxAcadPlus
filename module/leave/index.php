@@ -3,13 +3,15 @@ require('../requireSubModule.php');
 
 $sql = "select * from leave_duration";
 $result = $conn->query($sql);
-if ($result) {
-  while ($rowsArray = $result->fetch_assoc()) {
-    $short_leave = $rowsArray['short_leave'];
-    $half_day = $rowsArray['half_day'];
-    $update_ts = $rowsArray['update_ts'];
-    $update_id = $rowsArray['update_id'];
-  }
+if ($result && $result->num_rows == 1) {
+  $rowsArray = $result->fetch_assoc();
+  $short_leave = $rowsArray['short_leave'];
+  $half_day = $rowsArray['half_day'];
+  $update_ts = $rowsArray['update_ts'];
+  $update_id = $rowsArray['update_id'];
+} elseif ($result && $result->num_rows == 0){
+  $short_leave = "2";
+  $half_day = "4";
 } else echo $conn->error;
 
 ?>
@@ -20,13 +22,14 @@ if ($result) {
   <title>Leave Module : ClassConnect</title>
   <?php require("../css.php"); ?>
 </head>
+
 <body>
   <?php require("../topBar.php"); ?>
 
   <div class="container-fluid moduleBody">
     <div class="row">
       <div class="col-2 p-0 m-0 pl-2 full-height">
-        <div class="mt-2">
+        <div class="mt-3">
           <h5>Leave</h5>
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
@@ -209,11 +212,11 @@ if ($result) {
                   <!-- nav options -->
                   <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
                     <li class="nav-item">
-                      <a class="nav-link active" id="pills_leaveType" data-toggle="pill" href="#pills_type" role="tab" aria-controls="pills_type" aria-selected="true">Leave Credit</a>
+                      <a class="nav-link active" data-toggle="pill" href="#pills_lc" role="tab" aria-controls="pills_lc" aria-selected="true">Leave Credit</a>
                     </li>
                   </ul> <!-- content -->
                   <div class="tab-content" id="pills-tabContent p-3">
-                    <div class="tab-pane fade show active" id="pills_type" role="tabpanel" aria-labelledby="pills_leaveType">
+                    <div class="tab-pane fade show active" id="pills_lc" role="tabpanel" aria-labelledby="pills_leaveType">
                       <form class="form-horizontal" id="addLeaveSetup">
                         <div class="row">
                           <?php
@@ -233,9 +236,11 @@ if ($result) {
                           echo '<div class="col-6">';
                           echo '<div class="form-group">';
                           if ($result) {
-                            echo '<select class="form-control form-control-sm" name="sel_lt" id="sel_lt" required>';
-                            echo '<option selected disabled>Select Leave Type</option>';
-                            while ($rows = $result->fetch_assoc()) echo '<option value="' . $rows['lt_id'] . '">' . $rows['lt_name'] . '</option>';
+                            echo '<select class="form-control form-control-sm" name="leave_type" id="leave_type" required>';
+                            // echo '<option selected disabled>Select Leave Type</option>';
+                            while ($rows = $result->fetch_assoc()) {
+                              echo '<option value="' . $rows["lt_id"] . '">' . $rows["lt_name"] . '</option>';
+                            }
                             echo '</select>';
                           } else echo $conn->error;
                           echo '</div></div>';
@@ -525,26 +530,17 @@ if ($result) {
                     </div>
                     <div class="tab-pane fade" id="pills_duration" role="tabpanel" aria-labelledby="pills_leaveDuration">
                       <div class="row">
-                        <div class="col-3">
+                        <div class="col-6">
                           <div class="form-group">
                             <label>Short Leave</label>
                             <input type="text" class="form-control form-control-sm" value="<?php echo $short_leave; ?>" />
                           </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-6">
                           <div class="form-group">
                             <label>Half Day</label>
                             <input type="text" class="form-control form-control-sm" type="text" value="<?php echo $half_day; ?>" />
                           </div>
-                        </div>
-                        <div class="col-6 text-center">
-                          Last updated by</br>
-                          <label>
-                            <?php
-                            echo getField($conn, $update_id, "staff", "staff_id", "staff_name");
-                            echo '<br>' . date("d-m-Y h-m", strtotime($update_ts));
-                            ?>
-                          </label>
                         </div>
                       </div>
                     </div>
@@ -767,9 +763,9 @@ if ($result) {
       event.preventDefault(this);
       //$.alert("Form Submitted ");
       var formData = $(this).serialize();
-      //$.alert(formData);
+      // $.alert(formData);
       $.post("leaveSql.php", formData, () => {}, "text").done(function(mydata, mystatus) {
-        //$.alert("Updated Data" + mydata);
+        // $.alert("Updated Data" + mydata);
         leaveTypeList();
         $('#leaveTypeForm')[0].reset();
         $("#ltId").val("0")
@@ -930,12 +926,12 @@ if ($result) {
     $(document).on('submit', '#addLeaveSetup', function() {
       event.preventDefault(this);
       if ($("#sel_month").val() === null) $.alert("Month Required !!");
-      else if ($("#sel_lt").val() === null) $.alert(" Leave Type Required !!");
+      else if ($("#leave_type").val() === null) $.alert(" Leave Type Required !!");
       else {
         var formData = $(this).serialize();
-        $.alert("Form Submitted " + formData)
+        // $.alert("Form Submitted " + formData)
         $.post("leaveSql.php", formData, function() {}, "text").done(function(data, success) {
-          //$.alert(data)
+          // $.alert(data)
           $("#addLeaveSetup")[0].reset();
           leaveSetupTable()
         })
@@ -943,16 +939,16 @@ if ($result) {
     });
     $(document).on('click', '.editLeaveSetup', function() {
       var id = $(this).attr('data-leaveSetup');
-      $.alert("Id " + id);
+      // $.alert("Id " + id);
       $.post("leaveSql.php", {
         lsId: id,
         action: "fetchLeaveSetup"
       }, () => {}, "json").done(function(data) {
-        $('#sel_month').val(data.ls_month);
+        $('#sel_month').val(data.lcr_month);
         $('#sel_lt').val(data.lt_id);
-        $('#lsYear').val(data.ls_year);
-        $('#lsMale').val(data.ls_male);
-        $('#lsFemale').val(data.ls_female);
+        $('#lsYear').val(data.lcr_year);
+        $('#lsMale').val(data.lcr_male);
+        $('#lsFemale').val(data.lcr_female);
         $('#lsId').val(id);
       }).fail(function() {
         $.alert("Leave Credit Not Fetched ");
@@ -967,12 +963,12 @@ if ($result) {
         var leave_setup = '';
         $.each(data, function(key, value) {
           leave_setup += '<tr>';
-          leave_setup += '<td><a href="#" class="fas fa-edit editLeaveSetup" data-leaveSetup="' + value.ls_id + '"></a></td>';
+          leave_setup += '<td><a href="#" class="fas fa-edit editLeaveSetup" data-leaveSetup="' + value.lcr_id + '"></a></td>';
           leave_setup += '<td>' + value.lt_name + '</td>';
-          leave_setup += '<td>' + GetMonthName(value.ls_month) + '</td>';
-          leave_setup += '<td>' + value.ls_year + '</td>';
-          leave_setup += '<td>' + value.ls_male + '</td>';
-          leave_setup += '<td>' + value.ls_female + '</td>';
+          leave_setup += '<td>' + GetMonthName(value.lcr_month) + '</td>';
+          leave_setup += '<td>' + value.lcr_year + '</td>';
+          leave_setup += '<td>' + value.lcr_male + '</td>';
+          leave_setup += '<td>' + value.lcr_female + '</td>';
           leave_setup += '</tr>';
         });
         $(".leaveSetupTable").find("tr:gt(0)").remove()

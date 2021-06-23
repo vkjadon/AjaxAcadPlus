@@ -1,8 +1,6 @@
 <?php
-session_start();
-include('../../config_database.php');
-include('../../config_variable.php');
-include('../../php_function.php');
+require('../requireSubModule.php');
+
 //echo $_POST['action'];
 
 if (isset($_POST['rpAction'])) {
@@ -13,34 +11,18 @@ if (isset($_POST['rpAction'])) {
     if (!$result) echo $conn->error;
     echo "Added";
   } elseif ($_POST['rpAction'] == 'resourcePersonList') {
-    $sql = "select * from resource_person order by rp_name";
+    $sql = "select * from resource_person where rp_status='0'";
     $result = $conn->query($sql);
-
-    while ($rowsArray = $result->fetch_assoc()) {
-      $id = $rowsArray["rp_id"];
-      $status = $rowsArray["rp_status"];
-      echo '<div class="card myCard m-2">';
-      echo '<div class="ml-2"><b>' . $rowsArray["rp_name"] . '</b>(' . $rowsArray["rp_designation"] . ')</div>';
-      echo '<div class="row m-2">';
-      echo '<div class="col-sm-10">';
-      echo '<div class="cardBodyText">' . $rowsArray["rp_address"] . '</div>';
-      echo '</div>';
-      echo '</div>';
-      echo '<div class="card-footer">';
-      echo '<div class="cardBodyText text-center">';
-      echo '<a href="#" class="float-left rp_idE" data-id="' . $id . '"><i class="fa fa-edit"></i></a>';
-      echo '<i class="fa fa-mobile"></i> ' . $rowsArray["rp_mobile"] . ' | <i class="fa fa-envelope"></i> ' . $rowsArray["rp_email"];
-      if ($status == "9") echo '<a href="#" class="float-right rp_idR" data-id="' . $id . '"><i class="fa fa-refresh" aria-hidden="true"></i></a>';
-      else echo '<a href="#" class="float-right rp_idD" data-id="' . $id . '"><i class="fa fa-trash"></i></a>';
-      echo '</div>';
-      echo '</div>';
-      echo '</div>';
+    $json_array = array();
+    while ($output = $result->fetch_assoc()) {
+      $json_array[] = $output;
     }
+    echo json_encode($json_array);
   }
 }
 if (isset($_POST['orgAction'])) {
   if ($_POST['orgAction'] == 'orgList') {
-    $sql = "select * from organization";
+    $sql = "select * from organization where org_status='0'";
     $result = $conn->query($sql);
     $json_array = array();
     while ($output = $result->fetch_assoc()) {
@@ -48,7 +30,7 @@ if (isset($_POST['orgAction'])) {
     }
     echo json_encode($json_array);
   } elseif ($_POST['orgAction'] == 'addOrg') {
-    $sql = "insert into organization (org_name, org_url, org_mobile, org_email, org_address, org_about,update_id, org_status) values('" . data_check($_POST['org_name']) . "','" . data_check($_POST['org_url']) . "','" . data_check($_POST['org_mobile']) . "','" . data_check($_POST['org_email']) . "','" . data_check($_POST['org_address']) . "','" . data_check($_POST['org_about']) . "','$myId','0')";
+    $sql = "insert into organization (org_name, org_url, org_mobile, org_email, org_contact, org_address, org_about, update_id, org_status) values('" . data_check($_POST['org_name']) . "','" . data_check($_POST['org_url']) . "','" . data_check($_POST['org_mobile']) . "', '" . data_check($_POST['org_email']) . "', '" . data_check($_POST['org_contact']) . "', '" . data_check($_POST['org_address']) . "','" . data_check($_POST['org_about']) . "','$myId','0')";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     echo "Added";

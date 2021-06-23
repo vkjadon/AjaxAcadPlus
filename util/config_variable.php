@@ -24,11 +24,26 @@ if (isset($_SESSION['myStdId']) > 0) $myStdId = $_SESSION["myStdId"];
 if (isset($mySes)) {
   $session_start = getField($conn, $mySes, "session", "session_id", "session_start");
   $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
-
+  $sql = "select ly_id from leave_year where ly_status='0'";
+  $result=$conn->query($sql);
+  if ($result && $result->num_rows == 1) {
+    $rowsArray = $result->fetch_assoc();
+    $ly_id = $rowsArray['ly_id'];
+  } else {
+    echo $conn->error;
+    die();
+  }
   // check_tn_ad($conn, 'assessment_design');
   //check_tn_rs($conn, 'cc_outcome');
   check_tn_class($conn, "class");
+  check_tn_feedback($conn, "feedback");
+  check_tn_feedback_question($conn, "feedback_question");
+  check_tn_feedback_option($conn, "feedback_option");
+  check_tn_feedback_participant($conn, "feedback_participant");
+  check_tn_leave_credit($conn, "leave_credit");
+  check_tn_ld($conn, "leave_duration");
   check_tn_lt($conn, "leave_type");
+  check_tn_ly($conn, "leave_year");
   check_tn_org($conn, 'organization');
   check_tn_mn($conn, 'master_name');
   check_tn_rp($conn, 'resource_person');
@@ -40,6 +55,8 @@ if (isset($mySes)) {
   check_tn_subaddon($conn, "subject_addon");
   check_tn_subelective($conn, "subject_elective");
   check_tn_test($conn, "test");
+  check_tn_template($conn, "template");
+  check_tn_template_question($conn, "template_question");
   check_tn_user($conn, "user");
 
   $tn_amap = 'assessment_map' . $mySes;
@@ -48,8 +65,11 @@ if (isset($mySes)) {
   $tn_ccd = 'cc_detail' . $mySes;
   check_tn_ccd($conn, $tn_ccd);
 
-  $tn_eac = 'ea_claim' . $mySes;
-  //check_tn_eac($conn, $tn_eac);
+  $tn_lc = 'leave_claim' . $ly_id;
+  check_tn_lc($conn, $tn_lc);
+
+  $tn_ll = 'leave_ledger' . $ly_id;
+  check_tn_ll($conn, $tn_ll);
 
   $tn_rc = 'registration_class' . $mySes;
   check_tn_rc($conn, $tn_rc);
@@ -71,7 +91,7 @@ if (isset($mySes)) {
 
   $tn_src = 'subject_resource_class' . $mySes;
   check_tn_src($conn, $tn_src);
-  
+
   $tn_tl = 'teaching_load' . $mySes;
   check_tn_tl($conn, $tn_tl);
 

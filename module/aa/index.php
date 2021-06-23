@@ -161,14 +161,14 @@ require('../requireSubModule.php');
                           </div>
                           <div class="col">
                             <div class="form-group">
-                              <input type="radio" class="headName" id="ss" name="headName" value="ss">
-                              Specialization
+                              <input type="radio" class="headName" id="ft" name="headName" value="ft">
+                              Feedback Type
                             </div>
                           </div>
                           <div class="col">
                             <div class="form-group">
-                              <input type="radio" class="headName" id="cce" name="headName" value="cce">
-                              CoCur Event
+                              <input type="radio" class="headName" id="qt" name="headName" value="qt">
+                              Qualification Type
                             </div>
                           </div>
                         </div>
@@ -193,22 +193,23 @@ require('../requireSubModule.php');
                           </div>
                         </div>
                         <div class="row">
-                          <div class="col">
+                        <div class="col">
                             <div class="form-group">
-                              <input type="radio" class="headName" id="ft" name="headName" value="ft">
-                              Feedback Type
+                              <input type="radio" class="headName" id="ss" name="headName" value="ss">
+                              Specialization
                             </div>
                           </div>
                           <div class="col">
                             <div class="form-group">
-                              <input type="radio" class="headName" id="qt" name="headName" value="qt">
-                              Qualification Type
+                              <input type="radio" class="headName" id="cca" name="headName" value="cca">
+                              Cocurricular Activity
                             </div>
                           </div>
+
                           <div class="col">
                             <div class="form-group">
-                              <input type="radio" class="headName" id="nn" name="headName" value="nn">
-                              NewName
+                              <input type="radio" class="headName" id="eca" name="headName" value="eca">
+                              Extra Curricular
                             </div>
                           </div>
                         </div>
