@@ -16,7 +16,11 @@ if (isset($_SESSION["privledge"])) $myPriv = $_SESSION['privledge'];
 if (isset($_SESSION["mysclid"])) $myScl = $_SESSION['mysclid'];
 if (isset($_SESSION["mysid"])) $mySes = $_SESSION['mysid'];
 if (isset($_SESSION["myBatch"])) $myBatch = $_SESSION['myBatch'];
-if (isset($_SESSION["mydeptid"])) $myDept = $_SESSION['mydeptid'];
+if (isset($_SESSION["mydeptid"])){
+  $myDept = $_SESSION['mydeptid'];
+  $sesDeptName=getField($conn, $myDept, "department", "dept_id", "dept_name");
+  $dept_header='<h5 class="text-center">'.$sesDeptName.'</h5>';
+}
 if (isset($_SESSION["mypid"])) $myProg = $_SESSION['mypid'];
 
 if (isset($_SESSION['myStdId']) > 0) $myStdId = $_SESSION["myStdId"];
@@ -33,6 +37,7 @@ if (isset($mySes)) {
     echo $conn->error;
     die();
   }
+
   // check_tn_ad($conn, 'assessment_design');
   //check_tn_rs($conn, 'cc_outcome');
   check_tn_class($conn, "class");
@@ -46,6 +51,8 @@ if (isset($mySes)) {
   check_tn_ly($conn, "leave_year");
   check_tn_org($conn, 'organization');
   check_tn_mn($conn, 'master_name');
+  check_tn_question_bank($conn, 'question_bank');
+  check_tn_question_option($conn, 'question_option');
   check_tn_rp($conn, 'resource_person');
   check_tn_respStaff($conn, 'responsibility_staff');
   check_tn_std($conn, "student");
@@ -55,6 +62,7 @@ if (isset($mySes)) {
   check_tn_subaddon($conn, "subject_addon");
   check_tn_subelective($conn, "subject_elective");
   check_tn_test($conn, "test");
+  check_tn_test_question($conn, "test_question");
   check_tn_template($conn, "template");
   check_tn_template_question($conn, "template_question");
   check_tn_user($conn, "user");
@@ -65,6 +73,12 @@ if (isset($mySes)) {
   $tn_ccd = 'cc_detail' . $mySes;
   check_tn_ccd($conn, $tn_ccd);
 
+  $tn_ea='enrichment_activity'. $mySes;
+  check_tn_enrichment_activity($conn, $tn_ea);
+
+  $tn_eap='enrichment_activity_participant'. $mySes;
+  check_tn_enrichment_activity_participant($conn, $tn_eap);
+  
   $tn_lc = 'leave_claim' . $ly_id;
   check_tn_lc($conn, $tn_lc);
 

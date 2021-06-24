@@ -5,7 +5,7 @@ include('../../phpFunction/onlineFunction.php');
 //echo $_POST['action'];
 if (isset($_POST['action'])) {
 	if ($_POST['action'] == 'activeQuestion') {
-		$sql = "select * from test where test_status='0' and submit_id='$myId'";
+		$sql = "select * from test where test_status='0' and update_id='$myId'";
 		$result = $conn->query($sql);
 		if ($result) {
 			$array = $result->fetch_assoc();
@@ -198,7 +198,7 @@ if (isset($_POST['action'])) {
 			echo '</div></div>';
 		}
 	} elseif ($_POST['action'] == 'sectionQuestionList') {
-		$sql = "select * from test where test_status='0' and submit_id='$myId'";
+		$sql = "select * from test where test_status='0' and update_id='$myId'";
 		$result = $conn->query($sql);
 		if ($result) {
 			$array = $result->fetch_assoc();
@@ -287,7 +287,7 @@ if (isset($_POST['action'])) {
 		else echo $conn->error;
 	} elseif ($_POST['action'] == 'questionLibrary') {
 		$test_id='1';
-		$sql="select * from question_bank where submit_id='$myId' and qb_status<'9' and qb_id NOT IN (select qb_id from test_question where test_id=".$test_id.") order by qb_id desc";
+		$sql="select * from question_bank where update_id='$myId' and qb_status<'9' and qb_id NOT IN (select qb_id from test_question where test_id=".$test_id.") order by qb_id desc";
 		$json = getTableRow($conn, $sql, array("qb_id", "qb_text", "qb_image", "qb_status"));
 		//echo $json;
 		$array = json_decode($json, true);
@@ -340,7 +340,7 @@ if (isset($_POST['action'])) {
 			}
 		}
 	} elseif ($_POST['action'] == 'addLibraryQuestionToTest') {
-		$sql = "select * from test where test_status='0' and submit_id='$myId'";
+		$sql = "select * from test where test_status='0' and update_id='$myId'";
 		$result = $conn->query($sql);
 		if ($result) {
 			$array = $result->fetch_assoc();

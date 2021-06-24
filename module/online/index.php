@@ -27,20 +27,43 @@ require('../requireSubModule.php');
 			<div class="col-10 leftLinkBody">
 				<div class="tab-content" id="nav-tabContent">
 					<div class="tab-pane show active" id="list-mt" role="tabpanel" aria-labelledby="list-mt-list">
-						<div class="col-5">
-							<div class="container card myCard p-2">
-								<form id="addTestForm">
-									<div class="row">
-										<div class="col-12 mt-1 mb-1">
-											<input type="text" class="form-control form-control-sm" id="test_name" data-toggle="tooltip" title="xyz" name="test_name" />
-											<input type="hidden" id="action" name="action" value="addTest">
-											<button type="submit" class="btn btn-sm submitAddTestForm">Submit</button>
+						<div class="row">
+							<div class="col-5">
+								<div class="container card myCard p-2">
+									<form class="form-horizontal" id="addTestForm">
+										<div class="row">
+											<div class="col-9 pr-0">
+												<div class="form-group">
+													<label>Test Name</label>
+													<input type="text" class="form-control form-control-sm" id="test_name" data-toggle="tooltip" title="xyz" name="test_name" />
+												</div>
+											</div>
+											<div class="col-3 pl-1">
+												<div class="form-group">
+													<label>Section</label>
+													<input type="number" class="form-control form-control-sm" id="test_section" data-toggle="tooltip" title="xyz" name="test_section" min="1" value="1" />
+												</div>
+											</div>
 										</div>
-									</div>
-								</form>
-								<p id="testList"></p>
-							</div>
-							<div class="col-6 mt-1 mb-1" id="testRight">
+										<div class="form-group">
+											<input type="hidden" id="testAction" name="action" value="addTest">
+											<input type="hidden" id="test_id" name="test_id">
+											<button class="btn btn-sm submitAddTestForm">Submit</button>
+										</div>
+									</form>
+								</div>
+								<div class="container card myCard mt-2">
+									<table class="table table-bordered table-striped list-table-xs mt-3" id="testTable">
+										<tr>
+											<th><i class="fa fa-pencil-alt"></i></th>
+											<th>#</th>
+											<th>Test Name</th>
+											<th>Section</th>
+										</tr>
+									</table>
+								</div>
+								<div class="col-6 mt-1 mb-1" id="testRight">
+								</div>
 							</div>
 						</div>
 					</div>
@@ -53,9 +76,9 @@ require('../requireSubModule.php');
 										Section : <span id="selectedSection">1</span>
 										<textarea rows="4" class="content" id="question" name="question"></textarea>
 										<input type="hidden" id="actionCode" name="actionCode">
-										<button class="btn btn-secondary btn-square-sm addQuestion">Add New Question</button>
-										<button class="btn btn-warning btn-square-sm showQuestionLibrary">Question Library</button>
-										<button class="btn btn-info btn-square-sm showTestQuestion"> Test Question</button>
+										<button class="btn btn-sm addQuestion">Add Question</button>
+										<button class="btn btn-sm showQuestionLibrary"> Library</button>
+										<button class="btn btn-sm showTestQuestion">Show Test</button>
 									</div>
 								</div>
 							</div>
@@ -125,8 +148,63 @@ require('../requireSubModule.php');
 	$(document).ready(function() {
 		testList();
 
-		// Add Test Block
+		// Add Question Block
 
+		$(document).on("click", ".aq, .showTestQuestion", function() {
+			//$.alert("Add Question");
+			$("#questionForm").show()
+			$("#actionCode").val("add")
+			questionHeading()
+			sectionQuestionList()
+			activeQuestion()
+		});
+
+		function questionHeading(section) {
+			//$.alert("In SAS Claim List");
+			$.post("onlineSql.php", {
+				action: "questionHeading"
+			}, function(data, status) {
+				//$.alert("Success " + data);
+				$("#questionHeading").show()
+				$("#questionHeading").html(data);
+			}, "text").fail(function() {
+				$.alert("Error !!");
+			})
+		}
+
+		function activeQuestion() {
+			var selectedSection = $("#selectedSection").text()
+			//$.alert("Section  " + selectedSection)
+			$.post("sectionQuestionListSql.php", {
+				sectionId: selectedSection,
+				action: "activeQuestion"
+			}, function() {
+				//$.alert("Fecth" + mydata);
+			}, "text").done(function(data, status) {
+				//$.alert(data);
+				$(".showActiveQuestion").html(data)
+			}).fail(function() {
+				$.alert("Error !!");
+			})
+		}
+
+		function sectionQuestionList() {
+			var selectedSection = $("#selectedSection").text()
+			$.alert("Section  " + selectedSection)
+			$.post("sectionQuestionListSql.php", {
+				sectionId: selectedSection,
+				action: "sectionQuestionList"
+			}, function() {
+				//$.alert("Fecth" + mydata);
+			}, "text").done(function(data, status) {
+				//$.alert(data);
+				$(".sectionQuestionList").html(data)
+			}).fail(function() {
+				$.alert("Error !!");
+			})
+		}
+
+		// Add Test Block
 		$(document).on("submit", "#addTestForm", function() {
 			event.preventDefault(this);
 			var formData = $(this).serialize();
@@ -138,16 +216,49 @@ require('../requireSubModule.php');
 				testList()
 			})
 		});
+		$(document).on("click", ".editTest", function() {
+			var test_id = $(this).attr("data-test")
+			// $().removeClass();
+			$(".editTest").removeClass('fa-circle')
+			$(".editTest").addClass('fa-pencil-alt')
+
+			$(this).removeClass('fa-pencil-alt');
+			$(this).addClass('fa-circle')
+
+			// $.alert("Edit - Fetch " + test_id);
+			$.post("onlineSql.php", {
+				test_id: test_id,
+				action: "fetchTest"
+			}, function() {}, "json").done(function(data, status) {
+				// $.alert(" Update " + feedback_id);
+				$("#test_id").val(data.test_id)
+				$("#test_name").val(data.test_name)
+				$("#test_section").val(data.test_section)
+			})
+		})
 
 		function testList() {
-			//$.alert("In SAS Claim List");
+			// $.alert('hello');
 			$.post("onlineSql.php", {
-				action: "testList"
-			}, function(data, status) {
-				//$.alert("Success " + data);
-				$("#testList").html(data);
-			}, "text").fail(function() {
-				$.alert("Error !!");
+				action: "testList",
+			}, () => {}, "json").done(function(data, status) {
+				var card = '';
+				var count = 1;
+				// $.alert(data);
+				$.each(data, function(key, value) {
+					status = value.test_status;
+					card += '<tr>';
+					if (status == "0") card += '<td><a href="#" class="editTest fa fa-circle" data-test="' + value.test_id + '"></td>';
+					else card += '<td><a href="#" class="editTest fa fa-pencil-alt" data-test="' + value.test_id + '"></td>';
+					card += '<td>' + count++ + '</td>';
+					card += '<td>' + value.test_name + '</td>';
+					card += '<td>' + value.test_section + '</td>';
+					card += '</tr>';
+				});
+				$("#testTable").find("tr:gt(0)").remove()
+				$("#testTable").append(card);
+			}).fail(function() {
+				$.alert("Test is Not Responding");
 			})
 		}
 
@@ -157,14 +268,7 @@ require('../requireSubModule.php');
 			$("#questionForm").hide()
 			testHeading()
 		});
-		$(document).on("click", ".aq, .showTestQuestion", function() {
-			//$.alert("Add Question");
-			$("#questionForm").show()
-			$("#actionCode").val("add")
-			questionHeading()
-			sectionQuestionList()
-			activeQuestion()
-		});
+
 		$(".showQuestionLibrary").click(function() {
 			//$.alert("Add Question");
 			$(".showActiveQuestion").html("");
@@ -599,37 +703,7 @@ require('../requireSubModule.php');
 			})
 		});
 
-		function activeQuestion() {
-			var selectedSection = $("#selectedSection").text()
-			//$.alert("Section  " + selectedSection)
-			$.post("sectionQuestionListSql.php", {
-				sectionId: selectedSection,
-				action: "activeQuestion"
-			}, function() {
-				//$.alert("Fecth" + mydata);
-			}, "text").done(function(data, status) {
-				//$.alert(data);
-				$(".showActiveQuestion").html(data)
-			}).fail(function() {
-				$.alert("Error !!");
-			})
-		}
 
-		function sectionQuestionList() {
-			var selectedSection = $("#selectedSection").text()
-			$.alert("Section  " + selectedSection)
-			$.post("sectionQuestionListSql.php", {
-				sectionId: selectedSection,
-				action: "sectionQuestionList"
-			}, function() {
-				//$.alert("Fecth" + mydata);
-			}, "text").done(function(data, status) {
-				//$.alert(data);
-				$(".sectionQuestionList").html(data)
-			}).fail(function() {
-				$.alert("Error !!");
-			})
-		}
 
 		function questionLibrary() {
 			//$.alert("Library  ")
@@ -645,18 +719,7 @@ require('../requireSubModule.php');
 			})
 		}
 
-		function questionHeading(section) {
-			//$.alert("In SAS Claim List");
-			$.post("onlineSql.php", {
-				action: "questionHeading"
-			}, function(data, status) {
-				//$.alert("Success " + data);
-				$("#questionHeading").show()
-				$("#questionHeading").html(data);
-			}, "text").fail(function() {
-				$.alert("Error !!");
-			})
-		}
+
 
 		function testHeading() {
 			//$.alert("In SAS Claim List");

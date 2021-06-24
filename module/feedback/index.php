@@ -165,7 +165,6 @@ require('../requireSubModule.php');
 								</div>
 								<div class="container card m-0 myCard">
 									<div class="row mt-1">
-
 										<div class="col">
 											<table class="table table-striped list-table-xs" id="feedbackTable">
 												<tr class="align-center">

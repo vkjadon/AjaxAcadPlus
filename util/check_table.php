@@ -73,6 +73,54 @@ function check_tn_class($conn, $table)
   //else echo "Table Exists";
 }
 
+function check_tn_enrichment_activity($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'ea_id INT(5) NOT NULL AUTO_INCREMENT,
+    mn_id INT(3) NULL,
+    dept_id INT(3) NULL,
+    ea_name VARCHAR(50) NULL,
+    ea_from_date date NULL,
+    ea_from_time time NULL,
+    ea_to_date date NULL,
+    ea_to_time time NULL,
+    update_ts timestamp default current_timestamp(),
+    update_id INT(5) NULL,
+    ea_status INT(1) NULL,
+    PRIMARY KEY (ea_id),
+    UNIQUE(mn_id, dept_id, ea_name, update_id)';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+
+function check_tn_enrichment_activity_participant($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'ea_id INT(3) NULL,
+    participant_code varchar(10) NULL,
+    code_id int(5) NULL,
+    update_ts timestamp default current_timestamp(),
+    update_id INT(5) NULL,
+    UNIQUE(ea_id, code_id)';
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+
 function check_tn_feedback($conn, $table)
 {
   $sql = "select * from $table";
@@ -148,14 +196,14 @@ function check_tn_feedback_participant($conn, $table)
   if (!$result) {
     //echo "Table Missing $table";
     $query =
-      'feedback_id INT(3) NOT NULL AUTO_INCREMENT,
-    fp_code varchar(10) NULL,
-    fp_id int(5) NULL,
+      'feedback_id INT(3) NULL,
+    participant_code varchar(10) NULL,
+    code_id int(5) NULL,
     feedback_open datetime NULL,
     feedback_close datetime NULL,
     update_ts timestamp default current_timestamp(),
     update_id INT(5) NULL,
-    UNIQUE(feedback_id, fp_id)';
+    UNIQUE(feedback_id, participant_code, code_id)';
     $sql = "CREATE TABLE $table ($query)";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
@@ -364,7 +412,50 @@ function check_tn_mn($conn, $table)
   }
   //else echo "Table Exists";
 }
+function check_tn_question_bank($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'qb_id INT(5) NOT NULL AUTO_INCREMENT,
+    qb_level int(1) NULL,
+    qb_base int(1) NULL,
+    qb_text text NULL,
+    qb_image VARCHAR(150) NULL,
+    update_ts timestamp default current_timestamp(),
+    update_id INT(5) NULL,
+    qb_status INT(1) NULL,
+    PRIMARY KEY (qb_id),
+    UNIQUE(qb_text, qb_status)';
 
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+function check_tn_question_option($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'qb_id INT(5) NULL,
+    qo_text text NULL,
+    qo_image VARCHAR(150) NULL,
+    qo_code int(1) NULL,
+    qo_correct int(1) NULL,
+    UNIQUE(qb_id, qo_text, qo_image)';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
 function check_tn_rc($conn, $table)
 {
   $sql = "select * from $table";
@@ -794,6 +885,26 @@ function check_tn_test($conn, $table){
     if (!$result) echo $conn->error;
   }
 }
+function check_tn_test_question($conn, $table){
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    echo "Table Missing $table";
+    $query =
+      'test_id INT(5) null,
+    test_section int(1) NULL,
+    qb_id int(5) NULL,
+    tq_marks int(2) NULL,
+    tq_nmarks int(1) NULL,
+    update_ts timestamp Default current_timestamp,
+    update_id INT(5) NULL,
+    tq_status INT(1) NULL,
+    UNIQUE(test_id, qb_id)';
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+}
 
 function check_tn_template($conn, $table){
   $sql = "select * from $table";
@@ -925,6 +1036,7 @@ function check_tn_ttp($conn, $table)
   }
   //else echo "Table Exists";
 }
+
 function check_tn_user($conn, $table)
 {
   $sql = "select * from $table";

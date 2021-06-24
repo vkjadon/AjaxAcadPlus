@@ -6,7 +6,8 @@ include('../../phpFunction/onlineFunction.php');
 if (isset($_POST['action'])) {
 	if ($_POST['action'] == 'addTest') {
 		if (!$_POST['test_name'] == NULL) {
-			$sql = "insert into test (test_name, test_section, test_status, update_id) values('" . $_POST['test_name'] . "','1', '1', '$myId')";
+			if ($_POST['test_id'] == '0') $sql = "insert into test (test_name, test_section, test_status, update_id) values('" . data_check($_POST['test_name']) . "','" . data_check($_POST['test_section']) . "', '1', '$myId')";
+			else $sql = "update test set test_name='" . data_check($_POST['test_name']) . "', test_section='" . data_check($_POST['test_section']) . "' where test_id='" . $_POST['test_id'] . "'";
 			$result = $conn->query($sql);
 			if ($result) echo "Added Successfully";
 			else {
@@ -15,66 +16,36 @@ if (isset($_POST['action'])) {
 			}
 		} else echo "Test Name Cannot be Blank";
 	} elseif ($_POST['action'] == 'testList') {
-		$json = get_testListJson($conn, $myId);
-		//echo $json;
-		$array = json_decode($json, true);
-		//echo $array;
-		for ($i = 0; $i < count($array["data"]); $i++) {
-			$id = $array["data"][$i]["test_id"];
-			$test_name = $array["data"][$i]["test_name"];
-			$test_section = $array["data"][$i]["test_section"];
-			$test_status = $array["data"][$i]["test_status"];
-			if ($test_status == "0") {
-				echo '<div class="container card  myCard p-2 bg-light">
-				<div class="row">
-				<div class="col-10"><input class="form-control form-control-sm testName" data-test="' . $id . '" name="testName" value="' . $test_name . '" data-tag="test_name"><br>
-				<h6 class="text-muted">Section : ';
-				$sql = "select * from test where test_id='$id'";
-				$value = getFieldValue($conn, "test_section", $sql);
-				echo '<a href="#" class="decrement" id="' . $id . '" data-value="' . $value . '"><i class="fa fa-angle-double-left"></i></a>';
-				echo '<span class="' . $id . '">' . $value . '</span>';
-				echo '<a href="#" class="increment" id="' . $id . '" data-value="' . $value . '"><i class="fa fa-angle-double-right"></i></a></h6>
-					</div><div class="col-2">
-				<a class="mt-0 removeTestButton" data-test="' . $id . '"><i class="fa fa-trash"></i></a>
-				</div>
-				</div></div>';
-			} else {
-				echo '<div class="container card myCard mt-2 p-2">
-				<div class="row">
-				<div class="col-6">
-				<h6>' . $test_name . '[' . $id . ']</h6>
-				</div><div class="col-4">';
-				$sql = "select * from test where test_id='$id'";
-				$value = getFieldValue($conn, "test_section", $sql);
-				echo '<h6 class="text-muted">Sec : ' . $value . '</h6>
-					</div><div class="col-2">
-					<button class="btn btn-sm mt-0 setActiveButton" data-test="' . $id . '" title="Make this Test Active" data-toggle="tooltip">Active</button>
-				</div>
-				</div></div>';
+		$sql = "select * from test where update_id='$myId'";
+		$result = $conn->query($sql);
+		if ($result) {
+			$json_array = array();
+			while ($output = $result->fetch_assoc()) {
+				$json_array[] = $output;
 			}
+			echo json_encode($json_array);
+		} else echo $conn->error;
+	} elseif ($_POST['action'] == 'fetchTest') {
+		$sql = "update test set test_status='1' where update_id='$myId'";
+		$result = $conn->query($sql);
+
+		$sql = "update test set test_status='0' where test_id='" . $_POST['test_id'] . "'";
+		$result = $conn->query($sql);
+
+		$sql = "select * from test where test_id='" . $_POST['test_id'] . "'";
+		$result = $conn->query($sql);
+		if (!$result) echo $conn->error;
+		elseif ($result->num_rows > 0) {
+			$rowArray = $result->fetch_assoc();
+			echo json_encode($rowArray);
+		} else {
+			$json_array = array("fq_statement" => "No Active Data Found");
+			echo json_encode($json_array);
 		}
-	} elseif ($_POST['action'] == 'increment') {
-		$value = $_POST['value'] + 1;
-		$id = $_POST['id'];
-		//echo "Current Value " . $value;
-		//echo "Current Id " . $id;
-		updateField($conn, "test", array("test_id", "test_section"), array($id, $value), "");
-	} elseif ($_POST['action'] == 'decrement') {
-		$value = $_POST['value'] - 1;
-		$id = $_POST['id'];
-		if ($value > 0) updateField($conn, "test", array("test_id", "test_section"), array($id, $value), "");
 	} elseif ($_POST['action'] == 'removeTest') {
 		$id = $_POST['id'];
 		//echo "Jai ho";
 		updateField($conn, "test", array("test_id", "test_status"), array($id, "9"), "1");
-	} elseif ($_POST['action'] == 'setActive') {
-		$id = $_POST['id'];
-		//echo "Jai ho";
-		$sql = "update test set test_status='1' where test_status='0' and update_id='$myId'";
-		$conn->query($sql);
-		updateField($conn, "test", array("test_id", "test_status"), array($id, "0"), "1");
-		$sql = "update question_bank set qb_status='1' where qb_status='0' and update_id='$myId'";
-		$conn->query($sql);
 	} elseif ($_POST['action'] == 'testHeading') {
 		$sql = "select * from test where test_status='0' and update_id='$myId'";
 		$result = $conn->query($sql);
