@@ -113,7 +113,7 @@ function check_tn_enrichment_activity_participant($conn, $table)
     code_id int(5) NULL,
     update_ts timestamp default current_timestamp(),
     update_id INT(5) NULL,
-    UNIQUE(ea_id, code_id)';
+    UNIQUE(ea_id, participant_code, code_id)';
     $sql = "CREATE TABLE $table ($query)";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
@@ -928,6 +928,25 @@ function check_tn_test($conn, $table)
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
   }
+}
+function check_tn_test_participant($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'test_id INT(3) NULL,
+    participant_code varchar(10) NULL,
+    code_id int(5) NULL,
+    update_ts timestamp default current_timestamp(),
+    update_id INT(5) NULL,
+    UNIQUE(test_id, participant_code, code_id)';
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
 }
 function check_tn_test_question($conn, $table)
 {

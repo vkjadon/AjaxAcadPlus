@@ -30,27 +30,90 @@ require('../requireSubModule.php');
 						<div class="row">
 							<div class="col-5">
 								<div class="container card myCard p-2">
-									<form class="form-horizontal" id="addTestForm">
-										<div class="row">
-											<div class="col-9 pr-0">
-												<div class="form-group">
-													<label>Test Name</label>
-													<input type="text" class="form-control form-control-sm" id="test_name" data-toggle="tooltip" title="xyz" name="test_name" />
+									<ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
+										<li class="nav-item">
+											<a class="nav-link active" data-toggle="pill" href="#pills_test" role="tab">Test</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link participant" data-toggle="pill" href="#pills_tp" role="tab">Participants</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link schedule" data-toggle="pill" href="#pills_schedule" role="tab">Schedule</a>
+										</li>
+									</ul>
+									<!-- content -->
+									<div class="tab-content" id="pills-tabContent p-3">
+										<div class="tab-pane fade show active" id="pills_test" role="tabpanel">
+											<form class="form-horizontal" id="addTestForm">
+												<div class="row">
+													<div class="col-9 pr-0">
+														<div class="form-group">
+															<label>Test Name</label>
+															<input type="text" class="form-control form-control-sm" id="test_name" data-toggle="tooltip" title="xyz" name="test_name" />
+														</div>
+													</div>
+													<div class="col-3 pl-1">
+														<div class="form-group">
+															<label>Section</label>
+															<input type="number" class="form-control form-control-sm" id="test_section" data-toggle="tooltip" title="xyz" name="test_section" min="1" value="1" />
+														</div>
+													</div>
 												</div>
-											</div>
-											<div class="col-3 pl-1">
 												<div class="form-group">
-													<label>Section</label>
-													<input type="number" class="form-control form-control-sm" id="test_section" data-toggle="tooltip" title="xyz" name="test_section" min="1" value="1" />
+													<input type="hidden" id="testAction" name="action" value="addTest">
+													<input type="hidden" id="test_id" name="test_id">
+													<button class="btn btn-sm submitAddTestForm">Submit</button>
+												</div>
+											</form>
+										</div>
+										<div class="tab-pane fade" id="pills_tp" role="tabpanel">
+											<div class="row">
+												<div class="col">
+													<p id="deptClass"></p>
 												</div>
 											</div>
 										</div>
-										<div class="form-group">
-											<input type="hidden" id="testAction" name="action" value="addTest">
-											<input type="hidden" id="test_id" name="test_id">
-											<button class="btn btn-sm submitAddTestForm">Submit</button>
+										<div class="tab-pane fade" id="pills_schedule" role="tabpanel">
+											<form class="form-horizontal" id="addTestSchedule">
+												<div class="row">
+													<div class="col-3 pr-0">
+														<div class="form-group">
+															<label>From</label>
+															<input type="date" class="form-control form-control-sm" id="start_date" name="start_date" />
+														</div>
+													</div>
+													<div class="col-2 pl-1 pr-0">
+														<div class="form-group">
+															<label>Time</label>
+															<input type="time" class="form-control form-control-sm" id="start_time" name="start_time" value="<?php echo time(); ?>" />
+														</div>
+													</div>
+													<div class="col-3 pl-1 pr-0">
+														<div class="form-group">
+															<label>To</label>
+															<input type="date" class="form-control form-control-sm" id="to_date" name="to_date" />
+														</div>
+													</div>
+													<div class="col-2 pl-1 pr-0">
+														<div class="form-group">
+															<label>Time</label>
+															<input type="time" class="form-control form-control-sm" id="to_time" name="to_time" value="<?php echo time(); ?>" />
+														</div>
+													</div>
+													<div class="col-2 pl-1">
+														<div class="form-group">
+															<label>Duration</label>
+															<input type="number" class="form-control form-control-sm" id="to_time" name="to_time" value="60" min="10" placeholder="minutes" />
+														</div>
+													</div>
+												</div>
+												<div class="form-group">
+													<input type="hidden" id="scheduleAction" name="action" value="addSchedule">
+													<button class="btn btn-sm">Submit</button>
+												</div>
+											</form>
 										</div>
-									</form>
+									</div>
 								</div>
 								<div class="container card myCard mt-2">
 									<table class="table table-bordered table-striped list-table-xs mt-3" id="testTable">
@@ -254,8 +317,48 @@ require('../requireSubModule.php');
 				$("#test_id").val(data.test_id)
 				$("#test_name").val(data.test_name)
 				$("#test_section").val(data.test_section)
+				deptClassList();
 			})
 		})
+		$(document).on("click", ".participantClass", function() {
+			var classId = $(this).attr("data-class")
+			var status = $(this).is(":checked");
+			// $.alert("Participant Class Id " + classId + status);
+			$.post("onlineSql.php", {
+				classId: classId,
+				status: status,
+				action: "participant"
+			}, function() {}, "text").done(function(data, status) {
+				// $.alert(data)
+			})
+		})
+		$(document).on("click", ".participant", function() {
+			deptClassList();
+		})
+
+		function deptClassList() {
+			// $.alert("Class List ");
+			$.post("onlineSql.php", {
+				action: "deptClassList"
+			}, function() {}, "json").done(function(data, status) {
+				// $.alert(data)
+				var card = '';
+				var count = 1;
+				$.each(data, function(key, value) {
+					var check = value.check;
+					card += '<div class="row m-1">';
+					card += '<div class="col">';
+					if (check == '1') card += '<input type="checkbox" class="participantClass" checked data-class="' + value.class_id + '"> ' + value.class_name;
+					else card += '<input type="checkbox" class="participantClass" data-class="' + value.class_id + '"> ' + value.class_name;
+					card += ' [' + value.class_section + '] ';
+					// card += ' [' + check + '] ';
+					card += '</div>';
+					card += '</div>';
+				})
+				// $("#programClassTable").find("tr:gt(0)").remove();
+				$("#deptClass").html(card);
+			})
+		}
 
 		function testList() {
 			// $.alert('hello');
@@ -819,7 +922,7 @@ require('../requireSubModule.php');
 <div class="modal" id="uploadModal">
 	<div class="modal-dialog modal-md">
 		<form class="form-horizontal" id="uploadModalForm">
-			<div class="modal-content bg-secondary text-white">
+			<div class="modal-content">
 
 				<!-- Modal Header -->
 				<div class="modal-header">

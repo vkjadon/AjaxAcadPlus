@@ -133,14 +133,11 @@ if (isset($_POST['action'])) {
 					$code = $rows["qo_code"];
 					$qo_image = $rows["qo_image"];
 					$qo_text = $rows["qo_text"];
-					echo '<div class="row"><div class="col-9"><div class="card">
-      			<div class="card-body m-0 p-1">
+					echo '<div class="row mt-1"><div class="col-9 pr-0">
 		  			<input type="text" class="form-control questionOption" data-qb="' . $id . '" data-code="' . $code . '" data-tag="qo_text" value="' . $qo_text . '">';
 					if (strlen($qo_image) > 5) echo '<img src="../../access/olat/img/' . $qo_image . '">';
 					echo '</div>';
-					echo '</div>';
-					echo '</div>';
-					echo '<div class="col-3 p-0">';
+					echo '<div class="col-3 pl-1">';
 					if ($correct == "0") echo '<a href="#" class="changeOption" data-qb="' . $id . '" data-code="' . $code . '" data-set="setRight"><i class="fa fa-times"></i></a>&nbsp;&nbsp;';
 					else {
 						$optionError = "False";
@@ -151,13 +148,12 @@ if (isset($_POST['action'])) {
 					echo '</div>';
 					echo '</div>';
 				}
-				echo '<div class="row">
-					<div class="col-9"><div class="card">
-					<div class="card-body m-0 p-1">
-					<input type="text" class="form-control form-control-sm" id="newOption" ></div>
-					</div></div>
-					<div class="col-3">
-					<a href="#" class="fa fa-floppy-o addOption" data-qb="' . $id . '"></a>					
+				echo '<div class="row mt-1">
+					<div class="col-9 pr-0">
+					<input type="text" class="form-control form-control-sm" id="newOption" >
+					</div>
+					<div class="col-1 pl-1">
+						<h4><a href="#" class="fa fa-floppy-o addOption" data-qb="' . $id . '"></a></h4>
 					</div>
 					</div>';
 			}
@@ -183,15 +179,14 @@ if (isset($_POST['action'])) {
 			echo '<div class="col-1"><h3><a href="#" class="fa fa-arrow-circle-up uploadQuestionImage" data-upload="' . $id . '" data-tag="questionImage" title="Upload Question Image"></a></h3></div>';
 			if ($portion_count > 1)echo '<div class="col-4"><button class="btn btn-sm m-0 uploadKeyFile" data-upload="' . $id . '" data-tag="keyFile">Update Key File</button></div>';
 				
-			
-			if ($cpKeyError == "True") {
-				echo '<span class="warning"><i class="fa fa-exclamation-triangle"> Key File Missing !! </i></soan>';
-				$addToTestEroor = "True";
-			}
 			if ($tq_status == 1 && $addToTestEroor == "False") echo '<div class="col-3"><button class="btn btn-info btn-sm mt-0 testQuestion" data-test="' . $test_id . '" data-qb="' . $id . '" data-tag="qtt">Add To Test</button></div>';
 
 			if ($tq_status == "1") echo '<div class="col-2"><h6 class="p-1 mb-1 text-center small">Draft</h6></div>';
 			elseif ($tq_status == "2") echo '<div class="col-2"><h6 class="p-1 mb-1 text-center small">Added</h6></div>';
+			if ($cpKeyError == "True") {
+				echo '<span class="warning"><i class="fa fa-exclamation-triangle"> Key File Missing !! </i></soan>';
+				$addToTestEroor = "True";
+			}
 			echo '</div>';
 			echo '</div></div>';
 		}
@@ -203,7 +198,7 @@ if (isset($_POST['action'])) {
 			$test_id = $array["test_id"];
 		}
 		$sectionId = $_POST['sectionId'];
-		echo "Test Id $test_id Section $sectionId";
+		// echo "Test Id $test_id Section $sectionId";
 		$json = get_sectionQuestionListJson($conn, $test_id, $sectionId);
 		//echo $json;
 		$array = json_decode($json, true);
@@ -246,7 +241,7 @@ if (isset($_POST['action'])) {
 				else echo '<span class="warning"><i class="fa fa-exclamation-triangle"> Key File Missing !! </i></soan>';
 				echo '</div>';
 				echo '<div class="col">';
-				if ($qb_status > 0) echo '<button class="btn btn-secondary btn-square-sm mt-0 activeQuestion" data-qb="' . $id . '">Set Active</button>';
+				if ($qb_status > 0) echo '<button class="btn btn-sm mt-0 activeQuestion" data-qb="' . $id . '">Set Active</button>';
 				else echo '<span class="warning">Active</span>';
 				if ($tq_status == 1) echo '<p class="text-info">Draft</p>';
 				else echo '<p class="text-success">Added</p>';
@@ -266,7 +261,7 @@ if (isset($_POST['action'])) {
 				if (strlen($qb_image) > 5) echo '<p><img src="../../access/olat/img/' . $qb_image . '"></p>';
 				echo '</div>';
 				echo '<div class="col">';
-				if ($qb_status > 0) echo '<button class="btn btn-secondary btn-square-sm mt-0 activeQuestion" data-qb="' . $id . '">Set Active</button>';
+				if ($qb_status > 0) echo '<button class="btn btn-approve btn-sm mt-0 activeQuestion" data-qb="' . $id . '">Set Active</button>';
 				else echo '<span class="warning">Active</span>';
 				if ($tq_status == 1) echo '<p class="text-info">Draft</p>';
 				else echo '<p class="text-success">Added</p>';

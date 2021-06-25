@@ -64,6 +64,7 @@ if (isset($mySes)) {
   check_tn_subaddon($conn, "subject_addon");
   check_tn_subelective($conn, "subject_elective");
   check_tn_test($conn, "test");
+  check_tn_test_participant($conn, "test_participant");
   check_tn_test_question($conn, "test_question");
   check_tn_template($conn, "template");
   check_tn_template_question($conn, "template_question");

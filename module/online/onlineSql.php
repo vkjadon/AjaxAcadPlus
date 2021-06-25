@@ -298,7 +298,42 @@ if (isset($_POST['action'])) {
 		$result = $conn->query($sql);
 		if ($result) echo "Removed Successfully";
 		else echo $conn->error;
-	}
+	}elseif ($_POST['action'] == "deptClassList") {    
+    $sql = "select * from test where update_id='$myId' and test_status='0'";
+    $test_id = getFieldValue($conn, "test_id", $sql);
+
+    $sql = "select cl.* from class cl where cl.session_id='$mySes' and cl.dept_id='$myDept' and cl.class_status='0' order by cl.class_semester";
+
+    $result = $conn->query($sql);
+    $data = array();
+    if ($result) {
+      while ($rowsArray = $result->fetch_assoc()) {
+        $subArray = array();
+        $class_id=$rowsArray["class_id"];
+        $query="select * from test_participant where participant_code='class' and code_id='$class_id' and test_id='$test_id'";
+        $check=$conn->query($query)->num_rows;
+        $subArray["class_id"] = $class_id;
+        $subArray["class_name"] = $rowsArray["class_name"];
+        $subArray["class_section"] = $rowsArray["class_section"];
+        if($check>0)$subArray["check"] = "1";
+        else $subArray["check"] = "0";
+        $data[] = $subArray;
+      }
+    }
+    $jsonOutput = json_encode($data);
+    echo $jsonOutput;
+  } elseif ($_POST['action'] == "participant") {
+    $sql = "select * from test where update_id='$myId' and test_status='0'";
+    $test_id = getFieldValue($conn, "test_id", $sql);
+    echo $test_id;
+    if ($_POST['status'] == 'true') $sql = "insert into test_participant (test_id, participant_code, code_id, update_id) values('$test_id', 'class', '" . $_POST['classId'] . "', '$myId')";
+    else $sql = "delete from test_participant where test_id='$test_id' and participant_code='class' and code_id='" . $_POST['classId'] . "'";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+    else {
+      echo "Query Successful";
+    }
+  }
 } elseif ($_POST['instructionId'] == 'T' || $_POST['instructionId'] == 'S') {
 	$test_id = $_POST['testId'];
 	$id = $_POST['instructionId'];

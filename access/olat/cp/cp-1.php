@@ -14,12 +14,12 @@ For Design Type Problems
 To inclue standard file
 	require("../standard/shaft-diameters.php");
 */
-	$presentAge=$abp[0];;
-	$pcp[0]=$presentAge+10;
+	// $abp[0] represents present age
+	$pcp[0]=$abp[0]*2;
 	
 // Solution
 	if($solution=='Y')
 	{
 		echo '<h6>Answer</h6>';
-		echo 'Age after 10 years='.$pcp[0].' years';		
+		echo 'Distance in 2 hours ='.$pcp[0].' km';		
 	}
