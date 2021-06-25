@@ -412,6 +412,48 @@ function check_tn_mn($conn, $table)
   }
   //else echo "Table Exists";
 }
+function check_tn_qb_cp($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'qb_id INT(5) NULL,
+    qc_sno int(2) NULL,
+    qc_name varchar(50) NULL,
+    qc_marks float NULL,
+    qc_range float NULL,
+    qc_verification int(1),
+    UNIQUE(qb_id, qc_name)';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+function check_tn_qb_parameter($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'qb_id INT(5) NULL,
+    qp_sno int(2) NULL,
+    qp_name varchar(50) NULL,
+    qp_min float NULL,
+    qp_max float NULL,
+    qp_step int(1),
+    UNIQUE(qb_id, qp_sno)';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
 function check_tn_question_bank($conn, $table)
 {
   $sql = "select * from $table";
@@ -683,7 +725,7 @@ function check_tn_src($conn, $table)
   if (!$result) {
     //echo "Table Missing $table";
     $query =
-    'sr_id INT(5) NULL,
+      'sr_id INT(5) NULL,
     class_id INT(4) NULL,
     UNIQUE(sr_id, class_id)';
 
@@ -753,7 +795,8 @@ function check_tn_stddetail($conn, $table)
   }
   //else echo "Table Exists";
 }
-function check_tn_stdqual($conn, $table){
+function check_tn_stdqual($conn, $table)
+{
   $sql = "select * from $table";
   $result = $conn->query($sql);
   if (!$result) {
@@ -866,7 +909,8 @@ function check_tn_subelective($conn, $table)
   //else echo "Table Exists";
 }
 
-function check_tn_test($conn, $table){
+function check_tn_test($conn, $table)
+{
   $sql = "select * from $table";
   $result = $conn->query($sql);
   if (!$result) {
@@ -885,7 +929,8 @@ function check_tn_test($conn, $table){
     if (!$result) echo $conn->error;
   }
 }
-function check_tn_test_question($conn, $table){
+function check_tn_test_question($conn, $table)
+{
   $sql = "select * from $table";
   $result = $conn->query($sql);
   if (!$result) {
@@ -906,7 +951,8 @@ function check_tn_test_question($conn, $table){
   }
 }
 
-function check_tn_template($conn, $table){
+function check_tn_template($conn, $table)
+{
   $sql = "select * from $table";
   $result = $conn->query($sql);
   if (!$result) {
@@ -926,7 +972,8 @@ function check_tn_template($conn, $table){
   }
 }
 
-function check_tn_template_question($conn, $table){
+function check_tn_template_question($conn, $table)
+{
   $sql = "select * from $table";
   $result = $conn->query($sql);
   if (!$result) {
@@ -1054,7 +1101,6 @@ function check_tn_user($conn, $table)
     $sql = "CREATE TABLE $table ($query)";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
-
   }
   //else echo "Table Exists";
 }

@@ -1,15 +1,17 @@
 <?php
 session_start();
 require("config_database.php");
+require("../php_function.php"); 
 require("config_variable.php");
+
 if ($_POST['action'] == 'checkUser') {
   $myUn = $_POST['username'];
   $myPwd = $_POST['userpassword'];
   $response = array();
-  $sql="select * from staff where user_id='$myUn'";
-  $result=$conn->query($sql);
-  if($result && $result->num_rows>0){
-    $rows=$result->fetch_assoc();
+  $sql = "select * from staff where user_id='$myUn'";
+  $result = $conn->query($sql);
+  if ($result && $result->num_rows > 0) {
+    $rows = $result->fetch_assoc();
     $response["found"] = 'yes';
     $response["user"] = $rows["staff_id"];
     $jsonOutput = json_encode($response);
@@ -18,8 +20,9 @@ if ($_POST['action'] == 'checkUser') {
     $_SESSION['myid'] = $rows["staff_id"];
     $_SESSION['un'] = $myUn;
     $_SESSION['pwd'] = $myPwd;
-  }
-  else{
+  } elseif (!$result) {
+    echo $conn->error;
+  } else {
     $response["found"] = 'no';
     $jsonOutput = json_encode($response);
     echo $jsonOutput;

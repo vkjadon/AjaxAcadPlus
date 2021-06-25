@@ -32,14 +32,14 @@ if (isset($_POST['action'])) {
 			// $fileName='../../olat/text/ques-'.$id.'.txt';
 			// if (file_exists($fileName)) $qb_text = file_get_contents($fileName);
 			// else $qb_text = "No File Found";
-			echo '<div class="card">
+			echo '<div class="container card myCard">
       	<div class="card-body mt-2 py-1">
 				<div class="row">
 				<div class="col">
 				<h5>Question Edit Panel</h5>
 
 				<textarea rows="4" class="testQuestionText testQuestionUpdate" data-qb="' . $id . '" id="uq" data-tag="qb_text">' . $qb_text . '</textarea>';
-			if (strlen($qb_image) > 5) echo '<img src="../../olat/img/' . $qb_image . '">';
+			if (strlen($qb_image) > 5) echo '<img src="../../access/olat/img/' . $qb_image . '">';
 
 			echo '</div></div>';
 
@@ -59,32 +59,32 @@ if (isset($_POST['action'])) {
 					$sql = "select * from qb_parameter where qb_id='$id' and qp_sno='$ipc'";
 					$value = getFieldValue($conn, "qp_name", $sql);
 					echo '<div class="row">';
-					echo '<div class="col-4 p-0">';
+					echo '<div class="col-4 pr-0">';
 					echo '<input type="text" class="form-control form-control-sm parameter" data-qp="' . $ipc . '" data-tag="qp_name" data-qb="' . $id . '" value="' . $value . '">';
 					echo '</div>';
 					$value = getFieldValue($conn, "qp_min", $sql);
-					echo '<div class="col-2 p-0">';
+					echo '<div class="col-2 pl-1 pr-0">';
 					echo '<input type="text" class="form-control form-control-sm parameter" data-qp="' . $ipc . '" data-tag="qp_min" data-qb="' . $id . '" value="' . $value . '">';
 					echo '</div>';
 					$value = getFieldValue($conn, "qp_max", $sql);
-					echo '<div class="col-2 p-0">';
+					echo '<div class="col-2 pl-1 pr-0">';
 					echo '<input type="text" class="form-control form-control-sm parameter" data-qp="' . $ipc . '" data-tag="qp_max" data-qb="' . $id . '" value="' . $value . '">';
 					echo '</div>';
 					$value = getFieldValue($conn, "qp_step", $sql);
 					if ($value == 0) $paramError = "True";
-					echo '<div class="col-2 p-0">';
+					echo '<div class="col-2 pl-1">';
 					echo '<input type="text" class="form-control form-control-sm parameter" data-qp="' . $ipc . '" data-tag="qp_step" data-qb="' . $id . '" value="' . $value . '">';
 					echo '</div>';
 					echo '</div>';
 				}
 
 				// Block for Check Points
-				$fileName = '../../olat/cp/cp-' . $id . '.php';
+				$fileName = '../../access/olat/cp/cp-' . $id . '.php';
 				if (!file_exists($fileName)) $cpKeyError = "True";
 				echo '<div class="row">
-					<div class="col-6 p-0"><h6 class="ml-0 mt-2 mb-0 p-0">Check Points</h6></div>
-					<div class="col-2 p-0"><h6 class="ml-0 mt-2 mb-0 p-0">Marks</h6></div>
-					<div class="col-2 p-0"><h6 class="ml-0 mt-2 mb-0 p-0">Range(%)</h6></div>
+					<div class="col-6"><span class="topBarText">Check Points</span></div>
+					<div class="col-2"><span class="topBarText">Marks</span></div>
+					<div class="col-2"><span class="topBarText">Range(%)</span></div>
 					</div>';
 				$sqlCP = "select * from qb_cp where qb_id='$id' order by qc_sno";
 				$resultCP = $conn->query($sqlCP);
@@ -94,16 +94,16 @@ if (isset($_POST['action'])) {
 					$qc_range = $rows["qc_range"];
 					$qc_sno = $rows["qc_sno"];
 					if ($qc_marks == 0) $cpError = "True";
-					echo '<div class="row"><div class="col-6 p-0">
+					echo '<div class="row"><div class="col-6 pr-0">
 						<input type="text" class="form-control form-control-sm checkPoint" data-qb="' . $id . '"  data-sno="' . $qc_sno . '" data-tag="qc_name" value="' . $qc_name . '">
 						</div>
-						<div class="col-2 p-0">
+						<div class="col-2 pl-1 pr-0">
 						<input type="text" class="form-control form-control-sm checkPoint" data-qb="' . $id . '"  data-sno="' . $qc_sno . '" data-tag="qc_marks" value="' . $qc_marks . '">
 						</div>
-						<div class="col-2 p-0">
+						<div class="col-2 pl-1 pr-0">
 						<input type="text" class="form-control form-control-sm checkPoint" data-qb="' . $id . '"  data-sno="' . $qc_sno . '" data-tag="qc_range" value="' . $qc_range . '">
 						</div>
-						<div class="col-2 p-0">&nbsp;
+						<div class="col-2 pl-1">&nbsp;
 						<a href="#" class="trashCP" data-sno="' . $qc_sno . '" data-qb="' . $id . '" data-tag="cp"><i class="fa fa-trash"></i></a>
 						</div>
 						</div>';
@@ -114,14 +114,14 @@ if (isset($_POST['action'])) {
 					$qc_sno = 1;
 				} else $qc_sno++;
 				echo '<div class="row">
-					<div class="col-8 p-0">
-					<h6 class="ml-0 mt-2 mb-0 p-0">Add New Check Point</h6>
+					<div class="col-8 pr-0">
+					<label>Add New Check Point</label>
 					<input type="text" class="form-control form-control-sm" id="newCP" ></div>
-					<div class="col-2 p-0">
-					<h6 class="ml-0 mt-2 mb-0 p-0">Marks</h6>
+					<div class="col-2 pl-1 pr-0">
+					<label>Marks</label>
 					<input type="text" class="form-control form-control-sm" id="newCPMarks" ></div>
-					<div class="col-2 p-0"><br>&nbsp;
-					<a href="#" class="addCheckPoint" data-sno="' . $qc_sno . '" data-qb="' . $id . '"><i class="fa fa-plus"></i></a>
+					<div class="col-2">&nbsp;<h4>
+					<a href="#" class="addCheckPoint" data-sno="' . $qc_sno . '" data-qb="' . $id . '"><i class="fa fa-floppy-o"></i></i></a></h4>
 					</div>
 					</div>';
 			} else {
@@ -136,7 +136,7 @@ if (isset($_POST['action'])) {
 					echo '<div class="row"><div class="col-9"><div class="card">
       			<div class="card-body m-0 p-1">
 		  			<input type="text" class="form-control questionOption" data-qb="' . $id . '" data-code="' . $code . '" data-tag="qo_text" value="' . $qo_text . '">';
-					if (strlen($qo_image) > 5) echo '<img src="../../olat/img/' . $qo_image . '">';
+					if (strlen($qo_image) > 5) echo '<img src="../../access/olat/img/' . $qo_image . '">';
 					echo '</div>';
 					echo '</div>';
 					echo '</div>';
@@ -146,7 +146,7 @@ if (isset($_POST['action'])) {
 						$optionError = "False";
 						echo '<a href="#" class="changeOption" data-qb="' . $id . '" data-code="' . $code . '"  data-set="setWrong"><i class="fa fa-check"></i></a>&nbsp;&nbsp;';
 					}
-					echo '<a href="#" class="uploadOptionImage" data-upload="' . $id . '" data-sno="' . $code . '" data-tag="optionImage" title="Upload Option Image"><i class="fa fa-upload"></i></a>&nbsp;&nbsp;';
+					echo '<a href="#" class="fa fa-arrow-circle-up uploadOptionImage" data-upload="' . $id . '" data-sno="' . $code . '" data-tag="optionImage" title="Upload Option Image"></a>&nbsp;&nbsp;';
 					echo '<a href="#" class="trashOption" data-qb="' . $id . '" data-sno="' . $code . '" data-tag="option"><i class="fa fa-trash"></i></a>';
 					echo '</div>';
 					echo '</div>';
@@ -156,8 +156,8 @@ if (isset($_POST['action'])) {
 					<div class="card-body m-0 p-1">
 					<input type="text" class="form-control form-control-sm" id="newOption" ></div>
 					</div></div>
-					<div class="col-3 mt-1">
-					<a href="#" class="addOption" data-qb="' . $id . '"><i class="fa fa-plus"></i>New Option</a>					
+					<div class="col-3">
+					<a href="#" class="fa fa-floppy-o addOption" data-qb="' . $id . '"></a>					
 					</div>
 					</div>';
 			}
@@ -179,21 +179,19 @@ if (isset($_POST['action'])) {
 					$addToTestEroor = "True";
 				}
 			}
-			echo '<div class="row">
-				<div class="col-10">';
-				if ($portion_count > 1)echo '<button class="btn btn-warning btn-square-sm m-0 uploadKeyFile" data-upload="' . $id . '" data-tag="keyFile">Upload Key File</button>&nbsp;&nbsp;';
-			echo '<a href="#" class="uploadQuestionImage" data-upload="' . $id . '" data-tag="questionImage" title="Upload Question Image"><i class="fa fa-upload"></i></a>&nbsp;&nbsp;';
+			echo '<div class="row mt-2">';
+			echo '<div class="col-1"><h3><a href="#" class="fa fa-arrow-circle-up uploadQuestionImage" data-upload="' . $id . '" data-tag="questionImage" title="Upload Question Image"></a></h3></div>';
+			if ($portion_count > 1)echo '<div class="col-4"><button class="btn btn-sm m-0 uploadKeyFile" data-upload="' . $id . '" data-tag="keyFile">Update Key File</button></div>';
+				
 			
 			if ($cpKeyError == "True") {
 				echo '<span class="warning"><i class="fa fa-exclamation-triangle"> Key File Missing !! </i></soan>';
 				$addToTestEroor = "True";
 			}
+			if ($tq_status == 1 && $addToTestEroor == "False") echo '<div class="col-3"><button class="btn btn-info btn-sm mt-0 testQuestion" data-test="' . $test_id . '" data-qb="' . $id . '" data-tag="qtt">Add To Test</button></div>';
 
-			if ($tq_status == 1 && $addToTestEroor == "False") echo '<button class="btn btn-info btn-square-sm mt-0 testQuestion" data-test="' . $test_id . '" data-qb="' . $id . '" data-tag="qtt">Add To Test</button>';
-			echo '</div>';
-
-			if ($tq_status == "1") echo '<div class="col-2"><h6 class="p-1 mb-1 bg-danger text-light text-center small">Draft</h6></div>';
-			elseif ($tq_status == "2") echo '<div class="col-2"><h6 class="p-1 mb-1 bg-success text-light text-center small">Added</h6></div>';
+			if ($tq_status == "1") echo '<div class="col-2"><h6 class="p-1 mb-1 text-center small">Draft</h6></div>';
+			elseif ($tq_status == "2") echo '<div class="col-2"><h6 class="p-1 mb-1 text-center small">Added</h6></div>';
 			echo '</div>';
 			echo '</div></div>';
 		}
@@ -243,7 +241,7 @@ if (isset($_POST['action'])) {
 					if ($sno < $portion_count) echo $abp[$ip]; //to avoid last print (NULL)
 				}
 				$solution = 'Y';
-				$fileName = '../../olat/cp/cp-' . $id . '.php';
+				$fileName = '../../access/olat/cp/cp-' . $id . '.php';
 				if (file_exists($fileName)) require($fileName);
 				else echo '<span class="warning"><i class="fa fa-exclamation-triangle"> Key File Missing !! </i></soan>';
 				echo '</div>';
@@ -265,7 +263,7 @@ if (isset($_POST['action'])) {
 				echo '</div>';
 				echo '<div class="col-9">
 				<span class="testQuestionText">' . $qb_text . '</span>';
-				if (strlen($qb_image) > 5) echo '<p><img src="../../olat/img/' . $qb_image . '"></p>';
+				if (strlen($qb_image) > 5) echo '<p><img src="../../access/olat/img/' . $qb_image . '"></p>';
 				echo '</div>';
 				echo '<div class="col">';
 				if ($qb_status > 0) echo '<button class="btn btn-secondary btn-square-sm mt-0 activeQuestion" data-qb="' . $id . '">Set Active</button>';
@@ -315,9 +313,9 @@ if (isset($_POST['action'])) {
 					echo '<span class="testQuestionText">' . $portion[$ip] . '</span>';
 					if ($sno < $portion_count) echo $abp[$ip]; //to avoid last print (NULL)
 				}
-				if (strlen($qb_image) > 5) echo '<p><img src="../../olat/img/' . $qb_image . '"></p>';
+				if (strlen($qb_image) > 5) echo '<p><img src="../../access/olat/img/' . $qb_image . '"></p>';
 				$solution = 'Y';
-				$fileName = '../../olat/cp/cp-' . $id . '.php';
+				$fileName = '../../access/olat/cp/cp-' . $id . '.php';
 				if (!file_exists($fileName))echo '<span class="warning"><i class="fa fa-exclamation-triangle"> Key File Missing !! </i></soan>';
 				echo '</div>';
 				echo '<div class="col">';
@@ -331,7 +329,7 @@ if (isset($_POST['action'])) {
 				<div class="col-1"><span>' . ($i + 1) . '[' . $id . ']</span></div>
 				<div class="col-10">
 				<span class="testQuestionText">' . $qb_text . '</span>';
-				if (strlen($qb_image) > 5) echo '<p><img src="../../olat/img/' . $qb_image . '"></p>';
+				if (strlen($qb_image) > 5) echo '<p><img src="../../access/olat/img/' . $qb_image . '"></p>';
 				echo '</div>';
 				echo '<div class="col">';
 				echo '<button class="btn btn-secondary btn-square-sm mt-0 addQuestionToTest" data-qb="' . $id . '">Add to Test</button>';

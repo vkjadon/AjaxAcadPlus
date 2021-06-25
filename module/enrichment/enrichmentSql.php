@@ -82,6 +82,10 @@ if (isset($_POST['action'])) {
       echo json_encode($json_array);
     }
   } elseif ($_POST['action'] == "deptClassList") {
+    
+    $sql = "select * from $tn_ea where update_id='$myId' and ea_status='0'";
+    $ea_id = getFieldValue($conn, "ea_id", $sql);
+
     $sql = "select cl.* from class cl where cl.session_id='$mySes' and cl.dept_id='$myDept' and cl.class_status='0' order by cl.class_semester";
 
     $result = $conn->query($sql);
@@ -90,12 +94,13 @@ if (isset($_POST['action'])) {
       while ($rowsArray = $result->fetch_assoc()) {
         $subArray = array();
         $class_id=$rowsArray["class_id"];
-        $query="select * from $tn_eap where participant_code='class' and code_id='$class_id'";
+        $query="select * from $tn_eap where participant_code='class' and code_id='$class_id' and ea_id='$ea_id'";
         $check=$conn->query($query)->num_rows;
         $subArray["class_id"] = $class_id;
         $subArray["class_name"] = $rowsArray["class_name"];
         $subArray["class_section"] = $rowsArray["class_section"];
-        $subArray["check"] = $check;
+        if($check>0)$subArray["check"] = "1";
+        else $subArray["check"] = "0";
         $data[] = $subArray;
       }
     }

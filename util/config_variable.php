@@ -16,11 +16,7 @@ if (isset($_SESSION["privledge"])) $myPriv = $_SESSION['privledge'];
 if (isset($_SESSION["mysclid"])) $myScl = $_SESSION['mysclid'];
 if (isset($_SESSION["mysid"])) $mySes = $_SESSION['mysid'];
 if (isset($_SESSION["myBatch"])) $myBatch = $_SESSION['myBatch'];
-if (isset($_SESSION["mydeptid"])){
-  $myDept = $_SESSION['mydeptid'];
-  $sesDeptName=getField($conn, $myDept, "department", "dept_id", "dept_name");
-  $dept_header='<h5 class="text-center">'.$sesDeptName.'</h5>';
-}
+if (isset($_SESSION["mydeptid"])) $myDept = $_SESSION['mydeptid'];
 if (isset($_SESSION["mypid"])) $myProg = $_SESSION['mypid'];
 
 if (isset($_SESSION['myStdId']) > 0) $myStdId = $_SESSION["myStdId"];
@@ -28,6 +24,10 @@ if (isset($_SESSION['myStdId']) > 0) $myStdId = $_SESSION["myStdId"];
 if (isset($mySes)) {
   $session_start = getField($conn, $mySes, "session", "session_id", "session_start");
   $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
+
+  $sesDeptName=getField($conn, $myDept, "department", "dept_id", "dept_name");
+  $dept_header='<h5 class="text-center">'.$sesDeptName.'</h5>';
+
   $sql = "select ly_id from leave_year where ly_status='0'";
   $result=$conn->query($sql);
   if ($result && $result->num_rows == 1) {
@@ -51,6 +51,8 @@ if (isset($mySes)) {
   check_tn_ly($conn, "leave_year");
   check_tn_org($conn, 'organization');
   check_tn_mn($conn, 'master_name');
+  check_tn_qb_cp($conn, 'qb_cp');
+  check_tn_qb_parameter($conn, 'qb_parameter');
   check_tn_question_bank($conn, 'question_bank');
   check_tn_question_option($conn, 'question_option');
   check_tn_rp($conn, 'resource_person');

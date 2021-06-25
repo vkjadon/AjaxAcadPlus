@@ -70,15 +70,35 @@ require('../requireSubModule.php');
 					<div class="tab-pane fade" id="list-aq" role="tabpanel" aria-labelledby="list-aq-list">
 						<div class="row">
 							<div class="col-5 mt-1 mb-1">
-								<div class="card">
-									<div class="card-body mt-2 py-1">
-										<p id="questionHeading"></p>
-										Section : <span id="selectedSection">1</span>
-										<textarea rows="4" class="content" id="question" name="question"></textarea>
-										<input type="hidden" id="actionCode" name="actionCode">
-										<button class="btn btn-sm addQuestion">Add Question</button>
-										<button class="btn btn-sm showQuestionLibrary"> Library</button>
-										<button class="btn btn-sm showTestQuestion">Show Test</button>
+								<div class="container card myCard">
+									<h5 class="mt-2">Add New Question Panel</h5>
+									<div class="row mt-1">
+										<div class="col pr-0">
+											<label>Topic Tag</label>
+											<input type="text" class="form-control form-control-sm subjectTopic" id="subjectTopic" name="subjectTopic" value="">
+										</div>
+										<div class="col-3 pl-1 pr-0">
+											<label>Marks</label>
+											<input type="text" class="form-control form-control-sm defaultMarks" id="defaultMarks" name="marks" value="4">
+										</div>
+										<div class="col-3 pl-1">
+											<label>N Marks</label>
+											<input type="text" class="form-control form-control-sm defaultNMarks" id="defaultNMarks" name="nmarks" value="0">
+										</div>
+									</div>
+									<div class="row">
+										<div class="col">
+											Section : <span id="selectedSection">1</span>
+											<textarea rows="4" class="content" id="question" name="question"></textarea>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col">
+											<input type="hidden" id="actionCode" name="actionCode">
+											<button class="btn btn-sm addQuestion">Add Question</button>
+											<button class="btn btn-sm showQuestionLibrary"> Library</button>
+											<button class="btn btn-sm showTestQuestion">Show Test</button>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -190,7 +210,7 @@ require('../requireSubModule.php');
 
 		function sectionQuestionList() {
 			var selectedSection = $("#selectedSection").text()
-			$.alert("Section  " + selectedSection)
+			// $.alert("Section  " + selectedSection)
 			$.post("sectionQuestionListSql.php", {
 				sectionId: selectedSection,
 				action: "sectionQuestionList"

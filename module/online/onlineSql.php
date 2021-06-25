@@ -146,7 +146,7 @@ if (isset($_POST['action'])) {
 		$sql = "select max(qo_code) as max from question_option where qb_id='$qb_id'";
 		$max_sno = getMaxValue($conn, $sql) + 1;
 
-		$sql = "insert into question_option (qb_id, qo_text, qo_code) values('$qb_id','$qo_text', '$max_sno')";
+		$sql = "insert into question_option (qb_id, qo_text, qo_code, qo_correct) values('$qb_id','$qo_text', '$max_sno', '0')";
 		$result = $conn->query($sql);
 		if ($result) {
 			echo "Added Successfully";
@@ -202,32 +202,11 @@ if (isset($_POST['action'])) {
 			echo '<div class="row">';
 			echo '<div class="col"><h6>[' . $id . '] ' . $test_name . '</h6></div>';
 			echo '</div>';
-
 			echo '<div class="row">';
-			echo '<div class="col-3">';
-			echo '<div class="row">';
-			echo '<div class="col p-0 m-1">';
-			echo '<span class="topBarText p-0 m-0">Subject Topic</span>';
-			echo '<input type="text" class="form-control form-control-sm subjectTopic" id="subjectTopic" name="subjectTopic" value="">';
-			echo '</div>';
-			echo '</div>';
-			echo '</div>';
-			echo '<div class="col-3">
-				<span class="topBarText p-0 m-0">+ Marks -</span>
-				<div class="row">
-					<div class="col p-0 m-1">
-						<input type="text" class="form-control form-control-sm defaultMarks" id="defaultMarks" name="marks" value="4">
-					</div>
-					<div class="col p-0 m-1">
-						<input type="text" class="form-control form-control-sm defaultNMarks" id="defaultNMarks" name="nmarks" value="0">
-					</div>
-				</div>
-			</div>';
-
 			echo '<div class="col-3 text-center">';
 			echo '<span class="topBarText p-0 m-0">Sections</span>';
-			echo '<div class="row">';
-			echo '<div class="col p-0 m-1 text-center">';
+			echo '<div class="row">
+			<div class="col p-0 m-1 text-center">';
 			for ($i = 1; $i <= $test_section; $i++) {
 				echo '<button class="btn btn-warning btn-square-sm mt-0 defaultSection" id="defaultSection' . $i . '" data-section="' . $i . '">' . $i . '</button>';
 			}

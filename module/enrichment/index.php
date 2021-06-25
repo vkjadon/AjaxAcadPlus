@@ -336,7 +336,6 @@ require('../requireSubModule.php');
     $("#orgAction").val("addOrg")
     resourcePersonList();
     organizationList();
-    deptClassList();
     $(".selectLabel").text("Resource Person");
     selectList("rp");
     eaList();
@@ -390,7 +389,7 @@ require('../requireSubModule.php');
         $("#activity_from_time").html(data.ea_from_time)
         $("#activity_from_date").html(getFormattedDate(data.ea_to_date, "dmY"))
         $("#activity_to_time").html(data.ea_to_time)
-
+        deptClassList();
       })
 
     })
@@ -417,7 +416,9 @@ require('../requireSubModule.php');
         $.alert(data)
       })
     })
-
+    $(document).on("click", ".eap", function() {
+      deptClassList();
+    })
 
     function deptClassList() {
       // $.alert("Class List ");
@@ -428,12 +429,13 @@ require('../requireSubModule.php');
         var card = '';
         var count = 1;
         $.each(data, function(key, value) {
-          var check=value.check;
+          var check = value.check;
           card += '<div class="row m-1">';
           card += '<div class="col">';
-          if(check=='1')card += '<input type="checkbox" class="eapClass" checked data-class="' + value.class_id + '"> ' + value.class_name;
+          if (check == '1') card += '<input type="checkbox" class="eapClass" checked data-class="' + value.class_id + '"> ' + value.class_name;
           else card += '<input type="checkbox" class="eapClass" data-class="' + value.class_id + '"> ' + value.class_name;
           card += ' [' + value.class_section + '] ';
+          // card += ' [' + check + '] ';
           card += '</div>';
           card += '</div>';
         })
