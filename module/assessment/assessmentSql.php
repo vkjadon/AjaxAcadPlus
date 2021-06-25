@@ -3,36 +3,36 @@ require('../requireSubModule.php');
 //echo $_POST['action'];
 
 if (isset($_POST['action'])) {
-  if ($_POST['action'] == 'addGrid') {
+  if ($_POST['action'] == 'addTemplate') {
 
     $sql = "insert into $tn_amap (ac_id, at_id, amap_grid, amap_weightage, amap_internal, update_id, amap_status) values('" . data_check($_POST['sel_ac']) . "', '" . data_check($_POST['sel_at']) . "', '" . data_check($_POST['sel_grid']) . "', '" . data_check($_POST['weightage']) . "', '" . data_check($_POST['internal']) . "', '$myId','0')";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     echo "Added";
-  } elseif ($_POST['action'] == 'selectGrid') {
+  } elseif ($_POST['action'] == 'selectTemplate') {
     $sql = "select * from $tn_amap where amap_status='0' group by amap_grid order by amap_grid";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     $i = 1;
     echo '<select class="form-control form-control-sm" id="sel_grid" name="sel_grid" required>';
-    //echo '<option>Select a Grid</option>';
+    //echo '<option>Select a Template</option>';
     while ($rowsArray = $result->fetch_assoc()) {
       $id = $rowsArray["amap_grid"];
-      echo '<option value="' . $id . '">Grid-' . $i++ . '</option>';
+      echo '<option value="' . $id . '">Template-' . $i++ . '</option>';
     }
-    echo '<option value="' . $i . '">New Grid</option>';
+    echo '<option value="' . $i . '">New Template</option>';
     echo '</select>';
   } elseif ($_POST['action'] == 'amapList') {
-    $totalGrids = getMaxField($conn, $tn_amap, "amap_grid");
-    //echo $totalGrids;
-    for ($i = 1; $i <= $totalGrids; $i++) {
+    $totalTemplates = getMaxField($conn, $tn_amap, "amap_grid");
+    //echo $totalTemplates;
+    for ($i = 1; $i <= $totalTemplates; $i++) {
       $sql = "select * from $tn_amap where amap_grid='$i' order by ac_id";
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
       echo '<div class="row">';
       echo '<div class="col-sm-2 m-0 p-1">';
       echo '<div class="card myCard m-2 text-center">';
-      echo '<h4">Grid-'.$i.'</h4>';
+      echo '<h4">Template-'.$i.'</h4>';
       echo '</div>';
       echo '</div>';
       while ($rowsArray = $result->fetch_assoc()) {

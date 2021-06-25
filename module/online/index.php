@@ -28,7 +28,7 @@ require('../requireSubModule.php');
 				<div class="tab-content" id="nav-tabContent">
 					<div class="tab-pane show active" id="list-mt" role="tabpanel" aria-labelledby="list-mt-list">
 						<div class="row">
-							<div class="col-5">
+							<div class="col-6">
 								<div class="container card myCard p-2">
 									<ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
 										<li class="nav-item">
@@ -61,7 +61,8 @@ require('../requireSubModule.php');
 												</div>
 												<div class="form-group">
 													<input type="hidden" id="testAction" name="action" value="addTest">
-													<input type="hidden" id="test_id" name="test_id">
+													<!-- Test id is required 0 for insert and other to update -->
+													<input type="hidden" id="test_id" name="test_id" value="0">
 													<button class="btn btn-sm submitAddTestForm">Submit</button>
 												</div>
 											</form>
@@ -74,36 +75,36 @@ require('../requireSubModule.php');
 											</div>
 										</div>
 										<div class="tab-pane fade" id="pills_schedule" role="tabpanel">
-											<form class="form-horizontal" id="addTestSchedule">
+											<form class="form-horizontal" id="addTestScheduleForm">
 												<div class="row">
 													<div class="col-3 pr-0">
 														<div class="form-group">
 															<label>From</label>
-															<input type="date" class="form-control form-control-sm" id="start_date" name="start_date" />
+															<input type="date" class="form-control form-control-sm" id="from_date" name="test_from_date" value="<?php echo $submit_date; ?>" />
 														</div>
 													</div>
 													<div class="col-2 pl-1 pr-0">
 														<div class="form-group">
 															<label>Time</label>
-															<input type="time" class="form-control form-control-sm" id="start_time" name="start_time" value="<?php echo time(); ?>" />
+															<input type="time" class="form-control form-control-sm" id="from_time" name="test_from_time" value="" />
 														</div>
 													</div>
 													<div class="col-3 pl-1 pr-0">
 														<div class="form-group">
 															<label>To</label>
-															<input type="date" class="form-control form-control-sm" id="to_date" name="to_date" />
+															<input type="date" class="form-control form-control-sm" id="to_date" name="test_to_date" value="<?php echo $submit_date; ?>" />
 														</div>
 													</div>
 													<div class="col-2 pl-1 pr-0">
 														<div class="form-group">
 															<label>Time</label>
-															<input type="time" class="form-control form-control-sm" id="to_time" name="to_time" value="<?php echo time(); ?>" />
+															<input type="time" class="form-control form-control-sm" id="to_time" name="test_to_time" value="" />
 														</div>
 													</div>
 													<div class="col-2 pl-1">
 														<div class="form-group">
 															<label>Duration</label>
-															<input type="number" class="form-control form-control-sm" id="to_time" name="to_time" value="60" min="10" placeholder="minutes" />
+															<input type="number" class="form-control form-control-sm" id="test_duration" name="test_duration" value="60" min="10" placeholder="minutes" />
 														</div>
 													</div>
 												</div>
@@ -126,6 +127,44 @@ require('../requireSubModule.php');
 									</table>
 								</div>
 								<div class="col-6 mt-1 mb-1" id="testRight">
+								</div>
+							</div>
+							<div class="col-6">
+								<div class="container card mt-2 myCard">
+									<h5 class="card-title">Test Summary</h5>
+									<div class="container col-12">
+										<table class="table list-table-xs smallText">
+											<tr class="smallText">
+												<td width="20%">Test Name</td>
+												<td id="nameSR" colspan="3"></td>
+												<td width="20%">Section</td>
+												<td><span id="sectionSR"></span></td>
+											</tr>
+											<tr>
+												<td>From </td>
+												<td><span id="from_dateSR"></span> <span id="from_timeSR"></span></td>
+												<td width="15%">To </td>
+												<td><span id="to_dateSR"></span> <span id="to_timeSR"></span></td>
+												<td>Duration </td>
+												<td><span id="durationSR"></span></td>
+											</tr>
+											<tr>
+												<td>Participants</td>
+												<td colspan="5"><span id="participantSR"></span></td>
+											</tr>
+											<tr>
+												<td>Questions</td>
+												<td><span id="questionSR"></span></td>
+												<td>Marks</td>
+												<td><span id="questionMarksSR"></span></td>
+												<td>NMarks</td>
+												<td><span id="questionNMarksSR"></span></td>
+											</tr>
+											<tr>
+												<td colspan="6">Created by <span  class="smallText" id="staffSR"></span> and Last updated on <span class="smallText" id="updateSR"></span> at <span class="smallText" id="updateTimeSR"></span> </td>
+											</tr>
+										</table>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -230,6 +269,7 @@ require('../requireSubModule.php');
 <script>
 	$(document).ready(function() {
 		testList();
+		testSummary();
 
 		// Add Question Block
 
@@ -295,7 +335,6 @@ require('../requireSubModule.php');
 			$.post("onlineSql.php", formData, function() {}, "text").done(function(data, success) {
 				$.alert(data)
 				$('#addTestForm')[0].reset();
-				$("#addTestDiv").hide();
 				testList()
 			})
 		});
@@ -318,6 +357,7 @@ require('../requireSubModule.php');
 				$("#test_name").val(data.test_name)
 				$("#test_section").val(data.test_section)
 				deptClassList();
+				testSummary();
 			})
 		})
 		$(document).on("click", ".participantClass", function() {
@@ -335,6 +375,16 @@ require('../requireSubModule.php');
 		$(document).on("click", ".participant", function() {
 			deptClassList();
 		})
+		$(document).on("submit", "#addTestScheduleForm", function() {
+			event.preventDefault(this);
+			var formData = $(this).serialize();
+			$.alert("Form Submitted " + formData)
+			$.post("onlineSql.php", formData, function() {}, "text").done(function(data, success) {
+				$.alert(data)
+				$('#addTestScheduleForm')[0].reset();
+				// testList()
+			})
+		});
 
 		function deptClassList() {
 			// $.alert("Class List ");
@@ -357,6 +407,28 @@ require('../requireSubModule.php');
 				})
 				// $("#programClassTable").find("tr:gt(0)").remove();
 				$("#deptClass").html(card);
+			})
+		}
+		function testSummary() {
+			// $.alert('hello');
+			$.post("onlineSql.php", {
+				action: "testSR",
+			}, () => {}, "json").done(function(data, status) {
+				// $.alert(data.participant);
+				$("#nameSR").html(data.test_name);
+				$("#sectionSR").html(data.test_section);
+				$("#from_dateSR").html(getFormattedDate(data.test_from_date, "dmY"));
+				$("#from_timeSR").html(data.test_from_time);
+				$("#to_dateSR").html(getFormattedDate(data.test_to_date, "dmY"));
+				$("#to_timeSR").html(data.test_to_time);
+				$("#durationSR").html(data.test_duration);
+				$("#participantSR").html(data.participant);
+				$("#questionSR").html(data.question);
+				$("#staffSR").html(data.staff);
+				$("#updateSR").html(getFormattedDate(data.update, "dmY"));
+				$("#updateTimeSR").html(getTime(data.update));
+			}).fail(function() {
+				$.alert("Test is Not Responding");
 			})
 		}
 
@@ -868,8 +940,6 @@ require('../requireSubModule.php');
 			})
 		}
 
-
-
 		function getFormattedDate(ts, fmt) {
 			var a = new Date(ts);
 			var day = a.getDate();
@@ -880,6 +950,11 @@ require('../requireSubModule.php');
 			if (fmt == "dmY") return date;
 			else return dateYmd;
 		}
+		function getTime(ts) {
+      var a = new Date(ts);
+      var time = a.getHours() + ':' + a.getMinutes();
+      return time;
+    }
 	});
 </script>
 <script>

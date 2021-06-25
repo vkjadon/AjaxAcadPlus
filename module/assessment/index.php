@@ -31,12 +31,12 @@ require('../requireSubModule.php');
               <div class="row">
                 <div class="col-9 mt-1 mb-1">
                   <div class="container card mt-2 myCard">
-                    <h5 class="card-title p-2 mb-0"> Design Assessment Map </h5>
+                    <h5 class="card-title"> Design Assessment Template </h5>
                     <form class="form-horizontal" id="amapForm">
                       <div class="row mt-2">
                         <div class="col-3">
-                          <label> Grid </label>
-                          <p id="selectGrid"></p>
+                          <label> Template </label>
+                          <p id="selectTemplate"></p>
                         </div>
                         <div class="col-3">
                           <div class="form-group">
@@ -80,14 +80,14 @@ require('../requireSubModule.php');
                         </div>
 
                         <div class="col">
-                          <input type="hidden" id="action" name="action" value="addGrid">
+                          <input type="hidden" id="action" name="action" value="addTemplate">
                           <button type="submit" class="btn btn-sm amap">Submit</button>
                         </div>
                       </div>
                     </form>
                   </div>
                   <div class="container card mt-2 myCard">
-                    <h5 class="card-title p-2 mb-0"> Existing Assessment Grid </h5>
+                    <h5 class="card-title"> Existing Assessment Template </h5>
                     <p id="amapList"></p>
                   </div>
                 </div>
@@ -142,7 +142,7 @@ require('../requireSubModule.php');
     $('[data-toggle="tooltip"]').tooltip();
     $(".topBarTitle").text("Academics");
     $("#rpAction").val("addRP")
-    selectGrid();
+    selectTemplate();
     amapList();
 
     $(document).on('submit', '#amapForm', function(event) {
@@ -152,7 +152,7 @@ require('../requireSubModule.php');
       $.post("assessmentSql.php", formData, () => {}, "text").done(function(data, status) {
         //$.alert("List Updtaed" + data);
         amapList();
-        selectGrid();
+        selectTemplate();
       })
     });
 
@@ -168,13 +168,13 @@ require('../requireSubModule.php');
       })
     }
 
-    function selectGrid() {
+    function selectTemplate() {
       //$.alert("In List Function");
       $.post("assessmentSql.php", {
-        action: "selectGrid"
+        action: "selectTemplate"
       }, function() {}, "text").done(function(data, status) {
         //$.alert(data);
-        $("#selectGrid").html(data);
+        $("#selectTemplate").html(data);
       }).fail(function() {
         $.alert("Error !!");
       })

@@ -6,8 +6,10 @@ include('../../phpFunction/onlineFunction.php');
 if (isset($_POST['action'])) {
 	if ($_POST['action'] == 'addTest') {
 		if (!$_POST['test_name'] == NULL) {
+			$sql="update test set test_status='1' where update_id='$myId'";
+			$result = $conn->query($sql);
 			if ($_POST['test_id'] == '0') $sql = "insert into test (test_name, test_section, test_status, update_id) values('" . data_check($_POST['test_name']) . "','" . data_check($_POST['test_section']) . "', '1', '$myId')";
-			else $sql = "update test set test_name='" . data_check($_POST['test_name']) . "', test_section='" . data_check($_POST['test_section']) . "' where test_id='" . $_POST['test_id'] . "'";
+			else $sql = "update test set test_name='" . data_check($_POST['test_name']) . "', test_section='" . data_check($_POST['test_section']) . "', update_ts='$submit_ts' where test_id='" . $_POST['test_id'] . "'";
 			$result = $conn->query($sql);
 			if ($result) echo "Added Successfully";
 			else {
@@ -72,6 +74,9 @@ if (isset($_POST['action'])) {
 			echo '</div></div>';
 		}
 	} elseif ($_POST['action'] == 'addQuestion') {
+		$sql="update question_bank set qb_status='1' where update_id='$myId'";
+		$result = $conn->query($sql);
+
 		$sql = "select * from test where test_status='0' and update_id='$myId'";
 		$result = $conn->query($sql);
 		if ($result) {
@@ -135,7 +140,7 @@ if (isset($_POST['action'])) {
 				echo "Question Updated";
 			}
 		}
-	} elseif ($_POST['action'] == 'addOption') {
+	} elseif ($_POST['action'] == 'addOption') {		
 		$sql = "select * from question_bank where qb_status='0' and update_id='$myId'";
 		$result = $conn->query($sql);
 		if ($result) {
@@ -163,7 +168,8 @@ if (isset($_POST['action'])) {
 		}
 		$qb_id = $_POST['qb_id'];
 		//echo "Jai ho $test_id";
-		$sql = "update question_bank set qb_status='1' where qb_id IN (select qb_id from test_question where test_id='$test_id')";
+		$sql = "update question_bank set qb_status='1' where update_id='$myId'";
+		// $sql = "update question_bank set qb_status='1' where qb_id IN (select qb_id from test_question where test_id='$test_id')";
 		$result = $conn->query($sql);
 
 		$sql = "update question_bank set qb_status='0' where qb_id='$qb_id'";
@@ -298,42 +304,86 @@ if (isset($_POST['action'])) {
 		$result = $conn->query($sql);
 		if ($result) echo "Removed Successfully";
 		else echo $conn->error;
-	}elseif ($_POST['action'] == "deptClassList") {    
-    $sql = "select * from test where update_id='$myId' and test_status='0'";
-    $test_id = getFieldValue($conn, "test_id", $sql);
+	} elseif ($_POST['action'] == "deptClassList") {
+		$sql = "select * from test where update_id='$myId' and test_status='0'";
+		$test_id = getFieldValue($conn, "test_id", $sql);
 
-    $sql = "select cl.* from class cl where cl.session_id='$mySes' and cl.dept_id='$myDept' and cl.class_status='0' order by cl.class_semester";
+		$sql = "select cl.* from class cl where cl.session_id='$mySes' and cl.dept_id='$myDept' and cl.class_status='0' order by cl.class_semester";
 
-    $result = $conn->query($sql);
-    $data = array();
-    if ($result) {
-      while ($rowsArray = $result->fetch_assoc()) {
-        $subArray = array();
-        $class_id=$rowsArray["class_id"];
-        $query="select * from test_participant where participant_code='class' and code_id='$class_id' and test_id='$test_id'";
-        $check=$conn->query($query)->num_rows;
-        $subArray["class_id"] = $class_id;
-        $subArray["class_name"] = $rowsArray["class_name"];
-        $subArray["class_section"] = $rowsArray["class_section"];
-        if($check>0)$subArray["check"] = "1";
-        else $subArray["check"] = "0";
-        $data[] = $subArray;
-      }
-    }
-    $jsonOutput = json_encode($data);
-    echo $jsonOutput;
-  } elseif ($_POST['action'] == "participant") {
-    $sql = "select * from test where update_id='$myId' and test_status='0'";
-    $test_id = getFieldValue($conn, "test_id", $sql);
-    echo $test_id;
-    if ($_POST['status'] == 'true') $sql = "insert into test_participant (test_id, participant_code, code_id, update_id) values('$test_id', 'class', '" . $_POST['classId'] . "', '$myId')";
-    else $sql = "delete from test_participant where test_id='$test_id' and participant_code='class' and code_id='" . $_POST['classId'] . "'";
-    $result = $conn->query($sql);
-    if (!$result) echo $conn->error;
-    else {
-      echo "Query Successful";
-    }
-  }
+		$result = $conn->query($sql);
+		$data = array();
+		if ($result) {
+			while ($rowsArray = $result->fetch_assoc()) {
+				$subArray = array();
+				$class_id = $rowsArray["class_id"];
+				$query = "select * from test_participant where participant_code='class' and code_id='$class_id' and test_id='$test_id'";
+				$check = $conn->query($query)->num_rows;
+				$subArray["class_id"] = $class_id;
+				$subArray["class_name"] = $rowsArray["class_name"];
+				$subArray["class_section"] = $rowsArray["class_section"];
+				if ($check > 0) $subArray["check"] = "1";
+				else $subArray["check"] = "0";
+				$data[] = $subArray;
+			}
+		}
+		$jsonOutput = json_encode($data);
+		echo $jsonOutput;
+	} elseif ($_POST['action'] == "participant") {
+		$sql = "select * from test where update_id='$myId' and test_status='0'";
+		$test_id = getFieldValue($conn, "test_id", $sql);
+		echo $test_id;
+		if ($_POST['status'] == 'true') $sql = "insert into test_participant (test_id, participant_code, code_id, update_id) values('$test_id', 'class', '" . $_POST['classId'] . "', '$myId')";
+		else $sql = "delete from test_participant where test_id='$test_id' and participant_code='class' and code_id='" . $_POST['classId'] . "'";
+		$result = $conn->query($sql);
+		if (!$result) echo $conn->error;
+		else {
+			echo "Query Successful";
+		}
+	} elseif ($_POST['action'] == "addSchedule") {
+		$sql = "select * from test where update_id='$myId' and test_status='0'";
+		$test_id = getFieldValue($conn, "test_id", $sql);
+		echo $test_id;
+		$sql = "update test set test_from_date='" . $_POST['test_from_date'] . "', test_from_time='" . $_POST['test_from_time'] . "', test_to_date='" . $_POST['test_to_date'] . "', test_to_time='" . $_POST['test_to_time'] . "', test_duration='" . $_POST['test_duration'] . "' where test_id='$test_id'";
+		$result = $conn->query($sql);
+		if (!$result) echo $conn->error;
+		else {
+			echo "Query Successful";
+		}
+	} elseif ($_POST['action'] == 'testSR') {
+		$sql = "select * from test where update_id='$myId' and test_status='0'";
+		$test_id = getFieldValue($conn, "test_id", $sql);
+
+		//echo $test_id;
+		$sql = "select * from test where test_id='$test_id'";
+		$result = $conn->query($sql);
+		if (!$result) echo $conn->error;
+		elseif ($result->num_rows > 0) {
+			$data = array();
+			$rowArray = $result->fetch_assoc();
+			$data["test_name"] = $rowArray["test_name"];
+			$data["test_section"] = $rowArray["test_section"];
+			$data["test_from_date"] = $rowArray["test_from_date"];
+			$data["test_from_time"] = $rowArray["test_from_time"];
+			$data["test_to_date"] = $rowArray["test_to_date"];
+			$data["test_to_time"] = $rowArray["test_to_time"];
+			$data["test_duration"] = $rowArray["test_duration"];
+			$data["update"] = $rowArray["update_ts"];
+			$data["staff"] = getField($conn, $rowArray["update_id"], "staff", "staff_id", "staff_name" );
+
+			$text = '';
+			$sql = "select cl.* from class cl, test_participant tp where tp.test_id='$test_id' and tp.participant_code='class' and tp.code_id=cl.class_id order by cl.class_semester";
+			$result = $conn->query($sql);
+			while ($rowArray = $result->fetch_assoc()) {
+				$text .= $rowArray["class_name"] . '[' . $rowArray["class_section"] . '], ';
+			}
+			$data["participant"] = $text;
+
+			$sql = "select * from test_question where test_id='$test_id'";
+			$result = $conn->query($sql);
+			$data["question"] = $result->num_rows;
+			echo json_encode($data);
+		}
+	}
 } elseif ($_POST['instructionId'] == 'T' || $_POST['instructionId'] == 'S') {
 	$test_id = $_POST['testId'];
 	$id = $_POST['instructionId'];
