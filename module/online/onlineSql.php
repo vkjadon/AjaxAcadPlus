@@ -381,6 +381,12 @@ if (isset($_POST['action'])) {
 			$sql = "select * from test_question where test_id='$test_id'";
 			$result = $conn->query($sql);
 			$data["question"] = $result->num_rows;
+
+			$sql = "select sum(tq_marks) as marks, sum(tq_nmarks) as nmarks from test_question where test_id='$test_id'";
+			$result = $conn->query($sql);
+			$rowArray = $result->fetch_assoc();
+			$data["marks"] = $rowArray["marks"];
+			$data["nmarks"] = $rowArray["nmarks"];
 			echo json_encode($data);
 		}
 	}

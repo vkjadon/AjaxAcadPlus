@@ -352,10 +352,15 @@ require('../requireSubModule.php');
 				test_id: test_id,
 				action: "fetchTest"
 			}, function() {}, "json").done(function(data, status) {
-				// $.alert(" Update " + feedback_id);
+				// $.alert(data.test_from_time);
 				$("#test_id").val(data.test_id)
 				$("#test_name").val(data.test_name)
 				$("#test_section").val(data.test_section)
+				$("#from_date").val(data.test_from_date)
+				$("#from_time").val(data.test_from_time)
+				$("#to_date").val(data.test_to_date)
+				$("#to_time").val(data.test_to_time)
+				$("#test_duration").val(data.test_duration)
 				deptClassList();
 				testSummary();
 			})
@@ -370,6 +375,7 @@ require('../requireSubModule.php');
 				action: "participant"
 			}, function() {}, "text").done(function(data, status) {
 				// $.alert(data)
+				testSummary();
 			})
 		})
 		$(document).on("click", ".participant", function() {
@@ -380,9 +386,10 @@ require('../requireSubModule.php');
 			var formData = $(this).serialize();
 			$.alert("Form Submitted " + formData)
 			$.post("onlineSql.php", formData, function() {}, "text").done(function(data, success) {
-				$.alert(data)
+				// $.alert(data)
 				$('#addTestScheduleForm')[0].reset();
-				// testList()
+				testSummary();
+
 			})
 		});
 
@@ -427,6 +434,9 @@ require('../requireSubModule.php');
 				$("#staffSR").html(data.staff);
 				$("#updateSR").html(getFormattedDate(data.update, "dmY"));
 				$("#updateTimeSR").html(getTime(data.update));
+				$("#questionMarksSR").html(data.marks);
+				$("#questionNMarksSR").html(data.nmarks);
+				
 			}).fail(function() {
 				$.alert("Test is Not Responding");
 			})
