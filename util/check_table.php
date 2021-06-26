@@ -1,22 +1,24 @@
 <?php
 //echo "Check Tables";
 
-function check_tn_amap($conn, $table)
+function check_tn_atmp($conn, $table)
 {
   $sql = "select * from $table";
   $result = $conn->query($sql);
   if (!$result) {
     //echo "Table Missing $table";
     $query =
-      'ac_id INT(5) NULL,
-    at_id INT(5) NULL,
-    amap_grid INT(2) NULL,
-    amap_internal VARCHAR(10) NULL,
-    amap_weightage FLOAT NULL,
+      'atmp_id INT(5) NOT NULL AUTO_INCREMENT,
+    ac_id INT(3) NULL,
+    at_id INT(3) NULL,
+    atmp_template INT(2) NULL,
+    atmp_internal VARCHAR(10) NULL,
+    atmp_weightage FLOAT NULL,
     update_ts timestamp default current_timestamp(),
     update_id INT(1) NULL,
-    amap_status INT(1) NULL,
-    UNIQUE(ac_id, at_id, amap_grid)';
+    atmp_status INT(1) NULL,
+    PRIMARY KEY (atmp_id),
+    UNIQUE(ac_id, at_id, atmp_template)';
 
     $sql = "CREATE TABLE $table ($query)";
     $result = $conn->query($sql);
@@ -642,6 +644,49 @@ function check_tn_sas($conn, $table)
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
   }
+}
+function check_tn_sat($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'sat_id INT(5) NOT NULL AUTO_INCREMENT,
+      tl_id INT(3) NULL,
+    atmp_template int(2) NULL,
+    update_ts timestamp default current_timestamp(),
+    update_id INT(5) NULL,
+    sat_status INT(1) NULL,
+    PRIMARY KEY(sat_id),
+    UNIQUE(tl_id)';
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+
+function check_tn_sbas($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    echo "Table Missing $table";
+    $query =
+      'tl_id INT(5) NULL,
+    atmp_id VARCHAR(100) NULL,
+    sbas_sno INT(2) NULL,
+    sbas_marks INT(3) NULL,
+    update_ts timestamp Default current_timestamp,
+    update_id INT(5) NULL,
+    UNIQUE(tl_id, atmp_id, sbas_sno)';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
 }
 
 function check_tn_sbt($conn, $table)

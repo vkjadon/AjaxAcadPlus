@@ -161,7 +161,7 @@ require('../requireSubModule.php');
 												<td><span id="questionNMarksSR"></span></td>
 											</tr>
 											<tr>
-												<td colspan="6">Created by <span  class="smallText" id="staffSR"></span> and Last updated on <span class="smallText" id="updateSR"></span> at <span class="smallText" id="updateTimeSR"></span> </td>
+												<td colspan="6">Created by <span class="smallText" id="staffSR"></span> and Last updated on <span class="smallText" id="updateSR"></span> at <span class="smallText" id="updateTimeSR"></span> </td>
 											</tr>
 										</table>
 									</div>
@@ -416,6 +416,7 @@ require('../requireSubModule.php');
 				$("#deptClass").html(card);
 			})
 		}
+
 		function testSummary() {
 			// $.alert('hello');
 			$.post("onlineSql.php", {
@@ -436,7 +437,7 @@ require('../requireSubModule.php');
 				$("#updateTimeSR").html(getTime(data.update));
 				$("#questionMarksSR").html(data.marks);
 				$("#questionNMarksSR").html(data.nmarks);
-				
+
 			}).fail(function() {
 				$.alert("Test is Not Responding");
 			})
@@ -821,8 +822,6 @@ require('../requireSubModule.php');
 			$("#questionHeading").hide()
 			$("#sectionId").val("-")
 		});
-
-
 		$(document).on("click", ".setActiveButton", function() {
 			var id = $(this).attr("data-test")
 			//$.alert("Id" + id)
@@ -873,7 +872,6 @@ require('../requireSubModule.php');
 				}
 			});
 		});
-
 		$(document).on('click', '.decrement', function() {
 			var id = $(this).attr('id');
 			var value = $("." + id).text();
@@ -908,8 +906,6 @@ require('../requireSubModule.php');
 			})
 		});
 
-
-
 		function questionLibrary() {
 			//$.alert("Library  ")
 			$.post("sectionQuestionListSql.php", {
@@ -923,8 +919,6 @@ require('../requireSubModule.php');
 				$.alert("Error !!");
 			})
 		}
-
-
 
 		function testHeading() {
 			//$.alert("In SAS Claim List");
@@ -960,11 +954,12 @@ require('../requireSubModule.php');
 			if (fmt == "dmY") return date;
 			else return dateYmd;
 		}
+
 		function getTime(ts) {
-      var a = new Date(ts);
-      var time = a.getHours() + ':' + a.getMinutes();
-      return time;
-    }
+			var a = new Date(ts);
+			var time = a.getHours() + ':' + a.getMinutes();
+			return time;
+		}
 	});
 </script>
 <script>

@@ -67,3 +67,26 @@ function subjectChoice($conn, $tn_tlg, $myDept)
   }
   echo '</table>';
 }
+function staffTeachingLoad($conn, $staff_id, $tn_tl, $tn_tlg)
+{
+  $sql = "select tlg.*, tl.*, cl.class_name, class_section, sb.subject_code, sb.subject_name from $tn_tlg tlg, $tn_tl tl, class cl, subject sb where tl.tlg_id=tlg.tlg_id and tl.staff_id='$staff_id' and tlg.class_id=cl.class_id and tlg.subject_id=sb.subject_id and tlg.tlg_status='0' and tl.tl_status='0' order by tlg.class_id, tlg.subject_id, tlg.tlg_type, tl.tl_group";
+
+  $result = $conn->query($sql);
+  if (!$result) die(" Unable to process the Request of Teaching Load! Please report!");
+  $data = array();
+  while ($rows = $result->fetch_assoc()) {
+    $sub_array = array();
+    $sub_array['tlg_id'] = $rows['tlg_id'];
+    $sub_array['tl_id'] = $rows['tl_id'];
+    $sub_array['class_id'] = $rows['class_id'];
+    $sub_array['class_name'] = $rows['class_name'];
+    $sub_array['class_section'] = $rows['class_section'];
+    $sub_array['subject_id'] = $rows['subject_id'];
+    $sub_array['subject_code'] = $rows['subject_code'];
+    $sub_array['subject_name'] = $rows['subject_name'];
+    $sub_array['load_type'] = $rows['tlg_type'];
+    $sub_array['tl_group'] = $rows['tl_group'];
+    $data[] = $sub_array;
+  }
+  return $data;
+}

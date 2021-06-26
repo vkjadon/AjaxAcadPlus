@@ -1,7 +1,6 @@
 <?php
 require('../requireSubModule.php');
 
-include('../../phpFunction/onlineFunction.php');
 //echo $_POST['action'];
 if (isset($_POST['action'])) {
 	if ($_POST['action'] == 'addTest') {

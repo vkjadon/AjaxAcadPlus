@@ -70,8 +70,8 @@ if (isset($mySes)) {
   check_tn_template_question($conn, "template_question");
   check_tn_user($conn, "user");
 
-  $tn_amap = 'assessment_map' . $mySes;
-  check_tn_amap($conn, $tn_amap);
+  $tn_atmp = 'assessment_template' . $mySes;
+  check_tn_atmp($conn, $tn_atmp);
 
   $tn_ccd = 'cc_detail' . $mySes;
   check_tn_ccd($conn, $tn_ccd);
@@ -97,8 +97,11 @@ if (isset($mySes)) {
   $tn_sas = 'student_attendance_setup' . $mySes;
   check_tn_sas($conn, $tn_sas);
 
-  $tn_sbt = 'subject_topic' . $mySes;
-  check_tn_sbt($conn, $tn_sbt);
+  $tn_sbas = 'subject_assessment' . $mySes;
+  check_tn_sbas($conn, $tn_sbas);
+  
+  $tn_sat = 'subject_assessment_template' . $mySes;
+  check_tn_sat($conn, $tn_sat);
 
   $tn_sc = 'subject_choice' . $mySes;
   check_tn_sc($conn, $tn_sc);
@@ -108,6 +111,9 @@ if (isset($mySes)) {
 
   $tn_src = 'subject_resource_class' . $mySes;
   check_tn_src($conn, $tn_src);
+
+  $tn_sbt = 'subject_topic' . $mySes;
+  check_tn_sbt($conn, $tn_sbt);
 
   $tn_tl = 'teaching_load' . $mySes;
   check_tn_tl($conn, $tn_tl);
