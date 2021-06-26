@@ -122,7 +122,7 @@ if (isset($_POST['action'])) {
     $result_atmp = $conn->query($sql_atmp);
     while ($rowAtmp = $result_atmp->fetch_assoc()) {
       $atmp_id = $rowAtmp["atmp_id"];
-      $sql = "insert into $tn_sbas (tl_id, atmp_id, sbas_sno, sbas_marks, update_id) values('$tl_id','$atmp_id','1', '10', '$myId')";
+      $sql = "insert into $tn_sbas (tl_id, atmp_id, sbas_assessments, sbas_consider, update_id) values('$tl_id','$atmp_id','1', '1', '$myId')";
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
     }
@@ -135,14 +135,14 @@ if (isset($_POST['action'])) {
       $tl_id = $row['tl_id'];
       $atmp_template = $row['atmp_template'];
       $data = array();
-      $sql_ac = "select atmp.*, sbas.sbas_marks, sbas.sbas_sno, mn.mn_name from $tn_atmp atmp, $tn_sbas sbas, master_name mn where sbas.tl_id='$tl_id' and sbas.atmp_id=atmp.atmp_id and atmp.ac_id=mn.mn_id";
+      $sql_ac = "select atmp.*, sbas.sbas_consider, sbas.sbas_assessments, mn.mn_name from $tn_atmp atmp, $tn_sbas sbas, master_name mn where sbas.tl_id='$tl_id' and sbas.atmp_id=atmp.atmp_id and atmp.ac_id=mn.mn_id";
       $result_ac = $conn->query($sql_ac);
       while ($rowAC = $result_ac->fetch_assoc()) {
         $subArray = array();
         $subArray["mn_name"] = $rowAC["mn_name"];
         $subArray["atmp_id"] = $rowAC["atmp_id"];
-        $subArray["sbas_sno"] = $rowAC["sbas_sno"];
-        $subArray["sbas_marks"] = $rowAC["sbas_marks"];
+        $subArray["sbas_assessments"] = $rowAC["sbas_assessments"];
+        $subArray["sbas_consider"] = $rowAC["sbas_consider"];
         $subArray["atmp_weightage"] = $rowAC["atmp_weightage"];
         $data[] = $subArray;
       }
@@ -157,7 +157,8 @@ if (isset($_POST['action'])) {
       $row = $result->fetch_assoc();
       $tl_id = $row['tl_id'];
 
-      $sql_ac = "update $tn_sbas set sbas_sno='".$_POST['value']."' where tl_id='$tl_id' and atmp_id='".$_POST['id']."'";
+      if($_POST['tag']=='assessment')$sql_ac = "update $tn_sbas set sbas_assessments='".$_POST['value']."' where tl_id='$tl_id' and atmp_id='".$_POST['id']."'";
+      else $sql_ac = "update $tn_sbas set sbas_consider='".$_POST['value']."' where tl_id='$tl_id' and atmp_id='".$_POST['id']."'";
       $result_ac = $conn->query($sql_ac);
       if(!$result_ac)echo $conn->error;
     }

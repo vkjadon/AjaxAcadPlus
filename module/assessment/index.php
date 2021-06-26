@@ -108,12 +108,6 @@ require('../../phpFunction/teachingLoadFunction.php');
                       <li class="nav-item">
                         <a class="nav-link assessments" data-toggle="pill" href="#pills_assessments" role="tab">Assessments</a>
                       </li>
-                      <li class="nav-item">
-                        <a class="nav-link participant" data-toggle="pill" href="#pills_tp" role="tab">Marks</a>
-                      </li>
-                      <li class="nav-item">
-                        <a class="nav-link schedule" data-toggle="pill" href="#pills_schedule" role="tab">Schedule</a>
-                      </li>
                     </ul>
                     <!-- content -->
                     <div class="tab-content" id="pills-tabContent p-3">
@@ -130,9 +124,10 @@ require('../../phpFunction/teachingLoadFunction.php');
                         <table class="table table-bordered table-striped list-table-xs" id="assessmentComponentTable">
                           <tr>
                             <th>#</th>
-                            <th>Assessment Components</th>
+                            <th>Components</th>
                             <th>Weightage (%)</th>
-                            <th>Number of Assessments</th>
+                            <th>Assessments</th>
+                            <th>Consider</th>
                           </tr>
                         </table>
                       </div>
@@ -200,10 +195,12 @@ require('../../phpFunction/teachingLoadFunction.php');
     $(document).on("click", ".increDecre", function() {
       var id = $(this).attr('data-id');
       var value = $(this).attr("data-value");
-      // $.alert("Id " + id + "Value" + value);
+      var tag = $(this).attr("data-tag");
+      // $.alert("Id " + id + " Value " + value + " Tag " + tag);
       $.post("assessmentSql.php", {
         id: id,
         value: value,
+        tag: tag,
         action: "updateAssessmentNumber"
       }, function() {}, "text").done(function(data, status) {
         // $.alert(data);
@@ -221,7 +218,7 @@ require('../../phpFunction/teachingLoadFunction.php');
         var count = 1;
         // $.alert(data);
         $.each(data, function(key, value) {
-          var assessments = value.sbas_sno;
+          var assessments = value.sbas_assessments;
           var plusValue = parseInt(assessments) + 1;
           var minusValue = parseInt(assessments) - 1;
           if (minusValue == 0) minusValue = 1;
@@ -230,9 +227,19 @@ require('../../phpFunction/teachingLoadFunction.php');
           card += '<td>' + value.mn_name + '</td>';
           card += '<td class="text-center">' + value.atmp_weightage + '</td>';
           card += '<td>';
-          card += '<a href="#" class="increDecre" data-id="' + value.atmp_id + '" data-value="' + minusValue + '"><i class="fa fa-angle-double-left"></i></a>';
+          card += '<a href="#" class="increDecre" data-id="' + value.atmp_id + '" data-value="' + minusValue + '" data-tag="assessment"><i class="fa fa-angle-double-left"></i></a>';
           card += '<span>' + assessments + '</span>';
-          card += '<a href="#" class="increDecre" data-id="' + value.atmp_id + '" data-value="' + plusValue + '"><i class="fa fa-angle-double-right"></i></a>';
+          card += '<a href="#" class="increDecre" data-id="' + value.atmp_id + '" data-value="' + plusValue + '"  data-tag="assessment"><i class="fa fa-angle-double-right"></i></a>';
+          card += '</td>';
+          var consider = value.sbas_consider;
+          var plusValue = parseInt(consider) + 1;
+          var minusValue = parseInt(consider) - 1;
+          if (minusValue == 0) minusValue = 1;
+
+          card += '<td>';
+          card += '<a href="#" class="increDecre" data-id="' + value.atmp_id + '" data-value="' + minusValue + '" data-tag="consider"><i class="fa fa-angle-double-left"></i></a>';
+          card += '<span>' + consider + '</span>';
+          card += '<a href="#" class="increDecre" data-id="' + value.atmp_id + '" data-value="' + plusValue + '" data-tag="consider"><i class="fa fa-angle-double-right"></i></a>';
           card += '</td>';
           card += '</tr>';
         });

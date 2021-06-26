@@ -672,15 +672,15 @@ function check_tn_sbas($conn, $table)
   $sql = "select * from $table";
   $result = $conn->query($sql);
   if (!$result) {
-    echo "Table Missing $table";
+    //echo "Table Missing $table";
     $query =
       'tl_id INT(5) NULL,
     atmp_id VARCHAR(100) NULL,
-    sbas_sno INT(2) NULL,
-    sbas_marks INT(3) NULL,
+    sbas_assessments INT(2) NULL,
+    sbas_consider INT(2) NULL,
     update_ts timestamp Default current_timestamp,
     update_id INT(5) NULL,
-    UNIQUE(tl_id, atmp_id, sbas_sno)';
+    UNIQUE(tl_id, atmp_id)';
 
     $sql = "CREATE TABLE $table ($query)";
     $result = $conn->query($sql);
