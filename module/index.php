@@ -1,6 +1,6 @@
 <?php
 require('requireModule.php');
-
+//echo "dsd";
 if (!isset($myScl)) {
 	$myScl = getField($conn, $myId, "staff", "staff_id", "school_id");
 	$_SESSION['mysclid'] = $myScl;

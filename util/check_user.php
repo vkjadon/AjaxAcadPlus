@@ -1,8 +1,6 @@
 <?php
 session_start();
 require("config_database.php");
-require("../php_function.php"); 
-require("config_variable.php");
 
 if ($_POST['action'] == 'checkUser') {
   $myUn = $_POST['username'];

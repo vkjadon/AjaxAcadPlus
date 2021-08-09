@@ -22,20 +22,29 @@ if (isset($_SESSION["mypid"])) $myProg = $_SESSION['mypid'];
 if (isset($_SESSION['myStdId']) > 0) $myStdId = $_SESSION["myStdId"];
 
 if (isset($mySes)) {
+  //echo "$mySes";
   $session_start = getField($conn, $mySes, "session", "session_id", "session_start");
   $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
 
+  //echo "$session_start - $session_end";
+
   $sesDeptName=getField($conn, $myDept, "department", "dept_id", "dept_name");
   $dept_header='<h5 class="text-center">'.$sesDeptName.'</h5>';
+
+  //echo "$dept_header ";
+  check_tn_ly($conn, "leave_year");
 
   $sql = "select ly_id from leave_year where ly_status='0'";
   $result=$conn->query($sql);
   if ($result && $result->num_rows == 1) {
     $rowsArray = $result->fetch_assoc();
     $ly_id = $rowsArray['ly_id'];
+  } elseif($result && $result->num_rows == 0) {
+    echo $conn->error;
+    $ly_id='1';
   } else {
     echo $conn->error;
-    die();
+    die("Not Processed");
   }
 
   // check_tn_ad($conn, 'assessment_design');
@@ -48,7 +57,6 @@ if (isset($mySes)) {
   check_tn_leave_credit($conn, "leave_credit");
   check_tn_ld($conn, "leave_duration");
   check_tn_lt($conn, "leave_type");
-  check_tn_ly($conn, "leave_year");
   check_tn_org($conn, 'organization');
   check_tn_mn($conn, 'master_name');
   check_tn_qb_cp($conn, 'qb_cp');
@@ -82,6 +90,7 @@ if (isset($mySes)) {
   $tn_eap='enrichment_activity_participant'. $mySes;
   check_tn_enrichment_activity_participant($conn, $tn_eap);
   
+  //echo "Leave Year ";
   $tn_lc = 'leave_claim' . $ly_id;
   check_tn_lc($conn, $tn_lc);
 

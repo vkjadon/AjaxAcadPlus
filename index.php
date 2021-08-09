@@ -1,5 +1,7 @@
 <?php 
 session_start();
+if (isset($_SESSION["setLogo"])) $setLogo = $_SESSION['setLogo'];
+if (isset($_SESSION["setCodePath"])) $codePath = $_SESSION['setCodePath'];
 require("util/config_database.php"); 
 ?>
 
@@ -16,7 +18,9 @@ require("util/config_database.php");
   <div class="container">
     <h1>&nbsp;</h1>
     <div class="row">
-      <div class="col-4">
+      <div class="col-md-4 bg-danger text-center">
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
         <p>&nbsp;</p>
         <p>&nbsp;</p>
         <?php 
@@ -27,10 +31,10 @@ require("util/config_database.php");
           die();
         }
         ?>
-        <img src="<?php //echo $setLogo;?>"> 
-        <?php //echo $myFolder;?>       
+        <img src="<?php echo $setLogo;?>"> 
+        <!-- <?php echo $myFolder;?>        -->
       </div>
-      <div class="col-4">
+      <div class="col-md-4">
         <div class="card myCard">
             <div class="card-body">
             <h3 class="card-title">Connect</h3>

@@ -22,7 +22,7 @@ if (!isset($myBatch)) $myBatch = '';
 			<div class="col ml-2">
 				<span class="inputLabel">
 					<?php
-					echo $myName . '[' . $myUserId . ']';
+					echo $myName . '[' . $myUserId . '] - '.$myFolder;
 					//echo "School ".$myScl;
 					?>
 				</span>
@@ -57,7 +57,7 @@ if (!isset($myBatch)) $myBatch = '';
 
 	<nav id="navbar_top" class="navbar navbar-expand-lg bg-two">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="<?php echo $codePath . '/module/'; ?>">ACADPLUS</a>
+			<a class="navbar-brand" href="<?php echo $codePath . '/module/'; ?>">ClassConnect</a>
 			<!-- Collapse button -->
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav" aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>

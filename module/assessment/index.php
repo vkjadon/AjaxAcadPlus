@@ -8,9 +8,7 @@ require('../../phpFunction/teachingLoadFunction.php');
 <head>
   <title>Outcome Based Education : ClassConnect</title>
   <?php require('../css.php'); ?>
-
 </head>
-
 <body>
   <?php require("../topBar.php"); ?>
   <div class="content">
@@ -92,7 +90,6 @@ require('../../phpFunction/teachingLoadFunction.php');
                   </div>
                 </div>
                 <div class="col-4 mt-1 mb-1" role="tabpanel">
-
                   <p id="tabList"></p>
                 </div>
               </div>
@@ -167,8 +164,6 @@ require('../../phpFunction/teachingLoadFunction.php');
         </div>
       </div>
     </div>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
     <?php require("../bottom_bar.php"); ?>
 
   </div>

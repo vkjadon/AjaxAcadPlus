@@ -174,7 +174,7 @@ function check_tn_feedback_question($conn, $table)
   $sql = "select * from $table";
   $result = $conn->query($sql);
   if (!$result) {
-    //echo "Table Missing $table";
+    echo "Table Missing $table";
     $query =
       'fq_id INT(3) NOT NULL AUTO_INCREMENT,
     fq_statement text NULL,
@@ -182,8 +182,7 @@ function check_tn_feedback_question($conn, $table)
     update_ts timestamp default current_timestamp(),
     update_id INT(5) NULL,
     fq_status INT(1) NULL,
-    PRIMARY KEY (fq_id),
-    UNIQUE(fq_statement, fq_image)';
+    PRIMARY KEY (fq_id)';
     $sql = "CREATE TABLE $table ($query)";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
@@ -354,7 +353,7 @@ function check_tn_ly($conn, $table)
     update_id INT(4) NULL,
     ly_status INT(1) NULL,
     PRIMARY KEY (ly_id),
-    UNIQUE(ly_from)';
+    UNIQUE(ly_id, ly_from)';
 
     $sql = "CREATE TABLE $table ($query)";
     $result = $conn->query($sql);
@@ -461,7 +460,7 @@ function check_tn_question_bank($conn, $table)
   $sql = "select * from $table";
   $result = $conn->query($sql);
   if (!$result) {
-    //echo "Table Missing $table";
+    echo "Table Missing $table";
     $query =
       'qb_id INT(5) NOT NULL AUTO_INCREMENT,
     qb_level int(1) NULL,
@@ -471,8 +470,7 @@ function check_tn_question_bank($conn, $table)
     update_ts timestamp default current_timestamp(),
     update_id INT(5) NULL,
     qb_status INT(1) NULL,
-    PRIMARY KEY (qb_id),
-    UNIQUE(qb_text, qb_status)';
+    PRIMARY KEY (qb_id)';
 
     $sql = "CREATE TABLE $table ($query)";
     $result = $conn->query($sql);
@@ -487,12 +485,12 @@ function check_tn_question_option($conn, $table)
   if (!$result) {
     //echo "Table Missing $table";
     $query =
-      'qb_id INT(5) NULL,
+      'qb_id INT(5) not null,
     qo_text text NULL,
     qo_image VARCHAR(150) NULL,
     qo_code int(1) NULL,
     qo_correct int(1) NULL,
-    UNIQUE(qb_id, qo_text, qo_image)';
+    UNIQUE(qb_id, qo_code)';
 
     $sql = "CREATE TABLE $table ($query)";
     $result = $conn->query($sql);
@@ -744,7 +742,7 @@ function check_tn_sr($conn, $table)
   if (!$result) {
     //echo "Table Missing $table";
     $query =
-      'sr_id INT(5) NULL AUTO_INCREMENT,
+      'sr_id INT(5) NOT NULL AUTO_INCREMENT,
     subject_id INT(5) NULL,
     rt_id INT(2) NULL,
     sr_name VARCHAR(100) NULL,
