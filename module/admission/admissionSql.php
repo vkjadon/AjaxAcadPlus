@@ -20,10 +20,12 @@ if (isset($_POST['action'])) {
    if ($_POST['action'] == 'studentList') {
       $batchId=$_POST['batchId'];
       $progId=$_POST['progId'];
-      
-      if($progId>0)$sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.program_name from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.batch_id=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.program_id='$progId'";
-      else $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.program_name from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.batch_id=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id";
-      
+
+      // $sql = "select st.* from student st where st.student_status='0' order by user_id";
+      if($progId>0)$sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.program_name from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.batch_id=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.program_id='$progId' and st.student_status='0'";
+      else $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.program_name from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.batch_id=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.student_status='0'";
+      //$sql = "select st.*, sd.*, sa.*, b.batch, p.program_name from student st, student_detail sd, student_address sa, batch b, program p where st.batch_id=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id";
+
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
       else {
@@ -66,7 +68,7 @@ if (isset($_POST['action'])) {
             if($last_user_id==1) $last_user_id=$school_code.substr($batch, 2).$sp_code.'0001';
          }
          else echo $conn->error;
-         
+
          $sql = "insert into student (batch_id, program_id, student_name, student_rollno, student_mobile, student_email, user_id, update_id, student_status) value('$myBatch', '$myProg', '" . data_check($_POST['sName']) . "', '" . data_check($_POST['sRno']) . "', '" . $_POST['sMobile'] . "', '" . $_POST['sEmail'] . "', '$last_user_id', '$myId', '0')";
          $result = $conn->query($sql);
          if (!$result) echo $conn->error;

@@ -366,13 +366,40 @@ require('../requireSubModule.php');
           <div class="tab-pane fade" id="list-sr" role="tabpanel" aria-labelledby="list-sr-list">
             <div class="row">
               <div class="col-md-12" style="overflow: scroll;">
-                <div class="container card mt-2 myCard">
+                <div class="container card mt-2 myCard" id="print" style="overflow: scroll;">
+                <div class="text-right"><a onclick="printDiv('print')" class="fa fa-print"></a>
+                                    <a class="fas fa-file-export" id="export"></a></div>
                   <table class="table table-bordered table-striped list-table-xxs mt-3" id="studentShowList">
                     <!-- <th><i class="fas fa-edit"></i></th> -->
                     <th>ID</th>
                     <th>Name</th>
+                    <th>Course</th>
                     <th>RollNo</th>
                     <th>Mobile</th>
+                    <th>Semester</th>
+                    <th>Registration Date</th>
+                    <th>Regular</th>
+                    <th>DOB</th>
+                    <th>Whats App</th>
+                    <th>Adhaar</th>
+                    <th>Category</th>
+                    <th>Religion</th>
+                    <th>Blood Group</th>
+                    <th>Fee</th>
+                    <th>Gender</th>
+                    <th>Father's Name</th>
+                    <th>Father's Mobile</th>
+                    <th>Father's Email</th>
+                    <th>Father's Occupation </th>
+                    <th>Father's Deisgnation</th>
+                    <th>Mother's Name</th>
+                    <th>Mother's Mobile</th>
+                    <th>Mother's Email</th>
+                     <th>Address</th>
+                    <th>City</th>
+                    <th>Pincode</th>
+                    <th>State</th>
+                    <th>District</th>
                   </table>
                 </div>
               </div>
@@ -853,6 +880,41 @@ require('../requireSubModule.php');
     }
 
   });
+
+  function printDiv(print) {
+    // $.alert("In print");
+    var backup = document.body.innerHTML;
+    var divContent = document.getElementById(print).innerHTML;
+    document.body.innerHTML = divContent;
+    window.print();
+    document.body.innerHTML = backup;
+  }
+   document.getElementById('export').onclick = function() {
+      var tableId = document.getElementById('studentShowList').id;
+      htmlTableToExcel(tableId, filename = '');
+    }
+    var htmlTableToExcel = function(tableId, fileName = '') {
+      var excelFileName = 'excel_table_data';
+      var TableDataType = 'application/vnd.ms-excel';
+      var selectTable = document.getElementById(tableId);
+      var htmlTable = selectTable.outerHTML.replace(/ /g, '%20');
+
+      filename = filename ? filename + '.xls' : excelFileName + '.xls';
+      var excelFileURL = document.createElement("a");
+      document.body.appendChild(excelFileURL);
+
+      if (navigator.msSaveOrOpenBlob) {
+        var blob = new Blob(['\ufeff', htmlTable], {
+          type: TableDataType
+        });
+        navigator.msSaveOrOpenBlob(blob, fileName);
+      } else {
+
+        excelFileURL.href = 'data:' + TableDataType + ', ' + htmlTable;
+        excelFileURL.download = fileName;
+        excelFileURL.click();
+      }
+    }
 </script>
 
 <!-- Modal/Insititution Section-->
