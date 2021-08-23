@@ -50,10 +50,10 @@ if (isset($_POST['action'])) {
   }
  } elseif ($_POST['action'] == 'addStaff') {
 
-  $fields = ['staff_name', 'staff_doj', 'staff_mobile', 'staff_mobile'];
-  $values = [data_check($_POST['sName']), data_check($_POST['sDoj']), $_POST['sMobile'], $_POST['sEmail']];
+  $fields = ['school_id', 'staff_name', 'staff_doj', 'staff_mobile', 'staff_email', 'staff_status'];
+  $values = [$myScl, data_check($_POST['sName']), data_check($_POST['sDoj']), $_POST['sMobile'], $_POST['sEmail'], '0'];
   $status = 'staff_status';
-  $dup = "select * from staff where staff_id='" . data_check($_POST["sRno"]) . "' and $status='0'";
+  $dup = "select * from staff where staff_email='" . data_check($_POST["sEmail"]) . "' and $status='0'";
   $dup_alert = "Duplicate URL Exists. One Dept can have one URL. Give Dummy Unique URL if required";
   addData($conn, 'staff', 'staff_id', $fields, $values, $status, $dup, $dup_alert);
  } elseif ($_POST['action'] == 'fetchStaff') {
@@ -94,73 +94,31 @@ if (isset($_POST['action'])) {
   if (!$result) echo $conn->error;
   else echo "Success";
  } elseif ($_POST['action'] == 'staffQualificationList') {
-  $tableId = 'stq_id';
   $stfId = $_POST['stfId'];
   // echo "$stfId";
+  
+  $sql = "select sq.*, mn.mn_name from staff_qualification sq, master_name mn where mn.mn_id=sq.mn_id and sq.staff_id='$stfId'";
 
-  $statusDecode = array("status" => "stq_status", "0" => "Active", "9" => "Inactive");
-  $button = array("1", "1", "0", "0", "Upload", "View");
-
-  $fields = array("qualification_name", "stq_institute", "stq_board", "stq_percentage");
-  $dataType = array("0", "0", "0", "0", "0", "0", "0");
-  $header = array("Id", "Qualification", "Institute", "Board", "Percentage/CGPA");
-
-  if ($stfId > 0) $sql = "select stq.*, q.qualification_name from staff_qualification stq, qualification q where q.qualification_id=stq.qualification_id and stq.staff_id='$stfId'";
-  // getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDecode, $button);
-
-  $columnCount = count($header);
-  // echo "In Function  $sql Column Count $columnCount";
   echo '<table class="list-table-xs">';
-  echo '<thead align="center">';
-
-
-  if (isset($statusDecode["align"]) == "center") $align = 'align=' . '"center"';
-  else $align = '';
-  echo '<table class="list-table-xs">';
-  echo '<thead ' . $align . '>';
-  if ($button[0] == '1') echo '<th><i class="fa fa-edit"></i></th>';
-  for ($j = 0; $j < $columnCount; $j++) echo '<th>' . $header[$j] . '</th>';
-  if ($button[1] > 0) echo '<th><i class="fa fa-trash"></i></th>';
-  if ($button[2] == '1') echo '<td><i class="fa fa-info-circle"></i></td>';
-  if ($button[3] == '1') echo '<td>Process</td>';
-  $buttonCount = count($button);
-  if ($buttonCount > 4) {
-   for ($i = 4; $i < $buttonCount; $i++) {
-    echo '<th>' . $button[$i] . '</th>';
-   }
-  }
+  echo '<thead><th><i class="fa fa-edit"></i></th>';
+  echo '<th>Qualification</th>';
+  echo '<th>Institute</th>';
+  echo '<th><i class="fa fa-trash"></i></th>';
   echo '</thead>';
-  $fieldCount = count($fields);
   $result = $conn->query($sql);
   if (!$result) {
    echo $conn->error;
    die(" The script could not be Loadded! Please report!");
   }
   while ($rows = $result->fetch_assoc()) {
-   $data = "";
-   echo '<tr ' . $align . '>';
-   if ($tableId <> '') $id = $rows[$tableId];
-   if ($button[0] == '1') echo '<td><a href="#" class="' . $tableId . 'E" id="' . $id . '"><i class="fa fa-edit"></i></a></td>';
-   if ($tableId <> '') echo '<td>' . $id . '</td>';
-   for ($j = 0; $j < $fieldCount; $j++) {
-    $fieldName = $fields[$j];
-    $fieldValue = $rows[$fieldName];
-    $data .= ' data-' . $fieldName . '="' . $fieldValue . '"';
-    if ($fieldName == $statusDecode["status"]) echo '<td>' . $statusDecode[$fieldValue] . '</td>';
-    else {
-     if ($dataType[$j] == "0") echo '<td>' . $fieldValue . '</td>';
-     elseif ($dataType[$j] == "1") echo '<td>' . date("d-M-Y", strtotime($fieldValue)) . '</td>';
-    }
-   }
-   if ($button[1] == '1') echo '<td><a href="#" class="' . $tableId . 'D" id="' . $id . '"><i class="fa fa-trash"></i></a></td>';
-   elseif ($button[1] == '2') echo '<td><a href="#" class="' . $tableId . 'R" id="' . $id . '"><i class="fa fa-trash"></i></a></td>';
-   if ($button[2] == '1') echo '<td><a href="#" class="' . $tableId . 'I" id="' . $id . '"><i class="fa fa-info-circle"></i></a></td>';
-   if ($button[3] == '1') echo '<td><a href="#" class="' . $tableId . 'P" id="' . $id . '">Process</a></td>';
-   if ($buttonCount > 4) {
-    for ($i = 4; $i < $buttonCount; $i++) {
-     echo '<td><button class="btn btn-secondary btn-square-sm mt-1 ' . $tableId . $button[$i] . '" id="' . $id . '" ' . $data . '>' . $button[$i] . '</button></td>';
-    }
-   }
+   $staff_id = $rows['staff_id'];
+   $mn_id = $rows['mn_id'];
+   echo '<tr>';
+   echo '<td><a href="#" class="editSQ" data-staff="'.$staff_id.'" data-mn="'.$mn_id.'"><i class="fa fa-edit"></i></a></td>';
+   echo '<td>' . $rows['sq_institute'] . '</td>';   
+   echo '<td>' . $rows['sq_board'] . '</td>';   
+   echo '<td>' . $rows['sq_year'] . '</td>';   
+   echo '<td><a href="#" class="trashSQ" data-staff="'.$staff_id.'" data-mn="'.$mn_id.'"><i class="fa fa-trash"></i></a></td>';
    echo '</tr>';
   }
   echo '</table>';

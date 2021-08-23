@@ -13,8 +13,10 @@ if (isset($_POST['action'])) {
     $sql = "select * from batch order by batch desc";
     getListCard($conn, $tableId, $fields, $dataType, $sql, $statusDecode, $button);
   } elseif ($_POST["action"] == "addBatch") {
-    $fields = ['batch', 'update_id', 'batch_status'];
-    $values = [data_check($_POST['newBatch']), $myId, '0'];
+    $batch = data_check($_POST['newBatch']);
+    $ay = data_check($_POST['ay']);
+    $fields = ['batch', 'academic_year', 'update_id', 'batch_status'];
+    $values = [$batch, $ay, $myId, '0'];
     $status = 'batch_status';
     $dup = "select * from batch where batch='" . data_check($_POST["newBatch"]) . "'";
     $dup_alert = " Batch already Exists !!";
@@ -27,8 +29,8 @@ if (isset($_POST['action'])) {
     $output = $result->fetch_assoc();
     echo json_encode($output);
   } elseif ($_POST["action"] == "updateBatch") {
-    $fields = ['batch_id', 'batch'];
-    $values = [$_POST['modalId'], data_check($_POST['newBatch'])];
+    $fields = ['batch_id', 'batch', 'academic_year'];
+    $values = [$_POST['modalId'], data_check($_POST['newBatch']), data_check($_POST['ay'])];
     $dup = "select * from batch where batch_id='" . $_POST["modalId"] . "'";
     $dup_alert = "Could Not Update - Duplicate Entries";
     updateData($conn, 'batch', $fields, $values, $dup, $dup_alert);
@@ -166,8 +168,9 @@ if (isset($_POST['action'])) {
       echo '</div>';
     } else echo $conn->error;
   } elseif ($_POST["action"] == "headName") {
-    $sql = "insert into master_name (mn_code, mn_name, mn_remarks, mn_status, update_id) values('" . $_POST["headName"] . "', '" . $_POST["name"] . "', '" . $_POST["remarks"] . "', '0', '$myId')";
+    $sql = "insert into master_name (mn_code, mn_name, mn_abbri, mn_remarks, mn_status, update_id) values('" . $_POST["headName"] . "', '" . $_POST["name"] . "', '" . $_POST["abbri"] . "', '" . $_POST["remarks"] . "', '0', '$myId')";
     $conn->query($sql);
+    echo "Added Successfully";
   } elseif ($_POST["action"] == "masterNameList") {
     //echo "MyId- $myProg - $myBatch";
     $sql = "select * from master_name where mn_code='" . $_POST['headName'] . "' order by mn_name";
@@ -180,13 +183,14 @@ if (isset($_POST['action'])) {
       echo '<div class="row m-2">';
       echo '<div class="col-sm-2 p-0 pl-1">';
       echo '<a href="#" class="po_idE" data-id="' . $mn_id . '"><i class="fa fa-edit"></i></a>';
-      echo ' [' . $mn_id.']';
+      echo ' [' . $mn_id . ']';
       echo '</div>';
-
-      echo '<div class="col-sm-8">';
+      echo '<div class="col-sm-6">';
       echo '<div class="cardBodyText"><b>' . $row_mn["mn_name"] . '</b></div>';
       echo '</div>';
-
+      echo '<div class="col-sm-3">';
+      echo '<div class="cardBodyText"><b>' . $row_mn["mn_abbri"] . '</b></div>';
+      echo '</div>';
       echo '<div class="col-sm-1">';
       if ($status == "9") echo '<a href="#" class="float-right po_idR" data-id="' . $mn_id . '">Removed</a>';
       else echo '<a href="#" class="float-right po_idD" data-id="' . $mn_id . '"><i class="fa fa-trash"></i></a>';
@@ -218,11 +222,11 @@ if (isset($_POST['action'])) {
     $output = '';
     $sql = "select * from staff where staff_name LIKE '%" . $_POST["searchString"] . "%'";
     $result = $conn->query($sql);
-    if(!$result)echo $conn->error;
+    if (!$result) echo $conn->error;
     $output = '<ul class="list-group p-0 m-0">';
     if ($result) {
       while ($row = $result->fetch_assoc()) {
-        $output .= '<li class="list-group-item list-group-item-action staffAutoList"  data-staff="' . $row["staff_id"] . '" >' . $row["staff_name"] . ' ['.$row["user_id"].']</li>';
+        $output .= '<li class="list-group-item list-group-item-action staffAutoList"  data-staff="' . $row["staff_id"] . '" >' . $row["staff_name"] . ' [' . $row["user_id"] . ']</li>';
       }
     } else {
       $output .= '<li>Staff Not Found</li>';
@@ -230,7 +234,7 @@ if (isset($_POST['action'])) {
     $output .= '</ul>';
     echo $output;
   } elseif ($_POST["action"] == "respName") {
-    $sql="insert into responsibility_staff (rs_code, staff_id, unit_id, rs_from_date, rs_to_date, rs_remarks, update_id, rs_status) values('".$_POST["respName"]."', '".$_POST["staffId"]."', '".$_POST["selectId"]."', '".$_POST["respFrom"]."', '".$_POST["respTo"]."', '".$_POST["respRemarks"]."', '$myId', '0')";
+    $sql = "insert into responsibility_staff (rs_code, staff_id, unit_id, rs_from_date, rs_to_date, rs_remarks, update_id, rs_status) values('" . $_POST["respName"] . "', '" . $_POST["staffId"] . "', '" . $_POST["selectId"] . "', '" . $_POST["respFrom"] . "', '" . $_POST["respTo"] . "', '" . $_POST["respRemarks"] . "', '$myId', '0')";
     $conn->query($sql);
   }
 }

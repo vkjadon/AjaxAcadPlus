@@ -1,7 +1,7 @@
 <?php
 session_start();
 // Change Below
-$myFolder='clients/aryan';
+$myFolder='clients/aryans';
 // Change Below
 $myDb='aryan';
 $_SESSION["myFolder"]=$myFolder;

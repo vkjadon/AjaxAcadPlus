@@ -18,7 +18,12 @@ if (isset($_POST["query"])) {
 }
 if (isset($_POST['action'])) {
    if ($_POST['action'] == 'studentList') {
-      $sql = "select * from student st where st.program_id='$myProg' and st.batch_id='$myBatch' and student_status='0' order by student_name";
+      $batchId=$_POST['batchId'];
+      $progId=$_POST['progId'];
+      
+      if($progId>0)$sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.program_name from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.batch_id=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.program_id='$progId'";
+      else $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.program_name from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.batch_id=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id";
+      
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
       else {
@@ -28,12 +33,41 @@ if (isset($_POST['action'])) {
          }
          echo json_encode($json_array);
       }
-   } elseif ($_POST['action'] == 'addStudent') {
+   } elseif ($_POST['action'] == 'studentDisp') {
+      // $batchId=$_POST['batchId'];
+      // $progId=$_POST['progId'];
+      // if($batchId>0)$strBatch="and st.batch_id='".$batchId."'";
+      // else $strBatch='';
+      // if($progId>0)$str="and st.program_id='".$progId."'";
+      // else $strProg='';
+
+      // $str=$strBatch.' '.$strProg;
+      // $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.program_name from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.batch_id=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id";
+      $id = $_POST['userId'];
+      $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.program_name from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.batch_id=b.batch_id and st.user_id='$id' and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id";
+      $result = $conn->query($sql);
+      $output = $result->fetch_assoc();
+      echo json_encode($output);
+   }elseif ($_POST['action'] == 'addStudent') {
       $dup = "select * from student where student_rollno='" . data_check($_POST["sRno"]) . "' and student_status='0'";
       $result = $conn->query($dup);
       $dup_found = $result->num_rows;
       if ($dup_found == 0) {
-         $sql = "insert into student (batch_id, program_id, student_name, student_rollno, student_mobile, student_email, update_id, student_status) value('$myBatch', '$myProg', '" . data_check($_POST['sName']) . "', '" . data_check($_POST['sRno']) . "', '" . $_POST['sMobile'] . "', '" . $_POST['sEmail'] . "', '$myId', '0')";
+         $school_code = getField($conn, $myScl, 'school', 'school_id', 'school_code');
+         $batch = getField($conn, $myBatch, 'batch', 'batch_id', 'batch');
+         $sp_code = getField($conn, $myProg, 'program', 'program_id', 'sp_code');
+
+         $sql = "select max(user_id) as max from student where program_id='$myProg' and batch_id='$myBatch'";
+         $result = $conn->query($sql);
+         if ($result) {
+            $row = $result->fetch_assoc();
+            $last_user_id = $row["max"];
+            $last_user_id++;
+            if($last_user_id==1) $last_user_id=$school_code.substr($batch, 2).$sp_code.'0001';
+         }
+         else echo $conn->error;
+         
+         $sql = "insert into student (batch_id, program_id, student_name, student_rollno, student_mobile, student_email, user_id, update_id, student_status) value('$myBatch', '$myProg', '" . data_check($_POST['sName']) . "', '" . data_check($_POST['sRno']) . "', '" . $_POST['sMobile'] . "', '" . $_POST['sEmail'] . "', '$last_user_id', '$myId', '0')";
          $result = $conn->query($sql);
          if (!$result) echo $conn->error;
          else {
@@ -43,7 +77,7 @@ if (isset($_POST['action'])) {
             $result = $conn->query($sql);
          }
       }
-   } elseif ($_POST['action'] == 'fetchStudent') {
+   }  elseif ($_POST['action'] == 'fetchStudent') {
       $id = $_POST['studentId'];
       $sql = "select sd.*, s.* FROM student s, student_detail sd where s.student_id='$id' and s.student_id=sd.student_id";
       $result = $conn->query($sql);
@@ -86,11 +120,11 @@ if (isset($_POST['action'])) {
       $mn_id = $_POST['mn_id'];
       $tag = $_POST['tag'];
       $value = $_POST['value'];
-      $dup="select * from student_qualification where student_id='$student_id' and mn_id='$mn_id'";
-      $result=$conn->query($dup);
-      if($result->num_rows==0){
-         $sql="insert into student_qualification (student_id, mn_id, $tag, update_id, sq_status) values('$student_id','$mn_id', '$value', '$myId','0')";
-      }else{
+      $dup = "select * from student_qualification where student_id='$student_id' and mn_id='$mn_id'";
+      $result = $conn->query($dup);
+      if ($result->num_rows == 0) {
+         $sql = "insert into student_qualification (student_id, mn_id, $tag, update_id, sq_status) values('$student_id','$mn_id', '$value', '$myId','0')";
+      } else {
          $sql = "update student_qualification set $tag='$value', sq_status='0', update_ts='$submit_ts', update_id='$myId' where student_id='$student_id' and mn_id='$mn_id'";
       }
       $conn->query($sql);

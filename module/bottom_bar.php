@@ -5,7 +5,7 @@
     </div>
   </div>
 </div>
-<?php echo $codePath; ?>
+<?php // echo $codePath; ?>
 <script>
   $(document).on("keyup", '#indexSearch', function() {
     var searchString = $(this).val();

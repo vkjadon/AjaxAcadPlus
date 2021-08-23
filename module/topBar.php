@@ -19,6 +19,9 @@ if (!isset($myBatch)) $myBatch = '';
 <header>
 	<div class="py-2">
 		<div class="row">
+			<div class="col-1 ml-2 bg-danger">
+		<img src="<?php echo $setLogo; ?>" width="100%">
+			</div>
 			<div class="col ml-2">
 				<span class="inputLabel">
 					<?php
@@ -47,9 +50,9 @@ if (!isset($myBatch)) $myBatch = '';
 			</div>
 
 			<div class="col mr-2">
-				<a href="<?php echo $codePath . '/module/forms/'; ?>" class="float-right">&nbsp; Forms &nbsp;</a>
-				<a href="" class="float-right">&nbsp; Downloads &nbsp;</a>
-				<a href="<?php echo $codePath . '/eoffice/'; ?>" class="float-right" target="_blank">&nbsp; eOffice &nbsp;</a>
+				<!-- <a href="<?php echo $codePath . '/module/forms/'; ?>" class="float-right">&nbsp; Forms &nbsp;</a> -->
+				<!-- <a href="" class="float-right">&nbsp; Downloads &nbsp;</a> -->
+				<a href="<?php echo $codePath . '/access/admission/'; ?>" class="float-right" target="_blank">&nbsp; Admission &nbsp;</a>
 			</div>
 		</div>
 
@@ -60,7 +63,7 @@ if (!isset($myBatch)) $myBatch = '';
 			<a class="navbar-brand" href="<?php echo $codePath . '/module/'; ?>">ClassConnect</a>
 			<!-- Collapse button -->
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav" aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
+				<span class="navbar-toggler-icon">Menu</span>
 			</button>
 
 			<!-- Collapsible content -->
@@ -75,7 +78,7 @@ if (!isset($myBatch)) $myBatch = '';
 							<div class="card myCard border">
 								<div class="row">
 									<div class="col-6">
-										<a href="<?php echo $codePath . '/module/inst/'; ?>" class="dropdown-item pb-1">Institite Settings</a>
+										<a href="<?php echo $codePath . '/module/setting/'; ?>" class="dropdown-item pb-1">Institite Settings</a>
 										<a href="<?php echo $codePath . '/module/hr/'; ?>" class="dropdown-item pb-1"> Manage Staff </a>
 										<a href="<?php echo $codePath . '/module/admission/'; ?>" class="dropdown-item pb-1"> Manage Student </a>
 									</div>
@@ -178,7 +181,7 @@ if (!isset($myBatch)) $myBatch = '';
 							<div class="card myCard border">
 								<div class="row">
 									<div class=" col-6">
-									<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item pb-1"> Accounts </a>
+									<a href="<?php echo $codePath . '/module/fee/'; ?>" class="dropdown-item pb-1"> Fee </a>
 										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item pb-1"> TPC </a>
 										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item pb-1"> Alumni </a>
 									</div>

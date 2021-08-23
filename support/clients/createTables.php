@@ -239,6 +239,7 @@
     'school_id INT(5) NOT NULL AUTO_INCREMENT,
     school_name varchar(100) NULL,
     school_abbri VARCHAR(10) NULL,
+    school_code VARCHAR(2) NULL,
     school_logo blob NULL,
     school_url varchar(100) NULL,
     school_doi date NULL,

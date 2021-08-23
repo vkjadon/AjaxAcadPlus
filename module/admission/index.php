@@ -8,48 +8,6 @@ require('../requireSubModule.php');
 <head>
   <title>Outcome Based Education : AcadPlus</title>
   <?php require("../css.php"); ?>
-  <style>
-    .collapsible-link::before {
-      content: '';
-      width: 14px;
-      height: 2px;
-      background: #333;
-      position: absolute;
-      top: calc(50% - 1px);
-      right: 1rem;
-      display: block;
-      transition: all 0.3s;
-    }
-
-    /* Vertical line */
-    .collapsible-link::after {
-      content: '';
-      width: 2px;
-      height: 14px;
-      background: #333;
-      position: absolute;
-      top: calc(50% - 7px);
-      right: calc(1rem + 6px);
-      display: block;
-      transition: all 0.3s;
-    }
-
-    .collapsible-link[aria-expanded='true']::after {
-      transform: rotate(90deg) translateX(-1px);
-    }
-
-    .collapsible-link[aria-expanded='true']::before {
-      transform: rotate(180deg);
-    }
-
-    .collapseAccordian {
-      background-color: #e1f5fe;
-    }
-
-    .collapseHeader {
-      background-color: #29b6f6;
-    }
-  </style>
 </head>
 
 <body>
@@ -62,21 +20,69 @@ require('../requireSubModule.php');
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active as" id="list-as-list" data-toggle="list" href="#list-as" role="tab" aria-controls="as"> Add Student </a>
-          <a class="list-group-item list-group-item-action sr" id="list-sr-list" data-toggle="list" href="#list-sr" role="tab" aria-controls="sr">Student Report</a>
           <a class="list-group-item list-group-item-action cbp" id="list-cbp-list" data-toggle="list" href="#list-cbp" role="tab" aria-controls="cbp">Change Batch/Program</a>
+          <a class="list-group-item list-group-item-action ssr" id="list-ssr-list" data-toggle="list" href="#list-ssr" role="tab" aria-controls="ssr">Student Strength Report</a>
+          <a class="list-group-item list-group-item-action sr" id="list-sr-list" data-toggle="list" href="#list-sr" role="tab" aria-controls="sr">Student Report</a>
         </div>
       </div>
       <div class="col-10 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
+          <div class="row">
+            <div class="col-md-4 pr-0">
+              <div class="card border-info">
+                <div class="input-group">
+                  <?php
+                  $sql_batch = "select * from batch";
+                  $result = $conn->query($sql_batch);
+                  if ($result) {
+                    echo '<select class="form-control form-control-sm" name="sel_batch" id="sel_batch" required>';
+                    echo '<option selected disabled>Select Batch</option>';
+                    while ($rows = $result->fetch_assoc()) {
+                      $select_id = $rows['batch_id'];
+                      $select_name = $rows['batch'];
+                      echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+                    }
+                    echo '<option value="ALL">ALL</option>';
+                    echo '</select>';
+                  } else echo $conn->error;
+                  if ($result->num_rows == 0) echo 'No Data Found';
+                  ?>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card border-info" style="width:300px">
+                <div class="input-group">
+                  <?php
+                  $sql_program = "select * from program";
+                  $result = $conn->query($sql_program);
+                  if ($result) {
+                    echo '<select class="form-control form-control-sm" name="sel_program" id="sel_program" required>';
+                    echo '<option selected disabled>Select Program</option>';
+                    while ($rows = $result->fetch_assoc()) {
+                      $select_id = $rows['program_id'];
+                      $select_name = $rows['sp_name'];
+                      echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+                    }
+                    echo '<option value="ALL">ALL</option>';
+                    echo '</select>';
+                  } else echo $conn->error;
+                  if ($result->num_rows == 0) echo 'No Data Found';
+                  ?>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="row ml-2">
+                <h3>
+                  <a class="fa fa-arrow-circle-up uploadStudent"></a>
+                </h3>
+              </div>
+            </div>
+          </div>
           <div class="tab-pane show active" id="list-as" role="tabpanel" aria-labelledby="list-as-list">
             <div class="row">
               <div class="col-6">
-                <div class="row ml-2">
-                  <h3 class="mb-0 py-0">
-                    <a class="fa fa-plus-circle addStudent"></a>
-                    <a class="fa fa-arrow-circle-up uploadStudent"></a>
-                  </h3>
-                </div>
                 <div class="container card mt-2 myCard">
                   <!-- nav options -->
                   <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
@@ -343,10 +349,8 @@ require('../requireSubModule.php');
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-6">
-                <h5 class="mb-3">Student List</h5>
-                <div class="container card myCard">
+
+                <div class="container card myCard mt-2">
                   <div class="input-group md-form form-sm form-2 mt-1">
                     <input name="studentSearch" id="studentSearch" class="form-control my-0 py-1 red-border" type="text" placeholder="Search Student" aria-label="Search">
                     <div class="input-group-append">
@@ -355,19 +359,26 @@ require('../requireSubModule.php');
                   </div>
                   <div class='list-group' id="studentAutoList"></div>
                 </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="list-sr" role="tabpanel" aria-labelledby="list-sr-list">
+            <div class="row">
+              <div class="col-md-12" style="overflow: scroll;">
                 <div class="container card mt-2 myCard">
-                  <table class="table table-bordered table-striped list-table-xs mt-3" id="studentShowList">
-                    <th><i class="fas fa-edit"></i></th>
+                  <table class="table table-bordered table-striped list-table-xxs mt-3" id="studentShowList">
+                    <!-- <th><i class="fas fa-edit"></i></th> -->
+                    <th>ID</th>
                     <th>Name</th>
                     <th>RollNo</th>
                     <th>Mobile</th>
-                    <th>Email</th>
                   </table>
                 </div>
               </div>
             </div>
           </div>
-          <div class="tab-pane fade" id="list-sr" role="tabpanel" aria-labelledby="list-sr-list">
+          <div class="tab-pane fade" id="list-ssr" role="tabpanel" aria-labelledby="list-ssr-list">
             <div class="row">
               <div class="col-4">
                 <p id="studentProgramReport"></p>
@@ -390,70 +401,6 @@ require('../requireSubModule.php');
                   </tr>
                 </table>
               </div>
-              <div class="col-4">
-                <div class="row">
-                  <div class="card border-info mb-3" style="width:300px">
-                    <div class="card-header">
-                      Change Batch
-                    </div>
-                    <div class="card-body text-primary">
-                      <form class="form-horizontal" id="changeBatch">
-                        <div class="input-group">
-                          <?php
-                          $sql_batch = "select * from batch";
-                          $result = $conn->query($sql_batch);
-                          if ($result) {
-                            echo '<select class="form-control form-control-sm" name="sel_batch" id="sel_batch" required>';
-                            echo '<option selected disabled>Select Batch</option>';
-                            while ($rows = $result->fetch_assoc()) {
-                              $select_id = $rows['batch_id'];
-                              $select_name = $rows['batch'];
-                              echo '<option value="' . $select_id . '">' . $select_name . '</option>';
-                            }
-                            echo '</select>';
-                          } else echo $conn->error;
-                          if ($result->num_rows == 0) echo 'No Data Found';
-                          ?>
-                          <div class="input-group-append">
-                            <button class="btn btn-primary btn-sm m-0" type="submit">Submit</button>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="card border-info mb-3" style="width:300px">
-                    <div class="card-header">
-                      Change Programme
-                    </div>
-                    <div class="card-body text-primary">
-                      <form class="form-horizontal" id="changeProgram">
-                        <div class="input-group">
-                          <?php
-                          $sql_program = "select * from program";
-                          $result = $conn->query($sql_program);
-                          if ($result) {
-                            echo '<select class="form-control form-control-sm" name="sel_program" id="sel_program" required>';
-                            echo '<option selected disabled>Select Program</option>';
-                            while ($rows = $result->fetch_assoc()) {
-                              $select_id = $rows['program_id'];
-                              $select_name = $rows['sp_name'];
-                              echo '<option value="' . $select_id . '">' . $select_name . '</option>';
-                            }
-                            echo '</select>';
-                          } else echo $conn->error;
-                          if ($result->num_rows == 0) echo 'No Data Found';
-                          ?>
-                          <div class="input-group-append">
-                            <button class="btn btn-primary btn-sm m-0" type="submit">Submit</button>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -474,11 +421,8 @@ require('../requireSubModule.php');
   $(document).ready(function() {
 
     $('[data-toggle="tooltip"]').tooltip();
-    $('#list-as').show();
-    $('#list-sr').hide();
-    $('.studentProfile').hide();
-    $('#accordionStudent').hide();
     studentList();
+    studentProgramReport();
 
     $('#studentSearch').keyup(function() {
       var query = $(this).val();
@@ -556,19 +500,7 @@ require('../requireSubModule.php');
       })
     });
 
-    $(document).on('click', '.sr', function() {
-      $('#list-sr').show();
-      $('#list-cbp').hide();
-      $('#list-as').hide();
-      $('#studentProgramReport').show();
-      studentProgramReport();
-    });
-
     $(document).on('click', '.cbp', function() {
-      $('#list-cbp').show();
-      $('#list-sr').hide();
-      $('#list-as').hide();
-
       $.post("admissionSql.php", {
         action: "updateStudentList",
       }, () => {}, "json").done(function(data) {
@@ -591,13 +523,6 @@ require('../requireSubModule.php');
     $("#checkall").change(function() {
       $(".checkitem").prop("checked", $(this).prop("checked"))
     })
-
-    $(document).on('click', '.as', function() {
-      $(".selectPanel").show();
-      $('#list-as').show();
-      $('#list-sr').hide();
-      $('#list-cbp').hide();
-    });
 
     $(document).on('click', '.addStudent', function() {
       $('#modal_title').text("Add Student");
@@ -624,7 +549,8 @@ require('../requireSubModule.php');
         cache: false, // To unable request pages to be cached
         processData: false, // To send DOMDocument or non processed data file it is set to false
         success: function(data) {
-          // $.alert("heloo"+data);
+          $.alert("Successfully Uploaded!!");
+          studentList()
           $('#formModal').modal('hide');
         }
       })
@@ -633,13 +559,15 @@ require('../requireSubModule.php');
     $(document).on('click', '.editStudent', function() {
       $('.studentProfile').show();
       var id = $(this).attr("data-student");
+      // $.alert(id);
       $("#studentIdHidden").val(id);
       studentQualificationList();
-
       $.post("admissionSql.php", {
         studentId: id,
         action: "fetchStudent"
       }, () => {}, "json").done(function(data) {
+        // $.alert(data)
+        console.log(data)
         $(".student_email").text(data.student_email);
         $(".student_name").text(data.student_name);
         $(".student_rollno").text(data.student_rollno);
@@ -785,7 +713,7 @@ require('../requireSubModule.php');
         alert(" Pressed" + formData);
         $.post("admissionSql.php", formData, () => {}, "text").done(function(data) {
           $.alert("List Updtaed" + data);
-          if (action == "addSubject" || action == "updateSubject") {
+          if (action == "addStudent" || action == "updateStudent") {
             studentList();
           }
           if (action == "addStudentQualification" || action == "updateStudentQualification") {
@@ -826,29 +754,56 @@ require('../requireSubModule.php');
       $('#action').val("addContact");
     });
 
-    $(document).on('click', '.as', function() {
-      $(".selectPanel").show();
-    });
 
     function studentList() {
-      //$.alert("In List Function" + y);
+      var batchId = $("#sel_batch").val()
+      var progId = $("#sel_program").val()
+      // $.alert("Batch"+batchId  +"Prog"+ progId);
       $.post("admissionSql.php", {
+        batchId: batchId,
+        progId: progId,
         action: "studentList"
       }, function() {}, "json").done(function(data, status) {
-        $("#studentShowList").show();
-        // $.alert("List " + data);
-        var listData = '';
+        // $.alert(data);
+        console.log(data);
+        var card = '';
         $.each(data, function(key, value) {
-          listData += '<tr>';
-          listData += '<td><a href="#" class="fa fa-edit editStudent" data-student="' + value.student_id + '"></a></td>';
-          listData += '<td>' + value.student_name + '</td>';
-          listData += '<td>' + value.student_rollno + '</td>';
-          listData += '<td>' + value.student_mobile + '</td>';
-          listData += '<td>' + value.student_email + '</td>';
-          listData += '</tr>';
+          card += '<tr>';
+          // card += '<td><a href="#" class="fa fa-edit editStudent" data-student="' + value.student_id + '"></a></td>';
+          card += '<td>' + value.user_id + '</td>';
+          card += '<td>' + value.student_name + '</td>';
+          card += '<td>' + value.program_name + '</td>';
+          card += '<td>' + value.student_rollno + '</td>';
+          card += '<td>' + value.student_mobile + '</td>';
+          card += '<td>' + value.student_semester + '</td>';
+          card += '<td>' + getFormattedDate(value.student_admission, "dmY") + '</td>';
+          card += '<td>' + value.student_lateral + '</td>';
+          card += '<td>' + getFormattedDate(value.student_dob, "dmY") + '</td>';
+          card += '<td>' + value.student_whatsapp + '</td>';
+          card += '<td>' + value.student_adhaar + '</td>';
+          card += '<td>' + value.student_category + '</td>';
+          card += '<td>' + value.student_religion + '</td>';
+          card += '<td>' + value.student_bg + '</td>';
+          card += '<td>' + value.student_fee_category + '</td>';
+          card += '<td>' + value.student_gender + '</td>';
+          card += '<td>' + value.student_fname + '</td>';
+          card += '<td>' + value.student_fmobile + '</td>';
+          card += '<td>' + value.student_femail + '</td>';
+          card += '<td>' + value.student_foccupation + '</td>';
+          card += '<td>' + value.student_fdesignation + '</td>';
+          card += '<td>' + value.student_mname + '</td>';
+          card += '<td>' + value.student_mmobile + '</td>';
+          card += '<td>' + value.student_memail + '</td>';
+          card += '<td>' + value.permanent_address + '</td>';
+          card += '<td>' + value.city + '</td>';
+          card += '<td>' + value.pincode + '</td>';
+          card += '<td>' + value.reference_name + '</td>';
+          card += '<td>' + value.reference_type + '</td>';
+          card += '<td>' + value.reference_type + '</td>';
+          card += '</tr>';
         });
         $("#studentShowList").find("tr:gt(0)").remove();
-        $("#studentShowList").append(listData);
+        $("#studentShowList").append(card);
 
       }).fail(function() {
         $.alert("Error !!");
@@ -885,6 +840,16 @@ require('../requireSubModule.php');
         $.alert("Error !!");
       })
 
+    }
+    function getFormattedDate(ts, fmt) {
+      var a = new Date(ts);
+      var day = a.getDate();
+      var month = a.getMonth() + 1;
+      var year = a.getFullYear();
+      var date = day + '-' + month + '-' + year;
+      var dateYmd = year + '-' + month + '-' + day;
+      if (fmt == "dmY") return date;
+      else return dateYmd;
     }
 
   });

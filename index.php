@@ -1,8 +1,8 @@
-<?php 
+<?php
 session_start();
 if (isset($_SESSION["setLogo"])) $setLogo = $_SESSION['setLogo'];
 if (isset($_SESSION["setCodePath"])) $codePath = $_SESSION['setCodePath'];
-require("util/config_database.php"); 
+require("util/config_database.php");
 ?>
 
 <!DOCTYPE html>
@@ -10,50 +10,57 @@ require("util/config_database.php");
 
 <head>
   <title>AcadPlus</title>
-  <?php require("css.php");?>
+  <?php require("css.php"); ?>
 </head>
 
 <body>
-  <h1 class="display-3"> ClassConnect </h1>
   <div class="container">
     <h1>&nbsp;</h1>
+    <h1>&nbsp;</h1>
+    <h1>&nbsp;</h1>
     <div class="row">
-      <div class="col-md-4 bg-danger text-center">
+      
+      <div class="col-sm-2"></div>
+      <div class="col-sm-4">
+        <div class="card myCard">
+          <div class="card-body">
+            <div class="text-center mb-3">
+              <img src="https://engineeringinfo.in/images/logo-text.png" width="50%">
+            </div>
+            <form method="post" id="userForm">
+              <div class="form-group">
+                <label>User Id (Email for OTP)</label>
+                <input type="text" name="username" minlength="5" id="username" class="form-control" />
+                <label>Password</label>
+                <input type="password" name="userpassword" id="userpassword" class="form-control" />
+              </div>
+
+              <div class="form-group">
+                <input type="hidden" name="action" id="action" value="checkUser" />
+                <button class="btn btn-sm" name="userlogin" id="userlogin">Login</button>
+                <span><a href="#" class="atag otp">OTP Login</a></span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4 bg-danger text-center">
         <p>&nbsp;</p>
+        <h3 class="text-white">Welcome to </h3>
         <p>&nbsp;</p>
-        <p>&nbsp;</p>
-        <p>&nbsp;</p>
-        <?php 
-        if(isset($_SESSION["myFolder"]))$myFolder=$_SESSION["myFolder"];
+        <?php
+        if (isset($_SESSION["myFolder"])) $myFolder = $_SESSION["myFolder"];
         else {
           echo "<h5>The institute Tag Missing. <br>Please use https://classconnect.in/acadplus/InstTag. </h5>";
           echo '<h5>For demo use https://classconnect.in/acadplus/demo. or <a href="https://classconnect.in/acadplus/demo">Click Here</a></h5>';
           die();
         }
         ?>
-        <img src="<?php echo $setLogo;?>"> 
-        <!-- <?php echo $myFolder;?>        -->
+        <img src="<?php echo $setLogo; ?>">
+        <!-- <?php echo $myFolder; ?>        -->
       </div>
-      <div class="col-md-4">
-        <div class="card myCard">
-            <div class="card-body">
-            <h3 class="card-title">Connect</h3>
-              <form method="post" id="userForm">
-                <div class="form-group">
-                  <label>User Id (Email for OTP)</label>
-                  <input type="text" name="username" minlength="5" id="username" class="form-control" />
-                  <label>Password</label>
-                  <input type="password" name="userpassword" id="userpassword" class="form-control" />
-                </div>
+      <div class="col-md-4 text-center mt-4 py-3">
 
-                <div class="form-group">
-                <input type="hidden" name="action" id="action" value="checkUser" />
-                <button class="btn btn-sm" name="userlogin" id="userlogin">Login</button>
-                <span><a href="#" class="atag otp">OTP Login</a></span>
-                </div>
-              </form>
-            </div>
-        </div>
       </div>
     </div>
   </div>
@@ -75,17 +82,13 @@ require("util/config_database.php");
         }, "json").done(function(data, mystatus) {
           // alert(data);
           // alert("Id " + data.user+ " User Found " +data.student);
-          if(data.user>0)
-          {
+          if (data.user > 0) {
             //alert(data.user+data.found);
             location.href = "module/";
-          }
-          else if(data.student>0)
-          {
+          } else if (data.student > 0) {
             //alert(data.user+data.found);
             location.href = "module/student";
-          }
-          else alert("Not Found");
+          } else alert("Not Found");
         }).fail(function() {
           alert("fail in place of error");
         })

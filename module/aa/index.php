@@ -7,7 +7,6 @@ require('../requireSubModule.php');
 <head>
   <title>Outcome Based Education : ClassConnect</title>
   <?php require('../css.php'); ?>
-  <link rel="stylesheet" href="aa.css">
 
 </head>
 
@@ -153,22 +152,42 @@ require('../requireSubModule.php');
                     <div class="tab-content" id="pills-tabContent p-3">
                       <div class="tab-pane show active" id="nr">
                         <div class="row">
-                          <div class="col">
+                          <div class="col-md-4">
                             <div class="form-group">
                               <input type="radio" checked class="headName" id="rt" name="headName" value="rt">
-                              Resource Type
+                              Resource(rt)
                             </div>
                           </div>
-                          <div class="col">
+                          <div class="col-md-4">
                             <div class="form-group">
-                              <input type="radio" class="headName" id="ft" name="headName" value="ft">
-                              Feedback Type
+                              <input type="radio" class="headName" id="fbt" name="headName" value="fbt">
+                              Feedback(fbt)
                             </div>
                           </div>
-                          <div class="col">
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="cst" name="headName" value="cst">
+                              Caste(cst)
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-4">
                             <div class="form-group">
                               <input type="radio" class="headName" id="qt" name="headName" value="qt">
-                              Qualification Type
+                              Qualification(qt)
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="dg" name="headName" value="dg">
+                              Designation(dg)
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="bg" name="headName" value="bg">
+                              Blood Group(bg)
                             </div>
                           </div>
                         </div>
@@ -176,40 +195,68 @@ require('../requireSubModule.php');
                           <div class="col">
                             <div class="form-group">
                               <input type="radio" class="headName" id="am" name="headName" value="am">
-                              Assessment Method
+                              Assess. Method(am)
                             </div>
                           </div>
                           <div class="col">
                             <div class="form-group">
                               <input type="radio" class="headName" id="at" name="headName" value="at">
-                              Assessment Technique
+                              Assess. Technique(at)
                             </div>
                           </div>
                           <div class="col">
                             <div class="form-group">
                               <input type="radio" class="headName" id="ac" name="headName" value="ac">
-                              Assessment Components
+                              Assess. Components(ac)
                             </div>
                           </div>
                         </div>
                         <div class="row">
-                        <div class="col">
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="ft" name="headName" value="ft">
+                              Fee Type(ft)
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="fc" name="headName" value="fc">
+                              Fee Components(fc)
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="fcg" name="headName" value="fcg">
+                              Fee Category(fcg)
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col">
                             <div class="form-group">
                               <input type="radio" class="headName" id="ss" name="headName" value="ss">
-                              Specialization
+                              Specialization(ss)
                             </div>
                           </div>
                           <div class="col">
                             <div class="form-group">
                               <input type="radio" class="headName" id="cca" name="headName" value="cca">
-                              Cocurricular Activity
+                              Cocurricular Activity(cca)
                             </div>
                           </div>
 
                           <div class="col">
                             <div class="form-group">
                               <input type="radio" class="headName" id="eca" name="headName" value="eca">
-                              Extra Curricular
+                              Extra Curricular(eca)
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="rel" name="headName" value="rel">
+                              Religion(rel)
                             </div>
                           </div>
                         </div>
@@ -343,7 +390,7 @@ require('../requireSubModule.php');
       var name = $("#name").val();
       var abbri = $("#abbri").val();
       var remarks = $("#remarks").val();
-      $.alert(" Pressed" + headName + name + remarks);
+      // $.alert(" Pressed" + headName + name + remarks);
       $.post("aaSql.php", {
         name: name,
         abbri: abbri,
@@ -351,7 +398,7 @@ require('../requireSubModule.php');
         headName: headName,
         action: "headName"
       }, function(data, status) {}, "text").done(function(data) {
-        $.alert("List " + data);
+        $.alert(data);
         masterNameList();
       }).fail(function() {
         $.alert("fail in place of error");
@@ -638,7 +685,7 @@ require('../requireSubModule.php');
                     Batch<input type="text" class="form-control form-control-sm" id="newBatch" name="newBatch" placeholder="Batch">
                   </div>
                   <div class="col-sm-4">
-                    Batch<input type="text" class="form-control form-control-sm" id="newBatch" name="newBatch" placeholder="Batch">
+                    Academic Year<input type="text" class="form-control form-control-sm" id="ay" name="ay" placeholder="Academic Year">
                   </div>
                 </div>
               </div>

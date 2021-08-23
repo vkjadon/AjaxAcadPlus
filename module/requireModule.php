@@ -1,7 +1,10 @@
 <?php 
 session_start();
-require('../php_function.php');
 require("../util/config_database.php");
+require('../php_function.php');
 require('../util/config_variable.php');
-if(!isset($myId) || $myId<1)require("../logout.php");
+if(!isset($myId) || strlen($myId)==0 ){
+  //echo "My Id Check ";
+  require("../logout.php");
+}
 ?>

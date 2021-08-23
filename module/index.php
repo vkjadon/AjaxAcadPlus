@@ -56,14 +56,15 @@ if (!isset($myBatch)) {
 	<?php require("topBar.php"); ?>
 	<div class="container-fluid moduleBody">
 		<div class="row">
-			<div class="col-2">
 				<?php
 				require("setDefault.php");
+				if(!isset($myId) || strlen($myId)==0 ){
+					echo "My Id Check ";
+					require("../logout.php");
+				}
 				//require("sync_data.php");
 				//echo "Dept $myDept School $myScl Session $mySes";
 				?>
-			</div>
-
 		</div>
 		<?php require("bottom_bar.php"); ?>
 	</div>
@@ -76,62 +77,62 @@ if (!isset($myBatch)) {
 		$(document).on('change', '#sel_program', function() {
 			var x = $("#sel_program").val();
 			//$.alert("Program Changed " + x);
-			$.post("../check_user.php", {
+			$.post("../util/check_user.php", {
 				action: "setProgram",
 				programId: x
 			}, function(mydata, mystatus) {
 				//$.alert("- Program Updated -" + mydata);
 				location.reload();
 			}, "text").fail(function() {
-				$.alert("Error !!");
+				$.alert("Error in Program!!");
 			})
 		})
 		$(document).on('change', '#sel_batch', function() {
 			var x = $("#sel_batch").val();
 			//$.alert("Batch Changed " + x);
-			$.post("../check_user.php", {
+			$.post("../util/check_user.php", {
 				action: "setBatch",
 				batchId: x
 			}, function(mydata, mystatus) {
 				//$.alert("- Batch Updated -" + mydata);
 				location.reload();
 			}, "text").fail(function() {
-				$.alert("Error !!");
+				$.alert("Error in Natch !!");
 			})
 		})
 
 		$(document).on('change', '#sel_session', function() {
 			var x = $("#sel_session").val();
 			//$.alert("Session  Changed " + x);
-			$.post("../check_user.php", {
+			$.post("../util/check_user.php", {
 				action: "setSession",
 				sessionId: x
 			}, function(mydata, mystatus) {
 				//alert("- Session Updated -" + mydata);
 				location.reload();
 			}, "text").fail(function() {
-				$.alert("Error !!");
+				$.alert("Error in Session !!");
 			})
 		})
 
 		$(document).on('change', '#sel_dept', function() {
 			var x = $("#sel_dept").val();
 			//$.alert("Session  Changed " + x);
-			$.post("../check_user.php", {
+			$.post("../util/check_user.php", {
 				action: "setDept",
 				deptId: x
 			}, function(mydata, mystatus) {
 				//alert("- Session Updated -" + mydata);
 				location.reload();
 			}, "text").fail(function() {
-				$.alert("Error !!");
+				$.alert("Erro Dept !!");
 			})
 		})
 
 		$(document).on('change', '#sel_school', function() {
 			var x = $("#sel_school").val();
 			//$.alert("Session  Changed " + x);
-			$.post("../check_user.php", {
+			$.post("../util/check_user.php", {
 				schoolId: x,
 				action: "setSchool",
 			}, function(mydata, mystatus) {
@@ -139,7 +140,7 @@ if (!isset($myBatch)) {
 				location.reload();
 
 			}, "text").fail(function() {
-				$.alert("Error !!");
+				$.alert("Error in School!!");
 			})
 		})
 

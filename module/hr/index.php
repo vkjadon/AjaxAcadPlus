@@ -1,8 +1,6 @@
 <?php
 require('../requireSubModule.php');
-
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -43,14 +41,6 @@ require('../requireSubModule.php');
       transform: rotate(180deg);
     }
 
-    .collapseAccordian {
-      background-color: #e1f5fe;
-    }
-
-    .collapseHeader {
-      background-color: #29b6f6;
-    }
-
     .vertical {
 
       border: none;
@@ -64,15 +54,12 @@ require('../requireSubModule.php');
 <body>
   <?php require("../topBar.php"); ?>
   <div class="container-fluid moduleBody">
-    <span id="panelId"></span>
     <div class="row">
-    <div class="col-2 p-0 m-0 pl-2 full-height">
-    <h5 class="pt-3">Manage Staff</h5>
+      <div class="col-2 p-0 m-0 pl-2 full-height">
+        <h5 class="pt-3">Manage Staff</h5>
         <div class="list-group list-group-mine" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active as" id="list-as-list" data-toggle="list" href="#list-as" role="tab" aria-controls="as"> Add Staff </a>
-          <a class="list-group-item list-group-item-action sq" id="list-sq-list" data-toggle="list" href="#list-sq" role="tab" aria-controls="sq"> Staff Qualification </a>
-          <a class="list-group-item list-group-item-action sq" id="list-sq-list" data-toggle="list" href="#list-sq" role="tab" aria-controls="sq"> Role/Responsibility </a>
-          <span class="xsText mt-5"><em>Add staff not to be assigned designation and department.<br>The staff to be assigned these from Role/Responsibility Tab.</em></span>
+          <span class="xsText mt-5"><em>Staff not to be assigned designation and department.<br>These to be assigned through Service Record.</em></span>
         </div>
       </div>
       <div class="col-sm-10 leftLinkBody">
@@ -94,10 +81,10 @@ require('../requireSubModule.php');
                     <div class='list-group' id="staffAutoList"></div>
                     <div class="row">
                       <div class="col-sm-6">
-                        <button class="btn btn-secondary btn-sm m-0 addStaff">New Staff</button>
+                        <button class="btn btn-sm m-0 addStaff">New Staff</button>
                       </div>
                       <div class="col-sm-6">
-                        <button class="btn btn-primary btn-sm m-0 uploadStaff">Upload Staff</button>
+                        <button class="btn btn-sm m-0 uploadStaff">Upload Staff</button>
                       </div>
                     </div>
                   </div>
@@ -278,14 +265,14 @@ require('../requireSubModule.php');
                               <div class="row">
                                 <div class="col">
                                   <?php
-                                  $sql_qualification = "select * from qualification";
+                                  $sql_qualification = "select * from master_name where mn_code='qt'";
                                   $result = $conn->query($sql_qualification);
                                   if ($result) {
                                     echo '<select class="form-control form-control-sm staffQualificationForm" name="sel_qual" id="sel_qual" data-tag="qualification_id" required>';
                                     echo '<option selected disabled>Select Qualification</option>';
                                     while ($rows = $result->fetch_assoc()) {
-                                      $select_id = $rows['qualification_id'];
-                                      $select_name = $rows['qualification_name'];
+                                      $select_id = $rows['mn_id'];
+                                      $select_name = $rows['mn_name'];
                                       echo '<option value="' . $select_id . '">' . $select_name . '</option>';
                                     }
                                     echo '</select>';
@@ -414,8 +401,8 @@ require('../requireSubModule.php');
                             </div>
                           </div>
                           <!-- <div class="col-8"><br>
-               <p style="text-align:center" id="serviceShowList"></p>
-              </div> -->
+                            <p style="text-align:center" id="serviceShowList"></p>
+                          </div> -->
 
                         </form>
                       </div>
@@ -433,6 +420,7 @@ require('../requireSubModule.php');
     <?php require("../bottom_bar.php"); ?>
   </div>
 </body>
+
 </html>
 
 <?php require("../js.php"); ?>

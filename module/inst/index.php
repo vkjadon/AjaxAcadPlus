@@ -8,44 +8,6 @@ require('../requireSubModule.php');
 <head>
   <title>Outcome Based Education : AcadPlus</title>
   <?php require("../css.php"); ?>
-  <style>
-    .collapsible-link::before {
-      content: '';
-      width: 14px;
-      height: 2px;
-      background: #333;
-      position: absolute;
-      top: calc(50% - 1px);
-      right: 1rem;
-      display: block;
-      transition: all 0.3s;
-    }
-
-    /* Vertical line */
-    .collapsible-link::after {
-      content: '';
-      width: 2px;
-      height: 14px;
-      background: #333;
-      position: absolute;
-      top: calc(50% - 7px);
-      right: calc(1rem + 6px);
-      display: block;
-      transition: all 0.3s;
-    }
-
-    .collapsible-link[aria-expanded='true']::after {
-      transform: rotate(90deg) translateX(-1px);
-    }
-
-    .collapsible-link[aria-expanded='true']::before {
-      transform: rotate(180deg);
-    }
-
-    .collapseAccordian {
-      background-color: #e1f5fe;
-    }
-  </style>
 </head>
 
 <body>
@@ -359,90 +321,80 @@ require('../requireSubModule.php');
                 </div>
               </div>
               <div class="col-8">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-lg-12 mx-auto">
-                      <div id="accordionInfoSchool" class="accordion shadow">
-                        <div class="card">
-                          <div id="headingOne" class="card-header bg-white shadow-sm border-0">
-                            <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">Basic Information</a></h6>
-                          </div>
-                          <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionInfoSchool" class="collapse collapseAccordian">
-                            <div class="card-body">
-                              <form class="text w-100 p-0" id="basicSchoolInfoForm">
-                                <!-- <input type="hidden" id="schoolIdHidden" name="schoolIdHidden"> -->
-                                <p>Name and Address of the College</p>
-                                <div class="row">
-                                  <div class="col-12">
-                                    <div class="form-group">
-                                      <div class="md-form m-0">
-                                        <p class="text-muted m-0"> School/College Name</p>
-                                        <input type="text" id="schoolName" class="form-control schoolForm" data-tag="school_name">
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="row">
-                                  <div class="col-12">
-                                    <div class="form-group">
-                                      <div class="md-form md-outline m-0">
-                                        <p class="text-muted m-0">Address</p>
-                                        <textarea id="schoolAddress" class="md-textarea form-control schoolForm" data-tag="school_address" rows="3"></textarea>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="row">
-                                  <div class="col-6">
-                                    <div class="form-group">
-                                      <div class="md-form md-outline m-0">
-                                        <p class="text-muted m-0">City</p>
-                                        <input type="text" id="schoolCity" class="form-control schoolForm" data-tag="school_city">
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-6">
-                                    <div class="form-group">
-                                      <div class="md-form md-outline m-0">
-                                        <p class="text-muted m-0">Pin Code</p>
-                                        <input type="text" id="schoolPIN" class="form-control schoolForm" data-tag="school_pincode">
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="row">
-                                  <div class="col-6">
-                                    <div class="form-group">
-                                      <div class="md-form md-outline m-0">
-                                        <p class="text-muted m-0">State</p>
-                                        <input type="text" id="schoolState" class="form-control schoolForm" data-tag="school_state">
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="col-6">
-                                    <div class="form-group">
-                                      <div class="md-form md-outline m-0">
-                                        <p class="text-muted m-0">Website</p>
-                                        <input type="text" id="schoolWebsite" class="form-control schoolForm" data-tag="school_url">
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </form>
-                            </div>
-                          </div>
+                <h3>School/Intitution Details</h3>
+                <div class="row">
+                  <div class="col-lg-12 mx-auto">
+                    <div id="accordionInfoSchool" class="accordion shadow">
+                      <div class="card">
+                        <div id="headingOne" class="card-header bg-white shadow-sm border-0">
+                          <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">Basic Information</a></h6>
                         </div>
-                        <div class="card">
-                          <div id="headingTwo" class="card-header bg-white shadow-sm border-0">
-                            <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" class="d-block position-relative collapsed text-dark text-uppercase collapsible-link py-2">Geographical Information</a></h6>
-                          </div>
-                          <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionInfoSchool" class="collapse collapseAccordian">
-                            <div class="card-body">
-
-                            </div>
+                        <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionInfoSchool" class="collapse collapseAccordian">
+                          <div class="card-body">
+                            <form class="text w-100 p-0" id="basicSchoolInfoForm">
+                              <!-- <input type="hidden" id="schoolIdHidden" name="schoolIdHidden"> -->
+                              <p>Name and Address of the College</p>
+                              <div class="row">
+                                <div class="col-12">
+                                  <div class="form-group">
+                                    <div class="md-form m-0">
+                                      <p class="text-muted m-0"> School/College Name</p>
+                                      <input type="text" id="schoolName" class="form-control schoolForm" data-tag="school_name">
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-12">
+                                  <div class="form-group">
+                                    <div class="md-form md-outline m-0">
+                                      <p class="text-muted m-0">Address</p>
+                                      <textarea id="schoolAddress" class="md-textarea form-control schoolForm" data-tag="school_address" rows="3"></textarea>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-6">
+                                  <div class="form-group">
+                                    <div class="md-form md-outline m-0">
+                                      <p class="text-muted m-0">City</p>
+                                      <input type="text" id="schoolCity" class="form-control schoolForm" data-tag="school_city">
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-6">
+                                  <div class="form-group">
+                                    <div class="md-form md-outline m-0">
+                                      <p class="text-muted m-0">Pin Code</p>
+                                      <input type="text" id="schoolPIN" class="form-control schoolForm" data-tag="school_pincode">
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-6">
+                                  <div class="form-group">
+                                    <div class="md-form md-outline m-0">
+                                      <p class="text-muted m-0">State</p>
+                                      <input type="text" id="schoolState" class="form-control schoolForm" data-tag="school_state">
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-6">
+                                  <div class="form-group">
+                                    <div class="md-form md-outline m-0">
+                                      <p class="text-muted m-0">Website</p>
+                                      <input type="text" id="schoolWebsite" class="form-control schoolForm" data-tag="school_url">
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </form>
                           </div>
                         </div>
                       </div>
+                      
                     </div>
                   </div>
                 </div>
@@ -723,8 +675,6 @@ require('../requireSubModule.php');
       })
       deptProgramList()
     });
-
-
 
     $(document).on('submit', '#modalForm', function(event) {
       event.preventDefault(this);

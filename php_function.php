@@ -8,6 +8,13 @@ function data_check($data)
   $data = addcslashes($data, "'");
   return $data;
 }
+function data_clean($data)
+{
+  $data = preg_replace("/[^a-zA-Z0-9 @.&*+-]+/", "", $data);
+  return $data;
+}
+
+
 function selectList($conn, $selectTitle, $data, $sql)
 {
   //echo "Inst in function $tableName $id $name $where";
