@@ -19,10 +19,10 @@ require('../requireSubModule.php');
           <h5>Manage Students</h5>
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-          <a class="list-group-item list-group-item-action active as" id="list-as-list" data-toggle="list" href="#list-as" role="tab" aria-controls="as"> Add Student </a>
           <a class="list-group-item list-group-item-action cbp" id="list-cbp-list" data-toggle="list" href="#list-cbp" role="tab" aria-controls="cbp">Change Batch/Program</a>
           <a class="list-group-item list-group-item-action ssr" id="list-ssr-list" data-toggle="list" href="#list-ssr" role="tab" aria-controls="ssr">Student Strength Report</a>
           <a class="list-group-item list-group-item-action sr" id="list-sr-list" data-toggle="list" href="#list-sr" role="tab" aria-controls="sr">Student Report</a>
+          <a class="list-group-item list-group-item-action active as" id="list-as-list" data-toggle="list" href="#list-as" role="tab" aria-controls="as"> Update Student </a>
         </div>
       </div>
       <div class="col-10 leftLinkBody">
@@ -82,83 +82,106 @@ require('../requireSubModule.php');
           </div>
           <div class="tab-pane show active" id="list-as" role="tabpanel" aria-labelledby="list-as-list">
             <div class="row">
-              <div class="col-6">
+              <div class="col-4">
+                <div class="card border-info mt-2">
+                  <div class="card-header">
+                    ENTER USER ID TO SEARCH
+                  </div>
+                  <div class="card-body text-primary">
+                    <input name="studentSearch" id="studentSearch" class="form-control my-0 py-1 red-border" type="text" placeholder="Search Student" aria-label="Search">
+                    <button type="button" class="btn btn-primary" id="searchStudent">
+                      <i class="fas fa-search"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="col-8">
                 <div class="container card mt-2 myCard">
                   <!-- nav options -->
                   <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
+
                     <li class="nav-item">
-                      <a class="nav-link active" data-toggle="pill" href="#pills_home" role="tab" aria-controls="pills_home" aria-selected="true">Home</a>
+                      <a class="nav-link active" id="pills_tablePersonalInfo" data-toggle="pill" href="#pills_personalInfo" role="tab" aria-controls="pills_personalInfo" aria-selected="true">Personal Info</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" data-toggle="pill" href="#pills_personalInfo" role="tab" aria-controls="pills_personalInfo" aria-selected="true">Personal Info</a>
+                      <a class="nav-link" id="pills_tableParentsInfo" data-toggle="pill" href="#pills_parentsInfo" role="tab" aria-controls="pills_parentsInfo" aria-selected="true">Parents Info</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" data-toggle="pill" href="#pills_parentsInfo" role="tab" aria-controls="pills_parentsInfo" aria-selected="true">Parents Info</a>
+                      <a class="nav-link" id="pills_tableAddress" data-toggle="pill" href="#pills_address" role="tab" aria-controls="pills_address" aria-selected="true">Address Details</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link pills_qualification" data-toggle="pill" href="#pills_qualification" role="tab" aria-controls="pills_qualification" aria-selected="true">Qualification</a>
+                      <a class="nav-link pills_qualification" id="pills_tableQualification" data-toggle="pill" href="#pills_qualification" role="tab" aria-controls="pills_qualification" aria-selected="true">Qualification</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link pills_reference" id="pills_tableReference" data-toggle="pill" href="#pills_reference" role="tab" aria-controls="pills_reference" aria-selected="true">Reference</a>
                     </li>
                   </ul>
                   <div class="tab-content" id="pills-tabContent p-3">
-                    <div class="tab-pane show active" id="pills_home" role="tabpanel" aria-labelledby="pills_home">
-                      <div class="row p-1">
-                        <div class="col-3 m-0 p-0">
-                          <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="100">
-                        </div>
-                        <div class="col-9 m-0 p-0">
-                          <div class="row p-1">
-                            <div class="col-3 m-0 p-0">
-                              <h7 class="mb-0 ">Name</h7>
+                    <!-- <h4> New Id <span class="newId"> - Not Created </span></h4> -->
+                    <div class="tab-pane" id="pills_home" role="tabpanel" aria-labelledby="pills_home">
+                      <form id="newStudent">
+                        <div class="row">
+                          <div class="col-md-12 text-center">
+                            <h5>
+                              <?php $batch = getField($conn, $myBatch, "batch", "batch_id", "batch"); ?>
+                              <label>Batch: <?php echo $batch; ?> </label>
+                              <label>Session: <?php echo getField($conn, $mySes, "session", "session_id", "session_name"); ?></label>
+                            </h5>
+                          </div>
+                          <!-- <div class="col-md-4">
+                    <label>Institute/School</label>
+                    <p id="schoolOption"></p>
+                    <label>Programme Course</label>
+                    <p id="programOption"></p>
+                  </div> -->
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label>Semester</label>
+                              <input type="number" class="form-control form-control-sm" id="stdSemester" min="1" name="stdSemester" placeholder="Admission Semester" value="1">
                             </div>
-                            <div class="col-9 text-secondary student_name">
-                              Enter Valid Data
+                            <div class="form-group">
+                              <label>Academic Batch</label>
+                              <input type="number" class="form-control form-control-sm" id="stdAcademicBatch" name="stdAcademicBatch" length="4" value="<?php echo $batch; ?>">
                             </div>
                           </div>
-                          <div class="row p-1">
-                            <div class="col-3 m-0 p-0">
-                              <h7 class="mb-0 ">Roll Number</h7>
-                            </div>
-                            <div class="col-9 text-secondary student_rollno">
-                              Enter Valid Data
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <label>Registration Date</label>
+                              <input type="date" class="form-control form-control-sm" id="stdAdmission" name="stdAdmission" value="<?php echo $submit_date; ?>">
                             </div>
                           </div>
-                          <div class="row p-1">
-                            <div class="col-3 m-0 p-0">
-                              <h7 class="mb-0 ">Email</h7>
-                            </div>
-                            <div class="col-9 text-secondary student_email">
-                              Enter Valid Data
-                            </div>
-                          </div>
-                          <div class="row p-1">
-                            <div class="col-3 m-0 p-0">
-                              <h7 class="mb-0 ">Mobile</h7>
-                            </div>
-                            <div class="col-9 text-secondary student_mobile">
-                              Enter Valid Data
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                          <!-- <div class="col-md-4">
+                    <div class="form-group">
+                      <input type="checkbox" lass="form-check-input" id="stdLateralEntry" name="stdLateralEntry">
+                      <label>Lateral Entry</label>
                     </div>
-                    <div class="tab-pane fade" id="pills_personalInfo" role="tabpanel" aria-labelledby="pills_personalInfo">
+                  </div> -->
+                          <div class="col-md-4">
+                            <input type="hidden" id="userId" name="userId" value="0">
+                            <input type="hidden" id="action" name="action" value="addNew">
+                            <!-- <button class="btn btn-sm">Create/Update Id</button> -->
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="tab-pane fade show active" id="pills_personalInfo" role="tabpanel" aria-labelledby="pills_personalInfo">
                       <input type="hidden" id="studentIdHidden" name="studentIdHidden">
                       <div class="row">
                         <div class="col-12">
                           <div class="row">
-                            <div class="col-4">
+                            <div class="col-4 pr-1">
                               <div class="form-group">
                                 <label>Name</label>
                                 <input type="text" class="form-control form-control-sm studentUpdateForm" id="stdName" name="stdName" placeholder="Name of the Student" data-tag="student_name">
                               </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-4 pr-1 pl-1">
                               <div class="form-group">
                                 <label>Roll Number</label>
                                 <input type="text" class="form-control form-control-sm studentUpdateForm" id="stdRno" name="stdRno" placeholder="Roll Number of the Student" data-tag="student_rollno">
                               </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-4 pl-1">
                               <div class="form-group">
                                 <label>Mobile</label>
                                 <input type="text" class="form-control form-control-sm studentUpdateForm" id="stdMobile" name="stdMobile" placeholder="Mobile Number of the Student" data-tag="student_mobile">
@@ -166,52 +189,154 @@ require('../requireSubModule.php');
                             </div>
                           </div>
                           <div class="row">
-                            <div class="col-6">
+                            <div class="col-4 pr-1">
                               <div class="form-group">
                                 <label>Email</label>
                                 <input type="text" class="form-control form-control-sm studentUpdateForm" id="stdEmail" name="stdEmail" placeholder="Email ID of the Student" data-tag="student_email">
                               </div>
                             </div>
-                            <div class="col-6">
+                            <div class="col-4 pr-1 pl-1">
                               <div class="form-group">
                                 <label>Date of Birth</label>
                                 <input type="date" class="form-control form-control-sm studentUpdateForm" id="Dob" name="Dob" placeholder="Date of Birth" data-tag="student_dob">
                               </div>
                             </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-6">
-                              <div class="form-check-inline">
-                                <input type="radio" class="form-check-input studentUpdateForm" checked id="male" name="sGender" value="M" data-tag="student_gender">Male
-                              </div>
-                              <div class="form-check-inline">
-                                <input type="radio" class="form-check-input studentUpdateForm" id="female" name="sGender" value="F" data-tag="student_gender">Female
-                              </div>
-                            </div>
-                            <div class="col-6">
-                              <div class="form-check-inline">
-                                <input type="radio" class="form-check-input studentUpdateForm" checked id="obc" name="sCategory" value="OBC" data-tag="student_category">OBC
-                              </div>
-                              <div class="form-check-inline">
-                                <input type="radio" class="form-check-input studentUpdateForm" id="gen" name="sCategory" value="GEN" data-tag="student_category">General
-                              </div>
-                              <div class="form-check-inline">
-                                <input type="radio" class="form-check-input studentUpdateForm" id="sc" name="sCategory" value="SC" data-tag="student_category">SC/ST
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-12">
+                            <div class="col-4 pl-1">
                               <div class="form-group">
-                                <label>Address</label>
-                                <input type="text" class="form-control form-control-sm studentUpdateForm" id="sAddress" name="sAddress" placeholder="" data-tag="student_address">
+                                <label>WhatsApp Number</label>
+                                <input type="text" class="form-control form-control-sm studentUpdateForm" id="stdWaMobile" name="stdWaMobile" placeholder="Whats App Number" data-tag="student_whatsapp">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-4 pr-1">
+                              <label>Gender</label>
+                              <div class="row">
+                                <div class="col">
+                                  <div class="form-check-inline">
+                                    <input type="radio" class="form-check-input studentUpdateForm" checked id="male" name="sGender" value="M" data-tag="student_gender">Male
+                                  </div>
+                                  <div class="form-check-inline">
+                                    <input type="radio" class="form-check-input studentUpdateForm" id="female" name="sGender" value="F" data-tag="student_gender">Female
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-4 pr-1 pl-1">
+                              <div class="form-group">
+                                <label>Caste</label>
+                                <div class="row">
+                                  <div class="col">
+                                    <?php
+                                    $sql_caste = "select * from master_name where mn_code='cst'";
+                                    $result = $conn->query($sql_caste);
+                                    if ($result) {
+                                      echo '<select class="form-control form-control-sm studentUpdateForm" name="sel_caste" id="sel_caste" data-tag="student_category" required>';
+                                      echo '<option value="0">Select Caste</option>';
+                                      while ($rows = $result->fetch_assoc()) {
+                                        $select_name = $rows['mn_name'];
+                                        $abbri = $rows['mn_abbri'];
+                                        echo '<option value="' . $abbri . '">' . $select_name . '</option>';
+                                      }
+                                      echo '</select>';
+                                    } else echo $conn->error;
+                                    if ($result->num_rows == 0) echo 'No Data Found';
+                                    ?>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-4 pl-1">
+                              <div class="form-group">
+                                <label>Blood Group</label>
+                                <div class="row">
+                                  <div class="col">
+                                    <?php
+                                    $sql_bg = "select * from master_name where mn_code='bg'";
+                                    $result = $conn->query($sql_bg);
+                                    if ($result) {
+                                      echo '<select class="form-control form-control-sm studentUpdateForm" name="sql_bg" id="sql_bg" data-tag="student_bg" required>';
+                                      echo '<option value="">Blood Group</option>';
+                                      while ($rows = $result->fetch_assoc()) {
+                                        $select_name = $rows['mn_name'];
+                                        $abbri = $rows['mn_abbri'];
+                                        echo '<option value="' . $abbri . '">' . $select_name . '</option>';
+                                      }
+                                      echo '</select>';
+                                    } else echo $conn->error;
+                                    if ($result->num_rows == 0) echo 'No Data Found';
+                                    ?>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-3 pr-1">
+                              <div class="form-group">
+                                <label>Religion</label>
+                                <div class="row">
+                                  <div class="col">
+                                    <?php
+                                    $sql_rg = "select * from master_name where mn_code='rel'";
+                                    $result = $conn->query($sql_rg);
+                                    if ($result) {
+                                      echo '<select class="form-control form-control-sm studentUpdateForm" name="sql_rg" id="sql_rg" data-tag="student_religion" required>';
+                                      echo '<option value="">Religion</option>';
+                                      while ($rows = $result->fetch_assoc()) {
+                                        $abbri = $rows['mn_abbri'];
+                                        $select_name = $rows['mn_name'];
+                                        echo '<option value="' . $abbri . '">' . $select_name . '</option>';
+                                      }
+                                      echo '</select>';
+                                    } else echo $conn->error;
+                                    if ($result->num_rows == 0) echo 'No Data Found';
+                                    ?>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-3 pr-1 pl-1">
+                              <div class="form-group">
+                                <label>Adhaar Card Number</label>
+                                <input type="text" class="form-control form-control-sm studentUpdateForm" id="stdAdhaar" name="stdAdhaar" placeholder="Adhaar Number" data-tag="student_adhaar">
+                              </div>
+                            </div>
+                            <div class="col-3 pr-1 pl-1">
+                              <div class="form-group">
+                                <label>Fee Category </label>
+                                <div class="row">
+                                  <div class="col">
+                                    <?php
+                                    $sql_fcg = "select * from master_name where mn_code='fcg'";
+                                    $result = $conn->query($sql_fcg);
+                                    if ($result) {
+                                      echo '<select class="form-control form-control-sm studentUpdateForm" name="sql_fcg" id="sql_fcg" data-tag="student_fee_category" required>';
+                                      echo '<option value="">Fee Category</option>';
+                                      while ($rows = $result->fetch_assoc()) {
+                                        $abbri = $rows['mn_abbri'];
+                                        $select_name = $rows['mn_name'];
+                                        echo '<option value="' . $abbri . '">' . $select_name . '</option>';
+                                      }
+                                      echo '</select>';
+                                    } else echo $conn->error;
+                                    if ($result->num_rows == 0) echo 'No Data Found';
+                                    ?>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-3 pl-1">
+                              <div class="form-group">
+                                <label>Registration Date</label>
+                                <input type="date" class="form-control form-control-sm studentUpdateForm" id="stdAdmission" name="stdAdmission" value="<?php echo $submit_date; ?>">
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="tab-pane fade" id="pills_parentsInfo" role="tabpanel" aria-labelledby="pills_personalInfo">
+                    <div class="tab-pane fade" id="pills_parentsInfo" role="tabpanel" aria-labelledby="pills_parentsInfo">
                       <input type="hidden" id="studentIdHidden" name="studentIdHidden">
                       <div class="row">
                         <div class="col-4 pr-1">
@@ -257,28 +382,74 @@ require('../requireSubModule.php');
                         <div class="col-3 pr-1">
                           <div class="form-group">
                             <label>Father Mobile</label>
-                            <input type="text" class="form-control form-control-sm studentDetailForm" id="fMobile" name="fMobile" placeholder="Father's Mobile Number" data-tag="sc_fmobile">
+                            <input type="text" class="form-control form-control-sm studentDetailForm" id="fMobile" name="fMobile" placeholder="Father's Mobile Number" data-tag="student_fmobile">
                           </div>
                         </div>
                         <div class="col-3 pl-1 pr-1">
                           <div class="form-group">
                             <label>Email</label>
-                            <input type="text" class="form-control form-control-sm studentDetailForm" id="fEmail" name="fEmail" placeholder="Father's Email Address" data-tag="sc_femail">
+                            <input type="text" class="form-control form-control-sm studentDetailForm" id="fEmail" name="fEmail" placeholder="Father's Email Address" data-tag="student_femail">
                           </div>
                         </div>
                         <div class="col-3 pl-1 pr-1">
                           <div class="form-group">
                             <label>Mother Mobile</label>
-                            <input type="text" class="form-control form-control-sm studentDetailForm" id="mMobile" name="mMobile" placeholder="Mother's Mobile Number" data-tag="sc_mmobile">
+                            <input type="text" class="form-control form-control-sm studentDetailForm" id="mMobile" name="mMobile" placeholder="Mother's Mobile Number" data-tag="student_mmobile">
                           </div>
                         </div>
                         <div class="col-3 pl-1">
                           <div class="form-group">
                             <label>Email</label>
-                            <input type="text" class="form-control form-control-sm studentDetailForm" id="mEmail" name="mEmail" placeholder="Mother's Email Address" data-tag="sc_memail">
+                            <input type="text" class="form-control form-control-sm studentDetailForm" id="mEmail" name="mEmail" placeholder="Mother's Email Address" data-tag="student_memail">
                           </div>
                         </div>
                       </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills_address" role="tabpanel" aria-labelledby="pills_address">
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="form-group">
+                            <label>Permanent Address</label>
+                            <textarea class="form-control form-control-sm sAddressForm" id="permanent_address" name="permanent_address" rows="3" data-tag="permanent_address"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-3 pr-1">
+                          <div class="form-group">
+                            <label>City</label>
+                            <input type="text" class="form-control form-control-sm sAddressForm" id="sCity" name="sCity" placeholder="City" data-tag="city">
+                          </div>
+                        </div>
+                        <div class="col-3 pl-0 pr-1">
+                          <div class="form-group">
+                            <label>Pin Code</label>
+                            <input type="text" class="form-control form-control-sm sAddressForm" id="sPincode" name="sPincode" placeholder="Pincode" data-tag="pincode">
+                          </div>
+                        </div>
+                        <div class="col-3 pl-0 pr-1">
+                          <div class="form-group">
+                            <label>State</label>
+                            <p id="stateOption"></p>
+                          </div>
+                        </div>
+                        <div class="col-3 pl-0 ">
+                          <div class="form-group">
+                            <label>District</label>
+                            <p id="districtOption"></p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="form-group">
+                            <label>Correspondence Address</label>
+                            <textarea class="form-control form-control-sm sAddressForm" id="correspondence_address" name="correspondence_address" rows="3" data-tag="correspondence_address"></textarea>
+                          </div>
+                        </div>
+                      </div>
+
                     </div>
                     <div class="tab-pane fade" id="pills_qualification" role="tabpanel" aria-labelledby="pills_qualification">
                       <div class="row">
@@ -347,28 +518,75 @@ require('../requireSubModule.php');
                       </div>
                       <p style="text-align:center" id="qualificationShowList"></p>
                     </div>
-                  </div>
-                </div>
-
-                <div class="container card myCard mt-2">
-                  <div class="input-group md-form form-sm form-2 mt-1">
-                    <input name="studentSearch" id="studentSearch" class="form-control my-0 py-1 red-border" type="text" placeholder="Search Student" aria-label="Search">
-                    <div class="input-group-append">
-                      <span class="input-group-text cyan lighten-3" id="basic-text1"><i class="fas fa-search text-grey" aria-hidden="true"></i></span>
+                    <div class="tab-pane fade" id="pills_reference" role="tabpanel" aria-labelledby="pills_reference">
+                      <div class="row">
+                        <div class="col-6 pr-1">
+                          <div class="form-group">
+                            <label>Name of Consultant</label>
+                            <input type="text" class="form-control form-control-sm refForm" id="cName" name="cName" placeholder="Name of the Consultant" data-tag="reference_name">
+                          </div>
+                        </div>
+                        <div class="col-3 pl-0">
+                          <div class="form-group">
+                            <label>Contact Number</label>
+                            <input type="text" class="form-control form-control-sm refForm" id="cNumber" name="cNumber" placeholder="Contact Number" data-tag="reference_mobile">
+                          </div>
+                        </div>
+                        <div class="col-3 pr-1">
+                          <div class="form-group">
+                            <label>Incentive</label>
+                            <input type="text" class="form-control form-control-sm refForm" id="cIncentive" name="cIncentive" placeholder="Incentive" data-tag="reference_incentive">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-6 pr-1">
+                          <div class="form-group">
+                            <label>Name of Staff</label>
+                            <input type="text" class="form-control form-control-sm refForm" id="refStaff" name="refStaff" placeholder="Name of the Staff" data-tag="reference_staff">
+                          </div>
+                        </div>
+                        <div class="col-3 pl-0">
+                          <div class="form-group">
+                            <label>Designation</label>
+                            <input type="text" class="form-control form-control-sm refForm" id="refDesignation" name="refDesignation" placeholder="Designation" data-tag="reference_designation">
+                          </div>
+                        </div>
+                        <div class="col-3 pl-0">
+                          <div class="form-group">
+                            <label>Contact</label>
+                            <input type="text" class="form-control form-control-sm refForm" id="refContact" name="refContact" placeholder="Contact" data-tag="reference_contact">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="form-group">
+                            <label>Remarks</label>
+                            <textarea class="form-control form-control-sm refForm" id="remarks" name="remarks" rows="3" data-tag="remarks"></textarea>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div class='list-group' id="studentAutoList"></div>
                 </div>
-
               </div>
             </div>
           </div>
           <div class="tab-pane fade" id="list-sr" role="tabpanel" aria-labelledby="list-sr-list">
             <div class="row">
+              <div class="col-md-4 ml-3">
+                <div class="container card mt-2 myCard">
+                  <p id="totalStudents"></p>
+                </div>
+              </div>
+            </div>
+            <div class="row">
               <div class="col-md-12" style="overflow: scroll;">
                 <div class="container card mt-2 myCard" id="print" style="overflow: scroll;">
-                <div class="text-right"><a onclick="printDiv('print')" class="fa fa-print"></a>
-                                    <a class="fas fa-file-export" id="export"></a></div>
+                  <div class="text-right"><a onclick="printDiv('print')" class="fa fa-print"></a>
+                    <a class="fas fa-file-export" id="export"></a>
+                  </div>
                   <table class="table table-bordered table-striped list-table-xxs mt-3" id="studentShowList">
                     <!-- <th><i class="fas fa-edit"></i></th> -->
                     <th>ID</th>
@@ -395,11 +613,13 @@ require('../requireSubModule.php');
                     <th>Mother's Name</th>
                     <th>Mother's Mobile</th>
                     <th>Mother's Email</th>
-                     <th>Address</th>
+                    <th>Address</th>
                     <th>City</th>
                     <th>Pincode</th>
                     <th>State</th>
                     <th>District</th>
+                    <th>Reference Name</th>
+                    <th>Reference Staff</th>
                   </table>
                 </div>
               </div>
@@ -450,26 +670,78 @@ require('../requireSubModule.php');
     $('[data-toggle="tooltip"]').tooltip();
     studentList();
     studentProgramReport();
+    totalStudents();
 
-    $('#studentSearch').keyup(function() {
-      var query = $(this).val();
-      // alert(query);
-      if (query != '') {
-        $.ajax({
-          url: "admissionSql.php",
-          method: "POST",
-          data: {
-            query: query
-          },
-          success: function(data) {
-            $('#studentAutoList').fadeIn();
-            $('#studentAutoList').html(data);
-          }
-        });
-      } else {
-        $('#studentAutoList').fadeOut();
-        $('#studentAutoList').html("");
-      }
+    $(document).on('blur', '.studentUpdateForm', function() {
+      var userId = $("#studentSearch").val();
+      var tag = $(this).attr("data-tag")
+      var value = $(this).val()
+      // $.alert("Changes " + tag + " Value " + value + " Student " + userId);
+      $.post("admissionSql.php", {
+        id_name: "user_id",
+        id: userId,
+        tag: tag,
+        value: value,
+        action: "updateStudent"
+      }, function(data) {
+        // $.alert("List " + data);
+      }, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
+    $(document).on('blur', '.studentDetailForm', function() {
+      var studentId = $("#studentIdHidden").val()
+      var tag = $(this).attr("data-tag")
+      var value = $(this).val()
+      $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
+      $.post("admissionSql.php", {
+        id_name: "student_id",
+        id: studentId,
+        tag: tag,
+        value: value,
+        action: "updateDetails"
+      }, function(data) {
+        // $.alert("List " + data);
+      }, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
+    $(document).on('blur', '.sAddressForm', function() {
+      var studentId = $("#studentIdHidden").val()
+      var tag = $(this).attr("data-tag")
+      var value = $(this).val()
+      // $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
+      $.post("admissionSql.php", {
+        id_name: "student_id",
+        id: studentId,
+        tag: tag,
+        value: value,
+        action: "updateAddress"
+      }, function(data) {
+        // $.alert("List " + data);
+      }, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
+    $(document).on('blur', '.refForm', function() {
+      var studentId = $("#studentIdHidden").val()
+      var tag = $(this).attr("data-tag")
+      var value = $(this).val()
+      // $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
+      $.post("admissionSql.php", {
+        id_name: "student_id",
+        id: studentId,
+        tag: tag,
+        value: value,
+        action: "updateReference"
+      }, function(data) {
+        // $.alert("List " + data);
+      }, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
     });
 
     $(document).on('submit', '#changeBatch', function() {
@@ -493,39 +765,6 @@ require('../requireSubModule.php');
       })
     });
 
-    $(document).on('click', '.autoList', function() {
-      $('#studentSearch').val($(this).text());
-      var stdId = $(this).attr("data-std");
-      $('#studentAutoList').fadeOut();
-      $('#studentShowList').show();
-      $('.studentProfile').show();
-      $('#accordionStudent').show();
-
-      $.post("admissionSql.php", {
-        studentId: stdId,
-        action: "fetchStudent"
-      }, () => {}, "json").done(function(data) {
-        $("#stdName").val(data.student_name);
-        $("#stdRno").val(data.student_rollno);
-        $("#stdMobile").val(data.student_mobile);
-        $("#stdEmail").val(data.student_email);
-        $("#sDob").val(data.student_dob);
-        $("#sGender").val(data.student_gender);
-        $("#sGender").val(data.student_category);
-        $("#sAddress").val(data.student_address);
-
-        // $("#sAdhaar").val(data.student_adhaar);
-        $("#fName").val(data.student_fname);
-        $("#fOccupation").val(data.student_foccupation);
-        $("#fDes").val(data.student_fdesignation);
-        $("#mName").val(data.student_mname);
-        $("#mOccupation").val(data.student_moccupation);
-        $("#mDes").val(data.student_mdesignation);
-
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
 
     $(document).on('click', '.cbp', function() {
       $.post("admissionSql.php", {
@@ -551,18 +790,6 @@ require('../requireSubModule.php');
       $(".checkitem").prop("checked", $(this).prop("checked"))
     })
 
-    $(document).on('click', '.addStudent', function() {
-      $('#modal_title').text("Add Student");
-      $('#action').val("addStudent");
-      $('#firstModal').modal('show');
-      $('.selectPanel').show();
-    });
-
-    $(document).on('click', '.uploadStudent', function() {
-      $('#modal_uploadTitle').text("Upload Student");
-      $('#formModal').modal('show');
-    });
-
     $(document).on('submit', '#upload_csv', function(event) {
       event.preventDefault();
       var formData = $(this).serialize();
@@ -583,204 +810,56 @@ require('../requireSubModule.php');
       })
     });
 
-    $(document).on('click', '.editStudent', function() {
-      $('.studentProfile').show();
-      var id = $(this).attr("data-student");
-      // $.alert(id);
-      $("#studentIdHidden").val(id);
-      studentQualificationList();
+    $(document).on('click', '#searchStudent', function(event) {
+      var data = $("#studentSearch").val();
+      // $.alert(data);
       $.post("admissionSql.php", {
-        studentId: id,
-        action: "fetchStudent"
+        action: "fetchStudent",
+        userId: data,
       }, () => {}, "json").done(function(data) {
-        // $.alert(data)
-        console.log(data)
-        $(".student_email").text(data.student_email);
-        $(".student_name").text(data.student_name);
-        $(".student_rollno").text(data.student_rollno);
-        $(".student_mobile").text(data.student_mobile);
-
         $("#stdName").val(data.student_name);
         $("#stdRno").val(data.student_rollno);
         $("#stdMobile").val(data.student_mobile);
-        $("#sEmail").val(data.student_email);
-        $("#sDob").val(data.student_dob);
-        $("#sGender").val(data.student_gender);
-        $("#sGender").val(data.student_category);
-        $("#sAddress").val(data.student_address);
-
-        // $("#sAdhaar").val(data.student_adhaar);
+        $("#stdEmail").val(data.student_email);
+        $("#Dob").val(data.student_dob);
+        $("#stdWaMobile").val(data.student_whatsapp);
+        // $("#stdNa").val(data.student_gender);
+        $("#sel_caste").val(data.student_category);
+        $("#sql_bg").val(data.student_bg);
+        $("#sql_rg").val(data.student_religion);
+        $("#stdAdhaar").val(data.student_adhaar);
+        $("#sql_fcg").val(data.student_fee_category);
+        $("#stdAdmission").val(data.student_admission);
         $("#fName").val(data.student_fname);
-        $("#fOccupation").val(data.student_foccupation);
-        $("#fDes").val(data.student_fdesignation);
         $("#mName").val(data.student_mname);
-        $("#mOccupation").val(data.student_moccupation);
-        $("#mDes").val(data.student_mdesignation);
+        $("#fMobile").val(data.student_fmobile);
+        $("#mMobile").val(data.student_mmobile);
+        $("#fEmail").val(data.student_femail);
+        $("#mEmail").val(data.student_memail);
+        $("#permanent_address").val(data.permanent_address);
+        $("#sCity").val(data.city);
+        $("#sPincode").val(data.pincode);
+        $("#sel_state").val(data.state_name);
+        $("#sel_district").val(data.district_name);
+        $("#mEmail").val(data.student_memail);
+        $("#cName").val(data.reference_name);
+        $("#cNumber").val(data.reference_mobile);
+        $("#refStaff").val(data.reference_staff);
+        $("#cIncentive").val(data.reference_incentive);
+        $("#refDesignation").val(data.reference_designation);
+        $("#refContact").val(data.reference_contact);
+        $("#remarks").val(data.remarks);
+        $("#studentIdHidden").val(data.student_id);
+        // $.alert(data);
       }, "text").fail(function() {
         $.alert("fail in place of error");
       })
-    });
-
-    $(document).on('blur', '.studentUpdateForm', function() {
-      var studentId = $("#studentIdHidden").val()
-      var tag = $(this).attr("data-tag")
-      var value = $(this).val()
-      // $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
-      $.post("admissionSql.php", {
-        id_name: "student_id",
-        id: studentId,
-        tag: tag,
-        value: value,
-        action: "updateStudent"
-      }, function(data) {
-        // $.alert("List " + data);
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
-    $(document).on('blur', '.studentDetailForm', function() {
-      var studentId = $("#studentIdHidden").val()
-      var tag = $(this).attr("data-tag")
-      var value = $(this).val()
-      $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
-      $.post("admissionSql.php", {
-        tag: tag,
-        student_id: studentId,
-        value: value,
-        action: "updateDetails"
-      }, function(data) {
-        $.alert("List " + data);
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
-    $(document).on('blur', '.sQualForm', function() {
-      var studentId = $("#studentIdHidden").val()
-      var qId = $('#sel_qual').val()
-      var tag = $(this).attr("data-tag")
-      var value = $(this).val()
-      // $.alert("Changes " + tag + " Value " + value + " Student " + studentId + " qaul " + qId);
-      if (qId === "" || studentId == "") {
-        $.confirm({
-          title: 'Encountered an error!',
-          content: 'Please Select Qualification and Student ',
-          type: 'red',
-          typeAnimated: true,
-          buttons: {
-            tryAgain: {
-              text: 'Try again',
-              btnClass: 'btn-red',
-              action: function() {}
-            },
-          }
-        });
-      } else {
-        $.post("admissionSql.php", {
-          mn_id: qId,
-          tag: tag,
-          student_id: studentId,
-          value: value,
-          action: "updateStudentQualification"
-        }, function(data) {
-          // $.alert("List " + data);
-        }, "text").fail(function() {
-          $.alert("fail in place of error");
-        })
-      }
-    });
-
-    $(document).on('click', '.sq_idE', function() {
-      var id = $(this).attr('id');
-      var stdId = $('#panelId').val();
-      // $.alert("Id " + id + "std" + stdId);
-      $.post("admissionSql.php", {
-        action: "fetchStudentQualification",
-        sqId: id,
-        std_id: stdId
-      }, () => {}, "json").done(function(data) {
-        // $.alert("List " + data.student_id + "sq " + data.qualification_id);
-        $("#sInst").val(data.sq_institute);
-        $("#sBoard").val(data.sq_board);
-        $("#sYear").val(data.sq_year);
-        $("#sMarksObt").val(data.sq_marksObtained);
-        $("#sMaxMarks").val(data.sq_marksMax);
-        $("#sCgpa").val(data.sq_percentage);
-        var qual = data.qualification_id;
-        $("#sel_qual option[value='" + qual + "']").attr("selected", "selected");
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-      $(".studentForm").hide();
-    });
-
-    $(document).on('submit', '#modalForm', function(event) {
-      event.preventDefault(this);
-      var action = $("#action").val();
-      var sName = $("#sName").val();
-      var sMobile = $("#sMobile").val();
-      var sEmail = $("#sEmail").val();
-      var sRno = $("#sRno").val();
-      var stdId = $("#panelId").val();
-      $.alert("Name " + sName + " Rno " + stdId);
-
-      var error = "NO";
-      var error_msg = "";
-      if (action == "addStudent" || action == "updateStudent") {
-        if ($('#sName').val() === "" || $('#sRno').val() === "") {
-          error = "YES";
-          error_msg = "Student Name and Roll Number cannot be blank";
-        }
-      }
-
-      if (error == "NO") {
-        var formData = $(this).serialize();
-        $('#firstModal').modal('hide');
-        alert(" Pressed" + formData);
-        $.post("admissionSql.php", formData, () => {}, "text").done(function(data) {
-          $.alert("List Updtaed" + data);
-          if (action == "addStudent" || action == "updateStudent") {
-            studentList();
-          }
-          if (action == "addStudentQualification" || action == "updateStudentQualification") {
-            studentQualificationList(stdId);
-          }
-          $("#modalForm")[0].reset();
-        }, "text").fail(function() {
-          $.alert("fail in place of error");
-        })
-      } else {
-        $.alert(error_msg);
-      }
     });
 
     $(document).on('change', '#sel_batch, #sel_program', function() {
       studentList();
+      totalStudents();
     });
-
-    $(document).on('click', '.student_idContact', function() {
-      var id = $(this).attr('id');
-      $.alert("id" + id);
-      $.post("admissionSql.php", {
-          studentId: id,
-          action: "fetchContact"
-        }, function(data, status) {
-          // $.alert("data " + data)
-        },
-        "json").done(function(data) {
-        // $.alert("List " + data.sc_fmobile);
-        $("#fMobile").val(data.sc_fmobile);
-        $("#mMobile").val(data.sc_mmobile);
-      }).fail(function() {
-        $.alert("fail in place of error");
-      })
-      $('#modal_title').text("Update Contact Details");
-      $('#firstModal').modal('show');
-      $('#modalId').val(id);
-      $('#action').val("addContact");
-    });
-
 
     function studentList() {
       var batchId = $("#sel_batch").val()
@@ -824,9 +903,10 @@ require('../requireSubModule.php');
           card += '<td>' + value.permanent_address + '</td>';
           card += '<td>' + value.city + '</td>';
           card += '<td>' + value.pincode + '</td>';
+          card += '<td>' + value.state_name + '</td>';
+          card += '<td>' + value.district_name + '</td>';
           card += '<td>' + value.reference_name + '</td>';
-          card += '<td>' + value.reference_type + '</td>';
-          card += '<td>' + value.reference_type + '</td>';
+          card += '<td>' + value.reference_staff + '</td>';
           card += '</tr>';
         });
         $("#studentShowList").find("tr:gt(0)").remove();
@@ -868,6 +948,23 @@ require('../requireSubModule.php');
       })
 
     }
+
+    function totalStudents() {
+      var programId = $("#sel_program").val()
+      //  $.alert("In List Function" + programId);
+      $.post("admissionSql.php", {
+        action: "totalStudents",
+        programId: programId
+      }, function(mydata, mystatus) {
+        $("#totalStudents").show();
+        // $.alert("List qulai" + mydata);
+        $("#totalStudents").html(mydata);
+      }, "text").fail(function() {
+        $.alert("Error !!");
+      })
+
+    }
+
     function getFormattedDate(ts, fmt) {
       var a = new Date(ts);
       var day = a.getDate();
@@ -889,32 +986,32 @@ require('../requireSubModule.php');
     window.print();
     document.body.innerHTML = backup;
   }
-   document.getElementById('export').onclick = function() {
-      var tableId = document.getElementById('studentShowList').id;
-      htmlTableToExcel(tableId, filename = '');
+  document.getElementById('export').onclick = function() {
+    var tableId = document.getElementById('studentShowList').id;
+    htmlTableToExcel(tableId, filename = '');
+  }
+  var htmlTableToExcel = function(tableId, fileName = '') {
+    var excelFileName = 'excel_table_data';
+    var TableDataType = 'application/vnd.ms-excel';
+    var selectTable = document.getElementById(tableId);
+    var htmlTable = selectTable.outerHTML.replace(/ /g, '%20');
+
+    filename = filename ? filename + '.xls' : excelFileName + '.xls';
+    var excelFileURL = document.createElement("a");
+    document.body.appendChild(excelFileURL);
+
+    if (navigator.msSaveOrOpenBlob) {
+      var blob = new Blob(['\ufeff', htmlTable], {
+        type: TableDataType
+      });
+      navigator.msSaveOrOpenBlob(blob, fileName);
+    } else {
+
+      excelFileURL.href = 'data:' + TableDataType + ', ' + htmlTable;
+      excelFileURL.download = fileName;
+      excelFileURL.click();
     }
-    var htmlTableToExcel = function(tableId, fileName = '') {
-      var excelFileName = 'excel_table_data';
-      var TableDataType = 'application/vnd.ms-excel';
-      var selectTable = document.getElementById(tableId);
-      var htmlTable = selectTable.outerHTML.replace(/ /g, '%20');
-
-      filename = filename ? filename + '.xls' : excelFileName + '.xls';
-      var excelFileURL = document.createElement("a");
-      document.body.appendChild(excelFileURL);
-
-      if (navigator.msSaveOrOpenBlob) {
-        var blob = new Blob(['\ufeff', htmlTable], {
-          type: TableDataType
-        });
-        navigator.msSaveOrOpenBlob(blob, fileName);
-      } else {
-
-        excelFileURL.href = 'data:' + TableDataType + ', ' + htmlTable;
-        excelFileURL.download = fileName;
-        excelFileURL.click();
-      }
-    }
+  }
 </script>
 
 <!-- Modal/Insititution Section-->

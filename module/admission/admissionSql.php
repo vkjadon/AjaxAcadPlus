@@ -18,11 +18,11 @@ if (isset($_POST["query"])) {
 }
 if (isset($_POST['action'])) {
    if ($_POST['action'] == 'studentList') {
-      $batchId=$_POST['batchId'];
-      $progId=$_POST['progId'];
+      $batchId = $_POST['batchId'];
+      $progId = $_POST['progId'];
 
       // $sql = "select st.* from student st where st.student_status='0' order by user_id";
-      if($progId>0)$sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.program_name from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.batch_id=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.program_id='$progId' and st.student_status='0'";
+      if ($progId > 0) $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.program_name from  student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.batch_id=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.program_id='$progId' and st.student_status='0'";
       else $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.program_name from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.batch_id=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.student_status='0'";
       //$sql = "select st.*, sd.*, sa.*, b.batch, p.program_name from student st, student_detail sd, student_address sa, batch b, program p where st.batch_id=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id";
 
@@ -50,7 +50,7 @@ if (isset($_POST['action'])) {
       $result = $conn->query($sql);
       $output = $result->fetch_assoc();
       echo json_encode($output);
-   }elseif ($_POST['action'] == 'addStudent') {
+   } elseif ($_POST['action'] == 'addStudent') {
       $dup = "select * from student where student_rollno='" . data_check($_POST["sRno"]) . "' and student_status='0'";
       $result = $conn->query($dup);
       $dup_found = $result->num_rows;
@@ -65,9 +65,8 @@ if (isset($_POST['action'])) {
             $row = $result->fetch_assoc();
             $last_user_id = $row["max"];
             $last_user_id++;
-            if($last_user_id==1) $last_user_id=$school_code.substr($batch, 2).$sp_code.'0001';
-         }
-         else echo $conn->error;
+            if ($last_user_id == 1) $last_user_id = $school_code . substr($batch, 2) . $sp_code . '0001';
+         } else echo $conn->error;
 
          $sql = "insert into student (batch_id, program_id, student_name, student_rollno, student_mobile, student_email, user_id, update_id, student_status) value('$myBatch', '$myProg', '" . data_check($_POST['sName']) . "', '" . data_check($_POST['sRno']) . "', '" . $_POST['sMobile'] . "', '" . $_POST['sEmail'] . "', '$last_user_id', '$myId', '0')";
          $result = $conn->query($sql);
@@ -79,9 +78,9 @@ if (isset($_POST['action'])) {
             $result = $conn->query($sql);
          }
       }
-   }  elseif ($_POST['action'] == 'fetchStudent') {
-      $id = $_POST['studentId'];
-      $sql = "select sd.*, s.* FROM student s, student_detail sd where s.student_id='$id' and s.student_id=sd.student_id";
+   } elseif ($_POST['action'] == 'fetchStudent') {
+      $id = $_POST['userId'];
+      $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.program_name from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.batch_id=b.batch_id and st.user_id='$id' and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.student_status='0'";
       $result = $conn->query($sql);
       $output = $result->fetch_assoc();
       echo json_encode($output);
@@ -94,10 +93,34 @@ if (isset($_POST['action'])) {
       $conn->query($sql);
       echo $conn->error;
    } elseif ($_POST['action'] == 'updateDetails') {
-      $student_id = $_POST['student_id'];
+      $id_name = $_POST['id_name'];
+      $id = $_POST['id'];
       $tag = $_POST['tag'];
       $value = $_POST['value'];
-      $sql = "update student_detail set $tag='$value' where student_id='$student_id'";
+      $sql = "update student_detail set $tag='$value' where student_id='$id'";
+      $result = $conn->query($sql);
+      $affectedRows = $conn->affected_rows;
+      echo "affected rows $affectedRows";
+      if (!$result) echo $conn->error;
+      else echo "Updated";
+   } elseif ($_POST['action'] == 'updateAddress') {
+      $id_name = $_POST['id_name'];
+      $id = $_POST['id'];
+      $tag = $_POST['tag'];
+      $value = $_POST['value'];
+      $sql = "update student_address set $tag='$value' where student_id='$id'";
+      $result = $conn->query($sql);
+      $affectedRows = $conn->affected_rows;
+      echo "affected rows $affectedRows";
+      if (!$result) echo $conn->error;
+      else echo "Updated";
+   }
+   elseif ($_POST['action'] == 'updateReference') {
+      $id_name = $_POST['id_name'];
+      $id = $_POST['id'];
+      $tag = $_POST['tag'];
+      $value = $_POST['value'];
+      $sql = "update student_reference set $tag='$value' where student_id='$id'";
       $result = $conn->query($sql);
       $affectedRows = $conn->affected_rows;
       echo "affected rows $affectedRows";
@@ -158,6 +181,12 @@ if (isset($_POST['action'])) {
          echo '<tr><td>' . $program_name . '</td><td>' . $rowcount . '</td></tr>';
       }
       echo '</table></table>';
+   } elseif ($_POST['action'] == 'totalStudents') {
+      $program_id = $_POST['programId'];
+      $sql_desig = "select * from student where program_id='$program_id' and student_status='0'";
+      $result = $conn->query($sql_desig);
+      $rowcount = mysqli_num_rows($result);
+      echo  "Total Students Registered in this Program : $rowcount";
    } elseif ($_POST['action'] == 'updateStudentList') {
       $sql = "select * from student where program_id='$myProg' and batch_id='$myBatch'";
       $result = $conn->query($sql);

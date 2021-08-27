@@ -75,7 +75,7 @@ if (isset($_POST['action'])) {
          if ($last_user_id == 1) $last_user_id = $school_code . substr($batch, 2) . $sp_code . '0001';
       } else echo $conn->error;
 
-      $sql = "insert into student (batch_id, program_id, ay_id, student_lateral, student_regular, student_semester, user_id, student_admission, student_gender, update_id, student_status) value('$myBatch', '$program_id', '$ay_id', '$lateral', '$regular', '$semester', '$last_user_id', '$date', 'M', '$myId', '0')";
+      $sql = "insert into student (batch_id, program_id, ay_id, student_lateral, student_regular, student_semester, user_id, student_admission, student_gender, update_id, student_status) value('$myBatch', '$program_id', '$ay_id', '$lateral', '$regular', '$semester', '$last_user_id', '$date', 'M', '$myId', '1')";
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
       else {
@@ -178,6 +178,15 @@ if (isset($_POST['action'])) {
       //   echo "hellsdka";
       // $id = $_POST['userId'];
       $sql = "select st.*, b.batch, p.program_name from student st, batch b, program p where st.batch_id=b.batch_id and p.program_id=st.program_id";
+      $result = $conn->query($sql);
+      $json_array = array();
+      while ($rowArray = $result->fetch_assoc()) {
+         $json_array[] = $rowArray;
+      }
+      echo json_encode($json_array);
+   } elseif ($_POST['action'] == 'unsavedStudentList') {
+
+      $sql = "select st.*, p.program_name from student st, program p where student_status='1' and           p.program_id=st.program_id ";
       $result = $conn->query($sql);
       $json_array = array();
       while ($rowArray = $result->fetch_assoc()) {

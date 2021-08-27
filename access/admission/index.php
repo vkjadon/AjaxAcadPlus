@@ -536,12 +536,25 @@ if (!isset($myBatch)) $myBatch = '';
             </div>
           </div>
         </div>
+
       </div>
       <div class="col-md-6 pl-2">
         <div class="container card mt-2 myCard">
           <p class="applicationForm mt-3"><label>Please Select Institution/School and the Programme to Create New ID</label></p>
         </div>
 
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 pr-2">
+        <div class="container card mt-2 myCard">
+          <p class="mt-3"><label>Data of Unsaved Students</label></p>
+          <table class="table table-bordered table-striped list-table-xxs mt-3" id="unsavedList">
+            <th>ID</th>
+            <th>Program</th>
+            <th><i class="fas fa-edit"></i></th>
+          </table>
+        </div>
       </div>
     </div>
   </div>
@@ -565,7 +578,7 @@ if (!isset($myBatch)) $myBatch = '';
     $('[data-toggle="tooltip"]').tooltip();
     schoolOption();
     stateOption();
-
+    unsavedStudentList();
     $(document).on('change', '#sel_school', function() {
       programOption();
     });
@@ -976,6 +989,29 @@ if (!isset($myBatch)) $myBatch = '';
         $.alert("Not Responding");
       })
     }
+
+    function unsavedStudentList() {
+              // $.alert('hello');
+      $.post("admissionSql.php", {
+        action: "unsavedStudentList",
+      }, () => {}, "json").done(function(data) {
+        var card = '';
+        // $.alert(data.student_id);
+        $.each(data, function(key, value) {
+          card += '<tr>';
+          card += '<td>' + value.user_id + '</td>';
+          card += '<td>' + value.program_name + '</td>';
+          card += '<td>' +  + '</td>';
+          card += '</tr>';
+        });
+        $("#unsavedList").find("tr:gt(0)").remove()
+        $("#unsavedList").append(card);
+      }).fail(function() {
+        $.alert("Not Responding");
+      })
+    }
+
+
 
     function personalList() {
       var studentId = $("#userId").val()
