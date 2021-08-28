@@ -123,6 +123,33 @@ function check_tn_enrichment_activity_participant($conn, $table)
   //else echo "Table Exists";
 }
 
+function check_tn_feeStructure($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'school_id INT(3) null,
+    program_id INT(3) null,
+    batch_id int(3) null,
+    fee_category INT(3) null,
+    fee_type int(3) null,
+    fee_component varchar(50) null,
+    fee_semester int(3) null,
+    fc_amount varchar(6) null,
+    update_ts timestamp default current_timestamp(),
+    update_id INT(5) NULL,
+    status INT(1) NULL,
+    UNIQUE(school_id, program_id, batch_id, fee_category, fee_type, fee_semester )';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+
 function check_tn_feedback($conn, $table)
 {
   $sql = "select * from $table";

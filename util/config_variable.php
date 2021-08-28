@@ -50,6 +50,9 @@ if (isset($mySes)) {
   // check_tn_ad($conn, 'assessment_design');
   //check_tn_rs($conn, 'cc_outcome');
   check_tn_class($conn, "class");
+
+  check_tn_feeStructure($conn, "fee_structure");
+
   check_tn_feedback($conn, "feedback");
   check_tn_feedback_question($conn, "feedback_question");
   check_tn_feedback_option($conn, "feedback_option");

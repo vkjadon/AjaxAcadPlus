@@ -97,7 +97,7 @@ if (!isset($myBatch)) $myBatch = '';
                     <label>Institute/School</label>
                     <p id="schoolOption"></p>
                     <label>Programme Course</label>
-                    <p id="programOption"></p>
+                    <p id="programOption">Select a Program</p>
                   </div>
                   <div class="col-md-4">
                     <div class="form-group">
