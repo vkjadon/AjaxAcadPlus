@@ -27,7 +27,7 @@ require('../requireSubModule.php');
             <div class="container card mt-2 myCard">
               <form id="newFee">
                 <div class="row">
-                <div class="col-md-1 pr-0">
+                  <div class="col-md-1 pr-0">
                     <label>Batch</label>
                     <p id="batchOption"></p>
                   </div>
@@ -38,7 +38,7 @@ require('../requireSubModule.php');
                   <div class="col-md-2 pl-1 pr-0">
                     <label>Programme</label>
                     <p id="programOption">
-                    <input type="text" class="form-control form-control-sm" disabled placeholder="Program">
+                      <input type="text" class="form-control form-control-sm" disabled placeholder="Program">
                     </p>
                   </div>
                   <div class="col-md-2 pl-1 pr-0">
@@ -50,8 +50,8 @@ require('../requireSubModule.php');
                     <p id="feeType"></p>
                   </div>
                   <div class="col-md-2 pl-1 pr-0">
-                    <label>Fee Component</label>
-                    <input type="text" class="form-control form-control-sm" id="fee_component" name="fee_component" placeholder="Fee Component">
+                    <label>Component</label>
+                    <p id="feeComponent"></p>
                   </div>
                   <div class="col-md-1 pl-1 pr-0">
                     <div class="form-group">
@@ -69,6 +69,23 @@ require('../requireSubModule.php');
                 <input type="hidden" id="action" name="action" value="addNew">
                 <button class="btn btn-sm">Add/Update</button>
               </form>
+            </div>
+            <div class="row">
+              <div class="col-md-12" style="overflow: scroll;">
+                <div class="container card mt-2 myCard" id="print" style="overflow: scroll;">
+                  <table class="table table-bordered table-striped list-table-xxs mt-3" id="feeStructureList">
+                    <th><i class="fas fa-trash"></i></th>
+                    <th>Batch</th>
+                    <th>Institute</th>
+                    <th>Programme</th>
+                    <th>Category</th>
+                    <th>Type</th>
+                    <th>Component</th>
+                    <th>Semester</th>
+                    <th>Fee</th>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
           <div class="tab-pane fade" id="list-cs" role="tabpanel" aria-labelledby="list-cs-list">
@@ -93,14 +110,17 @@ require('../requireSubModule.php');
     batchOption();
     schoolOption();
     feeCategory();
+    feeComponent();
     feeType();
+    feeStructureList();
+
 
     $(document).on('submit', '#newFee', function(event) {
       event.preventDefault(this);
       // $.alert("Name");
       var error = "NO";
       var error_msg = "";
-      if ($('#sel_prog').val() === "0" || $('#sel_school').val() === "0" || $('#fee').val()==="0") {
+      if ($('#sel_prog').val() === "0" || $('#sel_school').val() === "0" || $('#fee').val() === "0") {
         error = "YES";
         error_msg = "Please check Department, Program and Fee are added.";
       }
@@ -108,8 +128,10 @@ require('../requireSubModule.php');
         var formData = $(this).serialize();
         // alert(" Pressed" + formData);
         $.post("feeSql.php", formData, () => {}, "text").done(function(data) {
-          $.alert(data);
-          feeStructure();
+          // $.alert(data);
+          // $("#semester").val(data);
+          // $("#fee").val(data);
+          $("#action").val("addFee");
         }, "text").fail(function() {
           $.alert("fail in place of error");
         })
@@ -136,6 +158,7 @@ require('../requireSubModule.php');
         $.alert("Error !!");
       })
     }
+
     function feeCategory() {
       // $.alert("Department ");
       $.post("feeSql.php", {
@@ -144,12 +167,30 @@ require('../requireSubModule.php');
         // $.alert(data);
         var list = '';
         list += '<select class="form-control form-control-sm" name="sel_fcg" id="sel_fcg" required>';
-        list += '<option value="0">ALL</option>';
         $.each(data, function(key, value) {
-          list += '<option value=' + value.mn_id + '>' + value.mn_abbri + '</option>';
+          list += '<option value=' + value.mn_id + '>' + value.mn_name + '</option>';
         });
         list += '</select>';
         $("#feeCategory").html(list);
+
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+    }
+
+    function feeComponent() {
+      // $.alert("Department ");
+      $.post("feeSql.php", {
+        action: "feeComponent"
+      }, function() {}, "json").done(function(data, status) {
+        // $.alert(data);
+        var list = '';
+        list += '<select class="form-control form-control-sm" name="sel_fc" id="sel_fc" required>';
+        $.each(data, function(key, value) {
+          list += '<option value=' + value.mn_id + '>' + value.mn_name + '</option>';
+        });
+        list += '</select>';
+        $("#feeComponent").html(list);
 
       }).fail(function() {
         $.alert("Error !!");
@@ -174,6 +215,7 @@ require('../requireSubModule.php');
         $.alert("Error !!");
       })
     }
+
     function schoolOption() {
       // $.alert("Department ");
       $.post("feeSql.php", {
@@ -193,6 +235,7 @@ require('../requireSubModule.php');
         $.alert("Error !!");
       })
     }
+
     function programOption() {
       var schoolId = $("#sel_school").val()
       // $.alert("Dept " + schoolId);
@@ -214,9 +257,69 @@ require('../requireSubModule.php');
       })
 
     }
+
+    function feeStructureList() {
+      // $.alert("Batch");
+      $.post("feeSql.php", {
+        action: "feeStructureList"
+      }, function() {}, "json").done(function(data, status) {
+        // $.alert(data);
+        // console.log(data);
+        var card = '';
+        $.each(data, function(key, value) {
+          card += '<tr>';
+          card += '<td><a href="#" class="fa fa-trash dropFee" data-fee="' + value.fs_id + '"></a></td>';
+          card += '<td>' + value.batch + '</td>';
+          card += '<td>' + value.school_name + '</td>';
+          card += '<td>' + value.program_name + '</td>';
+          card += '<td>' + value.mn_name + '</td>';
+          card += '<td>' + value.fee_type + '</td>';
+          card += '<td>' + value.fee_component + '</td>';
+          card += '<td>' + value.fee_semester + '</td>';
+          card += '<td>' + value.fc_amount + '</td>';
+          card += '</tr>';
+        });
+        $("#feeStructureList").find("tr:gt(0)").remove();
+        $("#feeStructureList").append(card);
+
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+
+    }
+
     $(document).on('change', '#sel_school', function() {
       programOption();
     });
+
+    $(document).on("click", ".dropFee", function() {
+      var fs_id = $(this).attr("data-fee");
+      // $.alert('fs' + fs_id);
+      $.confirm({
+        title: 'Please Confirm!',
+        draggable: true,
+        content: "<b><i>The Selected Fee Structure will be removed !!</i></b>",
+        buttons: {
+          confirm: {
+            btnClass: 'btn-info',
+            action: function() {
+              $.post("feeSql.php", {
+                fs_id: fs_id,
+                action: "deleteFee"
+              }, () => {}, "text").done(function(data, status) {
+                // $.alert(data);
+              })
+              feeStructureList()
+            }
+          },
+          cancel: {
+            btnClass: "btn-danger",
+            action: function() {}
+          },
+        }
+      });
+    });
+
 
 
     function getFormattedDate(ts, fmt) {
