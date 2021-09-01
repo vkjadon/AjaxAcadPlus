@@ -261,6 +261,14 @@ require('../requireSubModule.php');
                           </div>
                         </div>
                         <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="fm" name="headName" value="fm">
+                              Mode Of Fees(fm)
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
                           <div class="col-4 pr-1">
                             <div class="form-group">
                               <label>Name</label>

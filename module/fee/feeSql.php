@@ -1,6 +1,6 @@
 <?php
 require('../../module/requireSubModule.php');
-//echo $_POST['action'];
+// echo $_POST['action'];
 if (isset($_POST['action'])) {
   if ($_POST['action'] == 'batchOption') {
     $sql = "select * from batch where batch_status='0' order by batch desc";
@@ -70,7 +70,8 @@ if (isset($_POST['action'])) {
       echo json_encode($json_array);
     }
   } elseif ($_POST['action'] == 'addFee') {
-    $school_id = $_POST['sel_school'];
+    // echo " Add Fee ";
+    $school_id = $_POST['schoolId'];
     $batch_id = $_POST['sel_batch'];
     $program_id = $_POST['sel_prog'];
     $fcg = $_POST['sel_fcg'];
@@ -78,25 +79,35 @@ if (isset($_POST['action'])) {
     $fc = $_POST['sel_fc'];
     $sem = $_POST['semester'];
     $fee = $_POST['fee'];
-    $sql = "insert into fee_structure (school_id,program_id,batch_id,fee_category,fee_type, fee_component,fee_semester,fc_amount,update_id,status) values ('$school_id','$program_id','$batch_id','$fcg','$ft','$fc','$sem','$fee','$myId','0')";
+    $sql = "insert into fee_structure (school_id, program_id, batch_id, fee_category, fee_type, fee_component,fee_semester, fs_amount, update_id, fs_status) values ('$school_id', '$program_id', '$batch_id', '$fcg', '$ft','$fc', '$sem', '$fee', '$myId', '0')";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
+    else echo "Fee Successfully Added";
   } elseif ($_POST['action'] == 'feeStructureList') {
-
-    $sql = "select fs.*, b.batch, p.program_name, s.school_name, mn.mn_name from fee_structure fs, batch b, program p, school s, master_name mn where mn.mn_id=fs.fee_category and s.school_id=fs.school_id and b.batch_id=fs.batch_id and p.program_id=fs.program_id and status='0'";
+    $sql = "select fs.*, b.batch, p.program_name, s.school_name, mn.mn_name from fee_structure fs, batch b, program p, school s, master_name mn where mn.mn_id=fs.fee_category and s.school_id=fs.school_id and b.batch_id=fs.batch_id and p.program_id=fs.program_id and fs_status='0' order by b.batch desc, fs.fee_semester";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     else {
       $json_array = array();
+      $subArray=array();
       while ($rowsFee = $result->fetch_assoc()) {
-        $json_array[] = $rowsFee;
+        $subArray["fs_id"]=$rowsFee["fs_id"];
+        $subArray["batch"]=$rowsFee["batch"];
+        $subArray["school_name"]=$rowsFee["school_name"];
+        $subArray["program_name"]=$rowsFee["program_name"];
+        $subArray["mn_name"]=$rowsFee["mn_name"];
+        $subArray["fee_type"]=getField($conn, $rowsFee["fee_type"], "master_name", "mn_id", "mn_name");
+        $subArray["fee_component"]=getField($conn, $rowsFee["fee_component"], "master_name", "mn_id", "mn_name");
+        $subArray["fee_semester"]=$rowsFee["fee_semester"];
+        $subArray["fs_amount"]=$rowsFee["fs_amount"];
+        $json_array[] = $subArray;
       }
       echo json_encode($json_array);
     }
   } elseif ($_POST["action"] == "deleteFee") {
     $fs_id = $_POST['fs_id'];
-    $sql = "update fee_structure set status='9' where fs_id='$fs_id'";
+    $sql = "update fee_structure set fs_status='9' where fs_id='$fs_id'";
     $result = $conn->query($sql);
-    // echo $tn;
+    if($result) echo "Data Dropped !!";
   }
 }

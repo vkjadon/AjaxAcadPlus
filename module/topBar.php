@@ -182,6 +182,7 @@ if (!isset($myBatch)) $myBatch = '';
 								<div class="row">
 									<div class=" col-6">
 									<a href="<?php echo $codePath . '/module/fee/'; ?>" class="dropdown-item pb-1"> Fee </a>
+									<a href="<?php echo $codePath . '/module/feeReceipt/'; ?>" class="dropdown-item pb-1"> Fee Receipt </a>
 										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item pb-1"> TPC </a>
 										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item pb-1"> Alumni </a>
 									</div>

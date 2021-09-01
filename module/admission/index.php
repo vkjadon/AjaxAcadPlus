@@ -128,12 +128,7 @@ require('../requireSubModule.php');
                               <label>Session: <?php echo getField($conn, $mySes, "session", "session_id", "session_name"); ?></label>
                             </h5>
                           </div>
-                          <!-- <div class="col-md-4">
-                    <label>Institute/School</label>
-                    <p id="schoolOption"></p>
-                    <label>Programme Course</label>
-                    <p id="programOption"></p>
-                  </div> -->
+
                           <div class="col-md-4">
                             <div class="form-group">
                               <label>Semester</label>
@@ -150,12 +145,6 @@ require('../requireSubModule.php');
                               <input type="date" class="form-control form-control-sm" id="stdAdmission" name="stdAdmission" value="<?php echo $submit_date; ?>">
                             </div>
                           </div>
-                          <!-- <div class="col-md-4">
-                    <div class="form-group">
-                      <input type="checkbox" lass="form-check-input" id="stdLateralEntry" name="stdLateralEntry">
-                      <label>Lateral Entry</label>
-                    </div>
-                  </div> -->
                           <div class="col-md-4">
                             <input type="hidden" id="userId" name="userId" value="0">
                             <input type="hidden" id="action" name="action" value="addNew">

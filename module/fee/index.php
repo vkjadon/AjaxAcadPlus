@@ -22,59 +22,69 @@ require('../requireSubModule.php');
         </div>
       </div>
       <div class="col-10 leftLinkBody">
-        <div class="tab-content" id="nav-tabContent">
-          <div class="tab-pane show active" id="feeStructure" role="tabpanel" aria-labelledby="list-feeStructure-list">
-            <div class="container card mt-2 myCard">
+        <div class="row">
+          <div class="container card mt-2 myCard ml-4">
+            <div class="row">
+              <div class="col-md-3 pr-0">
+                <label>Batch</label>
+                <p id="batchOption"></p>
+              </div>
+              <div class="col-md-3 pl-1 pr-0">
+                <label>Institute/School</label>
+                <p id="schoolOption"></p>
+              </div>
+              <div class="col-md-3 pl-1 pr-0">
+                <label>Programme</label>
+                <p id="programOption">
+                  <input type="text" class="form-control form-control-sm" disabled placeholder="Program">
+                </p>
+              </div>
+              <div class="col-md-3 pl-1">
+                <label>Type</label>
+                <p id="feeType"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+          <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane show active" id="feeStructure" role="tabpanel" aria-labelledby="list-feeStructure-list">
               <form id="newFee">
                 <div class="row">
-                  <div class="col-md-1 pr-0">
-                    <label>Batch</label>
-                    <p id="batchOption"></p>
-                  </div>
-                  <div class="col-md-2 pl-1 pr-0">
-                    <label>Institute/School</label>
-                    <p id="schoolOption"></p>
-                  </div>
-                  <div class="col-md-2 pl-1 pr-0">
-                    <label>Programme</label>
-                    <p id="programOption">
-                      <input type="text" class="form-control form-control-sm" disabled placeholder="Program">
-                    </p>
-                  </div>
-                  <div class="col-md-2 pl-1 pr-0">
-                    <label>Category</label>
-                    <p id="feeCategory"></p>
-                  </div>
-                  <div class="col-md-1 pl-1 pr-0">
-                    <label>Type</label>
-                    <p id="feeType"></p>
-                  </div>
-                  <div class="col-md-2 pl-1 pr-0">
-                    <label>Component</label>
-                    <p id="feeComponent"></p>
-                  </div>
-                  <div class="col-md-1 pl-1 pr-0">
-                    <div class="form-group">
-                      <label>Semester</label>
-                      <input type="number" class="form-control form-control-sm" id="semester" min="1" name="semester" placeholder="Semester" value="1">
+                  <div class="col-md-12">
+                    <div class="container card mt-2 myCard ml-4">
+                      <div class="row">
+                        <div class="col-md-3 pr-0">
+                          <label>Category</label>
+                          <p id="feeCategory"></p>
+                        </div>
+                        <div class="col-md-3 pl-1 pr-0">
+                          <label>Component</label>
+                          <p id="feeComponent"></p>
+                        </div>
+                        <div class="col-md-3 pl-1 pr-0">
+                          <div class="form-group">
+                            <label>Semester</label>
+                            <input type="number" class="form-control form-control-sm" id="semester" min="1" name="semester" placeholder="Semester" value="1">
+                          </div>
+                        </div>
+                        <div class="col-md-3 pl-1">
+                          <div class="form-group">
+                            <label>Fee</label>
+                            <input type="number" class="form-control form-control-sm" id="fee" min="0" name="fee" placeholder="Fee" value="0">
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div class="col-md-1 pl-1">
-                    <div class="form-group">
-                      <label>Fee</label>
-                      <input type="number" class="form-control form-control-sm" id="fee" min="0" name="fee" placeholder="Fee" value="0">
-                    </div>
-                  </div>
-                </div>
-                <input type="hidden" id="action" name="action" value="addNew">
-                <button class="btn btn-sm">Add/Update</button>
+                  <input type="hidden" id="action" name="action" value="addFee">
+                  <button class="btn btn-sm">Add/Update</button>
               </form>
             </div>
             <div class="row">
-              <div class="col-md-12" style="overflow: scroll;">
-                <div class="container card mt-2 myCard" id="print" style="overflow: scroll;">
-                  <table class="table table-bordered table-striped list-table-xxs mt-3" id="feeStructureList">
-                    <th><i class="fas fa-trash"></i></th>
+              <div class="col-md-12">
+                <div class="container card mt-2 myCard ml-4" id="print" style="overflow: scroll;">
+                  <table class="table table-bordered table-striped list-table-xs mt-3" id="feeStructureList">
+                    <th class="text-center"><i class="fa fa-trash"></i></th>
                     <th>Batch</th>
                     <th>Institute</th>
                     <th>Programme</th>
@@ -94,12 +104,12 @@ require('../requireSubModule.php');
               </div>
             </div>
           </div>
-        </div>
       </div>
     </div>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <?php require("../bottom_bar.php"); ?>
+  </div>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <?php require("../bottom_bar.php"); ?>
   </div>
 </body>
 <?php require("../js.php"); ?>
@@ -114,10 +124,13 @@ require('../requireSubModule.php');
     feeType();
     feeStructureList();
 
-
     $(document).on('submit', '#newFee', function(event) {
       event.preventDefault(this);
       // $.alert("Name");
+      var batchId = $("#sel_batch").val()
+      var progId = $("#sel_prog").val()
+      var feeTypeId = $("#sel_ft").val()
+      var schoolId = $("#sel_school").val()
       var error = "NO";
       var error_msg = "";
       if ($('#sel_prog').val() === "0" || $('#sel_school').val() === "0" || $('#fee').val() === "0") {
@@ -126,12 +139,10 @@ require('../requireSubModule.php');
       }
       if (error == "NO") {
         var formData = $(this).serialize();
-        // alert(" Pressed" + formData);
+        alert(" Pressed" + formData);
         $.post("feeSql.php", formData, () => {}, "text").done(function(data) {
-          // $.alert(data);
-          // $("#semester").val(data);
-          // $("#fee").val(data);
-          $("#action").val("addFee");
+          $.alert(data);
+          feeStructureList()
         }, "text").fail(function() {
           $.alert("fail in place of error");
         })
@@ -268,7 +279,7 @@ require('../requireSubModule.php');
         var card = '';
         $.each(data, function(key, value) {
           card += '<tr>';
-          card += '<td><a href="#" class="fa fa-trash dropFee" data-fee="' + value.fs_id + '"></a></td>';
+          card += '<td class="text-center"><a href="#" class="dropFee" data-fee="' + value.fs_id + '"><i class="fas fa-trash"></i></a></td>';
           card += '<td>' + value.batch + '</td>';
           card += '<td>' + value.school_name + '</td>';
           card += '<td>' + value.program_name + '</td>';
@@ -276,7 +287,7 @@ require('../requireSubModule.php');
           card += '<td>' + value.fee_type + '</td>';
           card += '<td>' + value.fee_component + '</td>';
           card += '<td>' + value.fee_semester + '</td>';
-          card += '<td>' + value.fc_amount + '</td>';
+          card += '<td>' + value.fs_amount + '</td>';
           card += '</tr>';
         });
         $("#feeStructureList").find("tr:gt(0)").remove();
@@ -307,7 +318,7 @@ require('../requireSubModule.php');
                 fs_id: fs_id,
                 action: "deleteFee"
               }, () => {}, "text").done(function(data, status) {
-                // $.alert(data);
+                $.alert(data);
               })
               feeStructureList()
             }
@@ -319,8 +330,6 @@ require('../requireSubModule.php');
         }
       });
     });
-
-
 
     function getFormattedDate(ts, fmt) {
       var a = new Date(ts);
