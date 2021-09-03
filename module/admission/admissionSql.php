@@ -115,12 +115,12 @@ if (isset($_POST['action'])) {
       if (!$result) echo $conn->error;
       else echo "Updated";
    }
-   elseif ($_POST['action'] == 'updateReference') {
+   elseif ($_POST['action'] == 'updateDetails') {
       $id_name = $_POST['id_name'];
       $id = $_POST['id'];
       $tag = $_POST['tag'];
       $value = $_POST['value'];
-      $sql = "update student_reference set $tag='$value' where student_id='$id'";
+      $sql = "update student_detail set $tag='$value' where student_id='$id'";
       $result = $conn->query($sql);
       $affectedRows = $conn->affected_rows;
       echo "affected rows $affectedRows";

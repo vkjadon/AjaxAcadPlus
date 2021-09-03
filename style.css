@@ -1,102 +1,109 @@
-.display-4{
-  font-size:40px;
+.display-4 {
+    font-size: 40px;
 }
+
 .topBarText {
-  text-align: center;
-  font-style: italic;
-  font-size: small;
+    text-align: center;
+    font-style: italic;
+    font-size: small;
 }
+
 .footerNote {
-  text-align: center;
-  font-style: italic;
-  font-weight: bold;
-  font-size: small;
+    text-align: center;
+    font-style: italic;
+    font-weight: bold;
+    font-size: small;
 }
 
 .selectPanel {
-  color: rgba(39, 23, 134, 0.884);
-  text-align: center;
-  font-style: italic;
-  border: thick;
-  background-color: rgba(228, 233, 235, 0.897);
-  font-size: small;
+    color: rgba(39, 23, 134, 0.884);
+    text-align: center;
+    font-style: italic;
+    border: thick;
+    background-color: rgba(228, 233, 235, 0.897);
+    font-size: small;
 }
-.list-group-mine .list-group-item {
-  padding:4px;
-  font-weight:normal;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: small;
 
+.list-group-mine .list-group-item {
+    padding: 4px;
+    font-weight: normal;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: small;
 }
 
 .list-group-mine .list-group-item:hover {
-  background-color: rgb(221, 224, 226);
-  border-color: white;
+    background-color: rgb(221, 224, 226);
+    border-color: white;
 }
 
 .list-group-mine .active {
-  background-color: rgb(106, 110, 110);
-  border-color: white;
+    background-color: rgb(106, 110, 110);
+    border-color: white;
 }
+
 .nav-link {
-  padding:6px;
-  font-weight:normal;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  font-size: small;
+    padding: 6px;
+    font-weight: normal;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: small;
 }
 
 .btn-round-sm {
-  padding: 2px 6px;
-  font-size: 12px;
-  border-radius: 14px;
-  width: 12%;
-  background-color: rgb(221, 224, 226);
+    padding: 2px 6px;
+    font-size: 12px;
+    border-radius: 14px;
+    width: 12%;
+    background-color: rgb(221, 224, 226);
 }
-.btn-round-sm .active{
-  background-color: rgb(83, 90, 95);
+
+.btn-round-sm .active {
+    background-color: rgb(83, 90, 95);
 }
 
 .btn-square-sm {
-  padding: 2px 8px;
-  font-size: 12px;
-  border-radius: 0px;
+    padding: 2px 8px;
+    font-size: 12px;
+    border-radius: 0px;
 }
 
 .btn-square-xs {
-  padding: 2px 4px;
-  font-size: 10px;
-  border-radius: 0px;
+    padding: 2px 4px;
+    font-size: 10px;
+    border-radius: 0px;
 }
 
 .decrement {
-  padding: 2px;
-  margin: 0px;
-  border: ivory;
-  font-size: 18px;
-  color: coral;
-  border-radius: 0px;
+    padding: 2px;
+    margin: 0px;
+    border: ivory;
+    font-size: 18px;
+    color: coral;
+    border-radius: 0px;
 }
 
 .increment {
-  padding: 2px;
-  margin: 0px;
-  border: ivory;
-  font-size: 18px;
-  border-radius: 0px;
+    padding: 2px;
+    margin: 0px;
+    border: ivory;
+    font-size: 18px;
+    border-radius: 0px;
 }
 
-textarea
-{
-  width:100%;
+textarea {
+    width: 100%;
 }
 
 .fbOption {
-  font-size: small;
+    font-size: small;
 }
 
 .fbQuestion {
-  padding:4px;
-  font-weight:normal;
-  font-family:Georgia, 'Times New Roman', Times, serif;
-  background-color: rgb(244, 247, 248);
+    padding: 4px;
+    font-weight: normal;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    background-color: rgb(244, 247, 248);
+}
+
+.autoList {
+    z-index: 2;
 }
