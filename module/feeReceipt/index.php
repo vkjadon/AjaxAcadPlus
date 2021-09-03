@@ -92,12 +92,15 @@ require('../requireSubModule.php');
                   <!-- nav options -->
                   <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
                     <li class="nav-item">
-                      <a class="nav-link active" id="pills_tablePersonalInfo" data-toggle="pill" href="#pills_personalInfo" role="tab" aria-controls="pills_personalInfo" aria-selected="true">Fee Details</a>
+                      <a class="nav-link active" id="pills_tablePersonalInfo" data-toggle="pill" href="#pills_personalInfo" role="tab" aria-controls="pills_personalInfo" aria-selected="true">Fee Transaction</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="pill" href="#feeReceipt" role="tab" aria-controls="feeReceipt" aria-selected="true">Fee Receipt</a>
                     </li>
                   </ul>
                   <div class="tab-content" id="pills-tabContent p-3">
                     <!-- <h4> New Id <span class="newId"> - Not Created </span></h4> -->
-                    <div class="tab-pane fade show active" id="pills_personalInfo" role="tabpanel" aria-labelledby="pills_personalInfo">
+                    <div class="tab-pane show active" id="pills_personalInfo" role="tabpanel" aria-labelledby="pills_personalInfo">
                       <input type="hidden" id="studentIdHidden" name="studentIdHidden">
                       <div class="row">
                         <div class="col-12">
@@ -158,6 +161,104 @@ require('../requireSubModule.php');
                           <input type="hidden" id="action" name="action" value="addFeeReceipt">
                           <button class="btn btn-sm" id="addFeeReceipt">Generate</button>
                         </div>
+                      </div>
+                    </div>
+                    <div class="tab-pane fade" id="feeReceipt" role="tabpanel" aria-labelledby="feeReceipt">
+                      <div class="row">
+                        <div class="col-12" id="page1">
+                          <div class="float-right"><a onclick="printDiv('page1')" class="fa fa-print"></a></div>
+                          <div class="row">
+                            <div class="col-3 bg-danger">
+                              <img src="https://aryans.edu.in/wp-content/uploads/2020/09/aryans_logo01.png" width="100%">
+                            </div>
+                            <div class="col-8">
+                              <div>
+                                <h2>Aryans College of Engineering</h2>
+                                <span class="smallText">Vill. Nepra/Thua, Chandigarh - Patiala Highway, Near Chandigarh</span>
+                              </div>
+                            </div>
+                          </div>
+                          <hr>
+                          <div class="row">
+                            <div class="col-12 text-center">
+                              <h4>Payment Receipt</h4>
+                            </div>
+                          </div>
+                          <div class="row mt-2">
+                            <div class="col-3">
+                              <label for="receiptNumber">Receipt Number : </label>
+                            </div>
+                            <div class="col-3">
+                              <span id="receiptNumber"></span>
+                            </div>
+                            <div class="col-3">
+                              <label for="receiptDate">Date : </label><span id="receiptDate"></span>
+                            </div>
+                            <div class="col-3">
+                              <label for="receiptDate">Time : </label><span id="receiptTime"></span>
+                            </div>
+                          </div>
+                          <div class="row mt-2">
+                            <div class="col-3">
+                              <label for="receiptName">Received From : </label>
+                            </div>
+                            <div class="col-9">
+                              <span class="smallText" style="text-decoration: underline;" id="receiptName"></span>
+                            </div>
+                          </div>
+                          <div class="row mt-2">
+                            <div class="col-3">
+                              <label for="receiptCourse">Programme/Course : </label>
+                            </div>
+                            <div class="col-3">
+                              <span class="smallText" id="receiptCourse"></span>
+                            </div>
+                            <div class="col-3">
+                              <label for="receiptBatch">Batch : </label>
+                              <span class="smallText" id="receiptBatch"></span>
+                            </div>
+                            <div class="col-3">
+                              <label for="receiptSemester">Semester : </label>
+                              <span class="smallText" id="receiptSemester"></span>
+                            </div>
+                          </div>
+                          <div class="row mt-2">
+                            <div class="col-3">
+                              <label for="receiptRollNumber">Uni Roll Number : </label>
+                            </div>
+                            <div class="col-3">
+                              <p id="receiptRollNumber"></p>
+                            </div>
+                            <div class="col-3">
+                              <label for="receiptUserId">ID/Reg No : </label>
+                              <span id="receiptUserId"></span>
+                            </div>
+                          </div>
+                          <div class="row mt-2">
+                            <div class="col-12">
+                              <label for="receiptMode">Through : </label>
+                              <span id="receiptMode"></span>
+                              <label for="receiptType">On Account of:</label>
+                              <span id="receiptType"></span>
+                              <label for="transactionId"> with transaction Id : </label>
+                              <span id="transactionId"></span>
+                              <label for="transactionDate"> dated : </label>
+                              <span id="transactionDate"></span>
+                            </div>
+                          </div>
+                          <hr>
+                          <div class="row mt-2">
+                            <div class="col-3">
+                              &#8377; <span id="receiptAmount"></span>
+                            </div>
+                            <div class="col-sm-6">
+                              <span id="receiptAmountWord"></span>
+                            </div>
+                            <div class="col-sm-3">
+                              <label id="receiptSign">Signature</label>
+                            </div>
+                          </div>
+                        </div> <!-- Modal Body Closed-->
                       </div>
                     </div>
                   </div>
@@ -305,7 +406,6 @@ require('../requireSubModule.php');
           card += '<td class="text-center">' + value.fee_mode + '</td>';
           card += '<td class="text-center">' + value.fee_type + '</td>';
           card += '<td class="text-center">' + value.fr_amount + '</td>';
-          card += '<td class="text-center">' + +'</td>';
           card += '<td class="text-center"><a href="#" class="showReceipt" data-fr="' + value.fr_id + '"><i class="fas fa-eye"></i></a></td>';
           card += '</tr>';
         });
@@ -327,8 +427,6 @@ require('../requireSubModule.php');
       }, () => {}, "json").done(function(data, status) {
         $.alert(data.fr_id);
         console.log(data)
-
-        $('#receiptModal').modal('show');
         $('#receiptNumber').html(data.fr_id)
         $("#receiptDate").html(getFormattedDate(data.update_ts, "dmY"));
         $("#receiptTime").html(getTime(data.update_ts, "dmY"));
@@ -341,8 +439,8 @@ require('../requireSubModule.php');
         $("#receiptUserId").text($("#studentSearch").val());
         $("#transactionId").html(data.transaction_id);
         $("#transactionDate").html(data.transaction_date);
-        $("#receiptAmount").text(data.fr_amount+'/-');
-        $("#receiptAmountWord").text(numberToWords(parseInt(data.fr_amount))+' only');
+        $("#receiptAmount").text(data.fr_amount + '/-');
+        $("#receiptAmountWord").text(numberToWords(parseInt(data.fr_amount)) + ' only');
       }).fail(function() {
         $.alert("fail in place of error");
       })
@@ -448,121 +546,15 @@ require('../requireSubModule.php');
 
     }
   });
+
+  function printDiv(print) {
+    $.alert("In print");
+    var backup = document.body.innerHTML;
+    var divContent = document.getElementById(print).innerHTML;
+    document.body.innerHTML = divContent;
+    window.print();
+    document.body.innerHTML = backup;
+  }
 </script>
-<div class="modal" id="receiptModal">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="card myCard">
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title" id="modal_title"></h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div> <!-- Modal Header Closed-->
-        <!-- Modal body -->
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-12" id="page1">
-              <div class="row">
-                <div class="col-3 bg-danger">
-                  <img src="https://aryans.edu.in/wp-content/uploads/2020/09/aryans_logo01.png" width="100%">
-                </div>
-                <div class="col-8">
-                  <div>
-                    <h2>Aryans College of Engineering</h2>
-                    <span class="smallText">Vill. Nepra/Thua, Chandigarh - Patiala Highway, Near Chandigarh</span>
-                  </div>
-                </div>
-              </div>
-              <hr>
-              <div class="row">
-                <div class="col-12 text-center">
-                  <h4>Payment Receipt</h4>
-                </div>
-              </div>
-              <div class="row mt-2">
-                <div class="col-3">
-                  <label for="receiptNumber">Receipt Number : </label>
-                </div>
-                <div class="col-3">
-                  <span id="receiptNumber"></span>
-                </div>
-                <div class="col-3">
-                  <label for="receiptDate">Date : </label><span id="receiptDate"></span>
-                </div>
-                <div class="col-3">
-                  <label for="receiptDate">Time : </label><span id="receiptTime"></span>
-                </div>
-              </div>
-              <div class="row mt-2">
-                <div class="col-3">
-                  <label for="receiptName">Received From : </label>
-                </div>
-                <div class="col-9">
-                  <span class="smallText" style="text-decoration: underline;" id="receiptName"></span>
-                </div>
-              </div>
-              <div class="row mt-2">
-                <div class="col-3">
-                  <label for="receiptCourse">Programme/Course : </label>
-                </div>
-                <div class="col-3">
-                  <span class="smallText" id="receiptCourse"></span>
-                </div>
-                <div class="col-3">
-                  <label for="receiptBatch">Batch : </label>
-                  <span class="smallText" id="receiptBatch"></span>
-                </div>
-                <div class="col-3">
-                  <label for="receiptSemester">Semester : </label>
-                  <span class="smallText" id="receiptSemester"></span>
-                </div>
-              </div>
-              <div class="row mt-2">
-                <div class="col-3">
-                  <label for="receiptRollNumber">Uni Roll Number : </label>
-                </div>
-                <div class="col-3">
-                  <p id="receiptRollNumber"></p>
-                </div>
-                <div class="col-3">
-                  <label for="receiptUserId">ID/Reg No : </label>
-                  <span id="receiptUserId"></span>
-                </div>
-              </div>
-              <div class="row mt-2">
-                <div class="col-12">
-                  <label for="receiptMode">Through : </label>
-                  <span id="receiptMode"></span>
-                  <label for="receiptType">On Account of:</label>
-                  <span id="receiptType"></span>
-                  <label for="transactionId"> with transaction Id : </label>
-                  <span id="transactionId"></span>
-                  <label for="transactionDate"> dated : </label>
-                  <span id="transactionDate"></span>
-                </div>
-              </div>
-              <hr>
-              <div class="row mt-2">
-                <div class="col-3">
-                &#8377; <span id="receiptAmount"></span>
-                </div>
-                <div class="col-sm-6">
-                  <span id="receiptAmountWord"></span>
-                </div>
-                <div class="col-sm-3">
-                  <label id="receiptSign">Signature</label>
-                </div>
-              </div>
-
-            </div> <!-- Modal Body Closed-->
-          </div>
-
-          <!-- Modal footer -->
-          <div class="modal-footer">
-
-          </div> <!-- Modal Footer Closed-->
-        </div> <!-- Modal Conent Closed-->
-      </div> <!-- Modal Dialog Closed-->
-    </div>
 
 </html>

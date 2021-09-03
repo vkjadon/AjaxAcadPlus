@@ -648,7 +648,6 @@ require('../requireSubModule.php');
     <?php require("../bottom_bar.php"); ?>
   </div>
 </body>
-
 </html>
 
 <?php require("../js.php"); ?>
@@ -753,7 +752,6 @@ require('../requireSubModule.php');
         $.alert("Fail");
       })
     });
-
 
     $(document).on('click', '.cbp', function() {
       $.post("admissionSql.php", {
@@ -964,7 +962,6 @@ require('../requireSubModule.php');
       if (fmt == "dmY") return date;
       else return dateYmd;
     }
-
   });
 
   function printDiv(print) {
