@@ -102,22 +102,28 @@ require('../requireSubModule.php');
                       <div class="row">
                         <div class="col-12">
                           <div class="row">
-                            <div class="col-4 pr-1">
+                            <div class="col-3 pr-1">
                               <div class="form-group">
                                 <label>Type</label>
                                 <p id="feeType"></p>
                               </div>
                             </div>
-                            <div class="col-4 pr-1 pl-1">
+                            <div class="col-3 pl-1 pr-0">
                               <div class="form-group">
                                 <label>Mode</label>
                                 <p id="feeMode"></p>
                               </div>
                             </div>
-                            <div class="col-4 pl-1">
+                            <div class="col-3 pl-1 pr-0">
                               <div class="form-group">
                                 <label>Semester</label>
                                 <input type="number" class="form-control form-control-sm" id="semester" min="1" name="semester" placeholder="Semester" value="1">
+                              </div>
+                            </div>
+                            <div class="col-3 pl-1">
+                              <div class="form-group">
+                                <label>Receipt Date</label>
+                                <input type="date" class="form-control form-control-sm" id="fr_date" min="1" name="semester" value=<?php echo $submit_date; ?>>
                               </div>
                             </div>
                           </div>
@@ -125,7 +131,7 @@ require('../requireSubModule.php');
                             <div class="col-4 pr-1">
                               <div class="form-group">
                                 <label>Amount</label>
-                                <input type="text" class="form-control form-control-sm" id="feeAmount" name="feeAmount" placeholder="" data-tag="fee_amount">
+                                <input type="number" class="form-control form-control-sm" id="feeAmount" name="feeAmount" placeholder="" data-tag="fr_amount">
                               </div>
                             </div>
                             <div class="col-4 pr-1 pl-1">
@@ -136,8 +142,8 @@ require('../requireSubModule.php');
                             </div>
                             <div class="col-4 pl-1">
                               <div class="form-group">
-                                <label>Deposit Date</label>
-                                <input type="date" class="form-control form-control-sm" id="feeDate" name="feeDate" placeholder="" data-tag="feeDate">
+                                <label>Transaction Date</label>
+                                <input type="date" class="form-control form-control-sm" id="transaction_date" name="transaction_date" placeholder="" data-tag="transaction_date">
                               </div>
                             </div>
                           </div>
@@ -261,7 +267,7 @@ require('../requireSubModule.php');
       var feeAmount = $("#feeAmount").val();
       var tId = $("#tId").val();
       var feeDesc = $("#fee_desc").val();
-      var feeDate = $("#feeDate").val();
+      var transaction_date = $("#transaction_date").val();
 
       // $.alert(feeAmount);
       $.post("feeReceiptSql.php", {
@@ -272,7 +278,7 @@ require('../requireSubModule.php');
         feeAmount: feeAmount,
         tId: tId,
         feeDesc: feeDesc,
-        feeDate: feeDate,
+        transaction_date: transaction_date,
         action: "addFeeReceipt"
       }, function(data) {
         $.alert("List " + data);
@@ -298,7 +304,8 @@ require('../requireSubModule.php');
           card += '<td class="text-center">' + value.fr_id + '</td>';
           card += '<td class="text-center">' + value.fee_mode + '</td>';
           card += '<td class="text-center">' + value.fee_type + '</td>';
-          card += '<td class="text-center">' + value.fee_amount + '</td>';
+          card += '<td class="text-center">' + value.fr_amount + '</td>';
+          card += '<td class="text-center">' + +'</td>';
           card += '<td class="text-center"><a href="#" class="showReceipt" data-fr="' + value.fr_id + '"><i class="fas fa-eye"></i></a></td>';
           card += '</tr>';
         });
@@ -310,6 +317,7 @@ require('../requireSubModule.php');
       })
 
     }
+
     $(document).on("click", ".showReceipt", function() {
       var fr_id = $(this).attr("data-fr");
       $.alert("Fr Id " + fr_id + $("#studentSearch").val());
@@ -319,14 +327,22 @@ require('../requireSubModule.php');
       }, () => {}, "json").done(function(data, status) {
         $.alert(data.fr_id);
         console.log(data)
+
         $('#receiptModal').modal('show');
         $('#receiptNumber').html(data.fr_id)
-        $("#receiptDate").html(data.update_ts)
+        $("#receiptDate").html(getFormattedDate(data.update_ts, "dmY"));
+        $("#receiptTime").html(getTime(data.update_ts, "dmY"));
         $("#receiptName").text($(".student_name").text());
         $("#receiptCourse").text($(".student_program").text());
         $("#receiptBatch").text($(".student_batch").text());
         $("#receiptSemester").html(data.fee_semester);
+        $("#receiptMode").html(data.fee_mode);
+        $("#receiptType").html(data.fee_type);
         $("#receiptUserId").text($("#studentSearch").val());
+        $("#transactionId").html(data.transaction_id);
+        $("#transactionDate").html(data.transaction_date);
+        $("#receiptAmount").text(data.fr_amount+'/-');
+        $("#receiptAmountWord").text(numberToWords(parseInt(data.fr_amount))+' only');
       }).fail(function() {
         $.alert("fail in place of error");
       })
@@ -369,6 +385,68 @@ require('../requireSubModule.php');
         $.alert("Error !!");
       })
     }
+
+    function getFormattedDate(ts, fmt) {
+      var a = new Date(ts);
+      var day = a.getDate();
+      var month = a.getMonth() + 1;
+      var year = a.getFullYear();
+      var date = day + '-' + month + '-' + year;
+      var dateYmd = year + '-' + month + '-' + day;
+      if (fmt == "dmY") return date;
+      else return dateYmd;
+    }
+
+    function getTime(ts) {
+      var a = new Date(ts);
+      var time = a.getHours() + ':' + a.getMinutes();
+      return time;
+    }
+
+    function numberToWords(number) {
+      var digit = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+      var elevenSeries = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
+      var countingByTens = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+      var shortScale = ['', 'thousand', 'million', 'billion', 'trillion'];
+
+      number = number.toString();
+      number = number.replace(/[\, ]/g, '');
+      if (number != parseFloat(number)) return 'not a number';
+      var x = number.indexOf('.');
+      if (x == -1) x = number.length;
+      if (x > 15) return 'too big';
+      var n = number.split('');
+      var str = '';
+      var sk = 0;
+      for (var i = 0; i < x; i++) {
+        if ((x - i) % 3 == 2) {
+          if (n[i] == '1') {
+            str += elevenSeries[Number(n[i + 1])] + ' ';
+            i++;
+            sk = 1;
+          } else if (n[i] != 0) {
+            str += countingByTens[n[i] - 2] + ' ';
+            sk = 1;
+          }
+        } else if (n[i] != 0) {
+          str += digit[n[i]] + ' ';
+          if ((x - i) % 3 == 0) str += 'hundred ';
+          sk = 1;
+        }
+        if ((x - i) % 3 == 1) {
+          if (sk) str += shortScale[(x - i - 1) / 3] + ' ';
+          sk = 0;
+        }
+      }
+      if (x != number.length) {
+        var y = number.length;
+        str += 'point ';
+        for (var i = x + 1; i < y; i++) str += digit[n[i]] + ' ';
+      }
+      str = str.replace(/\number+/g, ' ');
+      return str.trim() + ".";
+
+    }
   });
 </script>
 <div class="modal" id="receiptModal">
@@ -391,6 +469,7 @@ require('../requireSubModule.php');
                 <div class="col-8">
                   <div>
                     <h2>Aryans College of Engineering</h2>
+                    <span class="smallText">Vill. Nepra/Thua, Chandigarh - Patiala Highway, Near Chandigarh</span>
                   </div>
                 </div>
               </div>
@@ -402,13 +481,16 @@ require('../requireSubModule.php');
               </div>
               <div class="row mt-2">
                 <div class="col-3">
-                  <label for="receiptNumber">Receipt Number:</label>
+                  <label for="receiptNumber">Receipt Number : </label>
                 </div>
                 <div class="col-3">
                   <span id="receiptNumber"></span>
                 </div>
-                <div class="col-6">
-                  <label for="receiptDate">Date and Time:</label><span id="receiptDate"></span>
+                <div class="col-3">
+                  <label for="receiptDate">Date : </label><span id="receiptDate"></span>
+                </div>
+                <div class="col-3">
+                  <label for="receiptDate">Time : </label><span id="receiptTime"></span>
                 </div>
               </div>
               <div class="row mt-2">
@@ -421,63 +503,54 @@ require('../requireSubModule.php');
               </div>
               <div class="row mt-2">
                 <div class="col-3">
-                  <label for="receiptCourse">Course : </label>
+                  <label for="receiptCourse">Programme/Course : </label>
+                </div>
+                <div class="col-3">
                   <span class="smallText" id="receiptCourse"></span>
                 </div>
-                <div class="col-2">
+                <div class="col-3">
                   <label for="receiptBatch">Batch : </label>
                   <span class="smallText" id="receiptBatch"></span>
                 </div>
-                <div class="col-2">
+                <div class="col-3">
                   <label for="receiptSemester">Semester : </label>
-                </div>
-                <div class="col-2">
-                  <p id="receiptSemester"></p>
+                  <span class="smallText" id="receiptSemester"></span>
                 </div>
               </div>
-              <div class="row">
+              <div class="row mt-2">
                 <div class="col-3">
-                  <label for="receiptRollNumber">Uni Roll Number:</label>
+                  <label for="receiptRollNumber">Uni Roll Number : </label>
                 </div>
                 <div class="col-3">
                   <p id="receiptRollNumber"></p>
                 </div>
                 <div class="col-3">
-                  <label for="receiptUserId">ID/Reg No:</label>
-                </div>
-                <div class="col-3">
-                  <p id="receiptUserId"></p>
+                  <label for="receiptUserId">ID/Reg No : </label>
+                  <span id="receiptUserId"></span>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-6">
-                  <label for="receiptBy">by:</label>
-                </div>
-                <div class="col-sm-6">
-                  <p id="receiptBy"></p>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-6">
+              <div class="row mt-2">
+                <div class="col-12">
+                  <label for="receiptMode">Through : </label>
+                  <span id="receiptMode"></span>
                   <label for="receiptType">On Account of:</label>
-                </div>
-                <div class="col-6">
-                  <p id="receiptType"></p>
+                  <span id="receiptType"></span>
+                  <label for="transactionId"> with transaction Id : </label>
+                  <span id="transactionId"></span>
+                  <label for="transactionDate"> dated : </label>
+                  <span id="transactionDate"></span>
                 </div>
               </div>
               <hr>
-              <div class="row">
+              <div class="row mt-2">
                 <div class="col-3">
-                  <label for="receiptTotal">Amount</label>
+                &#8377; <span id="receiptAmount"></span>
+                </div>
+                <div class="col-sm-6">
+                  <span id="receiptAmountWord"></span>
                 </div>
                 <div class="col-sm-3">
-                  <u id="receiptTotal"> Rs. </u>
-                </div>
-                <div class="col-3">
-                  <label for="receiptSign">Signature</label>
-                </div>
-                <div class="col-sm-3">
-                  <u id="receiptSign"></u>
+                  <label id="receiptSign">Signature</label>
                 </div>
               </div>
 

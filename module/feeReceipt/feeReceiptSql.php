@@ -62,7 +62,7 @@ if (isset($_POST['action'])) {
   $feeDesc = $_POST['feeDesc'];
   $feeDate = $_POST['feeDate'];
   // echo "$student_id $ft";
-  $sql = "insert into fee_receipt (fee_type, fee_date, student_id, fee_mode, fee_semester, fee_amount, transaction_id, fee_desc, update_id, fr_status) values ('$ft','$feeDate','$student_id' ,'$fm', '$sem', '$fee','$t_id', '$feeDesc', '$myId', '0')";
+  $sql = "insert into fee_receipt (fee_type, fee_date, student_id, fee_mode, fee_semester, fr_amount, transaction_id, fee_desc, update_id, fr_status) values ('$ft','$feeDate','$student_id' ,'$fm', '$sem', '$fee','$t_id', '$feeDesc', '$myId', '0')";
   $result = $conn->query($sql);
   if (!$result) echo $conn->error;
   else echo "Fee Successfully Added";
@@ -79,7 +79,7 @@ if (isset($_POST['action'])) {
     $subArray["mn_name"] = $rowsFee["mn_name"];
     $subArray["fee_type"] = getField($conn, $rowsFee["fee_type"], "master_name", "mn_id", "mn_name");
     $subArray["fee_mode"] = getField($conn, $rowsFee["fee_mode"], "master_name", "mn_id", "mn_name");
-    $subArray["fee_amount"] = $rowsFee["fee_amount"];
+    $subArray["fr_amount"] = $rowsFee["fr_amount"];
     $json_array[] = $subArray;
    }
    echo json_encode($json_array);
@@ -96,8 +96,11 @@ if (isset($_POST['action'])) {
     $json_array["mn_name"] = $rowsFee["mn_name"];
     $json_array["fee_type"] = getField($conn, $rowsFee["fee_type"], "master_name", "mn_id", "mn_name");
     $json_array["fee_mode"] = getField($conn, $rowsFee["fee_mode"], "master_name", "mn_id", "mn_name");
-    $json_array["fee_amount"] = $rowsFee["fee_amount"];
+    $json_array["fr_amount"] = $rowsFee["fr_amount"];
     $json_array["fee_semester"] = $rowsFee["fee_semester"];
+    $json_array["transaction_date"] = $rowsFee["transaction_date"];
+    $json_array["transaction_id"] = $rowsFee["transaction_id"];
+    $json_array["fr_date"] = $rowsFee["fr_date"];
     $json_array["update_ts"] = $rowsFee["update_ts"];
    }
    echo json_encode($json_array);
