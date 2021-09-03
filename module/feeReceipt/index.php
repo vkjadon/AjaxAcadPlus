@@ -312,7 +312,7 @@ require('../requireSubModule.php');
     }
     $(document).on("click", ".showReceipt", function() {
       var fr_id = $(this).attr("data-fr");
-      $.alert("Fr Id " + fr_id);
+      $.alert("Fr Id " + fr_id + $("#studentSearch").val());
       $.post("feeReceiptSql.php", {
         frId: fr_id,
         action: "fetchReceipt"
@@ -322,6 +322,11 @@ require('../requireSubModule.php');
         $('#receiptModal').modal('show');
         $('#receiptNumber').html(data.fr_id)
         $("#receiptDate").html(data.update_ts)
+        $("#receiptName").text($(".student_name").text());
+        $("#receiptCourse").text($(".student_program").text());
+        $("#receiptBatch").text($(".student_batch").text());
+        $("#receiptSemester").html(data.fee_semester);
+        $("#receiptUserId").text($("#studentSearch").val());
       }).fail(function() {
         $.alert("fail in place of error");
       })
@@ -395,43 +400,36 @@ require('../requireSubModule.php');
                   <h4>Payment Receipt</h4>
                 </div>
               </div>
-              <div class="row">
+              <div class="row mt-2">
                 <div class="col-3">
                   <label for="receiptNumber">Receipt Number:</label>
                 </div>
                 <div class="col-3">
-                  <p id="receiptNumber"></p>
-                </div>
-                <div class="col-3">
-                  <label for="receiptDate">Date and Time:</label>
-                </div>
-                <div class="col-3">
-                  <p id="receiptDate"></p>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-6">
-                  <label for="receiptName">Received From:</label>
+                  <span id="receiptNumber"></span>
                 </div>
                 <div class="col-6">
-                  <p id="receiptName"></p>
+                  <label for="receiptDate">Date and Time:</label><span id="receiptDate"></span>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-2">
-                  <label for="receiptCourse">Course:</label>
-                </div>
+              <div class="row mt-2">
                 <div class="col-3">
-                  <p id="receiptCourse"></p>
+                  <label for="receiptName">Received From : </label>
+                </div>
+                <div class="col-9">
+                  <span class="smallText" style="text-decoration: underline;" id="receiptName"></span>
+                </div>
+              </div>
+              <div class="row mt-2">
+                <div class="col-3">
+                  <label for="receiptCourse">Course : </label>
+                  <span class="smallText" id="receiptCourse"></span>
                 </div>
                 <div class="col-2">
-                  <label for="receiptBatch">Batch:</label>
+                  <label for="receiptBatch">Batch : </label>
+                  <span class="smallText" id="receiptBatch"></span>
                 </div>
                 <div class="col-2">
-                  <p id="receiptBatch"></p>
-                </div>
-                <div class="col-2">
-                  <label for="receiptSemester">Semester:</label>
+                  <label for="receiptSemester">Semester : </label>
                 </div>
                 <div class="col-2">
                   <p id="receiptSemester"></p>
@@ -493,4 +491,5 @@ require('../requireSubModule.php');
         </div> <!-- Modal Conent Closed-->
       </div> <!-- Modal Dialog Closed-->
     </div>
+
 </html>

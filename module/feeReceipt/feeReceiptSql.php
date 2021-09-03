@@ -97,6 +97,7 @@ if (isset($_POST['action'])) {
     $json_array["fee_type"] = getField($conn, $rowsFee["fee_type"], "master_name", "mn_id", "mn_name");
     $json_array["fee_mode"] = getField($conn, $rowsFee["fee_mode"], "master_name", "mn_id", "mn_name");
     $json_array["fee_amount"] = $rowsFee["fee_amount"];
+    $json_array["fee_semester"] = $rowsFee["fee_semester"];
     $json_array["update_ts"] = $rowsFee["update_ts"];
    }
    echo json_encode($json_array);
