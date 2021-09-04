@@ -159,7 +159,7 @@ require('../requireSubModule.php');
                             </div>
                           </div>
                           <input type="hidden" id="action" name="action" value="addFeeReceipt">
-                          <button class="btn btn-sm" id="addFeeReceipt">Generate</button>
+                          <button class="btn btn-sm" id="addFeeReceipt">Accept Transaction</button>
                         </div>
                       </div>
                     </div>
@@ -168,14 +168,9 @@ require('../requireSubModule.php');
                         <div class="col-12" id="page1">
                           <div class="float-right"><a onclick="printDiv('page1')" class="fa fa-print"></a></div>
                           <div class="row">
-                            <div class="col-3 bg-danger">
-                              <img src="https://aryans.edu.in/wp-content/uploads/2020/09/aryans_logo01.png" width="100%">
-                            </div>
-                            <div class="col-8">
-                              <div>
-                                <h2>Aryans College of Engineering</h2>
-                                <span class="smallText">Vill. Nepra/Thua, Chandigarh - Patiala Highway, Near Chandigarh</span>
-                              </div>
+                            <div class="col-12 text-center">
+                              <h2>Aryans College of Engineering</h2>
+                              <span class="smallText">Vill. Nepra/Thua, Chandigarh - Patiala Highway, Near Chandigarh</span>
                             </div>
                           </div>
                           <hr>
@@ -267,8 +262,7 @@ require('../requireSubModule.php');
               <div class="col-6">
                 <div class="container card mt-2 myCard" id="print" style="overflow: scroll;">
                   <table class="table table-bordered table-striped list-table-xs mt-3" id="feeReceiptList">
-                    <th class="text-center"><i class="fa fa-trash"></i></th>
-                    <th class="text-center">Fee Receipt ID</th>
+                    <th class="text-center">ID</th>
                     <th class="text-center">Mode</th>
                     <th class="text-center">Fee Type</th>
                     <th class="text-center">Amount</th>
@@ -294,7 +288,6 @@ require('../requireSubModule.php');
 
     feeType();
     feeMode();
-
     $('#studentNameSearch').keyup(function() {
       var query = $(this).val();
       // alert(query);
@@ -359,34 +352,65 @@ require('../requireSubModule.php');
         $.alert("fail in place of error");
       })
     });
+    
+    $(document).on("click", ".trashTask", function() {
+      var atask_id = $(this).attr("data-task");
+      $.alert(' atask ' + atask_id);
+      $.confirm({
+        title: 'Please Confirm!',
+        draggable: true,
+        content: "<b><i>The Selected Task will be removed !!</i></b>",
+        buttons: {
+          confirm: {
+            btnClass: 'btn-info',
+            action: function() {
+              $.post("coaSql.php", {
+                atask_id: atask_id,
+                action: "deleteTask"
+              }, () => {}, "text").done(function(data, status) {
+                // $.alert(data);
+              })
+              talkList()
+            }
+          },
+          cancel: {
+            btnClass: "btn-danger",
+            action: function() {}
+          },
+        }
+      });
+    });
 
     $(document).on('click', '#addFeeReceipt', function(event) {
       var studentId = $("#studentIdHidden").val();
-      var feeType = $("#sel_ft").val();
-      var feeMode = $("#sel_fm").val();
-      var sem = $("#semester").val();
-      var feeAmount = $("#feeAmount").val();
-      var tId = $("#tId").val();
-      var feeDesc = $("#fee_desc").val();
-      var transaction_date = $("#transaction_date").val();
-
-      // $.alert(feeAmount);
-      $.post("feeReceiptSql.php", {
-        id: studentId,
-        feeType: feeType,
-        feeMode: feeMode,
-        sem: sem,
-        feeAmount: feeAmount,
-        tId: tId,
-        feeDesc: feeDesc,
-        transaction_date: transaction_date,
-        action: "addFeeReceipt"
-      }, function(data) {
-        $.alert("List " + data);
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-
+      if (studentId > 0) {
+        var feeType = $("#sel_ft").val();
+        var feeMode = $("#sel_fm").val();
+        var sem = $("#semester").val();
+        var feeAmount = $("#feeAmount").val();
+        var tId = $("#tId").val();
+        var feeDesc = $("#fee_desc").val();
+        var transaction_date = $("#transaction_date").val();
+        var fr_date = $("#fr_date").val();
+        // $.alert(feeAmount);
+        $.post("feeReceiptSql.php", {
+          id: studentId,
+          feeType: feeType,
+          feeMode: feeMode,
+          sem: sem,
+          feeAmount: feeAmount,
+          tId: tId,
+          feeDesc: feeDesc,
+          fr_date: fr_date,
+          transaction_date: transaction_date,
+          action: "addFeeReceipt"
+        }, function(data) {
+          $.alert(data);
+          feeReceiptList();
+        }, "text").fail(function() {
+          $.alert("fail in place of error");
+        })
+      } else $.alert("Student not Selected !!");
     });
 
     function feeReceiptList() {
@@ -401,7 +425,6 @@ require('../requireSubModule.php');
         var card = '';
         $.each(data, function(key, value) {
           card += '<tr>';
-          card += '<td class="text-center"><a href="#" class="dropFeeReceipt" data-fee="' + value.fr_id + '"><i class="fas fa-trash"></i></a></td>';
           card += '<td class="text-center">' + value.fr_id + '</td>';
           card += '<td class="text-center">' + value.fee_mode + '</td>';
           card += '<td class="text-center">' + value.fee_type + '</td>';

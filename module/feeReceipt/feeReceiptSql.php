@@ -55,14 +55,15 @@ if (isset($_POST['action'])) {
   // echo " Add Fee ";
   $student_id = $_POST['id'];
   $t_id = $_POST['tId'];
+  $transaction_date = $_POST['transaction_date'];
   $ft = $_POST['feeType'];
   $fm = $_POST['feeMode'];
   $sem = $_POST['sem'];
   $fee = $_POST['feeAmount'];
   $feeDesc = $_POST['feeDesc'];
-  $feeDate = $_POST['feeDate'];
+  $feeDate = $_POST['fr_date'];
   // echo "$student_id $ft";
-  $sql = "insert into fee_receipt (fee_type, fee_date, student_id, fee_mode, fee_semester, fr_amount, transaction_id, fee_desc, update_id, fr_status) values ('$ft','$feeDate','$student_id' ,'$fm', '$sem', '$fee','$t_id', '$feeDesc', '$myId', '0')";
+  $sql = "insert into fee_receipt (fee_type, fr_date, student_id, fee_mode, fee_semester, fr_amount, transaction_id, transaction_date, fr_desc, update_id, fr_status) values ('$ft', '$feeDate', '$student_id', '$fm', '$sem', '$fee','$t_id', '$transaction_date', '$feeDesc', '$myId', '0')";
   $result = $conn->query($sql);
   if (!$result) echo $conn->error;
   else echo "Fee Successfully Added";
@@ -86,7 +87,7 @@ if (isset($_POST['action'])) {
   }
  } elseif ($_POST['action'] == 'fetchReceipt') {
   $fr_id = $_POST['frId'];
-  $sql = "select fr.*, mn.mn_name from fee_receipt fr, master_name mn where fr.fr_id='$fr_id' and mn.mn_id=fr.fee_type";
+  $sql = "select fr.*, mn.mn_name from fee_receipt fr, master_name mn where fr.fr_id='$fr_id' and mn.mn_id=fr.fee_type order by fr_id desc";
   $result = $conn->query($sql);
   if (!$result) echo $conn->error;
   else {
