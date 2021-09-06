@@ -22,67 +22,57 @@ require('../requireSubModule.php');
         </div>
       </div>
       <div class="col-10 leftLinkBody">
-        <div class="row">
-          <div class="container card mt-2 myCard ml-4">
-            <div class="row">
-              <div class="col-md-3 pr-0">
-                <label>Batch</label>
-                <p id="batchOption"></p>
-              </div>
-              <div class="col-md-3 pl-1 pr-0">
-                <label>Institute/School</label>
-                <p id="schoolOption"></p>
-              </div>
-              <div class="col-md-3 pl-1 pr-0">
-                <label>Programme</label>
-                <p id="programOption">
-                  <input type="text" class="form-control form-control-sm" disabled placeholder="Program">
-                </p>
-              </div>
-              <div class="col-md-3 pl-1">
-                <label>Type</label>
-                <p id="feeType"></p>
-              </div>
-            </div>
-          </div>
-        </div>
-          <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane show active" id="feeStructure" role="tabpanel" aria-labelledby="list-feeStructure-list">
+        <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane show active" id="feeStructure" role="tabpanel" aria-labelledby="list-feeStructure-list">
+            <div class="container card mt-2 myCard">
               <form id="newFee">
                 <div class="row">
-                  <div class="col-md-12">
-                    <div class="container card mt-2 myCard ml-4">
-                      <div class="row">
-                        <div class="col-md-3 pr-0">
-                          <label>Category</label>
-                          <p id="feeCategory"></p>
-                        </div>
-                        <div class="col-md-3 pl-1 pr-0">
-                          <label>Component</label>
-                          <p id="feeComponent"></p>
-                        </div>
-                        <div class="col-md-3 pl-1 pr-0">
-                          <div class="form-group">
-                            <label>Semester</label>
-                            <input type="number" class="form-control form-control-sm" id="semester" min="1" name="semester" placeholder="Semester" value="1">
-                          </div>
-                        </div>
-                        <div class="col-md-3 pl-1">
-                          <div class="form-group">
-                            <label>Fee</label>
-                            <input type="number" class="form-control form-control-sm" id="fee" min="0" name="fee" placeholder="Fee" value="0">
-                          </div>
-                        </div>
-                      </div>
+                  <div class="col-md-1 pr-0">
+                    <label>Batch</label>
+                    <p id="batchOption"></p>
+                  </div>
+                  <div class="col-md-2 pl-1 pr-0">
+                    <label>Institute/School</label>
+                    <p id="schoolOption"></p>
+                  </div>
+                  <div class="col-md-2 pl-1 pr-0">
+                    <label>Programme</label>
+                    <p id="programOption">
+                      <input type="text" class="form-control form-control-sm" disabled placeholder="Program">
+                    </p>
+                  </div>
+                  <div class="col-md-2 pl-1 pr-0">
+                    <label>Category</label>
+                    <p id="feeCategory"></p>
+                  </div>
+                  <div class="col-md-1 pl-1 pr-0">
+                    <label>Type</label>
+                    <p id="feeType"></p>
+                  </div>
+                  <div class="col-md-2 pl-1 pr-0">
+                    <label>Component</label>
+                    <p id="feeComponent"></p>
+                  </div>
+                  <div class="col-md-1 pl-1 pr-0">
+                    <div class="form-group">
+                      <label>Semester</label>
+                      <input type="number" class="form-control form-control-sm" id="semester" min="1" name="semester" placeholder="Semester" value="1">
                     </div>
                   </div>
-                  <input type="hidden" id="action" name="action" value="addFee">
-                  <button class="btn btn-sm">Add/Update</button>
+                  <div class="col-md-1 pl-1">
+                    <div class="form-group">
+                      <label>Fee</label>
+                      <input type="number" class="form-control form-control-sm" id="fee" min="0" name="fee" placeholder="Fee" value="0">
+                    </div>
+                  </div>
+                </div>
+                <input type="hidden" id="action" name="action" value="addFee">
+                <button class="btn btn-sm">Add/Update</button>
               </form>
             </div>
             <div class="row">
               <div class="col-md-12">
-                <div class="container card mt-2 myCard ml-4" id="print" style="overflow: scroll;">
+                <div class="container card mt-2 myCard" id="print" style="overflow: scroll;">
                   <table class="table table-bordered table-striped list-table-xs mt-3" id="feeStructureList">
                     <th class="text-center"><i class="fa fa-trash"></i></th>
                     <th>Batch</th>
@@ -104,12 +94,12 @@ require('../requireSubModule.php');
               </div>
             </div>
           </div>
+        </div>
       </div>
     </div>
-  </div>
-  <p>&nbsp;</p>
-  <p>&nbsp;</p>
-  <?php require("../bottom_bar.php"); ?>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
+    <?php require("../bottom_bar.php"); ?>
   </div>
 </body>
 <?php require("../js.php"); ?>
@@ -127,10 +117,6 @@ require('../requireSubModule.php');
     $(document).on('submit', '#newFee', function(event) {
       event.preventDefault(this);
       // $.alert("Name");
-      var batchId = $("#sel_batch").val()
-      var progId = $("#sel_prog").val()
-      var feeTypeId = $("#sel_ft").val()
-      var schoolId = $("#sel_school").val()
       var error = "NO";
       var error_msg = "";
       if ($('#sel_prog').val() === "0" || $('#sel_school').val() === "0" || $('#fee').val() === "0") {
@@ -139,7 +125,7 @@ require('../requireSubModule.php');
       }
       if (error == "NO") {
         var formData = $(this).serialize();
-        alert(" Pressed" + formData);
+        // alert(" Pressed" + formData);
         $.post("feeSql.php", formData, () => {}, "text").done(function(data) {
           $.alert(data);
           feeStructureList()

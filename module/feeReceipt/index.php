@@ -199,6 +199,7 @@ require('../requireSubModule.php');
                             </div>
                             <div class="col-9">
                               <span class="smallText" style="text-decoration: underline;" id="receiptName"></span>
+                              &nbsp; s/o &nbsp;<span class="smallText" style="text-decoration: underline;" id="receiptFatherName"></span>
                             </div>
                           </div>
                           <div class="row mt-2">
@@ -243,13 +244,20 @@ require('../requireSubModule.php');
                           </div>
                           <hr>
                           <div class="row mt-2">
-                            <div class="col-3">
+                            <div class="col-12">
+                              <label for="receiptRemarks">Remarks : </label>
+                              <p id="receiptRemarks"></p>
+                            </div>
+                          </div>
+                          <hr>
+                          <div class="row mt-2">
+                            <div class="col-3 border ml-3">
                               &#8377; <span id="receiptAmount"></span>
                             </div>
                             <div class="col-sm-6">
                               <span id="receiptAmountWord"></span>
                             </div>
-                            <div class="col-sm-3">
+                            <div class="col-sm-2">
                               <label id="receiptSign">Signature</label>
                             </div>
                           </div>
@@ -324,6 +332,9 @@ require('../requireSubModule.php');
         $(".student_batch").text(data.batch);
         $(".student_program").text(data.program_name);
         $("#studentIdHidden").val(data.student_id);
+        $("#receiptFatherName").text(data.student_fname);
+        
+        
         feeReceiptList();
         // $.alert(data);
       }, "text").fail(function() {
@@ -352,7 +363,7 @@ require('../requireSubModule.php');
         $.alert("fail in place of error");
       })
     });
-    
+
     $(document).on("click", ".trashTask", function() {
       var atask_id = $(this).attr("data-task");
       $.alert(' atask ' + atask_id);
@@ -443,15 +454,15 @@ require('../requireSubModule.php');
 
     $(document).on("click", ".showReceipt", function() {
       var fr_id = $(this).attr("data-fr");
-      $.alert("Fr Id " + fr_id + $("#studentSearch").val());
+      // $.alert("Fr Id " + fr_id + $("#studentSearch").val());
       $.post("feeReceiptSql.php", {
         frId: fr_id,
         action: "fetchReceipt"
       }, () => {}, "json").done(function(data, status) {
-        $.alert(data.fr_id);
-        console.log(data)
+        // $.alert(data.fr_id);
+        // console.log(data)
         $('#receiptNumber').html(data.fr_id)
-        $("#receiptDate").html(getFormattedDate(data.update_ts, "dmY"));
+        $("#receiptDate").html(getFormattedDate(data.fr_date, "dmY"));
         $("#receiptTime").html(getTime(data.update_ts, "dmY"));
         $("#receiptName").text($(".student_name").text());
         $("#receiptCourse").text($(".student_program").text());
@@ -525,10 +536,10 @@ require('../requireSubModule.php');
     }
 
     function numberToWords(number) {
-      var digit = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
-      var elevenSeries = ['ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
-      var countingByTens = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-      var shortScale = ['', 'thousand', 'million', 'billion', 'trillion'];
+      var digit = ['zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+      var elevenSeries = ['Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+      var countingByTens = ['Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+      var shortScale = ['', 'Thousand', 'million', 'billion', 'trillion'];
 
       number = number.toString();
       number = number.replace(/[\, ]/g, '');
@@ -551,7 +562,7 @@ require('../requireSubModule.php');
           }
         } else if (n[i] != 0) {
           str += digit[n[i]] + ' ';
-          if ((x - i) % 3 == 0) str += 'hundred ';
+          if ((x - i) % 3 == 0) str += 'Hundred ';
           sk = 1;
         }
         if ((x - i) % 3 == 1) {
@@ -565,8 +576,7 @@ require('../requireSubModule.php');
         for (var i = x + 1; i < y; i++) str += digit[n[i]] + ' ';
       }
       str = str.replace(/\number+/g, ' ');
-      return str.trim() + ".";
-
+      return str.trim();
     }
   });
 

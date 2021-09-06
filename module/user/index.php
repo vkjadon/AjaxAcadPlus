@@ -62,7 +62,6 @@ require('../requireSubModule.php');
                   <div class="row">
                     <div class="col-12">
                       <p class="text-center"><h1>User Status : <span class="userStatus"></span> </h1></p>
-
                       <button class="btn btn-success">Create User</button>
                       <button class="btn">Suspend User</button>
                       <button class="btn btn-danger">Remove User</button>
@@ -100,6 +99,21 @@ require('../requireSubModule.php');
 
     $('[data-toggle="tooltip"]').tooltip();
 
+    
+    $(document).on('click', '#searchStudent', function(event) {
+      var userId = $("#userId").val();
+      $.alert(userId);
+      $.post("userSql.php", {
+        action: "fetchUser",
+        userId: userId,
+      }, () => {}, "json").done(function(data) {
+        // $.alert(data);
+        studentDisp();
+      }, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
     function studentDisp() {
       var userId = $("#userId").val()
       // $.alert(" Student Display Functio  Id " + studentId);
@@ -136,6 +150,20 @@ require('../requireSubModule.php');
       })
     }
 
+    $(document).on('click', '#searchStaff', function(event) {
+      var userId = $("#userId").val();
+      $.alert(userId);
+      $.post("userSql.php", {
+        action: "fetchStaff",
+        userId: userId
+      }, () => {}, "json").done(function(data) {
+        // $.alert(data);
+        staffDisp();
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
     function staffDisp() {
       var userId = $("#userId").val()
       // $.alert(" Student Display Functio  Id " + studentId);
@@ -147,23 +175,12 @@ require('../requireSubModule.php');
         var card = '<h4>' + data.staff_name + ' [' + data.user_id + ']</h4>';
         card += '<table class="table list-table-xs">';
         card += '<tr>';
-        card += '<td> Program Name </td><td>' + data.program_name + '</td>';
-        card += '<td> Batch </td><td>' + data.batch + '</td>';
-        card += '</tr>';
-
-        card += '<tr>';
         card += '<td> Mobile </td><td>' + data.staff_mobile + '</td>';
-        card += '<td> Email </td><td>' + data.staff_email + '</td>';
         card += '</tr>';
-
-        card += '<tr><td colspan="4"><h4>Parents Information</h4></td></tr>'
 
         card += '<tr>';
-        card += '<td> Father Name </td><td>' + data.staff_fname + '</td>';
-        card += '<td>' + data.staff_fmobile + '</td>';
-        card += '<td>' + data.staff_femail + '</td>';
-        card += '</tr>';
-
+        card += '<td> Email </td><td>' + data.staff_email + '</td>';
+        card += '</tr>';        
         card += '</table>';
         $(".applicationForm").html(card);
 
@@ -171,34 +188,6 @@ require('../requireSubModule.php');
         $.alert("Could not Fetch Student Data!!");
       })
     }
-    
-    $(document).on('click', '#searchStudent', function(event) {
-      var userId = $("#userId").val();
-      $.alert(userId);
-      $.post("userSql.php", {
-        action: "fetchUser",
-        userId: userId,
-      }, () => {}, "json").done(function(data) {
-        // $.alert(data);
-        studentDisp();
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
-    $(document).on('click', '#searchStaff', function(event) {
-      var userId = $("#userId").val();
-      $.alert(userId);
-      $.post("userSql.php", {
-        action: "fetchStaff",
-        userId: userId,
-      }, () => {}, "json").done(function(data) {
-        // $.alert(data);
-        staffDisp();
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
 
     function getFormattedDate(ts, fmt) {
       var a = new Date(ts);

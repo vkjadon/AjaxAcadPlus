@@ -71,7 +71,7 @@ if (isset($_POST['action'])) {
     }
   } elseif ($_POST['action'] == 'addFee') {
     // echo " Add Fee ";
-    $school_id = $_POST['schoolId'];
+    $school_id = $_POST['sel_school'];
     $batch_id = $_POST['sel_batch'];
     $program_id = $_POST['sel_prog'];
     $fcg = $_POST['sel_fcg'];
