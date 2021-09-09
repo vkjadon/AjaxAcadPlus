@@ -3,6 +3,6 @@
 session_start();
 $myFolder=$_SESSION['myFolder'];
 session_destroy();
-//die("Session Time Out.");
+// die("You have Successfully logged out.");
 header('location:/acadplus/'.$myFolder.'/index.php');
 ?>

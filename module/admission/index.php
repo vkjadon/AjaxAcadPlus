@@ -28,21 +28,21 @@ require('../requireSubModule.php');
       <div class="col-10 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="row">
-            <div class="col-md-4 pr-0">
+            <div class="col-md-3 pr-0">
               <div class="card border-info">
                 <div class="input-group">
                   <?php
-                  $sql_batch = "select * from batch";
+                  $sql_batch = "select * from batch where batch_status='0' order by batch desc";
                   $result = $conn->query($sql_batch);
                   if ($result) {
                     echo '<select class="form-control form-control-sm" name="sel_batch" id="sel_batch" required>';
-                    echo '<option selected disabled>Select Batch</option>';
+                    // echo '<option selected disabled>Select Batch</option>';
                     while ($rows = $result->fetch_assoc()) {
                       $select_id = $rows['batch_id'];
                       $select_name = $rows['batch'];
                       echo '<option value="' . $select_id . '">' . $select_name . '</option>';
                     }
-                    echo '<option value="ALL">ALL</option>';
+                    // echo '<option value="ALL">ALL</option>';
                     echo '</select>';
                   } else echo $conn->error;
                   if ($result->num_rows == 0) echo 'No Data Found';
@@ -50,11 +50,11 @@ require('../requireSubModule.php');
                 </div>
               </div>
             </div>
-            <div class="col-md-4">
-              <div class="card border-info" style="width:300px">
+            <div class="col-md-3">
+              <div class="card border-info">
                 <div class="input-group">
                   <?php
-                  $sql_program = "select * from program";
+                  $sql_program = "select * from program where program_status='0' order by sp_name";
                   $result = $conn->query($sql_program);
                   if ($result) {
                     echo '<select class="form-control form-control-sm" name="sel_program" id="sel_program" required>';
@@ -72,12 +72,19 @@ require('../requireSubModule.php');
                 </div>
               </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-1">
               <div class="row ml-2">
                 <h3>
                   <a class="fa fa-arrow-circle-up uploadStudent"></a>
                 </h3>
               </div>
+            </div>
+            <div class="col-md-3">
+              <p class="smallText" id="totalStudents"></p>
+            </div>
+            <div class="col-md-1">
+              <input type="checkbox" id="leet" name="leet" value="1">
+              <span class="smallText">LEET</span>
             </div>
           </div>
           <div class="tab-pane show active" id="list-as" role="tabpanel" aria-labelledby="list-as-list">
@@ -128,7 +135,12 @@ require('../requireSubModule.php');
                               <label>Session: <?php echo getField($conn, $mySes, "session", "session_id", "session_name"); ?></label>
                             </h5>
                           </div>
-
+                          <!-- <div class="col-md-4">
+                    <label>Institute/School</label>
+                    <p id="schoolOption"></p>
+                    <label>Programme Course</label>
+                    <p id="programOption"></p>
+                  </div> -->
                           <div class="col-md-4">
                             <div class="form-group">
                               <label>Semester</label>
@@ -145,6 +157,12 @@ require('../requireSubModule.php');
                               <input type="date" class="form-control form-control-sm" id="stdAdmission" name="stdAdmission" value="<?php echo $submit_date; ?>">
                             </div>
                           </div>
+                          <!-- <div class="col-md-4">
+                    <div class="form-group">
+                      <input type="checkbox" lass="form-check-input" id="stdLateralEntry" name="stdLateralEntry">
+                      <label>Lateral Entry</label>
+                    </div>
+                  </div> -->
                           <div class="col-md-4">
                             <input type="hidden" id="userId" name="userId" value="0">
                             <input type="hidden" id="action" name="action" value="addNew">
@@ -564,11 +582,7 @@ require('../requireSubModule.php');
           </div>
           <div class="tab-pane fade" id="list-sr" role="tabpanel" aria-labelledby="list-sr-list">
             <div class="row">
-              <div class="col-md-4 ml-3">
-                <div class="container card mt-2 myCard">
-                  <p id="totalStudents"></p>
-                </div>
-              </div>
+
             </div>
             <div class="row">
               <div class="col-md-12" style="overflow: scroll;">
@@ -578,6 +592,7 @@ require('../requireSubModule.php');
                   </div>
                   <table class="table table-bordered table-striped list-table-xxs mt-3" id="studentShowList">
                     <!-- <th><i class="fas fa-edit"></i></th> -->
+                    <th>S.No</th>
                     <th>ID</th>
                     <th>Name</th>
                     <th>Course</th>
@@ -648,6 +663,7 @@ require('../requireSubModule.php');
     <?php require("../bottom_bar.php"); ?>
   </div>
 </body>
+
 </html>
 
 <?php require("../js.php"); ?>
@@ -682,7 +698,7 @@ require('../requireSubModule.php');
       var studentId = $("#studentIdHidden").val()
       var tag = $(this).attr("data-tag")
       var value = $(this).val()
-      $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
+      // $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
       $.post("admissionSql.php", {
         id_name: "student_id",
         id: studentId,
@@ -753,6 +769,7 @@ require('../requireSubModule.php');
       })
     });
 
+
     $(document).on('click', '.cbp', function() {
       $.post("admissionSql.php", {
         action: "updateStudentList",
@@ -777,11 +794,26 @@ require('../requireSubModule.php');
       $(".checkitem").prop("checked", $(this).prop("checked"))
     })
 
+    $(document).on('click', '.uploadStudent', function() {
+      // $.alert("Session From");
+      var selected_batch = $("#sel_batch").val()
+      var selected_prog = $("#sel_program").val()
+      // $.alert("Batch Not Selected" + selected_batch + "Prog" + selected_prog)
+      if (selected_batch == null || selected_prog == null) $.alert("Batch or Program Not Selected")
+      else {
+        $(".selectedBatch").text($("#sel_batch option:selected").text());
+        $(".selectedProg").text($("#sel_program option:selected").text());
+        $("#selectedBatch").val(selected_batch)
+        $("#selectedProg").val(selected_prog)
+        $('#formModal').modal('show');
+      }
+    });
+
     $(document).on('submit', '#upload_csv', function(event) {
       event.preventDefault();
       var formData = $(this).serialize();
       // $.alert(formData);
-      // action and test_id are passed as hidden
+      // action and other paramenters are passed as hidden
       $.ajax({
         url: "uploadStudentSql.php",
         method: "POST",
@@ -790,7 +822,7 @@ require('../requireSubModule.php');
         cache: false, // To unable request pages to be cached
         processData: false, // To send DOMDocument or non processed data file it is set to false
         success: function(data) {
-          $.alert("Successfully Uploaded!!");
+          $.alert(data);
           studentList()
           $('#formModal').modal('hide');
         }
@@ -848,53 +880,67 @@ require('../requireSubModule.php');
       totalStudents();
     });
 
+    $(document).on('click', '#leet', function() {
+      studentList();
+    });
+
     function studentList() {
       var batchId = $("#sel_batch").val()
       var progId = $("#sel_program").val()
-      // $.alert("Batch"+batchId  +"Prog"+ progId);
+      if ($('#leet').is(":checked")) var leet = 1;
+      else var leet = 0;
+      // $.alert("checked " + $('#leet').is(":checked") + "leet " + leet);
       $.post("admissionSql.php", {
         batchId: batchId,
         progId: progId,
+        leet: leet,
         action: "studentList"
       }, function() {}, "json").done(function(data, status) {
         // $.alert(data);
         console.log(data);
         var card = '';
+        var count = 1;
         $.each(data, function(key, value) {
-          card += '<tr>';
-          // card += '<td><a href="#" class="fa fa-edit editStudent" data-student="' + value.student_id + '"></a></td>';
-          card += '<td>' + value.user_id + '</td>';
-          card += '<td>' + value.student_name + '</td>';
-          card += '<td>' + value.program_name + '</td>';
-          card += '<td>' + value.student_rollno + '</td>';
-          card += '<td>' + value.student_mobile + '</td>';
-          card += '<td>' + value.student_semester + '</td>';
-          card += '<td>' + getFormattedDate(value.student_admission, "dmY") + '</td>';
-          card += '<td>' + value.student_lateral + '</td>';
-          card += '<td>' + getFormattedDate(value.student_dob, "dmY") + '</td>';
-          card += '<td>' + value.student_whatsapp + '</td>';
-          card += '<td>' + value.student_adhaar + '</td>';
-          card += '<td>' + value.student_category + '</td>';
-          card += '<td>' + value.student_religion + '</td>';
-          card += '<td>' + value.student_bg + '</td>';
-          card += '<td>' + value.student_fee_category + '</td>';
-          card += '<td>' + value.student_gender + '</td>';
-          card += '<td>' + value.student_fname + '</td>';
-          card += '<td>' + value.student_fmobile + '</td>';
-          card += '<td>' + value.student_femail + '</td>';
-          card += '<td>' + value.student_foccupation + '</td>';
-          card += '<td>' + value.student_fdesignation + '</td>';
-          card += '<td>' + value.student_mname + '</td>';
-          card += '<td>' + value.student_mmobile + '</td>';
-          card += '<td>' + value.student_memail + '</td>';
-          card += '<td>' + value.permanent_address + '</td>';
-          card += '<td>' + value.city + '</td>';
-          card += '<td>' + value.pincode + '</td>';
-          card += '<td>' + value.state_name + '</td>';
-          card += '<td>' + value.district_name + '</td>';
-          card += '<td>' + value.reference_name + '</td>';
-          card += '<td>' + value.reference_staff + '</td>';
-          card += '</tr>';
+          var student_lateral = value.student_lateral;
+          if (leet == '1' && leet != student_lateral) var skip = 'Y'
+          else var skip = 'N'
+          if (skip == 'N') {
+            card += '<tr>';
+            // card += '<td><a href="#" class="fa fa-edit editStudent" data-student="' + value.student_id + '"></a></td>';
+            card += '<td>' + count++ + '</td>';
+            card += '<td>' + value.user_id + '</td>';
+            card += '<td>' + value.student_name + '</td>';
+            card += '<td>' + value.program_name + '</td>';
+            card += '<td>' + value.student_rollno + '</td>';
+            card += '<td>' + value.student_mobile + '</td>';
+            card += '<td>' + value.student_semester + '</td>';
+            card += '<td>' + getFormattedDate(value.student_admission, "dmY") + '</td>';
+            card += '<td>' + value.student_lateral + '</td>';
+            card += '<td>' + getFormattedDate(value.student_dob, "dmY") + '</td>';
+            card += '<td>' + value.student_whatsapp + '</td>';
+            card += '<td>' + value.student_adhaar + '</td>';
+            card += '<td>' + value.student_category + '</td>';
+            card += '<td>' + value.student_religion + '</td>';
+            card += '<td>' + value.student_bg + '</td>';
+            card += '<td>' + value.student_fee_category + '</td>';
+            card += '<td>' + value.student_gender + '</td>';
+            card += '<td>' + value.student_fname + '</td>';
+            card += '<td>' + value.student_fmobile + '</td>';
+            card += '<td>' + value.student_femail + '</td>';
+            card += '<td>' + value.student_foccupation + '</td>';
+            card += '<td>' + value.student_fdesignation + '</td>';
+            card += '<td>' + value.student_mname + '</td>';
+            card += '<td>' + value.student_mmobile + '</td>';
+            card += '<td>' + value.student_memail + '</td>';
+            card += '<td>' + value.permanent_address + '</td>';
+            card += '<td>' + value.city + '</td>';
+            card += '<td>' + value.pincode + '</td>';
+            card += '<td>' + value.state_name + '</td>';
+            card += '<td>' + value.district_name + '</td>';
+            card += '<td>' + value.reference_name + '</td>';
+            card += '<td>' + value.reference_staff + '</td>';
+            card += '</tr>';
+          }
         });
         $("#studentShowList").find("tr:gt(0)").remove();
         $("#studentShowList").append(card);
@@ -937,11 +983,13 @@ require('../requireSubModule.php');
     }
 
     function totalStudents() {
+      var batchId = $("#sel_batch").val()
       var programId = $("#sel_program").val()
       //  $.alert("In List Function" + programId);
       $.post("admissionSql.php", {
-        action: "totalStudents",
-        programId: programId
+        programId: programId,
+        batchId: batchId,
+        action: "totalStudents"
       }, function(mydata, mystatus) {
         $("#totalStudents").show();
         // $.alert("List qulai" + mydata);
@@ -962,6 +1010,7 @@ require('../requireSubModule.php');
       if (fmt == "dmY") return date;
       else return dateYmd;
     }
+
   });
 
   function printDiv(print) {
@@ -1075,24 +1124,41 @@ require('../requireSubModule.php');
           <div class="row">
             <div class="col-sm-6">
               <h5>Selected Batch</h5>
-              <p class="selectedBatch"><b><?php echo $myBatchName; ?></b></p>
+              <p class="selectedBatch"></p>
             </div>
             <div class="col-sm-6">
               <h5>Selected Program</h5>
-              <p class="selectedProgram"><b><?php echo $myProgAbbri; ?></b></p>
+              <p class="selectedProg"></p>
             </div>
           </div>
           <hr>
           <div class="form-group">
             <div class="row">
-              <div class="col-sm-6">
+              <div class="col-sm-5">
                 <input type="file" name="student_upload" />
+                <p>&nbsp;</p>
+                <p class="warning">Only .csv File to be uploaded</p>
+                <p class="warning">First Row is header row</p>
+                <p class="warning">Data from Row 2</p>
+              </div>
+              <div class="col-sm-7 smallerText">
+                <ul>
+                  <li>Column A - SNo</li>
+                  <li>Column B - User Id</li>
+                  <li>Column C - Roll Number</li>
+                  <li>Column D - Student Name</li>
+                  <li>Column E - Father Name</li>
+                  <li>Column F - Moile</li>
+                  <!-- <li>Column G - Batch</li> -->
+                </ul>
               </div>
             </div>
           </div>
         </div> <!-- Modal Body Closed-->
         <!-- Modal footer -->
         <div class="modal-footer">
+          <input type="hidden" name="selectedBatch" id="selectedBatch" />
+          <input type="hidden" name="selectedProg" id="selectedProg" />
           <input type="submit" name="button_action" id="button_action" class="btn btn-success btn-sm" />
           <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
         </div> <!-- Modal Footer Closed-->

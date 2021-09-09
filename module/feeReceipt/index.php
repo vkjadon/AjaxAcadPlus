@@ -15,9 +15,11 @@ require('../requireSubModule.php');
     <div class="row">
       <div class="col-2 p-0 m-0 pl-2 full-height">
         <div class="mt-3">
+          <h5>Manage Receipt</h5>
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-          <a class="list-group-item list-group-item-action fr" id="list-fr-list" data-toggle="list" href="#list-fr" role="tab" aria-controls="fr">Fee Receipt</a>
+          <a class="list-group-item list-group-item-action active fr" id="list-fr-list" data-toggle="list" href="#list-fr" role="tab" aria-controls="fr">Fee Receipt</a>
+          <a class="list-group-item list-group-item-action trans" id="list-trans-list" data-toggle="list" href="#list-trans" role="tab" aria-controls="trans">Transactions Details</a>
         </div>
       </div>
       <div class="col-10 leftLinkBody">
@@ -54,26 +56,29 @@ require('../requireSubModule.php');
                   </div>
                   <div class="col-9">
                     <div class="row p-1">
-                      <div class="col-3 m-0 p-0">
+                      <div class="col-2 m-0 p-0">
                         <label>Name</label>
                       </div>
-                      <div class="col-9 text-secondary ">
-                        <span class="student_name">No Student Found</span>[<span class="student_rollno">000000</span>]
+                      <div class="col-7">
+                        <span class="student_name">Not Found</span> [<span class="student_rollno">000000</span>]
+                      </div>
+                      <div class="col-3">
+                        [<span class="student_id">0000</span>]
                       </div>
                     </div>
                     <div class="row p-1">
-                      <div class="col-3 m-0 p-0">
+                      <div class="col-2 m-0 p-0">
                         <label>Mobile</label>
                       </div>
-                      <div class="col-9 text-secondary student_mobile">
-                        Enter Valid Data
+                      <div class="col-10 student_mobile">
+                        Not Found
                       </div>
                     </div>
                     <div class="row p-1">
-                      <div class="col-3 m-0 p-0">
+                      <div class="col-2 m-0 p-0">
                         <label>Program</label>
                       </div>
-                      <div class="col-6 text-secondary student_program">
+                      <div class="col-7 student_program">
                         Enter Valid Data
                       </div>
                       <div class="col-3 m-0 p-0">
@@ -167,16 +172,19 @@ require('../requireSubModule.php');
                       <div class="row">
                         <div class="col-12" id="page1">
                           <div class="float-right"><a onclick="printDiv('page1')" class="fa fa-print"></a></div>
-                          <div class="row">
-                            <div class="col-12 text-center">
+                          <div class="row p-2 m-2">
+                            <div class="col-2">
+                              <img src="../../images/logo.jpg" width="80%">
+                            </div>
+                            <div class="col-10 text-center">
                               <h2>Aryans College of Engineering</h2>
-                              <span class="smallText">Vill. Nepra/Thua, Chandigarh - Patiala Highway, Near Chandigarh</span>
+                              <span class="smallText">Vill. Nepra/Thuha, Chandigarh - Patiala Highway, Near Chandigarh</span>
                             </div>
                           </div>
                           <hr>
                           <div class="row">
                             <div class="col-12 text-center">
-                              <h4>Payment Receipt</h4>
+                              <h4>Fee Receipt</h4>
                             </div>
                           </div>
                           <div class="row mt-2">
@@ -199,7 +207,7 @@ require('../requireSubModule.php');
                             </div>
                             <div class="col-9">
                               <span class="smallText" style="text-decoration: underline;" id="receiptName"></span>
-                              &nbsp; s/o &nbsp;<span class="smallText" style="text-decoration: underline;" id="receiptFatherName"></span>
+                              &nbsp; <span class="smallText" style="text-decoration: underline;" id="receiptSonDaughter"></span> &nbsp;<span class="smallText" style="text-decoration: underline;" id="receiptFatherName"></span>
                             </div>
                           </div>
                           <div class="row mt-2">
@@ -244,17 +252,13 @@ require('../requireSubModule.php');
                           </div>
                           <hr>
                           <div class="row mt-2">
-                            <div class="col-12">
-                              <label for="receiptRemarks">Remarks : </label>
-                              <p id="receiptRemarks"></p>
+                            <div class="col-12 ml-2">
+                              <span class="smallerText">Non Refundable</span>
                             </div>
-                          </div>
-                          <hr>
-                          <div class="row mt-2">
-                            <div class="col-3 border ml-3">
+                            <div class="col-2 border ml-3">
                               &#8377; <span id="receiptAmount"></span>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-7">
                               <span id="receiptAmountWord"></span>
                             </div>
                             <div class="col-sm-2">
@@ -274,7 +278,54 @@ require('../requireSubModule.php');
                     <th class="text-center">Mode</th>
                     <th class="text-center">Fee Type</th>
                     <th class="text-center">Amount</th>
+                    <th class="text-center">Remarks</th>
                     <th class="text-center"><i class="fa fa-eye"></i></th>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="list-trans" role="tabpanel" aria-labelledby="list-trans-list">
+            <div class="row">
+              <div class="col-8">
+                <div class="container card mt-2 myCard">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="row">
+                        <div class="col">
+                          <div class="form-group">
+                            <label>Receipt From</label>
+                            <input type="date" class="form-control form-control-sm" id="fr_from" name="fr_from" value="<?php echo $submit_date; ?>">
+                          </div>
+                        </div>
+                        <div class="col">
+                          <div class="form-group">
+                            <label>Receipt To</label>
+                            <input type="date" class="form-control form-control-sm" id="fr_to" name="fr_to" value="<?php echo $submit_date; ?>">
+                          </div>
+                        </div>
+                        <div class="col mt-3">
+                          <div class="form-group">
+                            <button class="btn btn-sm" id="showTransaction">Show Transaction</button>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="container card mt-2 myCard" id="print" style="overflow: scroll;">
+                  <table class="table table-bordered table-striped list-table-xxs mt-3" id="transactionList">
+                    <th class="text-center">SNo</th>
+                    <th class="text-center">Receipt Date</th>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Student</th>
+                    <th class="text-center">UserId</th>
+                    <th class="text-center">Mode</th>
+                    <th class="text-center">Fee Type</th>
+                    <th class="text-center">Amount</th>
+                    <th class="text-center">TransactionId</th>
                   </table>
                 </div>
               </div>
@@ -319,22 +370,23 @@ require('../requireSubModule.php');
 
     $(document).on('click', '#searchStudent', function(event) {
       var data = $("#studentSearch").val();
-      // $.alert(data);
+      $.alert(data);
       $.post("feeReceiptSql.php", {
         action: "fetchStudent",
         userId: data,
       }, () => {}, "json").done(function(data) {
         // console.log(data)
-
+        $(".student_id").text(data.student_id);
         $(".student_name").text(data.student_name);
         $(".student_rollno").text(data.student_rollno);
         $(".student_mobile").text(data.student_mobile);
         $(".student_batch").text(data.batch);
         $(".student_program").text(data.program_name);
         $("#studentIdHidden").val(data.student_id);
+        if (data.student_gender == 'F') $("#receiptSonDaughter").text(" d/o ");
+        else $("#receiptSonDaughter").text(" s/o ");
         $("#receiptFatherName").text(data.student_fname);
-        
-        
+        $("#receiptName").text(data.student_name);
         feeReceiptList();
         // $.alert(data);
       }, "text").fail(function() {
@@ -352,15 +404,57 @@ require('../requireSubModule.php');
         action: "fetchStudentAutoList"
       }, () => {}, "json").done(function(data) {
         // $.alert(data)
+        $(".student_id").text(data.student_id);
         $(".student_name").text(data.student_name);
         $(".student_rollno").text(data.student_rollno);
         $(".student_mobile").text(data.student_mobile);
         $(".student_batch").text(data.batch);
         $(".student_program").text(data.program_name);
         $("#studentIdHidden").val(data.student_id);
+        if (data.student_gender == 'F') $("#receiptSonDaughter").text(" d/o ");
+        else $("#receiptSonDaughter").text(" s/o ");
+        $("#receiptFatherName").text(data.student_fname);
+        $("#receiptName").text(data.student_name);
+
+        $("#studentSearch").val(data.user_id)
         feeReceiptList();
       }, "text").fail(function() {
         $.alert("fail in place of error");
+      })
+    });
+
+    $(document).on("click", "#showTransaction", function() {
+      var dateFrom = $("#fr_from").val();
+      var dateTo = $("#fr_to").val();
+      $.alert("From " + dateFrom + "To " + dateTo);
+      $.post("feeReceiptSql.php", {
+        dateFrom:dateFrom,
+        dateTo:dateTo,
+        action: "transactionList"
+      }, function() {}, "json").done(function(data, status) {
+        // $.alert(data);
+        // console.log(data);
+        var card = '';
+        var count=1;
+        $.each(data, function(key, value) {
+          card += '<tr>';
+          card += '<td class="text-center">' + count++ + '</td>';
+          card += '<td>' + getFormattedDate(value.fr_date, "dmY") + '</td>';
+          card += '<td class="text-center">' + value.fr_id + '</td>';
+          card += '<td>' + value.student_name + '</td>';
+          card += '<td>' + value.user_id + '</td>';
+          card += '<td class="text-center">' + value.fee_mode + '</td>';
+          card += '<td class="text-center">' + value.fee_type + '</td>';
+          card += '<td class="text-center">' + value.fr_amount + '</td>';
+          if (value.transaction_id == null) card += '<td class="text-center">--</td>';
+          else card += '<td class="text-center">' + value.transaction_id + '</td>';
+          card += '</tr>';
+        });
+        $("#transactionList").find("tr:gt(0)").remove();
+        $("#transactionList").append(card);
+
+      }).fail(function() {
+        $.alert("Error !!");
       })
     });
 
@@ -440,6 +534,8 @@ require('../requireSubModule.php');
           card += '<td class="text-center">' + value.fee_mode + '</td>';
           card += '<td class="text-center">' + value.fee_type + '</td>';
           card += '<td class="text-center">' + value.fr_amount + '</td>';
+          if (value.fr_desc == null) card += '<td class="text-center">--</td>';
+          else card += '<td class="text-center">' + value.fr_desc + '</td>';
           card += '<td class="text-center"><a href="#" class="showReceipt" data-fr="' + value.fr_id + '"><i class="fas fa-eye"></i></a></td>';
           card += '</tr>';
         });
@@ -464,7 +560,6 @@ require('../requireSubModule.php');
         $('#receiptNumber').html(data.fr_id)
         $("#receiptDate").html(getFormattedDate(data.fr_date, "dmY"));
         $("#receiptTime").html(getTime(data.update_ts, "dmY"));
-        $("#receiptName").text($(".student_name").text());
         $("#receiptCourse").text($(".student_program").text());
         $("#receiptBatch").text($(".student_batch").text());
         $("#receiptSemester").html(data.fee_semester);

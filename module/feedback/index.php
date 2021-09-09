@@ -1,6 +1,5 @@
 <?php
 require('../requireSubModule.php');
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

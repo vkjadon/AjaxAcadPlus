@@ -49,6 +49,7 @@ if (isset($mySes)) {
 
   // check_tn_ad($conn, 'assessment_design');
   //check_tn_rs($conn, 'cc_outcome');
+  
   check_tn_class($conn, "class");
 
   check_tn_feeStructure($conn, "fee_structure");

@@ -29,7 +29,7 @@ require("util/config_database.php");
             </div>
             <form method="post" id="userForm">
               <div class="form-group">
-                <label>User Id (Email for OTP)</label>
+                <label>User Id</label>
                 <input type="text" name="username" minlength="5" id="username" class="form-control" />
                 <label>Password</label>
                 <input type="password" name="userpassword" id="userpassword" class="form-control" />
@@ -38,7 +38,7 @@ require("util/config_database.php");
               <div class="form-group">
                 <input type="hidden" name="action" id="action" value="checkUser" />
                 <button class="btn btn-sm" name="userlogin" id="userlogin">Login</button>
-                <span><a href="#" class="atag otp">OTP Login</a></span>
+                <span><a class="atag otp">OTP Login</a></span>
               </div>
             </form>
           </div>
@@ -93,6 +93,20 @@ require("util/config_database.php");
           alert("fail in place of error");
         })
       });
+
+      $(document).on('click', '.otp', function(event) {
+      var username = $("#username").val();
+      alert(username);
+      $.post("util/check_user.php", {
+        action: "forgot",
+        username: username
+      }, () => {}, "text").done(function(data) {
+        alert(data);
+      }, "text").fail(function() {
+        alert("fail in place of error");
+      })
+    });
+
     });
   </script>
 

@@ -652,17 +652,17 @@ require('../requireSubModule.php');
       var selDept = $("#sel_dept").val();
       var sName = $("#sName").val();
       var stfId = $("#panelId").val();
-
-
       var error = "NO";
       var error_msg = "";
       if (action == "addStaff" || action == "updateStaff") {
         if ($('#sName').val() === "") {
           error = "YES";
           error_msg = "Staff Name cannot be blank";
+        }else if ($('#sEmail').val() === "") {
+          error = "YES";
+          error_msg = "Staff Email cannot be blank";
         }
       }
-
       if (error == "NO") {
         var formData = $(this).serialize();
         $('#firstModal').modal('hide');

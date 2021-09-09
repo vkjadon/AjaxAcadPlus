@@ -50,13 +50,13 @@ if (isset($_POST['action'])) {
     }
   } elseif ($_POST['action'] == 'addStaff') {
 
-    $sql = "insert into staff (school_id, staff_name, staff_doj, staff_mobile, staff_email, update_id, staff_status) value('$myScl', '".data_check($_POST['sName'])."', '".data_check($_POST['sDoj'])."', '".data_check($_POST['sMobile'])."', '".data_check($_POST['sEmail'])."', '$myId', '0')";
+    $sql = "insert into staff (school_id, staff_name, staff_doj, staff_mobile, staff_email, update_id, staff_status) value('$myScl', '" . data_check($_POST['sName']) . "', '" . data_check($_POST['sDoj']) . "', '" . data_check($_POST['sMobile']) . "', '" . data_check($_POST['sEmail']) . "', '$myId', '0')";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     else {
       $staff_id = $conn->insert_id;
-      $user_id=80000+$staff_id;
-      $user_id='AG'.$user_id;
+      $user_id = 80000 + $staff_id;
+      $user_id = 'AG' . $user_id;
       $sql = "update staff set user_id='$user_id' where staff_id='$staff_id'";
       $result = $conn->query($sql);
     }
@@ -187,10 +187,31 @@ if (isset($_POST['action'])) {
     } else echo "No Field should be Blank";
   } elseif ($_POST['action'] == 'addUser') {
     $id = $_POST['id'];
-    $password = sha1(random_int(0, 10));
-    $sql = "insert into user (staff_id, user_password, user_status) values ('$id', '$password', '0')";
-    $conn->query($sql);
-    echo $conn->error;
+    $mail = getField($conn, $id, "staff", "staff_id", "staff_email");
+    $password = random_int(100000, 999999);
+    $encripted = sha1($password);
+    $sql = "insert into user (staff_id, user_password, user_status) values ('$id', '$encripted', '0')";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+    else {
+      $subject = "Registration successful as User";
+      $message = '<html><head><title>HTML email</title></head>
+      <body>
+      <h4>Registration Successful.</h4>
+      <h5>Your password is '.$password.'</h5>
+      <h4>Regards</h4>
+      </body>
+      </html>';
+
+      // Always set content-type when sending HTML email
+      $headers = "MIME-Version: 1.0" . "\r\n";
+      $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+      // More headers
+      $headers .= 'From: <info@classconnect.in>';
+      mail($mail, $subject, $message, $headers);
+      echo "Staff Added as User. The password is sent to registered email [".$mail.$password."].";
+    }
   } elseif ($_POST['action'] == 'removeUser') {
     $id = $_POST['id'];
     $sql = "delete from user where staff_id='$id'";
