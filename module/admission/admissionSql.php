@@ -21,18 +21,52 @@ if (isset($_POST['action'])) {
       $batchId = $_POST['batchId'];
       $progId = $_POST['progId'];
       $leet = $_POST['leet'];
-
-      // $sql = "select st.* from student st where st.student_status='0' order by user_id";
-      if ($progId > 0) $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.program_name from  student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.batch_id=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.program_id='$progId' and st.batch_id='$batchId' and st.student_status='0'";
-      else $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.program_name from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.batch_id=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.batch_id='$batchId' and st.student_status='0'";
-      //$sql = "select st.*, sd.*, sa.*, b.batch, p.program_name from student st, student_detail sd, student_address sa, batch b, program p where st.batch_id=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id";
+      $ay = $_POST['ay'];
+      if ($ay == '1') $batchField = 'ay_id';
+      else $batchField = 'batch_id';
+      if ($progId > 0) $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.program_name from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.$batchField=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.program_id='$progId' and st.$batchField='$batchId' and st.student_status='0'";
+      else $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.program_name from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.$batchField=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.$batchField='$batchId' and st.student_status='0'";
 
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
       else {
          $json_array = array();
+         $subArray = array();
          while ($rowsStudent = $result->fetch_assoc()) {
-            $json_array[] = $rowsStudent;
+            $subArray["student_id"] = $rowsStudent["student_id"];
+            $subArray["user_id"] = $rowsStudent["user_id"];
+            $subArray["student_name"] = $rowsStudent["student_name"];
+            $subArray["program_name"] = $rowsStudent["program_name"];
+            $subArray["student_rollno"] = $rowsStudent["student_rollno"];
+            $subArray["student_mobile"] = $rowsStudent["student_mobile"];
+            $subArray["student_semester"] = $rowsStudent["student_semester"];
+            $subArray["student_admission"] = $rowsStudent["student_admission"];
+            $subArray["student_lateral"] = $rowsStudent["student_lateral"];
+            $subArray["student_dob"] = $rowsStudent["student_dob"];
+            $subArray["student_whatsapp"] = $rowsStudent["student_whatsapp"];
+            $subArray["student_adhaar"] = $rowsStudent["student_adhaar"];
+            $subArray["student_category"] = $rowsStudent["student_category"];
+            $subArray["student_religion"] = $rowsStudent["student_religion"];
+            $subArray["student_bg"] = $rowsStudent["student_bg"];
+            $subArray["student_fee_category"] = $rowsStudent["student_fee_category"];
+            $subArray["student_gender"] = $rowsStudent["student_gender"];
+            $subArray["student_fname"] = $rowsStudent["student_fname"];
+            $subArray["student_fmobile"] = $rowsStudent["student_fmobile"];
+            $subArray["student_femail"] = $rowsStudent["student_femail"];
+            $subArray["student_foccupation"] = $rowsStudent["student_foccupation"];
+            $subArray["student_fdesignation"] = $rowsStudent["student_fdesignation"];
+            $subArray["student_mname"] = $rowsStudent["student_mname"];
+            $subArray["student_mmobile"] = $rowsStudent["student_mmobile"];
+            $subArray["student_memail"] = $rowsStudent["student_memail"];
+            $subArray["permanent_address"] = $rowsStudent["permanent_address"];
+            $subArray["city"] = $rowsStudent["city"];
+            $subArray["pincode"] = $rowsStudent["pincode"];
+            // $state_id=$rowsStudent["state_id"];
+            $subArray["state_name"] = getField($conn, $rowsStudent["state_id"], "states", "state_id", "state_name");
+            $subArray["district_name"] = getField($conn, $rowsStudent["district_id"], "districts", "district_id", "district_name");
+            $subArray["reference_name"] = $rowsStudent["reference_name"];
+            $subArray["reference_staff"] = $rowsStudent["reference_staff"];
+            $json_array[] = $subArray;
          }
          echo json_encode($json_array);
       }
@@ -115,6 +149,15 @@ if (isset($_POST['action'])) {
       echo "affected rows $affectedRows";
       if (!$result) echo $conn->error;
       else echo "Updated";
+   } elseif ($_POST['action'] == 'updateState') {
+      $id = $_POST['modalId'];
+      $state_id = $_POST['sel_state'];
+      $sql = "update student_address set state_id='$state_id' where student_id='$id'";
+      $result = $conn->query($sql);
+      $affectedRows = $conn->affected_rows;
+      // echo "affected rows $affectedRows";
+      if (!$result) echo $conn->error;
+      else echo "State Updated !!";
    } elseif ($_POST['action'] == 'updateReference') {
       $id_name = $_POST['id_name'];
       $id = $_POST['id'];
@@ -184,8 +227,13 @@ if (isset($_POST['action'])) {
    } elseif ($_POST['action'] == 'totalStudents') {
       $program_id = $_POST['programId'];
       $batchId = $_POST['batchId'];
-      if ($program_id > 0) $sql = "select * from student where program_id='$program_id' and batch_id='$batchId' and student_status='0'";
-      else $sql = "select * from student where program_id>'0' and batch_id='$batchId' and student_status='0'";
+      $leet = $_POST['leet'];
+      $ay = $_POST['ay'];
+      if ($ay == '1') $batchField = 'ay_id';
+      else $batchField = 'batch_id';
+
+      if ($program_id > 0) $sql = "select * from student where program_id='$program_id' and $batchField='$batchId' and student_status='0'";
+      else $sql = "select * from student where program_id>'0' and $batchField='$batchId' and student_status='0'";
       $result = $conn->query($sql);
       $rowcount = mysqli_num_rows($result);
       echo  "Admitted Students : $rowcount";
@@ -197,5 +245,11 @@ if (isset($_POST['action'])) {
          $json_array[] = $rowArray;
       }
       echo json_encode($json_array);
-   }
+   }elseif ($_POST['action'] == 'dropStudent') {
+      $id = $_POST['id'];
+      $sql = "update student set student_status='9' where student_id='$id'";
+      $result = $conn->query($sql);
+      if (!$result) echo $conn->error;
+      else echo "Student Removed ";
+   } 
 }

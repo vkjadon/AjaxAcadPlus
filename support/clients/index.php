@@ -37,19 +37,19 @@
           <div class="card-body">
             <h3>MCE</h3>
             <div class="row">
-              <div class="col createTable">
+              <div class="col">
+                <button class="btn btn-sm adminSetup" data-tag="mce">Admin Setup</button>
                 <button class="btn btn-sm createTable" data-tag="mce">Create SetUp Tables</button>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-sm-4">
-        <div class="card myCard">
+        <div class="card myCard mt-2">
           <div class="card-body">
-            <h3>Aryan</h3>
+            <h3>Aryans</h3>
             <div class="row">
-              <div class="col createTable">
+              <div class="col">
+                <button class="btn btn-sm adminSetup" data-tag="aryan">Admin Setup</button>
                 <button class="btn btn-sm createTable" data-tag="aryan">Create SetUp Tables</button>
               </div>
             </div>

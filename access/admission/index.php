@@ -579,36 +579,6 @@ if (!isset($myBatch)) $myBatch = '';
     schoolOption();
     stateOption();
     unsavedStudentList();
-    $(document).on('change', '#sel_school', function() {
-      programOption();
-    });
-    $(document).on('submit', '#newStudent', function(event) {
-      event.preventDefault(this);
-      var data = $("#userId").val();
-      // $.alert("Name");
-      var error = "NO";
-      var error_msg = "";
-      if ($('#sel_prog').val() === "0" || $('#sel_school').val() === "0") {
-        error = "YES";
-        error_msg = "Department and/or Program Missing.";
-      }
-      if (error == "NO") {
-        var formData = $(this).serialize();
-        // alert(" Pressed" + formData);
-        $.post("admissionSql.php", formData, () => {}, "text").done(function(data) {
-          // $.alert(data);
-          $(".newId").html(data);
-          $("#userId").val(data);
-          $("#stdRno").val(data);
-          $("#action").val("updateId");
-          studentDisp();
-        }, "text").fail(function() {
-          $.alert("fail in place of error");
-        })
-      } else {
-        $.alert(error_msg);
-      }
-    });
 
     function schoolOption() {
       // $.alert("Department ");
@@ -651,6 +621,68 @@ if (!isset($myBatch)) $myBatch = '';
         $.alert("Error !!");
       })
 
+    }
+
+    $(document).on('change', '#sel_school', function() {
+      programOption();
+    });
+    $(document).on('submit', '#newStudent', function(event) {
+      event.preventDefault(this);
+      var data = $("#userId").val();
+      // $.alert("Name");
+      var error = "NO";
+      var error_msg = "";
+      if ($('#sel_prog').val() === "0" || $('#sel_school').val() === "0") {
+        error = "YES";
+        error_msg = "Department and/or Program Missing.";
+      }
+      if (error == "NO") {
+        var formData = $(this).serialize();
+        // alert(" Pressed" + formData);
+        $.post("admissionSql.php", formData, () => {}, "text").done(function(data) {
+          // $.alert(data);
+          $(".newId").html(data);
+          $("#userId").val(data);
+          $("#stdRno").val(data);
+          $("#action").val("updateId");
+          studentDisp();
+        }, "text").fail(function() {
+          $.alert("fail in place of error");
+        })
+      } else {
+        $.alert(error_msg);
+      }
+    });
+
+    $(document).on('click', '.editUnsaved', function(event) {
+      var id = $(this).attr("data-student");
+      $("#userId").val(id)
+      var data=studentDisp()
+      // $("#programOption").(data.program_name)
+      // $.alert("Id " + data.program_name)
+      $("#studentIdHidden").val(id);
+      $("#action").val("updateId");
+    });
+
+    function unsavedStudentList() {
+      // $.alert('hello');
+      $.post("admissionSql.php", {
+        action: "unsavedStudentList",
+      }, () => {}, "json").done(function(data) {
+        var card = '';
+        // $.alert(data.student_id);
+        $.each(data, function(key, value) {
+          card += '<tr>';
+          card += '<td>' + value.user_id + '</td>';
+          card += '<td>' + value.program_name + '</td>';
+          card += '<td><a href="#" class="editUnsaved" data-student="' + value.user_id + '"><i class="fas fa-edit"></i></a></td>';
+          card += '</tr>';
+        });
+        $("#unsavedList").find("tr:gt(0)").remove()
+        $("#unsavedList").append(card);
+      }).fail(function() {
+        $.alert("Not Responding");
+      })
     }
 
     $(document).on('blur', '.studentUpdateForm', function() {
@@ -853,7 +885,7 @@ if (!isset($myBatch)) $myBatch = '';
         card += '</tr>';
         card += '</table>';
         $(".applicationForm").html(card);
-
+        return data;
       }).fail(function() {
         $.alert("Could not Fetch Student Data!!");
       })
@@ -914,7 +946,12 @@ if (!isset($myBatch)) $myBatch = '';
         card += '</table>';
         if (error == "Y") $.alert(card);
         else {
-          $.alert("Successfully Updated");
+          $.post("admissionSql.php", {
+            userId: studentId,
+            action: "saveStudent"
+          }, function() {}, "text").done(function(data, status) {
+            $.alert("Student Saved !!");
+          })
         }
       })
     });
@@ -930,7 +967,7 @@ if (!isset($myBatch)) $myBatch = '';
       }, function() {}, "json").done(function(data, status) {
         // $.alert(data);
         var list = '';
-        list += '<select class="form-control form-control-sm sAddressForm" name="sel_state" id="sel_state" data-tag="state">';
+        list += '<select class="form-control form-control-sm sAddressForm" name="sel_state" id="sel_state" data-tag="state_id">';
         list += '<option value="0">Select State</option>'
         $.each(data, function(key, value) {
           list += '<option value="' + value.state_id + '" data-state="' + value.state_name + '">' + value.state_name + '</option>';
@@ -952,7 +989,7 @@ if (!isset($myBatch)) $myBatch = '';
       }, function() {}, "json").done(function(data, status) {
         // $.alert("List " + data);
         var list = '';
-        list += '<select class="form-control form-control-sm sAddressForm" name="sel_district" id="sel_district" data-tag="district">';
+        list += '<select class="form-control form-control-sm sAddressForm" name="sel_district" id="sel_district" data-tag="district_id">';
         list += '<option value="0">Select a Distrcit</option>'
         $.each(data, function(key, value) {
           list += '<option value=' + value.district_id + '>' + value.district_name + '</option>';
@@ -990,28 +1027,7 @@ if (!isset($myBatch)) $myBatch = '';
       })
     }
 
-    function unsavedStudentList() {
-              // $.alert('hello');
-      $.post("admissionSql.php", {
-        action: "unsavedStudentList",
-      }, () => {}, "json").done(function(data) {
-        var card = '';
-        // $.alert(data.student_id);
-        $.each(data, function(key, value) {
-          card += '<tr>';
-          card += '<td>' + value.user_id + '</td>';
-          card += '<td>' + value.program_name + '</td>';
-          card += '<td>' +  + '</td>';
-          card += '</tr>';
-        });
-        $("#unsavedList").find("tr:gt(0)").remove()
-        $("#unsavedList").append(card);
-      }).fail(function() {
-        $.alert("Not Responding");
-      })
-    }
-
-
+    
 
     function personalList() {
       var studentId = $("#userId").val()

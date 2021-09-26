@@ -84,6 +84,32 @@ require('../requireSubModule.php');
                       </div>
                     </div>
                     <div class="row">
+                      <div class="col">
+                        <div class="form-group">
+                          <input type="radio" class="respName" id="cash" name="respName" value="cash">
+                          Cashier
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-group">
+                          <input type="radio" class="respName" id="counsellor" name="respName" value="counsellor">
+                          Admission Counsellor
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-group">
+                          <input type="radio" class="respName" id="teleCounsellor" name="respName" value="teleCounsellor">
+                          Tele Counsellor
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="form-group">
+                          <input type="radio" class="respName" id="admsAdvisor" name="respName" value="admsAdvisor">
+                          Admission Advisor
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
                       <div class="col-6">
                         <div class="form-group">
                           <label class="selectLabel"></label>
@@ -232,6 +258,20 @@ require('../requireSubModule.php');
                           </div>
                         </div>
                         <div class="row">
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="fm" name="headName" value="fm">
+                              Mode Of Fees(fm)
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="ph" name="headName" value="ph">
+                              Payment Head (ph)
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
                           <div class="col">
                             <div class="form-group">
                               <input type="radio" class="headName" id="ss" name="headName" value="ss">
@@ -257,14 +297,6 @@ require('../requireSubModule.php');
                             <div class="form-group">
                               <input type="radio" class="headName" id="rel" name="headName" value="rel">
                               Religion(rel)
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col">
-                            <div class="form-group">
-                              <input type="radio" class="headName" id="fm" name="headName" value="fm">
-                              Mode Of Fees(fm)
                             </div>
                           </div>
                         </div>
@@ -381,7 +413,7 @@ require('../requireSubModule.php');
 
     $(document).on('click', '.headName', function(event) {
       var headName = $("input[name='headName']:checked").val();
-      //$.alert(" Pressed" + headName);
+      // $.alert(" Pressed" + headName);
       $.post("aaSql.php", {
         headName: headName,
         action: "masterList"

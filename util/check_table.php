@@ -122,7 +122,28 @@ function check_tn_enrichment_activity_participant($conn, $table)
   }
   //else echo "Table Exists";
 }
+function check_tn_feeConcession($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'student_id INT(3) null,
+    fee_type int(3) null,
+    fee_semester int(3) null,
+    fc_amount varchar(6) null,
+    update_ts timestamp default current_timestamp(),
+    update_id INT(5) NULL,
+    fc_status INT(1) NULL,
+    UNIQUE(student_id, fee_type, fee_semester)';
 
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
 function check_tn_feeStructure($conn, $table)
 {
   $sql = "select * from $table";
@@ -142,6 +163,58 @@ function check_tn_feeStructure($conn, $table)
     update_id INT(5) NULL,
     status INT(1) NULL,
     UNIQUE(school_id, program_id, batch_id, fee_category, fee_type, fee_semester )';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+
+function check_tn_feeSchedule($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'fsch_id INT(5) not null auto_increment,
+      school_id INT(3) null,
+    program_id INT(3) null,
+    batch_id int(3) null,
+    fee_category INT(4) null,
+    fee_type int(4) null,
+    fee_semester int(2) null,
+    fsch_amount varchar(6) null,
+    last_date date null,
+    update_ts timestamp default current_timestamp(),
+    update_id INT(5) NULL,
+    fsch_status INT(1) NULL,
+    primary key(fsch_id),
+    UNIQUE(school_id, program_id, batch_id, fee_category, fee_type, fee_semester)';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+
+function check_tn_feeReverse($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'frev_id INT(3) AUTO_INCREMENT,
+    fr_id int(3) null,
+    frev_desc text null,
+    update_ts timestamp default current_timestamp(),
+    update_id INT(5) NULL,
+    frev_status INT(1) NULL,
+    PRIMARY KEY (frev_id),
+    UNIQUE(fr_id)';
 
     $sql = "CREATE TABLE $table ($query)";
     $result = $conn->query($sql);
@@ -424,7 +497,7 @@ function check_tn_mn($conn, $table)
   if (!$result) {
     //echo "Table Missing $table";
     $query =
-      'mn_id INT(3) NOT NULL AUTO_INCREMENT,
+      'mn_id INT(4) NOT NULL AUTO_INCREMENT,
     mn_code VARCHAR(3) NULL,
     mn_name VARCHAR(50) NULL,
     mn_remarks VARCHAR(150) NULL,
@@ -433,6 +506,38 @@ function check_tn_mn($conn, $table)
     mn_status INT(1) NULL,
     PRIMARY KEY (mn_id),
     UNIQUE(mn_code, mn_name)';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+function check_tn_pv($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    echo "Table Missing $table";
+    $query =
+      'pv_id INT(5) NOT NULL AUTO_INCREMENT,
+    pv_type varchar(6) NULL,
+    pv_head int(4) NULL,
+    pv_mode int(4) NULL,
+    pv_amount int(8) NULL,
+    transaction_id varchar(20) NULL,
+    transaction_date date NULL,
+    pv_desc text,
+    bill_no varchar(12) NULL,
+    bill_date date NULL,
+    bill_amount int(8) NULL,
+    payee_name varchar(50) NULL,
+    payee_mobile varchar(10) NULL,
+    payee_id varchar(50) NULL,
+    update_ts timestamp default current_timestamp(),
+    update_id INT(5) NULL,
+    pv_status INT(1) NULL,
+    PRIMARY KEY (pv_id)';
 
     $sql = "CREATE TABLE $table ($query)";
     $result = $conn->query($sql);

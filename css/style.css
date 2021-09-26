@@ -127,6 +127,21 @@ div.minWidth100 {
     font-size: small;
     font-weight: bold;
 }
+.largeText {
+    font-size:large;
+    font-weight: bold;
+    color: #000;
+}
+.xlText {
+    font-size:x-large;
+    font-weight: bold;
+    color: #000;
+}
+.xxlText {
+    font-size:xx-large;
+    font-weight: bold;
+    color: #000;
+}
 .smallText {
     font-size: small;
     font-weight: bold;
@@ -234,7 +249,7 @@ a.fa.fa-arrow-circle-up, a.fa.fa-arrow-circle-right {
     padding-right: 2px;
 }
 
-.fa-trash {
+a.fa.fa-trash, fa-trash {
     color: rgba(245, 7, 19, 0.911);
     padding-left: 2px;
     padding-right: 2px;

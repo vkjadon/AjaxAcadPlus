@@ -176,13 +176,28 @@ if (!isset($myBatch)) $myBatch = '';
 
 					<!-- Centers -->
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown">Centers</a>
+						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown">Accounts</a>
 						<div class="dropdown-menu dropdown-default menuDouble">
 							<div class="card myCard border">
 								<div class="row">
 									<div class=" col-6">
 									<a href="<?php echo $codePath . '/module/fee/'; ?>" class="dropdown-item pb-1"> Fee </a>
 									<a href="<?php echo $codePath . '/module/feeReceipt/'; ?>" class="dropdown-item pb-1"> Fee Receipt </a>
+									</div>
+									<div class="col-6">
+										<a href="<?php echo $codePath . '/module/payment/'; ?>" class="dropdown-item pb-1"> Payment Voucher </a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</li>
+					<!-- Centers -->
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown">Centers</a>
+						<div class="dropdown-menu dropdown-default menuDouble">
+							<div class="card myCard border">
+								<div class="row">
+									<div class=" col-6">
 										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item pb-1"> TPC </a>
 										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item pb-1"> Alumni </a>
 									</div>
@@ -223,7 +238,7 @@ if (!isset($myBatch)) $myBatch = '';
 							<i class="fas fa-user"></i> <?php echo $myName; ?> </a>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="navbarDropdownMenuLink-333">
-							<a class="dropdown-item pb-1" href="<?php echo $codePath . '/module/profile/'; ?>">My Account</a>
+							<!-- <a class="dropdown-item pb-1" href="<?php echo $codePath . '/module/profile/'; ?>">My Account</a> -->
 							<a class="dropdown-item pb-1" href="<?php echo $codePath . '/module/profile/'; ?>">Profile</a>
 							<a class="dropdown-item pb-1" href="<?php echo $codePath . '/logout.php'; ?>">Logout</a>
 						</div>

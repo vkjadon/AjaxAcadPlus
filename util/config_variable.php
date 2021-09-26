@@ -52,7 +52,10 @@ if (isset($mySes)) {
   
   check_tn_class($conn, "class");
 
+  check_tn_feeConcession($conn, "fee_concession");
+  check_tn_feeReverse($conn, "fee_reverse");
   check_tn_feeStructure($conn, "fee_structure");
+  check_tn_feeSchedule($conn, "fee_schedule");
 
   check_tn_feedback($conn, "feedback");
   check_tn_feedback_question($conn, "feedback_question");
@@ -63,6 +66,7 @@ if (isset($mySes)) {
   check_tn_lt($conn, "leave_type");
   check_tn_org($conn, 'organization');
   check_tn_mn($conn, 'master_name');
+  check_tn_pv($conn, 'payment_voucher');
   check_tn_qb_cp($conn, 'qb_cp');
   check_tn_qb_parameter($conn, 'qb_parameter');
   check_tn_question_bank($conn, 'question_bank');

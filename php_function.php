@@ -2,7 +2,7 @@
 function data_check($data)
 {
   $data = trim($data);
-  $data = stripslashes($data);
+  // $data = stripslashes($data);
   $data = htmlspecialchars_decode($data);
   //htmlspecialchars_decode
   $data = addcslashes($data, "'");

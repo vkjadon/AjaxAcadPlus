@@ -210,7 +210,7 @@ if (isset($_POST['action'])) {
       // More headers
       $headers .= 'From: <info@classconnect.in>';
       mail($mail, $subject, $message, $headers);
-      echo "Staff Added as User. The password is sent to registered email [".$mail.$password."].";
+      echo "Staff Added as User. The password is sent to registered email [".$mail."].";
     }
   } elseif ($_POST['action'] == 'removeUser') {
     $id = $_POST['id'];

@@ -98,7 +98,6 @@ require('../requireSubModule.php');
   $(document).ready(function() {
 
     $('[data-toggle="tooltip"]').tooltip();
-
     
     $(document).on('click', '#searchStudent', function(event) {
       var userId = $("#userId").val();
@@ -166,7 +165,7 @@ require('../requireSubModule.php');
 
     function staffDisp() {
       var userId = $("#userId").val()
-      // $.alert(" Student Display Functio  Id " + studentId);
+      $.alert(" Staff Display Function  Id " + userId);
       $.post("userSql.php", {
         userId: userId,
         action: "staffDisp"
@@ -210,6 +209,7 @@ require('../requireSubModule.php');
     window.print();
     document.body.innerHTML = backup;
   }
+
   document.getElementById('export').onclick = function() {
     var tableId = document.getElementById('studentShowList').id;
     htmlTableToExcel(tableId, filename = '');

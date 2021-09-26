@@ -1,5 +1,6 @@
 <?php
 require('../requireSubModule.php');
+$phpFile = "admissionSql.php";
 ?>
 
 <!DOCTYPE html>
@@ -86,6 +87,10 @@ require('../requireSubModule.php');
               <input type="checkbox" id="leet" name="leet" value="1">
               <span class="smallText">LEET</span>
             </div>
+            <div class="col-md-1">
+              <input type="checkbox" id="ay" name="ay_id" value="1">
+              <span class="smallText">AY</span>
+            </div>
           </div>
           <div class="tab-pane show active" id="list-as" role="tabpanel" aria-labelledby="list-as-list">
             <div class="row">
@@ -95,10 +100,17 @@ require('../requireSubModule.php');
                     ENTER USER ID TO SEARCH
                   </div>
                   <div class="card-body text-primary">
-                    <input name="studentSearch" id="studentSearch" class="form-control my-0 py-1 red-border" type="text" placeholder="Search Student" aria-label="Search">
-                    <button type="button" class="btn btn-primary" id="searchStudent">
-                      <i class="fas fa-search"></i>
-                    </button>
+                    <div class="row">
+                      <div class="col-md-7 pr-0">
+                        <input name="studentSearch" id="studentSearch" class="form-control form-control-sm" type="text" placeholder="Search Student" aria-label="Search">
+                      </div>
+                      <div class="col-md-2 pl-1">
+                        <a class="fa fa-search xlText" id="searchStudent"></a>
+                      </div>
+                      <div class="col-md-3 pl-1">
+                        <a class="fa fa-trash xlText float-right" id="dropStudent"></a>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -582,49 +594,67 @@ require('../requireSubModule.php');
           </div>
           <div class="tab-pane fade" id="list-sr" role="tabpanel" aria-labelledby="list-sr-list">
             <div class="row">
-
-            </div>
-            <div class="row">
               <div class="col-md-12" style="overflow: scroll;">
-                <div class="container card mt-2 myCard" id="print" style="overflow: scroll;">
-                  <div class="text-right"><a onclick="printDiv('print')" class="fa fa-print"></a>
-                    <a class="fas fa-file-export" id="export"></a>
+                <div class="container card mt-2 myCard">
+                  <div class="row m-2">
+                    <div class="col-md-11 smallerText">
+                      <input type="checkbox" checked id="courseField"> Course
+                      <input type="checkbox" checked id="rollnoField"> RollNo
+                      <input type="checkbox" checked id="mobileField"> Mobile
+                      <input type="checkbox" checked id="semField"> Sem
+                      <input type="checkbox" checked id="dorField"> DoR
+                      <input type="checkbox" checked id="dobField"> DOB
+                      <input type="checkbox" checked id="waField"> WApp
+                      <input type="checkbox" checked id="adhaarField"> Adhaar
+                      <input type="checkbox" checked id="catField"> Cat
+                      <input type="checkbox" checked id="relField"> Rel
+                      <input type="checkbox" checked id="bgField"> BG
+                      <input type="checkbox" checked id="feeField"> Fee
+                      <br>
+                      <input type="checkbox" checked id="genderField"> Gender
+                      <input type="checkbox" checked id="fNameField"> FName
+                      <input type="checkbox" checked id="fDetailsField"> Family
+                    </div>
+                    <div class="col-md-1 text-right"><a onclick="printDiv('print')" class="fa fa-print"></a>
+                      <a class="fas fa-file-export" id="export"></a>
+                    </div>
                   </div>
-                  <table class="table table-bordered table-striped list-table-xxs mt-3" id="studentShowList">
-                    <!-- <th><i class="fas fa-edit"></i></th> -->
-                    <th>S.No</th>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Course</th>
-                    <th>RollNo</th>
-                    <th>Mobile</th>
-                    <th>Semester</th>
-                    <th>Registration Date</th>
-                    <th>Regular</th>
-                    <th>DOB</th>
-                    <th>Whats App</th>
-                    <th>Adhaar</th>
-                    <th>Category</th>
-                    <th>Religion</th>
-                    <th>Blood Group</th>
-                    <th>Fee</th>
-                    <th>Gender</th>
-                    <th>Father's Name</th>
-                    <th>Father's Mobile</th>
-                    <th>Father's Email</th>
-                    <th>Father's Occupation </th>
-                    <th>Father's Deisgnation</th>
-                    <th>Mother's Name</th>
-                    <th>Mother's Mobile</th>
-                    <th>Mother's Email</th>
-                    <th>Address</th>
-                    <th>City</th>
-                    <th>Pincode</th>
-                    <th>State</th>
-                    <th>District</th>
-                    <th>Reference Name</th>
-                    <th>Reference Staff</th>
-                  </table>
+                  <div id="print" style="overflow: scroll;">
+                    <table class="table table-bordered table-striped list-table-xxs mt-3" id="studentShowList">
+                      <!-- <th><i class="fas fa-edit"></i></th> -->
+                      <th>S.No</th>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th class="fNameField">Father's Name</th>
+                      <th class="courseField">Course</th>
+                      <th class="rollnoField">RollNo</th>
+                      <th class="mobileField">Mobile</th>
+                      <th class="semField">Sem</th>
+                      <th class="dorField">DoR</th>
+                      <th class="dobField">DoB</th>
+                      <th class="waField">WA No</th>
+                      <th>Address</th>
+                      <th>City</th>
+                      <th>District</th>
+                      <th>State</th>
+                      <th>Pincode</th>
+                      <th class="adhaarField">Adhaar</th>
+                      <th class="catField">Category</th>
+                      <th class="relField">Religion</th>
+                      <th class="bgField">Blood Group</th>
+                      <th class="feeField">Fee</th>
+                      <th class="genderField">Gender</th>
+                      <th class="fDetailsField">FMobile</th>
+                      <th class="fDetailsField">FEmail</th>
+                      <th class="fDetailsField">FOccupation </th>
+                      <th class="fDetailsField">FDeisgnation</th>
+                      <th class="fDetailsField">MName</th>
+                      <th class="fDetailsField">MMobile</th>
+                      <th class="fDetailsField">MEmail</th>
+                      <th>Reference Name</th>
+                      <th>Reference Staff</th>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>
@@ -676,12 +706,121 @@ require('../requireSubModule.php');
     studentProgramReport();
     totalStudents();
 
+    $(document).on('click', '#dropStudent', function(event) {
+      var data = $("#studentIdHidden").val();
+      // $.alert(data);
+      if (data > 0) {
+        $.confirm({
+          title: 'Please Confirm !',
+          draggable: true,
+          content: "<b><i>Are you Sure to Remove Student ? </i></b>",
+          buttons: {
+            confirm: {
+              btnClass: 'btn-info',
+              action: function() {
+                $.post("<?php echo $phpFile; ?>", {
+                  action: "dropStudent",
+                  id: data,
+                }, () => {}, "text").done(function(data) {
+                  // $.alert(data);
+                }, "text").fail(function() {
+                  $.alert("fail in place of error");
+                })
+              }
+            },
+            cancel: {
+              btnClass: "btn-danger",
+              action: function() {}
+            },
+          }
+        });
+      } else {
+        $.alert("No Student Selected !!");
+      }
+    });
+
+    $(document).on('click', '#searchStudent', function(event) {
+      var data = $("#studentSearch").val();
+      // $.alert(data);
+      $.post("<?php echo $phpFile; ?>", {
+        action: "fetchStudent",
+        userId: data,
+      }, () => {}, "json").done(function(data, status) {
+        // $.alert(status);
+        if (data == null) {
+          $.alert("No Student Found!!");
+          $("#studentIdHidden").val(null);
+
+        } else {
+          $("#stdName").val(data.student_name);
+          $("#stdRno").val(data.student_rollno);
+          $("#stdMobile").val(data.student_mobile);
+          $("#stdEmail").val(data.student_email);
+          $("#Dob").val(data.student_dob);
+          $("#stdWaMobile").val(data.student_whatsapp);
+          // $("#stdNa").val(data.student_gender);
+          $("#sel_caste").val(data.student_category);
+          $("#sql_bg").val(data.student_bg);
+          $("#sql_rg").val(data.student_religion);
+          $("#stdAdhaar").val(data.student_adhaar);
+          $("#sql_fcg").val(data.student_fee_category);
+          $("#stdAdmission").val(data.student_admission);
+          $("#fName").val(data.student_fname);
+          $("#mName").val(data.student_mname);
+          $("#fMobile").val(data.student_fmobile);
+          $("#mMobile").val(data.student_mmobile);
+          $("#fEmail").val(data.student_femail);
+          $("#mEmail").val(data.student_memail);
+          $("#permanent_address").val(data.permanent_address);
+          $("#sCity").val(data.city);
+          $("#sPincode").val(data.pincode);
+          $("#sel_state").val(data.state_name);
+          $("#sel_district").val(data.district_name);
+          $("#mEmail").val(data.student_memail);
+          $("#cName").val(data.reference_name);
+          $("#cNumber").val(data.reference_mobile);
+          $("#refStaff").val(data.reference_staff);
+          $("#cIncentive").val(data.reference_incentive);
+          $("#refDesignation").val(data.reference_designation);
+          $("#refContact").val(data.reference_contact);
+          $("#remarks").val(data.remarks);
+          $("#studentIdHidden").val(data.student_id);
+        }
+        // $.alert(data);
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
+    $(document).on('click', '#state_id', function() {
+      var student_id = $(this).attr("data-tag")
+      // $.alert(student_id);
+      $('#firstModal').modal('show');
+      $(".studentForm").hide();
+      $("#modalId").val(student_id);
+    });
+
+    $(document).on('submit', '#modalForm', function(event) {
+      event.preventDefault();
+      var formData = $(this).serialize();
+      // $.alert(formData);
+      $.post("<?php echo $phpFile; ?>", formData, () => {}, "text").done(function(data) {
+        $.alert(data);
+        studentList()
+      }, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
+      $('#firstModal').modal('hide');
+
+    });
+
+
     $(document).on('blur', '.studentUpdateForm', function() {
       var userId = $("#studentSearch").val();
       var tag = $(this).attr("data-tag")
       var value = $(this).val()
       // $.alert("Changes " + tag + " Value " + value + " Student " + userId);
-      $.post("admissionSql.php", {
+      $.post("<?php echo $phpFile; ?>", {
         id_name: "user_id",
         id: userId,
         tag: tag,
@@ -699,7 +838,7 @@ require('../requireSubModule.php');
       var tag = $(this).attr("data-tag")
       var value = $(this).val()
       // $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
-      $.post("admissionSql.php", {
+      $.post("<?php echo $phpFile; ?>", {
         id_name: "student_id",
         id: studentId,
         tag: tag,
@@ -717,7 +856,7 @@ require('../requireSubModule.php');
       var tag = $(this).attr("data-tag")
       var value = $(this).val()
       // $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
-      $.post("admissionSql.php", {
+      $.post("<?php echo $phpFile; ?>", {
         id_name: "student_id",
         id: studentId,
         tag: tag,
@@ -735,7 +874,7 @@ require('../requireSubModule.php');
       var tag = $(this).attr("data-tag")
       var value = $(this).val()
       // $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
-      $.post("admissionSql.php", {
+      $.post("<?php echo $phpFile; ?>", {
         id_name: "student_id",
         id: studentId,
         tag: tag,
@@ -758,7 +897,7 @@ require('../requireSubModule.php');
         }
       });
       // $.alert("Change Batch Pressed " + checkboxes_value);
-      $.post("admissionSql.php", {
+      $.post("<?php echo $phpFile; ?>", {
         action: "changeBatch",
         batchId: batchId,
         checkboxes_value: checkboxes_value,
@@ -771,7 +910,7 @@ require('../requireSubModule.php');
 
 
     $(document).on('click', '.cbp', function() {
-      $.post("admissionSql.php", {
+      $.post("<?php echo $phpFile; ?>", {
         action: "updateStudentList",
       }, () => {}, "json").done(function(data) {
         var student_data = '';
@@ -788,6 +927,37 @@ require('../requireSubModule.php');
       }, "json").fail(function() {
         $.alert("fail in place of error");
       })
+    });
+
+    $(document).on('click', '#courseField, #rollnoField, #mobileField, #semField, #dorField, #dobField, #waField, #adhaarField, #catField, #relField, #bgField, #feeField, #genderField, #fDetailsField', function() {
+      if ($('#courseField').is(":checked")) $(".courseField").show();
+      else $(".courseField").hide();
+      if ($('#rollnoField').is(":checked")) $(".rollnoField").show();
+      else $(".rollnoField").hide();
+      if ($('#mobileField').is(":checked")) $(".mobileField").show();
+      else $(".mobileField").hide();
+      if ($('#semField').is(":checked")) $(".semField").show();
+      else $(".semField").hide();
+      if ($('#dorField').is(":checked")) $(".dorField").show();
+      else $(".dorField").hide();
+      if ($('#dobField').is(":checked")) $(".dobField").show();
+      else $(".dobField").hide();
+      if ($('#waField').is(":checked")) $(".waField").show();
+      else $(".waField").hide();
+      if ($('#adhaarField').is(":checked")) $(".adhaarField").show();
+      else $(".adhaarField").hide();
+      if ($('#catField').is(":checked")) $(".catField").show();
+      else $(".catField").hide();
+      if ($('#relField').is(":checked")) $(".relField").show();
+      else $(".relField").hide();
+      if ($('#bgField').is(":checked")) $(".bgField").show();
+      else $(".bgField").hide();
+      if ($('#feeField').is(":checked")) $(".feeField").show();
+      else $(".feeField").hide();
+      if ($('#genderField').is(":checked")) $(".genderField").show();
+      else $(".genderField").hide();
+      if ($('#fDetailsField').is(":checked")) $(".fDetailsField").show();
+      else $(".fDetailsField").hide();
     });
 
     $("#checkall").change(function() {
@@ -829,59 +999,20 @@ require('../requireSubModule.php');
       })
     });
 
-    $(document).on('click', '#searchStudent', function(event) {
-      var data = $("#studentSearch").val();
-      // $.alert(data);
-      $.post("admissionSql.php", {
-        action: "fetchStudent",
-        userId: data,
-      }, () => {}, "json").done(function(data) {
-        $("#stdName").val(data.student_name);
-        $("#stdRno").val(data.student_rollno);
-        $("#stdMobile").val(data.student_mobile);
-        $("#stdEmail").val(data.student_email);
-        $("#Dob").val(data.student_dob);
-        $("#stdWaMobile").val(data.student_whatsapp);
-        // $("#stdNa").val(data.student_gender);
-        $("#sel_caste").val(data.student_category);
-        $("#sql_bg").val(data.student_bg);
-        $("#sql_rg").val(data.student_religion);
-        $("#stdAdhaar").val(data.student_adhaar);
-        $("#sql_fcg").val(data.student_fee_category);
-        $("#stdAdmission").val(data.student_admission);
-        $("#fName").val(data.student_fname);
-        $("#mName").val(data.student_mname);
-        $("#fMobile").val(data.student_fmobile);
-        $("#mMobile").val(data.student_mmobile);
-        $("#fEmail").val(data.student_femail);
-        $("#mEmail").val(data.student_memail);
-        $("#permanent_address").val(data.permanent_address);
-        $("#sCity").val(data.city);
-        $("#sPincode").val(data.pincode);
-        $("#sel_state").val(data.state_name);
-        $("#sel_district").val(data.district_name);
-        $("#mEmail").val(data.student_memail);
-        $("#cName").val(data.reference_name);
-        $("#cNumber").val(data.reference_mobile);
-        $("#refStaff").val(data.reference_staff);
-        $("#cIncentive").val(data.reference_incentive);
-        $("#refDesignation").val(data.reference_designation);
-        $("#refContact").val(data.reference_contact);
-        $("#remarks").val(data.remarks);
-        $("#studentIdHidden").val(data.student_id);
-        // $.alert(data);
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
 
     $(document).on('change', '#sel_batch, #sel_program', function() {
       studentList();
       totalStudents();
     });
 
+    $(document).on('click', '#ay', function() {
+      studentList();
+      totalStudents();
+    });
+
     $(document).on('click', '#leet', function() {
       studentList();
+      totalStudents();
     });
 
     function studentList() {
@@ -889,11 +1020,14 @@ require('../requireSubModule.php');
       var progId = $("#sel_program").val()
       if ($('#leet').is(":checked")) var leet = 1;
       else var leet = 0;
+      if ($('#ay').is(":checked")) var ay = 1;
+      else var ay = 0;
       // $.alert("checked " + $('#leet').is(":checked") + "leet " + leet);
-      $.post("admissionSql.php", {
+      $.post("<?php echo $phpFile; ?>", {
         batchId: batchId,
         progId: progId,
         leet: leet,
+        ay: ay,
         action: "studentList"
       }, function() {}, "json").done(function(data, status) {
         // $.alert(data);
@@ -910,33 +1044,32 @@ require('../requireSubModule.php');
             card += '<td>' + count++ + '</td>';
             card += '<td>' + value.user_id + '</td>';
             card += '<td>' + value.student_name + '</td>';
-            card += '<td>' + value.program_name + '</td>';
-            card += '<td>' + value.student_rollno + '</td>';
-            card += '<td>' + value.student_mobile + '</td>';
-            card += '<td>' + value.student_semester + '</td>';
-            card += '<td>' + getFormattedDate(value.student_admission, "dmY") + '</td>';
-            card += '<td>' + value.student_lateral + '</td>';
-            card += '<td>' + getFormattedDate(value.student_dob, "dmY") + '</td>';
-            card += '<td>' + value.student_whatsapp + '</td>';
-            card += '<td>' + value.student_adhaar + '</td>';
-            card += '<td>' + value.student_category + '</td>';
-            card += '<td>' + value.student_religion + '</td>';
-            card += '<td>' + value.student_bg + '</td>';
-            card += '<td>' + value.student_fee_category + '</td>';
-            card += '<td>' + value.student_gender + '</td>';
-            card += '<td>' + value.student_fname + '</td>';
-            card += '<td>' + value.student_fmobile + '</td>';
-            card += '<td>' + value.student_femail + '</td>';
-            card += '<td>' + value.student_foccupation + '</td>';
-            card += '<td>' + value.student_fdesignation + '</td>';
-            card += '<td>' + value.student_mname + '</td>';
-            card += '<td>' + value.student_mmobile + '</td>';
-            card += '<td>' + value.student_memail + '</td>';
+            card += '<td class="fnameField">' + value.student_fname + '</td>';
+            card += '<td class="courseField">' + value.program_name + '</td>';
+            card += '<td class="rollnoField">' + value.student_rollno + '</td>';
+            card += '<td class="mobileField">' + value.student_mobile + '</td>';
+            card += '<td class="semField">' + value.student_semester + '</td>';
+            card += '<td class="dorField">' + getFormattedDate(value.student_admission, "dmY") + '</td>';
+            card += '<td class="dobField">' + getFormattedDate(value.student_dob, "dmY") + '</td>';
+            card += '<td class="waField">' + value.student_whatsapp + '</td>';
             card += '<td>' + value.permanent_address + '</td>';
             card += '<td>' + value.city + '</td>';
-            card += '<td>' + value.pincode + '</td>';
-            card += '<td>' + value.state_name + '</td>';
             card += '<td>' + value.district_name + '</td>';
+            card += '<td id="state_id" data-tag="' + value.student_id + '">' + value.state_name + '</td>';
+            card += '<td>' + value.pincode + '</td>';
+            card += '<td class="adhaarField">' + value.student_adhaar + '</td>';
+            card += '<td class="catField">' + value.student_category + '</td>';
+            card += '<td class="relField">' + value.student_religion + '</td>';
+            card += '<td class="bgField">' + value.student_bg + '</td>';
+            card += '<td class="feeField">' + value.student_fee_category + '</td>';
+            card += '<td class="genderField">' + value.student_gender + '</td>';
+            card += '<td class="fDetailsField">' + value.student_fmobile + '</td>';
+            card += '<td class="fDetailsField">' + value.student_femail + '</td>';
+            card += '<td class="fDetailsField">' + value.student_foccupation + '</td>';
+            card += '<td class="fDetailsField">' + value.student_fdesignation + '</td>';
+            card += '<td class="fDetailsField">' + value.student_mname + '</td>';
+            card += '<td class="fDetailsField">' + value.student_mmobile + '</td>';
+            card += '<td class="fDetailsField">' + value.student_memail + '</td>';
             card += '<td>' + value.reference_name + '</td>';
             card += '<td>' + value.reference_staff + '</td>';
             card += '</tr>';
@@ -955,7 +1088,7 @@ require('../requireSubModule.php');
       var studentId = $("#studentIdHidden").val()
 
       // $.alert("In List Function" + x);
-      $.post("admissionSql.php", {
+      $.post("<?php echo $phpFile; ?>", {
         stdId: studentId,
         action: "studentQualificationList"
       }, function(mydata, mystatus) {
@@ -970,7 +1103,7 @@ require('../requireSubModule.php');
 
     function studentProgramReport() {
       //  $.alert("In List Function");
-      $.post("admissionSql.php", {
+      $.post("<?php echo $phpFile; ?>", {
         action: "studentProgramList",
       }, function(mydata, mystatus) {
         $("#studentProgramReport").show();
@@ -985,10 +1118,17 @@ require('../requireSubModule.php');
     function totalStudents() {
       var batchId = $("#sel_batch").val()
       var programId = $("#sel_program").val()
+      if ($('#leet').is(":checked")) var leet = 1;
+      else var leet = 0;
+      if ($('#ay').is(":checked")) var ay = 1;
+      else var ay = 0;
+
       //  $.alert("In List Function" + programId);
-      $.post("admissionSql.php", {
+      $.post("<?php echo $phpFile; ?>", {
         programId: programId,
         batchId: batchId,
+        leet: leet,
+        ay: ay,
         action: "totalStudents"
       }, function(mydata, mystatus) {
         $("#totalStudents").show();
@@ -1063,43 +1203,24 @@ require('../requireSubModule.php');
 
         <!-- Modal body -->
         <div class="modal-body">
-          <div class="studentForm">
+          <div class="stateForm">
             <div class="row">
               <div class="col-6">
                 <div class="form-group">
-                  Name
-                  <input type="text" class="form-control form-control-sm" id="sName" name="sName" placeholder="Name of the Student">
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="form-group">
-                  Roll Number
-                  <input type="text" class="form-control form-control-sm" id="sRno" name="sRno" placeholder="Roll Number of the Student">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
-                <div class="form-group">
-                  Email
-                  <input type="text" class="form-control form-control-sm" id="sEmail" name="sEmail" placeholder="Email ID of the Student">
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="form-group">
-                  Mobile
-                  <input type="text" class="form-control form-control-sm" id="sMobile" name="sMobile" placeholder="Mobile Number of the Student">
+                  State
+                  <?php
+                  $sql = "select * from states";
+                  selectInput($conn, "Select State", "state_id", "state_name", "", "sel_state", $sql);
+                  ?>
                 </div>
               </div>
             </div>
           </div>
-
         </div> <!-- Modal Body Closed-->
         <!-- Modal footer -->
         <div class="modal-footer">
           <input type="hidden" id="modalId" name="modalId">
-          <input type="hidden" id="action" name="action">
-          <input type="hidden" id="stdIdModal" name="stdIdModal">
+          <input type="hidden" id="action" name="action" value="updateState">
           <button type="submit" class="btn btn-secondary" id="submitModalForm">Submit</button>
           <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
         </div> <!-- Modal Footer Closed-->

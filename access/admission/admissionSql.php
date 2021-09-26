@@ -152,9 +152,9 @@ if (isset($_POST['action'])) {
    } elseif ($_POST['action'] == 'updateAddress') {
       $id = $_POST['id'];
       $tag = $_POST['tag'];
-      $value = $_POST['value'];
+      $value = data_clean($_POST['value']);
       $student_id = getField($conn, $id, "student", "user_id", "student_id");
-      //   echo "$student_id";
+      // echo "In updateAddress $student_id - $tag - $value";
       $sql = "update student_address set $tag='$value' where student_id='$student_id'";
       $conn->query($sql);
       echo $conn->error;
@@ -230,5 +230,11 @@ if (isset($_POST['action'])) {
          }
          echo json_encode($json_array);
       }
+   } elseif ($_POST['action'] == 'saveStudent') {
+      $userId = $_POST['userId'];
+      $student_id = getField($conn, $userId, "student", "user_id", "student_id");
+      $sql = "update student set student_status='0' where student_id='$student_id'";
+      $conn->query($sql);
+      echo $conn->error;
    }
 }
