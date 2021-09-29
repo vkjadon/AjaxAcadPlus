@@ -107,7 +107,7 @@ if (isset($_POST['action'])) {
     $dateFrom = $_POST['dateFrom'];
     $dateTo = $_POST['dateTo'];
 
-    $sql = "select sum(fr.fr_amount) as amount, mn.mn_name from fee_receipt fr, master_name mn where fr_date>='$dateFrom' and fr.fr_date<='$dateTo' and mn.mn_id=fr.fee_mode and fr_status='0' group by fr.fee_mode order by fr.fee_mode";
+    $sql = "select sum(fr.fr_amount) as amount, mn.mn_name from fee_receipt fr, master_name mn where fr_date>='$dateFrom' and fr.fr_date<='$dateTo' and mn.mn_id=fr.fee_mode and fr_status='0' and fr.fr_id NOT IN (select fr_id from fee_reverse) group by fr.fee_mode order by fr.fee_mode";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     else {
@@ -154,8 +154,8 @@ if (isset($_POST['action'])) {
     $fee_mode = $_POST['mode'];
 
     // echo "$fee_mode";
-    if ($fee_mode == 'ALL') $sql = "select fr.*, mn.mn_name from fee_receipt fr, master_name mn where fr.fr_date>='$dateFrom' and fr.fr_date<='$dateTo' and mn.mn_id=fr.fee_type and fr.fr_status='0' order by fr.fr_id";
-    else $sql = "select fr.*, mn.mn_name from fee_receipt fr, master_name mn where fr.fr_date>='$dateFrom' and fr.fr_date<='$dateTo' and fr.fee_mode='$fee_mode' and mn.mn_id=fr.fee_type and fr.fr_status='0' order by fr.fr_id";
+    if ($fee_mode == 'ALL') $sql = "select fr.*, mn.mn_name from fee_receipt fr, master_name mn where fr.fr_date>='$dateFrom' and fr.fr_date<='$dateTo' and mn.mn_id=fr.fee_type and fr.fr_status='0' and fr.fr_id NOT IN (select fr_id from fee_reverse) order by fr.fr_id";
+    else $sql = "select fr.*, mn.mn_name from fee_receipt fr, master_name mn where fr.fr_date>='$dateFrom' and fr.fr_date<='$dateTo' and fr.fee_mode='$fee_mode' and mn.mn_id=fr.fee_type and fr.fr_status='0' and fr.fr_id NOT IN (select fr_id from fee_reverse) order by fr.fr_id";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     else {
@@ -183,9 +183,22 @@ if (isset($_POST['action'])) {
     $student_id = $_POST['id'];
     $ft = $_POST['feeType'];
     $sem = $_POST['sem'];
+    // $concession = $_POST['fcAmount'];
     $fee = $_POST['feeAmount'];
+
+    $program_id=getField($conn, $student_id, "student", "student_id", "program_id");
+    $batch_id=getField($conn, $student_id, "student", "student_id", "batch_id");
+    $fcg=getField($conn, $student_id, "student", "student_id", "student_fee_category");
+    $sql = "select mn_id from master_name where mn_abbri='$fcg' and mn_code='fcg' and mn_status='0'";
+    $fee_category = getFieldValue($conn, "mn_id", $sql);
+    $sql = "select * from fee_schedule where batch_id='$batch_id' and program_id='$program_id' and fee_category='$fee_category' and fee_type='$ft'";
+    $result = $conn->query($sql);
+    $rows = $result->fetch_assoc();
+    $fee_amount = $rows["fsch_amount"];
+    $concession=$fee_amount-$fee;
+
     if ($myId > 0) {
-      $sql = "insert into fee_concession (student_id, fee_type, fee_semester, fc_amount, update_id, fc_status) values ('$student_id', '$ft', '$sem', '$fee', '$myId', '0')";
+      $sql = "insert into fee_concession (student_id, fee_type, fee_semester, fc_dues, fc_amount, update_id, fc_status) values ('$student_id', '$ft', '$sem', '$fee', '$concession', '$myId', '0')";
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
       else echo "Concession Successfully Added";
@@ -202,6 +215,7 @@ if (isset($_POST['action'])) {
         $subArray["mn_name"] = $rowsFee["mn_name"];
         $subArray["user_id"] = getField($conn, $rowsFee["update_id"], "staff", "staff_id", "user_id");
         $subArray["fee_semester"] = $rowsFee["fee_semester"];
+        $subArray["fc_dues"] = $rowsFee["fc_dues"];
         $subArray["fc_amount"] = $rowsFee["fc_amount"];
         $json_array[] = $subArray;
       }
@@ -221,27 +235,25 @@ if (isset($_POST['action'])) {
     $json_array = array();
     $subArray = array();
 
-    $sql = "select * from fee_schedule where batch_id='$batch_id' and program_id='$program_id' and fee_category='$fee_category'";
+    $sql = "select fc.* from fee_concession fc where fc.student_id='$student_id' and fc.fc_status='0'";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     else {
       while ($rowsFee = $result->fetch_assoc()) {
-        $subArray["fr_id"] = $rowsFee["fsch_id"];
-        $subArray["fr_amount"] = $rowsFee["fsch_amount"];
-        $subArray["frev_desc"] = getField($conn, $fee_category, "master_name", "mn_id", "mn_name");
+        $subArray["fr_id"] = "--";
+        $subArray["fr_amount"] = $rowsFee["fc_dues"];
+        $subArray["frev_desc"] = $rowsFee["fc_amount"];
         $subArray["user_id"] = getField($conn, $rowsFee["update_id"], "staff", "staff_id", "user_id");
         $subArray["update_ts"] = $rowsFee["update_ts"];
         $json_array[] = $subArray;
       }
     }
 
-
     $sql = "select fr.*, frev.*, mn.mn_name from fee_receipt fr, fee_reverse frev, master_name mn where fr.student_id='$student_id' and mn.mn_id=fr.fee_type and fr.fr_id=frev.fr_id and fr.fr_status='0' order by fr.fee_semester";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     else {
       while ($rowsFee = $result->fetch_assoc()) {
-        $subArray["fr_id"] = $fee_category;
         $subArray["fr_id"] = $rowsFee["fr_id"];
         $subArray["fr_amount"] = $rowsFee["fr_amount"];
         $subArray["frev_desc"] = $rowsFee["frev_desc"];

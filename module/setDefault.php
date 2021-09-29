@@ -91,10 +91,3 @@
 		</div>
 	</div>
 </div>
-<div class="col-md-2 p-0">
-	<div class="card mb-2">
-		<div class="card-body m-0 p-1 text-center" style="background-color:azure">
-			<a href="admission/" class="btn btn-xs">Manage Student</a>
-		</div>
-	</div>
-</div>

@@ -807,7 +807,7 @@ $phpFile = "admissionSql.php";
       $.post("<?php echo $phpFile; ?>", formData, () => {}, "text").done(function(data) {
         $.alert(data);
         studentList()
-      }, "text").fail(function() {
+      }).fail(function() {
         $.alert("fail in place of error");
       })
       $('#firstModal').modal('hide');

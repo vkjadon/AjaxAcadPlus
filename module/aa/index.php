@@ -60,25 +60,25 @@ require('../requireSubModule.php');
                     <div class="row">
                       <div class="col">
                         <div class="form-group">
-                          <input type="radio" checked class="respName" id="school" name="respName" value="school">
-                          Inst. Head
+                          <input type="radio" checked class="respName" id="sch" name="respName" value="sch">
+                          Inst. Head(sch)
                         </div>
                       </div>
                       <div class="col">
                         <div class="form-group">
-                          <input type="radio" class="respName" id="department" name="respName" value="department">
-                          Dept. Head
+                          <input type="radio" class="respName" id="dept" name="respName" value="dept">
+                          Dept. Head(dept)
                         </div>
                       </div>
                       <div class="col">
                         <div class="form-group">
-                          <input type="radio" class="respName" id="program" name="respName" value="program">
-                          Prog. Head
+                          <input type="radio" class="respName" id="ph" name="respName" value="ph">
+                          Prog. Head(ph)
                         </div>
                       </div>
                       <div class="col">
                         <div class="form-group">
-                          <input type="radio" class="respName" id="class" name="respName" value="class">
+                          <input type="radio" class="respName" id="cl" name="respName" value="cl">
                           Class InCharge
                         </div>
                       </div>
@@ -87,24 +87,24 @@ require('../requireSubModule.php');
                       <div class="col">
                         <div class="form-group">
                           <input type="radio" class="respName" id="cash" name="respName" value="cash">
-                          Cashier
+                          Cashier (cash)
                         </div>
                       </div>
                       <div class="col">
                         <div class="form-group">
-                          <input type="radio" class="respName" id="counsellor" name="respName" value="counsellor">
-                          Admission Counsellor
+                          <input type="radio" class="respName" id="ac" name="respName" value="ac">
+                          Admission Counsellor (ac)
                         </div>
                       </div>
                       <div class="col">
                         <div class="form-group">
-                          <input type="radio" class="respName" id="teleCounsellor" name="respName" value="teleCounsellor">
+                          <input type="radio" class="respName" id="tc" name="respName" value="tc">
                           Tele Counsellor
                         </div>
                       </div>
                       <div class="col">
                         <div class="form-group">
-                          <input type="radio" class="respName" id="admsAdvisor" name="respName" value="admsAdvisor">
+                          <input type="radio" class="respName" id="aa" name="respName" value="aa">
                           Admission Advisor
                         </div>
                       </div>
@@ -159,7 +159,7 @@ require('../requireSubModule.php');
                   </div>
                 </div>
                 <div class="col-5 mt-1 mb-1">
-                  <p id="resourcePersonList"></p>
+                  <p id="responsibilityList"></p>
                 </div>
               </div>
             </div>
@@ -356,7 +356,7 @@ require('../requireSubModule.php');
     $(".selectLabel").text("School");
     batchList();
     masterNameList();
-    selectList("school");
+    selectList("sch");
     batchSession(<?php echo $myBatch; ?>)
     //Auto Search Block
     $('#staffSearch').keyup(function() {
@@ -405,46 +405,12 @@ require('../requireSubModule.php');
       }, function() {}, "text").done(function(data, status) {
         // respNameList();
         selectList(respName);
+        respList()
         //$.alert("List " + data);
       }).fail(function() {
         $.alert("fail in place of error");
       })
     });
-
-    $(document).on('click', '.headName', function(event) {
-      var headName = $("input[name='headName']:checked").val();
-      // $.alert(" Pressed" + headName);
-      $.post("aaSql.php", {
-        headName: headName,
-        action: "masterList"
-      }, function() {}, "text").done(function(data, status) {
-        masterNameList();
-        //$.alert("List " + data);
-      }).fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
-    $(document).on('click', '.nrSubmit', function(event) {
-      var headName = $("input[name='headName']:checked").val();
-      var name = $("#name").val();
-      var abbri = $("#abbri").val();
-      var remarks = $("#remarks").val();
-      // $.alert(" Pressed" + headName + name + remarks);
-      $.post("aaSql.php", {
-        name: name,
-        abbri: abbri,
-        remarks: remarks,
-        headName: headName,
-        action: "headName"
-      }, function(data, status) {}, "text").done(function(data) {
-        $.alert(data);
-        masterNameList();
-      }).fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
     $(document).on('click', '.respSubmit', function(event) {
       var respName = $("input[name='respName']:checked").val();
       var staffId = $("#staffId").val();
@@ -469,7 +435,67 @@ require('../requireSubModule.php');
         $.alert("fail in place of error");
       })
     });
+    function respList() {
+      var respName = $("input[name='respName']:checked").val();
+      $.alert(" Pressed" + respName);
 
+      $.post("aaSql.php", {
+        respName: respName,
+        action: "respList"
+      }, function() {}, "text").done(function(data, status) {
+        $("#responsibilityList").html(data);
+        //$.alert("Updated");
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+    }
+    $(document).on('click', '.headName', function(event) {
+      var headName = $("input[name='headName']:checked").val();
+      // $.alert(" Pressed" + headName);
+      $.post("aaSql.php", {
+        headName: headName,
+        action: "masterList"
+      }, function() {}, "text").done(function(data, status) {
+        masterNameList();
+        //$.alert("List " + data);
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+    
+    $(document).on('click', '.nrSubmit', function(event) {
+      var headName = $("input[name='headName']:checked").val();
+      var name = $("#name").val();
+      var abbri = $("#abbri").val();
+      var remarks = $("#remarks").val();
+      // $.alert(" Pressed" + headName + name + remarks);
+      $.post("aaSql.php", {
+        name: name,
+        abbri: abbri,
+        remarks: remarks,
+        headName: headName,
+        action: "headName"
+      }, function(data, status) {}, "text").done(function(data) {
+        $.alert(data);
+        masterNameList();
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+    function masterNameList() {
+      var headName = $("input[name='headName']:checked").val();
+      //$.alert("Master Name " + headName);
+
+      $.post("aaSql.php", {
+        headName: headName,
+        action: "masterNameList"
+      }, function() {}, "text").done(function(data, status) {
+        $("#masterNameList").html(data);
+        //$.alert("Updated");
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+    }
     $(document).on('submit', '#modalForm', function(event) {
       event.preventDefault(this);
       var action = $("#action").val();
@@ -656,21 +682,6 @@ require('../requireSubModule.php');
         //$.alert("List " + mydata);
         $("#batchShowList").html(mydata);
       }, "text").fail(function() {
-        $.alert("Error !!");
-      })
-    }
-
-    function masterNameList() {
-      var headName = $("input[name='headName']:checked").val();
-      //$.alert("Master Name " + headName);
-
-      $.post("aaSql.php", {
-        headName: headName,
-        action: "masterNameList"
-      }, function() {}, "text").done(function(data, status) {
-        $("#masterNameList").html(data);
-        //$.alert("Updated");
-      }).fail(function() {
         $.alert("Error !!");
       })
     }

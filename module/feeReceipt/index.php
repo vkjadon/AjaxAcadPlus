@@ -21,8 +21,8 @@ $phpFile = "feeReceiptSql.php";
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active fr" id="list-fr-list" data-toggle="list" href="#list-fr" role="tab" aria-controls="fr">Fee Receipt</a>
           <a class="list-group-item list-group-item-action trans" id="list-trans-list" data-toggle="list" href="#list-trans" role="tab" aria-controls="trans">Transactions Details</a>
-          <a class="list-group-item list-group-item-action feeConcession" id="list-feeConcession-list" data-toggle="list" href="#feeConcession" role="tab" aria-controls="trans">Fee Concession</a>
-
+          <a class="list-group-item list-group-item-action feeConcession" id="list-feeConcession-list" data-toggle="list" href="#feeConcession" role="tab" aria-controls="trans">Dues/Concession</a>
+          <a class="list-group-item list-group-item-action reverse" data-toggle="list" href="#reverse" role="tab" aria-controls="trans">Reverse Entry</a>
         </div>
       </div>
       <div class="col-10 leftLinkBody">
@@ -103,13 +103,10 @@ $phpFile = "feeReceiptSql.php";
                       <a class="nav-link active" id="pills_tablePersonalInfo" data-toggle="pill" href="#pills_personalInfo" role="tab" aria-controls="pills_personalInfo" aria-selected="true">Fee Transaction</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" data-toggle="pill" href="#feeRecord" role="tab" aria-controls="feeRecord" aria-selected="true">Fee Record</a>
+                      <a class="nav-link feeRecord" data-toggle="pill" href="#feeRecord" role="tab" aria-controls="feeRecord" aria-selected="true">Fee Record</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link" data-toggle="pill" href="#feeReceipt" role="tab" aria-controls="feeReceipt" aria-selected="true">Fee Receipt</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" data-toggle="pill" href="#reverse" role="tab" aria-controls="reverse" aria-selected="true">Reverse Entry</a>
                     </li>
                   </ul>
                   <div class="tab-content" id="pills-tabContent p-3">
@@ -207,6 +204,17 @@ $phpFile = "feeReceiptSql.php";
                             <th class="text-center">Date</th>
                             <th class="text-center"><i class="fa fa-eye"></i></th>
                           </table>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <h5>Total Debit <input type="text" id="totalDebit" disabled></h5>
+                        </div>
+                        <div class="col-md-4">
+                          <h5>Total Credit <input type="text" id="totalCredit" disabled></h5>
+                        </div>
+                        <div class="col-md-4">
+                          <h5>Total Balance <input type="text" id="totalBalance" disabled></h5>
                         </div>
                       </div>
                     </div>
@@ -328,41 +336,6 @@ $phpFile = "feeReceiptSql.php";
                         </div>
                       </div>
                     </div>
-                    <div class="tab-pane fade" id="reverse" role="tabpanel" aria-labelledby="reverse">
-                      <div class="row">
-                        <div class="col-12">
-                          <div class="row">
-                            <div class="col-3 pr-1">
-                              <div class="form-group">
-                                <label>Receipt No</label>
-                                <p id="frIdReverse"></p>
-                              </div>
-                            </div>
-                            <div class="col-3 pr-1 pl-1">
-                              <div class="form-group">
-                                <label>Student ID</label>
-                                <p id="receiptUserIdReverse"></p>
-                              </div>
-                            </div>
-                            <div class="col-3 pr-1">
-                              <div class="form-group">
-                                <label>Amount</label>
-                                <p id="receiptAmountReverse"></p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-12">
-                              <div class="form-group">
-                                <label>Reverse Description</label>
-                                <textarea class="form-control form-control-sm" id="fre_desc" name="fre_desc" rows="3" data-tag="fre_desc"></textarea>
-                              </div>
-                            </div>
-                          </div>
-                          <button class="btn btn-sm" id="reverseSubmit">Reverse Transaction</button>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -424,9 +397,9 @@ $phpFile = "feeReceiptSql.php";
                 </div>
               </div>
               <div class="col-md-2 pl-1">
-              <div class="container card mt-2 myCard">
-                <p class="transactionHead"></p>
-              </div>
+                <div class="container card mt-2 myCard">
+                  <p class="transactionHead"></p>
+                </div>
               </div>
 
             </div>
@@ -444,28 +417,76 @@ $phpFile = "feeReceiptSql.php";
                             <p id="feeTypeConcession"></p>
                           </div>
                         </div>
-                        <div class="col-3 pl-1 pr-0">
+                        <div class="col-1 pl-1 pr-0">
                           <div class="form-group">
-                            <label>Semester</label>
+                            <label>Sem</label>
                             <input type="number" class="form-control form-control-sm" id="semesterConcession" min="1" name="semester" placeholder="Semester" value="1">
                           </div>
                         </div>
-                        <div class="col-3 pr-1 pr-0">
+                        <div class="col-2 pl-1 pr-0">
                           <div class="form-group">
-                            <label>Amount</label>
-                            <input type="number" class="form-control form-control-sm" id="feeAmountConcession" name="feeAmount" placeholder="" data-tag="fr_amount">
+                            <label>Fee Amount</label>
+                            <input type="number" class="form-control form-control-sm" id="feeAmountConcession" name="feeAmount" min="0" placeholder="Fee Dues">
                           </div>
                         </div>
-                        <div class="col-3 pr-1">
-                          <button class="btn btn-sm mt-4" id="proposeFeeConcession">Propose Concession</button>
+                        <div class="col-2 pl-1 pr-0">
+                          <div class="form-group">
+                            <label>Concession</label>
+                            <input type="number" class="form-control form-control-sm" id="fcAmount" name="fcAmount" min="0" placeholder="Concession">
+                          </div>
+                        </div>
+                        <div class="col-3 pl-1 pr-1">
+                          <button class="btn btn-sm mt-4" id="proposeFeeConcession">Dues/Concession</button>
                         </div>
                       </div>
                       <table class="table table-bordered table-striped list-table-xs mt-3" id="feeConcessionList">
                         <th class="text-center">Fee Type</th>
                         <th class="text-center">Semester</th>
-                        <th class="text-center">Amount</th>
+                        <th class="text-center">Fee Dues</th>
+                        <th class="text-center">Concession</th>
                         <th class="text-center">StaffId</th>
                       </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="reverse" role="tabpanel" aria-labelledby="reverse">
+            <div class="row">
+              <div class="col-10">
+                <div class="container card mt-2 myCard">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="row">
+                        <div class="col-3 pr-1">
+                          <div class="form-group">
+                            <label>Receipt No</label>
+                            <p id="frIdReverse"></p>
+                          </div>
+                        </div>
+                        <div class="col-3 pr-1 pl-1">
+                          <div class="form-group">
+                            <label>Student ID</label>
+                            <p id="receiptUserIdReverse"></p>
+                          </div>
+                        </div>
+                        <div class="col-3 pr-1">
+                          <div class="form-group">
+                            <label>Amount</label>
+                            <p id="receiptAmountReverse"></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="form-group">
+                            <label>Reverse Description</label>
+                            <textarea class="form-control form-control-sm" id="fre_desc" name="fre_desc" rows="3" data-tag="fre_desc"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                      <button class="btn btn-sm" id="reverseSubmit">Reverse Transaction</button>
                     </div>
                   </div>
                 </div>
@@ -537,6 +558,10 @@ $phpFile = "feeReceiptSql.php";
       }, "text").fail(function() {
         $.alert("fail in place of error");
       })
+    });
+
+    $(document).on('click', '.feeRecord', function(event) {
+      feeBalance();
     });
 
     $(document).on('click', '.autoList', function() {
@@ -629,10 +654,10 @@ $phpFile = "feeReceiptSql.php";
         // console.log(data);
         var card = '';
         $.each(data, function(key, value) {
-          card+= '<div class="container card mt-2 myCard">'
+          card += '<div class="container card mt-2 myCard">'
           card += '<h5 class="text-center">' + value.mode + '</h5>';
           card += '<h6 class="p-1">' + value.amount + '/-</h6>';
-          card+= '</div>'
+          card += '</div>'
 
         });
 
@@ -649,18 +674,19 @@ $phpFile = "feeReceiptSql.php";
         var feeType = $("#sel_ftConcession").val();
         var sem = $("#semesterConcession").val();
         var feeAmount = $("#feeAmountConcession").val();
-        // $.alert(" Sem " + sem + " Fee Type " + feeType + " Fee Amount " + feeAmount);
+        // var fcAmount = $("#fcAmount").val();
+        $.alert(" Sem " + sem + " Fee Type " + feeType + " Fee Amount " + feeAmount);
         $.post("feeReceiptSql.php", {
           id: studentId,
           feeType: feeType,
           sem: sem,
           feeAmount: feeAmount,
+          // fcAmount: fcAmount,
           action: "proposeConcession"
         }, function(data) {
           $.alert(data);
           feeConcessionList()
-          // feeReceiptList();
-        }, "text").fail(function() {
+        }).fail(function() {
           $.alert("fail in place of error");
         })
       } else $.alert("Student not Selected !!");
@@ -678,8 +704,9 @@ $phpFile = "feeReceiptSql.php";
         var card = '';
         $.each(data, function(key, value) {
           card += '<tr>';
-          card += '<td class="text-center">' + value.mn_name + '</td>';
+          card += '<td>' + value.mn_name + '</td>';
           card += '<td class="text-center">' + value.fee_semester + '</td>';
+          card += '<td class="text-center">' + value.fc_dues + '</td>';
           card += '<td class="text-center">' + value.fc_amount + '</td>';
           card += '<td class="text-center">' + value.user_id + '</td>';
           card += '</tr>';
@@ -771,7 +798,9 @@ $phpFile = "feeReceiptSql.php";
         // $.alert(data);
         // console.log(data);
         var card = '';
+        var totalCredit = 0;
         $.each(data, function(key, value) {
+          totalCredit = parseInt(totalCredit) + parseInt(value.fr_amount)
           if (value.frev_id > 0) card += '<tr style="color:red">';
           else card += '<tr>';
           card += '<td class="text-center">' + value.fr_id + '</td>';
@@ -787,6 +816,7 @@ $phpFile = "feeReceiptSql.php";
         });
         $("#feeReceiptList").find("tr:gt(0)").remove();
         $("#feeReceiptList").append(card);
+        $("#totalCredit").val(totalCredit);
 
       }).fail(function() {
         $.alert("Error !!");
@@ -804,7 +834,9 @@ $phpFile = "feeReceiptSql.php";
         // $.alert(data);
         // console.log(data);
         var card = '';
+        var totalDebit = 0;
         $.each(data, function(key, value) {
+          totalDebit = parseInt(totalDebit) + parseInt(value.fr_amount)
           card += '<tr>';
           card += '<td class="text-center">' + value.fr_id + '</td>';
           card += '<td class="text-center">' + value.fr_amount + '</td>';
@@ -816,13 +848,21 @@ $phpFile = "feeReceiptSql.php";
         });
         $("#feeDebitList").find("tr:gt(0)").remove();
         $("#feeDebitList").append(card);
+        $("#totalDebit").val(totalDebit);
 
       }).fail(function() {
-        $.alert("Error !!");
+        $.alert("Error in Debit List!!");
       })
 
     }
 
+    function feeBalance() {
+      var credit = $("#totalCredit").val();
+      var debit = $("#totalDebit").val();
+      var balance = parseInt(debit) - parseInt(credit);
+      $("#totalBalance").val(balance);
+      // $.alert(credit + "Debit" + debit + "Bal" + balance)
+    }
     $(document).on('click', '#reverseSubmit', function(event) {
       var fr_sno = $("#frId").val();
       var frev_desc = $("#fre_desc").val();
@@ -924,6 +964,7 @@ $phpFile = "feeReceiptSql.php";
         list += '</select>';
         var listConcession = '';
         listConcession += '<select class="form-control form-control-sm" name="sel_ft" id="sel_ftConcession" required>';
+        listConcession += '<option>Select Fee Type</option>';
         $.each(data, function(key, value) {
           listConcession += '<option value=' + value.mn_id + '>' + value.mn_name + '</option>';
         });

@@ -200,12 +200,24 @@ if (isset($_POST['action'])) {
     echo '</div>';
   } elseif ($_POST['action'] == 'selectList') {
     $tag = $_POST['tag'];
-    if ($tag == 'school') $sql = "select * from school where school_status='0' order by school_name";
-    elseif ($tag == 'dept') $sql = "select * from department where dept_status='0' order by dept_name";
-    elseif ($tag == 'program') $sql = "select * from program where program_status='0' order by program_name";
-    elseif ($tag == 'class') $sql = "select * from class where class_status='0' and session_id='$mySes' order by class_name";
-    $idField = $tag . '_id';
-    $nameField = $tag . '_name';
+    if ($tag == 'sch') {
+      $sql = "select * from school where school_status='0' order by school_name";
+      $tableTag='school';
+    }elseif ($tag == 'dept') {
+      $sql = "select * from department where dept_status='0' order by dept_name";
+      $tableTag='dept';
+    }elseif ($tag == 'ph') {
+      $sql = "select * from program where program_status='0' order by program_name";
+      $tableTag='program';
+    } elseif ($tag == 'cl') {
+      $sql = "select * from class where class_status='0' and session_id='$mySes' order by class_name";
+      $tableTag='class';
+    }else {
+      $sql = "select * from school where school_status='0' order by school_name";
+      $tableTag='school';
+    }
+    $idField = $tableTag . '_id';
+    $nameField = $tableTag . '_name';
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     echo '<select class="form-control form-control-sm" id="selectId" name="selectId" required>';
@@ -213,10 +225,11 @@ if (isset($_POST['action'])) {
     while ($rowsArray = $result->fetch_assoc()) {
       $id = $rowsArray[$idField];
       $name = $rowsArray[$nameField];
-      if ($tag == 'program') echo '<option value="' . $id . '">' . $rowsArray["program_abbri"] . '(' . $rowsArray["sp_name"] . ')</option>';
-      elseif ($tag == 'class') echo '<option value="' . $id . '">' . $rowsArray["class_name"] . '(' . $rowsArray["class_section"] . ')</option>';
+      if ($tableTag == 'program') echo '<option value="' . $id . '">' . $rowsArray["program_abbri"] . '(' . $rowsArray["sp_name"] . ')</option>';
+      elseif ($tableTag == 'class') echo '<option value="' . $id . '">' . $rowsArray["class_name"] . '(' . $rowsArray["class_section"] . ')</option>';
       else echo '<option value="' . $id . '">' . $name . '</option>';
     }
+    echo '<option value="0">ALL</option>';
     echo '</select>';
   } elseif ($_POST['action'] == "searchStaff") {
     $output = '';
@@ -236,5 +249,32 @@ if (isset($_POST['action'])) {
   } elseif ($_POST["action"] == "respName") {
     $sql = "insert into responsibility_staff (rs_code, staff_id, unit_id, rs_from_date, rs_to_date, rs_remarks, update_id, rs_status) values('" . $_POST["respName"] . "', '" . $_POST["staffId"] . "', '" . $_POST["selectId"] . "', '" . $_POST["respFrom"] . "', '" . $_POST["respTo"] . "', '" . $_POST["respRemarks"] . "', '$myId', '0')";
     $conn->query($sql);
-  }
+  }elseif ($_POST["action"] == "respList") {
+    //echo "MyId- $myProg - $myBatch";
+    $sql = "select * from responsibility_staff where rs_code='" . $_POST['respName'] . "'";
+    $result = $conn->query($sql);
+    echo '<div class="card myCard m-2">';
+
+    while ($row_mn = $result->fetch_assoc()) {
+      $rs_id = $row_mn["rs_id"];
+      $status = $row_mn["rs_status"];
+      echo '<div class="row m-2">';
+      echo '<div class="col-sm-2 p-0 pl-1">';
+      echo '<a href="#" class="po_idE" data-id="' . $rs_id . '"><i class="fa fa-edit"></i></a>';
+      echo ' [' . $rs_id . ']';
+      echo '</div>';
+      echo '<div class="col-sm-6">';
+      echo '<div class="cardBodyText"><b>' . getField($conn, $row_mn["staff_id"], "staff", "staff_id", "staff_name") . '</b></div>';
+      echo '</div>';
+      echo '<div class="col-sm-3">';
+      echo '<div class="cardBodyText"><b>' . $row_mn["rs_from_date"] . '</b></div>';
+      echo '</div>';
+      echo '<div class="col-sm-1">';
+      if ($status == "9") echo '<a href="#" class="float-right po_idR" data-id="' . $rs_id . '">Removed</a>';
+      else echo '<a href="#" class="float-right po_idD" data-id="' . $rs_id . '"><i class="fa fa-trash"></i></a>';
+      echo '</div>';
+      echo '</div>';
+    }
+    echo '</div>';
+  } 
 }

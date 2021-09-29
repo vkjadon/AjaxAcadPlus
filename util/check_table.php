@@ -133,9 +133,36 @@ function check_tn_feeConcession($conn, $table)
     fee_type int(3) null,
     fee_semester int(3) null,
     fc_amount varchar(6) null,
+    fc_dues varchar(6) null,
     update_ts timestamp default current_timestamp(),
     update_id INT(5) NULL,
     fc_status INT(1) NULL,
+    UNIQUE(student_id, fee_type, fee_semester)';
+
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+function check_tn_feeDues($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'fd_id INT(5) not null auto_increment,
+    student_id INT(3) null,
+    fee_type int(3) null,
+    fee_semester int(3) null,
+    fd_fee varchar(6) null,
+    fd_dues varchar(6) null,
+    fd_concession varchar(6) null,
+    update_ts timestamp default current_timestamp(),
+    update_id INT(5) NULL,
+    fc_status INT(1) NULL,
+    primary key(fd_id),
     UNIQUE(student_id, fee_type, fee_semester)';
 
     $sql = "CREATE TABLE $table ($query)";

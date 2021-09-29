@@ -53,7 +53,8 @@ function selectList($conn, $selectTitle, $data, $sql)
 function selectInput($conn, $selectTitle, $id, $name, $abbri, $idName, $sql)
 {
   //echo "Inst in function $tableName $id $name $where";
-
+  // $id - Field name - id
+  // $name - Field Name - name
   $result = $conn->query($sql);
   if ($result) {
     echo '<select class="form-control form-control-sm' . $name . '" name="' . $idName . '" id="' . $idName . '" required>';

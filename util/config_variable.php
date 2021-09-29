@@ -53,6 +53,7 @@ if (isset($mySes)) {
   check_tn_class($conn, "class");
 
   check_tn_feeConcession($conn, "fee_concession");
+  check_tn_feeDues($conn, "fee_dues");
   check_tn_feeReverse($conn, "fee_reverse");
   check_tn_feeStructure($conn, "fee_structure");
   check_tn_feeSchedule($conn, "fee_schedule");

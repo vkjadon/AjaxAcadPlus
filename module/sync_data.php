@@ -12,12 +12,12 @@ sync_data($conn, "department_ci", "class_incharge");
 function sync_data($conn, $tableX, $table)
 {
 	$curl = curl_init();
-	$url = 'https://instituteerp.net/acadplus/api/tableJson.php?table=' . $tableX;
+	$url = 'https://acadplus.in/acadplus/tableJson.php?table=' . $tableX;
 
 	curl_setopt($curl, CURLOPT_URL, $url);
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 	$output = curl_exec($curl);
-	//echo $output;
+	echo $output;
 	$output = json_decode($output, true);
 
 	$rowsX = count($output["data"]);
