@@ -1,8 +1,9 @@
 <?php
 session_start();
-$myFolder = 'clients/' . $_POST['instCode'].'/';
+$myFolder = 'clients/' . $_POST['instCode'] . '/';
 // Change Below
 $_SESSION["myFolder"] = $myFolder;
+
 if (isset($_POST['instCode'])) $_SESSION["myDb"] = $_POST['instCode'];
 $setCodePath = 'http://localhost/acadplus';
 $_SESSION["setCodePath"] = $setCodePath;
@@ -41,7 +42,7 @@ if ($_POST['action'] == 'checkUser') {
         $rows = $result->fetch_assoc();
 
         $_SESSION["setUrl"] = $rows["inst_url"];
-        $_SESSION["setLogo"] = 'https://erp.classconnect.in/'.$myFolder.$rows["inst_logo"];
+        $_SESSION["setLogo"] = 'https://erp.classconnect.in/' . $myFolder . $rows["inst_logo"];
 
         $sql = "select * from session where session_status='0' order by session_id desc";
         $result = $conn->query($sql);
@@ -70,16 +71,6 @@ if ($_POST['action'] == 'checkUser') {
     $jsonOutput = json_encode($response);
     echo $jsonOutput;
   }
-
-  /*$url = $setUrl . '/acadplus/api/check_user.php?u=' . $myUn . '&&p=' . $myPwd . '&&mf=' . $myFolder;
-  $curl = curl_init();
-  curl_setopt($curl, CURLOPT_URL, $url);
-  curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-  $output = curl_exec($curl);
-  $id = json_decode($output, true);
-  curl_close($curl);
-  echo $output;*/
-  //$id = json_decode($output, true);
 } elseif ($_POST['action'] == 'forgot') {
   $myUn = $_POST['username'];
   $sql_staff = "select * from staff where user_id='$myUn'";
@@ -112,11 +103,7 @@ if ($_POST['action'] == 'checkUser') {
     mail($staff_email, $subject, $message, $headers);
     echo "The password is sent to registered email [" . $staff_email . $password . "].";
   }
-} elseif ($_POST['action'] == 'setProgram') $_SESSION['mypid'] = $_POST['programId'];
-elseif ($_POST['action'] == 'setSession') $_SESSION['mysid'] = $_POST['sessionId'];
-elseif ($_POST['action'] == 'setSchool') $_SESSION['mysclid'] = $_POST['schoolId'];
-elseif ($_POST['action'] == 'setDept') $_SESSION['mydeptid'] = $_POST['deptId'];
-elseif ($_POST['action'] == 'setBatch') $_SESSION['myBatch'] = $_POST['batchId'];
+}
 function data_check($data)
 {
   $data = trim($data);

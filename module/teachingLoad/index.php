@@ -8,8 +8,6 @@ require('../../phpFunction/teachingLoadFunction.php');
 <head>
   <title>Outcome Based Education : ClassConnect</title>
   <?php require("../css.php"); ?>
-  <link rel="stylesheet" href="teachingLoad.css">
-
 </head>
 
 <body>
@@ -26,7 +24,7 @@ require('../../phpFunction/teachingLoadFunction.php');
           <a class="list-group-item list-group-item-action tl" id="list-tl-list" data-toggle="list" href="#list-tl" role="tab" aria-controls="tl"> Assign Load </a>
         </div>
         <?php
-        $sql = "select * from class where session_id='$mySes' and program_id='$myProg' order by class_semester";
+        $sql = "select * from class where session_id='$mySes' and dept_id='$myDept' order by program_id, class_semester";
         selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
         ?>
       </div>
@@ -58,7 +56,7 @@ require('../../phpFunction/teachingLoadFunction.php');
               <div class="container card myCard" id="card_tl">
                 <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab">
                   <?php
-                  $sql = "select * from class where session_id='$mySes' and program_id='$myProg' and class_status='0' order by class_semester";
+                  $sql = "select * from class where session_id='$mySes' and dept_id='$myDept' and class_status='0' order by program_id, class_semester";
                   $result = $conn->query($sql);
                   $count = 0;
                   while ($rowsClass = $result->fetch_assoc()) {
@@ -67,7 +65,7 @@ require('../../phpFunction/teachingLoadFunction.php');
                     if ($count == '0') $active = 'active';
                     else $active = '';
                     echo '<li class="nav-item">
-                    <a class="nav-link ' . $active . '" data-toggle="pill" href="#p' . $class_name[$count] . '">' . $class_name[$count] . '</a></li>';
+                    <a class="nav-link ' . $active . '" data-toggle="pill" href="#p' . $class_id[$count] . '">' . $class_name[$count] . '</a></li>';
                     $count++;
                   }
                   ?>
@@ -80,7 +78,8 @@ require('../../phpFunction/teachingLoadFunction.php');
                   for ($i = 0; $i < $count; $i++) {
                     if ($i == '0') $active = 'show active';
                     else $active = '';
-                    echo '<div class="tab-pane fade ' . $active . '" id="p' . $class_name[$i] . '">';
+                    echo '<div class="tab-pane fade ' . $active . '" id="p' . $class_id[$i] . '">';
+                    // echo $class_id[$i];
                     sessionLoad($conn, $class_id[$i], $tn_tlg);
                     echo '</div>';
                   }
@@ -306,6 +305,8 @@ require('../../phpFunction/teachingLoadFunction.php');
         $('#class_name').val(data.class_name);
         $('#class_section').val(data.class_section);
         $('#class_semester').val(data.class_semester);
+        $('#sel_newProg').val(data.program_id);
+        $('#sel_newBatch').val(data.batch_id);
 
         var class_shift = data.class_shift;
         if (class_shift == 'Morning') {
@@ -550,30 +551,58 @@ require('../../phpFunction/teachingLoadFunction.php');
         <div class="modal-body">
           <div class="classForm">
             <div class="row">
-              <div class="col-6">
+              <div class="col-6 pr-0">
                 <div class="form-group">
                   Class Name
                   <input type="text" class="form-control form-control-sm" id="class_name" name="class_name" placeholder="Class Name">
                 </div>
               </div>
-              <div class="col-3">
+              <div class="col-2 pl-1 pr-0">
                 <div class="form-group">
                   Semester
                   <input type="number" class="form-control form-control-sm" id="class_semester" name="class_semester" placeholder="semester">
                 </div>
               </div>
-              <div class="col-3">
+              <div class="col-2 pl-1 pr-0">
                 <div class="form-group">
                   Section
                   <input type="text" class="form-control form-control-sm" id="class_section" name="class_section" placeholder="Section">
                 </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-3">
+              <div class="col-2 pl-1">
                 <div class="form-group">
                   Group
                   <input type="number" class="form-control form-control-sm" id="class_group" name="class_group" value="1" placeholder="Group">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4 pr-0">
+                <div class="form-group">
+                  Program
+                  <select class="form-control form-control-sm" name="sel_newProg" id="sel_newProg">
+                    <?php
+                    $sql = "select p.* from program p, dept_program dp where dp.dept_id='$myDept' and dp.program_id=p.program_id and p.program_status='0' order by p.sp_name";
+                    $result = $conn->query($sql);
+                    while ($progRows = $result->fetch_assoc()) {
+                      echo '<option value="' . $progRows["program_id"] . '">' . $progRows["sp_abbri"] . '</option>';
+                    }
+                    ?>
+                  </select>
+                </div>
+              </div>
+              <div class="col-2 pl-1 pr-0">
+                <div class="form-group">
+                  Batch
+                  <select class="form-control form-control-sm" name="sel_newBatch" id="sel_newBatch">
+                    <?php
+                    $sql = "select * from batch where batch_status='0' order by batch desc";
+                    $result_batch = $conn->query($sql);
+                    while ($batchRows = $result_batch->fetch_assoc()) {
+                      echo '<option value="' . $batchRows["batch_id"] . '">' . $batchRows["batch"] . '</option>';
+                    }
+                    ?>
+                  </select>
                 </div>
               </div>
               <div class="col">
@@ -592,7 +621,7 @@ require('../../phpFunction/teachingLoadFunction.php');
               <div class="col">
                 <?php
                 $sql = "select * from department where dept_status='0' and dept_type='0' order by dept_abbri";
-                selectList($conn, "", array("2", "dept_id", "dept_abbri", "dept_id", "sel_dept"), $sql);
+                selectList($conn, "Sel Department", array("0", "dept_id", "dept_abbri", "dept_id", "sel_dept"), $sql);
                 ?>
               </div>
             </div>

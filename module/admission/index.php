@@ -22,6 +22,7 @@ $phpFile = "admissionSql.php";
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <?php
           if (in_array("13", $myLinks)) echo '<a class="list-group-item list-group-item-action as" id="list-as-list" data-toggle="list" href="#list-as" role="tab" aria-controls="as"> Update Student </a>';
+          if (in_array("13", $myLinks)) echo '<a class="list-group-item list-group-item-action" data-toggle="list" href="#list-qual" role="tab" aria-controls="qual">Qualification Report</a>';
           if (in_array("14", $myLinks)) echo '<a class="list-group-item list-group-item-action ss" id="list-ss-list" data-toggle="list" href="#list-ss" role="tab" aria-controls="ss">Student Status</a>';
           if (in_array("15", $myLinks)) echo '<a class="list-group-item list-group-item-action sr" id="list-sr-list" data-toggle="list" href="#list-sr" role="tab" aria-controls="sr">Student Report</a>';
           if (in_array("16", $myLinks)) echo '<a class="list-group-item list-group-item-action ssr" id="list-ssr-list" data-toggle="list" href="#list-ssr" role="tab" aria-controls="ssr">Student Strength</a>';
@@ -122,6 +123,9 @@ $phpFile = "admissionSql.php";
                       </div>
                       <div class="col-md-3 pl-1">
                         <a class="fa fa-trash xlText float-right" id="dropStudent"></a>
+                      </div>
+                      <div class="col-md-2 pl-1">
+                        <a class="fa fa-refresh xlText float-right" style="color: yellowgreen;" id="resetStudent"></a>
                       </div>
                     </div>
                   </div>
@@ -235,6 +239,14 @@ $phpFile = "admissionSql.php";
                                       <td><span class="largeText">Academic Year </span></td>
                                       <td class="largeText ayName">---</td>
                                     </tr>
+                                    <tr>
+                                      <td><span class="largeText"> Current Status </span></td>
+                                      <td class="warning"><h4><span id="status">---</span></h4></td>
+                                    </tr>
+                                    <tr>
+                                      <td width="60%"><span class="largeText"> Id </span></td>
+                                      <td class="largeText homeId">---</td>
+                                    </tr>
                                   </table>
 
                                 </div>
@@ -275,7 +287,6 @@ $phpFile = "admissionSql.php";
                                 <input type="number" class="form-control form-control-sm studentUpdateForm" id="stdSemester" min="1" name="stdSemester" placeholder="Admission Semester" data-tag="student_semester">
                               </div>
                             </div>
-
                           </div>
                           <div class="row">
                             <div class="col-4 pr-1">
@@ -290,28 +301,21 @@ $phpFile = "admissionSql.php";
                                 <input type="date" class="form-control form-control-sm studentUpdateForm" id="Dob" name="Dob" placeholder="Date of Birth" data-tag="student_dob">
                               </div>
                             </div>
-                            <div class="col-3 pl-1 pr-0">
+                            <div class="col-3 pr-1 pl-1">
                               <div class="form-group">
-                                <label>WhatsApp Number</label>
-                                <input type="text" class="form-control form-control-sm studentUpdateForm" id="stdWaMobile" name="stdWaMobile" placeholder="Whats App Number" data-tag="student_whatsapp">
+                                <label>Registration Date</label>
+                                <input type="date" class="form-control form-control-sm studentUpdateForm" id="stdAdmission" name="stdAdmission" data-tag="student_admission" value="<?php echo $submit_date; ?>">
                               </div>
                             </div>
-                            <div class="col-2 pr-1">
-                              <label>LEET</label>
-                              <div class="row">
-                                <div class="col">
-                                  <div class="form-check-inline">
-                                    <input type="radio" class="form-check-input studentUpdateForm" checked id="yes_leet" name="sLeet" value="1" data-tag="student_lateral">Yes
-                                  </div>
-                                  <div class="form-check-inline">
-                                    <input type="radio" class="form-check-input studentUpdateForm" id="no_leet" name="sLeet" value="0" data-tag="student_lateral">No
-                                  </div>
-                                </div>
+                            <div class="col-2 pl-1">
+                              <div class="form-group">
+                                <label>WhatsApp</label>
+                                <input type="text" class="form-control form-control-sm studentUpdateForm" id="stdWaMobile" name="stdWaMobile" placeholder="Whats App Number" data-tag="student_whatsapp">
                               </div>
                             </div>
                           </div>
                           <div class="row">
-                            <div class="col-4 pr-1">
+                            <div class="col-3 pr-1">
                               <label>Gender</label>
                               <div class="row">
                                 <div class="col">
@@ -324,7 +328,92 @@ $phpFile = "admissionSql.php";
                                 </div>
                               </div>
                             </div>
-                            <div class="col-4 pr-1 pl-1">
+                            <div class="col-2 pr-1 pl-1">
+                              <label>Scholarship</label>
+                              <div class="row">
+                                <div class="col">
+                                  <div class="form-check-inline">
+                                    <input type="radio" class="form-check-input studentUpdateForm" id="yes_scholarship" name="scholarship" value="1" data-tag="student_scholarship">Yes
+                                  </div>
+                                  <div class="form-check-inline">
+                                    <input type="radio" class="form-check-input studentUpdateForm" checked id="no_scholarship" name="scholarship" value="0" data-tag="student_scholarship">No
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-2 pr-1 pl-1">
+                              <label>LEET</label>
+                              <div class="row">
+                                <div class="col">
+                                  <div class="form-check-inline">
+                                    <input type="radio" class="form-check-input studentUpdateForm" checked id="yes_leet" name="sLeet" value="1" data-tag="student_lateral">Yes
+                                  </div>
+                                  <div class="form-check-inline">
+                                    <input type="radio" class="form-check-input studentUpdateForm" id="no_leet" name="sLeet" value="0" data-tag="student_lateral">No
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-3 pr-1 pl-1">
+                              <label>Regular</label>
+                              <div class="row">
+                                <div class="col">
+                                  <div class="form-check-inline">
+                                    <input type="radio" class="form-check-input studentUpdateForm" checked id="yes_regular" name="sRegular" value="1" data-tag="student_regular">Yes
+                                  </div>
+                                  <div class="form-check-inline">
+                                    <input type="radio" class="form-check-input studentUpdateForm" id="no_regular" name="sRegular" value="0" data-tag="student_regular">No
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-2 pr-1">
+                              <div class="form-group">
+                                <label>Adhaar</label>
+                                <input type="text" class="form-control form-control-sm studentUpdateForm" id="stdAdhaar" name="stdAdhaar" placeholder="Adhaar Number" data-tag="student_adhaar">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-2 pr-1">
+                              <label>Residential Status</label>
+                              <div class="row">
+                                <div class="col">
+                                  <div class="form-group">
+                                    <select class="form-control form-control-sm studentUpdateForm" name="sel_srs" id="sel_srs" data-tag="student_residential_status">
+                                      <option value="0">Day Scholar</option>
+                                      <option value="1">Hostller</option>
+                                      <option value="2">Transport</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-2 pr-1 pl-1">
+                              <div class="form-group">
+                                <label>Religion</label>
+                                <div class="row">
+                                  <div class="col">
+                                    <?php
+                                    $sql_rg = "select * from master_name where mn_code='rel'";
+                                    $result = $conn->query($sql_rg);
+                                    if ($result) {
+                                      echo '<select class="form-control form-control-sm studentUpdateForm" name="sel_rg" id="sel_rg" data-tag="student_religion" required>';
+                                      echo '<option value="">Religion</option>';
+                                      while ($rows = $result->fetch_assoc()) {
+                                        $abbri = $rows['mn_abbri'];
+                                        $select_name = $rows['mn_name'];
+                                        echo '<option value="' . $abbri . '">' . $select_name . '</option>';
+                                      }
+                                      echo '</select>';
+                                    } else echo $conn->error;
+                                    if ($result->num_rows == 0) echo 'No Data Found';
+                                    ?>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-2 pr-1 pl-1">
                               <div class="form-group">
                                 <label>Caste</label>
                                 <div class="row">
@@ -348,7 +437,7 @@ $phpFile = "admissionSql.php";
                                 </div>
                               </div>
                             </div>
-                            <div class="col-4 pl-1">
+                            <div class="col-2 pr-1 pl-1">
                               <div class="form-group">
                                 <label>Blood Group</label>
                                 <div class="row">
@@ -357,7 +446,7 @@ $phpFile = "admissionSql.php";
                                     $sql_bg = "select * from master_name where mn_code='bg'";
                                     $result = $conn->query($sql_bg);
                                     if ($result) {
-                                      echo '<select class="form-control form-control-sm studentUpdateForm" name="sql_bg" id="sql_bg" data-tag="student_bg" required>';
+                                      echo '<select class="form-control form-control-sm studentUpdateForm" name="sel_bg" id="sel_bg" data-tag="student_bg" required>';
                                       echo '<option value="">Blood Group</option>';
                                       while ($rows = $result->fetch_assoc()) {
                                         $select_name = $rows['mn_name'];
@@ -372,39 +461,7 @@ $phpFile = "admissionSql.php";
                                 </div>
                               </div>
                             </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-3 pr-1">
-                              <div class="form-group">
-                                <label>Religion</label>
-                                <div class="row">
-                                  <div class="col">
-                                    <?php
-                                    $sql_rg = "select * from master_name where mn_code='rel'";
-                                    $result = $conn->query($sql_rg);
-                                    if ($result) {
-                                      echo '<select class="form-control form-control-sm studentUpdateForm" name="sql_rg" id="sql_rg" data-tag="student_religion" required>';
-                                      echo '<option value="">Religion</option>';
-                                      while ($rows = $result->fetch_assoc()) {
-                                        $abbri = $rows['mn_abbri'];
-                                        $select_name = $rows['mn_name'];
-                                        echo '<option value="' . $abbri . '">' . $select_name . '</option>';
-                                      }
-                                      echo '</select>';
-                                    } else echo $conn->error;
-                                    if ($result->num_rows == 0) echo 'No Data Found';
-                                    ?>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-3 pr-1 pl-1">
-                              <div class="form-group">
-                                <label>Adhaar Card Number</label>
-                                <input type="text" class="form-control form-control-sm studentUpdateForm" id="stdAdhaar" name="stdAdhaar" placeholder="Adhaar Number" data-tag="student_adhaar">
-                              </div>
-                            </div>
-                            <div class="col-3 pr-1 pl-1">
+                            <div class="col-2 pl-1">
                               <div class="form-group">
                                 <label>Fee Category </label>
                                 <div class="row">
@@ -413,7 +470,7 @@ $phpFile = "admissionSql.php";
                                     $sql_fcg = "select * from master_name where mn_code='fcg'";
                                     $result = $conn->query($sql_fcg);
                                     if ($result) {
-                                      echo '<select class="form-control form-control-sm studentUpdateForm" name="sql_fcg" id="sql_fcg" data-tag="student_fee_category" required>';
+                                      echo '<select class="form-control form-control-sm studentUpdateForm" name="sel_fcg" id="sel_fcg" data-tag="student_fee_category" required>';
                                       echo '<option value="">Fee Category</option>';
                                       while ($rows = $result->fetch_assoc()) {
                                         $abbri = $rows['mn_abbri'];
@@ -428,10 +485,28 @@ $phpFile = "admissionSql.php";
                                 </div>
                               </div>
                             </div>
-                            <div class="col-3 pl-1">
+                            <div class="col-2 pl-1">
                               <div class="form-group">
-                                <label>Registration Date</label>
-                                <input type="date" class="form-control form-control-sm studentUpdateForm" id="stdAdmission" name="stdAdmission" value="<?php echo $submit_date; ?>">
+                                <label>Admn Cat</label>
+                                <div class="row">
+                                  <div class="col">
+                                    <?php
+                                    $sql_fcg = "select * from master_name where mn_code='adc'";
+                                    $result = $conn->query($sql_fcg);
+                                    if ($result) {
+                                      echo '<select class="form-control form-control-sm studentUpdateForm" name="sel_adc" id="sel_adc" data-tag="student_admission_category" required>';
+                                      echo '<option value="">Admission Category</option>';
+                                      while ($rows = $result->fetch_assoc()) {
+                                        $id = $rows['mn_id'];
+                                        $select_name = $rows['mn_name'];
+                                        echo '<option value="' . $id . '">' . $select_name . '</option>';
+                                      }
+                                      echo '</select>';
+                                    } else echo $conn->error;
+                                    if ($result->num_rows == 0) echo 'No Data Found';
+                                    ?>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -569,8 +644,8 @@ $phpFile = "admissionSql.php";
                                   $sql_qualification = "select * from master_name where mn_code='qt'";
                                   $result = $conn->query($sql_qualification);
                                   if ($result) {
-                                    echo '<select class="form-control form-control-sm" name="sel_qual" id="sel_qual" data-tag="qualification_id" required>';
-                                    echo '<option value="">Qualification</option>';
+                                    echo '<select class="form-control form-control-sm" name="sel_qual" id="sel_qual">';
+                                    echo '<option value="0">Qualification</option>';
                                     while ($rows = $result->fetch_assoc()) {
                                       $select_id = $rows['mn_id'];
                                       $select_name = $rows['mn_name'];
@@ -584,46 +659,64 @@ $phpFile = "admissionSql.php";
                               </div>
                             </div>
                           </div>
-                          <div class="col-4 pl-0 pr-1">
+                          <div class="col-3 pl-0 pr-1">
                             <div class="form-group">
                               <label>Institute</label>
-                              <input type="text" class="form-control form-control-sm sQualForm" id="sInst" name="sInst" placeholder="Name of the Institute" data-tag="sq_institute">
+                              <input type="text" class="form-control form-control-sm" id="sq_institute" name="sq_institute" placeholder="Name of the Institute">
                             </div>
                           </div>
                           <div class="col-3 pl-0 pr-1">
                             <div class="form-group">
                               <label>Board</label>
-                              <input type="text" class="form-control form-control-sm sQualForm" id="sBoard" name="sBoard" placeholder="Board" data-tag="sq_board">
+                              <input type="text" class="form-control form-control-sm" id="sq_board" name="sq_board" placeholder="Board">
                             </div>
                           </div>
                           <div class="col-1 pl-0 pr-1">
                             <div class="form-group">
                               <label>MO</label>
-                              <input type="number" class="form-control form-control-sm sQualForm" id="sMarksObt" name="sMarksObt" placeholder="Marks Obtained" data-tag="sq_mo">
+                              <input type="number" class="form-control form-control-sm" id="sq_mo" name="sq_mo" placeholder="Marks Obtained" value="0">
                             </div>
                           </div>
                           <div class="col-1 pl-0 pr-1">
                             <div class="form-group">
                               <label>MM</label>
-                              <input type="number" class="form-control form-control-sm sQualForm" id="sMaxMarks" name="sMaxMarks" placeholder="Maximum marks" data-tag="sq_mm">
+                              <input type="number" class="form-control form-control-sm" id="sq_mm" name="sq_mm" placeholder="Maximum marks" value="100">
                             </div>
                           </div>
                           <div class="col-1 pl-0 pr-1">
                             <div class="form-group">
-                              <label>CGPA/%</label>
-                              <input type="number" class="form-control form-control-sm sQualForm" id="sCgpa" name="sCgpa" placeholder="Percentage/CGPA" data-tag="sq_percentage">
+                              <label>CGPA</label>
+                              <input type="number" class="form-control form-control-sm" id="sq_cgpa" name="sq_cgpa" placeholder="CGPA" value="0" step=".01">
+                            </div>
+                          </div>
+                          <div class="col-1 pl-0 pr-1">
+                            <div class="form-group">
+                              <label>Per(%)</label>
+                              <input type="number" class="form-control form-control-sm" id="sq_percentage" name="sq_percentage" placeholder="Percentage" value="0" step=".1">
                             </div>
                           </div>
                           <div class="col-1 pl-0">
                             <div class="form-group">
                               <label>Year</label>
-                              <input type="number" class="form-control form-control-sm sQualForm" id="sYear" name="sYear" placeholder="Passing Year" data-tag="sq_year">
+                              <input type="number" class="form-control form-control-sm" id="sq_year" name="sq_year" placeholder="Passing Year" value="2000">
                             </div>
                           </div>
                         </div>
+                        <input type="hidden" id="studentIdQual" name="studentIdQual">
+                        <input type="hidden" name="action" value="updateQualification">
                         <button class="btn btn-sm" name="submit_qual" id="submit_qual">Update/Add</button>
                       </form>
-                      <p style="text-align:center" id="qualificationShowList"></p>
+                      <table class="table table-bordered table-striped list-table-xs mt-2" id="qualificationShowList">
+                        <tr>
+                          <th>Id</th>
+                          <th>Qualification</th>
+                          <th>Institute</th>
+                          <th>Board</th>
+                          <th>MO/MM</th>
+                          <th>%/CGPA</th>
+                          <th>Year</th>
+                        </tr>
+                      </table>
                     </div>
                     <div class="tab-pane fade" id="pills_reference" role="tabpanel" aria-labelledby="pills_reference">
                       <div class="row">
@@ -715,6 +808,10 @@ $phpFile = "admissionSql.php";
                         <th class="fNameField">Father's Name</th>
                         <th class="courseField">Course</th>
                         <th class="rollnoField">RollNo</th>
+                        <th>Acd Yr</th>
+                        <th>LEET</th>
+                        <th>Regular</th>
+                        <th>Scholarship</th>
                         <th class="mobileField">Mobile</th>
                         <th class="semField">Sem</th>
                         <th class="dorField">DoR</th>
@@ -814,6 +911,38 @@ $phpFile = "admissionSql.php";
               </div>
             </div>
           </div>
+          <div class="tab-pane fade" id="list-qual" role="tabpanel" aria-labelledby="list-qual-list">
+            <div class="row">
+              <div class="col-10">
+                <div class="container card m-2 myCard">
+                  <div class="col text-right">
+                    <a onclick="printDiv('printQual')" class="fa fa-print largeText"></a>
+                    <a class="fa fa-file-export largeText" id="exportQual"></a>
+                  </div>
+                  <div id="printQual">
+                    <table class="table table-bordered table-striped list-table-xs mt-4" id="qualificationTable">
+                      <tr>
+                        <th>#</th>
+                        <th>Id</th>
+                        <th>UserId</th>
+                        <th>Name</th>
+                        <th>Father Name</th>
+                        <th>Specialization</th>
+                        <th>Qual</th>
+                        <th>MO</th>
+                        <th>MM</th>
+                        <th>%</th>
+                        <th>CGPA</th>
+                        <th>Year</th>
+                        <th>Institute</th>
+                        <th>Board</th>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -828,6 +957,13 @@ $phpFile = "admissionSql.php";
   $(document).ready(function() {
 
     $('[data-toggle="tooltip"]').tooltip();
+
+    $(document).on("click", "#exportQual", function() {
+      // $.alert("ds");
+      $("#qualificationTable").table2excel({
+        filename: "qualification.xls"
+      });
+    })
     studentList();
     studentProgramReport();
     stateOption()
@@ -854,18 +990,6 @@ $phpFile = "admissionSql.php";
 
     $(document).on('change', '#sel_state', function() {
       districtOption();
-      // var studentId = $("#studentIdHidden").val()
-      // var state = $("#sel_state").val()
-      // // $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
-      // $.post("<?php echo $phpFile; ?>", {
-      //   id_name: "student_id",
-      //   state: state,
-      //   action: "updateState"
-      // }, function(data) {
-      //   // $.alert("List " + data);
-      // }).fail(function() {
-      //   $.alert("fail in place of error");
-      // })
     });
 
     function districtOption() {
@@ -912,7 +1036,7 @@ $phpFile = "admissionSql.php";
     $(document).on('click', '#dropStudent', function(event) {
       var data = $("#studentIdHidden").val();
       var mn_id = $("#sel_mn").val();
-      $.alert(mn_id);
+      // $.alert(mn_id);
       if (data > 0 && mn_id > 0) {
         $.confirm({
           title: 'Please Confirm !',
@@ -944,6 +1068,39 @@ $phpFile = "admissionSql.php";
       }
     });
 
+    $(document).on('click', '#resetStudent', function(event) {
+      var data = $("#studentIdHidden").val();
+      // $.alert(data);
+      if (data > 0) {
+        $.confirm({
+          title: 'Please Confirm !',
+          draggable: true,
+          content: "<b><i>Are you Sure to Re-instate the Student ? </i></b>",
+          buttons: {
+            confirm: {
+              btnClass: 'btn-info',
+              action: function() {
+                $.post("<?php echo $phpFile; ?>", {
+                  action: "resetStudent",
+                  id: data,
+                }, () => {}, "text").done(function(data) {
+                  // $.alert(data);
+                }).fail(function() {
+                  $.alert("fail in place of error");
+                })
+              }
+            },
+            cancel: {
+              btnClass: "btn-danger",
+              action: function() {}
+            },
+          }
+        });
+      } else {
+        $.alert("Student or Reason not Selected!!");
+      }
+    });
+
     $(document).on('click', '#searchStudent', function(event) {
       var data = $("#studentSearch").val();
       // $.alert(data);
@@ -955,8 +1112,16 @@ $phpFile = "admissionSql.php";
         if (data == null) {
           $.alert("No Student Found!!");
           $("#studentIdHidden").val(null);
+          $("#studentIdQual").val(null);
 
         } else {
+          $("#studentIdHidden").val(data.student_id);
+          $("#studentIdQual").val(data.student_id);
+          
+          if (data.student_status == '9') $("#status").html("Deleted");
+          else if (data.student_status == '0') $("#status").html("Active");
+          
+          
           $("#stdName").val(data.student_name);
           $("#stdRno").val(data.student_rollno);
           $("#stdMobile").val(data.student_mobile);
@@ -964,18 +1129,25 @@ $phpFile = "admissionSql.php";
           $("#stdSemester").val(data.student_semester);
           $("#Dob").val(data.student_dob);
           $("#stdWaMobile").val(data.student_whatsapp);
-
+          
           if (data.student_gender == 'M') $("#male").prop("checked", true);
           else $("#female").prop("checked", true);
           if (data.student_lateral == '1') $("#yes_leet").prop("checked", true);
           else $("#no_leet").prop("checked", true);
-
-          //$("#sGender").val(data.student_gender);
-          $("#sel_caste").val(data.student_category);
-          $("#sql_bg").val(data.student_bg);
-          $("#sql_rg").val(data.student_religion);
+          if (data.student_scholarship == '1') $("#yes_scholarship").prop("checked", true);
+          else $("#no_scholarship").prop("checked", true);
+          if (data.student_regular == '1') $("#yes_regular").prop("checked", true);
+          else $("#no_regular").prop("checked", true);
+          
           $("#stdAdhaar").val(data.student_adhaar);
-          $("#sql_fcg").val(data.student_fee_category);
+          
+          $("#sel_srs").val(data.student_residential_status);
+          $("#sel_rg").val(data.student_religion);
+          $("#sel_caste").val(data.student_category);
+          $("#sel_bg").val(data.student_bg);
+          $("#sel_fcg").val(data.student_fee_category);
+          $("#sel_adc").val(data.student_admission_category);
+          
           $("#stdAdmission").val(data.student_admission);
           $("#fName").val(data.student_fname);
           $("#mName").val(data.student_mname);
@@ -985,13 +1157,13 @@ $phpFile = "admissionSql.php";
           $("#mEmail").val(data.student_memail);
           $("#sCity").val(data.city);
           $("#sPincode").val(data.pincode);
-
+          
           var address = data.permanent_address;
           $("#permanent_address").val(address);
-
+          
           var state_id = data.state_id;
           var district_id = data.district_id;
-
+          
           $("#mEmail").val(data.student_memail);
           $("#cName").val(data.reference_name);
           $("#cNumber").val(data.reference_mobile);
@@ -1000,7 +1172,6 @@ $phpFile = "admissionSql.php";
           $("#refDesignation").val(data.reference_designation);
           $("#refContact").val(data.reference_contact);
           $("#remarks").val(data.remarks);
-          $("#studentIdHidden").val(data.student_id);
           $("#uploadId").val(data.student_id);
           $("#studentIdPill").html(data.user_id);
           if (data.student_image === null) $(".studentImage").html('<img  src="../../images/upload.jpg" width="100%">');
@@ -1008,6 +1179,7 @@ $phpFile = "admissionSql.php";
           $(".progName").html(data.program_name);
           $(".batchName").html(data.batch);
           $(".semesterName").html(data.student_semester);
+          $(".homeId").html(data.student_id);
           $.post("<?php echo $phpFile; ?>", {
             userId: data.user_id,
             action: "fetchAcademicBatch"
@@ -1029,19 +1201,12 @@ $phpFile = "admissionSql.php";
             // address = address + data.district_name;
           })
         }
+        studentQualificationList()
         // $.alert(data);
       }).fail(function() {
         $.alert("fail in place of error");
       })
     });
-
-    // $(document).on('click', '#state_id', function() {
-    //   var student_id = $(this).attr("data-tag")
-    //   // $.alert(student_id);
-    //   $('#firstModal').modal('show');
-    //   $(".studentForm").hide();
-    //   $("#modalId").val(student_id);
-    // });
 
     $(document).on('submit', '#modalForm', function(event) {
       event.preventDefault();
@@ -1061,7 +1226,7 @@ $phpFile = "admissionSql.php";
       var userId = $("#studentSearch").val();
       var tag = $(this).attr("data-tag")
       var value = $(this).val()
-      $.alert("Changes " + tag + " Value " + value + " Student " + userId);
+      // $.alert("Changes " + tag + " Value " + value + " Student " + userId);
       $.post("<?php echo $phpFile; ?>", {
         id_name: "user_id",
         id: userId,
@@ -1128,6 +1293,69 @@ $phpFile = "admissionSql.php";
         $.alert("fail in place of error");
       })
     });
+
+    $(document).on('submit', '#qualForm', function(event) {
+      event.preventDefault();
+      var studentId = $("#studentIdQual").val();
+      var sel_qual = $("#sel_qual").val();
+      if (studentId > 0 && sel_qual > 0) {
+        var formData = $(this).serialize();
+        // $.alert(formData);
+        $.post("<?php echo $phpFile; ?>", formData, () => {}, "text").done(function(data) {
+          // $.alert(data);
+          studentQualificationList()
+        }).fail(function() {
+          $.alert("fail in place of error");
+        })
+      } else $.alert("Please select Student and Qualification !!")
+    });
+
+    function studentQualificationList() {
+      var studentId = $("#studentIdHidden").val()
+      // $.alert("In List Function" + studentId);
+      $.post("<?php echo $phpFile; ?>", {
+        stdId: studentId,
+        action: "studentQualificationList"
+      }, function() {}, "json").done(function(data, status) {
+        // $.alert(data)
+        var card = '';
+        var count = 1;
+        $.each(data, function(key, value) {
+          card += '<tr>';
+          card += '<td><a class="fa fa-pencil-alt editQual" data-sq="' + value.sq_id + '"></a>' + value.sq_id + '</td>';
+          card += '<td>' + value.mn_name + '</td>';
+          card += '<td>' + value.sq_institute + '</td>';
+          card += '<td>' + value.sq_board + '</td>';
+          card += '<td>' + value.sq_mo + '/' + value.sq_mm + '</td>';
+          card += '<td>' + value.sq_percentage + '/' + value.sq_cgpa + '</td>';
+          card += '<td>' + value.sq_year + '</td>';
+          card += '</tr>';
+        });
+        $("#qualificationShowList").find("tr:gt(0)").remove();
+        $("#qualificationShowList").append(card);
+      }).fail(function() {
+        $.alert("Could not Fetch Student Qualification !!");
+      })
+    }
+    $(document).on('click', '.editQual', function() {
+      var mn_id = $(this).attr("data-sq")
+      var studentId = $("#studentIdHidden").val();
+      // $.alert("Change  " + progId + " Student Id " + studentId);
+      if (studentId > 0 && mn_id > 0) {
+        $.post("<?php echo $phpFile; ?>", {
+          mn_id: mn_id,
+          studentId: studentId,
+          action: "fetchStudentQualification",
+        }, function() {}, "json").done(function(data, status) {
+          // $.alert(data.sq_id)
+          $('#sel_qual').val(data.mn_id);
+          $("#sq_mo").val(data.sq_mo)
+          $("#sq_year").val(data.sq_year)
+        }).fail(function() {
+          $.alert("Error in Qualification !!");
+        })
+      } else $.alert("Please select Student and New Programme!!")
+    })
 
     $(document).on('click', '#changeBranch', function() {
       var progId = $("#new_prog").val()
@@ -1330,6 +1558,17 @@ $phpFile = "admissionSql.php";
           card += '<td class="fnameField">' + value.student_fname + '</td>';
           card += '<td class="courseField">' + value.program_name + '</td>';
           card += '<td class="rollnoField">' + value.student_rollno + '</td>';
+
+          card += '<td>' + value.student_ay + '</td>';
+          if (value.student_lateral == '1') card += '<td>Y</td>';
+          else card += '<td>N</td>';
+
+          if (value.student_regular == '1') card += '<td>Y</td>';
+          else card += '<td>N</td>';
+
+          if (value.student_scholarship == '1') card += '<td>Y</td>';
+          else card += '<td>N</td>';
+
           card += '<td class="mobileField">' + value.student_mobile + '</td>';
           card += '<td class="semField">' + value.student_semester + '</td>';
           card += '<td class="dorField">' + getFormattedDate(value.student_admission, "dmY") + '</td>';
@@ -1369,7 +1608,6 @@ $phpFile = "admissionSql.php";
           else var skip = 'N'
           if (skip == 'N') {
             card += '<tr>';
-            // card += '<td><a href="#" class="fa fa-edit editStudent" data-student="' + value.student_id + '"></a></td>';
             card += '<td>' + count++ + '</td>';
             if (value.ss == "1") card += '<td class="text-center"><input type="checkbox" class="checkitem" checked value="' + value.student_id + '"/></td>';
             else card += '<td class="text-center"><input type="checkbox" class="checkitem" value="' + value.student_id + '"/></td>';
@@ -1390,27 +1628,60 @@ $phpFile = "admissionSql.php";
         $("#studentStatusTable").find("tr:gt(0)").remove();
         $("#studentStatusTable").append(card);
 
+        var card = '';
+        var count = 1;
+        $.each(data, function(key, value) {
+          var student_lateral = value.student_lateral;
+          if (leet == '1' && leet != student_lateral) var skip = 'Y'
+          else var skip = 'N'
+          if (skip == 'N') {
+            var qual = value.qualification.length;
+            if (qual == 0) {
+              card += '<tr>';
+              card += '<td>' + count++ + '</td>';
+              card += '<td>' + value.student_id + '</td>';
+              card += '<td>' + value.user_id + '</td>';
+              card += '<td>' + value.student_name + '</td>';
+              card += '<td>' + value.student_fname + '</td>';
+              card += '<td>' + value.sp_abbri + '</td>';
+              card += '<td>--</td>';
+              card += '<td>--</td>';
+              card += '<td>--</td>';
+              card += '<td>--</td>';
+              card += '<td>--</td>';
+              card += '<td>--</td>';
+              card += '<td>--</td>';
+              card += '<td>--</td>';
+              card += '</tr>';
+            } else {
+              for (var i = 0; i < qual; i++) {
+                card += '<tr>';
+                card += '<td>' + count++ + '</td>';
+                card += '<td>' + value.student_id + '</td>';
+                card += '<td>' + value.user_id + '</td>';
+                card += '<td>' + value.student_name + '</td>';
+                card += '<td>' + value.student_fname + '</td>';
+                card += '<td>' + value.sp_abbri + '</td>';
+                card += '<td>' + value.qualification[i].mn_name + '</td>';
+                card += '<td>' + value.qualification[i].sq_mo + '</td>';
+                card += '<td>' + value.qualification[i].sq_mm + '</td>';
+                card += '<td>' + value.qualification[i].sq_percentage + '</td>';
+                card += '<td>' + value.qualification[i].sq_cgpa + '</td>';
+                card += '<td>' + value.qualification[i].sq_year + '</td>';
+                card += '<td>' + value.qualification[i].sq_institute + '</td>';
+                card += '<td>' + value.qualification[i].sq_board + '</td>';
+                card += '</tr>';
+              }
+            }
+          }
+        });
+        $("#qualificationTable").find("tr:gt(0)").remove();
+        $("#qualificationTable").append(card);
+
       }).fail(function() {
         $.alert("Error !!");
       })
 
-    }
-
-    function studentQualificationList() {
-      var studentId = $("#studentIdHidden").val()
-
-      $.alert("In List Function" + x);
-      $.post("<?php echo $phpFile; ?>", {
-        stdId: studentId,
-        action: "studentQualificationList"
-      }, function(mydata, mystatus) {
-        $("#qualificationShowList").show();
-        // $.alert("List qulai" + mydata);
-
-        $("#qualificationShowList").html(mydata);
-      }, "text").fail(function() {
-        $.alert("Error !!");
-      })
     }
 
     function studentProgramReport() {

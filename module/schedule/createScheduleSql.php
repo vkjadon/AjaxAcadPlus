@@ -126,19 +126,19 @@ if (isset($_POST['action'])) {
     $days = (strtotime($to) - strtotime($from)) / (24 * 60 * 60) + 1;
           
     $day = array("Mon", "Tue", "Wed", "Thu", "Fri", "Sat");
-    echo '<table class="table list-table-xxs">';
-    echo '<tr><td><h5>' . getField($conn, $classId, 'class', 'class_id', 'class_name') . '</h5></td></tr>';
+    echo '<table class="table list-table-xs">';
+    echo '<tr><td><span class="largeText">' . getField($conn, $classId, 'class', 'class_id', 'class_name') . '</span></td></tr>';
     for ($k = 0; $k < $days; $k++) {
       $current_ts = strtotime($from) + $k * 24 * 60 * 60;
       $current_date = date("Y-m-d", $current_ts);
       $dayofDate = date("D", $current_ts);
 
-      echo '<tr><td>' . $dayofDate . '</td>';
+      echo '<tr><td><span class="largeText">' . $dayofDate . '<br>'.date("d-M",strtotime($current_date)).'</span></td>';
       for ($j = 1; $j < 10; $j++) {
         $sql = "select sas.*, tl.tl_id, tl.tl_group, tlg.* from $tn_sas sas, $tn_tl tl, $tn_tlg tlg where sas.tl_id=tl.tl_id and tl.tlg_id=tlg.tlg_id and tlg.class_id='$classId' and sas.sas_date='$current_date' and sas.sas_period='$j' and sas_status='0'";
         $result = $conn->query($sql);
         $sno = 0;
-        echo '<td>';
+        echo '<td><b>P-'.$j.'</b> ';
         echo '<a href="#" class="substituteSchedule" data-class="' . $classId . '" data-date="' . $current_date . '" data-period="' . $j . '"><i class="fa fa-upload" aria-hidden="true" style="color:green"></i></a>';
         if ($result && $result->num_rows > 0) {
           while ($rows = $result->fetch_assoc()) {
@@ -158,8 +158,8 @@ if (isset($_POST['action'])) {
             //echo '<span>' . $subject_code . ' <b>[G-' . $tl_group . ']</b><br>' . $staff_name . '</span>';
 
             echo '<div id="sas' . $sas_id . '">' . $subject_code . ' <b>[' . $tlg_type . 'G-' . $tl_group . ']</b><br>' . $staff_name;
-            echo '<a href="#" class="dropSchedule" data-sas="' . $sas_id . '"><i class="fa fa-times" aria-hidden="true" style="color:red"></i></a>';
-            echo '&nbsp;<a href="#" class="substituteStaff" data-sas="' . $sas_id . '"><i class="fa fa-upload" aria-hidden="true" style="color:black"></i></a>';
+            echo '&nbsp<a href="#" class="dropSchedule" data-sas="' . $sas_id . '"><i class="fa fa-times" aria-hidden="true" style="color:red"></i></a>';
+            echo '&nbsp;<a href="#" class="substituteStaff float-right" data-sas="' . $sas_id . '"><i class="fa fa-upload" aria-hidden="true" style="color:black"></i></a>';
             echo '</div>';
             if ($result->num_rows > 1) echo '<br>';
           }

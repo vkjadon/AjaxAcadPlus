@@ -72,7 +72,7 @@ $phpFile = "feeReceiptSql.php";
             <div class="col-6 pl-1 student_detail">
               <div class="container card myCard border-info">
                 <div class="row p-1">
-                  <div class="col-2 m-0 p-0">
+                  <div class="col-2 m-0 p-0 studentImage">
                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="50%">
                   </div>
                   <div class="col-10 smallerText">
@@ -204,6 +204,7 @@ $phpFile = "feeReceiptSql.php";
                           <table class="table table-bordered table-striped list-table-xs mt-3" id="feeDebitList">
                             <th class="text-center">Id</th>
                             <th class="text-center">Date</th>
+                            <th class="text-center">Semester</th>
                             <th class="text-center">Description</th>
                             <th class="text-center">Fee Type</th>
                             <th class="text-center">Mode</th>
@@ -216,6 +217,7 @@ $phpFile = "feeReceiptSql.php";
                           <table class="table table-bordered table-striped list-table-xs mt-3" id="feeReceiptList">
                             <th class="text-center">Id</th>
                             <th class="text-center">Date</th>
+                            <th class="text-center">Semester</th>
                             <th class="text-center">Description</th>
                             <th class="text-center">Fee Type</th>
                             <th class="text-center">Mode</th>
@@ -254,7 +256,7 @@ $phpFile = "feeReceiptSql.php";
                             <tr>
                               <td class="text-center" colspan="3">
                                 <div class="row m-3">
-                                  <div class="col-1 p-2"><img src="<?php echo $setLogo;?>" width="70%"></div>
+                                  <div class="col-1 p-2"><img src="<?php echo $setLogo; ?>" width="70%"></div>
                                   <div class="col-10">
                                     <span class="xxlText"> Aryans Group of Colleges </span>
                                     <p class="largeText">Vill. Nepra/Thuha, Chandigarh - Patiala Highway, Tehsil Rajpura, District Patiala, Pincode 140 401</p>
@@ -370,25 +372,30 @@ $phpFile = "feeReceiptSql.php";
                   <div class="row">
                     <div class="col-12">
                       <div class="row">
-                        <div class="col">
+                        <div class="col pr-0">
                           <div class="form-group">
                             <label>Receipt From</label>
                             <input type="date" class="form-control form-control-sm" id="fr_from" name="fr_from" value="<?php echo $submit_date; ?>">
                           </div>
                         </div>
-                        <div class="col">
+                        <div class="col pl-1 pr-0">
                           <div class="form-group">
                             <label>Receipt To</label>
                             <input type="date" class="form-control form-control-sm" id="fr_to" name="fr_to" value="<?php echo $submit_date; ?>">
                           </div>
                         </div>
-                        <div class="col">
+                        <div class="col pl-1 pr-0">
                           <div class="form-group">
                             <label>Mode</label>
                             <p class="transMode"></p>
                           </div>
                         </div>
-
+                        <div class="col pl-1">
+                          <div class="form-group">
+                            <label>Fee Type</label>
+                            <p class="transactionFeeType"></p>
+                          </div>
+                        </div>
                         <div class="col mt-3">
                           <div class="form-group">
                             <button class="btn btn-sm" id="showTransaction">Show Transaction</button>
@@ -551,6 +558,7 @@ $phpFile = "feeReceiptSql.php";
     feeType();
     feeMode();
     transactionMode();
+    transactionFeeType();
 
     $('#studentNameSearch').keyup(function() {
       var query = $(this).val();
@@ -595,6 +603,9 @@ $phpFile = "feeReceiptSql.php";
         else $("#receiptSonDaughter").text(" s/o ");
         $("#receiptFatherName").text(data.student_fname);
         $("#receiptName").text(data.student_name);
+        if (data.student_image === null) $(".studentImage").html('<img  src="../../images/upload.jpg" width="40%">');
+        else $(".studentImage").html('<img  src="<?php echo '../../' . $myFolder . '/studentImages/'; ?>' + data.student_image + '" width="40%">');
+          
         feeConcessionList();
         feeReceiptList();
         feeDebitList();
@@ -644,11 +655,13 @@ $phpFile = "feeReceiptSql.php";
       var dateFrom = $("#fr_from").val();
       var dateTo = $("#fr_to").val();
       var mode = $("#sel_tm").val();
-      // $.alert("From " + dateFrom + "To " + dateTo + " Mode " + mode);
+      var ft = $("#sel_tft").val();
+      // $.alert("From " + dateFrom + "To " + dateTo + " Mode " + mode + " FT " + ft);
       $.post("<?php echo $phpFile; ?>", {
         dateFrom: dateFrom,
         dateTo: dateTo,
         mode: mode,
+        ft: ft,
         action: "transactionList"
       }, function() {}, "json").done(function(data, status) {
         // $.alert(data);
@@ -714,7 +727,6 @@ $phpFile = "feeReceiptSql.php";
         $.alert("Error !!");
       })
     }
-
 
     $(document).on('click', '#proposeFeeConcession', function(event) {
       var studentId = $("#studentIdHidden").val();
@@ -887,6 +899,7 @@ $phpFile = "feeReceiptSql.php";
           else card += '<tr>';
           card += '<td class="text-center">' + value.fr_id + '</td>';
           card += '<td class="text-center">' + getFormattedDate(value.fr_date, "dmY") + '</td>';
+          card += '<td class="text-center">' + value.semester + '</td>';
           if (value.fr_desc == null) card += '<td class="text-center">--</td>';
           else card += '<td>' + value.fr_desc + '</td>';
           card += '<td class="text-center">' + value.fee_type + '</td>';
@@ -894,7 +907,8 @@ $phpFile = "feeReceiptSql.php";
           card += '<td class="text-center"></td>';
           card += '<td class="text-center">' + value.fr_amount + '</td>';
           card += '<td class="text-center">' + value.user_id + '</td>';
-          card += '<td class="text-center"><a href="#" class="showReceipt" data-fr="' + value.fr_id + '"><i class="fas fa-eye"></i></a></td>';
+          if (value.frev_id > 0) card += '<td class="text-center"></td>';
+          else card += '<td class="text-center"><a href="#" class="showReceipt" data-fr="' + value.fr_id + '"><i class="fas fa-eye"></i></a></td>';
           card += '</tr>';
         });
         $("#feeReceiptList").find("tr:gt(0)").remove();
@@ -902,7 +916,7 @@ $phpFile = "feeReceiptSql.php";
         $("#totalCredit").val(totalCredit);
 
       }).fail(function() {
-        $.alert("Error !!");
+        $.alert("Error in Receipt!!");
       })
 
     }
@@ -923,6 +937,7 @@ $phpFile = "feeReceiptSql.php";
           card += '<tr>';
           card += '<td class="text-center">' + value.fr_id + '</td>';
           card += '<td class="text-center">' + getFormattedDate(value.update_ts, "dmY") + '</td>';
+          card += '<td class="text-center">' + value.semester + '</td>';
           if (value.fr_desc == null) card += '<td class="text-center">--</td>';
           else card += '<td>' + value.fr_desc + '</td>';
           card += '<td class="text-center">' + value.fee_type + '</td>';
@@ -1060,7 +1075,6 @@ $phpFile = "feeReceiptSql.php";
         listConcession += '</select>';
         $("#feeType").html(list);
         $("#feeTypeConcession").html(listConcession);
-
       }).fail(function() {
         $.alert("Error !!");
       })
@@ -1093,13 +1107,32 @@ $phpFile = "feeReceiptSql.php";
         // $.alert(data);
         var list = '';
         list += '<select class="form-control form-control-sm" name="sel_tm" id="sel_tm" required>';
+        list += '<option value="ALL">ALL</option>';
         $.each(data, function(key, value) {
           list += '<option value=' + value.mn_id + '>' + value.mn_name + '</option>';
         });
-        list += '<option value="ALL">ALL</option>';
         list += '</select>';
         $(".transMode").html(list);
 
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+    }
+
+    function transactionFeeType() {
+      // $.alert("Department ");
+      $.post("feeReceiptSql.php", {
+        action: "feeType"
+      }, function() {}, "json").done(function(data, status) {
+        // $.alert(data);
+        var list = '';
+        list += '<select class="form-control form-control-sm" name="sel_ft" id="sel_tft" required>';
+        list += '<option value="ALL">ALL</option>';
+        $.each(data, function(key, value) {
+          list += '<option value=' + value.mn_id + '>' + value.mn_name + '</option>';
+        });
+        list += '</select>';
+        $(".transactionFeeType").html(list);
       }).fail(function() {
         $.alert("Error !!");
       })

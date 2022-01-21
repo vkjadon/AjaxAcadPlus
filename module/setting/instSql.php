@@ -31,11 +31,13 @@ if (isset($_POST['action'])) {
 		$output = $result->fetch_assoc();
 		echo json_encode($output);
 	} elseif ($_POST['action'] == 'updateProgram') {
-		$fields = ['program_id', 'program_name', 'program_abbri', 'program_duration', 'program_seat', 'program_start', 'program_semester', 'sp_name', 'sp_abbri', 'sp_code'];
-		$values = [$_POST['modalId'], data_check($_POST['program_name']), data_check($_POST['program_abbri']), data_check($_POST['program_duration']), data_check($_POST['program_seat']), data_check($_POST['program_start']), data_check($_POST['program_semester']), data_check($_POST['sp_name']), data_check($_POST['sp_abbri']), data_check($_POST['sp_code'])];
-		$dup = "select * from program where program_id='" . $_POST["modalId"] . "'";
-		$dup_alert = "Could Not Update - Duplicate Entries";
-		updateData($conn, 'program', $fields, $values, $dup, $dup_alert);
+
+		$sql="update program set program_name='".data_check($_POST['program_name'])."', program_abbri='".data_check($_POST['program_abbri'])."', program_duration='".data_check($_POST['program_duration'])."', program_seat='".data_check($_POST['program_seat'])."', program_start='".data_check($_POST['program_start'])."', program_semester='".data_check($_POST['program_semester'])."', sp_name='".data_check($_POST['sp_name'])."', sp_abbri='".data_check($_POST['sp_abbri'])."', sp_code='".data_check($_POST['sp_code'])."'  where program_id='".$_POST['modalId']."'";
+
+		$result=$conn->query($sql);
+		if(!$result)echo $conn->error;
+
+
 	} elseif ($_POST["action"] == "programList") {
 		//    echo "MyId- $myId";
 		$sql = "SELECT * from program where program_status='0' order by program_start, program_name";
@@ -91,14 +93,15 @@ if (isset($_POST['action'])) {
 		$dept_id = $_POST['modalId'];
 		$dept_name = data_clean($_POST['dept_name']);
 		$dept_abbri = data_clean($_POST['dept_abbri']);
-		echo "MyId- $myId Dept $dept_id";
+		$dept_type = data_clean($_POST['dept_type']);
+		echo "MyId- $myId Dept $dept_id Type";
 		$sql_dup = "select * from department where dept_name='$dept_name'";
 		$result_dup = $conn->query($sql_dup);
 		if ($dept_id > 0) {
-			$sql = "update department set dept_name='$dept_name', dept_abbri='$dept_abbri' where dept_id='$dept_id'";
+			$sql = "update department set dept_name='$dept_name', dept_abbri='$dept_abbri', dept_type='$dept_type' where dept_id='$dept_id'";
 			$result = $conn->query($sql);
 		} else {
-			$sql = "insert into department (dept_name, dept_abbri, dept_status) values('$dept_name', '$dept_abbri', '0')";
+			$sql = "insert into department (dept_name, dept_abbri, dept_type, dept_status) values('$dept_name', '$dept_abbri', $dept_type, '0')";
 			$result = $conn->query($sql);
 		}
 	} elseif ($_POST['action'] == 'fetchDept') {
@@ -109,7 +112,7 @@ if (isset($_POST['action'])) {
 		echo json_encode($output);
 	} elseif ($_POST["action"] == "deptList") {
 		//    echo "MyId- $myId";
-		$sql = "SELECT * from department where dept_status='0' order by dept_name";
+		$sql = "SELECT * from department where dept_status='0' order by dept_type, dept_name";
 		$result = $conn->query($sql);
 		if (!$result) echo $conn->error;
 		elseif ($result->num_rows > 0) {

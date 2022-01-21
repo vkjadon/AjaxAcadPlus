@@ -108,6 +108,7 @@ table.table-scheduler th {
     font-size: small;
     font-weight: bold;
     padding: 2px;
+    width: 10%;
     color: rgba(0, 0, 0, 0.815);
 }
 
@@ -119,5 +120,6 @@ table.table-scheduler tr {
 table.table-scheduler td {
     font-size: small;
     padding: 2px 2px 2px;
+    text-align: left;
     border-top: thin dotted rgb(40, 31, 170);
 }

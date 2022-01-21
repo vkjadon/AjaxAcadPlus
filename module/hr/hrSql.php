@@ -19,8 +19,7 @@ if (isset($_POST["query"])) {
 }
 if (isset($_POST['action'])) {
   if ($_POST['action'] == 'staffList') {
-
-    $sql = "SELECT * from staff where staff_status='0' order by staff_name";
+    $sql = "SELECT s.* from staff s where s.staff_status='0' order by s.staff_name";
     $json = getTableRow($conn, $sql, array("staff_id", "staff_name", "staff_mobile", "staff_email", "user_id"));
     // echo $json;
     $array = json_decode($json, true);
@@ -35,29 +34,15 @@ if (isset($_POST['action'])) {
 
       $sql = "SELECT * from user where staff_id='$staff_id'";
       $result = $conn->query($sql);
-      $status = getFieldValue($conn, "user_status", $sql);
-      if ($staff_id > 1) {
-        echo '<div class="card">';
-        echo '<div class="card-body mb-0">';
-        echo '<div class="row">';
-        echo '<div class="col-10">';
-        echo '<h7 class="card-title">' . $staff_name . '</h7><br></div>';
-
-        echo '<div class="col-1 p-0">';
-        if ($status == "0") echo '<a href="#" class="fa fa-minus removeUser" data-id="' . $staff_id . '"></a></div>';
-        else echo '<a href="#" class="fa fa-plus addUser" data-id="' . $staff_id . '"></a></div>';
-        echo '<div class="col-1 p-0">';
-        echo '<a href="#" class="fa fa-edit editStaff" data-staff="' . $staff_id . '"></a></div>';
-        echo '</div>';
-        echo '<div class="row">';
-        echo '<div class="col-8">';
-        echo '<span class="card-subtitle mb-2 text-muted">' . $staff_email . '</span>';
-        echo '</div>';
-        echo '<div class="col-4">';
-        echo '<span class="card-subtitle mb-2 text-muted">' . $user_id . '</span>';
-        echo '</div>';
-        echo '</div></div></div>';
-      }
+      echo '<div class="card">';
+      echo '<div class="row m-1">';
+      echo '<div class="col-10"><h7 class="card-title">' . $staff_name . '</h7>[<span class="card-subtitle mb-2 text-muted">' . $user_id . '</span>]</div>';
+      echo '<div class="col-1 p-0">';
+      if ($result->num_rows > 0)  echo '<a href="#" class="fa fa-minus removeUser" data-id="' . $staff_id . '"></a></div>';
+      else echo '<a href="#" class="fa fa-plus addUser" data-id="' . $staff_id . '"></a></div>';
+      echo '<div class="col-1 p-0"><a href="#" class="fa fa-edit editStaff" data-staff="' . $staff_id . '"></a></div>';
+      echo '</div>';
+      echo '</div>';
     }
   } elseif ($_POST['action'] == 'addStaff') {
 
@@ -199,7 +184,7 @@ if (isset($_POST['action'])) {
   } elseif ($_POST['action'] == 'addUser') {
     $id = $_POST['id'];
     $mail = getField($conn, $id, "staff", "staff_id", "staff_email");
-    $password = random_int(100000, 999999);
+    $password = $myDb.$id;
     $encripted = sha1($password);
     $sql = "insert into user (staff_id, user_password, user_status) values ('$id', '$encripted', '0')";
     $result = $conn->query($sql);

@@ -9,15 +9,14 @@ if ($result && $result->num_rows == 1) {
   $half_day = $rowsArray['half_day'];
   $update_ts = $rowsArray['update_ts'];
   $update_id = $rowsArray['update_id'];
-} elseif ($result && $result->num_rows == 0){
-  $short_leave = "2";
-  $half_day = "4";
+} elseif ($result && $result->num_rows == 0) {
+  $short_leave = "2"; // hours
+  $half_day = "4";    // hours
 } else echo $conn->error;
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <title>Leave Module : ClassConnect</title>
   <?php require("../css.php"); ?>
@@ -28,7 +27,7 @@ if ($result && $result->num_rows == 1) {
 
   <div class="container-fluid moduleBody">
     <div class="row">
-      <div class="col-2 p-0 m-0 pl-2 full-height">
+      <div class="col-1 p-0 m-0 full-height">
         <div class="mt-3">
           <h5>Leave</h5>
         </div>
@@ -43,7 +42,7 @@ if ($result && $result->num_rows == 1) {
           <?php require("../searchBar.php"); ?>
         </div>
       </div>
-      <div class="col-10 leftLinkBody">
+      <div class="col-11 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="list-lf" role="tabpanel" aria-labelledby="list-lf-list">
             <div class="row">

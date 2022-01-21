@@ -7,48 +7,6 @@ require('../requireSubModule.php');
 <head>
   <title>Outcome Based Education : AcadPlus</title>
   <?php require("../css.php"); ?>
-  <style>
-    .collapsible-link::before {
-      content: '';
-      width: 14px;
-      height: 2px;
-      background: #333;
-      position: absolute;
-      top: calc(50% - 1px);
-      right: 1rem;
-      display: block;
-      transition: all 0.3s;
-    }
-
-    /* Vertical line */
-    .collapsible-link::after {
-      content: '';
-      width: 2px;
-      height: 14px;
-      background: #333;
-      position: absolute;
-      top: calc(50% - 7px);
-      right: calc(1rem + 6px);
-      display: block;
-      transition: all 0.3s;
-    }
-
-    .collapsible-link[aria-expanded='true']::after {
-      transform: rotate(90deg) translateX(-1px);
-    }
-
-    .collapsible-link[aria-expanded='true']::before {
-      transform: rotate(180deg);
-    }
-
-    .vertical {
-
-      border: none;
-      border-left: 1px solid hsla(200, 10%, 50%, 100);
-      height: 100vh;
-      width: 1px;
-    }
-  </style>
 </head>
 
 <body>
@@ -59,216 +17,204 @@ require('../requireSubModule.php');
         <h5 class="pt-3">Staff</h5>
         <div class="list-group list-group-mine" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active as" id="list-as-list" data-toggle="list" href="#list-as" role="tab" aria-controls="as"> Add Staff </a>
+          <a class="list-group-item list-group-item-action prog" data-toggle="list" href="#prog" role="tab" aria-controls="prog"> Progression </a>
         </div>
       </div>
       <div class="col-sm-11 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane fade show active" id="list-as" role="tabpanel" aria-labelledby="list-as-list">
             <div class="row">
-              <div class="col-4">
+              <div class="col-3">
                 <div class="card border-info mb-3">
                   <div class="card-header">
                     Enter Staff Name to Search
                   </div>
-                  <div class="card-body text-primary">
-                    <div class="input-group md-form form-sm form-2 mt-1">
-                      <input name="staffSearch" id="staffSearch" class="form-control my-0 py-1 red-border" type="text" placeholder="Search Staff" aria-label="Search">
-                      <div class="input-group-append">
-                        <span class="input-group-text cyan lighten-3" id="basic-text1"><i class="fas fa-search text-grey" aria-hidden="true"></i></span>
-                      </div>
-                    </div>
-                    <div class='list-group' id="staffAutoList"></div>
-                    <div class="row">
-                      <div class="col-sm-6">
-                        <button class="btn btn-sm m-0 addStaff">New Staff</button>
-                      </div>
-                      <div class="col-sm-6">
-                        <button class="btn btn-sm m-0 uploadStaff">Upload Staff</button>
-                      </div>
+                  <div class="input-group md-form form-sm form-2 mt-1">
+                    <input name="staffSearch" id="staffSearch" class="form-control" type="text" placeholder="Search Staff" aria-label="Search">
+                    <div class="input-group-append">
+                      <span class="input-group-text cyan lighten-3" id="basic-text1"><i class="fas fa-search text-grey" aria-hidden="true"></i></span>
                     </div>
                   </div>
-
+                  <div class='list-group' id="staffAutoList"></div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6 pr-0">
+                    <button class="btn btn-sm m-0 addStaff">New Staff</button>
+                  </div>
+                  <div class="col-sm-6 pl-1">
+                    <button class="btn btn-sm m-0 uploadStaff">Upload Staff</button>
+                  </div>
                 </div>
                 <p id="staffList"></p>
               </div>
-              <div class="col-8">
-                <div class="card border-info mb-3 staffProfile">
-                  <div class="card-header">Staff Profile</div>
-                  <div class="card-body text-primary">
-                    <div class="row">
-                      <div class="col-3">
-                        <div class="card">
-                          <div class="card-body">
-                            <div class="d-flex flex-column align-items-center text-center">
-                              <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="100">
+              <div class="col-9">
+                <div class="container card myCard mt-2">
+                  <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active" data-toggle="pill" href="#home" role="tab" aria-controls="home" aria-selected="true">Home</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="pill" href="#pills_basicInfo" role="tab" aria-controls="pills_basicInfo" aria-selected="true">Basic Info</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link pills_qualification" data-toggle="pill" href="#pills_qualification" role="tab" aria-controls="pills_qualification" aria-selected="true">Qualification</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link pills_reference" data-toggle="pill" href="#pills_experience" role="tab" aria-controls="pills_experience" aria-selected="true">Experience</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="pill" href="#pills_address" role="tab" aria-controls="pills_address" aria-selected="true">Address Details</a>
+                    </li>
+                  </ul>
+                  <div class="tab-content" id="pills-tabContent p-3">
+                    <div class="tab-pane show active" id="home" role="tabpanel" aria-labelledby="home">
+                      <div class="row">
+                        <div class="col-12">
+                          <div class="row">
+                            <div class="col-3 pr-1 text-center">
+                              <span class="studentImage"><img src="../../images/upload.jpg" width="70%"></span>
+                              <div class="border">
+                                <form class="form-horizontal" id="uploadModalForm">
+                                  <input type="file" name="upload_file">
+                                  <input type="hidden" name="studentId" id="uploadId">
+                                  <input type="hidden" name="action" value="uploadImage"><br>
+                                  <button type="submit" class="btn btn-sm btn-block">Upload Image</button>
+                                </form>
+                              </div>
+                            </div>
+                            <div class="col-9 pr-1">
+                              <div class="row">
+                                <div class="col-md-9">
+                                  <table width="100%">
+                                    <tr>
+                                      <td width="60%"><span class="largeText">Name </span></td>
+                                      <td class="largeText" id="staff_name">---</td>
+                                    </tr>
+                                    <tr>
+                                      <td width="60%"><span class="largeText">Employee Id </span></td>
+                                      <td class="largeText" id="studentIdPill">---</td>
+                                    </tr>
+                                    <tr>
+                                      <td width="60%"><span class="largeText"> Department </span></td>
+                                      <td class="largeText staff_mobile">---</td>
+                                    </tr>
+                                    <tr>
+                                      <td><span class="largeText"> Designation </span></td>
+                                      <td class="largeText staff_email">---</td>
+                                    </tr>
+                                    <tr>
+                                      <td><span class="largeText">Mobile</span></td>
+                                      <td class="largeText staff_dob">---</td>
+                                    </tr>
+                                    <tr>
+                                      <td><span class="largeText">Email </span></td>
+                                      <td class="largeText staff_doj">---</td>
+                                    </tr>
+                                    <tr>
+                                      <td><span class="largeText">DoJ </span></td>
+                                      <td class="largeText staff_doj">---</td>
+                                    </tr>
+                                  </table>
+                                </div>
+                                <div class="col-md-3"></div>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div class="col-9">
-                        <div class="card h-100">
-                          <div class="card-body">
-                            <div class="row">
-                              <div class="col-3">
-                                <h7 class="mb-0 ">Full Name</h7>
-                              </div>
-                              <div class="col-9 text-secondary staff_name">
-                                Kenneth Valdez
-                              </div>
+                    </div>
+                    <div class="tab-pane" id="pills_basicInfo" role="tabpanel" aria-labelledby="pills_basicInfo">
+                      <form class="form-horizontal">
+                        <input type="hidden" id="staffIdHidden" name="staffIdHidden">
+                        <div class="row">
+                          <div class="col-4">
+                            <div class="form-group">
+                              Staff Name
+                              <input type="text" class="form-control form-control-sm staffForm" id="sNameAccordian" name="sNameAccordian" placeholder="Staff Name" data-tag="staff_name">
                             </div>
-                            <div class="row">
-                              <div class="col-3">
-                                <h7 class="mb-0 ">DOJ</h7>
-                              </div>
-                              <div class="col-9 text-secondary staff_doj">
-                                Kenneth Valdez
-                              </div>
+                          </div>
+                          <div class="col-4">
+                            <div class="form-group">
+                              Father Name
+                              <input type="text" class="form-control form-control-sm staffForm" id="fName" name="fName" placeholder="Name of the Father" data-tag="staff_fname">
                             </div>
-                            <div class="row">
-                              <div class="col-3">
-                                <h7 class="mb-0 ">Email</h7>
-                              </div>
-                              <div class="col-9 text-secondary staff_email">
-                                Kenneth Valdez
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="col-3">
-                                <h7 class="mb-0 ">Mobile</h7>
-                              </div>
-                              <div class="col-9 text-secondary staff_mobile">
-                                Kenneth Valdez
-                              </div>
-                            </div>
-                            <div class="row">
-                              <div class="col-3">
-                                <h7 class="mb-0 ">User ID</h7>
-                              </div>
-                              <div class="col-9 text-secondary staff_userId">
-                                Kenneth Valdez
-                              </div>
+                          </div>
+                          <div class="col-4">
+                            <div class="form-group">
+                              Mother Name
+                              <input type="text" class="form-control form-control-sm staffForm" id="mName" name="mName" placeholder="Name of the Mother" data-tag="staff_mname">
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div id="accordionStaff" class="accordion shadow">
-                  <div class="card">
-                    <div id="headingOne" class="card-header bg-white shadow-sm border-0">
-                      <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" class="d-block position-relative text-dark text-uppercase collapsible-link py-2">Edit Details</a></h6>
-                    </div>
-                    <div id="collapseOne" aria-labelledby="headingOne" data-parent="#accordionStaff" class="collapse  collapseAccordian">
-                      <div class="card-body">
-                        <form class="form-horizontal">
-                          <input type="hidden" id="staffIdHidden" name="staffIdHidden">
-                          <div class="row">
-                            <div class="col-6">
-                              <div class="form-group">
-                                Staff Name
-                                <input type="text" class="form-control form-control-sm staffForm" id="sNameAccordian" name="sNameAccordian" placeholder="Staff Name" data-tag="staff_name">
-                              </div>
-                            </div>
-                            <div class="col-6">
-                              <div class="form-group">
-                                Date of Birth
-                                <input type="date" class="form-control form-control-sm staffForm" id="sDobAccordian" name="sDobAccordian" placeholder="Date of Birth" data-tag="staff_dob">
-                              </div>
+                        <div class="row">
+                          <div class="col-4">
+                            <div class="form-group">
+                              Email
+                              <input type="text" class="form-control form-control-sm staffForm" id="sEmailAccordian" name="sEmailAccordian" placeholder="Staff Email Id" data-tag="staff_email">
                             </div>
                           </div>
-                          <div class="row">
-                            <div class="col-6">
-                              <div class="form-group">
-                                Email
-                                <input type="text" class="form-control form-control-sm staffForm" id="sEmailAccordian" name="sEmailAccordian" placeholder="Staff Email Id" data-tag="staff_email">
-                              </div>
-                            </div>
-                            <div class="col-6">
-                              <div class="form-group">
-                                Mobile Number
-                                <input type="text" class="form-control form-control-sm staffForm" id="sMobileAccordian" name="sMobileAccordian" placeholder="Staff Mobile Number" data-tag="staff_mobile">
-                              </div>
+                          <div class="col-4">
+                            <div class="form-group">
+                              Mobile Number
+                              <input type="text" class="form-control form-control-sm staffForm" id="sMobileAccordian" name="sMobileAccordian" placeholder="Staff Mobile Number" data-tag="staff_mobile">
                             </div>
                           </div>
-                          <div class="row">
-                            <div class="col-6">
-                              <div class="form-group">
-                                Father Name
-                                <input type="text" class="form-control form-control-sm staffForm" id="fName" name="fName" placeholder="Name of the Father" data-tag="staff_fname">
-                              </div>
-                            </div>
-                            <div class="col-6">
-                              <div class="form-group">
-                                Mother Name
-                                <input type="text" class="form-control form-control-sm staffForm" id="mName" name="mName" placeholder="Name of the Mother" data-tag="staff_mname">
-                              </div>
+                          <div class="col-4">
+                            <div class="form-group">
+                              Date of Birth
+                              <input type="date" class="form-control form-control-sm staffForm" id="sDobAccordian" name="sDobAccordian" placeholder="Date of Birth" data-tag="staff_dob">
                             </div>
                           </div>
-                          <div class="row">
-                            <div class="col-6">
-                              <div class="form-group">
-                                Date of Joining
-                                <input type="date" class="form-control form-control-sm staffForm" id="sDojAccordian" name="sDojAccordian" placeholder="Date of Joining" data-tag="staff_doj">
-                              </div>
-                            </div>
-                            <div class="col-6">
-                              <div class="form-group">
-                                Adhaar Number
-                                <input type="text" class="form-control form-control-sm staffForm" id="sAdhaar" name="sAdhaar" placeholder="12 Digit Adhaar Number" data-tag="staff_adhaar">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-12">
-                              <div class="form-group">
-                                Address
-                                <input type="text" class="form-control form-control-sm staffForm" id="sAddress" name="sAddress" placeholder="Address" data-tag="staff_address">
-                              </div>
-                            </div>
-                          </div>
-                          <hr>
-                          <div class="row">
-                            <div class="col-5">
-                              <div class="form-check-inline">
-                                <input type="radio" class="form-check-input staffForm" checked id="male" name="sGender" value="male" data-tag="staff_gender">Male
-                              </div>
-                              <div class="form-check-inline">
-                                <input type="radio" class="form-check-input staffForm" id="female" name="sGender" value="female" data-tag="staff_gender">Female
-                              </div>
-                            </div>
-                            <div class="col-7">
-                              <div class="form-check-inline">
-                                <input type="radio" class="form-check-input staffForm" checked id="Teaching" name="sTeaching" value="Teaching" data-tag="staff_teaching">Teaching
-                              </div>
-                              <div class="form-check-inline">
-                                <input type="radio" class="form-check-input staffForm" id="NonTeaching" name="sTeaching" value="NonTeaching" data-tag="staff_teaching">Non-Teaching
-                              </div>
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card">
-                    <div id="headingTwo" class="card-header bg-white shadow-sm border-0">
-                      <h6 class="mb-0 font-weight-semibold"><a href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" class="d-block position-relative collapsed text-dark text-uppercase collapsible-link py-2">Add Qualification</a></h6>
-                    </div>
-                    <div id="collapseTwo" aria-labelledby="headingTwo" data-parent="#accordionStaff" class="collapse collapseAccordian">
-                      <div class="card-body">
-                        <input type="hidden" id="stqIdHidden" name="stqIdHidden">
+                        </div>
                         <div class="row">
                           <div class="col-6">
                             <div class="form-group">
-                              Qualification
+                              Date of Joining
+                              <input type="date" class="form-control form-control-sm staffForm" id="sDojAccordian" name="sDojAccordian" placeholder="Date of Joining" data-tag="staff_doj">
+                            </div>
+                          </div>
+                          <div class="col-6">
+                            <div class="form-group">
+                              Adhaar Number
+                              <input type="text" class="form-control form-control-sm staffForm" id="sAdhaar" name="sAdhaar" placeholder="12 Digit Adhaar Number" data-tag="staff_adhaar">
+                            </div>
+                          </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                          <div class="col-5">
+                            <div class="form-check-inline">
+                              <input type="radio" class="form-check-input staffForm" checked id="male" name="sGender" value="male" data-tag="staff_gender">Male
+                            </div>
+                            <div class="form-check-inline">
+                              <input type="radio" class="form-check-input staffForm" id="female" name="sGender" value="female" data-tag="staff_gender">Female
+                            </div>
+                          </div>
+                          <div class="col-7">
+                            <div class="form-check-inline">
+                              <input type="radio" class="form-check-input staffForm" checked id="Teaching" name="sTeaching" value="Teaching" data-tag="staff_teaching">Teaching
+                            </div>
+                            <div class="form-check-inline">
+                              <input type="radio" class="form-check-input staffForm" id="NonTeaching" name="sTeaching" value="NonTeaching" data-tag="staff_teaching">Non-Teaching
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="tab-pane fade" id="pills_qualification" role="tabpanel" aria-labelledby="pills_qualification">
+                      <form id="qualForm">
+                        <div class="row">
+                          <div class="col-1 pr-1">
+                            <div class="form-group">
+                              <label>Qual</label>
                               <div class="row">
                                 <div class="col">
                                   <?php
                                   $sql_qualification = "select * from master_name where mn_code='qt'";
                                   $result = $conn->query($sql_qualification);
                                   if ($result) {
-                                    echo '<select class="form-control form-control-sm staffQualificationForm" name="sel_qual" id="sel_qual" data-tag="qualification_id" required>';
-                                    echo '<option selected disabled>Select Qualification</option>';
+                                    echo '<select class="form-control form-control-sm" name="sel_qual" id="sel_qual">';
+                                    echo '<option value="0">Qualification</option>';
                                     while ($rows = $result->fetch_assoc()) {
                                       $select_id = $rows['mn_id'];
                                       $select_name = $rows['mn_name'];
@@ -282,56 +228,116 @@ require('../requireSubModule.php');
                               </div>
                             </div>
                           </div>
-                          <div class="col-6">
+                          <div class="col-3 pl-0 pr-1">
                             <div class="form-group">
-                              Institute
-                              <input type="text" class="form-control form-control-sm staffQualificationForm" id="sInst" name="sInst" placeholder="Name of the Institute" data-tag="stq_institute">
+                              <label>Institute</label>
+                              <input type="text" class="form-control form-control-sm" id="sq_institute" name="sq_institute" placeholder="Name of the Institute">
+                            </div>
+                          </div>
+                          <div class="col-3 pl-0 pr-1">
+                            <div class="form-group">
+                              <label>Board</label>
+                              <input type="text" class="form-control form-control-sm" id="sq_board" name="sq_board" placeholder="Board">
+                            </div>
+                          </div>
+                          <div class="col-1 pl-0 pr-1">
+                            <div class="form-group">
+                              <label>MO</label>
+                              <input type="number" class="form-control form-control-sm" id="sq_mo" name="sq_mo" placeholder="Marks Obtained" value="0">
+                            </div>
+                          </div>
+                          <div class="col-1 pl-0 pr-1">
+                            <div class="form-group">
+                              <label>MM</label>
+                              <input type="number" class="form-control form-control-sm" id="sq_mm" name="sq_mm" placeholder="Maximum marks" value="100">
+                            </div>
+                          </div>
+                          <div class="col-1 pl-0 pr-1">
+                            <div class="form-group">
+                              <label>CGPA</label>
+                              <input type="number" class="form-control form-control-sm" id="sq_cgpa" name="sq_cgpa" placeholder="CGPA" value="0" step=".01">
+                            </div>
+                          </div>
+                          <div class="col-1 pl-0 pr-1">
+                            <div class="form-group">
+                              <label>Per(%)</label>
+                              <input type="number" class="form-control form-control-sm" id="sq_percentage" name="sq_percentage" placeholder="Percentage" value="0" step=".1">
+                            </div>
+                          </div>
+                          <div class="col-1 pl-0">
+                            <div class="form-group">
+                              <label>Year</label>
+                              <input type="number" class="form-control form-control-sm" id="sq_year" name="sq_year" placeholder="Passing Year" value="2000">
                             </div>
                           </div>
                         </div>
-                        <div class="row">
-                          <div class="col-6">
-                            <div class="form-group">
-                              Board
-                              <input type="text" class="form-control form-control-sm staffQualificationForm" id="sBoard" name="sBoard" placeholder="Board" data-tag="stq_board">
-                            </div>
-                          </div>
-                          <div class="col-6">
-                            <div class="form-group">
-                              Year of Passing
-                              <input type="text" class="form-control form-control-sm staffQualificationForm" id="sYear" name="sYear" placeholder="Passing Year" data-tag="stq_year">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-4">
-                            <div class="form-group">
-                              Marks Obtained
-                              <input type="text" class="form-control form-control-sm staffQualificationForm" id="sMarksObt" name="sMarksObt" placeholder="Marks Obtained" data-tag="stq_marksObtained">
-                            </div>
-                          </div>
-                          <div class="col-4">
-                            <div class="form-group">
-                              Maximum Marks
-                              <input type="text" class="form-control form-control-sm staffQualificationForm" id="sMaxMarks" name="sMaxMarks" placeholder="Maximum marks" data-tag="stq_marksMax">
-                            </div>
-                          </div>
-                          <div class="col-4">
-                            <div class="form-group">
-                              Percentage/CGPA
-                              <input type="text" class="form-control form-control-sm staffQualificationForm" id="sCgpa" name="sCgpa" placeholder="Percentage/CGPA" data-tag="stq_percentage">
-                            </div>
+                        <input type="hidden" id="studentIdQual" name="studentIdQual">
+                        <input type="hidden" name="action" value="updateQualification">
+                        <button class="btn btn-sm" name="submit_qual" id="submit_qual">Update/Add</button>
+                      </form>
+                      <table class="table table-bordered table-striped list-table-xs mt-2" id="qualificationShowList">
+                        <tr>
+                          <th>Id</th>
+                          <th>Qualification</th>
+                          <th>Institute</th>
+                          <th>Board</th>
+                          <th>MO/MM</th>
+                          <th>%/CGPA</th>
+                          <th>Year</th>
+                        </tr>
+                      </table>
+                    </div>
+                    <div class="tab-pane fade" id="pills_address" role="tabpanel" aria-labelledby="pills_address">
+                      <div class="row">
+                        <div class="col-6 pr-0">
+                          <div class="form-group">
+                            <label>Permanent Address</label>
+                            <textarea class="form-control form-control-sm sAddressForm" id="permanent_address" name="permanent_address" rows="3" data-tag="permanent_address"></textarea>
                           </div>
                         </div>
-                        <div class="row">
-                          <div class="col-12">
-                            <p style="text-align:center" id="qualificationShowList"></p>
+                        <div class="col-3 pr-0 pl-1">
+                          <div class="form-group">
+                            <label>Correspondence Address</label>
+                            <textarea class="form-control form-control-sm sAddressForm" id="correspondence_address" name="correspondence_address" rows="3" data-tag="correspondence_address"></textarea>
+                          </div>
+                        </div>
+                        <div class="col-3 pl-1">
+                          <div class="form-group">
+                            <label>State</label>
+                            <div id="stateName"></div>
+                            <label>District</label>
+                            <p id="districtName"></p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-3 pr-1">
+                          <div class="form-group">
+                            <label>City</label>
+                            <input type="text" class="form-control form-control-sm sAddressForm" id="sCity" name="sCity" placeholder="City" data-tag="city">
+                          </div>
+                        </div>
+                        <div class="col-3 pl-0 pr-1">
+                          <div class="form-group">
+                            <label>Pin Code</label>
+                            <input type="text" class="form-control form-control-sm sAddressForm" id="sPincode" name="sPincode" placeholder="Pincode" data-tag="pincode">
+                          </div>
+                        </div>
+                        <div class="col-3 pl-0 pr-1">
+                          <div class="form-group">
+                            <label>State</label>
+                            <p id="stateOption"></p>
+                          </div>
+                        </div>
+                        <div class="col-3 pl-0 ">
+                          <div class="form-group">
+                            <label>District</label>
+                            <p id="districtOption"></p>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>

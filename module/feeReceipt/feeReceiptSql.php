@@ -3,12 +3,12 @@ require('../../module/requireSubModule.php');
 // echo $_POST['action'];
 if (isset($_POST["query"])) {
   $output = '';
-  $sql = "select s.student_id, s.student_name, sd.student_fname from student s, student_detail sd where s.student_name LIKE '%" . $_POST["query"] . "%' and s.student_id=sd.student_id and s.student_status='0' and s.program_id>0";
+  $sql = "select s.student_id, s.student_name, sd.student_fname, b.batch from student s, student_detail sd, batch b where s.student_name LIKE '%" . $_POST["query"] . "%' and s.student_id=sd.student_id and s.ay_id=b.batch_id and s.student_status='0' and s.program_id>0";
   $result = $conn->query($sql);
   $output = '<ul class="list-group">';
   if ($result) {
     while ($row = $result->fetch_assoc()) {
-      $output .= '<li class="list-group-item list-group-item-action autoList" style="z-index: 4;" data-std="' . $row["student_id"] . '" >' . $row["student_name"] . ' [' . $row["student_fname"] . ']</li>';
+      $output .= '<li class="list-group-item list-group-item-action autoList" style="z-index: 4;" data-std="' . $row["student_id"] . '" >' . $row["student_name"] . ' [' . $row["student_fname"] . ']' . $row["batch"] . '</li>';
     }
   } else {
     $output .= '<li>Student Not Found</li>';
@@ -26,9 +26,10 @@ if (isset($_POST['action'])) {
   } elseif ($_POST['action'] == 'fetchStudent') {
     $id = $_POST['userId'];
     $sql = "select st.*, sd.*, b.batch, p.program_name from student st, student_detail sd, batch b, program p where st.batch_id=b.batch_id and st.user_id='$id' and st.program_id=p.program_id and st.student_id=sd.student_id";
-    $output=array();
+    $output = array();
     $result = $conn->query($sql)->fetch_assoc();
     $output["student_name"] = $result["student_name"];
+    $output["student_image"] = $result["student_image"];
     $output["student_fname"] = $result["student_fname"];
     $output["student_rollno"] = $result["student_rollno"];
     $output["student_id"] = $result["student_id"];
@@ -36,8 +37,8 @@ if (isset($_POST['action'])) {
     $output["batch"] = $result["batch"];
     $output["program_name"] = $result["program_name"];
     $output["fcg"] = $result["student_fee_category"];
-    $output["ay"] =getField($conn, $result["ay_id"], "batch", "batch_id", "batch");
-    
+    $output["ay"] = getField($conn, $result["ay_id"], "batch", "batch_id", "batch");
+
     echo json_encode($output);
   } elseif ($_POST['action'] == 'feeType') {
     $sql = "select * from master_name where mn_code='ft' and mn_status='0' order by mn_name ASC";
@@ -94,7 +95,7 @@ if (isset($_POST['action'])) {
     } else echo "Session Time Out !! Please logout and login Again";
   } elseif ($_POST['action'] == 'feeReceiptList') {
     $student_id = $_POST['id'];
-    $sql = "select fr.*, mn.mn_name from fee_receipt fr, master_name mn where fr.student_id='$student_id' and mn.mn_id=fr.fee_type and fr_status='0' order by fr.fee_semester";
+    $sql = "select fr.*, mn.mn_name from fee_receipt fr, master_name mn where fr.student_id='$student_id' and mn.mn_id=fr.fee_type and fr.fr_status='0' order by fr.fr_id";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     else {
@@ -102,6 +103,7 @@ if (isset($_POST['action'])) {
       $subArray = array();
       while ($rowsFee = $result->fetch_assoc()) {
         $subArray["fr_id"] = $rowsFee["fr_id"];
+        $subArray["semester"] = $rowsFee["fee_semester"];
         $subArray["frev_id"] = getField($conn, $rowsFee["fr_id"], "fee_reverse", "fr_id", "frev_id");
         $subArray["mn_name"] = $rowsFee["mn_name"];
         $subArray["fee_type"] = getField($conn, $rowsFee["fee_type"], "master_name", "mn_id", "mn_name");
@@ -166,10 +168,13 @@ if (isset($_POST['action'])) {
     $dateFrom = $_POST['dateFrom'];
     $dateTo = $_POST['dateTo'];
     $fee_mode = $_POST['mode'];
-
+    $fee_type = $_POST['ft'];
     // echo "$fee_mode";
-    if ($fee_mode == 'ALL') $sql = "select fr.*, mn.mn_name from fee_receipt fr, master_name mn where fr.fr_date>='$dateFrom' and fr.fr_date<='$dateTo' and mn.mn_id=fr.fee_type and fr.fr_status='0' and fr.fr_id NOT IN (select fr_id from fee_reverse) order by fr.fr_id";
-    else $sql = "select fr.*, mn.mn_name from fee_receipt fr, master_name mn where fr.fr_date>='$dateFrom' and fr.fr_date<='$dateTo' and fr.fee_mode='$fee_mode' and mn.mn_id=fr.fee_type and fr.fr_status='0' and fr.fr_id NOT IN (select fr_id from fee_reverse) order by fr.fr_id";
+
+    if ($fee_mode > 0 && $fee_type == 'ALL') $sql = "select fr.*, mn.mn_name from fee_receipt fr, master_name mn where fr.fr_date>='$dateFrom' and fr.fr_date<='$dateTo' and fr.fee_mode='$fee_mode' and  mn.mn_id=fr.fee_type and fr.fr_status='0' and fr.fr_id NOT IN (select fr_id from fee_reverse) order by fr.fr_id";
+    elseif ($fee_mode == 'ALL' && $fee_type > 0) $sql = "select fr.*, mn.mn_name from fee_receipt fr, master_name mn where fr.fr_date>='$dateFrom' and fr.fr_date<='$dateTo' and fr.fee_type='$fee_type' and  mn.mn_id=fr.fee_type and fr.fr_status='0' and fr.fr_id NOT IN (select fr_id from fee_reverse) order by fr.fr_id";
+    elseif ($fee_mode > 0 && $fee_type > 0) $sql = "select fr.*, mn.mn_name from fee_receipt fr, master_name mn where fr.fr_date>='$dateFrom' and fr.fr_date<='$dateTo' and fr.fee_mode='$fee_mode' and fr.fee_type='$fee_type' and  mn.mn_id=fr.fee_type and fr.fr_status='0' and fr.fr_id NOT IN (select fr_id from fee_reverse) order by fr.fr_id";
+    else $sql = "select fr.*, mn.mn_name from fee_receipt fr, master_name mn where fr.fr_date>='$dateFrom' and fr.fr_date<='$dateTo' and mn.mn_id=fr.fee_type and fr.fr_status='0' and fr.fr_id NOT IN (select fr_id from fee_reverse) order by fr.fr_id";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     else {
@@ -190,7 +195,7 @@ if (isset($_POST['action'])) {
         $subArray["fr_date"] = $rowsFee["fr_date"];
         $subArray["transaction_date"] = $rowsFee["transaction_date"];
         $subArray["transaction_id"] = $rowsFee["transaction_id"];
-        if(strlen($rowsFee["fr_bank"])>0)$subArray["fee_bank"] = $rowsFee["fr_bank"];
+        if (strlen($rowsFee["fr_bank"]) > 0) $subArray["fee_bank"] = $rowsFee["fr_bank"];
         else $subArray["fee_bank"] = '--';
         $json_array[] = $subArray;
       }
@@ -252,8 +257,9 @@ if (isset($_POST['action'])) {
     else {
       while ($rowsFee = $result->fetch_assoc()) {
         $subArray["fr_id"] = "--";
+        $subArray["semester"] = $rowsFee["fee_semester"];
         $subArray["fr_amount"] = $rowsFee["fd_dues"] - $rowsFee["fd_concession"];
-        $subArray["fr_desc"] = $rowsFee["fd_remarks"].' [Dues and Concession]';
+        $subArray["fr_desc"] = $rowsFee["fd_remarks"] . ' [Dues and Concession]';
         $subArray["fee_type"] = getField($conn, $rowsFee["fee_type"], "master_name", "mn_id", "mn_name");
         $subArray["fee_mode"] = 'Direct';
         $subArray["user_id"] = getField($conn, $rowsFee["update_id"], "staff", "staff_id", "user_id");
@@ -268,7 +274,8 @@ if (isset($_POST['action'])) {
     else {
       while ($rowsFee = $result->fetch_assoc()) {
         $subArray["fr_id"] = $rowsFee["fr_id"];
-        $subArray["fr_desc"] = $rowsFee["fr_desc"].' [Reverse Entry]'.$rowsFee["frev_desc"];
+        $subArray["semester"] = $rowsFee["fee_semester"];
+        $subArray["fr_desc"] = $rowsFee["fr_desc"] . ' [Reverse Entry]' . $rowsFee["frev_desc"];
         $subArray["fr_amount"] = $rowsFee["fr_amount"];
         $subArray["fee_type"] = getField($conn, $rowsFee["fee_type"], "master_name", "mn_id", "mn_name");
         $subArray["fee_mode"] = 'Direct';

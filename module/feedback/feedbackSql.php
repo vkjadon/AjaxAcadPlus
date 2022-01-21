@@ -121,11 +121,10 @@ if (isset($_POST['action'])) {
 	} elseif ($_POST['action'] == "setActiveTemplate") {
 		$sql = "update template set template_status='1' where update_id='$myId'";
 		$result = $conn->query($sql);
-
 		$sql = "update template set template_status='0' where template_id='" . $_POST['template_id'] . "'";
 		$result = $conn->query($sql);
 		if (!$result) echo $conn->error;
-		else echo "Updated";
+		else echo "Set Template Active";
 	}elseif ($_POST['action'] == "templateQuestionList") {
 		$sql = "select fq.* from template_question tq, feedback_question fq where tq.template_id='".$_POST['template_id']."' and tq.fq_id=fq.fq_id and fq.update_id='$myId' and fq.fq_status='1' order by fq.fq_id desc";
 		$result = $conn->query($sql);
@@ -143,11 +142,10 @@ if (isset($_POST['action'])) {
 	} elseif ($_POST['action'] == "useTemplate") {
 		$sql = "update feedback set feedback_status='1' where update_id='$myId'";
 		$result = $conn->query($sql);
-
 		$sql = "insert into feedback (session_id, template_id, feedback_name, feedback_section, update_id, feedback_status) values('$mySes', '" . $_POST['template_id'] . "', 'New Feedback', '1', '$myId', '0')";
 		$result = $conn->query($sql);
-		if (!$result) echo $conn->error;
-		else echo "Updated";
+		if (!$result) echo $conn->errno;
+		else echo "A Feedback is Created for this Template !!";
 	} elseif ($_POST['action'] == "feedbackList") {
 		$sql = "select mn.mn_name, t.template_name, fb.* from feedback fb, template t, master_name mn where fb.session_id='$mySes' and t.template_id=fb.template_id and t.mn_id=mn.mn_id order by feedback_id desc";
 		$result = $conn->query($sql);
@@ -180,7 +178,7 @@ if (isset($_POST['action'])) {
 			echo json_encode($json_array);
 		}
 	} elseif ($_POST['action'] == "updateFeedback") {
-		$sql = "update feedback set feedback_name='" . data_check($_POST['feedback_name']) . "', feedback_open='" . data_check($_POST['feedback_open']) . "', feedback_close='" . data_check($_POST['feedback_close']) . "', update_ts='$submit_ts' where update_id='$myId' and feedback_status='0'";
+		$sql = "update feedback set feedback_name='" . data_check($_POST['feedback_name']) . "', feedback_open='" . data_check($_POST['feedback_open']) . "', feedback_open_time='" . data_check($_POST['feedback_open_time']) . "',feedback_close='" . data_check($_POST['feedback_close']) . "', feedback_close_time='" . data_check($_POST['feedback_close_time']) . "',update_ts='$submit_ts' where update_id='$myId' and feedback_status='0'";
 		$result = $conn->query($sql);
 		if (!$result) echo $conn->error;
 		else echo "Updated";

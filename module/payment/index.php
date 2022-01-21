@@ -21,45 +21,11 @@ $phpFile = "paymentSql.php";
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active pv" id="list-pv-list" data-toggle="list" href="#list-pv" role="tab" aria-controls="pv"> Voucher</a>
           <a class="list-group-item list-group-item-action trans" id="list-trans-list" data-toggle="list" href="#list-trans" role="tab" aria-controls="trans"> Transactions</a>
+          <a class="list-group-item list-group-item-action rev" data-toggle="list" href="#rev" role="tab" aria-controls="rev"> Reverse Entry</a>
         </div>
       </div>
       <div class="col-11 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
-          <!-- <div class="row">
-            <div class="col-6 pr-0">
-              <div class="card border-info">
-                <div class="card-body text-primary">
-                  <div class="row">
-                    <div class="col-3 pr-0">
-                      <input type="text" class="form-control form-control-sm" id="studentId" name="studentId" placeholder="Student Id" aria-label="studentId">
-                    </div>
-                    <div class="col-3 pl-1 pr-0">
-                      <button type="button" class="btn btn-block btn-sm" id="searchStudent">Student <i class="fas fa-search"></i></button>
-                    </div>
-                    <div class="col-3 pl-1 pr-0">
-                      <button type="button" class="btn btn-block btn-sm" id="staffSearch">Staff <i class="fas fa-search"></i></button>
-                    </div>
-                    <div class="col-3 pl-1">
-                      <button type="button" class="btn btn-block btn-sm" id="vendorSearch">Vendor <i class="fas fa-search"></i></button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-6 pr-0">
-              <div class="card border-info">
-                <div class="card-body text-primary">
-                  <div class="row">
-                    <div class="col-6 pr-0">
-                      <p id="name"></p>
-                    </div>
-                    <div class="col-6 pl-1">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
           <div class="tab-pane show active" id="list-pv" role="tabpanel" aria-labelledby="list-pv-list">
             <div class="row">
               <div class="col-9 pr-1">
@@ -355,8 +321,76 @@ $phpFile = "paymentSql.php";
                     <th class="text-center">TransDate</th>
                     <th class="text-center">Type</th>
                     <th class="text-center">StaffId</th>
+                    <th class="text-center">Reverse</th>
                   </table>
                 </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="rev" role="tabpanel" aria-labelledby="rev">
+            <div class="row">
+              <div class="col-6">
+                <div class="container card mt-2 myCard">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="row">
+                        <div class="col-md-4 pr-0">
+                          <div class="form-group">
+                            <label>Payment Voucher ID</label>
+                            <input type="text" class="form-control form-control-sm" id="pvIdShow" name="pvIdShow">
+                          </div>
+                        </div>
+                        <div class="col-md-6 pl-1 mt-3">
+                          <div class="form-group">
+                            <button class="btn btn-sm pvDetailShow">Show Payement Voucher</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <table class="table table-bordered list-table-xxs mt-3" id="pvDetail">
+                  <tr>
+                    <td colspan="3">
+                      <div class="row m-2">
+                        <div class="col-12 text-center">
+                          <h4 class="largeText" style="text-decoration: underline;">Payment Voucher</h4>
+                        </div>
+                        <div class="col-12">
+                          <span class="largeText">Payee Name : </span>
+                          <span class="largeText" id="payeeNameRev"></span>
+                        </div>
+                        <div class="col-12">
+                          <span class="largeText"> On Account of: </span>
+                          <span class="largeText" id="pvHeadRev" style="text-decoration: underline;"></span>
+                        </div>
+                        <div class="col-12">
+                          <span class="largeText"> dated : </span>
+                          <span class="largeText" id="transactionDateRev" style="text-decoration: underline;"></span>
+                        </div>
+                        <div class="col-12">
+                          <p class="largeText">Description </p>
+                          <span id="largeText"><input type="text" class="form-control form-control-sm" id="pr_desc" name="pr_desc"></span>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td width="20%">
+                      <div class="border mt-0 mb-2" style="color: black; ">
+                        <span class="largeText">&#8377; </span>
+                        <span class="largeText" id="pvAmountRev"></span>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="largeText" id="pvAmountWordRev"></span>
+                    </td>
+                    <td width="20%">
+                      <br>
+                      <button class="btn btn-sm pvRevButton">Reverse Voucher</button>
+                    </td>
+                  </tr>
+                </table>
               </div>
             </div>
           </div>
@@ -375,10 +409,10 @@ $phpFile = "paymentSql.php";
     feeMode();
 
     $(document).on("click", "#pvDailyPill", function() {
-      pvDate=$("#pv_date").val()
+      pvDate = $("#pv_date").val()
       $.alert("Daily " + pvDate);
       $.post("<?php echo $phpFile; ?>", {
-        pvDate : pvDate,
+        pvDate: pvDate,
         action: "pvDaily"
       }, function() {}, "json").done(function(data, status) {
         // $.alert(data);
@@ -414,7 +448,7 @@ $phpFile = "paymentSql.php";
 
     $(document).on("click", ".showVoucher", function() {
       var pv_id = $(this).attr("data-pv");
-      // $.alert("Fr Id " + pv_id );
+      $.alert("Fr Id " + pv_id);
       $.post("<?php echo $phpFile; ?> ", {
         pv_id: pv_id,
         action: "fetchVoucher"
@@ -439,6 +473,26 @@ $phpFile = "paymentSql.php";
         $("#transactionDate").html(getFormattedDate(data.transaction_date, "dmY"));
         $("#pvAmount").text(data.pv_amount + '/-');
         $("#pvAmountWord").text(numberToWords(parseInt(data.pv_amount)) + ' only');
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
+    $(document).on("click", ".pvDetailShow", function() {
+      var pv_id = $("#pvIdShow").val();
+      // $.alert("PV Id " + pv_id );
+      $.post("<?php echo $phpFile; ?> ", {
+        pv_id: pv_id,
+        action: "fetchVoucher"
+      }, () => {}, "json").done(function(data, status) {
+        // $.alert(data.fr_id);
+        // console.log(data)
+        $("#pvHeadRev").html(data.pv_head);
+        $("#transactionDateRev").html(getFormattedDate(data.update_ts, "dmY"));
+        $('#pvDescRev').html(data.pv_desc)
+        $('#payeeNameRev').html(data.payee_name)
+        $("#pvAmountRev").text(data.pv_amount + '/-');
+        $("#pvAmountWordRev").text(numberToWords(parseInt(data.pv_amount)) + ' only');
       }).fail(function() {
         $.alert("fail in place of error");
       })
@@ -512,6 +566,7 @@ $phpFile = "paymentSql.php";
           card += '<td class="text-center">' + value.transaction_date + '</td>';
           card += '<td class="text-center">' + value.pv_type + '</td>';
           card += '<td class="text-center">' + value.staff_id + '</td>';
+          card += '<td class="text-center">' + value.pr_id + '</td>';
           card += '</tr>';
         });
         $("#transactionList").find("tr:gt(0)").remove();
@@ -536,6 +591,42 @@ $phpFile = "paymentSql.php";
       }
     });
 
+    $(document).on('click', '.pvRevButton', function(event) {
+      var pv_id = $("#pvIdShow").val();
+      var pr_desc = $("#pr_desc").val();
+      if (pv_id > 0) {
+        $.confirm({
+          title: 'Please Confirm !',
+          draggable: true,
+          content: "<b><i>Payment No. " + pv_id + " is being Reversed !! <br> Remarks : " + pr_desc + "</i></b>",
+          buttons: {
+            confirm: {
+              btnClass: 'btn-info',
+              action: function() {
+                $.post("paymentSql.php", {
+                  id: pv_id,
+                  pr_desc: pr_desc,
+                  action: "addPVReverse"
+                }, function(data, status) {
+                  $("#pr_desc").val("");
+                  $.alert(data);
+                }, "text").fail(function() {
+                  $.alert("fail in place of error");
+                })
+              }
+            },
+            cancel: {
+              btnClass: "btn-danger",
+              action: function() {}
+            },
+          }
+        });
+
+
+        // $.alert(feeAmount);
+
+      } else $.alert("Student not Selected !!");
+    });
 
     function paymentHead() {
       // $.alert("Department ");

@@ -1,7 +1,6 @@
 <?php
 require('../requireSubModule.php');
 $phpFile = "userSql.php";
-
 ?>
 
 <!DOCTYPE html>
@@ -21,15 +20,16 @@ $phpFile = "userSql.php";
           <h5>Manage Users</h5>
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-        <?php
-          if(in_array("17",$myLinks))echo '<a class="list-group-item list-group-item-action aru" id="list-aru-list" data-toggle="list" href="#list-aru" role="tab" aria-controls="aru">Add/Remove</a>';
-          if(in_array("18",$myLinks))echo '<a class="list-group-item list-group-item-action ml" id="list-ml-list" data-toggle="list" href="#list-ml" role="tab" aria-controls="ml">Manage Links</a>';
-          if(in_array("19",$myLinks))echo '<a class="list-group-item list-group-item-action ulr" id="list-ulr-list" data-toggle="list" href="#list-ulr" role="tab" aria-controls="ulr">User Log Report</a>';
+          <?php
+          if (in_array("18", $myLinks)) echo '<a class="list-group-item list-group-item-action ml" id="list-ml-list" data-toggle="list" href="#list-ml" role="tab" aria-controls="ml">Links to Responsibility</a>';
+          if (in_array("17", $myLinks)) echo '<a class="list-group-item list-group-item-action aru" id="list-aru-list" data-toggle="list" href="#list-aru" role="tab" aria-controls="aru">Add/Remove</a>';
+          // if (in_array("19", $myLinks)) echo '<a class="list-group-item list-group-item-action ulr" id="list-ulr-list" data-toggle="list" href="#list-ulr" role="tab" aria-controls="ulr">User Log Report</a>';
           ?>
         </div>
       </div>
       <div class="col-11 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane fade" id="list-aru" role="tabpanel" aria-labelledby="list-aru-list">
           <div class="row">
             <div class="col-4 pr-0">
               <div class="card border-info">
@@ -48,29 +48,7 @@ $phpFile = "userSql.php";
                 </div>
               </div>
             </div>
-            <div class="col-md-2 pl-1">
-              <div class="card border-info">
-                <div class="card-body text-primary">
-                  <?php
-                  $curl = curl_init();
-                  curl_setopt($curl, CURLOPT_URL, "https://classconnect.in/api/get_portal_group.php");
-                  curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                  $output = curl_exec($curl);
-                  $group = json_decode($output, true);
-                  echo '<select class="form-control form-control-sm" name="sel_pg" id="sel_pg" required>';
-                  echo '<option value="0" disabled>Select Group</option>';
-
-                  for ($i = 0; $i < count($group["data"]); $i++) {
-                    echo '<option value="' . $group["data"][$i]["id"] . '">' . $group["data"][$i]["id"] . '-' . $group["data"][$i]["name"] . '</option>';
-                  }
-                  echo '</select>';
-                  curl_close($curl);
-                  ?>
-                </div>
-              </div>
-            </div>
           </div>
-          <div class="tab-pane fade" id="list-aru" role="tabpanel" aria-labelledby="list-aru-list">
             <div class="row">
               <div class="col-6">
                 <div class="container card mt-2 myCard">
@@ -100,7 +78,28 @@ $phpFile = "userSql.php";
           </div>
           <div class="tab-pane fade" id="list-ml" role="tabpanel" aria-labelledby="list-ml-list">
             <div class="card mt-2 myCard">
-              <div class="row m-2">
+              <div class="row m-1">
+                <div class="col-md-2 pl-1">
+                  <div class="card border-info">
+                    <div class="card-body text-primary">
+                      <?php
+                      $curl = curl_init();
+                      curl_setopt($curl, CURLOPT_URL, "https://classconnect.in/api/get_portal_group.php");
+                      curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                      $output = curl_exec($curl);
+                      $group = json_decode($output, true);
+                      echo '<select class="form-control form-control-sm" name="sel_pg" id="sel_pg" required title="Select Link Group">';
+                      echo '<option value="0" disabled>Select Group</option>';
+
+                      for ($i = 0; $i < count($group["data"]); $i++) {
+                        echo '<option value="' . $group["data"][$i]["id"] . '">' . $group["data"][$i]["id"] . '-' . $group["data"][$i]["name"] . '</option>';
+                      }
+                      echo '</select>';
+                      curl_close($curl);
+                      ?>
+                    </div>
+                  </div>
+                </div>
                 <div class="col-md-12">
                   <table class="table table-bordered list-table-xs mt-2" id="plList">
                     <thead>
@@ -108,7 +107,7 @@ $phpFile = "userSql.php";
                       <th>Order</th>
                       <th>Link Name</th>
                       <th>Default</th>
-                      <th>Link Status</th>
+                      <th>Responsibility-Link Status</th>
                     </thead>
                   </table>
                 </div>
@@ -130,8 +129,9 @@ $phpFile = "userSql.php";
 </html>
 <script>
   $(document).ready(function() {
-
-    $('[data-toggle="tooltip"]').tooltip();
+    $(function() {
+			$(document).tooltip();
+		});
 
     $(document).on('click', '.updateRL', function(event) {
       var pl = $(this).attr("data-pl");

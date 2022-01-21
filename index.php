@@ -22,21 +22,19 @@ session_start();
             <div class="text-center mb-3">
               <img src="https://engineeringinfo.in/images/logo-text.png" width="50%">
             </div>
-            <form method="post" id="userForm">
-              <div class="form-group">
-                <label class="mb-0">Institute Code</label>
-                <input type="text" name="instCode" minlength="2" id="instCode" class="form-control" required />
-                <label class="mt-2 mb-0">User Id</label>
-                <input type="text" name="username" minlength="5" id="username" class="form-control" required />
-                <label class="mt-2 mb-0">Password</label>
-                <input type="password" name="userpassword" id="userpassword" class="form-control" required />
-              </div>
-              <div class="form-group">
-                <input type="hidden" name="action" id="action" value="checkUser" />
-                <button class="btn btn-sm btn-primary otp" name="otplogin" id="otplogin">OTP Login</button>
-                <button class="btn btn-sm login" name="userlogin" id="userlogin">Login</button>
-              </div>
-            </form>
+            <div class="form-group">
+              <label class="mb-0">Institute Code</label>
+              <input type="text" name="instCode" minlength="2" id="instCode" class="form-control" required />
+              <label class="mt-2 mb-0">User Id</label>
+              <input type="text" name="username" minlength="5" id="username" class="form-control" required />
+              <label class="mt-2 mb-0">Password</label>
+              <input type="password" name="userpassword" id="userpassword" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <input type="hidden" name="action" id="action" value="checkUser" />
+              <button class="btn btn-sm btn-primary otp" name="otplogin" id="otplogin">OTP Login</button>
+              <button class="btn btn-sm login" name="userlogin" id="userlogin">Login</button>
+            </div>
           </div>
         </div>
       </div>
@@ -64,7 +62,7 @@ session_start();
             action: "forgot"
           }, () => {}, "text").done(function(data) {
             alert(data);
-          }, "text").fail(function() {
+          }).fail(function() {
             alert("One or More Credentials are NOT Correct!!");
           })
         } else alert("Please Enter a Valid Institute Code !!")

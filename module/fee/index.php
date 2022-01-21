@@ -119,10 +119,12 @@ $phpFile = "feeSql.php";
                     <th>Student ID</th>
                     <th>Name</th>
                     <th>Father Name</th>
+                    <th>Program</th>
                     <th>Roll Number</th>
                     <th>Mobile</th>
                     <th>Fee Category</th>
                     <th>Dues</th>
+                    <th>Concsn</th>
                     <th>Credit</th>
                     <th>Balance</th>
                     <?php
@@ -195,15 +197,17 @@ $phpFile = "feeSql.php";
             card += '<td>' + value.user_id + '</td>';
             card += '<td>' + value.student_name + '</td>';
             card += '<td>' + value.student_fname + '</td>';
+            card += '<td>' + value.program_name + '</td>';
             card += '<td>' + value.student_rollno + '</td>';
             card += '<td>' + value.student_mobile + '</td>';
             card += '<td>' + value.student_fee_category + '</td>';
             card += '<td>' + value.debit + '</td>';
+            card += '<td>' + value.concession + '</td>';
             card += '<td>' + value.credit + '</td>';
             card += '<td>' + value.balance + '</td>';
             $.each(data.status[key].mn_name, function(key2, value2) {
-              if(data.status[key].mn_name[key2]=='No')card += '<td class="tdRejected">' + data.status[key].mn_name[key2] + '</td>';
-              else card += '<td class="approved">' + data.status[key].mn_name[key2] + '</td>';
+              if (data.status[key].mn_name[key2] == 'No') card += '<td class="tdRejected">' + data.status[key].mn_name[key2] + '</td>';
+              else card += '<td class="approved">[' + data.status[key].mn_name[key2] + ']</td>';
             })
             card += '</tr>';
           });
@@ -361,6 +365,7 @@ $phpFile = "feeSql.php";
         $.each(data, function(key, value) {
           list += '<option value=' + value.mn_id + '>' + value.mn_name + '</option>';
         });
+        list += '<option value="ALL">ALL</option>';
         list += '</select>';
         $("#feeType").html(list);
 
@@ -459,6 +464,7 @@ $phpFile = "feeSql.php";
         $.each(data, function(key, value) {
           list += '<option value=' + value.program_id + '>' + value.program_name + '</option>';
         });
+        list += '<option value="ALL">ALL</option>';
         list += '</select>';
         $("#programOption").html(list);
 

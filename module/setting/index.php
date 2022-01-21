@@ -89,6 +89,7 @@ require('../requireSubModule.php');
                           <th>ID</th>
                           <th>Name</th>
                           <th>Abbri</th>
+                          <th>Type</th>
                           <th><i class="fas fa-trash"></i></th>
                         </tr>
                       </table>
@@ -385,15 +386,15 @@ require('../requireSubModule.php');
         var formData = $(this).serialize();
         $('#firstModal').modal('hide');
         // $.alert(formData);
-        $.post("instSql.php", formData, () => {}, "text").done(function(data) {
-          // $.alert("Da");
+        $.post("instSql.php", formData, () => {}, "text").done(function(data, status) {
+          // $.alert(data);
           if (action == "addProgram" || action == "updateProgram") programList();
           else if (action == "addSchool" || action == "updateSchool") schoolList();
           else if (action == "addDept" || action == "updateDept") deptList();
           $('#modalId').val("0");
 
           $('#modalForm')[0].reset();
-        }, "text").fail(function() {
+        }).fail(function() {
           $.alert("fail in place of error");
         })
       }
@@ -463,7 +464,7 @@ require('../requireSubModule.php');
         $('.departmentForm').hide();
 
         //$("#ccform").html(mydata);
-      }, "text").fail(function() {
+      }).fail(function() {
         $.alert("fail in place of error");
       })
     });
@@ -609,7 +610,7 @@ require('../requireSubModule.php');
         $('#modal_title').text("Update Department [" + id + "]");
         $('#dept_name').val(data.dept_name);
         $('#dept_abbri').val(data.dept_abbri);
-        $('#dept_code').val(data.dept_code);
+        $('#dept_type').val(data.dept_type);
 
         $('#action').val("addDept");
         $('#modalId').val(id);
@@ -621,7 +622,7 @@ require('../requireSubModule.php');
         $(".programForm").hide();
 
         //$("#ccform").html(mydata);
-      }, "text").fail(function() {
+      }).fail(function() {
         $.alert("fail in place of error");
       })
     });
@@ -643,6 +644,8 @@ require('../requireSubModule.php');
             card += '<td>' + value.dept_id + '</td>';
             card += '<td>' + value.dept_name + '</td>';
             card += '<td>' + value.dept_abbri + '</td>';
+            if(value.dept_type==0)card += '<td>Teaching</td>';
+            else card += '<td>Non Teaching</td>';
             card += '<td><a href="#" class="trashDept" data-id="' + value.dept_id + '"><i class="fa fa-trash"></i></td>';
             card += '</tr>';
           }
@@ -758,8 +761,11 @@ require('../requireSubModule.php');
               </div>
               <div class="col-3 pl-1">
                 <div class="form-group">
-                  <label> Code</label>
-                  <input type="text" class="form-control form-control-sm" id="dept_code" name="dept_code" placeholder="Code">
+                  <label>Type</label>
+                  <select class="form-control form-control-sm" id="dept_type" name="dept_type">
+                    <option value="0">Teaching</option>
+                    <option value="1">Non Teaching</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -795,7 +801,7 @@ require('../requireSubModule.php');
               <div class="col-3">
                 <div class="form-group">
                   Sp Code
-                  <input type="text" class="form-control form-control-sm" id="sp_code" name="sp_code" placeholder="Sp code">
+                  <input type="text" class="form-control form-control-sm" id="sp_code" name="sp_code" placeholder="Sp code" value="00">
                 </div>
               </div>
             </div>
@@ -803,25 +809,25 @@ require('../requireSubModule.php');
               <div class="col-3">
                 <div class="form-group">
                   Duration
-                  <input type="number" class="form-control form-control-sm" id="program_duration" name="program_duration" placeholder="Program Duration">
+                  <input type="number" class="form-control form-control-sm" id="program_duration" name="program_duration" placeholder="Program Duration" value="1">
                 </div>
               </div>
               <div class="col-3">
                 <div class="form-group">
                   Semester
-                  <input type="number" class="form-control form-control-sm" id="program_semester" name="program_semester" placeholder="Semester">
+                  <input type="number" class="form-control form-control-sm" id="program_semester" name="program_semester" placeholder="Semester" value="2">
                 </div>
               </div>
               <div class="col-3">
                 <div class="form-group">
                   Start Year
-                  <input type="number" class="form-control form-control-sm" id="program_start" name="program_start">
+                  <input type="number" class="form-control form-control-sm" id="program_start" name="program_start" value="2000">
                 </div>
               </div>
               <div class="col-3">
                 <div class="form-group">
                   Seats
-                  <input type="number" class="form-control form-control-sm" id="program_seat" name="program_seat" placeholder="Seats">
+                  <input type="number" class="form-control form-control-sm" id="program_seat" name="program_seat" placeholder="Seats" value="60">
                 </div>
               </div>
             </div>

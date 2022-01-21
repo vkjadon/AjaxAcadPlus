@@ -51,6 +51,8 @@ if (isset($mySes)) {
   //check_tn_rs($conn, 'cc_outcome');
   
   check_tn_class($conn, "class");
+  check_tn_ee($conn, "evaluation_event");
+
   check_tn_feeConcession($conn, "fee_concession");
   check_tn_feeDues($conn, "fee_dues");
   check_tn_feeReverse($conn, "fee_reverse");
@@ -68,6 +70,7 @@ if (isset($mySes)) {
   check_tn_org($conn, 'organization');
   check_tn_mn($conn, 'master_name');
   check_tn_pv($conn, 'payment_voucher');
+  check_tn_pvr($conn, 'pv_reverse');
   check_tn_qb_cp($conn, 'qb_cp');
   check_tn_qb_parameter($conn, 'qb_parameter');
   check_tn_question_bank($conn, 'question_bank');
@@ -75,7 +78,9 @@ if (isset($mySes)) {
   check_tn_rp($conn, 'resource_person');
   check_tn_respStaff($conn, 'responsibility_staff');
   check_tn_rl($conn, 'responsibility_link');
+  check_tn_sdl($conn, "schedule");
   check_tn_stdqual($conn, "student_qualification");
+  check_tn_stdscl($conn, "student_scholarship");
   check_tn_sub($conn, "subject");
   // check_tn_subaddon($conn, "subject_addon");
   check_tn_subelective($conn, "subject_elective");
@@ -83,6 +88,7 @@ if (isset($mySes)) {
   check_tn_test_participant($conn, "test_participant");
   check_tn_test_question($conn, "test_question");
   check_tn_template($conn, "template");
+  check_tn_todo($conn, "todo");
   check_tn_template_question($conn, "template_question");
   check_tn_user($conn, "user");
 
@@ -126,6 +132,11 @@ if (isset($mySes)) {
 
   $tn_sc = 'subject_choice' . $mySes;
   check_tn_sc($conn, $tn_sc);
+
+  $tn_sm = 'student_marks' . $mySes;
+
+  $tn_sms = 'student_marks_setup' . $mySes;
+  check_tn_sms($conn, $tn_sms);
 
   $tn_sr = 'subject_resource' . $mySes;
   check_tn_sr($conn, $tn_sr);

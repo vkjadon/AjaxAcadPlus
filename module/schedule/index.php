@@ -64,36 +64,34 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
             </div>
           </div>
           <div class="tab-pane fade" id="list-cs" role="tabpanel" aria-labelledby="list-cs-list">
-            <div class="row">
-              <div class="col-3 mt-1 mb-1">
-                <div class="container card myCard p-2 mb-2" id="showScheduleForm">
+            <div class="container card myCard p-2 mb-2" id="showScheduleForm">
+              <div class="row">
+                <div class="col-3 pr-0">
                   <div class="form-group">
-                    <div class="col">
-                      <label>Schedule Start Date</label>
-                      <input type="date" class="form-control form-control-sm" id="schedule_from" name="schedule_from" min="<?php echo $session_start; ?>" value="<?php echo date("Y-m-d", time()); ?>">
-                    </div>
+                    <label>Schedule Start Date</label>
+                    <input type="date" class="form-control form-control-sm" id="schedule_from" name="schedule_from" min="<?php echo $session_start; ?>" value="<?php echo date("Y-m-d", time()); ?>">
                   </div>
+                </div>
+                <div class="col-3 pl-1 pr-0">
                   <div class="form-group">
-                    <div class="col">
-                      <label>Schedule Last Date</label>
-                      <input type="date" class="form-control form-control-sm" id="schedule_to" name="schedule_to" max="<?php echo $session_end; ?>" value="<?php echo date("Y-m-d", time()); ?>">
-                    </div>
+                    <label>Schedule Last Date</label>
+                    <input type="date" class="form-control form-control-sm" id="schedule_to" name="schedule_to" max="<?php echo $session_end; ?>" value="<?php echo date("Y-m-d", time()); ?>">
                   </div>
-                  <div class="row">
-                    <div class="col pr-0">
-                      <div class="form-group">
-                        <button class="btn btn-sm createScheduleButton">Create Schedule</button>
-                      </div>
-                    </div>
-                    <div class="col pl-0">
-                      <div class="form-group">
-                        <button class="btn btn-sm showScheduleButton">Show Schedule</button>
-                      </div>
-                    </div>
+                </div>
+                <div class="col-2 pl-1 pr-0 mt-4">
+                  <div class="form-group">
+                    <button class="btn btn-sm btn-block createScheduleButton">Create Schedule</button>
+                  </div>
+                </div>
+                <div class="col-2 pl-1 pr-0 mt-4">
+                  <div class="form-group">
+                    <button class="btn btn-sm btn-block showScheduleButton">Show Schedule</button>
                   </div>
                 </div>
               </div>
-              <div class="col-9 mt-1 mb-1">
+            </div>
+            <div class="row">
+              <div class="col-12 mt-1 mb-1">
                 <div class="container card myCard p-2 mb-2">
                   <div id="waiting">Please click action button to load...
                     <img src="../../images/wating2.gif" width="40%">

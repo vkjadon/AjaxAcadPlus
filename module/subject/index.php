@@ -24,8 +24,8 @@ require('../requireSubModule.php');
             <a class="list-group-item list-group-item-action subReport" id="list-subReport-list" data-toggle="list" href="#list-subReport" role="tab" aria-controls="subReport"> Subject Report </a>
           </div>
           <div class="mr-2">
-          <?php require("../searchBar.php"); ?>
-        </div>
+            <?php require("../searchBar.php"); ?>
+          </div>
         </div>
         <div class="col-10 leftLinkBody">
           <div class="tab-content" id="nav-tabContent">
@@ -171,7 +171,7 @@ require('../requireSubModule.php');
         $('#firstModal').modal('hide');
         //$.alert(" Pressed" + formData);
         $.post("subjectSql.php", formData, () => {}, "text").done(function(data) {
-          //$.alert("List " + data);
+          $.alert(data);
           if (action == "addSubject" || action == "updateSubject") {
             subjectList();
             electiveList();
@@ -239,6 +239,7 @@ require('../requireSubModule.php');
         $('#modal_title').text("Update Subject [" + id + "]");
 
         $('#action').val("updateSubject");
+        $('#subject_id').val(id);
         $('#modalId').val(id);
         $('#subject_name').val(data.subject_name);
         $('#subject_code').val(data.subject_code);
@@ -250,6 +251,8 @@ require('../requireSubModule.php');
         $('#subject_internal').val(data.subject_internal);
         $('#subject_external').val(data.subject_external);
         $('#subject_sno').val(data.subject_sno);
+        $('#sel_newProg').val(data.program_id);
+        $('#sel_newBatch').val(data.batch_id);
         var staff = data.staff_id;
         //$.alert("Staff " + staff);
         $("#sel_staff option[value='" + staff + "']").attr("selected", "selected");
@@ -276,22 +279,21 @@ require('../requireSubModule.php');
         // } else if (subCat == 'Field Work') {
         //   document.getElementById("scFW").checked = true;
         // }
-
         $('#firstModal').modal('show');
         $('.subjectForm').show();
-        $('.coForm').hide();
-
       }, "text").fail(function() {
         $.alert("fail in place of error");
       })
     });
     $(document).on('click', '.addSubject', function() {
       var x = $("#sel_batch").val();
-      //$.alert("Add Subject" + x);
+      var y = <?php echo $myProg; ?>;
+      $.alert("Subject" + x + " Prog ");
       if (x === "") $.alert("Please select Batch !!");
       else {
         $('#modal_title').html("Add Subject [<?php echo $myProgAbbri . '-' . $myBatchName . ']'; ?> ");
         $('#batchIdModal').val(x);
+        $('#sel_newProg').val(y);
         $('#action').val("addSubject");
         $('#firstModal').modal('show');
         $('.coForm').hide();
@@ -302,11 +304,11 @@ require('../requireSubModule.php');
       event.preventDefault(this);
       var formData = $(this).serialize();
       $('#secondModal').modal("hide");
-      $.alert(" Pressed" + formData);
+      // $.alert(" Pressed" + formData);
       $.post("subjectSql.php", formData, () => {}, "text").done(function(data) {
-        $.alert("List " + data);
+        $.alert(data);
         $("#modalSecondForm")[0].reset();
-      }, "text").fail(function() {
+      }).fail(function() {
         $.alert("fail in place of error");
       })
     });
@@ -455,38 +457,28 @@ require('../requireSubModule.php');
       else return dateYmd;
     }
     $(document).on('change', '#sel_program', function() {
-			var x = $("#sel_program").val();
-			$.post("../../util/check_user.php", {
-				action: "setProgram",
-				programId: x
-			}, function(mydata, mystatus) {
+      var x = $("#sel_program").val();
+      $.post("../../util/session_variable.php", {
+        action: "setProgram",
+        programId: x
+      }, function(mydata, mystatus) {
         location.reload()
-			}, "text").fail(function() {
-				$.alert("Error in Program!!");
-			})
-		})		
-    $(document).on('change', '#sel_dept', function() {
-			var x = $("#sel_dept").val();
-			$.post("../../util/check_user.php", {
-				deptId: x,
-				action: "setDept"
-			}, function(mydata, mystatus) {
-        location.reload()
-			}, "text").fail(function() {
-				$.alert("Erro Dept !!");
-			})
-		})
+      }, "text").fail(function() {
+        $.alert("Error in Program!!");
+      })
+    })
+
     $(document).on('change', '#sel_batch', function() {
-			var x = $("#sel_batch").val();
-			$.post("../../util/check_user.php", {
-				action: "setBatch",
-				batchId: x
-			}, function(mydata, mystatus) {
+      var x = $("#sel_batch").val();
+      $.post("../../util/session_variable.php", {
+        action: "setBatch",
+        batchId: x
+      }, function(mydata, mystatus) {
         location.reload()
-			}, "text").fail(function() {
-				$.alert("Error in Natch !!");
-			})
-		})
+      }, "text").fail(function() {
+        $.alert("Error in Natch !!");
+      })
+    })
 
     $(document).on('click', '.uploadSubject', function() {
       //$.alert("Session From");
@@ -545,26 +537,26 @@ require('../requireSubModule.php');
         <div class="modal-body">
           <div class="subjectForm">
             <div class="row">
-              <div class="col-6">
+              <div class="col-6 pr-0">
                 <div class="form-group">
                   Subject Name
-                  <input type="text" class="form-control form-control-sm" id="subject_name" name="subject_name" placeholder="Subject Name">
+                  <input type="text" class="form-control form-control-sm" id="subject_name" name="subject_name" placeholder="Subject Name"><span id="subject_id"></span>
                 </div>
               </div>
-              <div class="col-2">
+              <div class="col-2 pl-1 pr-0">
                 <div class="form-group">
                   Code
                   <input type="text" class="form-control form-control-sm" id="subject_code" name="subject_code" placeholder="Subject Code">
                 </div>
               </div>
 
-              <div class="col-2">
+              <div class="col-2 pl-1 pr-0">
                 <div class="form-group">
                   Semester
                   <input type="number" class="form-control form-control-sm" id="subject_semester" name="subject_semester" placeholder="Semester">
                 </div>
               </div>
-              <div class="col-2">
+              <div class="col-2 pl-1">
                 <div class="form-group">
                   SNo
                   <input type="number" class="form-control form-control-sm" id="subject_sno" name="subject_sno" placeholder="SNo">
@@ -572,31 +564,58 @@ require('../requireSubModule.php');
               </div>
             </div>
             <div class="row">
-              <div class="col-3">
+              <div class="col-2 pr-0">
                 <div class="form-group">
                   Lecture
                   <input type="number" class="form-control form-control-sm" id="subject_lecture" name="subject_lecture" placeholder="subject_lecture">
                 </div>
               </div>
-              <div class="col-3">
+              <div class="col-2 pl-1 pr-0">
                 <div class="form-group">
                   Tutorial
                   <input type="text" class="form-control form-control-sm" id="subject_tutorial" name="subject_tutorial" placeholder="subject_tutorial">
                 </div>
               </div>
-              <div class="col-3">
+              <div class="col-2 pl-1 pr-0">
                 <div class="form-group">
                   Practical
                   <input type="text" class="form-control form-control-sm" id="subject_practical" name="subject_practical" placeholder="subject_practical">
                 </div>
               </div>
-              <div class="col-3">
+              <div class="col-2 pl-1 pr-0">
                 <div class="form-group">
                   Credit
                   <input type="text" class="form-control form-control-sm" id="subject_credit" name="subject_credit" placeholder="Credit">
                 </div>
               </div>
-
+              <div class="col-2 pl-1 pr-0">
+                <div class="form-group">
+                  Program
+                  <select class="form-control form-control-sm" name="sel_newProg" id="sel_newProg">
+                    <?php
+                    $sql = "select * from program where program_status='0' order by sp_name";
+                    $result = $conn->query($sql);
+                    while ($progRows = $result->fetch_assoc()) {
+                      echo '<option value="' . $progRows["program_id"] . '">' . $progRows["sp_abbri"] . '</option>';
+                    }
+                    ?>
+                  </select>
+                </div>
+              </div>
+              <div class="col-2 pl-1">
+                <div class="form-group">
+                  Batch
+                  <select class="form-control form-control-sm" name="sel_newBatch" id="sel_newBatch">
+                    <?php
+                    $sql = "select * from batch where batch_status='0' order by batch desc";
+                    $result_batch = $conn->query($sql);
+                    while ($batchRows = $result_batch->fetch_assoc()) {
+                      echo '<option value="' . $batchRows["batch_id"] . '">' . $batchRows["batch"] . '</option>';
+                    }
+                    ?>
+                  </select>
+                </div>
+              </div>
             </div>
             <hr>
             <div class="row">
@@ -622,28 +641,6 @@ require('../requireSubModule.php');
                   <li>EP (Elective Pool) is Elective subjects List for a Particular DE (Elective)</li>
                   <li>GB (Governing Body). The subjects suggested by UGC/AICTE etc</li>
                 </ul>
-              </div>
-            </div>
-          </div>
-          <div class="coForm">
-            <div class="row">
-              <div class="col-6">
-                <div class="form-group">
-                  Enter Code
-                  <input type="text" class="form-control form-control-sm" id="coCode" name="coCode" placeholder="CO Code">
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="form-group">
-                  Serial Order of CO
-                  <input type="text" class="form-control form-control-sm" id="coSno" name="coSno" placeholder="Serial Order">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12">
-                CO statement
-                <input type="text" class="form-control form-control-sm" id="coStatement" name="coStatement" placeholder="Enter CO Statement">
               </div>
             </div>
           </div>
@@ -680,8 +677,8 @@ require('../requireSubModule.php');
         <div class="modal-body">
           <div class="copySubjectForm">
             <div class="form-group row">
-              <label class="control-label col-4" for="batch">Copy to Batch:</label>
-              <div class="col-sm-8">
+              <label class="control-label col-3" for="batch">Copy to Batch:</label>
+              <div class="col-sm-9">
                 <?php
                 $sql_batch = "select * from batch where batch_status='0' order by batch desc";
                 $result_batch = $conn->query($sql_batch);
@@ -700,9 +697,21 @@ require('../requireSubModule.php');
               </div>
             </div>
             <div class="form-group row">
-              <label class="control-label col-sm-4" for="batch">Copy Semester:</label>
-              <div class="col-sm-8">
-                <input type="number" class="form-control form-control-sm" id="newSemester" name="newSemester" placeholder="Semester">
+              <label class="control-label col-sm-3" for="batch">Program:</label>
+              <div class="col-sm-5">
+                <select class="form-control form-control-sm" name="newProg" id="newProg">
+                  <?php
+                  $sql = "select p.* from program p, dept_program dp where dp.dept_id='$myDept' and dp.program_id=p.program_id and p.program_status='0' order by p.sp_name";
+                  $result = $conn->query($sql);
+                  while ($progRows = $result->fetch_assoc()) {
+                    echo '<option value="' . $progRows["program_id"] . '">' . $progRows["sp_abbri"] . '</option>';
+                  }
+                  ?>
+                </select>
+              </div>
+              <label class="control-label col-sm-2" for="batch">Semester:</label>
+              <div class="col-sm-2">
+                <input type="number" class="form-control form-control-sm" id="newSemester" name="newSemester" value="1" min="1">
               </div>
             </div>
           </div>

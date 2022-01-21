@@ -186,7 +186,7 @@ if (!isset($myBatch)) $myBatch = '';
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-4 pr-1">
+                    <div class="col-2 pr-1">
                       <label>Gender</label>
                       <div class="row">
                         <div class="col">
@@ -195,6 +195,19 @@ if (!isset($myBatch)) $myBatch = '';
                           </div>
                           <div class="form-check-inline">
                             <input type="radio" class="form-check-input studentUpdateForm" id="female" name="sGender" value="F" data-tag="student_gender">Female
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-2 pr-1">
+                      <label>Scholarship</label>
+                      <div class="row">
+                        <div class="col">
+                          <div class="form-check-inline">
+                            <input type="radio" class="form-check-input studentUpdateForm" checked id="scholNo" name="scholarship" value="0" data-tag="student_scholarship">No
+                          </div>
+                          <div class="form-check-inline">
+                            <input type="radio" class="form-check-input studentUpdateForm" id="scholYes" name="scholarship" value="1" data-tag="student_scholarship">Yes
                           </div>
                         </div>
                       </div>

@@ -22,6 +22,7 @@ require('../requireSubModule.php');
           <a class="list-group-item list-group-item-action active at" id="list-at-list" data-toggle="list" href="#list-at" role="tab" aria-controls="at"> Academic Tasks </a>
           <a class="list-group-item list-group-item-action att" id="list-att-list" data-toggle="list" href="#list-att" role="tab" aria-controls="att"> Attendance </a>
           <a class="list-group-item list-group-item-action attReg" id="list-attReg-list" data-toggle="list" href="#attReg" role="tab" aria-controls="attReg"> Register</a>
+          <a class="list-group-item list-group-item-action marks" id="list-marks-list" data-toggle="list" href="#marks" role="tab" aria-controls="marks"> Marks </a>
         </div>
       </div>
       <div class="col-11 leftLinkBody">
@@ -64,9 +65,9 @@ require('../requireSubModule.php');
                   <div class="tab-pane fade" id="pills_topics" role="tabpanel" aria-labelledby="pills_topic">
                     <div class="stForm border">
                       <div class="row p-2">
-                        <div class="col-8">
+                        <div class="col-9">
                           <div class="row">
-                            <div class="col-5 pr-1">
+                            <div class="col-6 pr-1">
                               <div class="form-group">
                                 <label>Topic Name</label>
                                 <input type="text" class="form-control form-control-sm" id="sbt_name" name="sbt_name" placeholder="Topic">
@@ -90,22 +91,23 @@ require('../requireSubModule.php');
                                 <input type="number" class="form-control form-control-sm" id="sbt_unit" name="sbt_unit" min="1" placeholder="Unit Number" value="1">
                               </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-2 mt-3">
                               <div class="form-check-inline">
                                 <input type="radio" class="form-check-input" checked id="syllabus" name="sbt_syllabus" value="0">Syllabus
                               </div>
+                              <br>
                               <div class="form-check-inline">
                                 <input type="radio" class="form-check-input" id="additional" name="sbt_syllabus" value="1">Additional
                               </div>
                             </div>
                             <div class="col-1 pl-1">
                               <div class="form-group">
-                                <button class="btn btn-sm submit_sbt" id="submit_sbt">Submit</button>
+                                <button class="btn btn-sm submit_sbt mt-4" id="submit_sbt">Submit</button>
                               </div>
                             </div>
                           </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
                           <span class="xsText">
                             <li>Subject Topics will be same for one Subject irrespective of the Class and Faculty.</li>
                             <li> It signifies the Syllabus.</li>
@@ -116,16 +118,7 @@ require('../requireSubModule.php');
                     </div>
                     <div class="subjectTopics">
                       <label>List of Topics</label>
-                      <table class="table list-table-xs" id="subjectTopicList">
-                        <tr class="align-center">
-                          <th><i class="fas fa-edit"></i></th>
-                          <th>Id</th>
-                          <th width="70%">Topic</th>
-                          <th>Wt</th>
-                          <th>CHr</th>
-                          <th><i class="fas fa-trash"></i></th>
-                        </tr>
-                      </table>
+                      <p id="subjectTopicList"></p>
                       <span class="xsText">Syllabus Topics are not editable. These are as approved by BOS. The faculty can add additional Topics in the interest of students based on current trends and industry requirements.</span>
                     </div>
                   </div>
@@ -163,7 +156,7 @@ require('../requireSubModule.php');
                             <input type="radio" class="form-check-input" id="public" name="sbr_type" value="Public">Public
                           </div>
                         </div>
-                      
+
                         <div class="col-1">
                           <div class="form-group">
                             <button class="btn btn-sm" id="submit_sbResource">Submit</button>
@@ -219,29 +212,121 @@ require('../requireSubModule.php');
           </div>
           <div class="tab-pane fade" id="attReg" role="tabpanel" aria-labelledby="list-attReg-list">
             <div class="card mt-2 myCard">
+              <div class="col-md-12">
+                <div class="text-center">
+                  <h3> Attendance Register <h3>
+                </div>
+              </div>
               <p class="header"></p>
               <p class="record overflow-auto"></p>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="marks" role="tabpanel" aria-labelledby="list-marks-list">
+            <div class="card mt-2 myCard">
+              <div class="row m-2">
+                <div class="col-md-4">
+                  <h3> Marks Details</h3>
+                </div>
+                <div class="col-md-2 pr-0">
+                  <?php 
+                  $sql="select * from evaluation_event";
+                  $data=array("2", "ee_id", "ee_name", "ee_abbri", "ee_id");
+                  echo selectList($conn, "EE", $data, $sql);
+                  ?>
+                </div>
+                <div class="col-md-1 pl-1 pr-0">
+                  <input type="number" class="form-control form-control-sm" name="max_marks" title="Maximum Marks">
+                </div>
+                <div class="col-md-1 pl-1 pr-0">
+                  <input type="number" class="form-control form-control-sm" name="pass_marks" title="Passing Marks">
+                </div>
+                <div class="col-md-2 pl-1">
+                  <input type="submit" class="btn btn-sm" value="Add Marks Event">
+                </div>
+              </div>
+              <div class="row ml-2">
+                <div class="col-md-12">
+                  <p class="marksHeader"></p>
+                  <p class="marksTable overflow-auto"></p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
     <?php require("../bottom_bar.php"); ?>
   </div>
 </body>
 <script>
   $(document).ready(function() {
-
+    $(function() {
+			$(document).tooltip();
+		});
     mtlList();
-    $('.selectPanel').hide()
-    $('#topicList').hide()
 
+    function marksRecord() {
+      $(".marksTable").html("<h3>No Data Found</h3>")
+      var tlId = $("input[name='subject']:checked").val();
+      $.alert("Teaching Load " + tlId);
+      $.post("attSql.php", {
+        tlId: tlId,
+        action: "marksRecord"
+      }, function() {}, "json").done(function(data, status) {
+        // $.alert(data.ee_abbri.length);
+        console.log(data)
+        var count = 1;
+        var text = '';
+        if (data.records.length > 0) {
+          var text = '<table class="table list-table-xs" style="white-space: nowrap;">';
+          text += '<tr>';
+          text += '<td>#</td><td>Student Name </td><td>RNo</td><td>DoR</td>';
+          for (var i = 0; i < data.ee_abbri.length; i++) {
+            text += '<td>' + data.ee_abbri[i] + '</td>';
+          }
+          text += '</tr>';
+          $.each(data.records, function(key, value) {
+            text += '<tr>';
+            text += '<td class="text-center">' + count++ + '</td>';
+            text += '<td>' + value.student_name + '[' + value.student_id + ']</td>';
+            text += '<td>' + value.student_rollno + '</td>';
+            text += '<td>' + getFormattedDate(value.rs_date, "dmY") + '</td>';
+            for (var i = 0; i < value.marks.length; i++) {
+              text += '<td><input class="form-control form-control-sm updateMarks" data-std="' + value.student_id + '" data-sms="' + data.sms_id[i] + '" id="std' + value.student_id + 'sms' + data.sms_id[i] + '" value="' + value.marks[i] + '"></td>';
+            }
+            text += '<td>' + value.totalMarks + '</td>';
+            text += '</tr>';
+          });
+          text += '</table>';
+        } else text += "<h4>No Data Found</h4>";
+        $(".marksTable").html(text)
+      })
+    }
+    $(document).on('blur', '.updateMarks', function() {
+      var student_id = $(this).attr("data-std");
+      var sms_id = $(this).attr("data-sms");
+      var tlId = $("input[name='subject']:checked").val();
+      var cellText = $("#std" + student_id + "sms" + sms_id).val()
+      // $.alert("student_id Id " + student_id + " sms_id " + sms_id + " Text " + cellText);
+      $.post("attSql.php", {
+        student_id: student_id,
+        sms_id: sms_id,
+        tlId: tlId,
+        marks: cellText,
+        action: "updateMarks"
+      }, function() {}, "text").done(function(data, status) {
+        //$.alert(data)
+        // $("#per" + student_id).html(data)
+      })
+    });
     // Subject Attendance Register
-    $(document).on('click', '.attReg, .sel_subject', function() {
+    $(document).on('click', '.attReg, .sel_subject, .marksRecord', function() {
       attRegHeaderFooter();
       attRecord();
+      marksRecord();
       subjectTopicList();
-
     });
 
     function attRegHeaderFooter() {
@@ -254,9 +339,6 @@ require('../requireSubModule.php');
         // $.alert(data);
         var header = '';
         header += '<div class="row m-2">';
-        header += '<div class="col-md-12">';
-        header += '<div class="text-center"><h3> Attendance Register<h3></div>';
-        header += '</div>';
         header += '<div class="col-md-6">';
         header += '<h4> Class : ' + data.class_name + '[' + data.class_section + ']</h4>';
         header += '</div>';
@@ -265,7 +347,6 @@ require('../requireSubModule.php');
         header += '</div>';
         header += '</div>';
         $(".header").html(header)
-
       })
     }
 
@@ -301,14 +382,14 @@ require('../requireSubModule.php');
         action: "attRecord"
       }, function() {}, "json").done(function(data, status) {
         // $.alert(data);
-        console.log(data)
+        // console.log(data)
         var count = 1;
         var text = '';
         var text = '<table class="table list-table-xs" style="white-space: nowrap;">';
         text += '<tr>';
-        text += '<td>#</td><td>Student Name </td><td>RNo</td><td>DoR</td>';
+        text += '<th>#</th><th>Student Name </th><th>RNo</th><th>DoR</th>';
         for (var i = 0; i < data.dates.length; i++) {
-          text += '<td>' + getFormattedDate(data.dates[i], "dm") + '</td>';
+          text += '<th class="text-center">' + getFormattedDate(data.dates[i], "dm") + '<br>' + data.period[i] + '</th>';
         }
         text += '</tr>';
 
@@ -347,7 +428,7 @@ require('../requireSubModule.php');
       var sbt_weight = $("#sbt_weight").val();
       var sbt_slot = $("#sbt_slot").val();
       var sbt_unit = $("#sbt_unit").val();
-      $.alert("Name " + sbt_name);
+      // $.alert("Name " + sbt_name);
       $.post("lmsSql.php", {
         tlId: tlId,
         sbt_name: sbt_name,
@@ -357,8 +438,9 @@ require('../requireSubModule.php');
         sbt_syllabus: sbt_syllabus,
         action: "addST"
       }, function(data, status) {
-        $.alert("Success " + data);
-        $('#subjectTopicList').html(data)
+        // $.alert("Success " + data);
+        // $('#subjectTopicList').html(data)
+        subjectTopicList()
       }, "text").fail(function() {
         $.alert("Error !!");
       })
@@ -470,11 +552,6 @@ require('../requireSubModule.php');
       })
     }
 
-    $(document).on('click', '.de', function() {
-      $('.selectPanel').show()
-      mySubjectList();
-      mySubjectAssessmentList();
-    });
 
     $(document).on('click', '.att', function() {
       $('#showScheduleForm').show();
@@ -551,7 +628,7 @@ require('../requireSubModule.php');
       var action = $('#schedule_action').val();
       var scheduleFrom = $('#date_from').val();
       var scheduleTo = $('#date_to').val();
-      //$.alert("Show Schedule Pressed  Action " + action + "<br>From " + scheduleFrom + " To " + scheduleTo);
+      // $.alert("Show Schedule Pressed  Action " + action + "<br>From " + scheduleFrom + " To " + scheduleTo);
       $("#showAttendanceRegister").hide()
 
       $.post("attSql.php", {
@@ -632,7 +709,19 @@ require('../requireSubModule.php');
 
     $(document).on('click', '.editButton', function() {
       var id = $(this).attr('data-sbtId');
-      $.alert("Id " + id);
+      $.alert("SbtId " + id);
+      $.post("lmsSql.php", {
+        sbtId: id,
+        action: "fetchSbt",
+      }, () => {}, "json").done(function(data, status) {
+        // $.alert(" SBT " + data)
+        // $.alert(" SBT " + data.sbt_name)
+        $("#sbt_name").val(data.sbt_name)
+        $("#sbt_weight").val(data.sbt_weight)
+        $("#sbt_slot").val(data.sbt_slot)
+        $("#sbt_unit").val(data.sbt_unit)
+        if (data.sbt_syllabus == 0) $("syllabus").val(data.sbt_syllabus)
+      })
     });
 
     function studentClassSubjectList(sasId) {
@@ -646,34 +735,6 @@ require('../requireSubModule.php');
         $("#showAttendanceRegister").html(data);
       }, "text").done(function(data, staus) {
         //$.alert("dfdf");
-      }).fail(function() {
-        $.alert("Error !!");
-      })
-    }
-
-    function mySubjectList() {
-      //$.alert("In List Function");
-      $.post("evalSql.php", {
-        action: "mySubjectList"
-      }, function(data, status) {
-        //$.alert("Success " + data);
-        $("#mySubjectList").html(data);
-      }, "text").done(function(data, staus) {
-        // $.alert("dfdf");
-      }).fail(function() {
-        $.alert("Error !!");
-      })
-    }
-
-    function mySubjectAssessmentList() {
-      //$.alert("In List Function");
-      $.post("evalSql.php", {
-        action: "mySubjectAssessmentList"
-      }, function(data, status) {
-        //$.alert("Success " + data);
-        $("#mySubjectAssessmentList").html(data);
-      }, "text").done(function(data, staus) {
-        // $.alert("dfdf");
       }).fail(function() {
         $.alert("Error !!");
       })
@@ -703,7 +764,6 @@ require('../requireSubModule.php');
           <h4 class="modal-title">Upload Document</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div> <!-- Modal Header Closed-->
-
         <!-- Modal body -->
         <div class="modal-body">
           <div class="uploadForm">
@@ -727,6 +787,5 @@ require('../requireSubModule.php');
     </form>
   </div> <!-- Modal Dialog Closed-->
 </div> <!-- Modal Closed-->
-
 
 </html>

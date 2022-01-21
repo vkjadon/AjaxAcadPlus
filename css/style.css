@@ -113,6 +113,10 @@ div.minWidth100 {
     font-size: 40px;
 }
 
+.completed {
+    text-decoration: line-through
+  }
+
 .warning {
     color: rgba(231, 40, 50, 0.911);
     font-style: italic;

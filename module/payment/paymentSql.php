@@ -103,6 +103,11 @@ if (isset($_POST['action'])) {
       $subArray = array();
       while ($rowsFee = $result->fetch_assoc()) {
         $subArray["pv_id"] = $rowsFee["pv_id"];
+        $sql_rev="select * from pv_reverse where pv_id='".$rowsFee["pv_id"]."' and pr_status='0'";
+        $result_rev=$conn->query($sql_rev);
+        if($result_rev->num_rows>0)$pr = 'Revered';
+        else $pr='--';
+        $subArray["pr_id"] = $pr;
         $subArray["payee_name"] = $rowsFee["payee_name"];
         $subArray["payee_mobile"] = $rowsFee["payee_mobile"];
         $subArray["payee_id"] = $rowsFee["payee_id"];
@@ -120,7 +125,7 @@ if (isset($_POST['action'])) {
       echo json_encode($json_array);
     }
   } elseif ($_POST['action'] == 'pvDaily') {
-    $pvDate=$_POST['pvDate'];
+    $pvDate = $_POST['pvDate'];
     $dateFrom = date("Y-m-d H:i:s", strtotime($pvDate));
     $dateTo = date("Y-m-d H:i:s", (strtotime($pvDate) + 24 * 60 * 60));
     // echo "$dateFrom";
@@ -177,5 +182,14 @@ if (isset($_POST['action'])) {
       }
       echo json_encode($json_array);
     }
+  } elseif ($_POST['action'] == 'addPVReverse') {
+    $id = $_POST['id'];
+    $pr_desc = $_POST['pr_desc'];
+    if ($myId > 0) {
+      $sql = "insert into pv_reverse (pv_id, pr_desc, update_id, pr_status) values ('$id', '$pr_desc', '$myId', '0')";
+      $result = $conn->query($sql);
+      if (!$result) echo $conn->error;
+      else echo "Entry Reversed";
+    } else echo "Session Time Out !! Please logout and login Again";
   }
 }

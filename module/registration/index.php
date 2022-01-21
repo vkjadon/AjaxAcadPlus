@@ -13,7 +13,7 @@ require('../requireSubModule.php');
   <?php require("../topBar.php"); ?>
   <div class="container-fluid moduleBody">
     <div class="row">
-      <div class="col-2 p-0 m-0 pl-2 full-height">
+      <div class="col-1 p-0 m-0 pl-1 full-height">
         <h5 class="mt-3">Registration</h5>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active cr" id="list-cr-list" data-toggle="list" href="#list-cr" role="tab"> Class Registration </a>
@@ -24,7 +24,7 @@ require('../requireSubModule.php');
         selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
         ?>
       </div>
-      <div class="col-10 leftLinkBody">
+      <div class="col-11 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="list-cr" role="tabpanel">
             <div class="row">
@@ -203,7 +203,7 @@ require('../requireSubModule.php');
       });
       var status = $(this).is(":checked");
       var tlId = $(this).val();
-      $.alert("Register Pressed " + status + tlId);
+      // $.alert("Register Pressed " + status + tlId);
 
       $.post("registrationSql.php", {
         tl: tlId,
@@ -323,10 +323,10 @@ require('../requireSubModule.php');
       var x = $("#sel_class").val();
       //$.alert("In Class-Subject Function Class Id" + x);
       $.post("registrationSql.php", {
-        action: "sbpList",
         classId: x,
         rpp: y,
-        startRecord: z
+        startRecord: z,
+        action: "sbpList"
       }, function(data, status) {
         //$.alert("Success " + data);
         $("#sbpList").html(data);

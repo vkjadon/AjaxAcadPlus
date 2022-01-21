@@ -66,20 +66,21 @@ if (isset($_POST['action'])) {
       $ay_id = getField($conn, $ay, 'batch', 'batch', 'batch_id');
 
       $sp_code = getField($conn, $program_id, 'program', 'program_id', 'sp_code');
-      // echo "SP Code  $sp_code PID $program_id $myBatch ";
-      $sql = "select count(user_id) as max from student where program_id='$program_id' and batch_id='$myBatch'";
+      //echo "SP Code  $sp_code PID $program_id $myBatch ";
+      // $sql = "select count(user_id) as max from student";
+      $sql = "select count(user_id) as max from student where batch_id='$myBatch'";
       $result = $conn->query($sql);
       if ($result) {
          $row = $result->fetch_assoc();
          $student_count = $row["max"];
          $student_count++;
-         $student_sp_count = substr($batch, 2) . $sp_code . '0000';
+         $student_sp_count = substr($batch, 2) . '0000';
          $student_sp_count = $student_sp_count + $student_count;
-         // echo "My Folder $myFolder USER ID ".$student_sp_count.'<br>';
+         //echo "My Folder $myFolder USER ID ".$student_sp_count.'<br>';
          $new_user_id = $school_code . $student_sp_count;
       } else echo $conn->error;
 
-      $sql = "insert into student (batch_id, program_id, ay_id, student_lateral, student_scholarship, student_regular, student_semester, user_id, student_admission, student_gender, update_id, student_status) value('$myBatch', '$program_id', '$ay_id', '$lateral', '$scholarship', '$regular', '$semester', '$new_user_id', '$date', 'M', '$myId', '1')";
+      $sql = "insert into student (batch_id, program_id, ay_id, student_lateral, student_scholarship, student_residential_status, student_regular, student_semester, user_id, student_admission, student_gender, update_id, student_status) value('$myBatch', '$program_id', '$ay_id', '$lateral', '$scholarship', '0', '$regular', '$semester', '$new_user_id', '$date', 'M', '$myId', '1')";
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
       else {

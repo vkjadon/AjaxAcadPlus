@@ -201,6 +201,7 @@ if (!isset($myBatch)) $myBatch = '';
 									</div>
 									<div class="col-6 pl-0">
 										<a href="<?php echo $codePath . '/module/payment/'; ?>" class="dropdown-item py-0"> Payment Voucher </a>
+										<a href="<?php echo $codePath . '/module/scholarship/'; ?>" class="dropdown-item py-0"> Scholarship </a>
 									</div>
 								</div>
 							</div>

@@ -162,11 +162,11 @@ if (isset($_POST['action'])) {
     $status = $_POST["status"];
 
     for ($i = 0; $i < count($id); $i++) {
-      echo $id[$i] . 'TL  - ' . $tl . ' Status ' . $status;
+      // echo $id[$i] . 'TL  - ' . $tl . ' Status ' . $status;
       echo '<br>';
       if ($status == "false") $sql = "delete from $tn_rs where student_id='$id[$i]' and tl_id='$tl'";
       else $sql = "insert into $tn_rs (student_id, tl_id, rs_date, update_id, rs_status) values('$id[$i]','$tl','$submit_ts', '$myId', '0')";
-      echo "All Insert and Dlete";
+      echo "All Insert and Delete";
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
     }

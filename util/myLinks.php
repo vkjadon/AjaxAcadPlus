@@ -1,4 +1,5 @@
 <?php
+// required in "module/requireSubModule.php"
 require("config_database.php");
 $sql = "select rs.*, rl.* from responsibility_staff rs, responsibility_link rl where rs.staff_id='$myId' and rs.mn_id=rl.mn_id";
 $result = $conn->query($sql);
@@ -28,4 +29,4 @@ if ($output['success'] == "True") {
   }
 }
 
-// print_r($myLinks);
+//print_r($myLinks);

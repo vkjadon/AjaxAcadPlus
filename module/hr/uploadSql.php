@@ -1,7 +1,5 @@
 <?php
 require('../requireSubModule.php');
-
-
 if (!empty($_FILES["upload_qualification"]["name"])) {
     $output = '';
     $stq_id = $_POST['stqIdM'];

@@ -33,11 +33,11 @@ if (isset($_POST['action'])) {
     $tlgId = getField($conn, $tlId, $tn_tl, "tl_id", "tlg_id");
     $subject_id = getField($conn, $tlgId, $tn_tlg, "tlg_id", "subject_id");
     $sno = 1;
-    $sql = "select * from $tn_sbt where subject_id='$subject_id' and sbt_status='0' order by sbt_type, sbt_sno";
+    $sql = "select * from $tn_sbt where subject_id='$subject_id' and sbt_status='0' order by sbt_syllabus, sbt_sno";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     echo '<table class="table list-table-xs mb-0">';
-    echo '<tr><th>#</th><th>Id</th><th class="text-center" width="5%"><i class="fa fa-pencil-alt"></i></th><th width="50%">Topic</th><th>Wt</th><th>Slot(s)</th><th>Coverage</th></tr>';
+    echo '<tr><th>#</th><th>Id</th><th class="text-center" width="5%"><i class="fa fa-pencil-alt"></i></th><th width="50%">Topic</th><th>Unit</th><th>Wt</th><th>Slot(s)</th><th>Coverage</th></tr>';
     while ($rows = $result->fetch_assoc()) {
       $sbtId = $rows["sbt_id"];
       echo '<tr>';
@@ -49,9 +49,11 @@ if (isset($_POST['action'])) {
       echo '<a href="#" class="fa fa-pencil-alt editButton" data-sbtId="' . $sbtId . '" data-tlId="' . $tlId . '"></a>';
       echo '</td>';
       echo '<td>' . $rows["sbt_name"] . '</td>';
+      echo '<td>' . $rows["sbt_unit"] . '</td>';
       echo '<td>' . $rows["sbt_weight"] . '</td>';
-      echo '<td>';
-      echo '</td>';
+      echo '<td>' . $rows["sbt_slot"] . '</td>';
+      if($rows["sbt_syllabus"]=='0')echo '<td>S</td>';
+      else echo '<td>A</td>';
       echo '<td>';
       $output = getFieldArray($conn, $sbtId, $tn_ccd, "sbt_id", "sas_id");
       for ($i = 0; $i < count($output); $i++) {
@@ -70,14 +72,14 @@ if (isset($_POST['action'])) {
     $sbt_unit = $_POST['sbt_unit'];
     $sbt_syllabus = $_POST['sbt_syllabus'];
 
-    echo "TL Id - $tlId";
+    // echo "TL Id - $tlId";
     $tlgId = getField($conn, $tlId, $tn_tl, "tl_id", "tlg_id");
     $subject_id = getField($conn, $tlgId, $tn_tlg, "tlg_id", "subject_id");
     $tlg_type = getField($conn, $tlgId, $tn_tlg, "tlg_id", "tlg_type");
 
     $sql = "select max(sbt_sno) as max from $tn_sbt where subject_id='$subject_id' and sbt_type='$tlg_type' and sbt_status='0'";
     $max_sno = getMaxValue($conn, $sql) + 1;
-    echo "Max $max_sno | Type $tlg_type";
+    // echo "Max $max_sno | Type $tlg_type";
     $dup = "select * from $tn_sbt where subject_id='$subject_id' and sbt_type='$tlg_type' and sbt_name='$sbt_name'";
     $result = $conn->query($dup);
     if ($result->num_rows == 0) {
@@ -146,7 +148,7 @@ if (isset($_POST['action'])) {
       $sr_name = $array["data"][$i]["name"];
       $mn_name = $array["data"][$i]["mn_name"];
       $sr_url = $array["data"][$i]["url"];
-      
+
       echo '<tr>';
       echo '<td>' . $srId . '</td><td>' . $sr_name . '</td><td>' . $mn_name . '</td><td><a href="' . $sr_url . '" target="_blank">' . $sr_url . '</a></td>';
       echo '<td><h5><a href="#" class="fa fa-arrow-circle-up upload" data-sr="' . $srId . '"></a></td>';
@@ -212,5 +214,12 @@ if (isset($_POST['action'])) {
       echo '</tr>';
     }
     echo '</table>';
+  } elseif ($_POST['action'] == "fetchSbt") {
+    $sbtId = $_POST['sbtId'];
+    //echo "TL Id - $sbtId";
+    $sql = "select * from $tn_sbt where sbt_id='$sbtId'";
+    $result = $conn->query($sql);
+    $rows = $result->fetch_assoc();
+    echo json_encode($rows);
   }
 }

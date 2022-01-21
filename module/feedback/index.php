@@ -13,10 +13,11 @@ require('../requireSubModule.php');
 	<?php require("../topBar.php"); ?>
 	<div class="container-fluid moduleBody">
 		<div class="row">
-			<div class="col-2 p-0 m-0 pl-2 full-height">
-				<div class="mt-2">
+			<div class="col-1 p-0 m-0 full-height">
+				<div class="mt-2 pl-1">
 					<h5>Feedback</h5>
 				</div>
+				
 				<div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
 					<a class="list-group-item list-group-item-action active ft" id="list-ft-list" data-toggle="list" href="#list-ft" role="tab"> Feedback Template </a>
 					<a class="list-group-item list-group-item-action sf" id="list-sf-list" data-toggle="list" href="#list-sf" role="tab"> Schedule Feedback </a>
@@ -27,7 +28,7 @@ require('../requireSubModule.php');
 					<?php require("../searchBar.php"); ?>
 				</div>
 			</div>
-			<div class="col-10 leftLinkBody">
+			<div class="col-11 leftLinkBody">
 				<div class="tab-content" id="nav-tabContent">
 					<div class="tab-pane show active" id="list-ft" role="tabpanel">
 						<div class="row">
@@ -120,16 +121,28 @@ require('../requireSubModule.php');
 													</div>
 												</div>
 												<div class="row">
-													<div class="col-6">
+													<div class="col-3 pr-0">
 														<div class="form-group">
 															<label>Feedback Open </label>
-															<input type="datetime-local" class="form-control form-control-sm" id="feedback_open" name="feedback_open" value="<?php echo $submit_ts; ?>">
+															<input type="date" class="form-control form-control-sm" id="feedback_open" name="feedback_open" value="<?php echo $submit_date; ?>">
 														</div>
 													</div>
-													<div class="col-6">
+													<div class="col-3 pl-1 pr-1">
+														<div class="form-group">
+															<label>Time </label>
+															<input type="time" class="form-control form-control-sm" id="feedback_open_time" name="feedback_open_time" value="<?php echo $submit_time; ?>">
+														</div>
+													</div>
+													<div class="col-3 pl-1 pr-1">
 														<div class="form-group">
 															<label>Feedback Close </label>
-															<input type="datetime-local" class="form-control form-control-sm" id="feedback_close" name="feedback_close">
+															<input type="date" class="form-control form-control-sm" id="feedback_close" name="feedback_close" value="<?php echo $submit_date;?>">
+														</div>
+													</div>
+													<div class="col-3 pl-0">
+														<div class="form-group">
+															<label> Time </label>
+															<input type="time" class="form-control form-control-sm" id="feedback_close_time" name="feedback_close_time" value="<?php echo $submit_time;?>">
 														</div>
 													</div>
 												</div>
@@ -184,7 +197,6 @@ require('../requireSubModule.php');
 							</div>
 						</div>
 					</div>
-
 					<div class="tab-pane fade" id="list-fq" role="tabpanel">
 						<div class="row">
 							<div class="col-6 pr-0">
@@ -305,11 +317,9 @@ require('../requireSubModule.php');
 							</div>
 						</div>
 					</div>
-
 				</div>
 				<a href="#" class="atag showQuestion">Question List</a>
 				<span class="questionList"></span>
-
 			</div>
 		</div>
 		<p>&nbsp;</p>
@@ -424,10 +434,12 @@ require('../requireSubModule.php');
 				feedback_id: feedback_id,
 				action: "fetchFeedback"
 			}, function() {}, "json").done(function(data, status) {
-				//$.alert(" Update " + feedback_id);
+				$.alert(" Update " + data.feedback_open);
 				$("#feedback_name").val(data.feedback_name)
 				$("#feedback_open").val(data.feedback_open)
+				$("#feedback_open_time").val(data.feedback_open_time)
 				$("#feedback_close").val(data.feedback_close)
+				$("#feedback_close_time").val(data.feedback_close_time)
 			})
 
 		})
@@ -438,7 +450,7 @@ require('../requireSubModule.php');
 			$.alert(formData);
 			$.post("feedbackSql.php", formData, () => {}, "text").done(function(mydata, mystatus) {
 				$.alert(mydata);
-				$('#updateFeedbackForm')[0].reset();
+				// $('#updateFeedbackForm')[0].reset();
 			}).fail(function() {
 				$.alert("fail in place of error");
 			})
@@ -600,9 +612,7 @@ require('../requireSubModule.php');
 							}
 							card += '<button class="btn btn-sm setActiveTemplate" data-template="' + template_id + '">Active</button>'
 							card += '<button class="btn btn-sm useTemplate" data-template="' + template_id + '">Use</button>'
-
 							card += '</div>'
-
 							card += '</div>';
 							card += '</div>';
 							count++

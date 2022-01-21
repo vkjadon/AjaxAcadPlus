@@ -17,12 +17,13 @@ if (isset($_POST['action'])) {
     $output = $result->fetch_assoc();
     echo json_encode($output);
   } elseif ($_POST['action'] == 'updateSubject') {
-    $fields = ['subject_id', 'subject_name', 'subject_code', 'subject_semester', 'subject_lecture', 'subject_tutorial', 'subject_practical', 'subject_credit', 'subject_type', 'subject_sno', 'update_ts', 'update_id'];
 
-    $values = [$_POST['modalId'], data_check($_POST['subject_name']), data_check($_POST['subject_code']), data_check($_POST['subject_semester']), data_check($_POST['subject_lecture']), data_check($_POST['subject_tutorial']), data_check($_POST['subject_practical']),  data_check($_POST['subject_credit']), data_check($_POST['subject_type']), data_check($_POST['subject_sno']), $submit_ts, $myId];
-    $dup = "select * from subject where subject_id='" . $_POST["modalId"] . "'";
-    $dup_alert = "Could Not Update - Duplicate Entries";
-    updateData($conn, 'subject', $fields, $values, $dup, $dup_alert);
+    $sql="update subject set program_id='".$_POST['sel_newProg']."', batch_id='".$_POST['sel_newBatch']."', subject_name='".data_check($_POST['subject_name'])."', subject_code='".data_check($_POST['subject_code'])."', subject_semester='".data_check($_POST['subject_semester'])."', subject_lecture='".data_check($_POST['subject_lecture'])."', subject_tutorial='".data_check($_POST['subject_tutorial'])."', subject_practical='".data_check($_POST['subject_practical'])."', subject_credit='".data_check($_POST['subject_credit'])."', subject_type='".data_check($_POST['subject_type'])."', subject_sno='".data_check($_POST['subject_sno'])."', update_ts='$submit_ts', update_id='$myId' where subject_id='".$_POST['modalId']."'";
+
+    $result=$conn->query($sql);
+    if(!$result)echo $conn->error;
+    else "Updated!!";
+
   } elseif ($_POST['action'] == 'vac') {
     $id = $_POST['id'];
     $code = $_POST['code'];
@@ -48,9 +49,9 @@ if (isset($_POST['action'])) {
 
     $copySemester = $_POST['newSemester'];
     $copyBatch = $_POST['newBatch'];
-
-    echo "Copy to Batch - $copyBatch - Sem - $copySemester";
-
+    $copyProg = $_POST['newProg'];
+    // echo "Copy to Batch - $copyBatch - Sem - $copySemester Prog $copyProg";
+    $i=0;
     $sql = "select * FROM subject where program_id='$myProg' and batch_id='$myBatch' and subject_semester='$copySemester'";
     $result = $conn->query($sql);
     while ($rows = $result->fetch_assoc()) {
@@ -64,18 +65,20 @@ if (isset($_POST['action'])) {
       $subject_category = $rows['subject_category'];
       $subject_credit = $rows['subject_credit'];
       $subject_internal = $rows['subject_internal'];
+      if($subject_internal==null)$subject_internal=0;
       $subject_external = $rows['subject_external'];
-      $staff_id = $rows['staff_id'];
-      echo "$subject_code | ";
-      $dup = "select * from subject where program_id='$myProg' and batch_id='$copyBatch' and subject_code='$subject_code'";
+      // echo " | Internal  - $subject_internal | ";
+      $dup = "select * from subject where program_id='$copyProg' and batch_id='$copyBatch' and subject_code='$subject_code'";
       $result_dup = $conn->query($dup);
       if (!$result_dup) echo $conn->error;
       else if ($result_dup->num_rows == 0) {
-        $insert = "insert into subject (program_id, batch_id, subject_semester, subject_name, subject_code, subject_type, subject_mode, subject_lecture, subject_tutorial, subject_practical, subject_category, subject_credit, subject_internal, subject_external, staff_id, update_id) values('$myProg', '$copyBatch', '$copySemester', '$subject_name', '$subject_code', '$subject_type', '$subject_mode', '$subject_lecture', '$subject_tutorial', '$subject_practical', '$subject_category', '$subject_credit', '$subject_internal', '$subject_external', '$staff_id', '$myId')";
+        $insert = "insert into subject (program_id, batch_id, subject_semester, subject_name, subject_code, subject_type, subject_mode, subject_lecture, subject_tutorial, subject_practical, subject_category, subject_credit, update_id) values('$copyProg', '$copyBatch', '$copySemester', '$subject_name', '$subject_code', '$subject_type', '$subject_mode', '$subject_lecture', '$subject_tutorial', '$subject_practical', '$subject_category', '$subject_credit', '$myId')";
         $result_insert = $conn->query($insert);
         if (!$result_insert) echo $conn->error;
+        $i++;
       }
-    };
+    }
+    echo " $i subject(s) Copied ";
   } elseif ($_POST["action"] == "subList") {
     //echo "MyId- $myId Prog $myProg";
     $tableId = 'subject_id';

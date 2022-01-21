@@ -303,6 +303,44 @@ require('../requireSubModule.php');
                           </div>
                         </div>
                         <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="adc" name="headName" value="adc">
+                              Admission Category(adc)
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="scl" name="headName" value="scl">
+                              Scholarships (scl)
+                            </div>
+                          </div> 
+                          <div class="col">
+                            <div class="form-group">
+                              New (new)
+                            </div>
+                          </div>                         
+                        </div>
+                        <div class="row">
+                          <div class="col">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="salcmp" name="headName" value="slc">
+                              Salary Component(slc)
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="salddc" name="headName" value="sld">
+                              Salary Deduction (sld)
+                            </div>
+                          </div> 
+                          <div class="col">
+                            <div class="form-group">
+                              New (new)
+                            </div>
+                          </div>                         
+                        </div>
+                        <div class="row">
                           <div class="col-4 pr-1">
                             <div class="form-group">
                               <label>Name</label>
@@ -349,7 +387,6 @@ require('../requireSubModule.php');
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
   $(document).ready(function() {
-
     $('[data-toggle="tooltip"]').tooltip();
     batchList();
     masterNameList();
@@ -487,18 +524,20 @@ require('../requireSubModule.php');
       var abbri = $("#abbri").val();
       var remarks = $("#remarks").val();
       // $.alert(" Pressed" + headName + name + remarks);
-      $.post("aaSql.php", {
-        name: name,
-        abbri: abbri,
-        remarks: remarks,
-        headName: headName,
-        action: "headName"
-      }, function(data, status) {}, "text").done(function(data) {
-        $.alert(data);
-        masterNameList();
-      }).fail(function() {
-        $.alert("fail in place of error");
-      })
+      if(name!=""){
+        $.post("aaSql.php", {
+          name: name,
+          abbri: abbri,
+          remarks: remarks,
+          headName: headName,
+          action: "headName"
+        }, function(data, status) {}, "text").done(function(data) {
+          $.alert(data);
+          masterNameList();
+        }).fail(function() {
+          $.alert("fail in place of error");
+        })
+      }$.alert("Name cannot be Blank!!");
     });
 
     function masterNameList() {

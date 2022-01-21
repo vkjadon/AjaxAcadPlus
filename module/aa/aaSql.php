@@ -168,8 +168,8 @@ if (isset($_POST['action'])) {
     } else echo $conn->error;
   } elseif ($_POST["action"] == "headName") {
     $sql = "insert into master_name (mn_code, mn_name, mn_abbri, mn_remarks, mn_status, update_id) values('" . $_POST["headName"] . "', '" . $_POST["name"] . "', '" . $_POST["abbri"] . "', '" . $_POST["remarks"] . "', '0', '$myId')";
-    $conn->query($sql);
-    echo "Added Successfully";
+    if($conn->query($sql))echo "Added Successfully";
+    else echo $conn->error;
   } elseif ($_POST["action"] == "masterNameList") {
     //echo "MyId- $myProg - $myBatch";
     $sql = "select * from master_name where mn_code='" . $_POST['headName'] . "' order by mn_name";

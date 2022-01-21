@@ -187,13 +187,18 @@ if (isset($_POST['action'])) {
       $mn_id[$i] = $rowsArray['mn_id'];
       $i++;
     }
-
+    $id = $_POST['sel_school'];
     $batchId = $_POST['sel_batch'];
     $tn_ss = 'student_status' . $batchId;
     $progId = $_POST['sel_prog'];
+    
     $fee_type = $_POST['ft'];
+    if($fee_type=='ALL') $matchFeeType='';
+    else $matchFeeType="and fee_type='$fee_type'";
 
-    $sql = "select st.*, sd.*, b.batch, p.program_name from student st, student_detail sd, batch b, program p where st.batch_id=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.program_id='$progId' and st.ay_id='$batchId' and st.student_status='0'";
+    if($progId=='ALL') $sql = "select st.*, std.*, p.sp_name from student st, student_detail std, program p, dept_program dp, school_dept sd where st.ay_id='$batchId' and sd.school_id='$id' and sd.dept_id=dp.dept_id and dp.program_id=p.program_id and p.program_status='0' and st.program_id=p.program_id and st.student_id=std.student_id and st.student_status='0' order by st.program_id, st.student_name";
+
+    else $sql = "select st.*, std.*, p.sp_name from student st, student_detail std, program p where st.program_id=p.program_id and st.student_id=std.student_id and st.program_id='$progId' and st.ay_id='$batchId' and st.student_status='0'  order by student_name";
 
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
@@ -204,7 +209,7 @@ if (isset($_POST['action'])) {
         $student_id = $rowsStudent["student_id"];
         $subArray["student_id"] = $student_id;
         $subArray["student_name"] = $rowsStudent["student_name"];
-        $subArray["program_name"] = $rowsStudent["program_name"];
+        $subArray["program_name"] = $rowsStudent["sp_name"];
         $subArray["user_id"] = $rowsStudent["user_id"];
         $subArray["student_rollno"] = $rowsStudent["student_rollno"];
         $subArray["student_mobile"] = $rowsStudent["student_mobile"];
@@ -213,23 +218,25 @@ if (isset($_POST['action'])) {
         $subArray["student_fname"] = $rowsStudent["student_fname"];
 
         $reverse=0;
-        $sql_rev = "select sum(fr.fr_amount) as reverse from fee_receipt fr, fee_reverse frev where fr.student_id='$student_id' and fr.fr_id=frev.fr_id and fr.fr_status='0'";
+        $sql_rev = "select sum(fr.fr_amount) as reverse from fee_receipt fr, fee_reverse frev where fr.student_id='$student_id' $matchFeeType and fr.fr_id=frev.fr_id and fr.fr_status='0'";
         $result_rev = $conn->query($sql_rev)->fetch_assoc();
         $reverse = $result_rev["reverse"];
         
-        $sql_debit = "select sum(fd_dues) as debit from fee_dues where student_id='$student_id'";
+        $sql_debit = "select sum(fd_dues) as debit, sum(fd_concession) as concession from fee_dues where student_id='$student_id' $matchFeeType";
         $result_debit = $conn->query($sql_debit)->fetch_assoc();
         $dues = $result_debit["debit"];
+        $concession = $result_debit["concession"];
         if ($dues > 0) $subArray["debit"] = $dues+$reverse;
         else $subArray["debit"] = 0;
 
-        
+        if ($concession > 0) $subArray["concession"] = $concession;
+        else $subArray["concession"] = 0;
 
-        $sql_credit = "select sum(fr_amount) as credit from fee_receipt where student_id='$student_id'";
+        $sql_credit = "select sum(fr_amount) as credit from fee_receipt where student_id='$student_id' $matchFeeType";
         $result_credit = $conn->query($sql_credit)->fetch_assoc();
         if ($result_credit["credit"] > 0) $subArray["credit"] = $result_credit["credit"];
         else $subArray["credit"] = 0;
-        $subArray["balance"] = $subArray["debit"] - $result_credit["credit"];
+        $subArray["balance"] = $subArray["debit"] - $result_credit["credit"]-$subArray["concession"];
         $json_array["ledger"][] = $subArray;
 
         $tag = array();
