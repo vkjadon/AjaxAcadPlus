@@ -1,5 +1,7 @@
 <?php
 require('../requireSubModule.php');
+$phpFile = "userSql.php";
+
 ?>
 
 <!DOCTYPE html>
@@ -14,38 +16,61 @@ require('../requireSubModule.php');
   <?php require("../topBar.php"); ?>
   <div class="container-fluid moduleBody">
     <div class="row">
-      <div class="col-2 p-0 m-0 pl-2 full-height">
+      <div class="col-1 p-0 m-0 pl-1 full-height">
         <div class="mt-3">
           <h5>Manage Users</h5>
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-          <a class="list-group-item list-group-item-action show active aru" id="list-aru-list" data-toggle="list" href="#list-aru" role="tab" aria-controls="aru">Add/Remove User</a>
-          <a class="list-group-item list-group-item-action ml" id="list-ml-list" data-toggle="list" href="#list-ml" role="tab" aria-controls="ml">Manage Links</a>
-          <a class="list-group-item list-group-item-action ulr" id="list-ulr-list" data-toggle="list" href="#list-ulr" role="tab" aria-controls="ulr">User Log Report</a>
+        <?php
+          if(in_array("17",$myLinks))echo '<a class="list-group-item list-group-item-action aru" id="list-aru-list" data-toggle="list" href="#list-aru" role="tab" aria-controls="aru">Add/Remove</a>';
+          if(in_array("18",$myLinks))echo '<a class="list-group-item list-group-item-action ml" id="list-ml-list" data-toggle="list" href="#list-ml" role="tab" aria-controls="ml">Manage Links</a>';
+          if(in_array("19",$myLinks))echo '<a class="list-group-item list-group-item-action ulr" id="list-ulr-list" data-toggle="list" href="#list-ulr" role="tab" aria-controls="ulr">User Log Report</a>';
+          ?>
         </div>
       </div>
-      <div class="col-10 leftLinkBody">
+      <div class="col-11 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="row">
-            <div class="col-6">
+            <div class="col-4 pr-0">
               <div class="card border-info">
                 <div class="card-body text-primary">
                   <div class="row">
-                    <div class="col-6 pr-0">
+                    <div class="col-4 pr-0">
                       <input name="userId" id="userId" class="form-control form-control-sm" type="text" placeholder="Search User" aria-label="Search">
                     </div>
-                    <div class="col-3 pl-1 pr-0">
+                    <div class="col-4 pl-1 pr-0">
                       <button type="button" class="btn btn-block btn-sm" id="searchStudent"><i class="fas fa-search"></i>Student</button>
                     </div>
-                    <div class="col-3 pl-1">
+                    <div class="col-4 pl-1">
                       <button type="button" class="btn btn-block btn-sm" id="searchStaff"><i class="fas fa-search"></i>Staff</button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+            <div class="col-md-2 pl-1">
+              <div class="card border-info">
+                <div class="card-body text-primary">
+                  <?php
+                  $curl = curl_init();
+                  curl_setopt($curl, CURLOPT_URL, "https://classconnect.in/api/get_portal_group.php");
+                  curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+                  $output = curl_exec($curl);
+                  $group = json_decode($output, true);
+                  echo '<select class="form-control form-control-sm" name="sel_pg" id="sel_pg" required>';
+                  echo '<option value="0" disabled>Select Group</option>';
+
+                  for ($i = 0; $i < count($group["data"]); $i++) {
+                    echo '<option value="' . $group["data"][$i]["id"] . '">' . $group["data"][$i]["id"] . '-' . $group["data"][$i]["name"] . '</option>';
+                  }
+                  echo '</select>';
+                  curl_close($curl);
+                  ?>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="tab-pane show active" id="list-aru" role="tabpanel" aria-labelledby="list-aru-list">
+          <div class="tab-pane fade" id="list-aru" role="tabpanel" aria-labelledby="list-aru-list">
             <div class="row">
               <div class="col-6">
                 <div class="container card mt-2 myCard">
@@ -61,7 +86,9 @@ require('../requireSubModule.php');
                 <div class="container card mt-2 myCard">
                   <div class="row">
                     <div class="col-12">
-                      <p class="text-center"><h1>User Status : <span class="userStatus"></span> </h1></p>
+                      <p class="text-center">
+                      <h1>User Status : <span class="userStatus"></span> </h1>
+                      </p>
                       <button class="btn btn-success">Create User</button>
                       <button class="btn">Suspend User</button>
                       <button class="btn btn-danger">Remove User</button>
@@ -71,16 +98,26 @@ require('../requireSubModule.php');
               </div>
             </div>
           </div>
-          <div class="tab-pane fade" id="list-ulr" role="tabpanel" aria-labelledby="list-ulr-list">
-
-          </div>
           <div class="tab-pane fade" id="list-ml" role="tabpanel" aria-labelledby="list-ml-list">
-            <div class="row">
-              <div class="col-4">
+            <div class="card mt-2 myCard">
+              <div class="row m-2">
+                <div class="col-md-12">
+                  <table class="table table-bordered list-table-xs mt-2" id="plList">
+                    <thead>
+                      <th>Id</th>
+                      <th>Order</th>
+                      <th>Link Name</th>
+                      <th>Default</th>
+                      <th>Link Status</th>
+                    </thead>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
+          <div class="tab-pane fade" id="list-ulr" role="tabpanel" aria-labelledby="list-ulr-list">
 
+          </div>
         </div>
       </div>
     </div>
@@ -91,14 +128,63 @@ require('../requireSubModule.php');
 </body>
 
 </html>
-
-<?php require("../js.php"); ?>
-
 <script>
   $(document).ready(function() {
 
     $('[data-toggle="tooltip"]').tooltip();
-    
+
+    $(document).on('click', '.updateRL', function(event) {
+      var pl = $(this).attr("data-pl");
+      var mn = $(this).attr("data-mn");
+      var tag = $(this).attr("data-tag");
+      // $.alert("pl " + pl + " mn " + mn + " tag " + tag);
+      $.post("userSql.php", {
+        pl: pl,
+        mn: mn,
+        tag: tag,
+        action: "updateRL",
+      }, () => {}, "text").done(function(data) {
+        // $.alert(data);
+        groupLinks();
+
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
+    $(document).on('change', '#sel_pg', function(event) {
+      groupLinks();
+    });
+
+    function groupLinks() {
+      var pg_id = $("#sel_pg").val();
+      // $.alert(" Group Id " + pg_id);
+      $.post("<?php echo $phpFile; ?>", {
+        pg_id: pg_id,
+        action: "groupLinkList",
+      }, function() {}, "json").done(function(data, status) {
+        console.log(data)
+        // $.alert(data);
+        var card = '';
+        $.each(data.link, function(key, value) {
+          card += '<tr>';
+          card += '<td>' + value.pl_id + '</td>';
+          card += '<td>' + value.pl_sno + '</td>';
+          card += '<td>' + value.pl_name + '</td>';
+          if (value.pl_type == "0") card += '<td>No</td>';
+          else if (value.pl_type == "1") card += '<td class="warning">Yes</td>';
+          else card += '<td>--</td>';
+          card += '<td>' + value.text + '</td>';
+          card += '</tr>';
+        })
+        $("#plList").find("tr:gt(0)").remove();
+        $("#plList").append(card);
+
+      }).fail(function() {
+        $.alert("No Links Found ! Please try Other Group !");
+      })
+    }
+
     $(document).on('click', '#searchStudent', function(event) {
       var userId = $("#userId").val();
       $.alert(userId);
@@ -179,7 +265,7 @@ require('../requireSubModule.php');
 
         card += '<tr>';
         card += '<td> Email </td><td>' + data.staff_email + '</td>';
-        card += '</tr>';        
+        card += '</tr>';
         card += '</table>';
         $(".applicationForm").html(card);
 
@@ -200,41 +286,6 @@ require('../requireSubModule.php');
     }
 
   });
-
-  function printDiv(print) {
-    // $.alert("In print");
-    var backup = document.body.innerHTML;
-    var divContent = document.getElementById(print).innerHTML;
-    document.body.innerHTML = divContent;
-    window.print();
-    document.body.innerHTML = backup;
-  }
-
-  document.getElementById('export').onclick = function() {
-    var tableId = document.getElementById('studentShowList').id;
-    htmlTableToExcel(tableId, filename = '');
-  }
-  var htmlTableToExcel = function(tableId, fileName = '') {
-    var excelFileName = 'excel_table_data';
-    var TableDataType = 'application/vnd.ms-excel';
-    var selectTable = document.getElementById(tableId);
-    var htmlTable = selectTable.outerHTML.replace(/ /g, '%20');
-
-    filename = filename ? filename + '.xls' : excelFileName + '.xls';
-    var excelFileURL = document.createElement("a");
-    document.body.appendChild(excelFileURL);
-
-    if (navigator.msSaveOrOpenBlob) {
-      var blob = new Blob(['\ufeff', htmlTable], {
-        type: TableDataType
-      });
-      navigator.msSaveOrOpenBlob(blob, fileName);
-    } else {
-
-      excelFileURL.href = 'data:' + TableDataType + ', ' + htmlTable;
-      excelFileURL.download = fileName;
-      excelFileURL.click();
-    }
-  }
 </script>
+
 </html>

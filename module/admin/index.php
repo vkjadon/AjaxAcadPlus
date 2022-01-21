@@ -4,25 +4,6 @@ require('../requireSubModule.php');
 <!DOCTYPE html>
 <html lang="en">
 
-<style>
-  input[type=text] {
-    border: none;
-    border-bottom: 2px solid;
-    word-wrap: break-word;
-  }
-</style>
-
-<head>
-  <title>Outcome Based Education : ClassConnect</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
-  <link rel="stylesheet" href="../../table.css">
-  <link rel="stylesheet" href="../../style.css">
-</head>
-
 <body>
   <?php require("../topBar.php"); ?>
   <div class="container-fluid">

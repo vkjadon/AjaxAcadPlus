@@ -42,7 +42,7 @@ if (isset($_POST['action'])) {
   } elseif ($_POST['action'] == 'addPayment') {
     // echo " Add Fee ";
     if ($myId > 0) {
-      $sql = "insert into payment_voucher (pv_type, pv_head, pv_mode, pv_amount, transaction_id, transaction_date, pv_desc, bill_no, bill_date, bill_amount, payee_name, payee_mobile, payee_id, update_id, pv_status) values ('" . $_POST['pv_type'] . "', '" . $_POST['pv_head'] . "', '" . $_POST['pv_mode'] . "', '" . $_POST['pv_amount'] . "', '" . $_POST['transaction_id'] . "', '" . $_POST['transaction_date'] . "', '" . $_POST['pv_desc'] . "', '" . $_POST['bill_no'] . "','" . $_POST['bill_date'] . "', '" . $_POST['bill_amount'] . "', '" . $_POST['payee_name'] . "','" . $_POST['payee_mobile'] . "','" . $_POST['payee_id'] . "', '$myId', '0')";
+      $sql = "insert into payment_voucher (pv_type, pv_head, pv_mode, pv_bank, pv_amount, transaction_id, transaction_date, pv_desc, bill_no, bill_date, bill_amount, payee_name, payee_mobile, payee_id, update_id, pv_status) values ('" . $_POST['pv_type'] . "', '" . $_POST['pv_head'] . "', '" . $_POST['pv_mode'] . "', '" . $_POST['pv_bank'] . "', '" . $_POST['pv_amount'] . "', '" . $_POST['transaction_id'] . "', '" . $_POST['transaction_date'] . "', '" . $_POST['pv_desc'] . "', '" . $_POST['bill_no'] . "','" . $_POST['bill_date'] . "', '" . $_POST['bill_amount'] . "', '" . $_POST['payee_name'] . "','" . $_POST['payee_mobile'] . "','" . $_POST['payee_id'] . "', '$myId', '0')";
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
       else echo "Fee Successfully Added";
@@ -110,6 +110,7 @@ if (isset($_POST['action'])) {
         $subArray["pv_mode"] = getField($conn, $rowsFee["pv_mode"], "master_name", "mn_id", "mn_name");
         $subArray["staff_id"] = getField($conn, $rowsFee["update_id"], "staff", "staff_id", "user_id");
         $subArray["pv_amount"] = $rowsFee["pv_amount"];
+        $subArray["pv_bank"] = $rowsFee["pv_bank"];
         $subArray["transaction_date"] = $rowsFee["transaction_date"];
         $subArray["transaction_id"] = $rowsFee["transaction_id"];
         $subArray["update_ts"] = date("d-m-Y", strtotime($rowsFee["update_ts"]));
@@ -119,8 +120,9 @@ if (isset($_POST['action'])) {
       echo json_encode($json_array);
     }
   } elseif ($_POST['action'] == 'pvDaily') {
-    $dateFrom = date("Y-m-d H:i:s", strtotime($submit_date));
-    $dateTo = date("Y-m-d H:i:s", (strtotime($submit_date) + 24 * 60 * 60));
+    $pvDate=$_POST['pvDate'];
+    $dateFrom = date("Y-m-d H:i:s", strtotime($pvDate));
+    $dateTo = date("Y-m-d H:i:s", (strtotime($pvDate) + 24 * 60 * 60));
     // echo "$dateFrom";
     $sql = "select pv.*, mn.mn_name from payment_voucher pv, master_name mn where mn.mn_id=pv.pv_head and pv.pv_status='0' and pv.update_ts>='$dateFrom' and pv.update_ts<='$dateTo' order by pv.pv_id";
     $result = $conn->query($sql);
@@ -138,6 +140,7 @@ if (isset($_POST['action'])) {
         $subArray["pv_mode"] = getField($conn, $rowsFee["pv_mode"], "master_name", "mn_id", "mn_name");
         $subArray["staff_id"] = getField($conn, $rowsFee["update_id"], "staff", "staff_id", "user_id");
         $subArray["pv_amount"] = $rowsFee["pv_amount"];
+        $subArray["pv_bank"] = $rowsFee["pv_bank"];
         $subArray["transaction_date"] = $rowsFee["transaction_date"];
         $subArray["transaction_id"] = $rowsFee["transaction_id"];
         $subArray["update_ts"] = date("d-m-Y", strtotime($rowsFee["update_ts"]));
@@ -159,10 +162,12 @@ if (isset($_POST['action'])) {
         $json_array["payee_mobile"] = $rowsFee["payee_mobile"];
         $json_array["payee_id"] = $rowsFee["payee_id"];
         $json_array["pv_type"] = $rowsFee["pv_type"];
+        $json_array["pv_desc"] = $rowsFee["pv_desc"];
         $json_array["pv_head"] = $rowsFee["mn_name"];
         $json_array["pv_mode"] = getField($conn, $rowsFee["pv_mode"], "master_name", "mn_id", "mn_name");
         $json_array["staff_id"] = getField($conn, $rowsFee["update_id"], "staff", "staff_id", "user_id");
         $json_array["pv_amount"] = $rowsFee["pv_amount"];
+        $json_array["pv_bank"] = $rowsFee["pv_bank"];
         $json_array["transaction_date"] = $rowsFee["transaction_date"];
         $json_array["transaction_id"] = $rowsFee["transaction_id"];
         $json_array["update_ts"] = $rowsFee["update_ts"];

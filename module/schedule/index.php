@@ -28,8 +28,8 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
         </div>
         <div class="mr-2">
           <?php
-          $sql = "select * from class where session_id='$mySes' and dept_id='$myDept' order by class_name";
-          selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
+          $sql = "select * from class where session_id='$mySes' and program_id='$myProg' order by class_semester";
+          selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql);
           ?>
         </div>
       </div>
@@ -57,7 +57,7 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
               <div id="sessionClassListSTT"></div>
             </div>
             <div class="container card myCard p-2">
-            <div class="waiting">Please click action button to load...
+              <div class="waiting">Please click action button to load...
                 <img src="../../images/wating2.gif" width="40%">
               </div>
               <p id="showTimeTable"></p>
@@ -110,9 +110,6 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
     <?php require("../bottom_bar.php"); ?>
   </div>
 </body>
-<?php require("../js.php"); ?>
-
-
 <script>
   $(document).ready(function() {
     $(".topBarTitle").text("Schedule");
@@ -616,7 +613,7 @@ $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
       var panelId = $('#panelId').text();
       if (panelId == "STT") var actionText = 'sessionClassListSTT';
       else var actionText = 'sessionClassList';
-      //$.alert("In List Function " + actionText + "Panel " + panelId);
+      $.alert("In List Function " + actionText + "Panel " + panelId);
       $.post("createScheduleSql.php", {
         action: actionText
       }, function(data, status) {

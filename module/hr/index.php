@@ -55,14 +55,13 @@ require('../requireSubModule.php');
   <?php require("../topBar.php"); ?>
   <div class="container-fluid moduleBody">
     <div class="row">
-      <div class="col-2 p-0 m-0 pl-2 full-height">
-        <h5 class="pt-3">Manage Staff</h5>
+      <div class="col-1 p-0 m-0 pl-1 full-height">
+        <h5 class="pt-3">Staff</h5>
         <div class="list-group list-group-mine" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active as" id="list-as-list" data-toggle="list" href="#list-as" role="tab" aria-controls="as"> Add Staff </a>
-          <span class="xsText mt-5"><em>Staff not to be assigned designation and department.<br>These to be assigned through Service Record.</em></span>
         </div>
       </div>
-      <div class="col-sm-10 leftLinkBody">
+      <div class="col-sm-11 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane fade show active" id="list-as" role="tabpanel" aria-labelledby="list-as-list">
             <div class="row">
@@ -332,7 +331,7 @@ require('../requireSubModule.php');
                       </div>
                     </div>
                   </div>
-                  
+
                 </div>
               </div>
             </div>
@@ -348,7 +347,6 @@ require('../requireSubModule.php');
 
 </html>
 
-<?php require("../js.php"); ?>
 <script>
   function resetForm() {
     document.getElementById("formStaff").reset();
@@ -658,7 +656,7 @@ require('../requireSubModule.php');
         if ($('#sName').val() === "") {
           error = "YES";
           error_msg = "Staff Name cannot be blank";
-        }else if ($('#sEmail').val() === "") {
+        } else if ($('#sEmail').val() === "") {
           error = "YES";
           error_msg = "Staff Email cannot be blank";
         }

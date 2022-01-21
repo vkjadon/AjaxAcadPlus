@@ -1,6 +1,5 @@
 <?php
 require('../requireSubModule.php');
-
 //echo $_POST['action'];
 if (isset($_POST['action'])) {
   if ($_POST["action"] == "batchList") {
@@ -72,8 +71,8 @@ if (isset($_POST['action'])) {
     if (count($array["data"]) == 0) echo "No Session Found";
   } elseif ($_POST["action"] == "addSession") {
     //echo "Add Session";
-    $fields = ['school_id', 'ay_id', 'session_name', 'session_start', 'session_end', 'session_remarks'];
-    $values = [$myScl, $_POST['batchIdModal'], data_check($_POST['session_name']), data_check($_POST['session_start']), data_check($_POST['session_end']), data_check($_POST['session_remarks'])];
+    $fields = ['school_id', 'ay_id', 'session_name', 'session_start', 'session_end', 'session_remarks', 'update_id', 'session_status'];
+    $values = [$myScl, $_POST['batchIdModal'], data_check($_POST['session_name']), data_check($_POST['session_start']), data_check($_POST['session_end']), data_check($_POST['session_remarks']), $myId, '0'];
     $status = 'session_status';
     $dup = "select * from session where session_name='" . data_check($_POST["session_name"]) . "' and school_id='" . $myScl . "'  and ay_id='" . $myBatch . "'and $status='0'";
     $dup_alert = "Session Alreday Exists ! Please Change the Name";
@@ -200,16 +199,18 @@ if (isset($_POST['action'])) {
     echo '</div>';
   } elseif ($_POST['action'] == 'selectList') {
     $tag = $_POST['tag'];
-    if ($tag == 'sch') {
+    $mn_abbri=getField($conn, $tag, "master_name", "mn_id", "mn_abbri");
+
+    if ($mn_abbri == 'inst') {
       $sql = "select * from school where school_status='0' order by school_name";
       $tableTag='school';
-    }elseif ($tag == 'dept') {
+    }elseif ($mn_abbri == 'dept') {
       $sql = "select * from department where dept_status='0' order by dept_name";
       $tableTag='dept';
-    }elseif ($tag == 'ph') {
+    }elseif ($mn_abbri == 'prog') {
       $sql = "select * from program where program_status='0' order by program_name";
       $tableTag='program';
-    } elseif ($tag == 'cl') {
+    } elseif ($mn_abbri == 'cl') {
       $sql = "select * from class where class_status='0' and session_id='$mySes' order by class_name";
       $tableTag='class';
     }else {
@@ -247,11 +248,11 @@ if (isset($_POST['action'])) {
     $output .= '</ul>';
     echo $output;
   } elseif ($_POST["action"] == "respName") {
-    $sql = "insert into responsibility_staff (rs_code, staff_id, unit_id, rs_from_date, rs_to_date, rs_remarks, update_id, rs_status) values('" . $_POST["respName"] . "', '" . $_POST["staffId"] . "', '" . $_POST["selectId"] . "', '" . $_POST["respFrom"] . "', '" . $_POST["respTo"] . "', '" . $_POST["respRemarks"] . "', '$myId', '0')";
+    $sql = "insert into responsibility_staff (mn_id, rs_code, staff_id, unit_id, rs_from_date, rs_to_date, rs_remarks, update_id, rs_status) values('" . $_POST["mn_id"] . "', '" . $_POST["sel_scope"] . "', '" . $_POST["staffId"] . "', '" . $_POST["selectId"] . "', '" . $_POST["respFrom"] . "', '" . $_POST["respTo"] . "', '" . $_POST["respRemarks"] . "', '$myId', '0')";
     $conn->query($sql);
   }elseif ($_POST["action"] == "respList") {
     //echo "MyId- $myProg - $myBatch";
-    $sql = "select * from responsibility_staff where rs_code='" . $_POST['respName'] . "'";
+    $sql = "select * from responsibility_staff where mn_id='" . $_POST['mn_id'] . "'";
     $result = $conn->query($sql);
     echo '<div class="card myCard m-2">';
 

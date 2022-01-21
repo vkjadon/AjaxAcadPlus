@@ -27,13 +27,14 @@ require('../requireSubModule.php');
             <div class="card-body text-primary">
               <div class="row">
                 <div class="col-2">
-                  <div class="card">
-                    <div class="card-body">
-                      <div class="d-flex flex-column align-items-center text-center">
-                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="100">
-                      </div>
+                  <span class="staffImage"><img src="../../images/upload.jpg"></span>
+                  <form class="form-horizontal" id="uploadModalForm">
+                    <div class="form-group">
+                      <input type="file" name="upload_file">
+                      <input type="hidden" name="action" value="uploadImage"><br>
+                      <button type="submit" class="btn btn-sm btn-block">Upload Image</button>
                     </div>
-                  </div>
+                  </form>
                 </div>
                 <div class="col-6">
                   <div class="card h-100">
@@ -82,7 +83,7 @@ require('../requireSubModule.php');
                   </div>
                 </div>
                 <div class="col-4">
-                  <div class="card myCard h-100">
+                  <div class="card myCard">
                     <form class="formChange" method="post" action="" onSubmit="return validatePassword()">
                       <div class="row m-1">
                         <div class="col-4 pr-0 pl-1">
@@ -106,7 +107,7 @@ require('../requireSubModule.php');
                       </div>
                       <div class="row m-1">
                         <div class="col-12 p-0">
-                          <input type="hidden" id="actionPwd" name="action" value="changePassword"> 
+                          <input type="hidden" id="actionPwd" name="action" value="changePassword">
                           <button class="btn btn-sm">Change Password</button>
                         </div>
                       </div>
@@ -192,6 +193,9 @@ require('../requireSubModule.php');
                   </div>
                 </div>
               </div>
+              <div class="col-3 pr-1 text-center">
+
+              </div>
             </div>
           </div>
         </div>
@@ -204,8 +208,6 @@ require('../requireSubModule.php');
 </body>
 
 </html>
-
-<?php require("../js.php"); ?>
 <script>
   function resetForm() {
     document.getElementById("formStaff").reset();
@@ -234,11 +236,30 @@ require('../requireSubModule.php');
       $(".staff_mobile").text(data.staff_mobile);
       $(".staff_doj").text(data.staff_doj);
       $(".staff_userId").text(data.user_id);
+      if (data.staff_image === null) $(".staffImage").html('<img  src="../../images/upload.jpg" width="100%">');
+      else $(".staffImage").html('<img  src="<?php echo '../../' . $myFolder . '/staffImages/'; ?>' + data.staff_image + '" width="100%">');
       $('.staffProfile').show();
     }, "text").fail(function() {
       $.alert("fail in place of error");
     });
-
+    $(document).on('submit', '#uploadModalForm', function(event) {
+      event.preventDefault();
+      var formData = $(this).serialize();
+      $.alert(formData);
+      // action and test_id are passed as hidden
+      $.ajax({
+        url: "uploadSql.php",
+        method: "POST",
+        data: new FormData(this),
+        contentType: false, // The content type used when sending data to the server.
+        cache: false, // To unable request pages to be cached
+        processData: false, // To send DOMDocument or non processed data file it is set to false
+        success: function(data) {
+          $.alert("List " + data);
+          $('#uploadModal').modal('hide');
+        }
+      })
+    });
     $(document).on('submit', '.formChange', function(event) {
       event.preventDefault();
       var formData = $(this).serialize();
@@ -251,4 +272,5 @@ require('../requireSubModule.php');
     });
   });
 </script>
+
 </html>

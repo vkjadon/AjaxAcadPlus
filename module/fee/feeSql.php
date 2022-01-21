@@ -178,5 +178,76 @@ if (isset($_POST['action'])) {
       }
       echo json_encode($json_array);
     }
+  } elseif ($_POST['action'] == 'ledgerStatusList') {
+
+    $sql_status = "select * from master_name where mn_code='sts' order by mn_id";
+    $result_status = $conn->query($sql_status);
+    $i = 0;
+    while ($rowsArray = $result_status->fetch_assoc()) {
+      $mn_id[$i] = $rowsArray['mn_id'];
+      $i++;
+    }
+
+    $batchId = $_POST['sel_batch'];
+    $tn_ss = 'student_status' . $batchId;
+    $progId = $_POST['sel_prog'];
+    $fee_type = $_POST['ft'];
+
+    $sql = "select st.*, sd.*, b.batch, p.program_name from student st, student_detail sd, batch b, program p where st.batch_id=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.program_id='$progId' and st.ay_id='$batchId' and st.student_status='0'";
+
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+    else {
+      $json_array = array();
+      $subArray = array();
+      while ($rowsStudent = $result->fetch_assoc()) {
+        $student_id = $rowsStudent["student_id"];
+        $subArray["student_id"] = $student_id;
+        $subArray["student_name"] = $rowsStudent["student_name"];
+        $subArray["program_name"] = $rowsStudent["program_name"];
+        $subArray["user_id"] = $rowsStudent["user_id"];
+        $subArray["student_rollno"] = $rowsStudent["student_rollno"];
+        $subArray["student_mobile"] = $rowsStudent["student_mobile"];
+        $subArray["student_semester"] = $rowsStudent["student_semester"];
+        $subArray["student_fee_category"] = $rowsStudent["student_fee_category"];
+        $subArray["student_fname"] = $rowsStudent["student_fname"];
+
+        $reverse=0;
+        $sql_rev = "select sum(fr.fr_amount) as reverse from fee_receipt fr, fee_reverse frev where fr.student_id='$student_id' and fr.fr_id=frev.fr_id and fr.fr_status='0'";
+        $result_rev = $conn->query($sql_rev)->fetch_assoc();
+        $reverse = $result_rev["reverse"];
+        
+        $sql_debit = "select sum(fd_dues) as debit from fee_dues where student_id='$student_id'";
+        $result_debit = $conn->query($sql_debit)->fetch_assoc();
+        $dues = $result_debit["debit"];
+        if ($dues > 0) $subArray["debit"] = $dues+$reverse;
+        else $subArray["debit"] = 0;
+
+        
+
+        $sql_credit = "select sum(fr_amount) as credit from fee_receipt where student_id='$student_id'";
+        $result_credit = $conn->query($sql_credit)->fetch_assoc();
+        if ($result_credit["credit"] > 0) $subArray["credit"] = $result_credit["credit"];
+        else $subArray["credit"] = 0;
+        $subArray["balance"] = $subArray["debit"] - $result_credit["credit"];
+        $json_array["ledger"][] = $subArray;
+
+        $tag = array();
+        for ($i = 0; $i < count($mn_id); $i++) {
+          $sql_sem = "select * from $tn_ss where student_id='$student_id' and mn_id='" . $mn_id[$i] . "'";
+          $result_sem = $conn->query($sql_sem);
+          if ($result_sem->num_rows == 0) $sem_text = 'No';
+          else {
+            $sem_text = "";
+            while ($rowsArray = $result_sem->fetch_assoc()) {
+              $sem_text .= $rowsArray["semester"].",  ";
+            }
+          }
+          $tag["mn_name"][] = $sem_text;
+        }
+        $json_array["status"][] = $tag;
+      }
+      echo json_encode($json_array);
+    }
   }
 }

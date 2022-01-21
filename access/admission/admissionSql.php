@@ -56,6 +56,8 @@ if (isset($_POST['action'])) {
       $ay = $_POST['stdAcademicBatch'];
       if (isset($_POST['stdLateralEntry'])) $lateral = 1;
       else $lateral = 0;
+      if (isset($_POST['stdScholarship'])) $scholarship = 1;
+      else $scholarship = 0;
       if (isset($_POST['stdRegular'])) $regular = 1;
       else $regular = 0;
 
@@ -65,17 +67,19 @@ if (isset($_POST['action'])) {
 
       $sp_code = getField($conn, $program_id, 'program', 'program_id', 'sp_code');
       // echo "SP Code  $sp_code PID $program_id $myBatch ";
-      $sql = "select max(user_id) as max from student where program_id='$program_id' and batch_id='$myBatch'";
+      $sql = "select count(user_id) as max from student where program_id='$program_id' and batch_id='$myBatch'";
       $result = $conn->query($sql);
       if ($result) {
          $row = $result->fetch_assoc();
-         $last_user_id = $row["max"];
-         $last_user_id++;
-         // echo "USER ID ".$last_user_id.'<br>';
-         if ($last_user_id == 1) $last_user_id = $school_code . substr($batch, 2) . $sp_code . '0001';
+         $student_count = $row["max"];
+         $student_count++;
+         $student_sp_count = substr($batch, 2) . $sp_code . '0000';
+         $student_sp_count = $student_sp_count + $student_count;
+         // echo "My Folder $myFolder USER ID ".$student_sp_count.'<br>';
+         $new_user_id = $school_code . $student_sp_count;
       } else echo $conn->error;
 
-      $sql = "insert into student (batch_id, program_id, ay_id, student_lateral, student_regular, student_semester, user_id, student_admission, student_gender, update_id, student_status) value('$myBatch', '$program_id', '$ay_id', '$lateral', '$regular', '$semester', '$last_user_id', '$date', 'M', '$myId', '1')";
+      $sql = "insert into student (batch_id, program_id, ay_id, student_lateral, student_scholarship, student_regular, student_semester, user_id, student_admission, student_gender, update_id, student_status) value('$myBatch', '$program_id', '$ay_id', '$lateral', '$scholarship', '$regular', '$semester', '$new_user_id', '$date', 'M', '$myId', '1')";
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
       else {
@@ -88,7 +92,7 @@ if (isset($_POST['action'])) {
          $sql = "insert into student_reference (student_id, update_id) values('$student_id', '$myId')";
          $result = $conn->query($sql);
       }
-      echo "$last_user_id";
+      echo "$new_user_id";
    } elseif ($_POST['action'] == 'updateId') {
       $school_id = $_POST['sel_school'];
       $program_id = $_POST['sel_prog'];
@@ -236,5 +240,11 @@ if (isset($_POST['action'])) {
       $sql = "update student set student_status='0' where student_id='$student_id'";
       $conn->query($sql);
       echo $conn->error;
+   } elseif ($_POST['action'] == 'fetchStudent') {
+      $id = $_POST['userId'];
+      $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.program_name from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.batch_id=b.batch_id and st.user_id='$id' and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.student_status='1'";
+      $result = $conn->query($sql);
+      $output = $result->fetch_assoc();
+      echo json_encode($output);
    }
 }

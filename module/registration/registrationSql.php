@@ -9,8 +9,8 @@ if (isset($_POST['action'])) {
     $class_semester = getField($conn, $class_id, "class", "class_id", "class_semester");
     $class_group = getField($conn, $class_id, "class", "class_id", "class_group");
     $batch_id = getField($conn, $class_id, "class", "class_id", "batch_id");
-    //echo "Class $class_id Batch $batch_id";
-    $sqlAll = "select * from student where program_id='$myProg' and batch_id='$batch_id' and student_status='0'";
+    // echo "Class $class_id Batch $batch_id";
+    $sqlAll = "select * from student where program_id='$myProg' and ay_id='$batch_id' and student_status='0'";
 
     if (isset($_POST['rpp'])) $rpp = $_POST['rpp'];
     else $rpp = 50;
@@ -20,7 +20,7 @@ if (isset($_POST['action'])) {
 
     paginationBar($conn, $sqlAll, $rpp, "sbp_rpp", "sbp");
 
-    $sql = "select * from student where program_id='$myProg' and batch_id='$batch_id' and student_status='0' limit $startRecord, $rpp";
+    $sql = "select * from student where program_id='$myProg' and ay_id='$batch_id' and student_status='0' limit $startRecord, $rpp";
 
     $result = $conn->query($sql);
     echo '<span id="currentRecord">' . $startRecord . '</span>';

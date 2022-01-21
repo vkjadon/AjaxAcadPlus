@@ -26,7 +26,7 @@ require('../../phpFunction/teachingLoadFunction.php');
           <a class="list-group-item list-group-item-action tl" id="list-tl-list" data-toggle="list" href="#list-tl" role="tab" aria-controls="tl"> Assign Load </a>
         </div>
         <?php
-        $sql = "select * from class where session_id='$mySes' and dept_id='$myDept' order by class_semester";
+        $sql = "select * from class where session_id='$mySes' and program_id='$myProg' order by class_semester";
         selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
         ?>
       </div>
@@ -148,9 +148,6 @@ require('../../phpFunction/teachingLoadFunction.php');
     <?php require("../bottom_bar.php"); ?>
   </div>
 </body>
-<?php require("../js.php"); ?>
-
-
 <script>
   $(document).ready(function() {
     $(document).on('click', '.checkAll', function() {

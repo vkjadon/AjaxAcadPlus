@@ -48,9 +48,6 @@ require('../requireSubModule.php');
     <?php require("../bottom_bar.php"); ?>
   </div>
 </body>
-<?php require("../js.php"); ?>
-
-
 <script>
   $(document).ready(function() {
 

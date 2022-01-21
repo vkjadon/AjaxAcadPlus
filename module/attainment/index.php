@@ -389,9 +389,6 @@ require('../requireSubModule.php');
  </div>
 </body>
 
-<?php require("../js.php"); ?>
-
-
 <script>
  $(document).ready(function() {
 

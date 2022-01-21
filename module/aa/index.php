@@ -16,15 +16,15 @@ require('../requireSubModule.php');
 
     <div class="container-fluid moduleBody">
       <div class="row">
-        <div class="col-2 p-0 m-0 pl-2 full-height">
-          <h5 class="pt-3">Academics</h5>
+        <div class="col-1 p-0 m-0 pl-1 full-height">
+          <h5 class="pt-3 text-center">Academics</h5>
           <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
             <a class="list-group-item list-group-item-action active bs" id="list-bs-list" data-toggle="list" href="#list-bs"> Batch/Session </a>
-            <a class="list-group-item list-group-item-action responsibility" id="list-responsibility-list" data-toggle="list" href="#list-responsibility"> Asign Responsibility </a>
-            <a class="list-group-item list-group-item-action  master" id="list-master-list" data-toggle="list" href="#list-master"> Academic Master Data </a>
+            <a class="list-group-item list-group-item-action responsibility" id="list-responsibility-list" data-toggle="list" href="#list-responsibility"> Responsibility </a>
+            <a class="list-group-item list-group-item-action  master" id="list-master-list" data-toggle="list" href="#list-master"> Master Data </a>
           </div>
         </div>
-        <div class="col-10 leftLinkBody">
+        <div class="col-11 leftLinkBody">
           <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane show active" id="list-bs" role="tabpanel">
               <div class="row">
@@ -58,72 +58,41 @@ require('../requireSubModule.php');
                   <div class="container card mt-2 myCard">
                     <h5 class="p-2 mb-2">Assign Responsibilty</h5>
                     <div class="row">
-                      <div class="col">
+                      <div class="col-3 pr-0">
                         <div class="form-group">
-                          <input type="radio" checked class="respName" id="sch" name="respName" value="sch">
-                          Inst. Head(sch)
+                          <label>Responsibility</label>
+                          <?php
+                          $sql_batch = "select * from master_name where mn_code='res' and mn_status='0' order by mn_name desc";
+                          $result = $conn->query($sql_batch);
+                          if ($result) {
+                            echo '<select class="form-control form-control-sm" name="sel_resp" id="sel_resp" required>';
+                            echo '<option selected disabled>Select Responsibility</option>';
+                            while ($rows = $result->fetch_assoc()) {
+                              $select_id = $rows['mn_id'];
+                              $select_name = $rows['mn_name'];
+                              echo '<option value="' . $select_id . '">' . $select_name . '[' . $rows['mn_abbri'] . ']</option>';
+                            }
+                            // echo '<option value="ALL">ALL</option>';
+                            echo '</select>';
+                          } else echo $conn->error;
+                          if ($result->num_rows == 0) echo 'No Data Found';
+                          ?>
                         </div>
                       </div>
-                      <div class="col">
-                        <div class="form-group">
-                          <input type="radio" class="respName" id="dept" name="respName" value="dept">
-                          Dept. Head(dept)
-                        </div>
-                      </div>
-                      <div class="col">
-                        <div class="form-group">
-                          <input type="radio" class="respName" id="ph" name="respName" value="ph">
-                          Prog. Head(ph)
-                        </div>
-                      </div>
-                      <div class="col">
-                        <div class="form-group">
-                          <input type="radio" class="respName" id="cl" name="respName" value="cl">
-                          Class InCharge
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col">
-                        <div class="form-group">
-                          <input type="radio" class="respName" id="cash" name="respName" value="cash">
-                          Cashier (cash)
-                        </div>
-                      </div>
-                      <div class="col">
-                        <div class="form-group">
-                          <input type="radio" class="respName" id="ac" name="respName" value="ac">
-                          Admission Counsellor (ac)
-                        </div>
-                      </div>
-                      <div class="col">
-                        <div class="form-group">
-                          <input type="radio" class="respName" id="tc" name="respName" value="tc">
-                          Tele Counsellor
-                        </div>
-                      </div>
-                      <div class="col">
-                        <div class="form-group">
-                          <input type="radio" class="respName" id="aa" name="respName" value="aa">
-                          Admission Advisor
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-6">
+                      <div class="col-3 pl-1 pr-0">
                         <div class="form-group">
                           <label class="selectLabel"></label>
                           <p class="selectList"></p>
                         </div>
                       </div>
-                      <div class="col-3">
+                      <div class="col-3 pl-1 pr-0">
                         <div class="form-group">
                           <label>Staff</label>
                           <input type="text" class="form-control form-control-sm" id="staffSearch" name="staffSearch" placeholder="Search Staff" aria-label="Search">
                           <p class='list-group overlapList' id="staffAutoList"></p>
                         </div>
                       </div>
-                      <div class="col-3">
+                      <div class="col-3 pl-1">
                         <div class="form-group">
                           <label>Office Order</label>
                           <input type="text" class="form-control form-control-sm" id="respOrder" name="respOrder">
@@ -131,19 +100,32 @@ require('../requireSubModule.php');
                       </div>
                     </div>
                     <div class="row">
-                      <div class="col-3 pr-1">
+                      <div class="col-3 pr-0">
+                        <div class="form-group">
+                          <label>Scope</label>
+                          <select class="form-control form-control-sm" name="sel_scope" id="sel_scope" required>
+                            <option selected disabled>Select Scope</option>';
+                            <option value="CLS">Class</option>
+                            <option value="PRG">Programme</option>
+                            <option value="DPT">Department</option>
+                            <option value="INT">Institution</option>
+                            <option value="GRP">Group</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-3 pl-1 pr-0">
                         <div class="form-group">
                           <label>Effective From</label>
                           <input type="date" class="form-control form-control-sm" id="respFrom" name="respFrom" value="<?php echo $submit_date; ?>">
                         </div>
                       </div>
-                      <div class="col-3 pl-1">
+                      <div class="col-3 pl-1 pr-0">
                         <div class="form-group">
                           <label>Effective Till</label>
                           <input type="date" class="form-control form-control-sm" id="respTo" name="respTo" value="<?php echo $submit_date; ?>">
                         </div>
                       </div>
-                      <div class="col-6">
+                      <div class="col-3 pl-1">
                         <div class="form-group">
                           <label>Remarks</label>
                           <input type="text" class="form-control form-control-sm" id="respRemarks" name="respRemarks">
@@ -261,13 +243,19 @@ require('../requireSubModule.php');
                           <div class="col-md-4">
                             <div class="form-group">
                               <input type="radio" class="headName" id="fm" name="headName" value="fm">
-                              Mode Of Fees(fm)
+                              Transaction Mode(fm)
                             </div>
                           </div>
                           <div class="col-md-4">
                             <div class="form-group">
                               <input type="radio" class="headName" id="ph" name="headName" value="ph">
                               Payment Head (ph)
+                            </div>
+                          </div>
+                          <div class="col-md-4">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="sts" name="headName" value="sts">
+                              Student Status(sts)
                             </div>
                           </div>
                         </div>
@@ -297,6 +285,20 @@ require('../requireSubModule.php');
                             <div class="form-group">
                               <input type="radio" class="headName" id="rel" name="headName" value="rel">
                               Religion(rel)
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="form-group">
+                              <input type="radio" class="headName" id="dse" name="headName" value="dse">
+                              Delete Std Entry(dse)
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="form-group">
+                              <div class="form-group">
+                                <input type="radio" class="headName" id="res" name="headName" value="res">
+                                Responsibility(res)
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -344,16 +346,11 @@ require('../requireSubModule.php');
   </div>
   <h1>&nbsp;</h1>
 </body>
-
-<?php require("../js.php"); ?>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
 <script type="text/javascript">
   $(document).ready(function() {
 
     $('[data-toggle="tooltip"]').tooltip();
-    $(".topBarTitle").text("Academics");
-    $(".selectLabel").text("School");
     batchList();
     masterNameList();
     selectList("sch");
@@ -394,6 +391,22 @@ require('../requireSubModule.php');
       batchList();
     });
 
+    $(document).on('change', '#sel_resp', function(event) {
+      var mn_id = $("#sel_resp").val();
+      // $.alert(" Resp " + mn_id);
+      $.post("aaSql.php", {
+        mn_id: mn_id,
+        action: "respList"
+      }, function() {}, "text").done(function(data, status) {
+        // respNameList();
+        selectList(mn_id);
+        respList()
+        //$.alert("List " + data);
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
     $(document).on('click', '.respName', function(event) {
       var respName = $("input[name='respName']:checked").val();
       $(".selectLabel").text(respName);
@@ -411,18 +424,21 @@ require('../requireSubModule.php');
         $.alert("fail in place of error");
       })
     });
+
     $(document).on('click', '.respSubmit', function(event) {
-      var respName = $("input[name='respName']:checked").val();
+      var mn_id = $("#sel_resp").val();
       var staffId = $("#staffId").val();
       var selectId = $("#selectId").val();
+      var sel_scope = $("#sel_scope").val();
       var respRemarks = $("#respRemarks").val();
       var respFrom = $("#respFrom").val();
       var respTo = $("#respTo").val();
       var respOrder = $("#respOrder").val();
-      $.alert(" Res " + respName + " Staff " + staffId + " SelId " + selectId);
+      // $.alert(" Staff " + staffId + " SelId " + selectId);
       $.post("aaSql.php", {
         selectId: selectId,
-        respName: respName,
+        sel_scope: sel_scope,
+        mn_id: mn_id,
         respFrom: respFrom,
         respTo: respTo,
         respOrder: respOrder,
@@ -430,17 +446,19 @@ require('../requireSubModule.php');
         staffId: staffId,
         action: "respName"
       }, function(data, status) {}, "text").done(function(data) {
-        $.alert("List " + data);
+        // $.alert("List " + data);
+        respList()
+
       }).fail(function() {
         $.alert("fail in place of error");
       })
     });
-    function respList() {
-      var respName = $("input[name='respName']:checked").val();
-      $.alert(" Pressed" + respName);
 
+    function respList() {
+      var mn_id = $("#sel_resp").val();
+      // $.alert(" Pressed" + mn_id);
       $.post("aaSql.php", {
-        respName: respName,
+        mn_id: mn_id,
         action: "respList"
       }, function() {}, "text").done(function(data, status) {
         $("#responsibilityList").html(data);
@@ -462,7 +480,7 @@ require('../requireSubModule.php');
         $.alert("fail in place of error");
       })
     });
-    
+
     $(document).on('click', '.nrSubmit', function(event) {
       var headName = $("input[name='headName']:checked").val();
       var name = $("#name").val();
@@ -482,6 +500,7 @@ require('../requireSubModule.php');
         $.alert("fail in place of error");
       })
     });
+
     function masterNameList() {
       var headName = $("input[name='headName']:checked").val();
       //$.alert("Master Name " + headName);
@@ -643,11 +662,9 @@ require('../requireSubModule.php');
       })
     });
 
-
     // Functions
     function selectList(tag) {
-      //$.alert("In List Function");
-      if (tag == "department") tag = "dept";
+      // $.alert( "Select " + tag);
       $.post("aaSql.php", {
         tag: tag,
         action: "selectList"

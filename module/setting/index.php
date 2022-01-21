@@ -14,17 +14,17 @@ require('../requireSubModule.php');
   <?php require("../topBar.php"); ?>
   <div class="container-fluid moduleBody">
     <div class="row">
-      <div class="col-2 p-0 m-0 pl-2 full-height">
-        <h5 class="pt-3">Institute Settings</h5>
+      <div class="col-1 p-0 m-0 pl-1 full-height">
+        <h5 class="pt-3">Settings</h5>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-          <a class="list-group-item list-group-item-action active inst" id="list-inst-list" data-toggle="list" href="#list-inst" role="tab" aria-controls="inst"> Manage University/Group </a>
-          <a class="list-group-item list-group-item-action sch" id="list-sch-list" data-toggle="list" href="#list-sch" role="tab" aria-controls="sch"> Manage School/Institution </a>
-          <a class="list-group-item list-group-item-action dept" id="list-dept-list" data-toggle="list" href="#list-dept" role="tab" aria-controls="dept"> Manage Department </a>
-          <a class="list-group-item list-group-item-action mip" id="list-mip-list" data-toggle="list" href="#list-mip" role="tab" aria-controls="mip"> Manage Programme </a>
-          <a class="list-group-item list-group-item-action is" id="list-is-list" data-toggle="list" href="#list-is" role="tab" aria-controls="is"> Institute Structure </a>
+          <a class="list-group-item list-group-item-action active inst" id="list-inst-list" data-toggle="list" href="#list-inst" role="tab" aria-controls="inst"> Group </a>
+          <a class="list-group-item list-group-item-action sch" id="list-sch-list" data-toggle="list" href="#list-sch" role="tab" aria-controls="sch"> Institution </a>
+          <a class="list-group-item list-group-item-action dept" id="list-dept-list" data-toggle="list" href="#list-dept" role="tab" aria-controls="dept"> Department </a>
+          <a class="list-group-item list-group-item-action mip" id="list-mip-list" data-toggle="list" href="#list-mip" role="tab" aria-controls="mip"> Programme </a>
+          <a class="list-group-item list-group-item-action is" id="list-is-list" data-toggle="list" href="#list-is" role="tab" aria-controls="is"> Structure </a>
         </div>
       </div>
-      <div class="col-10 leftLinkBody">
+      <div class="col-11 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="list-inst" role="tabpanel" aria-labelledby="list-inst-list">
             <div class="row">
@@ -33,25 +33,13 @@ require('../requireSubModule.php');
                   <a class="fa fa-plus-circle p-0 addInst"></a>
                 </h3>
                 <div class="container card mt-2 mb-2 myCard">
-                  <div class="card-title-xs"><a href="#" class="fa fa-pencil-alt editInst"></a> University/Group</div>
+                  <div class="card-title-xs"><a href="#" class="fa fa-pencil-alt editInst" id="instId"></a> University/Group</div>
                   <div class="row mt-1">
-                    <div class="col">
-                      <table class="table table-striped list-table-xs" id="instTable">
-                        <tr>
-                          <th width="20%">Name</th>
-                          <td colspan="3"><span id="instName"></span></td>
-                        </tr>
-                        <tr>
-                          <th> Abbri</th>
-                          <td><span id="instName"></span></td>
-                          <th width="20%"> URL</th>
-                          <td><span id="instURL"></span></td>
-                        </tr>
-                        <tr>
-                          <th> Address</th>
-                          <td colspan="3"><span id="instAddress"></span></td>
-                        </tr>
-                      </table>
+                    <div class="col-12">
+                      <p class="xlText" id="instName"></p>
+                      <p class="largeText" id="instURL"></p>
+                      <p class="largeText" id="instAddress"></p>
+                      <p class="largeText" id="instLogo"></p>
                     </div>
                   </div>
                 </div>
@@ -151,6 +139,7 @@ require('../requireSubModule.php');
                     <form class="form-horizontal" id="schoolDeptForm">
                       <div class="row">
                         <div class="col-sm-6">
+                          <label>School/Institution</label>
                           <?php
                           $sql_school = "select * from school where school_status='0'";
                           $result = $conn->query($sql_school);
@@ -168,6 +157,7 @@ require('../requireSubModule.php');
                           ?>
                         </div>
                         <div class="col-sm-6">
+                          <label>Department</label>
                           <div class="input-group">
                             <?php
                             $sql_department = "select * from department where dept_status='0'";
@@ -206,6 +196,7 @@ require('../requireSubModule.php');
                     <form class="form-horizontal" id="deptProgramForm">
                       <div class="row">
                         <div class="col-sm-6">
+                          <label>Department</label>
                           <?php
                           $sql_department = "select * from department where dept_status='0'";
                           $result = $conn->query($sql_department);
@@ -223,6 +214,7 @@ require('../requireSubModule.php');
                           ?>
                         </div>
                         <div class="col-sm-6">
+                          <label>Program/Specialization</label>
                           <div class="input-group">
                             <?php
                             $sql_program = "select * from program where program_status='0' order by sp_name";
@@ -274,9 +266,6 @@ require('../requireSubModule.php');
   </div>
   <?php require("../bottom_bar.php"); ?>
 </body>
-
-<?php require("../js.php"); ?>
-
 <script>
   $(document).ready(function() {
     instList();
@@ -383,16 +372,19 @@ require('../requireSubModule.php');
     // Manage Program
     $(document).on('submit', '#modalForm', function(event) {
       event.preventDefault(this);
+      var instName = $("#inst_name").val();
       var pn = $("#program_name").val();
       var school_name = $("#school_name").val();
       var action = $("#action").val();
-      if (action == "addProgram" && pn === "") $.alert("Program Name cannot be blank!! ");
+      // $.alert(" Action " + action );
+      if (action == "addInst" && instName === "") $.alert("Group/University Name cannot be blank!! ");
+      else if (action == "addProgram" && pn === "") $.alert("Program Name cannot be blank!! ");
       else if (action == "addSchool" && school_name === "") $.alert("School Name cannot be blank!! ");
       else if (action == "addDept" && dept_name === "") $.alert("Department Name cannot be blank!! ");
       else {
         var formData = $(this).serialize();
         $('#firstModal').modal('hide');
-        // $.alert(" Action " + action);
+        // $.alert(formData);
         $.post("instSql.php", formData, () => {}, "text").done(function(data) {
           // $.alert("Da");
           if (action == "addProgram" || action == "updateProgram") programList();
@@ -406,6 +398,39 @@ require('../requireSubModule.php');
         })
       }
     });
+
+    $(document).on('click', '.editInst', function() {
+      // var id = $(this).attr("data-id");
+      var id=1;
+      //$.alert("Id " + id);
+      $.post("instSql.php", {
+        instId: id,
+        action: "fetchInst"
+      }, () => {}, "json").done(function(data) {
+        //$.alert("List " + data.inst_name);
+
+        $('#modal_title').text("Update Institute [" + id + "]");
+        $('#inst_name').val(data.inst_name);
+        $('#inst_abbri').val(data.inst_abbri);
+        $('#inst_address').val(data.inst_address);
+        $('#inst_logo').val(data.inst_logo);
+        $('#inst_url').val(data.inst_url);
+
+        $('#action').val("updateInst");
+        $('#modalId').val(id);
+
+        $('#firstModal').modal('show');
+        $('.programForm').hide();
+        $('.instForm').show();
+        $('.schoolForm').hide();
+        $('.departmentForm').hide();
+
+        //$("#ccform").html(mydata);
+      }, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
     $(document).on('click', '.editProgram', function() {
       var id = $(this).attr("data-id");
       //$.alert("Id " + id);
@@ -636,7 +661,10 @@ require('../requireSubModule.php');
         //$.alert("List " + mydata);
       }, "json").done(function(data, status) {
         // $.alert(data)
-        $("#instName").html('<h3>' + data.inst_name + '</h3>')
+        $("#instName").html(data.inst_name)
+        $("#instURL").html(data.inst_url)
+        $("#instLogo").html(data.inst_logo )
+        $("#instAddress").html(data.inst_address)
       })
     }
 
@@ -656,6 +684,42 @@ require('../requireSubModule.php');
 
         <!-- Modal body -->
         <div class="modal-body">
+          <div class="instForm">
+            <div class="row">
+              <div class="col-6 pr-0">
+                <div class="form-group">
+                  <label>Group/University</label>
+                  <input type="text" class="form-control form-control-sm" id="inst_name" name="inst_name" placeholder="Name">
+                </div>
+              </div>
+              <div class="col-3 pl-1 pr-0">
+                <div class="form-group">
+                  <label>Abbri</label>
+                  <input type="text" class="form-control form-control-sm" id="inst_abbri" name="inst_abbri" placeholder="Abbri">
+                </div>
+              </div>
+              <div class="col-3 pl-1">
+                <div class="form-group">
+                  <label> Logo </label>
+                  <input type="text" class="form-control form-control-sm" id="inst_logo" name="inst_logo" placeholder="Logo">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-7 pr-0">
+                <div class="form-group">
+                  <label>Address</label>
+                  <input type="text" class="form-control form-control-sm" id="inst_address" name="inst_address" placeholder="Address">
+                </div>
+              </div>
+              <div class="col-5 pl-1">
+                <div class="form-group">
+                  <label>URL</label>
+                  <input type="text" class="form-control form-control-sm" id="inst_url" name="inst_url" placeholder="Abbri">
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="schoolForm">
             <div class="row">
               <div class="col-6 pr-0">

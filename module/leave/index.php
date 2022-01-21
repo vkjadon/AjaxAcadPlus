@@ -635,9 +635,6 @@ if ($result && $result->num_rows == 1) {
   <?php require("../bottom_bar.php"); ?>
   </div>
 </body>
-
-<?php require("../js.php"); ?>
-
 <script>
   $(document).ready(function() {
     lrStatusTextClass = ["", "", "under-process", "under-process", "under-process", "approved", "", "rejected", "warning", "warning"];

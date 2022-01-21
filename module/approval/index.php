@@ -84,9 +84,6 @@ require('../../phpFunction/leaveFunction.php');
   </div>
 </body>
 
-<?php require("../js.php"); ?>
-
-
 <script>
   $(document).ready(function() {
     $(".topBarTitle").text("Approvals");

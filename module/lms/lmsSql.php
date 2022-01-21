@@ -20,7 +20,7 @@ if (isset($_POST['action'])) {
       $section = getField($conn, $class_id, "class", "class_id", "class_section");
       $subject_id = $array["data"][$i]["subject_id"];
       $subject = getField($conn, $subject_id, "subject", "subject_id", "subject_code");
-      echo '<div class="col-6">';
+      echo '<div class="col-2">';
       if ($i == 0) echo '<input type="radio" class="sel_subject" checked id="cl' . $tlId . '" name="subject" value="' . $tlId . '">';
       else echo '<input type="radio" class="sel_subject"  id="cl' . $tlId . '" name="subject" value="' . $tlId . '">';
       echo '<span class="smallerText"> ' . $subject . ' ' . $class . '[' . $section . '] ' . $type . 'G-' . $group . '</span>';
@@ -37,16 +37,16 @@ if (isset($_POST['action'])) {
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     echo '<table class="table list-table-xs mb-0">';
-    echo '<tr><th>#</th><th>Id</th><th>Action</th><th width="50%">Topic</th><th>Wt</th><th>Slot(s)</th><th>Coverage</th></tr>';
+    echo '<tr><th>#</th><th>Id</th><th class="text-center" width="5%"><i class="fa fa-pencil-alt"></i></th><th width="50%">Topic</th><th>Wt</th><th>Slot(s)</th><th>Coverage</th></tr>';
     while ($rows = $result->fetch_assoc()) {
       $sbtId = $rows["sbt_id"];
       echo '<tr>';
       echo '<td>' . $sno++ . '</td>';
       echo '<td>[' . $rows["sbt_id"] . '] </td>';
-      echo '<td>';
+      echo '<td class="text-center">';
       // if ($sno > 2) echo '<a href="#" class="btn btn-success btn-square-xs swapButton" data-sbtId="' . $sbtId . '" data-tlId="' . $tlId . '" data-swap="UP"><i class="fa fa-arrow-up"></i></a>';
       // if ($sno <= $result->num_rows) echo '<a href="#" class="btn btn-danger btn-square-xs swapButton" data-sbtId="' . $sbtId . '" data-tlId="' . $tlId . '" data-swap="DN"><i class="fa fa-arrow-down"></i></a>';
-      echo '<a href="#" class="btn btn-info btn-square-xs editButton" data-sbtId="' . $sbtId . '" data-tlId="' . $tlId . '"><i class="fa fa-edit"></i></a>';
+      echo '<a href="#" class="fa fa-pencil-alt editButton" data-sbtId="' . $sbtId . '" data-tlId="' . $tlId . '"></a>';
       echo '</td>';
       echo '<td>' . $rows["sbt_name"] . '</td>';
       echo '<td>' . $rows["sbt_weight"] . '</td>';
@@ -70,14 +70,14 @@ if (isset($_POST['action'])) {
     $sbt_unit = $_POST['sbt_unit'];
     $sbt_syllabus = $_POST['sbt_syllabus'];
 
-    //echo "TL Id - $tlId";
+    echo "TL Id - $tlId";
     $tlgId = getField($conn, $tlId, $tn_tl, "tl_id", "tlg_id");
     $subject_id = getField($conn, $tlgId, $tn_tlg, "tlg_id", "subject_id");
     $tlg_type = getField($conn, $tlgId, $tn_tlg, "tlg_id", "tlg_type");
 
     $sql = "select max(sbt_sno) as max from $tn_sbt where subject_id='$subject_id' and sbt_type='$tlg_type' and sbt_status='0'";
     $max_sno = getMaxValue($conn, $sql) + 1;
-    //echo "Max $max_sno | Type $tlg_type";
+    echo "Max $max_sno | Type $tlg_type";
     $dup = "select * from $tn_sbt where subject_id='$subject_id' and sbt_type='$tlg_type' and sbt_name='$sbt_name'";
     $result = $conn->query($dup);
     if ($result->num_rows == 0) {
@@ -86,6 +86,7 @@ if (isset($_POST['action'])) {
       $sql = "update  $tn_sbt set sbt_status='0' where subject_id='$subject_id' and sbt_type='$tlg_type' and sbt_name='$sbt_name'";
     }
     $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
   } elseif ($_POST['action'] == "swap") {
     $selectedId = $_POST['sbtId'];
     $swap = $_POST['swap'];
@@ -113,18 +114,18 @@ if (isset($_POST['action'])) {
 
     // echo "Subject $subject_id Id $myId";
 
-    $dup = "select * from $tn_sr where sr_name='" . data_check($_POST["sbr_name"]) . "' and subject_id='$subject_id' and mn_id='" . data_check($_POST['mn_id']) . "' and update_id='$myId'";
+    $dup = "select * from $tn_sr where sr_name='" . data_check($_POST["sbr_name"]) . "' and subject_id='$subject_id' and rt_id='" . data_check($_POST['mn_id']) . "' and update_id='$myId'";
     $result = $conn->query($dup);
-    if($result){
+    if ($result) {
       if ($result->num_rows == 0) {
-        $sql = "insert into $tn_sr (subject_id, mn_id, sr_name, sr_type, sr_url, update_id, sr_status) values('$subject_id', '" . $_POST['mn_id'] . "', '" . data_check($_POST["sbr_name"]) . "', '" . data_check($_POST["sbr_type"]) . "', '" . data_check($_POST["sbr_url"]) . "', '$myId', '0')";
+        $sql = "insert into $tn_sr (subject_id, rt_id, sr_name, sr_type, sr_url, update_id, sr_status) values('$subject_id', '" . $_POST['mn_id'] . "', '" . data_check($_POST["sbr_name"]) . "', '" . data_check($_POST["sbr_type"]) . "', '" . data_check($_POST["sbr_url"]) . "', '$myId', '0')";
       } else {
-        $sql = "update  $tn_sr set sr_status='0' where sr_name='" . data_check($_POST["sbr_name"]) . "' and subject_id='$subject_id' and mn_id='" . data_check($_POST['mn_id']) . "' and update_id='$myId'";
+        $sql = "update  $tn_sr set sr_status='0' where sr_name='" . data_check($_POST["sbr_name"]) . "' and subject_id='$subject_id' and rt_id='" . data_check($_POST['mn_id']) . "' and update_id='$myId'";
       }
       $result = $conn->query($sql);
-      if(!$result)echo $conn->error;
+      if (!$result) echo $conn->error;
     } else echo $conn->error;
-    
+
 
 
     //echo "OK";
@@ -139,27 +140,35 @@ if (isset($_POST['action'])) {
     $array = json_decode($json, true);
 
     echo '<table class="table list-table-xs">';
-    echo '<tr><th>Id</th><th>Title</th><th>Link</th><th><i class="fa fa-upload"></i></th><th>Class</th></tr>';
+    echo '<tr><th>Id</th><th>Title</th><th>Type</th><th>Link</th><th><i class="fa fa-upload"></i></th><th>Class</th></tr>';
     for ($i = 0; $i < count($array["data"]); $i++) {
-      $rsbId = $array["data"][$i]["id"];
-      $rsb_name = $array["data"][$i]["name"];
-      $rsb_url = $array["data"][$i]["url"];
+      $srId = $array["data"][$i]["id"];
+      $sr_name = $array["data"][$i]["name"];
+      $mn_name = $array["data"][$i]["mn_name"];
+      $sr_url = $array["data"][$i]["url"];
+      
       echo '<tr>';
-      echo '<td>' . $rsbId . '</td><td>' . $rsb_name . '</td><td><a href="' . $rsb_url . '" target="_blank">' . $rsb_url . '</a></td>';
-      echo '<td><h5><a class="fa fa-arrow-circle-up upload" data-rsb="' . $rsbId . '"></a></h5></td>';
+      echo '<td>' . $srId . '</td><td>' . $sr_name . '</td><td>' . $mn_name . '</td><td><a href="' . $sr_url . '" target="_blank">' . $sr_url . '</a></td>';
+      echo '<td><h5><a href="#" class="fa fa-arrow-circle-up upload" data-sr="' . $srId . '"></a></td>';
+      $filelink = '../../' . $myFolder . 'resourse/' . $srId . '.pdf';
+      if (!file_exists($filelink)) {
+        $filelink = '#';
+        $filename = '#';
+      } else $filename = $srId . '.pdf';
+      echo '<td><a href="' . $filelink . '" class="fa fa-eye show" target="_blank" data-sr="' . $srId . '">' . $filename . '</a></td>';
       echo '<td>';
       $jsonTL = get_staffClass($conn, $myId, $tn_tl, $tn_tlg);
       //echo $jsonTL;
       $arrayTL = json_decode($jsonTL, true);
       for ($j = 0; $j < count($arrayTL["data"]); $j++) {
         $class_id = $arrayTL["data"][$j]["class_id"];
-        $sql = "select * from $tn_src where class_id='$class_id' and sr_id='$rsbId'";
+        $sql = "select * from $tn_src where class_id='$class_id' and sr_id='$srId'";
         $result = $conn->query($sql);
-        if(!$result)echo $conn->error;
+        if (!$result) echo $conn->error;
         $class = getField($conn, $class_id, "class", "class_id", "class_name");
         $class_section = getField($conn, $class_id, "class", "class_id", "class_section");
-        if ($result->num_rows == 0) echo ' <input type="checkbox" class="resClass" name="res_class" data-resCl="' . $class_id . '" data-rsb="' . $rsbId . '">' . $class . '[' . $class_id . ']';
-        else echo ' <input type="checkbox" class="resClass" checked name="res_class" data-resCl="' . $class_id . '" data-rsb="' . $rsbId . '">' . $class . ' [' . $class_section . ']';
+        if ($result->num_rows == 0) echo ' <input type="checkbox" class="resClass" name="res_class" data-resCl="' . $class_id . '" data-sr="' . $srId . '"> ' . $class . '[' . $class_id . ']';
+        else echo ' <input type="checkbox" class="resClass" checked name="res_class" data-resCl="' . $class_id . '" data-sr="' . $srId . '"> ' . $class . ' [' . $class_section . ']';
       }
       echo '</td>';
       echo '</tr>';
@@ -168,12 +177,11 @@ if (isset($_POST['action'])) {
     echo '';
   } elseif ($_POST['action'] == "resClass") {
     $classId = $_POST['classId'];
-    $rsbId = $_POST['rsbId'];
+    $srId = $_POST['srId'];
     $checkboxStatus = $_POST['checkboxStatus'];
-
-    echo "Class $classId RSB $rsbId";
-    if ($checkboxStatus == 'true') $sql = "insert into $tn_src (class_id, sr_id) values('$classId', '$rsbId')";
-    else $sql = "delete from $tn_src where class_id='$classId' and sr_id='$rsbId'";
+    // echo "Class $classId RSB $srId";
+    if ($checkboxStatus == 'true') $sql = "insert into $tn_src (class_id, sr_id) values('$classId', '$srId')";
+    else $sql = "delete from $tn_src where class_id='$classId' and sr_id='$srId'";
     $conn->query($sql);
     echo $conn->error;
   } elseif ($_POST['action'] == "coverage") {

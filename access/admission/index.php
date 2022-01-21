@@ -30,8 +30,8 @@ if (!isset($myBatch)) $myBatch = '';
 <body>
   <div class="container-fluid moduleBody">
     <div class="row m-3">
-      <div class="col-md-2 ml-2 bg-danger">
-        <img src="<?php echo $setLogo; ?>" width="100%">
+      <div class="col-md-1">
+        <img src="<?php echo $setLogo; ?>" width="80%">
       </div>
       <div class="col-md-3 ml-2">
         <span class="inputLabel">
@@ -115,13 +115,19 @@ if (!isset($myBatch)) $myBatch = '';
                       <input type="date" class="form-control form-control-sm" id="stdAdmission" name="stdAdmission" value="<?php echo $submit_date; ?>">
                     </div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                     <div class="form-group">
                       <input type="checkbox" lass="form-check-input" id="stdLateralEntry" name="stdLateralEntry">
                       <label>Lateral Entry</label>
                     </div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <input type="checkbox" lass="form-check-input" id="stdScholarship" name="stdScholarship">
+                      <label>Scholarship</label>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
                     <div class="form-group">
                       <input type="checkbox" lass="form-check-input" checked id="stdRegular" name="stdRegular">
                       <label>Regular</label>
@@ -396,7 +402,6 @@ if (!isset($myBatch)) $myBatch = '';
                   <div class="form-group">
                     <label>State</label>
                     <p id="stateOption"></p>
-
                   </div>
                 </div>
                 <div class="col-3 pl-0 ">
@@ -535,6 +540,12 @@ if (!isset($myBatch)) $myBatch = '';
               </div>
             </div>
           </div>
+          <p class="mt-3"><label>Data of Unsaved Students</label></p>
+          <table class="table table-bordered table-striped list-table-xxs mt-3" id="unsavedList">
+            <th>ID</th>
+            <th>Program</th>
+            <th><i class="fas fa-edit"></i></th>
+          </table>
         </div>
 
       </div>
@@ -545,27 +556,12 @@ if (!isset($myBatch)) $myBatch = '';
 
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-6 pr-2">
-        <div class="container card mt-2 myCard">
-          <p class="mt-3"><label>Data of Unsaved Students</label></p>
-          <table class="table table-bordered table-striped list-table-xxs mt-3" id="unsavedList">
-            <th>ID</th>
-            <th>Program</th>
-            <th><i class="fas fa-edit"></i></th>
-          </table>
-        </div>
-      </div>
-    </div>
   </div>
   <p>&nbsp;</p>
   <p>&nbsp;</p>
 </body>
 
 </html>
-
-<?php require("../../module/js.php"); ?>
-
 <script>
   $(document).ready(function() {
 
@@ -655,13 +651,74 @@ if (!isset($myBatch)) $myBatch = '';
     });
 
     $(document).on('click', '.editUnsaved', function(event) {
-      var id = $(this).attr("data-student");
-      $("#userId").val(id)
-      var data=studentDisp()
-      // $("#programOption").(data.program_name)
-      // $.alert("Id " + data.program_name)
-      $("#studentIdHidden").val(id);
-      $("#action").val("updateId");
+      var userId = $(this).attr("data-student");
+      $(".newId").html(userId)
+      $("#userId").val(userId)
+      // $.alert(userId);
+      $.post("admissionSql.php", {
+        userId: userId,
+        action: "fetchStudent"
+      }, () => {}, "json").done(function(data, status) {
+        // $.alert(data);
+        if (data == null) {
+          $.alert("No Student Found!!");
+          $("#studentIdHidden").val(null);
+
+        } else {
+          $("#studentIdHidden").val(data.student_id);
+          $("#action").val("updateId");
+          $("#stdName").val(data.student_name);
+          $("#stdRno").val(data.student_rollno);
+          $("#stdMobile").val(data.student_mobile);
+          $("#stdEmail").val(data.student_email);
+          $("#stdSemester").val(data.student_semester);
+          $("#Dob").val(data.student_dob);
+          $("#stdWaMobile").val(data.student_whatsapp);
+
+          if (data.student_gender == 'M') $("#male").prop("checked", true);
+          else $("#female").prop("checked", true);
+          if (data.student_lateral == '1') $("#yes_leet").prop("checked", true);
+          else $("#no_leet").prop("checked", true);
+
+          //$("#sGender").val(data.student_gender);
+          $("#sel_caste").val(data.student_category);
+          $("#sql_bg").val(data.student_bg);
+          $("#sql_rg").val(data.student_religion);
+          $("#stdAdhaar").val(data.student_adhaar);
+          $("#sql_fcg").val(data.student_fee_category);
+          $("#stdAdmission").val(data.student_admission);
+          $("#fName").val(data.student_fname);
+          $("#mName").val(data.student_mname);
+          $("#fMobile").val(data.student_fmobile);
+          $("#mMobile").val(data.student_mmobile);
+          $("#fEmail").val(data.student_femail);
+          $("#mEmail").val(data.student_memail);
+          $("#permanent_address").val(data.permanent_address);
+          $("#sCity").val(data.city);
+          $("#sPincode").val(data.pincode);
+          $("#sel_state").val(data.state_name);
+          $("#sel_district").val(data.district_name);
+          $("#mEmail").val(data.student_memail);
+          $("#cName").val(data.reference_name);
+          $("#cNumber").val(data.reference_mobile);
+          $("#refStaff").val(data.reference_staff);
+          $("#cIncentive").val(data.reference_incentive);
+          $("#refDesignation").val(data.reference_designation);
+          $("#refContact").val(data.reference_contact);
+          $("#remarks").val(data.remarks);
+          $("#studentIdHidden").val(data.student_id);
+          $("#uploadId").val(data.student_id);
+          $("#studentIdPill").html(data.user_id);
+          if (data.student_image === null) $(".studentImage").html('<img  src="../../images/upload.jpg" width="100%">');
+          else $(".studentImage").html('<img  src="<?php echo '../../' . $myFolder . '/studentImages/'; ?>' + data.student_image + '" width="100%">');
+          $(".progName").html(data.program_name);
+          $(".batchName").html(data.batch);
+          $(".semesterName").html(data.student_semester);
+          studentDisp()
+        }
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
     });
 
     function unsavedStudentList() {
@@ -976,7 +1033,7 @@ if (!isset($myBatch)) $myBatch = '';
         $("#stateOption").html(list);
 
       }).fail(function() {
-        $.alert("Error !!");
+        $.alert("Error in State Options !!");
       })
     }
 
@@ -1026,8 +1083,6 @@ if (!isset($myBatch)) $myBatch = '';
         $.alert("Not Responding");
       })
     }
-
-    
 
     function personalList() {
       var studentId = $("#userId").val()

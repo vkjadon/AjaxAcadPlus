@@ -61,7 +61,8 @@ if (isset($_POST['action'])) {
     }
     echo "<h4>Schedule Created </h4>";
   } elseif ($_POST['action'] == 'sessionClassListSTT') {
-    $json = get_sessionClass($conn, $mySes, $myDept);
+    // echo $mySes.'-'.$myProg;
+    $json = get_sessionClass($conn, $mySes, $myProg);
     //echo $json;
     $array = json_decode($json, true);
     

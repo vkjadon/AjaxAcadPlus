@@ -1,9 +1,14 @@
 html, body {
     font-size: 14px;
-    padding-top: 1px;
-    background-color: #dfdfdf52;
+    padding-top: 2px;
+    /* background-color: #dfdfdf52; */
     height: 100%;
     margin: 0;
+    /* font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif; */
+    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: #000;
+    
 }
 
 select {
@@ -21,7 +26,7 @@ select {
 }
 
 .full-height {
-    background: rgb(255, 255, 255);
+    background: rgba(247, 246, 246);
     height: 1000px;
 }
 
@@ -303,12 +308,12 @@ a.fa.fa-trash, fa-trash {
     padding: 4px;
     font-weight: normal;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: small;
+    /* font-size: small; */
 }
 
 .atag .list-group-item:hover {
     background-color: rgb(44, 145, 74);
-    border-color: white;
+    border-color: rgb(245, 245, 245);
 }
 
 .atag .active {
@@ -320,11 +325,12 @@ a.fa.fa-trash, fa-trash {
 /* List css */
 
 .list-group-mine .list-group-item {
-    padding: 4px;
+    padding: 2px;
+    padding-left: 2px;
     font-weight: normal;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: small;
-    border-color: rgb(255, 255, 255);
+    /* font-size: small; */
+    background-color: rgb(247, 246, 246);
+    border-color: rgb(243, 242, 242);
 }
 
 .list-group-mine .list-group-item:hover {
@@ -342,7 +348,7 @@ a.fa.fa-trash, fa-trash {
     padding: 6px;
     font-weight: normal;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: small;
+    /* font-size: small; */
     color: #703d3d;
 }
 
@@ -350,7 +356,7 @@ a.fa.fa-trash, fa-trash {
     padding: 2px;
     font-weight: normal;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: small;
+    /* font-size: small; */
     color: #703d3d;
 }
 /* Button css*/

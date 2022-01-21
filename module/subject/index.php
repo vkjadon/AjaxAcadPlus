@@ -23,6 +23,9 @@ require('../requireSubModule.php');
             <a class="list-group-item list-group-item-action se" id="list-se-list" data-toggle="list" href="#list-se" role="tab" aria-controls="se">Session Electives</a>
             <a class="list-group-item list-group-item-action subReport" id="list-subReport-list" data-toggle="list" href="#list-subReport" role="tab" aria-controls="subReport"> Subject Report </a>
           </div>
+          <div class="mr-2">
+          <?php require("../searchBar.php"); ?>
+        </div>
         </div>
         <div class="col-10 leftLinkBody">
           <div class="tab-content" id="nav-tabContent">
@@ -42,7 +45,7 @@ require('../requireSubModule.php');
                   </div>
                 </div>
                 <div class="col-sm-5">
-                  <h5>Elective List</h5>
+                  <h3>Elective List</h3>
                   <div class="card myCard">
                     <div id="electiveList"></div>
                   </div>
@@ -60,12 +63,10 @@ require('../requireSubModule.php');
               </div>
             </div>
             <div class="tab-pane fade" id="list-subReport" role="tabpanel" aria-labelledby="list-subReport-list">
-
               <div class="row">
                 <div class="col-sm-7">
                   <h5>Subject List</h5>
                   <div class="card myCard p-2">
-                    
                     <table class="table table-striped table-bordered list-table-xs" id="subReport">
                       <thead>
                         <tr>
@@ -95,8 +96,6 @@ require('../requireSubModule.php');
   </div>
   <h1>&nbsp;</h1>
 </body>
-
-<?php require("../js.php"); ?>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 <script type="text/javascript">
@@ -108,9 +107,6 @@ require('../requireSubModule.php');
     electiveList();
     subReport();
 
-    $(document).on("change", "#sel_subject", function() {
-      coList();
-    });
     $(document).on('click', '.sub', function() {
       subjectList();
       electiveList();
@@ -258,33 +254,28 @@ require('../requireSubModule.php');
         //$.alert("Staff " + staff);
         $("#sel_staff option[value='" + staff + "']").attr("selected", "selected");
         var subType = data.subject_type;
-        if (subType == 'DE') {
-          document.getElementById("stDE").checked = true;
-        } else if (subType == 'OE') {
-          document.getElementById("stOE").checked = true;
-        } else if (subType == 'DC') {
-          document.getElementById("stDC").checked = true;
-        } else if (subType == 'OC') {
-          document.getElementById("stOC").checked = true;
-        }
+        if (subType == 'DE') $("#stDE").prop("checked", true);
+        else if (subType == 'OE') $("#stOE").prop("checked", true);
+        else if (subType == 'DC') $("#stDC").prop("checked", true);
+        else if (subType == 'OC') $("#stOC").prop("checked", true);
 
         var subMode = data.subject_mode;
-        if (subMode == 'Online') {
-          document.getElementById("smOn").checked = true;
-        } else if (subMode == 'Offline') {
-          document.getElementById("smOff").checked = true;
-        }
+        // if (subMode == 'Online') {
+        //   document.getElementById("smOn").checked = true;
+        // } else if (subMode == 'Offline') {
+        //   document.getElementById("smOff").checked = true;
+        // }
 
-        var subCat = data.subject_category;
-        if (subCat == 'Theory') {
-          document.getElementById("scTh").checked = true;
-        } else if (subCat == 'Practical') {
-          document.getElementById("scPr").checked = true;
-        } else if (subCat == 'Project') {
-          document.getElementById("scPrj").checked = true;
-        } else if (subCat == 'Field Work') {
-          document.getElementById("scFW").checked = true;
-        }
+        // var subCat = data.subject_category;
+        // if (subCat == 'Theory') {
+        //   document.getElementById("scTh").checked = true;
+        // } else if (subCat == 'Practical') {
+        //   document.getElementById("scPr").checked = true;
+        // } else if (subCat == 'Project') {
+        //   document.getElementById("scPrj").checked = true;
+        // } else if (subCat == 'Field Work') {
+        //   document.getElementById("scFW").checked = true;
+        // }
 
         $('#firstModal').modal('show');
         $('.subjectForm').show();
@@ -463,6 +454,39 @@ require('../requireSubModule.php');
       if (fmt == "dmY") return date;
       else return dateYmd;
     }
+    $(document).on('change', '#sel_program', function() {
+			var x = $("#sel_program").val();
+			$.post("../../util/check_user.php", {
+				action: "setProgram",
+				programId: x
+			}, function(mydata, mystatus) {
+        location.reload()
+			}, "text").fail(function() {
+				$.alert("Error in Program!!");
+			})
+		})		
+    $(document).on('change', '#sel_dept', function() {
+			var x = $("#sel_dept").val();
+			$.post("../../util/check_user.php", {
+				deptId: x,
+				action: "setDept"
+			}, function(mydata, mystatus) {
+        location.reload()
+			}, "text").fail(function() {
+				$.alert("Erro Dept !!");
+			})
+		})
+    $(document).on('change', '#sel_batch', function() {
+			var x = $("#sel_batch").val();
+			$.post("../../util/check_user.php", {
+				action: "setBatch",
+				batchId: x
+			}, function(mydata, mystatus) {
+        location.reload()
+			}, "text").fail(function() {
+				$.alert("Error in Natch !!");
+			})
+		})
 
     $(document).on('click', '.uploadSubject', function() {
       //$.alert("Session From");

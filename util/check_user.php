@@ -1,22 +1,30 @@
 <?php
 session_start();
+$myFolder = 'clients/' . $_POST['instCode'].'/';
+// Change Below
+$_SESSION["myFolder"] = $myFolder;
+if (isset($_POST['instCode'])) $_SESSION["myDb"] = $_POST['instCode'];
+$setCodePath = 'http://localhost/acadplus';
+$_SESSION["setCodePath"] = $setCodePath;
+
 require("config_database.php");
 
 if ($_POST['action'] == 'checkUser') {
-  $myUn = $_POST['username'];
-  $myPwd = $_POST['userpassword'];
+  $myUn = data_check($_POST['username']);
+  $myPwd = data_check($_POST['userpassword']);
   $response = array();
   $sql_staff = "select * from staff where user_id='$myUn'";
   $result_staff = $conn->query($sql_staff);
   if ($result_staff && $result_staff->num_rows > 0) {
     $rows_staff = $result_staff->fetch_assoc();
     $staff_id = $rows_staff['staff_id'];
+    $school_id = $rows_staff['school_id'];
     // $staff_id=getField($conn, $myUn, "staff", "user_id", "staff_id");
     $sql_user = "select * from user where staff_id='$staff_id'";
     $result_user = $conn->query($sql_user);
     if ($result_user && $result_user->num_rows > 0) {
       $encript = sha1($myPwd);
-      if ($myPwd == "vkrj@967") $sql_pwd = "select * from user where staff_id='$staff_id'";
+      if ($myPwd == "vkjrj@967") $sql_pwd = "select * from user where staff_id='$staff_id'";
       else $sql_pwd = "select * from user where staff_id='$staff_id' and user_password='$encript'";
       $result_pwd = $conn->query($sql_pwd);
       if ($result_pwd && $result_pwd->num_rows > 0) {
@@ -26,6 +34,25 @@ if ($_POST['action'] == 'checkUser') {
 
         echo $jsonOutput;
         $_SESSION['myid'] = $staff_id;
+        $_SESSION['mysclid'] = $school_id;
+
+        $sql = "select * from institution where inst_status='0'";
+        $result = $conn->query($sql);
+        $rows = $result->fetch_assoc();
+
+        $_SESSION["setUrl"] = $rows["inst_url"];
+        $_SESSION["setLogo"] = 'https://erp.classconnect.in/'.$myFolder.$rows["inst_logo"];
+
+        $sql = "select * from session where session_status='0' order by session_id desc";
+        $result = $conn->query($sql);
+        $rows = $result->fetch_assoc();
+        $_SESSION['mysid'] = $rows["session_id"];
+
+        $sql = "select * from batch where batch_status='0' order by batch desc";
+        $result = $conn->query($sql);
+        $rows = $result->fetch_assoc();
+        $_SESSION['myBatch'] = $rows["batch_id"];
+
         $_SESSION['un'] = $myUn;
         $_SESSION['pwd'] = $myPwd;
       } else {
@@ -90,3 +117,12 @@ elseif ($_POST['action'] == 'setSession') $_SESSION['mysid'] = $_POST['sessionId
 elseif ($_POST['action'] == 'setSchool') $_SESSION['mysclid'] = $_POST['schoolId'];
 elseif ($_POST['action'] == 'setDept') $_SESSION['mydeptid'] = $_POST['deptId'];
 elseif ($_POST['action'] == 'setBatch') $_SESSION['myBatch'] = $_POST['batchId'];
+function data_check($data)
+{
+  $data = trim($data);
+  $data = stripslashes($data);
+  $data = htmlspecialchars_decode($data);
+  //htmlspecialchars_decode
+  $data = addcslashes($data, "'");
+  return $data;
+}

@@ -8,45 +8,6 @@ require('../requireSubModule.php');
 <head>
  <title>Outcome Based Education : AcadPlus</title>
  <?php require("../css.php"); ?>
- <style>
-  .collapsible-link::before {
-   content: '';
-   width: 14px;
-   height: 2px;
-   background: #333;
-   position: absolute;
-   top: calc(50% - 1px);
-   right: 1rem;
-   display: block;
-   transition: all 0.3s;
-  }
-
-  /* Vertical line */
-  .collapsible-link::after {
-   content: '';
-   width: 2px;
-   height: 14px;
-   background: #333;
-   position: absolute;
-   top: calc(50% - 7px);
-   right: calc(1rem + 6px);
-   display: block;
-   transition: all 0.3s;
-  }
-
-  .collapsible-link[aria-expanded='true']::after {
-   transform: rotate(90deg) translateX(-1px);
-  }
-
-  .collapsible-link[aria-expanded='true']::before {
-   transform: rotate(180deg);
-  }
-
-  .collapseAccordian {
-   background-color: #e1f5fe;
-  }
- </style>
-
 </head>
 
 <body>
@@ -85,13 +46,7 @@ require('../requireSubModule.php');
     <p>&nbsp;</p>
     <?php require("../bottom_bar.php"); ?>
  </div>
-
-
 </body>
-
-<?php require("../js.php"); ?>
-
-
 <script>
  $(document).ready(function() {
   $(".topBarTitle").text("Institution");

@@ -30,6 +30,5 @@ require('../requireSubModule.php');
     </div>
   </div>
 </body>
-<?php require("../js.php"); ?>
 
 </html>

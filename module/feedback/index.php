@@ -44,7 +44,7 @@ require('../requireSubModule.php');
 												<div class="form-group">
 													<label>Feedback Type</label>
 													<?php
-													$sql = "select * from master_name where mn_code='ft' and mn_status='0' order by mn_name";
+													$sql = "select * from master_name where mn_code='fbt' and mn_status='0' order by mn_name";
 													selectList($conn, "Select Feedback Type", array("1", "mn_id", "mn_name", "", "sel_ft"), $sql);
 													?>
 												</div>
@@ -318,9 +318,7 @@ require('../requireSubModule.php');
 	</div>
 </body>
 <!-- MDB -->
-<?php require("../js.php"); ?>
 <script src="https://cdn.tiny.cloud/1/xjvk0d07c7h90fry9yq9z0ljb019ujam91eo2jk8uhlun307/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-
 <script>
 	tinymce.init({
 		selector: 'vkj',

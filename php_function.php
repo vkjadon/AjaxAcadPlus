@@ -57,7 +57,7 @@ function selectInput($conn, $selectTitle, $id, $name, $abbri, $idName, $sql)
   // $name - Field Name - name
   $result = $conn->query($sql);
   if ($result) {
-    echo '<select class="form-control form-control-sm' . $name . '" name="' . $idName . '" id="' . $idName . '" required>';
+    echo '<select class="mdb-select form-control form-control-sm ' . $name . '" name="' . $idName . '" id="' . $idName . '" required>';
     echo '<option value="">' . $selectTitle . '</option>';
     while ($rows = $result->fetch_assoc()) {
       $select_id = $rows[$id];
@@ -614,9 +614,9 @@ function get_tlList($conn, $class_id)
   );
   return json_encode($output);
 }
-function get_sessionClass($conn, $ses, $dept)
+function get_sessionClass($conn, $ses, $prog)
 {
-  $sql = "select cl.*, b.* from class cl, batch b where cl.batch_id=b.batch_id and cl.session_id='$ses' and dept_id='$dept' order by cl.class_semester";
+  $sql = "select cl.*, b.* from class cl, batch b where cl.batch_id=b.batch_id and cl.session_id='$ses' and program_id='$prog' order by cl.class_semester";
 
   $result = $conn->query($sql);
   if (!$result) die(" The script could not be Loadded! Please report!");
@@ -795,7 +795,7 @@ function get_subjectAttendance($conn, $tn_sa, $tn_sas, $tlId, $studentId)
 }
 function get_subjectResource($conn, $tn_sr, $subject_id)
 {
-  $sql = "select * from $tn_sr where subject_id='$subject_id' and sr_status='0'";
+  $sql = "select sr.*, mn.mn_name from $tn_sr sr, master_name mn where sr.subject_id='$subject_id' and sr.rt_id=mn.mn_id and sr.sr_status='0'";
 
   $result = $conn->query($sql);
   if (!$result) die(" The script (Resources) could not be Loadded! Please report!");
@@ -806,7 +806,7 @@ function get_subjectResource($conn, $tn_sr, $subject_id)
     $sub_array["name"] = $rows['sr_name'];
     $sub_array["type"] = $rows['sr_type'];
     $sub_array["url"] = $rows['sr_url'];
-    $sub_array["rtId"] = $rows['sr_id'];
+    $sub_array["mn_name"] = $rows['mn_name'];
     $data[] = $sub_array;
   }
   $output = array(

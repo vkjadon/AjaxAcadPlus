@@ -32,7 +32,7 @@ if (!empty($_FILES["student_upload"]["name"])) {
       // echo "records $records";
       if ($records == 0) {
         $count++;
-        $sql = "INSERT INTO student (batch_id, program_id, user_id, student_rollno, student_name, student_mobile, student_lateral, student_semester, update_id, student_status) VALUES ('$batch_id', '$program_id', '$id', '$roll', '$name', '$mobile', '0', '1', '$myId', '0')";
+        $sql = "INSERT INTO student (batch_id, program_id, ay_id, user_id, student_rollno, student_name, student_mobile, student_lateral, student_semester, update_id, student_status) VALUES ('$batch_id', '$program_id', '$batch_id', '$id', '$roll', '$name', '$mobile', '0', '1', '$myId', '0')";
         $result = $conn->query($sql);
         if (!$result) echo $conn->error;
         else {

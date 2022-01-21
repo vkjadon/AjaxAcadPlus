@@ -564,7 +564,7 @@ function get_staffTeachingLoad($conn, $staff_id, $tn_tl, $tn_tlg)
 
 function get_subjectResource($conn, $tn_res, $subject_id)
 {
-  $sql = "select * from $tn_res where subject_id='$subject_id' and rsb_status='0'";
+  $sql = "select res.* from $tn_res res, master_name mn where res.subject_id='$subject_id' and res,rsb_status='0'";
 
   $result = $conn->query($sql);
   if (!$result) die(" The script (Resources) could not be Loadded! Please report!");

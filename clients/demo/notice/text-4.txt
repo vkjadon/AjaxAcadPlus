@@ -1,8 +1,0 @@
-<div class="d-flex justify-content-center">
-<h3>Department of Mechatronics Engineering</h3>
-</div>
-<div class="d-flex justify-content-center">
-<h4>Chitkara University</h4>
-</div>
-<hr />
-<p>New-4</p>

@@ -1,0 +1,10 @@
+	tr:nth-child(even) th {
+		color: #ccc;
+		font-weight: normal;
+	}
+		
+	th, td {
+		font-weight: normal;
+		
+	}
+	

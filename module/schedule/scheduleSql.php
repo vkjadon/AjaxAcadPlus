@@ -24,7 +24,7 @@ if (isset($_POST['action'])) {
     $class_period = $_POST['classPeriod'];
     $dayStatus = $_POST['dayStatus'];
     $dayId = $_POST['dayId'];
-    //echo "Class $classId dayId $dayId dayStatus $dayStatus Period $class_period";
+    echo "Class $classId dayId $dayId dayStatus $dayStatus Period $class_period";
     echo '<table class="table list-table-xs">';
     echo '<tr>';
     echo '<td rowspan="3"><h6>' . $dayId . '</h6></td>';
@@ -32,7 +32,11 @@ if (isset($_POST['action'])) {
       echo '<td>';
       echo $i;
       $sql = "select ttp_start from $tn_ttp where class_id='$classId' and ttp_day='$dayId' and ttp_period='$i'";
-      $ttp_start = getFieldValue($conn, "ttp_start", $sql);
+      $result = $conn->query($sql);
+      if ($result && $result->num_rows > 0) {
+        $startArray = $result->fetch_assoc();
+        $ttp_start = $startArray["ttp_start"];
+      } else $ttp_start = "";
       echo ' <input type="time" class="periodTime" data-period="' . $i . '" data-day="' . $dayId . '" data-class="' . $classId . '" value="' . $ttp_start . '">';
       echo '</td>';
     }
@@ -171,13 +175,12 @@ function slotLoad($conn, $tn_tt, $tn_tlg, $tn_tl, $classId, $dayId, $period, $dr
     //echo "Staff Clash";
     $result = $conn->query($sqlClashStaff);
     while ($rowsTT = $result->fetch_assoc()) {
-      $tlg_id=$rowsTT['tlg_id'];
-      $clashClassId=getField($conn, $tlg_id, $tn_tlg, "tlg_id", "class_id");
-      $subject_id=getField($conn, $tlg_id, $tn_tlg, "tlg_id", "subject_id");
-      if($clashClassId<>$classId)
-      {
-        echo '<br>'.getField($conn, $clashClassId, "class", "class_id", "class_name");
-        echo ' ['.getField($conn, $subject_id, "subject", "subject_id", "subject_code").']';
+      $tlg_id = $rowsTT['tlg_id'];
+      $clashClassId = getField($conn, $tlg_id, $tn_tlg, "tlg_id", "class_id");
+      $subject_id = getField($conn, $tlg_id, $tn_tlg, "tlg_id", "subject_id");
+      if ($clashClassId <> $classId) {
+        echo '<br>' . getField($conn, $clashClassId, "class", "class_id", "class_name");
+        echo ' [' . getField($conn, $subject_id, "subject", "subject_id", "subject_code") . ']';
       }
     }
   }

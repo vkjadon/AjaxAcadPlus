@@ -168,10 +168,7 @@ require('../../phpFunction/teachingLoadFunction.php');
 
   </div>
 </body>
-
-<?php require("../js.php"); ?>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
 <script type="text/javascript">
   $(document).ready(function() {
 

@@ -14,21 +14,26 @@ $phpFile = "feeReceiptSql.php";
   <?php require("../topBar.php"); ?>
   <div class="container-fluid moduleBody">
     <div class="row">
-      <div class="col-2 p-0 m-0 pl-2 full-height">
+      <div class="col-1 p-0 m-0 full-height">
         <div class="mt-3">
-          <h5>Manage Receipt</h5>
+          <h5 class=" text-center pr-2"> Receipt </h5>
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-          <a class="list-group-item list-group-item-action active fr" id="list-fr-list" data-toggle="list" href="#list-fr" role="tab" aria-controls="fr">Fee Receipt</a>
-          <a class="list-group-item list-group-item-action trans" id="list-trans-list" data-toggle="list" href="#list-trans" role="tab" aria-controls="trans">Transactions Details</a>
-          <a class="list-group-item list-group-item-action feeConcession" id="list-feeConcession-list" data-toggle="list" href="#feeConcession" role="tab" aria-controls="trans">Dues/Concession</a>
-          <a class="list-group-item list-group-item-action reverse" data-toggle="list" href="#reverse" role="tab" aria-controls="trans">Reverse Entry</a>
+          <?php
+          if (in_array("9", $myLinks)) echo '<a class="list-group-item list-group-item-action fr" id="list-fr-list" data-toggle="list" href="#list-fr" role="tab" aria-controls="fr"> Fee Receipt</a>';
+
+          if (in_array("10", $myLinks)) echo '<a class="list-group-item list-group-item-action trans" id="list-trans-list" data-toggle="list" href="#list-trans" role="tab" aria-controls="trans"> Transactions </a>';
+
+          if (in_array("11", $myLinks)) echo '<a class="list-group-item list-group-item-action feeConcession" id="list-feeConcession-list" data-toggle="list" href="#feeConcession" role="tab" aria-controls="trans"> Dues/Concession</a>';
+
+          if (in_array("12", $myLinks)) echo '<a class="list-group-item list-group-item-action reverse" data-toggle="list" href="#reverse" role="tab" aria-controls="trans"> Reverse Entry</a>';
+          ?>
         </div>
       </div>
-      <div class="col-10 leftLinkBody">
+      <div class="col-11 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="row">
-            <div class="col-3 pr-0">
+            <div class="col-2 pr-0">
               <div class="card border-info">
                 <div class="card-body text-primary">
                   <div class="row">
@@ -42,50 +47,60 @@ $phpFile = "feeReceiptSql.php";
                 </div>
               </div>
             </div>
-            <div class="col-3">
+            <div class="col-2 pl-1 pr-0">
               <div class="card border-info">
                 <div class="card-body text-primary">
                   <input name="studentNameSearch" id="studentNameSearch" class="form-control form-control-sm" type="text" placeholder="Search Student" aria-label="Search">
                   <div class='list-group' id="studentAutoList"></div>
-                  </button>
                 </div>
               </div>
             </div>
-            <div class="col-6 student_detail">
-              <div class="container card myCard">
-                <div class="row p-1">
-                  <div class="col-3 m-0 p-0">
-                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="70%">
+            <div class="col-2 pl-1 pr-0">
+              <div class="card border-info">
+                <div class="card-body text-primary">
+                  <div class="row">
+                    <div class="col-9 pr-0">
+                      <input type="text" class="form-control form-control-sm" id="frId" name="frId" placeholder="Fee Receipt Number" aria-label="frId">
+                    </div>
+                    <div class="col-3 pl-1">
+                      <button type="button" class="btn btn-block btn-sm" id="searchReceipt"><i class="fas fa-search"></i></button>
+                    </div>
                   </div>
-                  <div class="col-9">
-                    <div class="row p-1">
-                      <div class="col-2 m-0 p-0">
-                        <label>Name</label>
-                      </div>
-                      <div class="col-7">
-                        <span class="student_name">Not Found</span> [<span class="student_rollno">000000</span>]
-                      </div>
-                      <div class="col-3">
-                        [<span class="student_id">0000</span>]
-                      </div>
-                    </div>
-                    <div class="row p-1">
-                      <div class="col-2 m-0 p-0">
-                        <label>Mobile</label>
-                      </div>
-                      <div class="col-10 student_mobile">
-                        Not Found
-                      </div>
-                    </div>
-                    <div class="row p-1">
-                      <div class="col-2 m-0 p-0">
-                        <label>Program</label>
-                      </div>
-                      <div class="col-7 student_program">
-                        Enter Valid Data
-                      </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 pl-1 student_detail">
+              <div class="container card myCard border-info">
+                <div class="row p-1">
+                  <div class="col-2 m-0 p-0">
+                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="50%">
+                  </div>
+                  <div class="col-10 smallerText">
+                    <div class="row mt-1 p-0">
                       <div class="col-3 m-0 p-0">
-                        <label>Batch</label>:<span class="student_batch"></span>
+                        <span class="student_name">Not Found</span>
+                      </div>
+                      <div class="col-3 p-0 student_fname">--</div>
+                      <div class="col-3 p-0 student_rollno">--</div>
+                      <div class="col-3 p-0 student_id">--</div>
+                    </div>
+                    <div class="row p-0">
+                      <div class="col-3 p-0 student_program">--</div>
+                      <div class="col-3 p-0 student_fcg">--</div>
+                      <div class="col-3 p-0">
+                        Adm : <span class="student_batch">--</span>
+                      </div>
+                      <div class="col-3 p-0">
+                        Acad: <span class="student_ay">--</span>
+                      </div>
+                    </div>
+                    <div class="row p-0">
+                      <div class="col-3 p-0 current_class">--</div>
+                      <div class="col-3 p-0 current_semester">--</div>
+                      <div class="col-3 p-0 current_group">--</div>
+                      <div class="col-3 p-0">
+                        <span class="student_mobile">--</span>
+                        <i class="fa fa-phone"></i>
                       </div>
                     </div>
                   </div>
@@ -93,14 +108,13 @@ $phpFile = "feeReceiptSql.php";
               </div>
             </div>
           </div>
-          <div class="tab-pane show active" id="list-fr" role="tabpanel" aria-labelledby="list-fr-list">
+          <div class="tab-pane fade" id="list-fr" role="tabpanel" aria-labelledby="list-fr-list">
             <div class="row">
-              <div class="col pr-1">
-                <div class="container card mt-2 myCard">
-                  <!-- nav options -->
+              <div class="col-12">
+                <div class="card mt-2 p-3 myCard">
                   <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
                     <li class="nav-item">
-                      <a class="nav-link active" id="pills_tablePersonalInfo" data-toggle="pill" href="#pills_personalInfo" role="tab" aria-controls="pills_personalInfo" aria-selected="true">Fee Transaction</a>
+                      <a class="nav-link active" data-toggle="pill" href="#feeTrans" role="tab" aria-controls="feeTrans" aria-selected="true">Fee Transaction</a>
                     </li>
                     <li class="nav-item">
                       <a class="nav-link feeRecord" data-toggle="pill" href="#feeRecord" role="tab" aria-controls="feeRecord" aria-selected="true">Fee Record</a>
@@ -110,13 +124,12 @@ $phpFile = "feeReceiptSql.php";
                     </li>
                   </ul>
                   <div class="tab-content" id="pills-tabContent p-3">
-                    <!-- <h4> New Id <span class="newId"> - Not Created </span></h4> -->
-                    <div class="tab-pane show active" id="pills_personalInfo" role="tabpanel" aria-labelledby="pills_personalInfo">
+                    <div class="tab-pane show active" id="feeTrans" role="tabpanel" aria-labelledby="feeTrans">
                       <input type="hidden" id="studentIdHidden" name="studentIdHidden">
                       <div class="row">
-                        <div class="col-12">
+                        <div class="col-9">
                           <div class="row">
-                            <div class="col-3 pr-1">
+                            <div class="col-3 pr-0">
                               <div class="form-group">
                                 <label>Type</label>
                                 <p id="feeType"></p>
@@ -128,10 +141,16 @@ $phpFile = "feeReceiptSql.php";
                                 <p class="feeMode"></p>
                               </div>
                             </div>
-                            <div class="col-3 pl-1 pr-0">
+                            <div class="col-1 pl-1 pr-0">
                               <div class="form-group">
                                 <label>Semester</label>
                                 <input type="number" class="form-control form-control-sm" id="semester" min="1" name="semester" placeholder="Semester" value="1">
+                              </div>
+                            </div>
+                            <div class="col-2 pl-1 pr-0">
+                              <div class="form-group">
+                                <label>Old Receipt No</label>
+                                <input type="number" class="form-control form-control-sm" id="fr_sno" name="fr_sno" placeholder="" data-tag="fr_sno">
                               </div>
                             </div>
                             <div class="col-3 pl-1">
@@ -142,19 +161,19 @@ $phpFile = "feeReceiptSql.php";
                             </div>
                           </div>
                           <div class="row">
-                            <div class="col-3 pr-1">
+                            <div class="col-3 pr-0">
                               <div class="form-group">
-                                <label>Receipt No</label>
-                                <input type="number" class="form-control form-control-sm" id="fr_sno" name="fr_sno" placeholder="" data-tag="fr_sno">
+                                <label>Bank Name</label>
+                                <input type="text" class="form-control form-control-sm" id="fr_bank" name="fr_bank" placeholder="Bank Name">
                               </div>
                             </div>
-                            <div class="col-3 pr-1">
+                            <div class="col-3 pl-1 pr-0">
                               <div class="form-group">
                                 <label>Amount</label>
                                 <input type="number" class="form-control form-control-sm" id="feeAmount" name="feeAmount" placeholder="" data-tag="fr_amount">
                               </div>
                             </div>
-                            <div class="col-3 pr-1 pl-1">
+                            <div class="col-3 pr-0 pl-1">
                               <div class="form-group">
                                 <label>Transaction ID</label>
                                 <input type="text" class="form-control form-control-sm" id="tId" name="tId" placeholder="Transaction ID" data-tag="transaction_id">
@@ -167,41 +186,42 @@ $phpFile = "feeReceiptSql.php";
                               </div>
                             </div>
                           </div>
-                          <div class="row">
-                            <div class="col-12">
-                              <div class="form-group">
-                                <label>Description</label>
-                                <textarea class="form-control form-control-sm" id="fee_desc" name="fee_desc" rows="3" data-tag="fee_description"></textarea>
-                              </div>
-                            </div>
+                        </div>
+                        <div class="col-3">
+                          <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="form-control form-control-sm" id="fee_desc" name="fee_desc" rows="5"></textarea>
                           </div>
-                          <input type="hidden" id="action" name="action" value="addFeeReceipt">
-                          <button class="btn btn-sm" id="addFeeReceipt">Accept Transaction</button>
                         </div>
                       </div>
+                      <input type="hidden" id="action" name="action" value="addFeeReceipt">
+                      <button class="btn btn-sm" id="addFeeReceipt">Accept Transaction</button>
                     </div>
                     <div class="tab-pane fade" id="feeRecord" role="tabpanel" aria-labelledby="feeRecord">
                       <div class="row">
-                        <div class="col-5">
-                          <h4>Debit Record</h4>
+                        <div class="col-12">
+                          <h4>Debit/Concession Record</h4>
                           <table class="table table-bordered table-striped list-table-xs mt-3" id="feeDebitList">
                             <th class="text-center">Id</th>
-                            <th class="text-center">Amount</th>
-                            <th class="text-center">Description</th>
-                            <th class="text-center">Staff</th>
                             <th class="text-center">Date</th>
+                            <th class="text-center">Description</th>
+                            <th class="text-center">Fee Type</th>
+                            <th class="text-center">Mode</th>
+                            <th class="text-center">Debit</th>
+                            <th class="text-center">Credit</th>
+                            <th class="text-center">Staff</th>
+                            <th class="text-center"><i class="fa fa-eye"></i></th>
                           </table>
-                        </div>
-                        <div class="col-7">
                           <h4>Credit Record</h4>
                           <table class="table table-bordered table-striped list-table-xs mt-3" id="feeReceiptList">
                             <th class="text-center">Id</th>
-                            <th class="text-center">Mode</th>
-                            <th class="text-center">Fee Type</th>
-                            <th class="text-center">Description</th>
-                            <th class="text-center">StaffId</th>
-                            <th class="text-center">Amount</th>
                             <th class="text-center">Date</th>
+                            <th class="text-center">Description</th>
+                            <th class="text-center">Fee Type</th>
+                            <th class="text-center">Mode</th>
+                            <th class="text-center">Debit</th>
+                            <th class="text-center">Credit</th>
+                            <th class="text-center">StaffId</th>
                             <th class="text-center"><i class="fa fa-eye"></i></th>
                           </table>
                         </div>
@@ -221,12 +241,6 @@ $phpFile = "feeReceiptSql.php";
                     <div class="tab-pane fade" id="feeReceipt" role="tabpanel" aria-labelledby="feeReceipt">
                       <div class="row">
                         <div class="col-1"></div>
-                        <div class="col-md-3 pr-0">
-                          <input type="text" class="form-control form-control-sm" id="frId" name="frId" placeholder="Fee Receipt Number" aria-label="frId">
-                        </div>
-                        <div class="col-md-1 pl-0">
-                          <button type="button" class="btn btn-block btn-sm" id="searchReceipt"><i class="fas fa-search"></i></button>
-                        </div>
                         <div class="col-md-7">
                           <div class=" float-right">
                             <a onclick="printDiv('page1')" class="fa fa-print"></a>
@@ -240,11 +254,11 @@ $phpFile = "feeReceiptSql.php";
                             <tr>
                               <td class="text-center" colspan="3">
                                 <div class="row m-3">
-                                  <div class="col-2 p-2"><img src="../../images/logo.jpg" width="70%"></div>
+                                  <div class="col-1 p-2"><img src="<?php echo $setLogo;?>" width="70%"></div>
                                   <div class="col-10">
                                     <span class="xxlText"> Aryans Group of Colleges </span>
                                     <p class="largeText">Vill. Nepra/Thuha, Chandigarh - Patiala Highway, Tehsil Rajpura, District Patiala, Pincode 140 401</p>
-                                    <p class="largeText">www.aryans.edu.in | +91 9876 29 9888</p>
+                                    <span class="largeText">www.aryans.edu.in | +91 9876 29 9888</span>
                                   </div>
                                 </div>
                               </td>
@@ -306,7 +320,8 @@ $phpFile = "feeReceiptSql.php";
                                 <div class="row m-2">
                                   <div class="col-12">
                                     <span class="largeText">Through : </span>
-                                    <span class="largeText" id="receiptMode" style="text-decoration: underline;"></span>
+                                    <span class="largeText" id="receiptMode" style="text-decoration: underline;"></span>&nbsp;[
+                                    <span class="largeText" id="receiptBank" style="text-decoration: underline;"> --- </span>]&nbsp;
                                     <span class="largeText">On Account of:</span>
                                     <span class="largeText" id="receiptType" style="text-decoration: underline;"></span>
                                     <span class="largeText"> with transaction Id : </span>
@@ -315,6 +330,7 @@ $phpFile = "feeReceiptSql.php";
                                     <span class="largeText" id="transactionDate" style="text-decoration: underline;"></span>
                                   </div>
                                 </div>
+
                               </td>
                             </tr>
                             <tr>
@@ -333,6 +349,12 @@ $phpFile = "feeReceiptSql.php";
                               </td>
                             </tr>
                           </table>
+                        </div>
+                      </div>
+                      <div class="row m-2">
+                        <div class="col-12 ml-3 pl-4">
+                          <p class="largeText ml-3 pl-4">Description </p>
+                          <span class="ml-3 pl-4" id="receiptDesc">---</span>
                         </div>
                       </div>
                     </div>
@@ -380,14 +402,16 @@ $phpFile = "feeReceiptSql.php";
                   <div class="col-md-12 text-right">
                     <a class="fas fa-file-export" id="export"></a>
                   </div>
-                  <table class="table table-bordered table-striped list-table-xxs mt-3" id="transactionList">
+                  <table class="table table-bordered table-striped list-table-xs mt-3" id="transactionList">
                     <th class="text-center">SNo</th>
                     <th class="text-center">Receipt Date</th>
                     <th class="text-center">ID</th>
                     <th class="text-center">Student</th>
                     <th class="text-center">StudentId</th>
-                    <th class="text-center">Mode</th>
+                    <th class="text-center">Prog</th>
                     <th class="text-center">Fee Type</th>
+                    <th class="text-center">Mode</th>
+                    <th class="text-center">Bank</th>
                     <th class="text-center">Amount</th>
                     <th class="text-center">TransId</th>
                     <th class="text-center">TransDate</th>
@@ -406,12 +430,12 @@ $phpFile = "feeReceiptSql.php";
           </div>
           <div class="tab-pane fade" id="feeConcession" role="tabpanel" aria-labelledby="feeConcession">
             <div class="row">
-              <div class="col-10">
+              <div class="col-8 pr-0">
                 <div class="container card mt-2 myCard">
                   <div class="row">
                     <div class="col-12">
                       <div class="row">
-                        <div class="col-3 pr-1">
+                        <div class="col-2 pr-0">
                           <div class="form-group">
                             <label>Type</label>
                             <p id="feeTypeConcession"></p>
@@ -425,18 +449,24 @@ $phpFile = "feeReceiptSql.php";
                         </div>
                         <div class="col-2 pl-1 pr-0">
                           <div class="form-group">
-                            <label>Fee Amount</label>
-                            <input type="number" class="form-control form-control-sm" id="feeAmountConcession" name="feeAmount" min="0" placeholder="Fee Dues">
+                            <label>Dues</label>
+                            <input type="number" class="form-control form-control-sm" id="feeAmountConcession" name="feeAmount" min="0" placeholder="Fee Dues" value="0">
                           </div>
                         </div>
                         <div class="col-2 pl-1 pr-0">
                           <div class="form-group">
-                            <label>Concession</label>
-                            <input type="number" class="form-control form-control-sm" id="fcAmount" name="fcAmount" min="0" placeholder="Concession">
+                            <label>Concsn</label>
+                            <input type="number" class="form-control form-control-sm" id="fcAmount" name="fcAmount" min="0" placeholder="Concession" value="0">
                           </div>
                         </div>
-                        <div class="col-3 pl-1 pr-1">
-                          <button class="btn btn-sm mt-4" id="proposeFeeConcession">Dues/Concession</button>
+                        <div class="col-3 pl-1 pr-0">
+                          <div class="form-group">
+                            <label>Remarks</label>
+                            <input type="text" class="form-control form-control-sm" id="fdRemarks" name="fdRemarks" placeholder="Remarks">
+                          </div>
+                        </div>
+                        <div class="col-2 pl-1 pr-1">
+                          <button class="btn btn-sm mt-4" id="proposeFeeConcession">Update</button>
                         </div>
                       </div>
                       <table class="table table-bordered table-striped list-table-xs mt-3" id="feeConcessionList">
@@ -444,7 +474,21 @@ $phpFile = "feeReceiptSql.php";
                         <th class="text-center">Semester</th>
                         <th class="text-center">Fee Dues</th>
                         <th class="text-center">Concession</th>
+                        <th class="text-center">Remarks</th>
                         <th class="text-center">StaffId</th>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4 pl-1">
+                <div class="container card mt-2 myCard">
+                  <div class="row">
+                    <div class="col-12 mt-2">
+                      <h5 class="text-center">Fee Structure</h5>
+                      <table class="table table-bordered table-striped list-table-xs mt-3" id="feeStructureList">
+                        <th>Fee Type</th>
+                        <th>Amount</th>
                       </table>
                     </div>
                   </div>
@@ -501,9 +545,6 @@ $phpFile = "feeReceiptSql.php";
     <?php require("../bottom_bar.php"); ?>
   </div>
 </body>
-<?php require("../js.php"); ?>
-
-
 <script>
   $(document).ready(function() {
 
@@ -542,10 +583,13 @@ $phpFile = "feeReceiptSql.php";
         // console.log(data)
         $(".student_id").text(data.student_id);
         $(".student_name").text(data.student_name);
+        $(".student_fname").text(data.student_fname);
         $(".student_rollno").text(data.student_rollno);
         $(".student_mobile").text(data.student_mobile);
         $(".student_batch").text(data.batch);
+        $(".student_ay").text(data.ay);
         $(".student_program").text(data.program_name);
+        $(".student_fcg").text(data.fcg);
         $("#studentIdHidden").val(data.student_id);
         if (data.student_gender == 'F') $("#receiptSonDaughter").text(" d/o ");
         else $("#receiptSonDaughter").text(" s/o ");
@@ -554,6 +598,7 @@ $phpFile = "feeReceiptSql.php";
         feeConcessionList();
         feeReceiptList();
         feeDebitList();
+        feeStructure();
         // $.alert(data);
       }, "text").fail(function() {
         $.alert("fail in place of error");
@@ -618,8 +663,10 @@ $phpFile = "feeReceiptSql.php";
           card += '<td class="text-center">' + value.fr_id + '</td>';
           card += '<td>' + value.student_name + '</td>';
           card += '<td>' + value.user_id + '</td>';
-          card += '<td class="text-center">' + value.fee_mode + '</td>';
+          card += '<td>' + value.sp_abbri + '</td>';
           card += '<td class="text-center">' + value.fee_type + '</td>';
+          card += '<td class="text-center">' + value.fee_mode + '</td>';
+          card += '<td class="text-center">' + value.fee_bank + '</td>';
 
           card += '<td class="text-center">' + value.fr_amount + '</td>';
           if (value.transaction_id == null) card += '<td class="text-center">--</td>';
@@ -668,20 +715,26 @@ $phpFile = "feeReceiptSql.php";
       })
     }
 
+
     $(document).on('click', '#proposeFeeConcession', function(event) {
       var studentId = $("#studentIdHidden").val();
-      if (studentId > 0) {
+      if (studentId == 0) $.alert("Student not Selected !!");
+      else if ($("#sel_ftConcession").val() == 0) $.alert("Fee Type not Selected !!");
+      // else if ($("#feeAmountConcession").val() <= 0) $.alert("Fee Dues not Specified !!");
+      else {
         var feeType = $("#sel_ftConcession").val();
         var sem = $("#semesterConcession").val();
         var feeAmount = $("#feeAmountConcession").val();
-        // var fcAmount = $("#fcAmount").val();
-        $.alert(" Sem " + sem + " Fee Type " + feeType + " Fee Amount " + feeAmount);
+        var fcAmount = $("#fcAmount").val();
+        var fdRemarks = $("#fdRemarks").val();
+        // $.alert(" Sem " + sem + " Fee Type " + feeType + " Fee Amount " + feeAmount);
         $.post("feeReceiptSql.php", {
           id: studentId,
           feeType: feeType,
           sem: sem,
           feeAmount: feeAmount,
-          // fcAmount: fcAmount,
+          fcAmount: fcAmount,
+          fdRemarks: fdRemarks,
           action: "proposeConcession"
         }, function(data) {
           $.alert(data);
@@ -689,7 +742,7 @@ $phpFile = "feeReceiptSql.php";
         }).fail(function() {
           $.alert("fail in place of error");
         })
-      } else $.alert("Student not Selected !!");
+      }
     });
 
     function feeConcessionList() {
@@ -706,8 +759,9 @@ $phpFile = "feeReceiptSql.php";
           card += '<tr>';
           card += '<td>' + value.mn_name + '</td>';
           card += '<td class="text-center">' + value.fee_semester + '</td>';
-          card += '<td class="text-center">' + value.fc_dues + '</td>';
-          card += '<td class="text-center">' + value.fc_amount + '</td>';
+          card += '<td class="text-center">' + value.fd_dues + '</td>';
+          card += '<td class="text-center">' + value.fd_concession + '</td>';
+          card += '<td class="text-center">' + value.fd_remarks + '</td>';
           card += '<td class="text-center">' + value.user_id + '</td>';
           card += '</tr>';
         });
@@ -733,6 +787,32 @@ $phpFile = "feeReceiptSql.php";
         $("#transaction_date").prop('disabled', false);
       }
     });
+
+    function feeStructure() {
+      var studentId = $("#studentIdHidden").val();
+      var fee_semester = $("#semesterConcession").val()
+      // $.alert("studentId " + studentId + "Sem " + fee_semester);
+      $.post("<?php echo $phpFile; ?>", {
+        student_id: studentId,
+        fee_semester: fee_semester,
+        action: "feeStructure"
+      }, function() {}, "json").done(function(data, status) {
+        // $.alert(data);
+        // console.log(data);
+        var card = '';
+        $.each(data, function(key, value) {
+          card += '<tr>';
+          card += '<td>' + value.fee_type + '</td>';
+          card += '<td>' + value.amount + '</td>';
+          card += '</tr>';
+        });
+        $("#feeStructureList").find("tr:gt(0)").remove();
+        $("#feeStructureList").append(card);
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+    }
+
     $(document).on('click', '#addFeeReceipt', function(event) {
       var studentId = $("#studentIdHidden").val();
       var fr_sno = $("#fr_sno").val();
@@ -744,6 +824,7 @@ $phpFile = "feeReceiptSql.php";
       var feeDesc = $("#fee_desc").val();
       var transaction_date = $("#transaction_date").val();
       var fr_date = $("#fr_date").val();
+      var fr_bank = $("#fr_bank").val();
       if (studentId > 0) {
         $.confirm({
           title: 'Please Confirm !',
@@ -764,6 +845,7 @@ $phpFile = "feeReceiptSql.php";
                   feeDesc: feeDesc,
                   fr_date: fr_date,
                   transaction_date: transaction_date,
+                  fr_bank: fr_bank,
                   action: "addFeeReceipt"
                 }, function(data) {
                   feeReceiptList();
@@ -804,13 +886,14 @@ $phpFile = "feeReceiptSql.php";
           if (value.frev_id > 0) card += '<tr style="color:red">';
           else card += '<tr>';
           card += '<td class="text-center">' + value.fr_id + '</td>';
-          card += '<td class="text-center">' + value.fee_mode + '</td>';
-          card += '<td class="text-center">' + value.fee_type + '</td>';
-          if (value.fr_desc == null) card += '<td class="text-center">--</td>';
-          else card += '<td class="text-center">' + value.fr_desc + '</td>';
-          card += '<td class="text-center">' + value.user_id + '</td>';
-          card += '<td class="text-center">' + value.fr_amount + '</td>';
           card += '<td class="text-center">' + getFormattedDate(value.fr_date, "dmY") + '</td>';
+          if (value.fr_desc == null) card += '<td class="text-center">--</td>';
+          else card += '<td>' + value.fr_desc + '</td>';
+          card += '<td class="text-center">' + value.fee_type + '</td>';
+          card += '<td class="text-center">' + value.fee_mode + '</td>';
+          card += '<td class="text-center"></td>';
+          card += '<td class="text-center">' + value.fr_amount + '</td>';
+          card += '<td class="text-center">' + value.user_id + '</td>';
           card += '<td class="text-center"><a href="#" class="showReceipt" data-fr="' + value.fr_id + '"><i class="fas fa-eye"></i></a></td>';
           card += '</tr>';
         });
@@ -839,11 +922,15 @@ $phpFile = "feeReceiptSql.php";
           totalDebit = parseInt(totalDebit) + parseInt(value.fr_amount)
           card += '<tr>';
           card += '<td class="text-center">' + value.fr_id + '</td>';
-          card += '<td class="text-center">' + value.fr_amount + '</td>';
-          if (value.frev_desc == null) card += '<td class="text-center">--</td>';
-          else card += '<td class="text-center">' + value.frev_desc + '</td>';
-          card += '<td class="text-center">' + value.user_id + '</td>';
           card += '<td class="text-center">' + getFormattedDate(value.update_ts, "dmY") + '</td>';
+          if (value.fr_desc == null) card += '<td class="text-center">--</td>';
+          else card += '<td>' + value.fr_desc + '</td>';
+          card += '<td class="text-center">' + value.fee_type + '</td>';
+          card += '<td class="text-center">' + value.fee_mode + '</td>';
+          card += '<td class="text-center">' + value.fr_amount + '</td>';
+          card += '<td class="text-center"></td>';
+          card += '<td class="text-center">' + value.user_id + '</td>';
+          card += '<td class="text-center">--</td>';
           card += '</tr>';
         });
         $("#feeDebitList").find("tr:gt(0)").remove();
@@ -933,7 +1020,9 @@ $phpFile = "feeReceiptSql.php";
         $("#receiptBatch").html(data.student_batch);
         $("#receiptSemester").html(data.fee_semester);
         $("#receiptMode").html(data.fee_mode);
+        $("#receiptBank").html(data.fee_bank);
         $("#receiptType").html(data.fee_type);
+        $("#receiptDesc").html(data.fr_desc);
         $("#receiptUserId").html(data.user_id);
         $("#transactionId").html(data.transaction_id);
         $("#transactionDate").html(getFormattedDate(data.transaction_date, "dmY"));
@@ -964,7 +1053,7 @@ $phpFile = "feeReceiptSql.php";
         list += '</select>';
         var listConcession = '';
         listConcession += '<select class="form-control form-control-sm" name="sel_ft" id="sel_ftConcession" required>';
-        listConcession += '<option>Select Fee Type</option>';
+        listConcession += '<option value="0">Select Fee Type</option>';
         $.each(data, function(key, value) {
           listConcession += '<option value=' + value.mn_id + '>' + value.mn_name + '</option>';
         });

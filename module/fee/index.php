@@ -14,20 +14,18 @@ $phpFile = "feeSql.php";
   <?php require("../topBar.php"); ?>
   <div class="container-fluid moduleBody">
     <div class="row">
-      <div class="col-2 p-0 m-0 pl-2 full-height">
-        <div class="mt-3">
-          <h5>Fee Management</h5>
+      <div class="col-1 p-0 m-0 full-height">
+        <div class="mt-3 pl-1">
+          <h5>Fee </h5>
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <?php
-
           echo '<a class="list-group-item list-group-item-action active feeStructure" id="list-feeStructure-list" data-toggle="list" href="#feeStructure" role="tab" aria-controls="feeStructure"> Fee Structure </a>';
-
           echo '<a class="list-group-item list-group-item-action feeStatus" id="list-feeStatus-list" data-toggle="list" href="#feeStatus" role="tab" aria-controls="feeStatus"> Fee Status </a>';
           ?>
         </div>
       </div>
-      <div class="col-10 leftLinkBody">
+      <div class="col-11 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="feeStructure" role="tabpanel" aria-labelledby="list-feeStructure-list">
             <div class="row">
@@ -78,6 +76,7 @@ $phpFile = "feeSql.php";
                     <button class="btn btn-sm">Add/Update</button>
                     <a class="fa fa-eye" id="showFeeStructure"></a>
                     <a class="btn btn-sm" id="manageFeeSchedule">Manage Fee Schedule</a>
+                    <a class="btn btn-success btn-sm" id="ledgerStatus">Ledger Status</a>
                   </form>
                 </div>
               </div>
@@ -88,10 +87,12 @@ $phpFile = "feeSql.php";
                       <button class="btn btn-sm mt-3" id="copyBatchBtn">Copy</button>
                 </div>
               </div>
-            </div>
-            <div class="row">
+
               <div class="col-md-12">
-                <div class="container card mt-2 myCard" id="print" style="overflow: scroll;">
+                <div class="card mt-2 myCard" id="print" style="overflow: scroll;">
+                  <div class="col-12 mt-2 text-right">
+                    <a onclick="export_data()"><i class="fas fa-file-export"></i></a>
+                  </div>
                   <h5 class="tableTitle m-0 mt-3"></h5>
                   <table class="table table-bordered table-striped list-table-xs mt-3" id="feeStructureList">
                     <th class="text-center"><i class="fa fa-trash"></i></th>
@@ -114,6 +115,27 @@ $phpFile = "feeSql.php";
                     <th>Fee</th>
                     <th>Last Date</th>
                   </table>
+                  <table class="table table-bordered table-striped list-table-xs mt-3" id="ledgerStatusList">
+                    <th>Student ID</th>
+                    <th>Name</th>
+                    <th>Father Name</th>
+                    <th>Roll Number</th>
+                    <th>Mobile</th>
+                    <th>Fee Category</th>
+                    <th>Dues</th>
+                    <th>Credit</th>
+                    <th>Balance</th>
+                    <?php
+                    $sql = "select * from master_name where mn_code='sts' order by mn_id";
+                    $result = $conn->query($sql);
+                    while ($rowsArray = $result->fetch_assoc()) {
+                      echo '<th>' . $rowsArray['mn_abbri'] . '</th>';
+                    }
+                    ?>
+                  </table>
+                  <p id="totalDebit"></p>
+                  <p id="totalCredit"></p>
+                  <p id="totalBalance"></p>
                 </div>
               </div>
             </div>
@@ -126,9 +148,6 @@ $phpFile = "feeSql.php";
     <?php require("../bottom_bar.php"); ?>
   </div>
 </body>
-<?php require("../js.php"); ?>
-
-
 <script>
   $(document).ready(function() {
     batchOption();
@@ -138,8 +157,68 @@ $phpFile = "feeSql.php";
     feeType();
     $("#feeScheduleList").hide()
     $("#feeStructureList").hide()
+    $("#ledgerStatusList").hide()
 
     //  feeStructureList();
+
+    $(document).on('click', '#ledgerStatus', function(event) {
+      // $.alert("Name");
+      $("#ledgerStatusList").show()
+
+      var error = "NO";
+      var error_msg = "";
+      if ($('#sel_prog').val() === "0" || $('#sel_school').val() === "0" || $('#sel_batch').val() === "0") {
+        error = "YES";
+        error_msg = "Please check Department, Program and Fee are added.";
+      }
+      if (error == "NO") {
+        // alert(" Pressed" + formData);
+        $.post("<?php echo $phpFile; ?>", {
+          sel_batch: $('#sel_batch').val(),
+          sel_prog: $('#sel_prog').val(),
+          sel_school: $('#sel_school').val(),
+          ft: $("#sel_ft").val(),
+          action: "ledgerStatusList"
+        }, () => {}, "json").done(function(data) {
+          // $.alert(data);
+          console.log(data);
+          var card = '';
+          var total_debit = 0;
+          var total_credit = 0;
+          var total_balance = 0;
+
+          $.each(data.ledger, function(key, value) {
+            total_debit = parseInt(total_debit) + parseInt(value.debit);
+            total_credit = parseInt(total_credit) + parseInt(value.credit);
+            total_balance = parseInt(total_balance) + parseInt(value.balance);
+            card += '<tr>';
+            card += '<td>' + value.user_id + '</td>';
+            card += '<td>' + value.student_name + '</td>';
+            card += '<td>' + value.student_fname + '</td>';
+            card += '<td>' + value.student_rollno + '</td>';
+            card += '<td>' + value.student_mobile + '</td>';
+            card += '<td>' + value.student_fee_category + '</td>';
+            card += '<td>' + value.debit + '</td>';
+            card += '<td>' + value.credit + '</td>';
+            card += '<td>' + value.balance + '</td>';
+            $.each(data.status[key].mn_name, function(key2, value2) {
+              if(data.status[key].mn_name[key2]=='No')card += '<td class="tdRejected">' + data.status[key].mn_name[key2] + '</td>';
+              else card += '<td class="approved">' + data.status[key].mn_name[key2] + '</td>';
+            })
+            card += '</tr>';
+          });
+          $("#ledgerStatusList").find("tr:gt(0)").remove();
+          $("#ledgerStatusList").append(card);
+          $("#totalDebit").html("<h5> Total Debit " + total_debit + "</h5>")
+          $("#totalCredit").html("<h5> Total Credit " + total_credit + "</h5>")
+          $("#totalBalance").html("<h5> Total Balance " + total_balance + "</h5>")
+        }).fail(function() {
+          $.alert("fail in place of error");
+        })
+      } else {
+        $.alert(error_msg);
+      }
+    });
 
     $(document).on('click', '#manageFeeSchedule', function(event) {
       $(".tableTitle").text("Fee Schedule")
@@ -432,6 +511,20 @@ $phpFile = "feeSql.php";
       else return dateYmd;
     }
   });
+</script>
+
+<script>
+  function export_data() {
+    let data = document.getElementById('ledgerStatusList');
+    var fp = XLSX.utils.table_to_book(data, {
+      sheet: 'vishal'
+    });
+    XLSX.write(fp, {
+      bookType: 'xlsx',
+      type: 'base64'
+    });
+    XLSX.writeFile(fp, 'test.xlsx');
+  }
 </script>
 
 </html>

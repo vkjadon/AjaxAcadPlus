@@ -5,7 +5,7 @@ require('../requireSubModule.php');
 if (isset($_POST['actionDeptProgram'])) {
 	$deptId = $_POST['deptIdHidden2'];
 	$programId = $_POST['programIdHidden'];
-	echo "$deptId,$schoolId";
+	// echo "$deptId";
 	if (!$_POST['sel_deptProgram'] == NULL && !$_POST['sel_program'] == NULL) {
 		$sql = "insert into dept_program (dept_id, program_id) values('$deptId', '$programId')";
 		$result = $conn->query($sql);
@@ -38,7 +38,7 @@ if (isset($_POST['action'])) {
 		updateData($conn, 'program', $fields, $values, $dup, $dup_alert);
 	} elseif ($_POST["action"] == "programList") {
 		//    echo "MyId- $myId";
-		$sql = "SELECT * from program where program_status='0' and update_id='$myId' order by program_start, program_name";
+		$sql = "SELECT * from program where program_status='0' order by program_start, program_name";
 		$result = $conn->query($sql);
 		if (!$result) echo $conn->error;
 		elseif ($result->num_rows > 0) {
@@ -127,6 +127,10 @@ if (isset($_POST['action'])) {
 		$result = $conn->query($sql);
 		$output = $result->fetch_assoc();
 		echo json_encode($output);
+	} elseif ($_POST['action'] == 'updateInst') {
+		$sql = "update institution set inst_logo='".data_check($_POST['inst_logo'])."', inst_name='".data_check($_POST['inst_name'])."', inst_url='".data_check($_POST['inst_url'])."', inst_address='".data_check($_POST['inst_address'])."' where inst_id='" . $_POST["modalId"] . "'";
+		$result = $conn->query($sql);
+		if(!$result)echo $conn->error;
 	} elseif ($_POST["action"] == "attachSchoolDept") {
 		$deptId = $_POST['deptId'];
 		$schoolId = $_POST['schoolId'];
@@ -163,7 +167,7 @@ if (isset($_POST['action'])) {
 		}
 		echo '</table></table>';
 	} elseif ($_POST["action"] == "deptProgramList") {
-		$sql = "SELECT * from dept_program";
+		$sql = "SELECT * from dept_program order by dept_id";
 		$json = getTableRow($conn, $sql, array("dept_id", "program_id"));
 		$array = json_decode($json, true);
 		//echo count($array);

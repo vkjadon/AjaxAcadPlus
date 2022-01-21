@@ -21,7 +21,7 @@ if (isset($_POST['action'])) {
   if ($_POST['action'] == 'staffList') {
 
     $sql = "SELECT * from staff where staff_status='0' order by staff_name";
-    $json = getTableRow($conn, $sql, array("staff_id", "staff_name", "staff_mobile", "staff_email"));
+    $json = getTableRow($conn, $sql, array("staff_id", "staff_name", "staff_mobile", "staff_email", "user_id"));
     // echo $json;
     $array = json_decode($json, true);
     $count = count($array["data"]);
@@ -31,22 +31,33 @@ if (isset($_POST['action'])) {
       $staff_name = $array["data"][$i]["staff_name"];
       $staff_mobile = $array["data"][$i]["staff_mobile"];
       $staff_email = $array["data"][$i]["staff_email"];
+      $user_id = $array["data"][$i]["user_id"];
 
       $sql = "SELECT * from user where staff_id='$staff_id'";
       $result = $conn->query($sql);
       $status = getFieldValue($conn, "user_status", $sql);
+      if ($staff_id > 1) {
+        echo '<div class="card">';
+        echo '<div class="card-body mb-0">';
+        echo '<div class="row">';
+        echo '<div class="col-10">';
+        echo '<h7 class="card-title">' . $staff_name . '</h7><br></div>';
 
-      echo '<div class="card">';
-      echo '<div class="card-body mb-0">';
-      echo '<div class="row">';
-      echo '<div class="col-10">';
-      echo '<h7 class="card-title">' . $staff_name . '</h7><br></div>';
-      echo '<div class="col-1 p-0">';
-      if ($status == "0") echo '<a href="#" class="fa fa-minus removeUser" data-id="' . $staff_id . '"></a></div>';
-      else echo '<a href="#" class="fa fa-plus addUser" data-id="' . $staff_id . '"></a></div>';
-      echo '<div class="col-1 p-0">';
-      echo '<a href="#" class="fa fa-edit editStaff" data-staff="' . $staff_id . '"></a></div></div>';
-      echo '<h8 class="card-subtitle mb-2 text-muted">' . $staff_email . ' </h8></div></div>';
+        echo '<div class="col-1 p-0">';
+        if ($status == "0") echo '<a href="#" class="fa fa-minus removeUser" data-id="' . $staff_id . '"></a></div>';
+        else echo '<a href="#" class="fa fa-plus addUser" data-id="' . $staff_id . '"></a></div>';
+        echo '<div class="col-1 p-0">';
+        echo '<a href="#" class="fa fa-edit editStaff" data-staff="' . $staff_id . '"></a></div>';
+        echo '</div>';
+        echo '<div class="row">';
+        echo '<div class="col-8">';
+        echo '<span class="card-subtitle mb-2 text-muted">' . $staff_email . '</span>';
+        echo '</div>';
+        echo '<div class="col-4">';
+        echo '<span class="card-subtitle mb-2 text-muted">' . $user_id . '</span>';
+        echo '</div>';
+        echo '</div></div></div>';
+      }
     }
   } elseif ($_POST['action'] == 'addStaff') {
 
@@ -198,7 +209,7 @@ if (isset($_POST['action'])) {
       $message = '<html><head><title>HTML email</title></head>
       <body>
       <h4>Registration Successful.</h4>
-      <h5>Your password is '.$password.'</h5>
+      <h5>Your password is ' . $password . '</h5>
       <h4>Regards</h4>
       </body>
       </html>';
@@ -210,7 +221,7 @@ if (isset($_POST['action'])) {
       // More headers
       $headers .= 'From: <info@classconnect.in>';
       mail($mail, $subject, $message, $headers);
-      echo "Staff Added as User. The password is sent to registered email [".$mail."].";
+      echo "Staff Added as User. The password is sent to registered email [" . $mail . "].";
     }
   } elseif ($_POST['action'] == 'removeUser') {
     $id = $_POST['id'];

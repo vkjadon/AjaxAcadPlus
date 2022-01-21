@@ -1,8 +1,6 @@
 <?php
 session_start();
-if (isset($_SESSION["setLogo"])) $setLogo = $_SESSION['setLogo'];
-if (isset($_SESSION["setCodePath"])) $codePath = $_SESSION['setCodePath'];
-require("util/config_database.php");
+//session_destroy();
 ?>
 
 <!DOCTYPE html>
@@ -17,50 +15,30 @@ require("util/config_database.php");
   <div class="container">
     <h1>&nbsp;</h1>
     <h1>&nbsp;</h1>
-    <h1>&nbsp;</h1>
     <div class="row">
-      
-      <div class="col-sm-2"></div>
       <div class="col-sm-4">
-        <div class="card myCard">
+        <div class="container card myCard">
           <div class="card-body">
             <div class="text-center mb-3">
               <img src="https://engineeringinfo.in/images/logo-text.png" width="50%">
             </div>
             <form method="post" id="userForm">
               <div class="form-group">
-                <label>User Id</label>
-                <input type="text" name="username" minlength="5" id="username" class="form-control" />
-                <label>Password</label>
-                <input type="password" name="userpassword" id="userpassword" class="form-control" />
+                <label class="mb-0">Institute Code</label>
+                <input type="text" name="instCode" minlength="2" id="instCode" class="form-control" required />
+                <label class="mt-2 mb-0">User Id</label>
+                <input type="text" name="username" minlength="5" id="username" class="form-control" required />
+                <label class="mt-2 mb-0">Password</label>
+                <input type="password" name="userpassword" id="userpassword" class="form-control" required />
               </div>
-
               <div class="form-group">
                 <input type="hidden" name="action" id="action" value="checkUser" />
-                <button class="btn btn-sm" name="userlogin" id="userlogin">Login</button>
-                <span><a class="atag otp">OTP Login</a></span>
+                <button class="btn btn-sm btn-primary otp" name="otplogin" id="otplogin">OTP Login</button>
+                <button class="btn btn-sm login" name="userlogin" id="userlogin">Login</button>
               </div>
             </form>
           </div>
         </div>
-      </div>
-      <div class="col-sm-4 bg-danger text-center">
-        <p>&nbsp;</p>
-        <h3 class="text-white">Welcome to </h3>
-        <p>&nbsp;</p>
-        <?php
-        if (isset($_SESSION["myFolder"])) $myFolder = $_SESSION["myFolder"];
-        else {
-          echo "<h5>The institute Tag Missing. <br>Please use https://classconnect.in/acadplus/InstTag. </h5>";
-          echo '<h5>For demo use https://classconnect.in/acadplus/demo. or <a href="https://classconnect.in/acadplus/demo">Click Here</a></h5>';
-          die();
-        }
-        ?>
-        <img src="<?php echo $setLogo; ?>">
-        <!-- <?php echo $myFolder; ?>        -->
-      </div>
-      <div class="col-md-4 text-center mt-4 py-3">
-
       </div>
     </div>
   </div>
@@ -73,39 +51,55 @@ require("util/config_database.php");
 
   <script>
     $(document).ready(function() {
-      $('#userForm').submit(function(event) {
+      $(document).on('click', '.otp', function(event) {
         event.preventDefault(this);
-        var formData = $(this).serialize();
-        //alert(formData);
-        $.post("util/check_user.php", formData, function(mydata, mystatus) {
-          //alert(" success " + mydata.found);
-        }, "json").done(function(data, mystatus) {
-          // alert(data);
-          // alert("Id " + data.user+ " User Found " +data.student);
-          if (data.user > 0) {
-            //alert(data.user+data.found);
-            location.href = "module/";
-          } else if (data.student > 0) {
-            //alert(data.user+data.found);
-            location.href = "module/student";
-          } else alert("Not Found");
-        }).fail(function() {
-          alert("fail in place of error");
-        })
+        var username = $("#username").val();
+        var instCode = $("#instCode").val();
+        // alert("Code " + instCode.length);
+        if (instCode.length > 2) {
+          // alert("Code " + instCode);
+          $.post("util/check_user.php", {
+            username: username,
+            instCode: instCode,
+            action: "forgot"
+          }, () => {}, "text").done(function(data) {
+            alert(data);
+          }, "text").fail(function() {
+            alert("One or More Credentials are NOT Correct!!");
+          })
+        } else alert("Please Enter a Valid Institute Code !!")
       });
 
-      $(document).on('click', '.otp', function(event) {
-      var username = $("#username").val();
-      alert(username);
-      $.post("util/check_user.php", {
-        action: "forgot",
-        username: username
-      }, () => {}, "text").done(function(data) {
-        alert(data);
-      }, "text").fail(function() {
-        alert("fail in place of error");
-      })
-    });
+      $(document).on('click', '.login', function(event) {
+        event.preventDefault(this);
+        var username = $("#username").val();
+        var userpassword = $("#userpassword").val();
+        var instCode = $("#instCode").val();
+        if (instCode.length > 2) {
+          $.post("util/check_user.php", {
+            username: username,
+            userpassword: userpassword,
+            instCode: instCode,
+            action: "checkUser"
+          }, function(mydata, mystatus) {
+            //alert(" success " + mydata.found);
+          }, "json").done(function(data, mystatus) {
+            // alert(data);
+            // alert("Id " + data.user+ " User Found " +data.student);
+            if (data.user > 0) {
+              //alert(data.user+data.found);
+              location.href = "module/";
+            } else if (data.student > 0) {
+              //alert(data.user+data.found);
+              location.href = "module/student";
+            } else alert("Not Found");
+          }).fail(function() {
+            alert("One or More Credentials are NOT Correct!!");
+          })
+        } else alert("Please Enter a Valid Institute Code !!")
+      });
+
+
 
     });
   </script>

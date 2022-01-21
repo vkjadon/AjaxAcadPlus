@@ -27,14 +27,12 @@ if (isset($_POST['action'])) {
     $id = $_POST['id'];
     $code = $_POST['code'];
     $field = $_POST['field'];
-    if ($code == 'N') $sql = "update subject_addon set $field='0' where subject_id='$id'";
-    else $sql = "update subject_addon set $field='1' where subject_id='$id'";
+    if ($code == 'N') $sql = "update subject set $field='0' where subject_id='$id'";
+    else $sql = "update subject set $field='1' where subject_id='$id'";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     else {
       //echo $conn->affected_rows;
-      $sql = "insert into subject_addon (subject_id, $field) values('$id', '1')";
-      $conn->query($sql);
     }
   } elseif ($_POST['action'] == 'deleteSubject') {
     $id = $_POST['id'];
@@ -82,7 +80,7 @@ if (isset($_POST['action'])) {
     //echo "MyId- $myId Prog $myProg";
     $tableId = 'subject_id';
     $sql = "select * from subject where program_id='$myProg' and batch_id='$myBatch' and subject_semester>0 order by subject_semester, subject_status, subject_sno";
-    $json = getTableRow($conn, $sql, array("subject_id", "subject_name", "subject_code", "subject_lecture", "subject_tutorial", "subject_practical", "subject_credit", "subject_semester", "subject_sno", "subject_type", "subject_status"));
+    $json = getTableRow($conn, $sql, array("subject_id", "subject_name", "subject_code", "subject_lecture", "subject_tutorial", "subject_practical", "subject_credit", "subject_semester", "subject_sno", "subject_type", "subject_emp" , "subject_skill", "subject_entrep", "subject_vac", "subject_status"));
     $array = json_decode($json, true);
     //echo count($array);
     //echo count($array["data"]);
@@ -107,15 +105,16 @@ if (isset($_POST['action'])) {
       echo '<div class="cardBodyText"><b>' . $array["data"][$i]["subject_name"] . '</b></div>';
       echo '<div class="cardBodyText">Semester : ' . $array["data"][$i]["subject_semester"];
       echo ' <b>Credit : ' . $Cr . ' </b>';
-      $emp = getField($conn, $subject_id, "subject_addon", "subject_id", "subject_emp");
+      $emp = $array["data"][$i]["subject_emp"];
       if ($emp == "1") echo ' [ <i class="fa fa-check"><b><a href="#" class="vac" data-action="vac" data-field="subject_emp" data-code="N" data-id="' . $subject_id . '"></i>Emp</a></b> ] ';
       else echo ' [ <i class="fa fa-times"></i><b><a href="#" class="vac" data-action="vac" data-field="subject_emp" data-code="Y" data-id="' . $subject_id . '">Emp</a></b> ] ';
 
-      $skill = getField($conn, $subject_id, "subject_addon", "subject_id", "subject_skill");
+      $skill = $array["data"][$i]["subject_skill"];
+
       if ($skill == "1") echo ' [ <i class="fa fa-check"><b><a href="#" class="vac" data-action="vac" data-field="subject_skill" data-code="N" data-id="' . $subject_id . '"></i>Skill</a></b> ] ';
       else echo ' [ <i class="fa fa-times"></i><b><a href="#" class="vac"  data-action="vac" data-field="subject_skill" data-code="Y" data-id="' . $subject_id . '">Skill</a></b> ] ';
 
-      $entrep = getField($conn, $subject_id, "subject_addon", "subject_id", "subject_entrep");
+      $entrep = $array["data"][$i]["subject_entrep"];
       if ($entrep == "1") echo '<i class="fa fa-check"><b><a href="#" class="vac" data-action="vac" data-field="subject_entrep" data-code="N" data-id="' . $subject_id . '"></i>Entrep</a></b>';
       else echo '<i class="fa fa-times"></i><b><a href="#" class="vac" data-action="vac"  data-field="subject_entrep" data-code="Y" data-id="' . $subject_id . '">Entrep</a></b>';
       echo '</div>';
@@ -126,8 +125,8 @@ if (isset($_POST['action'])) {
       echo '</div>';
 
       echo '<div class="col-sm-2">';
-      $vac = getField($conn, $subject_id, "subject_addon", "subject_id", "subject_vac");
 
+      $vac = $array["data"][$i]["subject_vac"];
       if ($vac == "1") echo '<i class="fa fa-check"><b><a href="#" class="vac" data-action="vac" data-field="subject_vac" data-code="N" data-id="' . $subject_id . '"></i>VAC</a></b>';
       else echo '<i class="fa fa-times"></i><b><a href="#" class="vac"  data-action="vac" data-field="subject_vac" data-code="Y" data-id="' . $subject_id . '">VAC</a></b>';
       echo '<br>';

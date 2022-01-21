@@ -14,16 +14,16 @@ $phpFile = "paymentSql.php";
   <?php require("../topBar.php"); ?>
   <div class="container-fluid moduleBody">
     <div class="row">
-      <div class="col-2 p-0 m-0 pl-2 full-height">
-        <div class="mt-3">
-          <h5>Manage Payments</h5>
+      <div class="col-1 p-0 m-0 full-height">
+        <div class="text-center mt-3">
+          <h5>Payments</h5>
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-          <a class="list-group-item list-group-item-action active pv" id="list-pv-list" data-toggle="list" href="#list-pv" role="tab" aria-controls="pv">Payment Voucher</a>
-          <a class="list-group-item list-group-item-action trans" id="list-trans-list" data-toggle="list" href="#list-trans" role="tab" aria-controls="trans">Payment Transactions</a>
+          <a class="list-group-item list-group-item-action active pv" id="list-pv-list" data-toggle="list" href="#list-pv" role="tab" aria-controls="pv"> Voucher</a>
+          <a class="list-group-item list-group-item-action trans" id="list-trans-list" data-toggle="list" href="#list-trans" role="tab" aria-controls="trans"> Transactions</a>
         </div>
       </div>
-      <div class="col-10 leftLinkBody">
+      <div class="col-11 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <!-- <div class="row">
             <div class="col-6 pr-0">
@@ -80,7 +80,7 @@ $phpFile = "paymentSql.php";
                     <div class="tab-pane show active" id="pt" role="tabpanel" aria-labelledby="pt">
                       <form id="pvForm" name="pvForm">
                         <div class="row">
-                          <div class="col-12">
+                          <div class="col-9">
                             <div class="row">
                               <div class="col-3 pr-1">
                                 <div class="form-group">
@@ -155,14 +155,19 @@ $phpFile = "paymentSql.php";
                               </div>
                               <div class="col-3 pl-1">
                                 <div class="form-group">
-                                  <label>Payment Type</label><br>
-                                  <input type="radio" checked id="credit" name="pv_type" value="Credit"> Credit
-                                  <input type="radio" id="debit" name="pv_type" value="Debit"> Debit
+                                  <label>Bank Name</label>
+                                  <input type="text" class="form-control form-control-sm" id="pv_bank" name="pv_bank">
                                 </div>
                               </div>
                             </div>
+                          </div>
+                          <div class="col-3">
+                            <div class="form-group">
+                              <label>Payment Type</label><br>
+                              <input type="radio" checked id="credit" name="pv_type" value="Credit"> Credit
+                              <input type="radio" id="debit" name="pv_type" value="Debit"> Debit
+                            </div>
                             <div class="row">
-
                               <div class="col-12">
                                 <div class="form-group">
                                   <label>Description</label>
@@ -177,6 +182,9 @@ $phpFile = "paymentSql.php";
                       </form>
                     </div>
                     <div class="tab-pane fade" id="pvDaily" role="tabpanel" aria-labelledby="pvDaily">
+                      <label>Payment Voucher Date</label>
+                      <input type="date" class="form-control form-control-sm" id="pv_date" value="<?php echo $submit_date; ?>">
+
                       <table class="table table-bordered table-striped list-table-xxs mt-3" id="dailyVoucher">
                         <th class="text-center">SNo</th>
                         <th class="text-center">Voucher Date</th>
@@ -185,6 +193,7 @@ $phpFile = "paymentSql.php";
                         <th class="text-center">Mobile</th>
                         <th class="text-center">Head</th>
                         <th class="text-center">Mode</th>
+                        <th class="text-center">Bank</th>
                         <th class="text-center">Amount</th>
                         <th class="text-center">TransId</th>
                         <th class="text-center">TransDate</th>
@@ -259,12 +268,19 @@ $phpFile = "paymentSql.php";
                                   <div class="col-12">
                                     <span class="largeText">Through : </span>
                                     <span class="largeText" id="pvMode" style="text-decoration: underline;"></span>
+                                    [<span class="largeText" id="pvBank" style="text-decoration: underline;">--</span>]
                                     <span class="largeText"> on Account of: </span>
                                     <span class="largeText" id="pvHead" style="text-decoration: underline;"></span>
                                     <span class="largeText"> with transaction Id : </span>
                                     <span class="largeText" id="transactionId" style="text-decoration: underline;"></span>
                                     <span class="largeText"> dated : </span>
                                     <span class="largeText" id="transactionDate" style="text-decoration: underline;"></span>
+                                  </div>
+                                </div>
+                                <div class="row m-2">
+                                  <div class="col-12">
+                                    <p class="largeText">Description </p>
+                                    <span id="pvDesc">---</span>
                                   </div>
                                 </div>
                               </td>
@@ -333,6 +349,7 @@ $phpFile = "paymentSql.php";
                     <th class="text-center">Mobile</th>
                     <th class="text-center">Head</th>
                     <th class="text-center">Mode</th>
+                    <th class="text-center">Bank</th>
                     <th class="text-center">Amount</th>
                     <th class="text-center">TransId</th>
                     <th class="text-center">TransDate</th>
@@ -351,8 +368,6 @@ $phpFile = "paymentSql.php";
     <?php require("../bottom_bar.php"); ?>
   </div>
 </body>
-<?php require("../js.php"); ?>
-
 
 <script>
   $(document).ready(function() {
@@ -360,8 +375,10 @@ $phpFile = "paymentSql.php";
     feeMode();
 
     $(document).on("click", "#pvDailyPill", function() {
-      // $.alert("Daily ");
+      pvDate=$("#pv_date").val()
+      $.alert("Daily " + pvDate);
       $.post("<?php echo $phpFile; ?>", {
+        pvDate : pvDate,
         action: "pvDaily"
       }, function() {}, "json").done(function(data, status) {
         // $.alert(data);
@@ -377,6 +394,7 @@ $phpFile = "paymentSql.php";
           card += '<td>' + value.payee_mobile + '</td>';
           card += '<td class="text-center">' + value.pv_head + '</td>';
           card += '<td class="text-center">' + value.pv_mode + '</td>';
+          card += '<td class="text-center">' + value.pv_bank + '</td>';
           card += '<td class="text-center">' + value.pv_amount + '</td>';
           if (value.transaction_id == null) card += '<td class="text-center">--</td>';
           else card += '<td class="text-center">' + value.transaction_id + '</td>';
@@ -406,11 +424,13 @@ $phpFile = "paymentSql.php";
         $('#pvNumber').html(data.pv_id)
         $("#pvDate").html(getFormattedDate(data.update_ts, "dmY"));
         $("#pvMode").html(data.pv_mode);
+        $("#pvBank").html(data.pv_bank);
         $("#pvHead").html(data.pv_head);
         $("#pvType").html(data.pv_type);
         $('#billNo').html(data.bill_no)
         $('#billDate').html(data.bill_date)
         $('#billAmount').html(data.bill_amount)
+        $('#pvDesc').html(data.pv_desc)
 
         $('#payeeName').html(data.payee_name)
         $('#payeeMobile').html(data.payee_mobile)
@@ -485,6 +505,7 @@ $phpFile = "paymentSql.php";
           card += '<td>' + value.payee_mobile + '</td>';
           card += '<td class="text-center">' + value.pv_head + '</td>';
           card += '<td class="text-center">' + value.pv_mode + '</td>';
+          card += '<td class="text-center">' + value.pv_bank + '</td>';
           card += '<td class="text-center">' + value.pv_amount + '</td>';
           if (value.transaction_id == null) card += '<td class="text-center">--</td>';
           else card += '<td class="text-center">' + value.transaction_id + '</td>';
@@ -515,36 +536,6 @@ $phpFile = "paymentSql.php";
       }
     });
 
-    function feeReceiptList() {
-      // $.alert("Batch");
-      var studentId = $("#studentIdHidden").val();
-      $.post("<?php echo $phpFile; ?> ", {
-        action: "feeReceiptList",
-        id: studentId,
-      }, function() {}, "json").done(function(data, status) {
-        // $.alert(data);
-        // console.log(data);
-        var card = '';
-        $.each(data, function(key, value) {
-          card += '<tr>';
-          card += '<td class="text-center">' + value.fr_id + '</td>';
-          card += '<td class="text-center">' + value.fee_mode + '</td>';
-          card += '<td class="text-center">' + value.pv_type + '</td>';
-          card += '<td class="text-center">' + value.fr_amount + '</td>';
-          if (value.fr_desc == null) card += '<td class="text-center">--</td>';
-          else card += '<td class="text-center">' + value.fr_desc + '</td>';
-          card += '<td class="text-center">' + value.user_id + '</td>';
-          card += '<td class="text-center"><a href="#" class="showReceipt" data-fr="' + value.fr_id + '"><i class="fas fa-eye"></i></a></td>';
-          card += '</tr>';
-        });
-        $("#feeReceiptList").find("tr:gt(0)").remove();
-        $("#feeReceiptList").append(card);
-
-      }).fail(function() {
-        $.alert("Error !!");
-      })
-
-    }
 
     function paymentHead() {
       // $.alert("Department ");

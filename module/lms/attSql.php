@@ -35,7 +35,7 @@ if (isset($_POST['action'])) {
     $student = count($array["data"]);
     $sno = 1;
     echo '<div class="row">';
-    echo '<div class="col-8 p-0">';
+    echo '<div class="col-8 pr-0">';
     echo '<table class="table list-table-xs">';
     echo '<tr><th>#</th><th>Id</th><th>Name</th><th>RollNo</th><th>Status</th><th>DoReg</th>';
     echo '<th>Att</th><th>Del</th><th>%</th></tr>';
@@ -71,21 +71,17 @@ if (isset($_POST['action'])) {
     echo '</table>';
     echo '</div>';
 
-    echo '<div class="col-4">';
-    echo '<div class="row">';
-    echo '<div class="col-sm-8 mr-0 pr-0">';
-
+    echo '<div class="col-md-4 pl-1 pr-0">';
     echo '<div class="card mb-2">
-      <div class="card-body mb-0">
-      <h5 class="card-title"  data-tl="' . $tlId . '">' . $date . '[' . $dayofDate . ']  :' . $period . ' </h5>
+    <div class="card-body mb-0">';
+    echo '<div class="row">';
+    echo '<div class="col-sm-8 pr-0">';
+    echo '<h5 class="card-title"  data-tl="' . $tlId . '">' . $date . '[' . $dayofDate . ']  :' . $period . ' </h5>
       <h6 class="card-subtitle mb-2 text-muted">' . $subject_name . ' [' . $subjectId . ']</h6>
-      <h6 class="card-subtitle mb-2 text-muted">' . $className . ' [' . $class_section . ' ]<b>[' . $tlgType . 'G-' . $tlGroup . ']</b></h6>
-      </div></div>';
+      <h6 class="card-subtitle mb-2 text-muted">' . $className . ' [' . $class_section . ' ]<b>[' . $tlgType . 'G-' . $tlGroup . ']</b></h6>';
     echo '</div>';
     echo '<div class="col">';
-    echo '<div class="card mb=2">
-      <div class="card-body mb-0">
-      <div id="attStats">';
+    echo '<div id="attStats">';
     $sql = "select * from $tn_sa where sa_attendance='0' and sas_id='$sasId'";
     $result = $conn->query($sql);
     echo '<h6>P : ' . $result->num_rows . '</h6>';
@@ -115,7 +111,7 @@ if (isset($_POST['action'])) {
     }
     echo '</table>';
     echo '</div></div>';
-    
+
     echo '</div>';
   } elseif ($_POST['action'] == 'showSchedule') {
     $from = $_POST['scheduleFrom'];
@@ -164,7 +160,7 @@ if (isset($_POST['action'])) {
           if (strlen($check) > 0) $update_ts = getField($conn, $sas_id, $tn_sas, "sas_id", "update_ts");
 
           echo '<div class="col-2"><div class="card mb-2 p-0">';
-          echo 'Id:'.$rows['sas_id'];
+          echo 'Id:' . $rows['sas_id'];
           echo '<div class="card-body m-0 p-2">
           <h5 class="card-title m-0">Period : ' . $rows['sas_period'] . ' </h5>
           <h6 class="text-muted m-0 pt-2">' . $class_name . ' [' . $class_section . ' ]<b>[' . $tlg_type . 'G-' . $tl_group . ']</b></h6>
@@ -216,5 +212,117 @@ if (isset($_POST['action'])) {
     echo "SSS $sasId";
     $sql = "update $tn_sas set sas_mark='1', update_ts='$submit_ts' where sas_id='$sasId'";
     $conn->query($sql);
+  } elseif ($_POST['action'] == "fetchAttRegHeaderFooter") {
+    $tlId = $_POST['tlId'];
+
+    // From Teaching Load
+    $tlgId = getField($conn, $tlId, $tn_tl, "tl_id", "tlg_id");
+    $tlGroup = getField($conn, $tlId, $tn_tl, "tl_id", "tl_group");
+
+    // From Teacihng Load Group
+    $subjectId = getField($conn, $tlgId, $tn_tlg, "tlg_id", "subject_id");
+    $classId = getField($conn, $tlgId, $tn_tlg, "tlg_id", "class_id");
+    $tlgType = getField($conn, $tlgId, $tn_tlg, "tlg_id", "tlg_type");
+
+    // From Subject
+    $subject_code = getField($conn, $subjectId, 'subject', 'subject_id', 'subject_code');
+    $subject_name = getField($conn, $subjectId, 'subject', 'subject_id', 'subject_name');
+
+    // From Class
+    $className = getField($conn, $classId, 'class', 'class_id', 'class_name');
+    $class_section = getField($conn, $classId, 'class', 'class_id', 'class_section');
+
+    // echo $className;
+
+    $output = array(
+      "class_name" => $className,
+      "class_section" => $class_section,
+      "subject_name" => $subject_name,
+      "subject_code" => $subject_code
+    );
+    echo json_encode($output);
+    $tn_sa = 'student_attendance' . $classId;
+  } elseif ($_POST['action'] == "attRecord") {
+    $tlId = $_POST['tlId'];
+
+    // From Teaching Load
+    $tlgId = getField($conn, $tlId, $tn_tl, "tl_id", "tlg_id");
+    $tlGroup = getField($conn, $tlId, $tn_tl, "tl_id", "tl_group");
+
+    // From Teacihng Load Group
+    $subjectId = getField($conn, $tlgId, $tn_tlg, "tlg_id", "subject_id");
+    $classId = getField($conn, $tlgId, $tn_tlg, "tlg_id", "class_id");
+    $tlgType = getField($conn, $tlgId, $tn_tlg, "tlg_id", "tlg_type");
+
+    $sql = "select * from $tn_sas where tl_id='$tlId' order by sas_date, sas_period";
+    $result = $conn->query($sql);
+    $count = 0;
+    $data = array();
+    while ($sasRows = $result->fetch_assoc()) {
+      $sas[$count] = $sasRows["sas_id"];
+      $sas_date[$count] = $sasRows["sas_date"];
+      $sas_period[$count] = $sasRows["sas_period"];
+      $count++;
+    }
+    // $data[] = $sub_array;
+
+    $tn_sa = 'student_attendance' . $classId;
+
+    // echo $className;
+    $sql = "select * from $tn_rs where tl_id='$tlId'";
+    $result = $conn->query($sql);
+    if (!$result) die(" The script could not be Loadded! Unable to populate Student List !");
+    while ($rows = $result->fetch_assoc()) {
+      $sub_array = array();
+      $sub_array["student_id"] = $rows['student_id'];
+      $sub_array["student_name"] = getField($conn, $rows['student_id'], "student", "student_id", "student_name");
+      $sub_array["student_rollno"] = getField($conn, $rows['student_id'], "student", "student_id", "student_rollno");
+      $sub_array["rs_date"] = $rows['rs_date'];
+      $absents=0;$presents=0;$delivered=0;
+      for ($i = 0; $i < $count; $i++) {
+        $sql_sa = "select * from $tn_sa where sas_id='" . $sas[$i] . "' and student_id='" . $rows['student_id'] . "'";
+        $result_sa = $conn->query($sql_sa);
+        if ($result_sa && $result_sa->num_rows > 0) {
+          $saRows = $result_sa->fetch_assoc();
+          if ($saRows["sa_attendance"] == '1') {
+            $sub_array["sa_attendance"][] = 'A';
+            $absents++;
+          }
+          else {
+            $sub_array["sa_attendance"][] = 'P';
+            $presents++;
+          }
+        } else $sub_array["sa_attendance"][] = '--';
+      }
+      $sub_array["presents"]=ceil(($presents/($absents+$presents))*100);
+      $data[] = $sub_array;
+    }
+    $output = array(
+      "records" => $data,
+      "dates" => $sas_date,
+      "sas_id" => $sas
+    );
+    echo json_encode($output);
+  } elseif($_POST['action']=="updateAttendance"){
+    $tlId = $_POST['tlId'];
+    $sas_id=$_POST['sas_id'];
+    $student_id=$_POST['student_id'];
+    $attendance=$_POST['attendance'];
+    if($attendance=='A')$attendance='1';
+    else $attendance='0';
+    $tlgId = getField($conn, $tlId, $tn_tl, "tl_id", "tlg_id");
+    $classId = getField($conn, $tlgId, $tn_tlg, "tlg_id", "class_id");
+    // echo $sas_id.'-'.$tlId.'-'.$tlgId.'-'.$classId;
+    $tn_sa="student_attendance".$classId;
+    $sql="update $tn_sa set sa_attendance='$attendance' where student_id='$student_id' and sas_id='$sas_id'";
+    $conn->query($sql);
+    $sql="select * from $tn_sa sa, $tn_sas sas where sas.tl_id='$tlId' and sa.sas_id=sas.sas_id and sa.student_id='$student_id' and sa.sa_attendance='0'";
+    $result=$conn->query($sql);
+    $presents=$result->num_rows;
+    $sql="select * from $tn_sa sa, $tn_sas sas where sas.tl_id='$tlId' and sa.sas_id=sas.sas_id and sa.student_id='$student_id' and sa.sa_attendance='1'";
+    $result=$conn->query($sql);
+    $absents=$result->num_rows;
+    $percent=ceil($presents/($absents+$presents)*100);
+    echo $percent;
   }
 }
