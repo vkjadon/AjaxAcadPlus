@@ -19,28 +19,31 @@ if (!isset($myBatch)) $myBatch = '';
 <header>
 	<div class="py-2">
 		<div class="row">
-			<div class="col-2 ml-2">
-				<img src="<?php echo $setLogo; // Defined in check_user ?>" height="37px">
-				<?php echo $myFolder;?>
+			<div class="col-md-1 ml-2">
+				<img src="<?php echo $setLogo; // Defined in check_user 
+									?>" height="37px">
+				<?php // echo $myFolder;
+				?>
 			</div>
-			<div class="col ml-2 text-center">
+			<div class="col-md-2 ml-2 text-center">
 				<?php
 				echo $mySclAbbri . '[' . $myDeptAbbri . '] ';
 				echo '<b>' . $mySesName . '</b>';
 				//echo "School ".$myScl;
 				?>
 			</div>
-			<div class="col mr-2">
+			<div class="col-md-2 mr-2">
 				<?php
 				echo $myProgAbbri . '[' . $myProg . ']-' . $myBatchName . '[' . $myBatch . ']';
 				//echo "School ".$myScl;
 				?>
 			</div>
-			<div class="col float-right">
+			<div class="col-md-2 float-right">
 				<input type="text" class="form-control form-control-sm" id="indexSearch" name="indexSearch" placeholder="Search Staff" aria-label="Search">
 				<p class='list-group overlapList' id="indexAutoList"></p>
 			</div>
-
+			<div class="col-md-2"></div>
+			<div class="col-md-2 text-right largeText" id="clock"></div>
 			<div class="col mr-2">
 				<!-- <a href="<?php echo $codePath . '/module/forms/'; ?>" class="float-right">&nbsp; Forms &nbsp;</a> -->
 				<!-- <a href="" class="float-right">&nbsp; Downloads &nbsp;</a> -->
@@ -78,7 +81,7 @@ if (!isset($myBatch)) $myBatch = '';
 											<a href="<?php echo $codePath . '/module/user/'; ?>" class="dropdown-item py-0">Users and Links</a>
 										</div>
 										<div class="col-6 pl-0">
-											
+
 										</div>
 									</div>
 								</div>
@@ -155,8 +158,8 @@ if (!isset($myBatch)) $myBatch = '';
 								<div class="row">
 									<div class="col-6 pr-0">
 										<a href="<?php echo $codePath . '/module/hr/'; ?>" class="dropdown-item py-0">Manage Staff</a>
+										<a href="<?php echo $codePath . '/module/hr_prog/'; ?>" class="dropdown-item py-0"> Progression </a>
 										<a href="<?php echo $codePath . '/module/leave/'; ?>" class="dropdown-item py-0">Leave</a>
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> Staff Event </a>
 									</div>
 									<div class="col-6 pl-0">
 										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> Support </a>
@@ -256,7 +259,7 @@ if (!isset($myBatch)) $myBatch = '';
 						<div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="navbarDropdownMenuLink-333">
 							<!-- <a class="dropdown-item py-0" href="<?php echo $codePath . '/module/profile/'; ?>">My Account</a> -->
 							<a class="dropdown-item py-0" href="<?php echo $codePath . '/module/profile/'; ?>">Profile</a>
-							<a class="dropdown-item py-0" href="<?php echo $codePath . '/logout.php';?>">Logout</a>
+							<a class="dropdown-item py-0" href="<?php echo $codePath . '/logout.php'; ?>">Logout</a>
 						</div>
 					</li>
 				</ul>
@@ -279,4 +282,39 @@ if (!isset($myBatch)) $myBatch = '';
 			}
 		});
 	});
+
+	function showTime() {
+		// to get current time/ date.
+		var date = new Date();
+		// to get the current hour
+		var h = date.getHours();
+		// to get the current minutes
+		var m = date.getMinutes();
+		//to get the current second
+		var s = date.getSeconds();
+		// AM, PM setting
+		var session = "AM";
+
+		//conditions for times behavior 
+		if (h == 0) {
+			h = 12;
+		}
+		if (h >= 12) {
+			session = "PM";
+		}
+
+		if (h > 12) {
+			h = h - 12;
+		}
+		m = (m < 10) ? m = "0" + m : m;
+		s = (s < 10) ? s = "0" + s : s;
+
+		//putting time in one variable
+		var time = h + ":" + m + ":" + s + " " + session;
+		//putting time in our div
+		$('#clock').html(time);
+		//to change time in every seconds
+		setTimeout(showTime, 1000);
+	}
+	showTime();
 </script>

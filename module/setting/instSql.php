@@ -32,15 +32,23 @@ if (isset($_POST['action'])) {
 		echo json_encode($output);
 	} elseif ($_POST['action'] == 'updateProgram') {
 
-		$sql="update program set program_name='".data_check($_POST['program_name'])."', program_abbri='".data_check($_POST['program_abbri'])."', program_duration='".data_check($_POST['program_duration'])."', program_seat='".data_check($_POST['program_seat'])."', program_start='".data_check($_POST['program_start'])."', program_semester='".data_check($_POST['program_semester'])."', sp_name='".data_check($_POST['sp_name'])."', sp_abbri='".data_check($_POST['sp_abbri'])."', sp_code='".data_check($_POST['sp_code'])."'  where program_id='".$_POST['modalId']."'";
+		$sql = "update program set program_name='" . data_check($_POST['program_name']) . "', program_abbri='" . data_check($_POST['program_abbri']) . "', program_duration='" . data_check($_POST['program_duration']) . "', program_seat='" . data_check($_POST['program_seat']) . "', program_start='" . data_check($_POST['program_start']) . "', program_semester='" . data_check($_POST['program_semester']) . "', sp_name='" . data_check($_POST['sp_name']) . "', sp_abbri='" . data_check($_POST['sp_abbri']) . "', sp_code='" . data_check($_POST['sp_code']) . "'  where program_id='" . $_POST['modalId'] . "'";
 
-		$result=$conn->query($sql);
-		if(!$result)echo $conn->error;
-
-
+		$result = $conn->query($sql);
+		if (!$result) echo $conn->error;
+	} elseif ($_POST['action'] == 'removeProgram') {
+		$progId = $_POST['progId'];
+		$sql = "update program set program_status='9' where program_id='$progId'";
+		$conn->query($sql);
+		echo $conn->error;
+	} elseif ($_POST['action'] == 'resetProgram') {
+		$progId = $_POST['progId'];
+		$sql = "update program set program_status='0' where program_id='$progId'";
+		$conn->query($sql);
+		echo $conn->error;
 	} elseif ($_POST["action"] == "programList") {
 		//    echo "MyId- $myId";
-		$sql = "SELECT * from program where program_status='0' order by program_start, program_name";
+		$sql = "SELECT * from program order by program_start, program_name";
 		$result = $conn->query($sql);
 		if (!$result) echo $conn->error;
 		elseif ($result->num_rows > 0) {
@@ -74,9 +82,19 @@ if (isset($_POST['action'])) {
 		$result = $conn->query($sql);
 		$output = $result->fetch_assoc();
 		echo json_encode($output);
+	} elseif ($_POST['action'] == 'removeSchool') {
+		$sclId = $_POST['sclId'];
+		$sql = "update school set school_status='9' where school_id='$sclId'";
+		$conn->query($sql);
+		echo $conn->error;
+	} elseif ($_POST['action'] == 'resetSchool') {
+		$sclId = $_POST['sclId'];
+		$sql = "update school set school_status='0' where school_id='$sclId'";
+		$conn->query($sql);
+		echo $conn->error;
 	} elseif ($_POST["action"] == "schoolList") {
 		//    echo "MyId- $myId";
-		$sql = "SELECT * from school where school_status='0' order by school_code";
+		$sql = "SELECT * from school order by school_code";
 		$result = $conn->query($sql);
 		if (!$result) echo $conn->error;
 		elseif ($result->num_rows > 0) {
@@ -110,9 +128,19 @@ if (isset($_POST['action'])) {
 		$result = $conn->query($sql);
 		$output = $result->fetch_assoc();
 		echo json_encode($output);
+	} elseif ($_POST['action'] == 'removeDept') {
+		$deptId = $_POST['deptId'];
+		$sql = "update department set dept_status='9' where dept_id='$deptId'";
+		$conn->query($sql);
+		echo $conn->error;
+	} elseif ($_POST['action'] == 'resetDept') {
+		$deptId = $_POST['deptId'];
+		$sql = "update department set dept_status='0' where dept_id='$deptId'";
+		$conn->query($sql);
+		echo $conn->error;
 	} elseif ($_POST["action"] == "deptList") {
 		//    echo "MyId- $myId";
-		$sql = "SELECT * from department where dept_status='0' order by dept_type, dept_name";
+		$sql = "SELECT * from department order by dept_type, dept_name";
 		$result = $conn->query($sql);
 		if (!$result) echo $conn->error;
 		elseif ($result->num_rows > 0) {
@@ -131,9 +159,9 @@ if (isset($_POST['action'])) {
 		$output = $result->fetch_assoc();
 		echo json_encode($output);
 	} elseif ($_POST['action'] == 'updateInst') {
-		$sql = "update institution set inst_logo='".data_check($_POST['inst_logo'])."', inst_name='".data_check($_POST['inst_name'])."', inst_url='".data_check($_POST['inst_url'])."', inst_address='".data_check($_POST['inst_address'])."' where inst_id='" . $_POST["modalId"] . "'";
+		$sql = "update institution set inst_logo='" . data_check($_POST['inst_logo']) . "', inst_name='" . data_check($_POST['inst_name']) . "', inst_url='" . data_check($_POST['inst_url']) . "', inst_address='" . data_check($_POST['inst_address']) . "' where inst_id='" . $_POST["modalId"] . "'";
 		$result = $conn->query($sql);
-		if(!$result)echo $conn->error;
+		if (!$result) echo $conn->error;
 	} elseif ($_POST["action"] == "attachSchoolDept") {
 		$deptId = $_POST['deptId'];
 		$schoolId = $_POST['schoolId'];

@@ -479,6 +479,33 @@ require('../requireSubModule.php');
       $(".programForm").show();
     });
 
+    $(document).on('click', '.resetProgram', function() {
+      var prog_id = $(this).attr("data-id");
+      // $.alert("Data" + prog_id)
+      $.post("instSql.php", {
+        progId: prog_id,
+        action: "resetProgram"
+      }, function() {}, "text").done(function(data,status){
+        // $.alert("Data" + data)
+        programList();
+      }).fail(function() {
+        $.alert("Error");
+      })
+    });
+    $(document).on('click', '.trashProgram', function() {
+      var prog_id = $(this).attr("data-id");
+      // $.alert("Data" + prog_id)
+      $.post("instSql.php", {
+        progId: prog_id,
+        action: "removeProgram"
+      }, function() {}, "text").done(function(data,status){
+        // $.alert("Data" + data)
+        programList();
+      }).fail(function() {
+        $.alert("Error");
+      })
+    });
+
     function programList() {
       // $.alert("In List Function");
       $.post("instSql.php", {
@@ -509,7 +536,8 @@ require('../requireSubModule.php');
               card += '<td>' + value.sp_abbri + '</td>';
               card += '<td>' + value.program_duration + '</td>';
               card += '<td>' + value.program_semester + '</td>';
-              card += '<td><a href="#" class="trashProgram" data-id="' + value.program_id + '"><i class="fa fa-trash"></i></td>';
+              if(status==0)card += '<td><a href="#" class="fa fa-trash trashProgram" data-id="' + value.program_id + '"></td>';
+              else card += '<td><a href="#" class="fa fa-refresh resetProgram" data-id="' + value.program_id + '"></td>';
               card += '</tr>';
             }
           })
@@ -558,14 +586,38 @@ require('../requireSubModule.php');
         $.alert("fail in place of error");
       })
     });
+    $(document).on('click', '.resetSchool', function() {
+      var id = $(this).attr("data-id");
+      // $.alert("Data" + prog_id)
+      $.post("instSql.php", {
+        sclId: id,
+        action: "resetSchool"
+      }, function() {}, "text").done(function(data,status){
+        // $.alert("Data" + data)
+        schoolList();
+      }).fail(function() {
+        $.alert("Error");
+      })
+    });
+    $(document).on('click', '.trashSchool', function() {
+      var id = $(this).attr("data-id");
+      // $.alert("Data" + prog_id)
+      $.post("instSql.php", {
+        sclId: id,
+        action: "removeSchool"
+      }, function() {}, "text").done(function(data,status){
+        // $.alert("Data" + data)
+        schoolList();
+      }).fail(function() {
+        $.alert("Error");
+      })
+    });
 
     function schoolList() {
       // $.alert("In List Function");
       $.post("instSql.php", {
         action: "schoolList"
-      }, function(mydata, mystatus) {
-        //$.alert("List " + mydata);
-      }, "json").done(function(data, status) {
+      }, function() {}, "json").done(function(data, status) {
         // $.alert(data)
         var card = '';
         var count = 1;
@@ -578,7 +630,8 @@ require('../requireSubModule.php');
             card += '<td>' + value.school_name + '</td>';
             card += '<td>' + value.school_abbri + '</td>';
             card += '<td>' + value.school_code + '</td>';
-            card += '<td><a href="#" class="trashSchool" data-id="' + value.school_id + '"><i class="fa fa-trash"></i></td>';
+            if(status==0)card += '<td><a href="#" class="fa fa-trash trashSchool" data-id="' + value.school_id + '"></td>';
+            else card += '<td><a href="#" class="fa fa-refresh resetSchool" data-id="' + value.school_id + '"></td>';
             card += '</tr>';
           }
         })
@@ -626,6 +679,33 @@ require('../requireSubModule.php');
         $.alert("fail in place of error");
       })
     });
+    $(document).on('click', '.resetDept', function() {
+      var id = $(this).attr("data-id");
+      // $.alert("Data" + prog_id)
+      $.post("instSql.php", {
+        deptId: id,
+        action: "resetDept"
+      }, function() {}, "text").done(function(data,status){
+        // $.alert("Data" + data)
+        deptList();
+      }).fail(function() {
+        $.alert("Error");
+      })
+    });
+
+    $(document).on('click', '.trashDept', function() {
+      var id = $(this).attr("data-id");
+      // $.alert("Data" + prog_id)
+      $.post("instSql.php", {
+        deptId: id,
+        action: "removeDept"
+      }, function() {}, "text").done(function(data,status){
+        // $.alert("Data" + data)
+        deptList();
+      }).fail(function() {
+        $.alert("Error");
+      })
+    });
 
     function deptList() {
       // $.alert("In List Function");
@@ -646,7 +726,8 @@ require('../requireSubModule.php');
             card += '<td>' + value.dept_abbri + '</td>';
             if(value.dept_type==0)card += '<td>Teaching</td>';
             else card += '<td>Non Teaching</td>';
-            card += '<td><a href="#" class="trashDept" data-id="' + value.dept_id + '"><i class="fa fa-trash"></i></td>';
+            if(status==0)card += '<td><a href="#" class="fa fa-trash trashDept" data-id="' + value.dept_id + '"></td>';
+            else card += '<td><a href="#" class="fa fa-refresh resetDept" data-id="' + value.dept_id + '"></td>';
             card += '</tr>';
           }
         })
@@ -660,9 +741,7 @@ require('../requireSubModule.php');
       // $.alert("In List Function");
       $.post("instSql.php", {
         action: "fetchInst"
-      }, function(mydata, mystatus) {
-        //$.alert("List " + mydata);
-      }, "json").done(function(data, status) {
+      }, function() {}, "json").done(function(data, status) {
         // $.alert(data)
         $("#instName").html(data.inst_name)
         $("#instURL").html(data.inst_url)

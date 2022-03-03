@@ -47,9 +47,22 @@ if (isset($_POST['action'])) {
       if ($deleted == '1') $status = '9';
       else $status = '0';
 
+      $hostel = $_POST['hostel'];
+      $transport = $_POST['transport'];
+      $dayScholar = $_POST['dayScholar'];
+      if ($hostel == '1' && $transport == '1' && $dayScholar == '1') {
+         if ($progId > 0) $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.* from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.$batchField=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.program_id='$progId' and st.$batchField='$batchId' $leet and st.student_status='$status' order by st.ay_id, st.user_id";
+         else $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.* from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.$batchField=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.$batchField='$batchId' $leet and st.student_status='$status' order by st.ay_id, st.user_id";
+      }else{
+         if ($hostel == '1' && $transport == '0' && $dayScholar == '0')$srs=' and st.student_residential_status="2"';
+         elseif ($hostel == '0' && $transport == '1' && $dayScholar == '0')$srs=' and st.student_residential_status="1"';
+         elseif ($hostel == '0' && $transport == '0' && $dayScholar == '1')$srs=' and st.student_residential_status="0"';
+         else $srs=' and st.student_residential_status>"0"';
+         if ($progId > 0) $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.* from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.$batchField=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.program_id='$progId' and st.$batchField='$batchId' $leet $srs and st.student_status='$status' order by st.ay_id, st.user_id";
+         else $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.* from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.$batchField=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.$batchField='$batchId' $leet $srs and st.student_status='$status' order by st.ay_id, st.user_id";
+      }
+
       // echo "$progId - $batchId - $leet ";
-      if ($progId > 0) $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.* from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.$batchField=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.program_id='$progId' and st.$batchField='$batchId' $leet and st.student_status='$status' order by st.ay_id, st.user_id";
-      else $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.* from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.$batchField=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.$batchField='$batchId' $leet and st.student_status='$status' order by st.ay_id, st.user_id";
 
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;

@@ -96,9 +96,6 @@ session_start();
           })
         } else alert("Please Enter a Valid Institute Code !!")
       });
-
-
-
     });
   </script>
 

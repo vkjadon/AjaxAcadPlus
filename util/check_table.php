@@ -1093,7 +1093,23 @@ function check_tn_src($conn, $table)
   }
   //else echo "Table Exists";
 }
-
+function check_tn_ssl($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    $query =
+      'ss_id INT(5) NULL,
+        staff_id int(5) NULL,
+        mn_id INT(4) NULL,
+        mn_type INT(1) NULL,
+        ss_value VARCHAR(8) NULL,
+        UNIQUE(staff_id, mn_id)';
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    // if (!$result) echo $conn->error;
+  }
+}
 function check_tn_stdqual($conn, $table)
 {
   $sql = "select * from $table";

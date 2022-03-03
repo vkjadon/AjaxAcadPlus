@@ -32,7 +32,7 @@ $phpFile = "admissionSql.php";
       <div class="col-11 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="row">
-            <div class="col-md-3 pr-0">
+            <div class="col-md-2 pr-0">
               <div class="card border-info">
                 <div class="input-group">
                   <?php
@@ -54,7 +54,7 @@ $phpFile = "admissionSql.php";
                 </div>
               </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
               <div class="card border-info">
                 <div class="input-group">
                   <?php
@@ -85,13 +85,19 @@ $phpFile = "admissionSql.php";
             <div class="col-md-2">
               <p class="smallText"> Students : <span id="totalStudents"></span></p>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-5">
               <input type="checkbox" checked id="ay" name="ay_id" value="1">
               <span class="smallText">AY</span>
               <input type="checkbox" id="leet" name="leet" value="1">
               <span class="smallText">LEET</span>
               <input type="checkbox" id="deleted" name="deleted" value="1">
               <span class="smallText">Deleted</span>
+              <input type="checkbox" checked id="hostel" name="hostel">
+              <span class="smallText">Hostel</span>
+              <input type="checkbox" checked id="transport" name="transport">
+              <span class="smallText">Transport</span>
+              <input type="checkbox" checked id="dayScholar" name="dayScholar">
+              <span class="smallText">Day Scholar</span>
             </div>
           </div>
           <div class="tab-pane fade" id="list-as" role="tabpanel" aria-labelledby="list-as-list">
@@ -1514,7 +1520,7 @@ $phpFile = "admissionSql.php";
       studentList();
     });
 
-    $(document).on('click', '#ay, #leet, #deleted, #showSSList', function() {
+    $(document).on('click', '#ay, #leet, #deleted, #showSSList, #hostel, #transport, #dayScholar', function() {
       studentList();
     });
 
@@ -1529,6 +1535,12 @@ $phpFile = "admissionSql.php";
       else var ay = 0;
       if ($('#deleted').is(":checked")) var deleted = 1;
       else var deleted = 0;
+      if ($('#hostel').is(":checked")) var hostel = 1;
+      else var hostel = 0;
+      if ($('#transport').is(":checked")) var transport = 1;
+      else var transport = 0;
+      if ($('#dayScholar').is(":checked")) var dayScholar = 1;
+      else var dayScholar = 0;
       // $.alert("leet " + leet + " Batch " + batchId + "Prog" + progId + " SS " + ssId);
       $.post("<?php echo $phpFile; ?>", {
         batchId: batchId,
@@ -1538,6 +1550,9 @@ $phpFile = "admissionSql.php";
         leet: leet,
         ay: ay,
         deleted: deleted,
+        hostel: hostel,
+        transport: transport,
+        dayScholar: dayScholar,
         action: "studentList"
       }, function() {}, "json").done(function(data, status) {
         // $.alert(data);
@@ -1569,12 +1584,15 @@ $phpFile = "admissionSql.php";
           if (value.student_scholarship == '1') card += '<td>Y</td>';
           else card += '<td>N</td>';
 
+          var address= value.permanent_address;
+          if(address!=null)address=address.replace("#","")
+
           card += '<td class="mobileField">' + value.student_mobile + '</td>';
           card += '<td class="semField">' + value.student_semester + '</td>';
           card += '<td class="dorField">' + getFormattedDate(value.student_admission, "dmY") + '</td>';
           card += '<td class="dobField">' + getFormattedDate(value.student_dob, "dmY") + '</td>';
           card += '<td class="waField">' + value.student_whatsapp + '</td>';
-          card += '<td>' + value.permanent_address + '</td>';
+          card += '<td>' +  + '</td>';
           card += '<td>' + value.city + '</td>';
           card += '<td>' + value.district_name + '</td>';
           card += '<td id="state_id" data-tag="' + value.student_id + '">' + value.state_name + '</td>';

@@ -275,55 +275,50 @@ $phpFile = "paymentSql.php";
             </div>
           </div>
           <div class="tab-pane fade" id="list-trans" role="tabpanel" aria-labelledby="list-trans-list">
-            <div class="row">
-              <div class="col-10">
-                <div class="container card mt-2 myCard">
-                  <div class="row">
-                    <div class="col-12">
-                      <div class="row">
-                        <div class="col">
-                          <div class="form-group">
-                            <label>Payment From</label>
-                            <input type="date" class="form-control form-control-sm" id="pv_from" name="pv_from" value="<?php echo $submit_date; ?>">
-                          </div>
-                        </div>
-                        <div class="col">
-                          <div class="form-group">
-                            <label>Payment To</label>
-                            <input type="date" class="form-control form-control-sm" id="pv_to" name="pv_to" value="<?php echo $submit_date; ?>">
-                          </div>
-                        </div>
-                        <div class="col mt-3">
-                          <div class="form-group">
-                            <button class="btn btn-sm" id="showPayment">Show Payement</button>
-                          </div>
-                        </div>
-                      </div>
-
+            <div class="card mt-2 myCard">
+              <div class="col-12">
+                <div class="row">
+                  <div class="col-md-2 pl-2">
+                    <div class="form-group">
+                      <label>Payment From</label>
+                      <input type="date" class="form-control form-control-sm" id="pv_from" name="pv_from" value="<?php echo $submit_date; ?>">
+                    </div>
+                  </div>
+                  <div class="col-md-2 pl-2">
+                    <div class="form-group">
+                      <label>Payment To</label>
+                      <input type="date" class="form-control form-control-sm" id="pv_to" name="pv_to" value="<?php echo $submit_date; ?>">
+                    </div>
+                  </div>
+                  <div class="col-md-2 mt-3">
+                    <div class="form-group">
+                      <button class="btn btn-sm" id="showPayment">Show Payement</button>
                     </div>
                   </div>
                 </div>
-                <div class="container card mt-2 myCard" id="print" style="overflow: scroll;">
-                  <div class="col-md-12 text-right">
-                    <a class="fas fa-file-export" id="export"></a>
-                  </div>
-                  <table class="table table-bordered table-striped list-table-xxs mt-3" id="transactionList">
-                    <th class="text-center">SNo</th>
-                    <th class="text-center">Voucher Date</th>
-                    <th class="text-center">ID</th>
-                    <th class="text-center">Payee</th>
-                    <th class="text-center">Mobile</th>
-                    <th class="text-center">Head</th>
-                    <th class="text-center">Mode</th>
-                    <th class="text-center">Bank</th>
-                    <th class="text-center">Amount</th>
-                    <th class="text-center">TransId</th>
-                    <th class="text-center">TransDate</th>
-                    <th class="text-center">Type</th>
-                    <th class="text-center">StaffId</th>
-                    <th class="text-center">Reverse</th>
-                  </table>
-                </div>
+              </div>
+            </div>
+            <div class="card mt-2 myCard" id="print" style="overflow: scroll;">
+              <div class="col-md-12 text-right">
+                <a class="fas fa-file-export" id="export"></a>
+              </div>
+              <div class="col-md-12">
+              <table class="table table-bordered table-striped list-table-xs" id="transactionList">
+                <th class="text-center">SNo</th>
+                <th class="text-center">Voucher Date</th>
+                <th class="text-center">ID</th>
+                <th class="text-center">Payee</th>
+                <th class="text-center">Mobile</th>
+                <th class="text-center">Head</th>
+                <th class="text-center">Mode</th>
+                <th class="text-center">Bank</th>
+                <th class="text-center">Amount</th>
+                <th class="text-center">TransId</th>
+                <th class="text-center">TransDate</th>
+                <th class="text-center">Type</th>
+                <th class="text-center">StaffId</th>
+                <th class="text-center">Reverse</th>
+              </table>
               </div>
             </div>
           </div>

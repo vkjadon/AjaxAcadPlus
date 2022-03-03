@@ -41,8 +41,9 @@ if (isset($_POST['action'])) {
     }
   } elseif ($_POST['action'] == 'addPayment') {
     // echo " Add Fee ";
+    $time=gmdate("Y/m/d H:i:s",time());
     if ($myId > 0) {
-      $sql = "insert into payment_voucher (pv_type, pv_head, pv_mode, pv_bank, pv_amount, transaction_id, transaction_date, pv_desc, bill_no, bill_date, bill_amount, payee_name, payee_mobile, payee_id, update_id, pv_status) values ('" . $_POST['pv_type'] . "', '" . $_POST['pv_head'] . "', '" . $_POST['pv_mode'] . "', '" . $_POST['pv_bank'] . "', '" . $_POST['pv_amount'] . "', '" . $_POST['transaction_id'] . "', '" . $_POST['transaction_date'] . "', '" . $_POST['pv_desc'] . "', '" . $_POST['bill_no'] . "','" . $_POST['bill_date'] . "', '" . $_POST['bill_amount'] . "', '" . $_POST['payee_name'] . "','" . $_POST['payee_mobile'] . "','" . $_POST['payee_id'] . "', '$myId', '0')";
+      $sql = "insert into payment_voucher (pv_type, pv_head, pv_mode, pv_bank, pv_amount, transaction_id, transaction_date, pv_desc, bill_no, bill_date, bill_amount, payee_name, payee_mobile, payee_id, update_ts, update_id, pv_status) values ('" . $_POST['pv_type'] . "', '" . $_POST['pv_head'] . "', '" . $_POST['pv_mode'] . "', '" . $_POST['pv_bank'] . "', '" . $_POST['pv_amount'] . "', '" . $_POST['transaction_id'] . "', '" . $_POST['transaction_date'] . "', '" . $_POST['pv_desc'] . "', '" . $_POST['bill_no'] . "','" . $_POST['bill_date'] . "', '" . $_POST['bill_amount'] . "', '" . $_POST['payee_name'] . "','" . $_POST['payee_mobile'] . "','" . $_POST['payee_id'] . "', '$time', '$myId', '0')";
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
       else echo "Fee Successfully Added";
@@ -105,8 +106,10 @@ if (isset($_POST['action'])) {
         $subArray["pv_id"] = $rowsFee["pv_id"];
         $sql_rev="select * from pv_reverse where pv_id='".$rowsFee["pv_id"]."' and pr_status='0'";
         $result_rev=$conn->query($sql_rev);
-        if($result_rev->num_rows>0)$pr = 'Revered';
-        else $pr='--';
+        if($result_rev->num_rows>0){
+          $revRows=$result_rev->fetch_assoc();
+          $pr = $revRows["pr_desc"];
+        } else $pr='--';
         $subArray["pr_id"] = $pr;
         $subArray["payee_name"] = $rowsFee["payee_name"];
         $subArray["payee_mobile"] = $rowsFee["payee_mobile"];

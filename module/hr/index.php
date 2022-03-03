@@ -16,13 +16,13 @@ require('../requireSubModule.php');
       <div class="col-1 p-0 m-0 pl-1 full-height">
         <h5 class="pt-3">Staff</h5>
         <div class="list-group list-group-mine" id="list-tab" role="tablist">
-          <a class="list-group-item list-group-item-action active as" id="list-as-list" data-toggle="list" href="#list-as" role="tab" aria-controls="as"> Add Staff </a>
-          <a class="list-group-item list-group-item-action prog" data-toggle="list" href="#prog" role="tab" aria-controls="prog"> Progression </a>
+          <a class="list-group-item list-group-item-action active as" data-toggle="list" href="#as" role="tab" aria-controls="as"> Add Staff </a>
+          <a class="list-group-item list-group-item-action" data-toggle="list" href="#dr" role="tab" aria-controls="dr"> Detail Report </a>
         </div>
       </div>
       <div class="col-sm-11 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
-          <div class="tab-pane fade show active" id="list-as" role="tabpanel" aria-labelledby="list-as-list">
+          <div class="tab-pane fade show active" id="as" role="tabpanel" aria-labelledby="as">
             <div class="row">
               <div class="col-3">
                 <div class="card border-info mb-3">
@@ -342,6 +342,54 @@ require('../requireSubModule.php');
               </div>
             </div>
           </div>
+          <div class="tab-pane fade" id="dr" role="tabpanel" aria-labelledby="list-dr-list">
+            <?php
+            $sql = "select s.* from staff s where staff_id>1 order by s.staff_name";
+            $result = $conn->query($sql);
+            ?>
+            <div class="col-md-12 text-right">
+              <a href="export_report.php" class="fas fa-file-export" target="_blank">Export to Excel</a>
+            </div>
+            <table id="example" class="display" style="width:100%">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>User Id</th>
+                  <th>Mobile</th>
+                  <th>Email</th>
+                  <th>Father Name</th>
+                  <th>Mother Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                if (!$result) echo $conn->error;
+                else {
+                  while ($rowsStaff = $result->fetch_assoc()) {
+                    echo '<tr>';
+                    echo '<td>' . $rowsStaff["staff_name"] . '</td>';
+                    echo '<td>' . $rowsStaff["user_id"] . '</td>';
+                    echo '<td>' . $rowsStaff["staff_mobile"] . '</td>';
+                    echo '<td>' . $rowsStaff["staff_email"] . '</td>';
+                    echo '<td>' . $rowsStaff["staff_fname"] . '</td>';
+                    echo '<td>' . $rowsStaff["staff_mname"] . '</td>';
+                    echo '</tr>';
+                  }
+                }
+                ?>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <th>Name</th>
+                  <th>User Id</th>
+                  <th>Mobile</th>
+                  <th>Email</th>
+                  <th>Father Name</th>
+                  <th>Mother Name</th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -363,6 +411,8 @@ require('../requireSubModule.php');
     $('#list-sq').hide();
     $('#accordionStaff').hide();
     $('.staffProfile').hide();
+
+    $('#example').DataTable()
 
     var z = $("#sel_dept").val();
     staffList();
@@ -755,8 +805,33 @@ require('../requireSubModule.php');
       })
 
     }
-
   });
+  document.getElementById('export').onclick = function() {
+    var tableId = document.getElementById('example').id;
+    htmlTableToExcel(tableId, filename = '');
+  }
+  var htmlTableToExcel = function(tableId, fileName = '') {
+    var excelFileName = 'excel_table_data';
+    var TableDataType = 'application/vnd.ms-excel';
+    var selectTable = document.getElementById(tableId);
+    var htmlTable = selectTable.outerHTML.replace(/ /g, '%20');
+
+    filename = filename ? filename + '.xls' : excelFileName + '.xls';
+    var excelFileURL = document.createElement("a");
+    document.body.appendChild(excelFileURL);
+
+    if (navigator.msSaveOrOpenBlob) {
+      var blob = new Blob(['\ufeff', htmlTable], {
+        type: TableDataType
+      });
+      navigator.msSaveOrOpenBlob(blob, fileName);
+    } else {
+
+      excelFileURL.href = 'data:' + TableDataType + ', ' + htmlTable;
+      excelFileURL.download = fileName;
+      excelFileURL.click();
+    }
+  }
 </script>
 
 <div class="modal" id="firstModal">

@@ -124,18 +124,18 @@ require('../requireSubModule.php');
                 <div class="card">
                   <div class="card-body">
                     <form class="form-horizontal">
-                      <input type="hidden" id="staffIdHidden" name="staffIdHidden">
+                      <input type="hidden" id="staffIdHidden" name="staffIdHidden" value="0">
                       <div class="row">
                         <div class="col-6">
                           <div class="form-group">
                             Staff Name
-                            <input type="text" class="form-control form-control-sm staffForm" id="sNameAccordian" name="sNameAccordian" placeholder="Staff Name" data-tag="staff_name">
+                            <input type="text" class="form-control form-control-sm staffForm" id="staff_name" name="staff_name" placeholder="Staff Name" data-tag="staff_name">
                           </div>
                         </div>
                         <div class="col-6">
                           <div class="form-group">
                             Date of Birth
-                            <input type="date" class="form-control form-control-sm staffForm" id="sDobAccordian" name="sDobAccordian" placeholder="Date of Birth" data-tag="staff_dob">
+                            <input type="date" class="form-control form-control-sm staffForm" id="staff_dob" name="staff_dob" value="<?php echo $submit_date;?>" data-tag="staff_dob">
                           </div>
                         </div>
                       </div>
@@ -143,13 +143,13 @@ require('../requireSubModule.php');
                         <div class="col-6">
                           <div class="form-group">
                             Email
-                            <input type="text" class="form-control form-control-sm staffForm" id="sEmailAccordian" name="sEmailAccordian" placeholder="Staff Email Id" data-tag="staff_email">
+                            <input type="text" class="form-control form-control-sm staffForm" id="staff_email" name="staff_email" placeholder="Staff Email Id" data-tag="staff_email">
                           </div>
                         </div>
                         <div class="col-6">
                           <div class="form-group">
                             Mobile Number
-                            <input type="text" class="form-control form-control-sm staffForm" id="sMobileAccordian" name="sMobileAccordian" placeholder="Staff Mobile Number" data-tag="staff_mobile">
+                            <input type="text" class="form-control form-control-sm staffForm" id="staff_mobile" name="staff_mobile" placeholder="Staff Mobile Number" data-tag="staff_mobile">
                           </div>
                         </div>
                       </div>
@@ -157,13 +157,13 @@ require('../requireSubModule.php');
                         <div class="col-6">
                           <div class="form-group">
                             Father Name
-                            <input type="text" class="form-control form-control-sm staffForm" id="fName" name="fName" placeholder="Name of the Father" data-tag="staff_fname">
+                            <input type="text" class="form-control form-control-sm staffForm" id="staff_fname" name="staff_fname" placeholder="Name of the Father" data-tag="staff_fname">
                           </div>
                         </div>
                         <div class="col-6">
                           <div class="form-group">
                             Mother Name
-                            <input type="text" class="form-control form-control-sm staffForm" id="mName" name="mName" placeholder="Name of the Mother" data-tag="staff_mname">
+                            <input type="text" class="form-control form-control-sm staffForm" id="staff_mname" name="staff_mname" placeholder="Name of the Mother" data-tag="staff_mname">
                           </div>
                         </div>
                       </div>
@@ -171,13 +171,13 @@ require('../requireSubModule.php');
                         <div class="col-6">
                           <div class="form-group">
                             Date of Joining
-                            <input type="date" class="form-control form-control-sm staffForm" id="sDojAccordian" name="sDojAccordian" placeholder="Date of Joining" data-tag="staff_doj">
+                            <input type="date" class="form-control form-control-sm staffForm" id="staff_doj" name="staff_doj" value="<?php echo $submit_date;?>" data-tag="staff_doj">
                           </div>
                         </div>
                         <div class="col-6">
                           <div class="form-group">
                             Adhaar Number
-                            <input type="text" class="form-control form-control-sm staffForm" id="sAdhaar" name="sAdhaar" placeholder="12 Digit Adhaar Number" data-tag="staff_adhaar">
+                            <input type="text" class="form-control form-control-sm staffForm" id="staff_adhaar" name="staff_adhaar" placeholder="12 Digit Adhaar Number" data-tag="staff_adhaar">
                           </div>
                         </div>
                       </div>
@@ -185,7 +185,7 @@ require('../requireSubModule.php');
                         <div class="col-12">
                           <div class="form-group">
                             Address
-                            <textarea class="form-control form-control-sm" rows="3" id="sAddress" name="sAddress"></textarea>
+                            <textarea class="form-control form-control-sm staffForm" rows="3" id="staff_address" name="staff_address"></textarea>
                           </div>
                         </div>
                       </div>
@@ -194,7 +194,6 @@ require('../requireSubModule.php');
                 </div>
               </div>
               <div class="col-3 pr-1 text-center">
-
               </div>
             </div>
           </div>
@@ -215,33 +214,75 @@ require('../requireSubModule.php');
 
   $(document).ready(function() {
 
-    $.post("profileSql.php", {
-      action: "fetchStaff"
-    }, () => {}, "json").done(function(data) {
-      // $.alert("hello" + data.staff_name);
-      $("#sEmailAccordian").val(data.staff_email);
-      $("#sNameAccordian").val(data.staff_name);
-      $("#sMobileAccordian").val(data.staff_mobile);
-      $("#sDobAccordian").val(data.staff_dob);
-      $("#fName").val(data.staff_fname);
-      $("#mName").val(data.staff_mname);
-      $("#sAdhaar").val(data.staff_adhaar);
-      $("#sAddress").val(data.staff_address);
-      $("#sGender").val(data.staff_gender);
-      $("#sTeaching").val(data.staff_teaching);
-      $("#sDojAccordian").val(data.staff_doj);
-      $("#staff_title").text(data.staff_name);
-      $(".staff_email").text(data.staff_email);
-      $(".staff_name").text(data.staff_name);
-      $(".staff_mobile").text(data.staff_mobile);
-      $(".staff_doj").text(data.staff_doj);
-      $(".staff_userId").text(data.user_id);
-      if (data.staff_image === null) $(".staffImage").html('<img  src="../../images/upload.jpg" width="100%">');
-      else $(".staffImage").html('<img  src="<?php echo '../../' . $myFolder . '/staffImages/'; ?>' + data.staff_image + '" width="100%">');
-      $('.staffProfile').show();
-    }, "text").fail(function() {
-      $.alert("fail in place of error");
+    profile();
+
+    function profile() {
+      $.post("profileSql.php", {
+        action: "fetchStaff"
+      }, () => {}, "json").done(function(data) {
+        // $.alert("hello" + data.staff_name);
+        $("#staffIdHidden").val(data.staff_id);
+        $("#staff_email").val(data.staff_email);
+        $("#staff_name").val(data.staff_name);
+        $("#staff_mobile").val(data.staff_mobile);
+        $("#staff_dob").val(data.staff_dob);
+        $("#staff_fname").val(data.staff_fname);
+        $("#staff_mname").val(data.staff_mname);
+        $("#staff_adhaar").val(data.staff_adhaar);
+        $("#staff_address").val(data.staff_address);
+        $("#staff_doj").val(data.staff_doj);
+        $(".staff_email").text(data.staff_email);
+        $(".staff_name").text(data.staff_name);
+        $(".staff_mobile").text(data.staff_mobile);
+        $(".staff_doj").text(data.staff_doj);
+        $(".staff_userId").text(data.user_id);
+        if (data.staff_image === null) $(".staffImage").html('<img  src="../../images/upload.jpg" width="100%">');
+        else $(".staffImage").html('<img  src="<?php echo '../../' . $myFolder . '/staffImages/'; ?>' + data.staff_image + '" width="100%">');
+        $('.staffProfile').show();
+      }).fail(function() {
+        $.alert("fail in place of error");
+      });
+      $(document).on('blur', '.salaryUpdateForm', function() {
+        var staff_id = $("#staffIdHidden").val();
+        if (staff_id > 0) {
+          var mn_id = $(this).attr("data-id")
+          var tag = $(this).attr("data-tag")
+          var value = $(this).val()
+          // $.alert("Tag " + tag + " Value " + value + " Staff " + staff_id + " mn_id " + mn_id);
+          $.post("hr_progSql.php", {
+            userId: staff_id,
+            mn_id: mn_id,
+            tag: tag,
+            value: value,
+            action: "staffSalary"
+          }, function() {}, "text").done(function(data, status) {
+            // $.alert(data);
+          }).fail(function() {
+            $.alert("fail in place of error");
+          })
+        } else $.alert("Please select a Staff !!")
+      });
+    }
+
+    $(document).on('blur', '.staffForm', function() {
+      var staff_id = $("#staffIdHidden").val();
+      if (staff_id > 0) {
+        var tag = $(this).attr("data-tag")
+        var value = $(this).val()
+        // $.alert("Tag " + tag + " Value " + value + " Staff " + staff_id);
+        $.post("profileSql.php", {
+          staff_id: staff_id,
+          tag: tag,
+          value: value,
+          action: "staffUpdate"
+        }, function() {}, "text").done(function(data, status) {
+          // $.alert(data);
+        }).fail(function() {
+          $.alert("fail in place of error");
+        })
+      } else $.alert("Please select a Staff !!")
     });
+
     $(document).on('submit', '#uploadModalForm', function(event) {
       event.preventDefault();
       var formData = $(this).serialize();

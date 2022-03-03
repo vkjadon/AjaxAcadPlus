@@ -79,6 +79,7 @@ if (isset($mySes)) {
   check_tn_respStaff($conn, 'responsibility_staff');
   check_tn_rl($conn, 'responsibility_link');
   check_tn_sdl($conn, "schedule");
+  check_tn_ssl($conn, "staff_salary");
   check_tn_stdqual($conn, "student_qualification");
   check_tn_stdscl($conn, "student_scholarship");
   check_tn_sub($conn, "subject");

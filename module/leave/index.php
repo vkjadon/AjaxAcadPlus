@@ -38,9 +38,6 @@ if ($result && $result->num_rows == 1) {
           <a class="list-group-item list-group-item-action lr" id="list-lr-list" data-toggle="list" href="#list-lr" role="tab" aria-controls="lr">Leave Report</a>
           <a class="list-group-item list-group-item-action lt" id="list-lt-list" data-toggle="list" href="#list-lt" role="tab" aria-controls="lt">Master Data</a>
         </div>
-        <div class="mr-2">
-          <?php require("../searchBar.php"); ?>
-        </div>
       </div>
       <div class="col-11 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">

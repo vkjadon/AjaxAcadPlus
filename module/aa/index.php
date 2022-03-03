@@ -314,12 +314,12 @@ require('../requireSubModule.php');
                               <input type="radio" class="headName" id="scl" name="headName" value="scl">
                               Scholarships (scl)
                             </div>
-                          </div> 
+                          </div>
                           <div class="col">
                             <div class="form-group">
                               New (new)
                             </div>
-                          </div>                         
+                          </div>
                         </div>
                         <div class="row">
                           <div class="col">
@@ -333,12 +333,12 @@ require('../requireSubModule.php');
                               <input type="radio" class="headName" id="salddc" name="headName" value="sld">
                               Salary Deduction (sld)
                             </div>
-                          </div> 
+                          </div>
                           <div class="col">
                             <div class="form-group">
                               New (new)
                             </div>
-                          </div>                         
+                          </div>
                         </div>
                         <div class="row">
                           <div class="col-4 pr-1">
@@ -362,16 +362,16 @@ require('../requireSubModule.php');
                         </div>
                         <div class="row">
                           <div class="col">
+                            <input type="hidden" id="mn_id" value="0">
                             <button type="submit" class="btn btn-sm nrSubmit">Submit</button>
                           </div>
                         </div>
-                      </div>
-                      <div class="tab-pane fade" id="res">
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="col-5 mt-1 mb-1">
+                  <h4>List of Components </h4>
                   <p id="masterNameList"></p>
                 </div>
               </div>
@@ -523,21 +523,42 @@ require('../requireSubModule.php');
       var name = $("#name").val();
       var abbri = $("#abbri").val();
       var remarks = $("#remarks").val();
-      // $.alert(" Pressed" + headName + name + remarks);
-      if(name!=""){
-        $.post("aaSql.php", {
-          name: name,
-          abbri: abbri,
-          remarks: remarks,
-          headName: headName,
-          action: "headName"
-        }, function(data, status) {}, "text").done(function(data) {
-          $.alert(data);
-          masterNameList();
-        }).fail(function() {
-          $.alert("fail in place of error");
-        })
-      }$.alert("Name cannot be Blank!!");
+      var id = $("#mn_id").val();
+      // $.alert(" Pressed" + headName + name + remarks + id);
+      $.post("aaSql.php", {
+        name: name,
+        abbri: abbri,
+        remarks: remarks,
+        mn_id: id,
+        headName: headName,
+        action: "headName"
+      }, function(data, status) {}, "text").done(function(data) {
+        $.alert(data);
+        $("#name").val("")
+        $("#abbri").val("")
+        $("#remarks").val("")
+        $("#mn_id").val("0")
+        masterNameList();
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
+    $(document).on('click', '.mn_idE', function() {
+      var id = $(this).attr('data-id');
+      // $.alert("Id " + id);
+      $.post("aaSql.php", {
+        action: "mnFetch",
+        mn_id: id
+      }, () => {}, "json").done(function(data) {
+        //$.alert("List " + data.batch);
+        $("#name").val(data.mn_name)
+        $("#abbri").val(data.mn_abbri)
+        $("#remarks").val(data.mn_remarks)
+        $("#mn_id").val(data.mn_id)
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
     });
 
     function masterNameList() {

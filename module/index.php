@@ -28,7 +28,6 @@ if (!isset($myProg)) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 	<title>Outcome Based Education : ClassConnect</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -67,7 +66,6 @@ if (!isset($myProg)) {
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
 </head>
-
 <body>
 	<?php require("topBar.php"); ?>
 	<div class="container-fluid moduleBody">
