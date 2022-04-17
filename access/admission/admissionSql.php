@@ -54,6 +54,7 @@ if (isset($_POST['action'])) {
       $semester = $_POST['stdSemester'];
       $date = $_POST['stdAdmission'];
       $ay = $_POST['stdAcademicBatch'];
+      $myBatch = $_POST['sel_admBatch'];
       if (isset($_POST['stdLateralEntry'])) $lateral = 1;
       else $lateral = 0;
       if (isset($_POST['stdScholarship'])) $scholarship = 1;

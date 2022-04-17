@@ -16,17 +16,17 @@ require('../requireSubModule.php');
 
   <div class="container-fluid moduleBody">
     <div class="row">
-      <div class="col-2 p-0 m-0 pl-2 full-height">
-        <div class="mt-3">
+      <div class="col-1 p-0 m-0 full-height">
+        <div class="mt-3 pl-1">
           <h5>Enrichment</h5>
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active rp" id="list-rp-list" data-toggle="list" href="#list-rp" role="tab" aria-controls="rp"> Resource Person </a>
           <a class="list-group-item list-group-item-action org" id="list-org-list" data-toggle="list" href="#list-org" role="tab" aria-controls="org"> Organization </a>
-          <a class="list-group-item list-group-item-action cce" id="list-cce-list" data-toggle="list" href="#list-cce" role="tab" aria-controls="cce"> Co-curricular Activity </a>
+          <a class="list-group-item list-group-item-action cce" id="list-cce-list" data-toggle="list" href="#list-cce" role="tab" aria-controls="cce"> CC Activity </a>
         </div>
       </div>
-      <div class="col-10 leftLinkBody">
+      <div class="col-11 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="list-rp" role="tabpanel">
             <div class="row">
@@ -284,7 +284,7 @@ require('../requireSubModule.php');
               <div class="col-6 mt-1 mb-1" role="tabpanel">
                 <div class="container card mt-2 myCard">
                   <h5 class="text-center mt-2">Notice</h5>
-                  <p><?php echo $dept_header; ?></p>
+                  <p><?php //echo $dept_header; ?></p>
                   <p>It is for the information of all concern that the department is organizing an activity as per following schedule:</p>
                   <div class="container col-12">
                     <table class="table list-table-xs">

@@ -1039,7 +1039,7 @@ $phpFile = "feeReceiptSql.php";
         $.each(data, function(key, value) {
           totalDebit = totalDebit + parseInt(value.fr_debit)
           totalCredit = totalCredit + parseInt(value.fr_amount)
-          netBalance = netBalance + parseInt(value.fr_amount) - parseInt(value.fr_debit)
+          netBalance = netBalance - parseInt(value.fr_amount) + parseInt(value.fr_debit)
           if (value.frev_id > 0) card += '<tr style="color:red">';
           else card += '<tr>';
           card += '<td class="text-center">' + value.fr_id + '</td>';
@@ -1057,7 +1057,7 @@ $phpFile = "feeReceiptSql.php";
           card += '<td class="text-center">' + value.user_id + '</td>';
           card += '</tr>';
         });
-        card+='<tr><td colspan="6"></td><td>'+totalDebit+'</td><td>'+totalCredit+'</td></tr>'
+        card+='<tr><td colspan="6"></td><td>'+totalDebit+'</td><td>'+totalCredit+'</td><td>'+netBalance+'</td></tr>'
         $("#feeRecordList").find("tr:gt(0)").remove();
         $("#feeRecordList").append(card);
         // $("#totalCredit").val(totalCredit);

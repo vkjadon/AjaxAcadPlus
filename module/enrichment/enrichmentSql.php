@@ -1,5 +1,5 @@
 <?php
-require('../requireSubModule.php');
+require('../../module/requireSubModule.php');
 
 //echo $_POST['action'];
 

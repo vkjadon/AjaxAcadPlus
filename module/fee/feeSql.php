@@ -191,6 +191,7 @@ if (isset($_POST['action'])) {
     $batchId = $_POST['sel_batch'];
     $tn_ss = 'student_status' . $batchId;
     $progId = $_POST['sel_prog'];
+    $semester = $_POST['semester'];
     
     $fee_type = $_POST['ft'];
     if($fee_type=='ALL') $matchFeeType='';
@@ -216,13 +217,14 @@ if (isset($_POST['action'])) {
         $subArray["student_semester"] = $rowsStudent["student_semester"];
         $subArray["student_fee_category"] = $rowsStudent["student_fee_category"];
         $subArray["student_fname"] = $rowsStudent["student_fname"];
+        $subArray["semester"] = $semester;
 
         $reverse=0;
-        $sql_rev = "select sum(fr.fr_amount) as reverse from fee_receipt fr, fee_reverse frev where fr.student_id='$student_id' $matchFeeType and fr.fr_id=frev.fr_id and fr.fr_status='0'";
+        $sql_rev = "select sum(fr.fr_amount) as reverse from fee_receipt fr, fee_reverse frev where fr.student_id='$student_id' $matchFeeType and fr.fr_id=frev.fr_id and fr.fee_semester<='$semester' and fr.fr_status='0'";
         $result_rev = $conn->query($sql_rev)->fetch_assoc();
         $reverse = $result_rev["reverse"];
         
-        $sql_debit = "select sum(fd_dues) as debit, sum(fd_concession) as concession from fee_dues where student_id='$student_id' $matchFeeType";
+        $sql_debit = "select sum(fd_dues) as debit, sum(fd_concession) as concession from fee_dues where student_id='$student_id' and fee_semester<='$semester'  $matchFeeType";
         $result_debit = $conn->query($sql_debit)->fetch_assoc();
         $dues = $result_debit["debit"];
         $concession = $result_debit["concession"];
@@ -232,11 +234,13 @@ if (isset($_POST['action'])) {
         if ($concession > 0) $subArray["concession"] = $concession;
         else $subArray["concession"] = 0;
 
-        $sql_credit = "select sum(fr_amount) as credit from fee_receipt where student_id='$student_id' $matchFeeType";
+        $sql_credit = "select sum(fr_amount) as credit from fee_receipt where student_id='$student_id' and fee_semester<='$semester' $matchFeeType";
         $result_credit = $conn->query($sql_credit)->fetch_assoc();
         if ($result_credit["credit"] > 0) $subArray["credit"] = $result_credit["credit"];
         else $subArray["credit"] = 0;
         $subArray["balance"] = $subArray["debit"] - $result_credit["credit"]-$subArray["concession"];
+
+
         $json_array["ledger"][] = $subArray;
 
         $tag = array();

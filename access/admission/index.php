@@ -105,14 +105,31 @@ if (!isset($myBatch)) $myBatch = '';
                       <input type="number" class="form-control form-control-sm" id="stdSemester" min="1" name="stdSemester" placeholder="Admission Semester" value="1">
                     </div>
                     <div class="form-group">
-                      <label>Academic Batch</label>
-                      <input type="number" class="form-control form-control-sm" id="stdAcademicBatch" name="stdAcademicBatch" length="4" value="<?php echo $batch; ?>">
+                      <label>Admission Batch</label>
+                      <?php
+                      $sql_batch = "select * from batch where batch_status<>'9' order by batch desc";
+                      $result = $conn->query($sql_batch);
+                      if ($result) {
+                        echo '<select class="form-control form-control-sm" name="sel_admBatch" id="sel_admBatch" required>';
+                        while ($rows = $result->fetch_assoc()) {
+                          $batch_name = $rows['batch'];
+                          $batch_id = $rows['batch_id'];
+                          echo '<option value="' . $batch_id . '">' . $batch_name . '</option>';
+                        }
+                        echo '</select>';
+                      } else echo $conn->error;
+                      if ($result->num_rows == 0) echo 'No Data Found';
+                      ?>
                     </div>
                   </div>
                   <div class="col-md-4">
                     <div class="form-group">
                       <label>Registration Date</label>
                       <input type="date" class="form-control form-control-sm" id="stdAdmission" name="stdAdmission" value="<?php echo $submit_date; ?>">
+                    </div>
+                    <div class="form-group">
+                      <label>Academic Batch</label>
+                      <input type="number" class="form-control form-control-sm" id="stdAcademicBatch" name="stdAcademicBatch" length="4" value="<?php echo $batch; ?>">
                     </div>
                   </div>
                   <div class="col-md-3">
@@ -647,7 +664,7 @@ if (!isset($myBatch)) $myBatch = '';
       }
       if (error == "NO") {
         var formData = $(this).serialize();
-        // alert(" Pressed" + formData);
+        alert(" Pressed" + formData);
         $.post("admissionSql.php", formData, () => {}, "text").done(function(data) {
           // $.alert(data);
           $(".newId").html(data);

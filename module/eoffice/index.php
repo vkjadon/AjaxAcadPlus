@@ -1,8 +1,5 @@
 <?php
-session_start();
-require("../../config_database.php");
-require('../../config_variable.php');
-require('../../php_function.php');
+require('../requireSubModule.php');
 ?>
 
 <!DOCTYPE html>
@@ -10,7 +7,7 @@ require('../../php_function.php');
 
 <head>
   <title>Outcome Based Education : ClassConnect</title>
-  <?php require("../css.php");?>
+  <?php require("../css.php"); ?>
 
 </head>
 
@@ -18,11 +15,10 @@ require('../../php_function.php');
   <?php require("../topBar.php"); ?>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-2">
-        <?php
-        $url = $setUrl . '/acadplus/api/check_dept_head.php?u=' . $myUn . '&&p=' . $myPwd;
-        $dept_head = check_dept_head($url);
-        ?>
+      <div class="col-1 p-0 m-0 full-height">
+        <div class="mt-3 pl-1">
+          <h5>eOffice </h5>
+        </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active inbox" id="list-inbox-list" data-toggle="list" href="#list-inbox" role="tab" aria-controls="inbox"> Inbox </a>
           <a class="list-group-item list-group-item-action compose" id="list-compose-list" data-toggle="list" href="#list-compose" role="tab" aria-controls="compose"> Compose </a>
@@ -30,9 +26,9 @@ require('../../php_function.php');
           <a class="list-group-item list-group-item-action fs" id="list-fs-list" data-toggle="list" href="#list-fs" role="tab" aria-controls="fs"> File System </a>
         </div>
       </div>
-      <div class="col-10">
+      <div class="col-11 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
-          <div class="tab-pane fade show active" id="list-inbox" role="tabpanel" aria-labelledby="list-inbox-list">
+          <div class="tab-pane show active" id="list-inbox" role="tabpanel" aria-labelledby="list-inbox-list">
           </div>
           <div class="tab-pane fade" id="list-compose" role="tabpanel" aria-labelledby="list-compose-list">
             <p id="noticeId"></p>
@@ -206,7 +202,7 @@ require('../../php_function.php');
     </div>
 </body>
 
-<?php require("../js.php");?>
+<?php require("../js.php"); ?>
 <script src="https://cdn.tiny.cloud/1/xjvk0d07c7h90fry9yq9z0ljb019ujam91eo2jk8uhlun307/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
 <script>

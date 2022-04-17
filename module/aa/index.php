@@ -22,6 +22,7 @@ require('../requireSubModule.php');
             <a class="list-group-item list-group-item-action active bs" id="list-bs-list" data-toggle="list" href="#list-bs"> Batch/Session </a>
             <a class="list-group-item list-group-item-action responsibility" id="list-responsibility-list" data-toggle="list" href="#list-responsibility"> Responsibility </a>
             <a class="list-group-item list-group-item-action  master" id="list-master-list" data-toggle="list" href="#list-master"> Master Data </a>
+            <a class="list-group-item list-group-item-action astmp" data-toggle="list" href="#astmp"> Ass Template</a>
           </div>
         </div>
         <div class="col-11 leftLinkBody">
@@ -375,6 +376,9 @@ require('../requireSubModule.php');
                   <p id="masterNameList"></p>
                 </div>
               </div>
+            </div>
+            <div class="tab-pane" id="astmp" role="tabpanel">
+
             </div>
           </div>
         </div>

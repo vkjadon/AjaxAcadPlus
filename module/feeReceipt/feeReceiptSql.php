@@ -351,6 +351,7 @@ if (isset($_POST['action'])) {
     $sql = "select mn_id from master_name where mn_abbri='$fcg' and mn_code='fcg' and mn_status='0'";
     $fee_category = getFieldValue($conn, "mn_id", $sql);
 
+    // echo "$program_id";
     $json_array = array();
     $subArray = array();
 
@@ -414,7 +415,7 @@ if (isset($_POST['action'])) {
         $subArray["fee_bank"] = $rowsFee["fr_bank"];
         $json_array[] = $subArray;
       }
-      echo json_encode($json_array);
     }
+    echo json_encode($json_array);
   }
 }

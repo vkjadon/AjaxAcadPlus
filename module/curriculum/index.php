@@ -13,10 +13,9 @@ require('../requireSubModule.php');
 <body>
   <?php require("../topBar.php"); ?>
   <div class="content">
-
     <div class="container-fluid moduleBody">
       <div class="row">
-      <div class="col-2 p-0 m-0 pl-2 full-height">
+      <div class="col-1 p-0 m-0 pl-1 full-height">
           <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
             <a class="list-group-item list-group-item-action show active cc" id="list-cc-list" data-toggle="list" href="#list-cc" role="tab" aria-controls="cc"> Constitute Committees </a>
             <a class="list-group-item list-group-item-action com" id="list-com-list" data-toggle="list" href="#list-com" role="tab" aria-controls="com"> Communications </a>
@@ -24,9 +23,8 @@ require('../requireSubModule.php');
             <a class="list-group-item list-group-item-action cdreport" id="list-cdreport-list" data-toggle="list" href="#list-cdreport" role="tab" aria-controls="cdreport"> Curriculum Report </a>
           </div>
         </div>
-        <div class="col-10 leftLinkBody">
+        <div class="col-11 leftLinkBody">
           <div class="tab-content" id="nav-tabContent">
-
             <div class="tab-pane fade show active" id="list-cc" role="tabpanel" aria-labelledby="list-cc-list">
               <div class="row">
                 <div class="col-sm-8 p-0">
@@ -39,25 +37,8 @@ require('../requireSubModule.php');
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-sm-8">
-                  <div id="subShowList"></div>
-                </div>
-                <div class="col-sm-4">
-                  <div id="subjectSummary"></div>
-                </div>
-              </div>
             </div>
             <div class="tab-pane fade" id="list-com" role="tabpanel" aria-labelledby="list-com-list">
-
-              <div class="row">
-                <div class="col-sm-7">
-                </div>
-                <div class="col-sm-5">
-                  <h5>Subject Summary</h5>
-                  <div id="subjectSummary"></div>
-                </div>
-              </div>
             </div>
           </div>
         </div>

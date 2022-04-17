@@ -20,125 +20,142 @@ $phpFile = "feeSql.php";
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <?php
-          echo '<a class="list-group-item list-group-item-action active feeStructure" id="list-feeStructure-list" data-toggle="list" href="#feeStructure" role="tab" aria-controls="feeStructure"> Fee Structure </a>';
-          echo '<a class="list-group-item list-group-item-action feeStatus" id="list-feeStatus-list" data-toggle="list" href="#feeStatus" role="tab" aria-controls="feeStatus"> Fee Status </a>';
+          echo '<a class="list-group-item list-group-item-action active feeStructure" id="showFeeStructure" data-toggle="list" href="#feeStructure" role="tab" aria-controls="feeStructure"> Fee Structure </a>';
+          echo '<a class="list-group-item list-group-item-action feeSchedule" data-toggle="list" href="#feeSchedule" role="tab" aria-controls="feeSchedule"> Fee Schedule </a>';
+          echo '<a class="list-group-item list-group-item-action ledgerStatus" data-toggle="list" href="#ledgerStatus" role="tab" aria-controls="ledgerStatus"> Fee Status </a>';
           ?>
         </div>
       </div>
       <div class="col-11 leftLinkBody">
-        <div class="tab-content" id="nav-tabContent">
-          <div class="tab-pane show active" id="feeStructure" role="tabpanel" aria-labelledby="list-feeStructure-list">
+        <div class="card p-2 myCard">
+          <form id="newFee">
             <div class="row">
-              <div class="col-md-10 pr-0">
-                <div class="container card mt-2 myCard">
-                  <form id="newFee">
-                    <div class="row">
-                      <div class="col-md-1 pr-0">
-                        <label>Batch</label>
-                        <p id="batchOption"></p>
-                      </div>
-                      <div class="col-md-2 pl-1 pr-0">
-                        <label>Institute/School</label>
-                        <p id="schoolOption"></p>
-                      </div>
-                      <div class="col-md-2 pl-1 pr-0">
-                        <label>Programme</label>
-                        <p id="programOption">
-                          <input type="text" class="form-control form-control-sm" disabled placeholder="Program">
-                        </p>
-                      </div>
-                      <div class="col-md-2 pl-1 pr-0">
-                        <label>Category</label>
-                        <p id="feeCategory"></p>
-                      </div>
-                      <div class="col-md-1 pl-1 pr-0">
-                        <label>Type</label>
-                        <p id="feeType"></p>
-                      </div>
-                      <div class="col-md-2 pl-1 pr-0">
-                        <label>Component</label>
-                        <p id="feeComponent"></p>
-                      </div>
-                      <div class="col-md-1 pl-1 pr-0">
-                        <div class="form-group">
-                          <label>Semester</label>
-                          <input type="number" class="form-control form-control-sm" id="semester" min="1" name="semester" placeholder="Semester" value="1">
-                        </div>
-                      </div>
-                      <div class="col-md-1 pl-1">
-                        <div class="form-group">
-                          <label>Fee</label>
-                          <input type="number" class="form-control form-control-sm" id="fee" min="0" name="fee" placeholder="Fee" value="0">
-                        </div>
-                      </div>
-                    </div>
-                    <input type="hidden" id="action" name="action" value="addFee">
-                    <button class="btn btn-sm">Add/Update</button>
-                    <a class="fa fa-eye" id="showFeeStructure"></a>
-                    <a class="btn btn-sm" id="manageFeeSchedule">Manage Fee Schedule</a>
-                    <a class="btn btn-success btn-sm" id="ledgerStatus">Ledger Status</a>
-                  </form>
+              <div class="col-md-1 pr-0">
+                <label>Batch</label>
+                <p id="batchOption"></p>
+              </div>
+              <div class="col-md-2 pl-1 pr-0">
+                <label>Institute/School</label>
+                <p id="schoolOption"></p>
+              </div>
+              <div class="col-md-2 pl-1 pr-0">
+                <label>Programme</label>
+                <p id="programOption">
+                  <input type="text" class="form-control form-control-sm" disabled placeholder="Program">
+                </p>
+              </div>
+              <div class="col-md-2 pl-1 pr-0">
+                <label>Category</label>
+                <p id="feeCategory"></p>
+              </div>
+              <div class="col-md-1 pl-1 pr-0">
+                <label>Type</label>
+                <p id="feeType"></p>
+              </div>
+              <div class="col-md-2 pl-1 pr-0">
+                <label>Component</label>
+                <p id="feeComponent"></p>
+              </div>
+              <div class="col-md-1 pl-1 pr-0">
+                <div class="form-group">
+                  <label>Semester</label>
+                  <input type="number" class="form-control form-control-sm" id="semester" min="1" name="semester" placeholder="Semester" value="1">
                 </div>
               </div>
-              <div class="col-md-2 pl-1">
-                <div class="container card mt-2 myCard">
-                  <label>Copy<label>
-                      <input type="number" class="form-control form-control-sm" id="copyBatch" name="copyBatch" minlength="4" min="2000" value="2020">
-                      <button class="btn btn-sm mt-3" id="copyBatchBtn">Copy</button>
+              <div class="col-md-1 pl-1">
+                <div class="form-group">
+                  <label>Fee</label>
+                  <input type="number" class="form-control form-control-sm" id="fee" min="0" name="fee" placeholder="Fee" value="0">
                 </div>
               </div>
-
+            </div>
+            <input type="hidden" id="action" name="action" value="addFee">
+            <button class="btn btn-sm">Add/Update</button>
+          </form>
+        </div>
+        <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane active" id="feeStructure" role="tabpanel" aria-labelledby="list-feeStructure-list">
+            <div class="row">
               <div class="col-md-12">
-                <div class="card mt-2 myCard" id="print" style="overflow: scroll;">
-                  <div class="col-12 mt-2 text-right">
-                    <a onclick="export_data()"><i class="fas fa-file-export"></i></a>
+                <div class="card mt-2 myCard" style="overflow: scroll;">
+                  <div class="row">
+                    <div class="col-md-8 mt-2">
+                      <h5 class="tableTitle m-0 mt-3"></h5>
+                    </div>
+                    <div class="col-md-1 mt-2 pr-0 text-right">
+                      <input type="number" class="form-control form-control-sm" id="copyBatch" name="copyBatch" minlength="4" min="2000" value="2020">
+                    </div>
+                    <div class="col-md-1 mt-1 pl-0">
+                      <button class="btn btn-sm" id="copyBatchBtn">Copy</button>
+                    </div>
                   </div>
-                  <h5 class="tableTitle m-0 mt-3"></h5>
-                  <table class="table table-bordered table-striped list-table-xs mt-3" id="feeStructureList">
-                    <th class="text-center"><i class="fa fa-trash"></i></th>
-                    <th>Batch</th>
-                    <th>Institute</th>
-                    <th>Programme</th>
-                    <th>Category</th>
-                    <th>Type</th>
-                    <th>Component</th>
-                    <th>Semester</th>
-                    <th>Fee</th>
-                  </table>
-                  <table class="table table-bordered table-striped list-table-xs mt-3" id="feeScheduleList">
-                    <th>Batch</th>
-                    <th>Institute</th>
-                    <th>Programme</th>
-                    <th>Category</th>
-                    <th>Type</th>
-                    <th>Semester</th>
-                    <th>Fee</th>
-                    <th>Last Date</th>
-                  </table>
-                  <table class="table table-bordered table-striped list-table-xs mt-3" id="ledgerStatusList">
-                    <th>Student ID</th>
-                    <th>Name</th>
-                    <th>Father Name</th>
-                    <th>Program</th>
-                    <th>Roll Number</th>
-                    <th>Mobile</th>
-                    <th>Fee Category</th>
-                    <th>Dues</th>
-                    <th>Concsn</th>
-                    <th>Credit</th>
-                    <th>Balance</th>
-                    <?php
-                    $sql = "select * from master_name where mn_code='sts' order by mn_id";
-                    $result = $conn->query($sql);
-                    while ($rowsArray = $result->fetch_assoc()) {
-                      echo '<th>' . $rowsArray['mn_abbri'] . '</th>';
-                    }
-                    ?>
-                  </table>
-                  <p id="totalDebit"></p>
-                  <p id="totalCredit"></p>
-                  <p id="totalBalance"></p>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <table class="table table-bordered table-striped list-table-xs mt-3" id="feeStructureList">
+                        <th class="text-center"><i class="fa fa-trash"></i></th>
+                        <th>Batch</th>
+                        <th>Institute</th>
+                        <th>Programme</th>
+                        <th>Category</th>
+                        <th>Type</th>
+                        <th>Component</th>
+                        <th>Semester</th>
+                        <th>Fee</th>
+                      </table>
+                    </div>
+                  </div>
                 </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane" id="feeSchedule" role="tabpanel" aria-labelledby="list-feeSchedule-list">
+            <table class="table table-bordered table-striped list-table-xs mt-3" id="feeScheduleList">
+              <th>Batch</th>
+              <th>Institute</th>
+              <th>Programme</th>
+              <th>Category</th>
+              <th>Type</th>
+              <th>Semester</th>
+              <th>Fee</th>
+              <th>Last Date</th>
+            </table>
+          </div>
+          <div class="tab-pane" id="ledgerStatus" role="tabpanel" aria-labelledby="list-ledgerStatus-list">
+            <div class="row">
+              <div class="col-md-10">
+              </div>
+              <div class="col-md-2">
+                <div class="text-right">
+                  <a onclick="export_data()"><i class="fas fa-file-export"></i></a>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <table class="table table-bordered table-striped list-table-xs mt-3" id="ledgerStatusList">
+                  <th>Student ID</th>
+                  <th>Name</th>
+                  <th>Father Name</th>
+                  <th>Program</th>
+                  <th>Roll Number</th>
+                  <th>Sem</th>
+                  <th>Mobile</th>
+                  <th>Fee Category</th>
+                  <th>Dues</th>
+                  <th>Concsn</th>
+                  <th>Credit</th>
+                  <th>Balance</th>
+                  <?php
+                  $sql = "select * from master_name where mn_code='sts' order by mn_id";
+                  $result = $conn->query($sql);
+                  while ($rowsArray = $result->fetch_assoc()) {
+                    echo '<th>' . $rowsArray['mn_abbri'] . '</th>';
+                  }
+                  ?>
+                </table>
+                <p id="totalDebit"></p>
+                <p id="totalCredit"></p>
+                <p id="totalBalance"></p>
               </div>
             </div>
           </div>
@@ -163,7 +180,7 @@ $phpFile = "feeSql.php";
 
     //  feeStructureList();
 
-    $(document).on('click', '#ledgerStatus', function(event) {
+    $(document).on('click', '.ledgerStatus', function(event) {
       // $.alert("Name");
       $("#ledgerStatusList").show()
 
@@ -180,6 +197,7 @@ $phpFile = "feeSql.php";
           sel_prog: $('#sel_prog').val(),
           sel_school: $('#sel_school').val(),
           ft: $("#sel_ft").val(),
+          semester: $('#semester').val(),
           action: "ledgerStatusList"
         }, () => {}, "json").done(function(data) {
           // $.alert(data);
@@ -199,6 +217,7 @@ $phpFile = "feeSql.php";
             card += '<td>' + value.student_fname + '</td>';
             card += '<td>' + value.program_name + '</td>';
             card += '<td>' + value.student_rollno + '</td>';
+            card += '<td>' + value.semester + '</td>';
             card += '<td>' + value.student_mobile + '</td>';
             card += '<td>' + value.student_fee_category + '</td>';
             card += '<td>' + value.debit + '</td>';
@@ -224,7 +243,7 @@ $phpFile = "feeSql.php";
       }
     });
 
-    $(document).on('click', '#manageFeeSchedule', function(event) {
+    $(document).on('click', '.feeSchedule', function(event) {
       $(".tableTitle").text("Fee Schedule")
       $("#feeScheduleList").show()
       $("#feeStructureList").hide()
@@ -234,7 +253,7 @@ $phpFile = "feeSql.php";
     function feeSchedule() {
       var batchId = $("#sel_batch").val()
       var ft = $("#sel_ft").val()
-      $.alert("Batch " + batchId + " FT " + ft);
+      // $.alert("Batch " + batchId + " FT " + ft);
       $.post("<?php echo $phpFile; ?>", {
         sel_batch: batchId,
         ft: ft,
@@ -324,7 +343,7 @@ $phpFile = "feeSql.php";
 
     function feeStructureList() {
       var batchId = $("#sel_batch").val()
-      $.alert(batchId);
+      // $.alert(batchId);
       $.post("<?php echo $phpFile; ?>", {
         sel_batch: batchId,
         action: "feeStructureList"

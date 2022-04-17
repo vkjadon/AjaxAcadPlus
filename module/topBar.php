@@ -102,7 +102,7 @@ if (!isset($myBatch)) $myBatch = '';
 										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0">Infrastructure</a>
 									</div>
 									<div class="col-6 pl-0">
-										<!-- <a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0">Committees</a> -->
+										<a href="<?php echo $codePath . '/module/eoffice/'; ?>" class="dropdown-item py-0">Office</a>
 										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0">Status Report</a>
 									</div>
 								</div>
@@ -116,7 +116,7 @@ if (!isset($myBatch)) $myBatch = '';
 							<div class="card myCard border">
 								<div class="row">
 									<div class="col-6 pr-0">
-										<!-- <a href="<?php echo $codePath . '/module/curriculum/'; ?>" class="dropdown-item py-0">Curriculum Design </a> -->
+										<a href="<?php echo $codePath . '/module/curriculum/'; ?>" class="dropdown-item py-0">Curriculum Design </a>
 										<a href="<?php echo $codePath . '/module/subject/'; ?>" class="dropdown-item py-0">Manage Subjects </a>
 										<a href="<?php echo $codePath . '/module/teachingLoad/'; ?>" class="dropdown-item py-0">Teaching Load</a>
 										<a href="<?php echo $codePath . '/module/schedule/'; ?>" class="dropdown-item py-0">Schedule</a>
