@@ -146,7 +146,7 @@ require('../requireSubModule.php');
                 </div>
               </div>
             </div>
-            <div class="tab-pane" id="list-master" role="tabpanel">
+            <div class="tab-pane fade" id="list-master" role="tabpanel">
               <div class="row">
                 <div class="col-7 mt-1 mb-1">
                   <div class="container card shadow d-flex justify-content-center mt-2 myCard">
@@ -376,9 +376,73 @@ require('../requireSubModule.php');
                   <p id="masterNameList"></p>
                 </div>
               </div>
-            </div>
-            <div class="tab-pane" id="astmp" role="tabpanel">
+            </div>            
+            <div class="tab-pane fade" id="astmp" role="tabpanel">
+              <div class="row">
+                <div class="col-7 mt-1 mb-1">
+                  <div class="container card mt-2 myCard">
+                    <h5 class="card-title"> Design Assessment Template </h5>
+                    <form class="form-horizontal" id="atmpForm">
+                      <div class="row mt-2">
+                        <div class="col-3">
+                          <label> Template </label>
+                          <p id="selectTemplate"></p>
+                        </div>
+                        <div class="col-3">
+                          <div class="form-group">
+                            <label>Method</label>
+                            <?php
+                            $sql = "select * from master_name where mn_code='am' and mn_status='0' order by mn_name";
+                            $result = $conn->query($sql);
+                            echo '<select class="form-control form-control-sm" name="sel_am">';
+                            while ($rowCCE = $result->fetch_assoc()) {
+                              echo '<option value="' . $rowCCE["mn_id"] . '">' . $rowCCE["mn_name"] . '</option>';
+                            }
+                            echo '</select>';
+                            ?>
+                          </div>
+                        </div>
+                        <div class="col-3">
+                          <div class="form-group">
+                            <label>Tool</label>
+                            <?php
+                            $sql = "select * from master_name where mn_code='at' and mn_status='0' order by mn_name";
+                            $result = $conn->query($sql);
+                            echo '<select class="form-control form-control-sm" name="sel_at">';
+                            while ($rowCCE = $result->fetch_assoc()) {
+                              echo '<option value="' . $rowCCE["mn_id"] . '">' . $rowCCE["mn_name"] . '</option>';
+                            }
+                            echo '</select>';
+                            ?>
+                          </div>
+                        </div>
 
+                        <div class="col-3">
+                          <div class="form-group">
+                            <label> Weightage</label>
+                            <input class="form-control form-control-sm" id="weightage" name="weightage" required>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col">
+                          <input type="radio" id="cie" checked name="internal" value="CIE"> CIE(Internal)
+                          <input type="radio" id="see" name="internal" value="SEE"> SEE(External)
+                        </div>
+
+                        <div class="col">
+                          <input type="hidden" id="action" name="action" value="addTemplate">
+                          <button type="submit" class="btn btn-sm atmp">Submit</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <p id="atmpList"></p>
+                </div>
+                <div class="col-4 mt-1 mb-1" role="tabpanel">
+                  <p id="tabList"></p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -394,6 +458,7 @@ require('../requireSubModule.php');
     $('[data-toggle="tooltip"]').tooltip();
     batchList();
     masterNameList();
+    selectTemplate();
     selectList("sch");
     batchSession(<?php echo $myBatch; ?>)
     //Auto Search Block
@@ -564,7 +629,28 @@ require('../requireSubModule.php');
         $.alert("fail in place of error");
       })
     });
+    $(document).on('submit', '#atmpForm', function(event) {
+      event.preventDefault(this);
+      var formData = $(this).serialize();
+      //$.alert(formData);
+      $.post("aaSql.php", formData, () => {}, "text").done(function(data, status) {
+        //$.alert("List Updtaed" + data);
+        atmpList();
+        selectTemplate();
+      })
+    });
 
+    function atmpList() {
+      //$.alert("In List Function" + grid);
+      $.post("aaSql.php", {
+        action: "atmpList"
+      }, function() {}, "text").done(function(data, status) {
+        //$.alert(data);
+        $("#atmpList").html(data);
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+    }
     function masterNameList() {
       var headName = $("input[name='headName']:checked").val();
       //$.alert("Master Name " + headName);
@@ -727,6 +813,18 @@ require('../requireSubModule.php');
     });
 
     // Functions
+    function selectTemplate() {
+      //$.alert("In List Function");
+      $.post("aaSql.php", {
+        action: "selectTemplate"
+      }, function() {}, "text").done(function(data, status) {
+        //$.alert(data);
+        $("#selectTemplate").html(data);
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+    }
+
     function selectList(tag) {
       // $.alert( "Select " + tag);
       $.post("aaSql.php", {

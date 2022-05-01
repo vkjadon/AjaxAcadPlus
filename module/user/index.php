@@ -21,57 +21,64 @@ $phpFile = "userSql.php";
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <?php
-          if (in_array("18", $myLinks)) echo '<a class="list-group-item list-group-item-action ml" id="list-ml-list" data-toggle="list" href="#list-ml" role="tab" aria-controls="ml">Links to Responsibility</a>';
-          if (in_array("17", $myLinks)) echo '<a class="list-group-item list-group-item-action aru" id="list-aru-list" data-toggle="list" href="#list-aru" role="tab" aria-controls="aru">Add/Remove</a>';
-          // if (in_array("19", $myLinks)) echo '<a class="list-group-item list-group-item-action ulr" id="list-ulr-list" data-toggle="list" href="#list-ulr" role="tab" aria-controls="ulr">User Log Report</a>';
+          if (in_array("17", $myLinks)) echo '<a class="list-group-item active list-group-item-action aru" id="list-aru-list" data-toggle="list" href="#list-aru" role="tab" aria-controls="aru">User</a>';
+          if (in_array("18", $myLinks)) echo '<a class="list-group-item list-group-item-action ml" id="list-ml-list" data-toggle="list" href="#list-ml" role="tab" aria-controls="ml">Responsibility Link</a>';
+          if (in_array("19", $myLinks)) echo '<a class="list-group-item list-group-item-action ulr" id="list-ulr-list" data-toggle="list" href="#list-ulr" role="tab" aria-controls="ulr">User Log Report</a>';
           ?>
         </div>
       </div>
       <div class="col-11 leftLinkBody">
-        <div class="tab-content" id="nav-tabContent">
-          <div class="tab-pane fade" id="list-aru" role="tabpanel" aria-labelledby="list-aru-list">
-          <div class="row">
-            <div class="col-4 pr-0">
-              <div class="card border-info">
-                <div class="card-body text-primary">
-                  <div class="row">
-                    <div class="col-4 pr-0">
-                      <input name="userId" id="userId" class="form-control form-control-sm" type="text" placeholder="Search User" aria-label="Search">
-                    </div>
-                    <div class="col-4 pl-1 pr-0">
-                      <button type="button" class="btn btn-block btn-sm" id="searchStudent"><i class="fas fa-search"></i>Student</button>
-                    </div>
-                    <div class="col-4 pl-1">
-                      <button type="button" class="btn btn-block btn-sm" id="searchStaff"><i class="fas fa-search"></i>Staff</button>
-                    </div>
+        <div class="row">
+          <div class="col-4 pr-0">
+            <div class="card border-info">
+              <div class="card-body text-primary">
+                <div class="row">
+                  <div class="col-4 pr-0">
+                    <input name="userId" id="userId" class="form-control form-control-sm" type="text" placeholder="Search User" aria-label="Search">
+                  </div>
+                  <div class="col-4 pl-1 pr-0">
+                    <button type="button" class="btn btn-block btn-sm" id="searchStudent"><i class="fas fa-search"></i>Student</button>
+                  </div>
+                  <div class="col-4 pl-1">
+                    <button type="button" class="btn btn-block btn-sm" id="searchStaff"><i class="fas fa-search"></i>Staff</button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-            <div class="row">
-              <div class="col-6">
-                <div class="container card mt-2 myCard">
-                  <div class="row">
-                    <div class="col-12">
-                      <p class="applicationForm"></p>
-                    </div>
+          <div class="col-4 pl-1 pr-0">
+            <div class="card border-info">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-12 py-1">
+                    <span class="studentInfo">No Student Selected</span>
                   </div>
-                  <h4>User History</h4>
                 </div>
               </div>
-              <div class="col-6">
-                <div class="container card mt-2 myCard">
-                  <div class="row">
-                    <div class="col-12">
-                      <p class="text-center">
-                      <h1>User Status : <span class="userStatus"></span> </h1>
-                      </p>
-                      <button class="btn btn-success">Create User</button>
-                      <button class="btn">Suspend User</button>
-                      <button class="btn btn-danger">Remove User</button>
-                    </div>
+            </div>
+          </div>
+          <div class="col-4 pl-1">
+            <div class="card border-danger">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-12 py-1">
+                    <span class="staffInfo">No Staff Selected</span>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-content" id="nav-tabContent">
+          <div class="tab-pane show active" id="list-aru" role="tabpanel" aria-labelledby="list-aru-list">
+            <div class="row">
+              <div class="col-4">
+                <div class="card mt-2 myCard">
+                  <h1>User Status : <span class="userStatus"></span> </h1>
+                  <button class="btn">Manage Privilege</button>
+                  <button class="btn btn-success">Create User</button>
+                  <button class="btn btn-default">Suspend User</button>
+                  <button class="btn btn-danger">Remove User</button>
                 </div>
               </div>
             </div>
@@ -87,6 +94,7 @@ $phpFile = "userSql.php";
                       curl_setopt($curl, CURLOPT_URL, "https://classconnect.in/api/get_portal_group.php");
                       curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
                       $output = curl_exec($curl);
+                      curl_close($curl);
                       $group = json_decode($output, true);
                       echo '<select class="form-control form-control-sm" name="sel_pg" id="sel_pg" required title="Select Link Group">';
                       echo '<option value="0" disabled>Select Group</option>';
@@ -95,7 +103,6 @@ $phpFile = "userSql.php";
                         echo '<option value="' . $group["data"][$i]["id"] . '">' . $group["data"][$i]["id"] . '-' . $group["data"][$i]["name"] . '</option>';
                       }
                       echo '</select>';
-                      curl_close($curl);
                       ?>
                     </div>
                   </div>
@@ -115,7 +122,6 @@ $phpFile = "userSql.php";
             </div>
           </div>
           <div class="tab-pane fade" id="list-ulr" role="tabpanel" aria-labelledby="list-ulr-list">
-
           </div>
         </div>
       </div>
@@ -130,8 +136,8 @@ $phpFile = "userSql.php";
 <script>
   $(document).ready(function() {
     $(function() {
-			$(document).tooltip();
-		});
+      $(document).tooltip();
+    });
 
     $(document).on('click', '.updateRL', function(event) {
       var pl = $(this).attr("data-pl");
@@ -207,28 +213,12 @@ $phpFile = "userSql.php";
         action: "studentDisp"
       }, function() {}, "json").done(function(data, status) {
         // $.alert(data);
-        var card = '<h4>' + data.student_name + ' [' + data.user_id + ']</h4>';
-        card += '<table class="table list-table-xs">';
-        card += '<tr>';
-        card += '<td> Program Name </td><td>' + data.program_name + '</td>';
-        card += '<td> Batch </td><td>' + data.batch + '</td>';
-        card += '</tr>';
+        var card = data.student_name + ' [' + data.user_id + ']';
 
-        card += '<tr>';
-        card += '<td> Mobile </td><td>' + data.student_mobile + '</td>';
-        card += '<td> Email </td><td>' + data.student_email + '</td>';
-        card += '</tr>';
-
-        card += '<tr><td colspan="4"><h4>Parents Information</h4></td></tr>'
-
-        card += '<tr>';
-        card += '<td> Father Name </td><td>' + data.student_fname + '</td>';
-        card += '<td>' + data.student_fmobile + '</td>';
-        card += '<td>' + data.student_femail + '</td>';
-        card += '</tr>';
-
-        card += '</table>';
-        $(".applicationForm").html(card);
+        card += data.program_name + '[' + data.batch + ']';
+        card += 'Mobile' + data.student_mobile;
+        card += 'Email' + data.student_email;
+        $(".studentInfo").html(card);
 
       }).fail(function() {
         $.alert("Could not Fetch Student Data!!");
@@ -257,17 +247,10 @@ $phpFile = "userSql.php";
         action: "staffDisp"
       }, function() {}, "json").done(function(data, status) {
         // $.alert(data);
-        var card = '<h4>' + data.staff_name + ' [' + data.user_id + ']</h4>';
-        card += '<table class="table list-table-xs">';
-        card += '<tr>';
-        card += '<td> Mobile </td><td>' + data.staff_mobile + '</td>';
-        card += '</tr>';
-
-        card += '<tr>';
-        card += '<td> Email </td><td>' + data.staff_email + '</td>';
-        card += '</tr>';
-        card += '</table>';
-        $(".applicationForm").html(card);
+        var card = data.staff_name + ' [' + data.user_id + ']';
+        card += ' Mobile ' + data.staff_mobile;
+        card += 'Email ' + data.staff_email;
+        $(".staffInfo").html(card);
 
       }).fail(function() {
         $.alert("Could not Fetch Student Data!!");

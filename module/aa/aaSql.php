@@ -91,10 +91,10 @@ if (isset($_POST['action'])) {
     // echo "inside update batch";
   } elseif ($_POST["action"] == "headName") {
     $id = $_POST['mn_id'];
-    if($id==0)$sql = "insert into master_name (mn_code, mn_name, mn_abbri, mn_remarks, mn_status, update_id) values('" . $_POST["headName"] . "', '" . $_POST["name"] . "', '" . $_POST["abbri"] . "', '" . $_POST["remarks"] . "', '0', '$myId')";
-    else $sql="update master_name set mn_name='" . $_POST["name"] . "', mn_abbri='" . $_POST["abbri"] . "', mn_remarks='" . $_POST["remarks"] . "' where mn_id='$id'";
-    if($id>0)$text="Update Successfully";
-    else $text="Added Successfully";
+    if ($id == 0) $sql = "insert into master_name (mn_code, mn_name, mn_abbri, mn_remarks, mn_status, update_id) values('" . $_POST["headName"] . "', '" . $_POST["name"] . "', '" . $_POST["abbri"] . "', '" . $_POST["remarks"] . "', '0', '$myId')";
+    else $sql = "update master_name set mn_name='" . $_POST["name"] . "', mn_abbri='" . $_POST["abbri"] . "', mn_remarks='" . $_POST["remarks"] . "' where mn_id='$id'";
+    if ($id > 0) $text = "Update Successfully";
+    else $text = "Added Successfully";
     if ($conn->query($sql)) echo $text;
     else echo $conn->error;
   } elseif ($_POST["action"] == "mnFetch") {
@@ -133,6 +133,60 @@ if (isset($_POST['action'])) {
       echo '</div>';
     }
     echo '</div>';
+  } elseif ($_POST['action'] == 'selectTemplate') {
+    $sql = "select * from $tn_atmp where atmp_status='0' group by atmp_template order by atmp_template";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+    $i = 1;
+    echo '<select class="form-control form-control-sm" id="sel_template" name="sel_template" required>';
+    //echo '<option>Select a Template</option>';
+    while ($rowsArray = $result->fetch_assoc()) {
+      $id = $rowsArray["atmp_template"];
+      echo '<option value="' . $id . '">Template-' . $i++ . '</option>';
+    }
+    echo '<option value="' . $i . '">New Template</option>';
+    echo '</select>';
+  } elseif ($_POST['action'] == 'addTemplate') {
+    $sql = "insert into $tn_atmp (am_id, at_id, atmp_template, atmp_weightage, atmp_internal, update_id, atmp_status) values('" . data_check($_POST['sel_am']) . "', '" . data_check($_POST['sel_at']) . "', '" . data_check($_POST['sel_template']) . "', '" . data_check($_POST['weightage']) . "', '" . data_check($_POST['internal']) . "', '$myId','0')";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+    echo "Added";
+  } elseif ($_POST['action'] == 'atmpList') {
+    $totalTemplates = getMaxField($conn, $tn_atmp, "atmp_template");
+    //echo $totalTemplates;
+    for ($i = 1; $i <= $totalTemplates; $i++) {
+      $sql = "select * from $tn_atmp where atmp_template='$i' order by atmp_internal";
+      $result = $conn->query($sql);
+      if (!$result) echo $conn->error;
+      echo '<div class="row">';
+      echo '<div class="col-12">';
+      echo '<div class="container card mt-2 myCard">';
+      echo '<h4">Template-' . $i . '</h4>';
+      echo '<table class="table table-striped list-table-xs">';
+      echo '<tr><th></th><th>Tool</th><th>Method</th><th>Component</th><th>Weightage</th><th></th></tr>';
+
+      while ($rowsArray = $result->fetch_assoc()) {
+        $status = $rowsArray["atmp_status"];
+        $internal = $rowsArray["atmp_internal"];
+        $at = getField($conn, $rowsArray["at_id"], "master_name", "mn_id", "mn_name");
+        $am = getField($conn, $rowsArray["am_id"], "master_name", "mn_id", "mn_name");
+        //echo $at.'-'.$am;
+        echo '<tr>';
+        echo '<td><a href="#" class="fa fa-pencil-alt float-left rp_idE" data-id="' . $rowsArray["at_id"] . '"></a></td>';
+        echo '<td>' . $at . '</td>';
+        echo '<td>' . $am . '</td>';
+        if ($internal == 'CIE') echo '<td>CIE (Internal)</td>';
+        else echo '<td>SEE (External)</td>';
+        echo '<td>' . $rowsArray["atmp_weightage"] . '</td>';
+        if ($status == "9") echo '<td><a href="#" class="float-right rp_idR" data-id="' . $rowsArray["at_id"] . '"><i class="fa fa-refresh" aria-hidden="true"></i></a></td>';
+        else echo '<td><a href="#" class="float-right rp_idD" data-id="' . $rowsArray["at_id"] . '"><i class="fa fa-trash"></i></a></td>';
+        echo '</tr>';
+      }
+      echo '</table>';
+      echo '</div>';
+      echo '</div>';
+      echo '</div>';
+    }
   } elseif ($_POST['action'] == 'selectList') {
     $tag = $_POST['tag'];
     $mn_abbri = getField($conn, $tag, "master_name", "mn_id", "mn_abbri");
