@@ -10,7 +10,9 @@ require('../requireSubModule.php');
 </head>
 
 <body>
-  <?php require("../topBar.php"); ?>
+  <?php 
+  require("../topBar.php"); 
+  ?>
   <div class="container-fluid moduleBody">
     <div class="row">
       <div class="col-1 p-0 m-0 full-height">

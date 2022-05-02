@@ -17,20 +17,20 @@ if (isset($_POST['action'])) {
          $output = $result->fetch_assoc();
       }
       echo json_encode($output);
-   } elseif ($_POST['action'] == 'fetchStaff') {
-      $id = $_POST['userId'];
-      // echo $id;
-      $sql = "select s.* from staff s where s.user_id='$id'";
+   } elseif ($_POST['action'] == 'staffDisp') {
+      $id = data_check($_POST['userId']);
+      $sql = "select * from user_privilege where user_id='$id'";
+      $result = $conn->query($sql);
+      if ($result->num_rows == 0) {
+         $sql_insert = "insert into user_privilege (user_id, up_code, up_status) values('$id', '0', '0')";
+         $conn->query($sql_insert);
+      }
+      $sql = "select s.*, upr.* from staff s, user_privilege upr where s.user_id=upr.user_id and s.user_id='$id'";
+      // $sql = "select s.* from staff s where s.user_id='$id'";
       $result = $conn->query($sql);
       if ($result) {
          $output = $result->fetch_assoc();
       } else echo $conn->error;
-      echo json_encode($output);
-   } elseif ($_POST['action'] == 'staffDisp') {
-      $id = $_POST['userId'];
-      $sql = "select s.* from staff s where s.user_id='$id'";
-      $result = $conn->query($sql);
-      $output = $result->fetch_assoc();
       echo json_encode($output);
    } elseif ($_POST['action'] == 'groupLinkList') {
       // $respArray = array();
@@ -76,8 +76,59 @@ if (isset($_POST['action'])) {
          echo json_encode($json_array);
       } else $links = 0;
    } elseif ($_POST['action'] == 'updateRL') {
-      if($_POST['tag']=="add")$sql_rl = "insert into responsibility_link (pl_id, mn_id) values ('".$_POST['pl']."', '".$_POST['mn']."')";
-      else $sql_rl = "delete from responsibility_link where pl_id='".$_POST['pl']."' and mn_id= '".$_POST['mn']."'";
+      if ($_POST['tag'] == "add") $sql_rl = "insert into responsibility_link (pl_id, mn_id) values ('" . $_POST['pl'] . "', '" . $_POST['mn'] . "')";
+      else $sql_rl = "delete from responsibility_link where pl_id='" . $_POST['pl'] . "' and mn_id= '" . $_POST['mn'] . "'";
       $result_rl = $conn->query($sql_rl);
+   } elseif ($_POST['action'] == 'updateUpr') {
+      $sql = "update user_privilege set up_code='" . $_POST['value'] . "' where user_id= '" . $_POST['userId'] . "'";
+      $result = $conn->query($sql);
+   } elseif ($_POST['action'] == 'staffList') {
+      $sql = "SELECT s.* from staff s where s.staff_status='0' order by s.staff_name";
+      //  echo $count;
+      $result = $conn->query($sql);
+      if (!$result) echo $conn->error;
+    else {
+      $json_array = array();
+      $subArray = array();
+      $count=0;
+      while ($rowsStaff = $result->fetch_assoc()) {
+         $count++;
+         $subArray["count"] = $count;
+         $staff_id = $rowsStaff["staff_id"];
+         $user_id = $rowsStaff["user_id"];
+         $subArray["user_id"] = $user_id;
+         $subArray["staff_name"] = $rowsStaff["staff_name"];
+         $subArray["staff_mobile"] = $rowsStaff["staff_mobile"];
+         $subArray["staff_status"] = $rowsStaff["staff_status"];
+
+         $sql_user="select * from user where staff_id='$staff_id'";
+         $result_user=$conn->query($sql_user);
+         if($result_user && $result_user->num_rows==1){
+            $rowsUser=$result_user->fetch_assoc();
+            $subArray["user_status"] =$rowsUser["user_status"]; 
+            $subArray["last_login"] =$rowsUser["last_login"]; 
+         }else $subArray["user_status"]="100";
+
+         $sql_up="select * from user_privilege where user_id='$user_id'";
+         $result_user=$conn->query($sql_up);
+         if($result_user && $result_user->num_rows==1){
+            $rowsUser=$result_user->fetch_assoc();
+            $subArray["up_code"] =$rowsUser["up_code"]; 
+         }else $subArray["up_code"]="100";
+
+         // $subArray["user_status"]=$result_user->num_rows;
+         $json_array[] = $subArray;
+      }
+      echo json_encode($json_array); 
+         //   echo '<div class="card">';
+         //   echo '<div class="row m-1">';
+         //   echo '<div class="col-10"><h7 class="card-title">' . $staff_name . '</h7>[<span class="card-subtitle mb-2 text-muted">' . $user_id . '</span>]</div>';
+         //   echo '<div class="col-1 p-0">';
+         //   if ($result->num_rows > 0)  echo '<a href="#" class="fa fa-minus removeUser" data-id="' . $staff_id . '"></a></div>';
+         //   else echo '<a href="#" class="fa fa-plus addUser" data-id="' . $staff_id . '"></a></div>';
+         //   echo '<div class="col-1 p-0"><a href="#" class="fa fa-edit editStaff" data-staff="' . $staff_id . '"></a></div>';
+         //   echo '</div>';
+         //   echo '</div>';
+      }
    }
 }

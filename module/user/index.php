@@ -64,6 +64,17 @@ $phpFile = "userSql.php";
                   <div class="col-12 py-1">
                     <span class="staffInfo">No Staff Selected</span>
                   </div>
+                  <div class="col-12 py-1">
+                    <div class="form-check-inline">
+                      <input type="radio" class="form-check-input upr" id="faculty" name="up_code" value="0">Faculty
+                    </div>
+                    <div class="form-check-inline">
+                      <input type="radio" class="form-check-input upr" id="staff" name="up_code" value="1">Staff
+                    </div>
+                    <div class="form-check-inline">
+                      <input type="radio" class="form-check-input upr" id="admin" name="up_code" value="9">Admin
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -72,14 +83,18 @@ $phpFile = "userSql.php";
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="list-aru" role="tabpanel" aria-labelledby="list-aru-list">
             <div class="row">
-              <div class="col-4">
-                <div class="card mt-2 myCard">
-                  <h1>User Status : <span class="userStatus"></span> </h1>
-                  <button class="btn">Manage Privilege</button>
-                  <button class="btn btn-success">Create User</button>
-                  <button class="btn btn-default">Suspend User</button>
-                  <button class="btn btn-danger">Remove User</button>
-                </div>
+              <div class="col-10">
+                <h4>Staff User</h4>
+                <table class="table table-bordered table-striped list-table-xs mt-3" id="staffList">
+                  <th class="text-center">#</th>
+                  <th class="text-center">Id</th>
+                  <th class="text-center">Name</th>
+                  <th class="text-center">Mobile</th>
+                  <th class="text-center">Staff Status</th>
+                  <th class="text-center">User Status</th>
+                  <th class="text-center">Privilege</th>
+                  <th class="text-center">Last Login</th>
+                </table>
               </div>
             </div>
           </div>
@@ -139,6 +154,7 @@ $phpFile = "userSql.php";
       $(document).tooltip();
     });
 
+    staffList();
     $(document).on('click', '.updateRL', function(event) {
       var pl = $(this).attr("data-pl");
       var mn = $(this).attr("data-mn");
@@ -226,20 +242,6 @@ $phpFile = "userSql.php";
     }
 
     $(document).on('click', '#searchStaff', function(event) {
-      var userId = $("#userId").val();
-      $.alert(userId);
-      $.post("userSql.php", {
-        action: "fetchStaff",
-        userId: userId
-      }, () => {}, "json").done(function(data) {
-        // $.alert(data);
-        staffDisp();
-      }).fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
-    function staffDisp() {
       var userId = $("#userId").val()
       $.alert(" Staff Display Function  Id " + userId);
       $.post("userSql.php", {
@@ -247,16 +249,73 @@ $phpFile = "userSql.php";
         action: "staffDisp"
       }, function() {}, "json").done(function(data, status) {
         // $.alert(data);
+        var priv = data.up_code;
         var card = data.staff_name + ' [' + data.user_id + ']';
         card += ' Mobile ' + data.staff_mobile;
         card += 'Email ' + data.staff_email;
+
+        if (priv == '0') {
+          document.getElementById("faculty").checked = true;
+        } else if (priv == '1') {
+          document.getElementById("staff").checked = true;
+        } else if (priv == '9') {
+          document.getElementById("admin").checked = true;
+        }
+
         $(".staffInfo").html(card);
 
       }).fail(function() {
         $.alert("Could not Fetch Student Data!!");
       })
-    }
+    });
 
+    $(document).on('click', '.upr', function(event) {
+      var userId = $("#userId").val()
+      var value = $(this).val()
+      $.alert(" Value " + value + " Staff " + userId);
+      $.post("userSql.php", {
+        userId: userId,
+        value: value,
+        action: "updateUpr",
+      }, () => {}, "text").done(function(data) {
+        // $.alert(data);
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+    function staffList() {
+      // $.alert("Batch");
+      $.post("userSql.php", {
+        action: "staffList",
+      }, function() {}, "json").done(function(data, status) {
+        // $.alert(data);
+        // console.log(data);
+        var card = '';
+        $.each(data, function(key, value) {
+          card += '<tr>';
+          card += '<td class="text-center">' + value.count + '</td>';
+          card += '<td class="text-center">' + value.user_id + '</td>';
+          card += '<td>' + value.staff_name + '</td>';
+          card += '<td class="text-center">' + value.staff_mobile + '</td>';
+          if(value.staff_status==0)card += '<td class="text-center">Active</td>';
+          else card += '<td class="text-center text-danger">Left</td>';
+          if(value.user_status==0)card += '<td class="text-center">User</td>';
+          else card += '<td class="text-center text-danger">Not a User</td>';
+          if(value.up_code==0)card += '<td class="text-center">Faculty</td>';
+          else if(value.up_code==1)card += '<td class="text-center">Staff</td>';
+          else if(value.up_code==9)card += '<td class="text-center text-large">Admin</td>';
+          else card += '<td class="text-center text-danger">Not Set</td>';
+          card += '<td class="text-center">' + value.last_login + '</td>';
+          card += '</tr>';
+        });
+        $("#staffList").find("tr:gt(0)").remove();
+        $("#staffList").append(card);
+
+      }).fail(function() {
+        $.alert("Error in Receipt!!");
+      })
+
+    }
     function getFormattedDate(ts, fmt) {
       var a = new Date(ts);
       var day = a.getDate();

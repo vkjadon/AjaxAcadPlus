@@ -1462,10 +1462,60 @@ function check_tn_user($conn, $table)
       'staff_id int(4) NULL,
     student_id INT(5) NULL,
     user_password varchar(150) NULL,
+    user_privilege int(1) DEFAULT 0,
     last_login timestamp DEFAULT CURRENT_TIMESTAMP,
     user_status int(1) NULL,
     UNIQUE(staff_id, student_id)';
 
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+function check_tn_userLog($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'user_id varchar(10) NULL,
+    ul_login timestamp NULL,
+    ul_logout timestamp NULL ';
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+function check_tn_userActivity($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+      'user_id varchar(10) NULL,
+      ua_name varchar(50) NULL,
+    ua_time timestamp';
+    $sql = "CREATE TABLE $table ($query)";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+  }
+  //else echo "Table Exists";
+}
+function check_tn_up($conn, $table)
+{
+  $sql = "select * from $table";
+  $result = $conn->query($sql);
+  if (!$result) {
+    //echo "Table Missing $table";
+    $query =
+    'user_id varchar(10) NOT NULL,
+    up_code int(1) default 0,
+    up_time timestamp,
+    up_status int(1) default 0';
     $sql = "CREATE TABLE $table ($query)";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;

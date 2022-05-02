@@ -33,7 +33,15 @@ if ($_POST['action'] == 'checkUser') {
         $response["user"] = $staff_id;
         $jsonOutput = json_encode($response);
 
+        $last_login = date("Y-m-d h:i:s", time());
+        $sql = "update user set last_login='$last_login' where staff_id='$staff_id'";
+        $result = $conn->query($sql);
+
+        $sql = "insert into user_log (user_id, ul_login) values('$myUn', '$last_login')";
+        $result = $conn->query($sql);
+
         echo $jsonOutput;
+
         $_SESSION['myid'] = $staff_id;
         $_SESSION['mysclid'] = $school_id;
 
@@ -42,6 +50,7 @@ if ($_POST['action'] == 'checkUser') {
         $rows = $result->fetch_assoc();
 
         $_SESSION["setUrl"] = $rows["inst_url"];
+        $_SESSION["timeLag"] = $rows["inst_timelag"];
         $_SESSION["setLogo"] = 'https://erp.classconnect.in/' . $myFolder . $rows["inst_logo"];
 
         $sql = "select * from session where session_status='0' order by session_id desc";
@@ -54,6 +63,7 @@ if ($_POST['action'] == 'checkUser') {
         $rows = $result->fetch_assoc();
         $_SESSION['myBatch'] = $rows["batch_id"];
 
+        $_SESSION['mll'] = $last_login;
         $_SESSION['un'] = $myUn;
         $_SESSION['pwd'] = $myPwd;
       } else {

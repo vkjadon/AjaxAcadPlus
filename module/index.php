@@ -14,7 +14,7 @@ if (!isset($myDept)) {
 		$rows = $result->fetch_assoc();
 		$myDept = $rows["dept_id"];
 		$_SESSION['mydeptid'] = $myDept;
-	} else $_SESSION['mydeptid'] = '1';
+	} //else $_SESSION['mydeptid'] = '1';
 }
 if (!isset($myProg)) {
 	$sql = "select p.* from program p where p.program_status='0' order by p.sp_abbri";
@@ -23,7 +23,7 @@ if (!isset($myProg)) {
 		$rows = $result->fetch_assoc();
 		$myProg = $rows["program_id"];
 		$_SESSION['mypid'] = $myProg;
-	} else $_SESSION['mypid'] = '1';
+	} //else $_SESSION['mypid'] = '1';
 }
 ?>
 <!DOCTYPE html>
@@ -67,7 +67,9 @@ if (!isset($myProg)) {
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
 </head>
 <body>
-	<?php require("topBar.php"); ?>
+<?php 
+  require("topBar.php"); 
+  ?>
 	<div class="container-fluid moduleBody">
 		<div class="row">
 			<div class="col-md-3">
@@ -143,6 +145,7 @@ if (!isset($myProg)) {
 			</div>
 			<div class="col-md-3">
 				<?php
+				// echo 'P-'.$privilege;
 				require("setDefault.php");
 				?>
 				<div class="card myCard">
@@ -436,7 +439,6 @@ if (!isset($myProg)) {
 			}, function(mydata, mystatus) {
 				//alert("- School Updated -" + mydata);
 				location.reload();
-
 			}, "text").fail(function() {
 				$.alert("Error in School!!");
 			})

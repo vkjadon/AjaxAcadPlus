@@ -274,6 +274,7 @@
     inst_address VARCHAR(100) NULL,
     inst_city VARCHAR(20) NULL,
     inst_pincode int(6) NULL,
+    inst_timelag int(6) NULL,
     inst_state varchar(50) NULL,
     inst_type varchar(10) NULL,
     inst_url varchar(100) NULL,

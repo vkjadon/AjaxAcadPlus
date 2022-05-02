@@ -10,6 +10,8 @@ if (isset($_SESSION["myDb"])) $myDb = $_SESSION['myDb'];
 
 if (isset($_SESSION['un'])) $myUn = $_SESSION['un'];
 if (isset($_SESSION['pwd'])) $myPwd = $_SESSION['pwd'];
+if (isset($_SESSION['mll'])) $myMll = $_SESSION['mll'];
+if (isset($_SESSION['timeLag'])) $myTimeLag = $_SESSION['timeLag'];
 if (isset($_SESSION["myid"])) $myId = $_SESSION['myid'];
 if (isset($_SESSION["privledge"])) $myPriv = $_SESSION['privledge'];
 
@@ -92,6 +94,9 @@ if (isset($mySes)) {
   check_tn_todo($conn, "todo");
   check_tn_template_question($conn, "template_question");
   check_tn_user($conn, "user");
+  check_tn_userLog($conn, "user_log");
+  check_tn_userActivity($conn, "user_activity");
+  check_tn_up($conn, "user_privilege");
 
   $tn_atmp = 'assessment_template' . $mySes;
   check_tn_atmp($conn, $tn_atmp);

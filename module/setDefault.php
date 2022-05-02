@@ -4,6 +4,7 @@
 			<div class="row">
 				<div class="col-6 pr-0" title="Institution/School">
 					<?php
+					// echo $myScl.'-'.$myDept.'-'.$myProg;
 					if (isset($myScl)) {
 						$name = getField($conn, $myScl, "school", "school_id", "school_abbri");
 						$sql = "select * from school where school_status='0' order by school_name";
@@ -18,14 +19,15 @@
 					<?php
 					if (isset($myDept) && isset($myScl)) {
 						$name = getField($conn, $myDept, "department", "dept_id", "dept_abbri");
-						$sql = "select d.* from department d, school_dept sd where d.dept_id=sd.dept_id and sd.school_id='$myScl' and d.dept_status='0' and d.dept_type='0' order by d.dept_name";
-						selectList($conn, 'Department', array('0', 'dept_id', 'dept_abbri',  'dept_name', 'sel_dept', $myDept, $name), $sql);
+						$sql = "select * from department where dept_status='0' order by dept_name";
+
+						selectList($conn, 'Department', array('1', 'dept_id', 'dept_abbri',  'dept_name', 'sel_dept', $myDept, $name), $sql);
 					} elseif (isset($myScl)) {
-						$sql = "select d.* from department d, school_dept sd where d.dept_id=sd.dept_id and sd.school_id='$myScl' and d.dept_type='0' and d.dept_status='0' order by dept_name";
-						selectList($conn, 'Department', array('0', 'dept_id', 'dept_abbri',  'dept_name', 'sel_dept'), $sql);
+						$sql = "select * from department where dept_status='0' order by dept_name";
+						selectList($conn, 'Department', array('1', 'dept_id', 'dept_abbri',  'dept_name', 'sel_dept'), $sql);
 					} else {
-						$sql = "select * from department where d.dept_type='0' and dept_status='0' order by dept_name";
-						selectList($conn, 'Department', array('0', 'dept_id', 'dept_abbri',  'dept_name', 'sel_dept'), $sql);
+						$sql = "select * from department where dept_status='0' order by dept_name";
+						selectList($conn, 'Department', array('1', 'dept_id', 'dept_abbri',  'dept_name', 'sel_dept'), $sql);
 					}
 					?>
 				</div>
@@ -72,8 +74,6 @@
 					?>
 
 				</div>
-
-
 			</div>
 		</div>
 	</div>
