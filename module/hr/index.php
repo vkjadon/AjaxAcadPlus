@@ -1,5 +1,7 @@
 <?php
 require('../requireSubModule.php');
+addActivity($conn, $myId, "Manage Staff - HR");
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -76,7 +78,7 @@ require('../requireSubModule.php');
                               <div class="border">
                                 <form class="form-horizontal" id="uploadModalForm">
                                   <input type="file" name="upload_file">
-                                  <input type="hidden" name="studentId" id="uploadId">
+                                  <input type="hidden" name="staffId" id="uploadId">
                                   <input type="hidden" name="action" value="uploadImage"><br>
                                   <button type="submit" class="btn btn-sm btn-block">Upload Image</button>
                                 </form>
@@ -92,7 +94,7 @@ require('../requireSubModule.php');
                                     </tr>
                                     <tr>
                                       <td width="60%"><span class="largeText">Employee Id </span></td>
-                                      <td class="largeText" id="studentIdPill">---</td>
+                                      <td class="largeText" id="staffIdPill">---</td>
                                     </tr>
                                     <tr>
                                       <td width="60%"><span class="largeText"> Department </span></td>
@@ -127,39 +129,25 @@ require('../requireSubModule.php');
                       <form class="form-horizontal">
                         <input type="hidden" id="staffIdHidden" name="staffIdHidden">
                         <div class="row">
-                          <div class="col-4">
+                          <div class="col-3 pr-0">
                             <div class="form-group">
                               Staff Name
                               <input type="text" class="form-control form-control-sm staffForm" id="sNameAccordian" name="sNameAccordian" placeholder="Staff Name" data-tag="staff_name">
                             </div>
                           </div>
-                          <div class="col-4">
-                            <div class="form-group">
-                              Father Name
-                              <input type="text" class="form-control form-control-sm staffForm" id="fName" name="fName" placeholder="Name of the Father" data-tag="staff_fname">
-                            </div>
-                          </div>
-                          <div class="col-4">
-                            <div class="form-group">
-                              Mother Name
-                              <input type="text" class="form-control form-control-sm staffForm" id="mName" name="mName" placeholder="Name of the Mother" data-tag="staff_mname">
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-4">
-                            <div class="form-group">
-                              Email
-                              <input type="text" class="form-control form-control-sm staffForm" id="sEmailAccordian" name="sEmailAccordian" placeholder="Staff Email Id" data-tag="staff_email">
-                            </div>
-                          </div>
-                          <div class="col-4">
+                          <div class="col-3 pl-1 pr-0">
                             <div class="form-group">
                               Mobile Number
                               <input type="text" class="form-control form-control-sm staffForm" id="sMobileAccordian" name="sMobileAccordian" placeholder="Staff Mobile Number" data-tag="staff_mobile">
                             </div>
                           </div>
-                          <div class="col-4">
+                          <div class="col-3 pl-1 pr-0">
+                            <div class="form-group">
+                              Email
+                              <input type="text" class="form-control form-control-sm staffForm" id="sEmailAccordian" name="sEmailAccordian" placeholder="Staff Email Id" data-tag="staff_email">
+                            </div>
+                          </div>
+                          <div class="col-3 pl-1">
                             <div class="form-group">
                               Date of Birth
                               <input type="date" class="form-control form-control-sm staffForm" id="sDobAccordian" name="sDobAccordian" placeholder="Date of Birth" data-tag="staff_dob">
@@ -167,16 +155,96 @@ require('../requireSubModule.php');
                           </div>
                         </div>
                         <div class="row">
-                          <div class="col-6">
+                          <div class="col-3 pr-0">
+                            <div class="form-group">
+                              Father Name
+                              <input type="text" class="form-control form-control-sm staffForm" id="fName" name="fName" placeholder="Name of the Father" data-tag="staff_fname">
+                            </div>
+                          </div>
+                          <div class="col-3 pl-1 pr-0">
+                            <div class="form-group">
+                              Mother Name
+                              <input type="text" class="form-control form-control-sm staffForm" id="mName" name="mName" placeholder="Name of the Mother" data-tag="staff_mname">
+                            </div>
+                          </div>
+                          <div class="col-3 pl-1 pr-0">
                             <div class="form-group">
                               Date of Joining
                               <input type="date" class="form-control form-control-sm staffForm" id="sDojAccordian" name="sDojAccordian" placeholder="Date of Joining" data-tag="staff_doj">
                             </div>
                           </div>
-                          <div class="col-6">
+                          <div class="col-3 pl-1">
                             <div class="form-group">
                               Adhaar Number
                               <input type="text" class="form-control form-control-sm staffForm" id="sAdhaar" name="sAdhaar" placeholder="12 Digit Adhaar Number" data-tag="staff_adhaar">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-3 pr-0">
+                            <div class="form-group">
+                              Name in Account
+                              <input type="text" class="form-control form-control-sm staffForm" id="staff_name_account" name="staff_name_account" placeholder="Name as in Account" data-tag="staff_name_account">
+                            </div>
+                          </div>
+                          <div class="col-3 pl-1 pr-0">
+                            <div class="form-group">
+                              Bank Name
+                              <input type="text" class="form-control form-control-sm staffForm" id="staff_bank" name="staff_bank" placeholder="Bank Name" data-tag="staff_bank">
+                            </div>
+                          </div>
+                          <div class="col-3 pl-1 pr-0">
+                            <div class="form-group">
+                              Account Number
+                              <input type="text" class="form-control form-control-sm staffForm" id="staff_account" name="staff_account" placeholder="Account Number" data-tag="staff_account">
+                            </div>
+                          </div>
+                          <div class="col-3 pl-1">
+                            <div class="form-group">
+                              IFSC Number
+                              <input type="text" class="form-control form-control-sm staffForm" id="staff_ifsc" name="staff_ifsc" placeholder="IFSC Number" data-tag="staff_ifsc">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-3 pr-0">
+                            <div class="form-group">
+                              Department
+                              <?php
+                              $sel = "select * from department where dept_status='0' order by dept_name, dept_type";
+                              $result = $conn->query($sel);
+                              if ($result) {
+                                echo '<select class="form-control form-control-sm" name="sel_dept" id="sel_dept">';
+                                echo '<option value="0"> Select Departmrnt </option>';
+                                while ($rows = $result->fetch_assoc()) {
+                                  $select_id = $rows['dept_id'];
+                                  $select_name = $rows['dept_name'];
+                                  echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+                                }
+                                echo '</select>';
+                              } else echo $conn->error;
+                              if ($result->num_rows == 0) echo 'No Data Found';
+                              ?>
+                            </div>
+                          </div>
+                          <div class="col-3 pr-0">
+                            <div class="form-group">
+                              Designation
+                              <?php
+                              $sel = "select * from master_name where mn_code='dg'";
+                              $result = $conn->query($sel);
+                              if ($result) {
+                                echo '<select class="form-control form-control-sm" name="sel_des" id="sel_des">';
+                                echo '<option value="0"> Select Designation </option>';
+                                while ($rows = $result->fetch_assoc()) {
+                                  $select_id = $rows['mn_id'];
+                                  $select_name = $rows['mn_name'];
+                                  echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+                                }
+                                echo '</select>';
+                              } else echo $conn->error;
+                              if ($result->num_rows == 0) echo 'No Data Found';
+                              ?>
                             </div>
                           </div>
                         </div>
@@ -192,10 +260,10 @@ require('../requireSubModule.php');
                           </div>
                           <div class="col-7">
                             <div class="form-check-inline">
-                              <input type="radio" class="form-check-input staffForm" checked id="Teaching" name="sTeaching" value="Teaching" data-tag="staff_teaching">Teaching
+                              <input type="radio" class="form-check-input staffForm" checked id="teaching" name="sTeaching" value="1" data-tag="staff_teaching">Teaching
                             </div>
                             <div class="form-check-inline">
-                              <input type="radio" class="form-check-input staffForm" id="NonTeaching" name="sTeaching" value="NonTeaching" data-tag="staff_teaching">Non-Teaching
+                              <input type="radio" class="form-check-input staffForm" id="nonTeaching" name="sTeaching" value="0" data-tag="staff_teaching">Non-Teaching
                             </div>
                           </div>
                         </div>
@@ -210,8 +278,8 @@ require('../requireSubModule.php');
                               <div class="row">
                                 <div class="col">
                                   <?php
-                                  $sql_qualification = "select * from master_name where mn_code='qt'";
-                                  $result = $conn->query($sql_qualification);
+                                  $sel_des = "select * from master_name where mn_code='qt'";
+                                  $result = $conn->query($sel_des);
                                   if ($result) {
                                     echo '<select class="form-control form-control-sm" name="sel_qual" id="sel_qual">';
                                     echo '<option value="0">Qualification</option>';
@@ -271,7 +339,7 @@ require('../requireSubModule.php');
                             </div>
                           </div>
                         </div>
-                        <input type="hidden" id="studentIdQual" name="studentIdQual">
+                        <input type="hidden" id="staffIdQual" name="staffIdQual">
                         <input type="hidden" name="action" value="updateQualification">
                         <button class="btn btn-sm" name="submit_qual" id="submit_qual">Update/Add</button>
                       </form>
@@ -407,10 +475,6 @@ require('../requireSubModule.php');
   }
 
   $(document).ready(function() {
-    $('#list-as').show();
-    $('#list-sq').hide();
-    $('#accordionStaff').hide();
-    $('.staffProfile').hide();
 
     $('#example').DataTable()
 
@@ -471,233 +535,12 @@ require('../requireSubModule.php');
       })
     });
 
-    $(document).on('click', '.sq', function() {
-      $(".selectPanel").show();
-      $('#list-sq').show();
-      $('#list-as').hide();
-      $('#staffShowList').show();
-    });
-
-    $(document).on('click', '.as', function() {
-      $(".selectPanel").show();
-      $('#list-as').show();
-      $('#list-sq').hide();
-    });
+    // Show Add Staff Modal
 
     $(document).on('click', '.addStaff', function() {
       $('#modal_title').text("Add Staff");
       $('#action').val("addStaff");
       $('#firstModal').modal('show');
-      $('.staffForm').show();
-      $('.selectPanel').show();
-      $(".staffDetailForm").hide();
-      $(".staffQualificationForm").hide();
-    });
-
-    $(document).on('click', '.uploadStaff', function() {
-      $('#actionUpload').val('uploadStaff')
-      $('#button_action').show().val('Update Staff');
-      $('#formModal').modal('show');
-      $('#modal_uploadTitle').text('Upload Staff');
-    });
-
-    $(document).on('submit', '#upload_csv', function(event) {
-      event.preventDefault();
-      var formData = $(this).serialize();
-      // action and test_id are passed as hidden
-      $.alert(formData);
-
-      $.ajax({
-        url: "uploadStaffSql.php",
-        method: "POST",
-        data: new FormData(this),
-        contentType: false, // The content type used when sending data to the server.
-        cache: false, // To unable request pages to be cached
-        processData: false, // To send DOMDocument or non processed data file it is set to false
-        success: function(data) {
-          console.log(data);
-        }
-      })
-    });
-
-    $(document).on('blur', '.staffForm', function() {
-      var staffId = $("#staffIdHidden").val()
-      var tag = $(this).attr("data-tag")
-      var value = $(this).val()
-      // $.alert("Changes " + tag + " Value " + value + " Staff " + staffId);
-      $.post("hrSql.php", {
-        id_name: "staff_id",
-        id: staffId,
-        tag: tag,
-        value: value,
-        action: "updateStaff"
-      }, function(data) {
-        // $.alert("List " + data);
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
-    $(document).on('submit', '#staffServiceForm', function() {
-      event.preventDefault(this);
-      var staffId = $("#staffIdHidden").val()
-      var deptId = $("#sel_dept").val()
-      var desigId = $("#sel_desig").val()
-      $("#stfIdService").val(staffId);
-      $("#action").val("addStaffService")
-      var formData = $(this).serialize();
-      $.alert("Form Submitted " + formData)
-      $.post("hrSql.php", formData, function() {}, "text").done(function(data, success) {
-        $.alert(data)
-        $('#staffServiceForm')[0].reset();
-        staffServiceList(staffId, deptId, desigId)
-      })
-    });
-
-    $(document).on('blur', '.staffQualificationForm', function() {
-      var staffId = $("#staffIdHidden").val()
-      var qId = $('#sel_qual').val()
-      var tag = $(this).attr("data-tag")
-      var value = $(this).val()
-      // $.alert("Changes " + tag + " Value " + value + " Staff " + staffId + "q" + qId);
-      if (qId === null) {
-        $.confirm({
-          title: 'Encountered an error!',
-          content: 'Please Select Qualification First',
-          type: 'red',
-          typeAnimated: false,
-          buttons: {
-            tryAgain: {
-              text: 'Try again',
-              btnClass: 'btn-red',
-              action: function() {}
-            },
-          }
-        });
-      } else {
-        $.post("hrSql.php", {
-          id_name: "qualification_id",
-          id: qId,
-          staff_id: staffId,
-          tag: tag,
-          value: value,
-          action: "updateStaffQualification"
-        }, function(data) {
-          // $.alert(data);
-        }, "text").fail(function() {
-          $.alert("fail in place of error");
-        })
-      }
-    });
-
-    $(document).on('click', '.editStaff', function() {
-      $('#accordionStaff').show();
-      var id = $(this).attr("data-staff");
-      $('#staffIdHidden').val(id);
-      staffQualificationList(id);
-      staffServiceList(id);
-      $.post("hrSql.php", {
-        staffId: id,
-        action: "fetchStaff"
-      }, () => {}, "json").done(function(data) {
-        // $.alert("hello" + data.staff_name);
-        $("#sEmailAccordian").val(data.staff_email);
-        $("#sNameAccordian").val(data.staff_name);
-        $("#sMobileAccordian").val(data.staff_mobile);
-        $("#sDobAccordian").val(data.staff_dob);
-        $("#fName").val(data.staff_fname);
-        $("#mName").val(data.staff_mname);
-        $("#sAdhaar").val(data.staff_adhaar);
-        $("#sAddress").val(data.staff_address);
-        $("#sGender").val(data.staff_gender);
-        $("#sTeaching").val(data.staff_teaching);
-        $("#sDojAccordian").val(data.staff_doj);
-        $("#staff_title").text(data.staff_name);
-        $(".staff_email").text(data.staff_email);
-        $(".staff_name").text(data.staff_name);
-        $(".staff_mobile").text(data.staff_mobile);
-        $(".staff_doj").text(data.staff_doj);
-        $(".staff_userId").text(data.user_id);
-        $('.staffProfile').show();
-
-
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
-
-    $(document).on('click', '.stq_idView', function() {
-      var id = $(this).attr('id');
-      $.alert("id" + id);
-      $('#stqIdM').val(id);
-      $("#viewModal").modal('show');
-    });
-
-    $(document).on('click', '.stq_idUpload', function() {
-      var id = $(this).attr('id');
-      //$.alert("id" + id);
-      $('#stqIdM').val(id);
-      $("#uploadModal").modal('show');
-      $(".uploadQualificationForm").show()
-      $(".uploadStaffForm").hide()
-    });
-
-    $(document).on('submit', '.uploadQualificationForm', function(event) {
-      event.preventDefault();
-      var formData = $(this).serialize();
-      $.alert(formData);
-      // action and test_id are passed as hidden
-      $.ajax({
-        url: "uploadSql.php",
-        method: "POST",
-        data: new FormData(this),
-        contentType: false, // The content type used when sending data to the server.
-        cache: false, // To unable request pages to be cached
-        processData: false, // To send DOMDocument or non processed data file it is set to false
-        success: function(data) {
-          $.alert("List " + data);
-          $('#uploadModal').modal('hide');
-        }
-      })
-    });
-
-    $(document).on('click', '.addStaffQualification', function() {
-      $('#modal_title').text("Add Staff Qualifications");
-      $('#firstModal').modal('show');
-      var stfId = $('#panelId').val();
-      $('#stfIdModal').val(stfId);
-      $('.studentForm').hide();
-      $('.selectPanel').show();
-      $(".staffDetailForm").hide();
-      $(".staffForm").hide();
-      $('#action').val("addStaffQualification");
-    });
-
-    $(document).on('click', '.stq_idE', function() {
-      var id = $(this).attr('id');
-      $('#stqIdHidden').val(id);
-      var stfId = $('#panelId').val();
-      //  $.alert("Id " + id + "std" + stdId);
-      $.post("hrSql.php", {
-        action: "fetchStaffQualification",
-        stqId: id,
-        stf_id: stfId
-      }, () => {}, "json").done(function(data) {
-        // $.alert("List " + data.student_id + "sq " + data.qualification_id);
-        $("#sInst").val(data.stq_institute);
-        $("#sBoard").val(data.stq_board);
-        $("#sYear").val(data.stq_year);
-        $("#sMarksObt").val(data.stq_marksObtained);
-        $("#sMaxMarks").val(data.stq_marksMax);
-        $("#sCgpa").val(data.stq_percentage);
-        $("#modalId").val(id);
-        $("#action").val("updateStaffQualification");
-        var qual = data.qualification_id;
-        $("#sel_qual option[value='" + qual + "']").attr("selected", "selected");
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
     });
 
     $(document).on('submit', '#modalForm', function(event) {
@@ -766,6 +609,180 @@ require('../requireSubModule.php');
       })
     });
 
+    $(document).on('click', '.uploadStaff', function() {
+      $('#actionUpload').val('uploadStaff')
+      $('#button_action').show().val('Update Staff');
+      $('#formModal').modal('show');
+      $('#modal_uploadTitle').text('Upload Staff');
+    });
+
+    $(document).on('submit', '#upload_csv', function(event) {
+      event.preventDefault();
+      var formData = $(this).serialize();
+      // action and test_id are passed as hidden
+      $.alert(formData);
+
+      $.ajax({
+        url: "uploadStaffSql.php",
+        method: "POST",
+        data: new FormData(this),
+        contentType: false, // The content type used when sending data to the server.
+        cache: false, // To unable request pages to be cached
+        processData: false, // To send DOMDocument or non processed data file it is set to false
+        success: function(data) {
+          console.log(data);
+        }
+      })
+    });
+
+    $(document).on('click', '.editStaff', function() {
+      $('#accordionStaff').show();
+      var id = $(this).attr("data-staff");
+      $('#staffIdHidden').val(id);
+      staffQualificationList(id);
+      staffServiceList(id);
+      $.post("hrSql.php", {
+        staffId: id,
+        action: "fetchStaff"
+      }, () => {}, "json").done(function(data) {
+        // $.alert("hello" + data.staff_name);
+        $("#sEmailAccordian").val(data.staff_email);
+        $("#sNameAccordian").val(data.staff_name);
+        $("#sMobileAccordian").val(data.staff_mobile);
+        $("#sDobAccordian").val(data.staff_dob);
+        $("#fName").val(data.staff_fname);
+        $("#mName").val(data.staff_mname);
+        $("#sAdhaar").val(data.staff_adhaar);
+        $("#sAddress").val(data.staff_address);
+        $("#sGender").val(data.staff_gender);
+        if (data.staff_teaching == '0') $("#nonTeaching").prop("checked", true);
+        else $("#teaching").prop("checked", true);
+        $("#sDojAccordian").val(data.staff_doj);
+        $("#staff_title").text(data.staff_name);
+        $(".staff_email").text(data.staff_email);
+        $(".staff_name").text(data.staff_name);
+        $(".staff_mobile").text(data.staff_mobile);
+        $(".staff_doj").text(data.staff_doj);
+        $(".staff_userId").text(data.user_id);
+        $("#staff_name_account").val(data.staff_name_account);
+        $("#staff_bank").val(data.staff_bank);
+        $("#staff_account").val(data.staff_account);
+        $("#staff_ifsc").val(data.staff_ifsc);
+        $("#sel_dept").val(data.dept_id);
+        $("#sel_des").val(data.mn_id);
+        $('.staffProfile').show();
+      }, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+    $(document).on('blur', '.staffForm', function() {
+      var staffId = $("#staffIdHidden").val()
+      var tag = $(this).attr("data-tag")
+      var value = $(this).val()
+      // $.alert("Changes " + tag + " Value " + value + " Staff " + staffId);
+      $.post("hrSql.php", {
+        id_name: "staff_id",
+        id: staffId,
+        tag: tag,
+        value: value,
+        action: "updateStaff"
+      }, function(data) {
+        // $.alert("List " + data);
+      }, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
+    $(document).on('submit', '#staffServiceForm', function() {
+      event.preventDefault(this);
+      var staffId = $("#staffIdHidden").val()
+      var deptId = $("#sel_deptSS").val()
+      var desigId = $("#sel_desigSS").val()
+      $("#stfIdService").val(staffId);
+      $("#action").val("addStaffService")
+      var formData = $(this).serialize();
+      $.alert("Form Submitted " + formData)
+      $.post("hrSql.php", formData, function() {}, "text").done(function(data, success) {
+        $.alert(data)
+        $('#staffServiceForm')[0].reset();
+        staffServiceList(staffId, deptId, desigId)
+      })
+    });
+
+    $(document).on('blur', '.staffQualificationForm', function() {
+      var staffId = $("#staffIdHidden").val()
+      var qId = $('#sel_qual').val()
+      var tag = $(this).attr("data-tag")
+      var value = $(this).val()
+      // $.alert("Changes " + tag + " Value " + value + " Staff " + staffId + "q" + qId);
+      if (qId === null) {
+        $.confirm({
+          title: 'Encountered an error!',
+          content: 'Please Select Qualification First',
+          type: 'red',
+          typeAnimated: false,
+          buttons: {
+            tryAgain: {
+              text: 'Try again',
+              btnClass: 'btn-red',
+              action: function() {}
+            },
+          }
+        });
+      } else {
+        $.post("hrSql.php", {
+          id_name: "qualification_id",
+          id: qId,
+          staff_id: staffId,
+          tag: tag,
+          value: value,
+          action: "updateStaffQualification"
+        }, function(data) {
+          // $.alert(data);
+        }, "text").fail(function() {
+          $.alert("fail in place of error");
+        })
+      }
+    });
+
+    $(document).on('click', '.addStaffQualification', function() {
+      $('#modal_title').text("Add Staff Qualifications");
+      $('#firstModal').modal('show');
+      var stfId = $('#panelId').val();
+      $('#stfIdModal').val(stfId);
+      $('.staffForm').hide();
+      $('.selectPanel').show();
+      $(".staffDetailForm").hide();
+      $(".staffForm").hide();
+      $('#action').val("addStaffQualification");
+    });
+
+    $(document).on('click', '.staff_idE', function() {
+      var id = $(this).attr('id');
+      $('#stqIdHidden').val(id);
+      var stfId = $('#panelId').val();
+      //  $.alert("Id " + id + "std" + stdId);
+      $.post("hrSql.php", {
+        action: "fetchStaffQualification",
+        stqId: id,
+        stf_id: stfId
+      }, () => {}, "json").done(function(data) {
+        // $.alert("List " + data.staff_id + "sq " + data.qualification_id);
+        $("#sInst").val(data.staff_institute);
+        $("#sBoard").val(data.staff_board);
+        $("#sYear").val(data.staff_year);
+        $("#sMarksObt").val(data.staff_marksObtained);
+        $("#sMaxMarks").val(data.staff_marksMax);
+        $("#sCgpa").val(data.staff_percentage);
+        $("#modalId").val(id);
+        $("#action").val("updateStaffQualification");
+        var qual = data.qualification_id;
+        $("#sel_qual option[value='" + qual + "']").attr("selected", "selected");
+      }, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
     function staffList() {
       $.post("hrSql.php", {
         action: "staffList"
@@ -810,28 +827,6 @@ require('../requireSubModule.php');
     var tableId = document.getElementById('example').id;
     htmlTableToExcel(tableId, filename = '');
   }
-  var htmlTableToExcel = function(tableId, fileName = '') {
-    var excelFileName = 'excel_table_data';
-    var TableDataType = 'application/vnd.ms-excel';
-    var selectTable = document.getElementById(tableId);
-    var htmlTable = selectTable.outerHTML.replace(/ /g, '%20');
-
-    filename = filename ? filename + '.xls' : excelFileName + '.xls';
-    var excelFileURL = document.createElement("a");
-    document.body.appendChild(excelFileURL);
-
-    if (navigator.msSaveOrOpenBlob) {
-      var blob = new Blob(['\ufeff', htmlTable], {
-        type: TableDataType
-      });
-      navigator.msSaveOrOpenBlob(blob, fileName);
-    } else {
-
-      excelFileURL.href = 'data:' + TableDataType + ', ' + htmlTable;
-      excelFileURL.download = fileName;
-      excelFileURL.click();
-    }
-  }
 </script>
 
 <div class="modal" id="firstModal">
@@ -848,31 +843,37 @@ require('../requireSubModule.php');
               </div>
             </div>
             <div class="row">
-              <div class="col-6">
+              <div class="col-4 pr-0">
                 <div class="form-group">
                   Staff Name
                   <input type="text" class="form-control form-control-sm" id="sName" name="sName" placeholder="Staff Name">
                 </div>
               </div>
-              <div class="col-6">
-                <div class="form-group">
-                  Date of Joining
-                  <input type="date" class="form-control form-control-sm" id="sDoj" name="sDoj" placeholder="Date of Joining">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-6">
+              <div class="col-4 pl-1 pr-0">
                 <div class="form-group">
                   Email
                   <input type="text" class="form-control form-control-sm" id="sEmail" name="sEmail" placeholder="Staff Email Id">
                 </div>
               </div>
-              <div class="col-6">
+              <div class="col-4 pl-1">
                 <div class="form-group">
                   Mobile Number
                   <input type="text" class="form-control form-control-sm" id="sMobile" name="sMobile" placeholder="Staff Mobile Number">
                 </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4 pr-0">
+                <div class="form-group">
+                  Date of Joining
+                  <input type="date" class="form-control form-control-sm" id="sDoj" name="sDoj" placeholder="Date of Joining">
+                </div>
+              </div>
+              <div class="col-4 pl-1 pr-0">
+
+              </div>
+              <div class="col-4 p1-1">
+
               </div>
             </div>
           </div>
@@ -938,11 +939,11 @@ require('../requireSubModule.php');
         <!-- Modal body -->
         <div class="modal-body">
           <?php
-          $stq_id = $_POST['stqIdM'];
-          $sql = "select stq.* from staff_qualification stq where stq.stq_id='$stq_id'";
+          $staff_id = $_POST['sqIdM'];
+          $sql = "select stq.* from staff_qualification stq where stq.staff_id='$staff_id'";
           $conn->query($sql);
           $folder = '../../' . $myFolder . '/qualification';
-          $file = $folder . '/' . $stq_id;
+          $file = $folder . '/' . $staff_id;
           ?>
           <embed src="<?php echo $file; ?>" width="100%" height="600" alt=”pdf” pluginspage=”http://www.adobe.com/products/acrobat/readstep2.html”></embed>
         </div> <!-- Modal Body Closed-->

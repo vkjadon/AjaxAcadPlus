@@ -5,7 +5,8 @@ if (isset($_SESSION["myFolder"])) {
   $servername = "localhost";  //Host Name
   $username = "root";         // Database User Name
   $password = "";             // Database User Password
-  $db = "classcon_" . $myDb;             // Database Name
+  if($myDb=='imt')$db = "classconnect_".$myDb;
+  else $db = "classcon_".$myDb;      // Database Name
 
   // Create connection
   $conn = new mysqli($servername, $username, $password, $db);

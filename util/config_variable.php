@@ -55,9 +55,12 @@ if (isset($mySes)) {
   check_tn_class($conn, "class");
   check_tn_ee($conn, "evaluation_event");
 
+  check_tn_fe($conn, "faculty_event");
+
   check_tn_feeConcession($conn, "fee_concession");
   check_tn_feeDues($conn, "fee_dues");
   check_tn_feeReverse($conn, "fee_reverse");
+  check_tn_feeReceipt($conn, "fee_receipt");
   check_tn_feeStructure($conn, "fee_structure");
   check_tn_feeSchedule($conn, "fee_schedule");
 
@@ -71,15 +74,19 @@ if (isset($mySes)) {
   check_tn_lt($conn, "leave_type");
   check_tn_org($conn, 'organization');
   check_tn_mn($conn, 'master_name');
+  check_tn_pg($conn, 'privilege_group');
+  check_tn_prtg($conn, 'portal_group');
+  check_tn_prtm($conn, 'portal_menu');
   check_tn_pv($conn, 'payment_voucher');
   check_tn_pvr($conn, 'pv_reverse');
   check_tn_qb_cp($conn, 'qb_cp');
   check_tn_qb_parameter($conn, 'qb_parameter');
   check_tn_question_bank($conn, 'question_bank');
   check_tn_question_option($conn, 'question_option');
-  check_tn_rp($conn, 'resource_person');
   check_tn_respStaff($conn, 'responsibility_staff');
+  check_tn_rg($conn, 'responsibility_group');
   check_tn_rl($conn, 'responsibility_link');
+  check_tn_rp($conn, 'resource_person');
   check_tn_sdl($conn, "schedule");
   check_tn_ssl($conn, "staff_salary");
   check_tn_stdqual($conn, "student_qualification");
@@ -96,7 +103,6 @@ if (isset($mySes)) {
   check_tn_user($conn, "user");
   check_tn_userLog($conn, "user_log");
   check_tn_userActivity($conn, "user_activity");
-  check_tn_up($conn, "user_privilege");
 
   $tn_atmp = 'assessment_template' . $mySes;
   check_tn_atmp($conn, $tn_atmp);

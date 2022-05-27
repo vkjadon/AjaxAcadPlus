@@ -28,6 +28,7 @@ if (!isset($myProg)) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<title>Outcome Based Education : ClassConnect</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -66,42 +67,29 @@ if (!isset($myProg)) {
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
 </head>
+
 <body>
-<?php 
-  require("topBar.php"); 
-  ?>
+	<?php
+	require("topBar.php");
+	?>
 	<div class="container-fluid moduleBody">
 		<div class="row">
-			<div class="col-md-3">
-				<div class="container card myCard">
-					<div class="card-body p-1">
-						<p class="largeText userName"> Welcome Guest</p>
-						<div class="row">
-							<div class="col-md-4 pl-3">
-								<div class="card myCard">
-									<div class="card-body p-1">
-										<span class="staffImage"><img src="../images/upload.jpg"></span>
-										<div class="text-center"><?php echo '[' . $myUserId . ']'; ?></div>
-									</div>
-								</div>
-							</div>
-							<div class="col-md-8">
-								<p class="smallerText userDesignation"> Not Set</p>
-								<p class="smallerText userEmail"> Not Set</p>
-								<p class="smallerText userMobile"></p>
-								<p class="smallerText userDoJ"></p>
-							</div>
+		<div class="col-md-3">
+				<?php
+				// echo 'P-'.$privilege;
+				require("setDefault.php");
+				?>
+				<div class="card myCard">
+					<div class="card-body m-0 p-1">
+						<div class="text-center">
+							<label class="warning">Today's Classes </label>
 						</div>
+						<table class="table table-scheduler classSchedule"></table>
 					</div>
 				</div>
-				<div class="card myCard mt-2">
-					<div class="card-body">
-						<span class="largeText">To Do List</span>
-						<form action="javascript:void(0);">
-							<input type="text" class="form-control add-task" id="add-task" placeholder="New Task...">
-							<input type="hidden" class="form-control" id="todo_id" value="0">
-						</form>
-						<div class="todo-list"></div>
+				<div class="card myCard">
+					<div class="card-body m-0 p-1" style="background-color:floralwhite">
+						<label class="warning">Birthday Reminder</label>
 					</div>
 				</div>
 			</div>
@@ -139,29 +127,51 @@ if (!isset($myProg)) {
 						</div>
 					</div>
 				</div>
+				<div class="card myCard mt-2">
+					<div class="card-body">
+						<span class="largeText">Event List</span>
+						<div class="event-list"></div>
+					</div>
+				</div>
+
 				<div class="card mt-3 myCard">
 					<div class="m-4" id="calendar"></div>
 				</div>
 			</div>
 			<div class="col-md-3">
-				<?php
-				// echo 'P-'.$privilege;
-				require("setDefault.php");
-				?>
-				<div class="card myCard">
-					<div class="card-body m-0 p-1">
-						<div class="text-center">
-							<label class="warning">Today's Classes </label>
+				<div class="container card myCard">
+					<div class="card-body p-1">
+						<p class="largeText userName"> Welcome Guest</p>
+						<div class="row">
+							<div class="col-md-4 pl-3">
+								<div class="card myCard">
+									<div class="card-body p-1">
+										<span class="staffImage"><img src="../images/upload.jpg"></span>
+										<div class="text-center"><?php echo '[' . $myUserId . ']'; ?></div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-8">
+								<p class="smallerText userDesignation"> Not Set</p>
+								<p class="smallerText userEmail"> Not Set</p>
+								<p class="smallerText userMobile"></p>
+								<p class="smallerText userDoJ"></p>
+							</div>
 						</div>
-						<table class="table table-scheduler classSchedule"></table>
 					</div>
 				</div>
-				<div class="card myCard">
-					<div class="card-body m-0 p-1" style="background-color:floralwhite">
-						<label class="warning">Birthday Reminder</label>
+				<div class="card myCard mt-2">
+					<div class="card-body">
+						<span class="largeText">To Do List</span>
+						<form action="javascript:void(0);">
+							<input type="text" class="form-control add-task" id="add-task" placeholder="New Task...">
+							<input type="hidden" class="form-control" id="todo_id" value="0">
+						</form>
+						<div class="todo-list"></div>
 					</div>
 				</div>
 			</div>
+
 		</div>
 		<?php require("bottom_bar.php"); ?>
 	</div>
@@ -188,7 +198,7 @@ if (!isset($myProg)) {
 		$(document).on('click', '.addSchedule', function() {
 			// $.alert("Schedule ");
 			$("#modalId").val("0")
-			$('#modal_title').html("Add New Meeting/Schedule");
+			$('#modal_title').html("Add New Meeting/Schedule/Event");
 			$('#action').val("updateSchedule");
 			$('#firstModal').modal('show');
 			$('.scheduleForm').show();
@@ -198,7 +208,7 @@ if (!isset($myProg)) {
 			event.preventDefault(this);
 			var formData = $(this).serialize();
 			$('#firstModal').modal('hide');
-			// $.alert(" Form Data " + formData);
+			$.alert(" Form Data " + formData);
 			$.post("indexSql.php", formData, () => {}, "text").done(function(data) {
 				$.alert(data);
 				scheduleList();
@@ -218,13 +228,13 @@ if (!isset($myProg)) {
 				// $.alert(data.schedule_name);
 				$("#schedule_name").val(data.schedule_name)
 				$("#schedule_venue").val(data.schedule_venue)
-				$("#schedule_date").val(data.schedule_date)
+				$("#schedule_date_from").val(data.schedule_date_from)
 				$("#schedule_time_from").val(data.schedule_time_from)
 				$("#schedule_time_to").val(data.schedule_time_to)
 				$("#registration_link").val(data.registration_link)
 				$("#webinar_ink").val(data.webinar_ink)
 				$("#schedule_remarks").val(data.schedule_remarks)
-				$('#modal_title').html("Update Meeting");
+				$('#modal_title').html("Update Meeting/Event");
 				$('#action').val("updateSchedule");
 				$('#firstModal').modal('show');
 				$('.scheduleForm').show();
@@ -471,7 +481,7 @@ if (!isset($myProg)) {
 			var today = year + "-" + month + "-" + day,
 				displayTime = hour + ":" + min;
 
-			$("#schedule_date").val(today);
+			$("#schedule_date_from").val(today);
 			$("#schedule_time_from").val(displayTime);
 			$("#schedule_time_to").val(displayTime);
 		}
@@ -492,14 +502,28 @@ if (!isset($myProg)) {
 				<!-- Modal body -->
 				<div class="modal-body">
 					<div class="scheduleForm">
+						<div class="col-12 py-1">
+							<div class="form-check-inline">
+								<input type="radio" class="form-check-input schedule_type" id="meeting" name="schedule_type" value="0">Meeting
+							</div>
+							<div class="form-check-inline">
+								<input type="radio" class="form-check-input schedule_type" id="event" name="schedule_type" value="1">Event
+							</div>
+						</div>
 						<div class="row">
-							<div class="col-8 pr-0">
+							<div class="col-6 pr-0">
 								<div class="form-group">
-									Meeting/Schedule Subject/Title
+									Title
 									<input type="text" class="form-control form-control-sm" id="schedule_name" name="schedule_name" placeholder="Schedule Name" required>
 								</div>
 							</div>
-							<div class="col-4 pl-1">
+							<div class="col-3 pl-1 pr-0">
+								<div class="form-group">
+									Title (Abbri)
+									<input type="text" class="form-control form-control-sm" id="schedule_abbri" name="schedule_abbri" placeholder="Abbri" required>
+								</div>
+							</div>
+							<div class="col-3 pl-1">
 								<div class="form-group">
 									Venue
 									<input type="text" class="form-control form-control-sm" id="schedule_venue" name="schedule_venue" placeholder="Schedule Venue" required>
@@ -507,10 +531,10 @@ if (!isset($myProg)) {
 							</div>
 						</div>
 						<div class="row">
-							<div class="col-4 pr-0">
+							<div class="col-3 pr-0">
 								<div class="form-group">
-									Date
-									<input type="date" class="form-control form-control-sm" id="schedule_date" name="schedule_date" placeholder="Schedule Date">
+									Date From
+									<input type="date" class="form-control form-control-sm" id="schedule_date_from" name="schedule_date_from" placeholder="Schedule From Date">
 								</div>
 							</div>
 							<div class="col-3 pl-1 pr-0">
@@ -520,6 +544,12 @@ if (!isset($myProg)) {
 								</div>
 							</div>
 							<div class="col-3 pl-1 pr-0">
+								<div class="form-group">
+									Date To
+									<input type="date" class="form-control form-control-sm" id="schedule_date_from_to" name="schedule_date_from_to" placeholder="Schedule To Date">
+								</div>
+							</div>
+							<div class="col-3 pl-1">
 								<div class="form-group">
 									Time To
 									<input type="time" class="form-control form-control-sm" id="schedule_time_to" name="schedule_time_to">

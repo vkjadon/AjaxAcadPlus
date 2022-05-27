@@ -20,6 +20,7 @@ if (isset($_POST['action'])) {
     $dup = "select * from batch where batch='" . data_check($_POST["newBatch"]) . "'";
     $dup_alert = " Batch already Exists !!";
     addData($conn, 'batch', 'batch_id', $fields, $values, $status, $dup, $dup_alert);
+    addActivity($conn, $myId, "Add Batch");
     // echo "dbsj";
   } elseif ($_POST["action"] == "fetchBatch") {
     $id = $_POST['batchId'];
@@ -33,6 +34,8 @@ if (isset($_POST['action'])) {
     $dup = "select * from batch where batch_id='" . $_POST["modalId"] . "'";
     $dup_alert = "Could Not Update - Duplicate Entries";
     updateData($conn, 'batch', $fields, $values, $dup, $dup_alert);
+    addActivity($conn, $myId, "Update Batch");
+
     // echo "inside update batch";
   } elseif ($_POST['action'] == 'batchSession') {
     $ay_id = $_POST['batchId'];
@@ -97,7 +100,12 @@ if (isset($_POST['action'])) {
     else $text = "Added Successfully";
     if ($conn->query($sql)) echo $text;
     else echo $conn->error;
-  } elseif ($_POST["action"] == "mnFetch") {
+  } elseif ($_POST["action"] == "mnUpdate") {
+    if($_POST["tag"]=="D")$sql="update master_name set mn_status='9' where mn_id='".$_POST["mn_id"]."'";
+    else $sql="update master_name set mn_status='0' where mn_id='".$_POST["mn_id"]."'";
+    $conn->query($sql);
+    // echo "inside update batch";
+  }elseif ($_POST["action"] == "mnFetch") {
     $id = $_POST['mn_id'];
     $sql = "select * FROM master_name where mn_id='$id'";
     $result = $conn->query($sql);
@@ -105,7 +113,7 @@ if (isset($_POST['action'])) {
     echo json_encode($output);
   } elseif ($_POST["action"] == "masterNameList") {
     //echo "MyId- $myProg - $myBatch";
-    $sql = "select * from master_name where mn_code='" . $_POST['headName'] . "' order by mn_name";
+    $sql = "select * from master_name where mn_code='" . $_POST['headName'] . "' order by mn_status, mn_name";
     $result = $conn->query($sql);
     echo '<div class="card myCard m-2">';
 
@@ -127,8 +135,8 @@ if (isset($_POST['action'])) {
       echo '<div class="cardBodyText"><b>' . $row_mn["mn_remarks"] . '</b></div>';
       echo '</div>';
       echo '<div class="col-sm-1">';
-      if ($status == "9") echo '<a href="#" class="float-right po_idR" data-id="' . $mn_id . '">Removed</a>';
-      else echo '<a href="#" class="float-right po_idD" data-id="' . $mn_id . '"><i class="fa fa-trash"></i></a>';
+      if ($status == "9") echo '<a href="#" class="float-right mnUpdate" data-tag="R" data-id="' . $mn_id . '"><i class="fa fa-refresh"></i></a>';
+      else echo '<a href="#" class="float-right mnUpdate" data-tag="D" data-id="' . $mn_id . '"><i class="fa fa-trash"></i></a>';
       echo '</div>';
       echo '</div>';
     }

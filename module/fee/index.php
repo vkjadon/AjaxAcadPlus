@@ -1,6 +1,8 @@
 <?php
 require('../requireSubModule.php');
 $phpFile = "feeSql.php";
+addActivity($conn, $myId, "FEE");
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,11 +21,9 @@ $phpFile = "feeSql.php";
           <h5>Fee </h5>
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-          <?php
-          echo '<a class="list-group-item list-group-item-action active feeStructure" id="showFeeStructure" data-toggle="list" href="#feeStructure" role="tab" aria-controls="feeStructure"> Fee Structure </a>';
-          echo '<a class="list-group-item list-group-item-action feeSchedule" data-toggle="list" href="#feeSchedule" role="tab" aria-controls="feeSchedule"> Fee Schedule </a>';
-          echo '<a class="list-group-item list-group-item-action ledgerStatus" data-toggle="list" href="#ledgerStatus" role="tab" aria-controls="ledgerStatus"> Fee Status </a>';
-          ?>
+          <a class="list-group-item list-group-item-action active feeStructure" data-toggle="list" href="#feeStructure" role="tab" aria-controls="feeStructure"> Fee Structure </a>
+          <a class="list-group-item list-group-item-action feeSchedule" data-toggle="list" href="#feeSchedule" role="tab" aria-controls="feeSchedule"> Fee Schedule </a>
+          <a class="list-group-item list-group-item-action ledgerStatus" data-toggle="list" href="#ledgerStatus" role="tab" aria-controls="ledgerStatus"> Fee Status </a>
         </div>
       </div>
       <div class="col-11 leftLinkBody">
@@ -69,8 +69,17 @@ $phpFile = "feeSql.php";
                 </div>
               </div>
             </div>
-            <input type="hidden" id="action" name="action" value="addFee">
-            <button class="btn btn-sm">Add/Update</button>
+            <div class="row">
+              <div class="col-md-8">
+              </div>
+              <div class="col-md-2 pl-0">
+                <button class="btn btn-sm btn-info" id="postDues">Post Dues</button>
+              </div>
+              <div class="col-md-2 pl-0">
+                <input type="hidden" id="action" name="action" value="addFee">
+                <button class="btn btn-sm">Add/Update/Refresh</button>
+              </div>
+            </div>
           </form>
         </div>
         <div class="tab-content" id="nav-tabContent">
@@ -78,17 +87,21 @@ $phpFile = "feeSql.php";
             <div class="row">
               <div class="col-md-12">
                 <div class="card mt-2 myCard" style="overflow: scroll;">
-                  <div class="row">
-                    <div class="col-md-8 mt-2">
-                      <h5 class="tableTitle m-0 mt-3"></h5>
+                  <div class="row m-1">
+                    <div class="col-md-1">
+                      <a href="#" class="fa fa-refresh" id="showFeeStructure"></a>
                     </div>
-                    <div class="col-md-1 mt-2 pr-0 text-right">
+                    <div class="col-md-8">
+                    </div>
+                    <div class="col-md-1 pr-0 text-right">
                       <input type="number" class="form-control form-control-sm" id="copyBatch" name="copyBatch" minlength="4" min="2000" value="2020">
                     </div>
-                    <div class="col-md-1 mt-1 pl-0">
-                      <button class="btn btn-sm" id="copyBatchBtn">Copy</button>
+                    <div class="col-md-2 pl-0">
+                      <button class="btn btn-sm btn-block" id="copyBatchBtn">Copy Fee Structure</button>
                     </div>
+
                   </div>
+                  <h5 class="largeText mt-3 text-center">Fee Structure</h5>
                   <div class="row">
                     <div class="col-md-12">
                       <table class="table table-bordered table-striped list-table-xs mt-3" id="feeStructureList">
@@ -174,11 +187,11 @@ $phpFile = "feeSql.php";
     feeCategory();
     feeComponent();
     feeType();
-    $("#feeScheduleList").hide()
-    $("#feeStructureList").hide()
-    $("#ledgerStatusList").hide()
+    // $("#feeScheduleList").hide()
+    // $("#feeStructureList").hide()
+    // $("#ledgerStatusList").hide()
 
-    //  feeStructureList();
+    // feeStructureList();
 
     $(document).on('click', '.ledgerStatus', function(event) {
       // $.alert("Name");
@@ -245,8 +258,6 @@ $phpFile = "feeSql.php";
 
     $(document).on('click', '.feeSchedule', function(event) {
       $(".tableTitle").text("Fee Schedule")
-      $("#feeScheduleList").show()
-      $("#feeStructureList").hide()
       feeSchedule()
     });
 
@@ -314,8 +325,6 @@ $phpFile = "feeSql.php";
     $(document).on('click', '#showFeeStructure', function(event) {
       $(".tableTitle").text("Fee Structure")
       feeStructureList()
-      $("#feeStructureList").show()
-      $("#feeScheduleList").hide()
     });
 
     $(document).on('submit', '#newFee', function(event) {
@@ -331,7 +340,7 @@ $phpFile = "feeSql.php";
         var formData = $(this).serialize();
         // alert(" Pressed" + formData);
         $.post("<?php echo $phpFile; ?>", formData, () => {}, "text").done(function(data) {
-          $.alert(data);
+          // $.alert(data);
           feeStructureList()
         }, "text").fail(function() {
           $.alert("fail in place of error");

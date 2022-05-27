@@ -32,6 +32,7 @@ if (isset($_POST['action'])) {
          $result = $conn->query($sql);
          if (!$result) echo $conn->error;
       }
+      addActivity($conn, $myId, "Enter Student List");
 
       $mn_id = $_POST['mn_id'];
       $progId = $_POST['progId'];
@@ -53,11 +54,11 @@ if (isset($_POST['action'])) {
       if ($hostel == '1' && $transport == '1' && $dayScholar == '1') {
          if ($progId > 0) $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.* from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.$batchField=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.program_id='$progId' and st.$batchField='$batchId' $leet and st.student_status='$status' order by st.ay_id, st.user_id";
          else $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.* from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.$batchField=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.$batchField='$batchId' $leet and st.student_status='$status' order by st.ay_id, st.user_id";
-      }else{
-         if ($hostel == '1' && $transport == '0' && $dayScholar == '0')$srs=' and st.student_residential_status="2"';
-         elseif ($hostel == '0' && $transport == '1' && $dayScholar == '0')$srs=' and st.student_residential_status="1"';
-         elseif ($hostel == '0' && $transport == '0' && $dayScholar == '1')$srs=' and st.student_residential_status="0"';
-         else $srs=' and st.student_residential_status>"0"';
+      } else {
+         if ($hostel == '1' && $transport == '0' && $dayScholar == '0') $srs = ' and st.student_residential_status="2"';
+         elseif ($hostel == '0' && $transport == '1' && $dayScholar == '0') $srs = ' and st.student_residential_status="1"';
+         elseif ($hostel == '0' && $transport == '0' && $dayScholar == '1') $srs = ' and st.student_residential_status="0"';
+         else $srs = ' and st.student_residential_status>"0"';
          if ($progId > 0) $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.* from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.$batchField=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.program_id='$progId' and st.$batchField='$batchId' $leet $srs and st.student_status='$status' order by st.ay_id, st.user_id";
          else $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.* from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.$batchField=b.batch_id and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id and st.$batchField='$batchId' $leet $srs and st.student_status='$status' order by st.ay_id, st.user_id";
       }
@@ -127,6 +128,7 @@ if (isset($_POST['action'])) {
             $json_array[] = $subArray;
          }
          echo json_encode($json_array);
+         addActivity($conn, $myId, "End of Student List");
       }
    } elseif ($_POST['action'] == 'studentDisp') {
       $id = $_POST['userId'];
@@ -134,12 +136,16 @@ if (isset($_POST['action'])) {
       $result = $conn->query($sql);
       $output = $result->fetch_assoc();
       echo json_encode($output);
+      addActivity($conn, $myId, "studentDisp");
+
    } elseif ($_POST['action'] == 'fetchAcademicBatch') {
       $id = $_POST['userId'];
       $sql = "select b.* from student st, batch b where st.ay_id=b.batch_id and st.user_id='$id'";
       $result = $conn->query($sql);
       $output = $result->fetch_assoc();
       echo json_encode($output);
+      addActivity($conn, $myId, $_POST['action']);
+      
    } elseif ($_POST['action'] == 'addStudent') {
       $dup = "select * from student where student_rollno='" . data_check($_POST["sRno"]) . "' and student_status='0'";
       $result = $conn->query($dup);
@@ -168,12 +174,15 @@ if (isset($_POST['action'])) {
             $result = $conn->query($sql);
          }
       }
+      addActivity($conn, $myId, $_POST['action']);
    } elseif ($_POST['action'] == 'fetchStudent') {
       $id = $_POST['userId'];
       $sql = "select st.*, sd.*, sa.*, sr.*, b.batch, p.program_name from student st, student_detail sd, student_address sa, student_reference sr, batch b, program p where st.batch_id=b.batch_id and st.user_id='$id' and st.program_id=p.program_id and st.student_id=sd.student_id and st.student_id=sa.student_id and st.student_id=sr.student_id";
       $result = $conn->query($sql);
       $output = $result->fetch_assoc();
       echo json_encode($output);
+      addActivity($conn, $myId, $_POST['action']);
+
    } elseif ($_POST['action'] == 'fetchState') {
       $state_id = $_POST['state_id'];
       $sql = "select * from states where state_id='$state_id'";
@@ -194,6 +203,8 @@ if (isset($_POST['action'])) {
       $sql = "update student set $tag='$value' where $id_name='$id'";
       $conn->query($sql);
       echo $conn->error;
+      addActivity($conn, $myId, $_POST['action']);
+
    } elseif ($_POST['action'] == 'updateDetails') {
       $id_name = $_POST['id_name'];
       $id = $_POST['id'];
@@ -205,6 +216,8 @@ if (isset($_POST['action'])) {
       echo "affected rows $affectedRows";
       if (!$result) echo $conn->error;
       else echo "Updated";
+      addActivity($conn, $myId, $_POST['action']);
+
    } elseif ($_POST['action'] == 'updateAddress') {
       $id_name = $_POST['id_name'];
       $id = $_POST['id'];
@@ -216,6 +229,8 @@ if (isset($_POST['action'])) {
       echo "affected rows $affectedRows";
       if (!$result) echo $conn->error;
       else echo "Updated";
+      addActivity($conn, $myId, $_POST['action']);
+
    } elseif ($_POST['action'] == 'updateReference') {
       $id_name = $_POST['id_name'];
       $id = $_POST['id'];
@@ -227,6 +242,8 @@ if (isset($_POST['action'])) {
       echo "affected rows $affectedRows";
       if (!$result) echo $conn->error;
       else echo "Updated";
+      addActivity($conn, $myId, $_POST['action']);
+
    } elseif ($_POST['action'] == 'studentQualificationList') {
 
       $stdId = $_POST['stdId'];
@@ -254,6 +271,8 @@ if (isset($_POST['action'])) {
       }
       $conn->query($sql);
       echo $conn->error;
+      addActivity($conn, $myId, $_POST['action']);
+
    } elseif ($_POST['action'] == 'fetchStudentQualification') {
       $sq_id = $_POST['mn_id'];
       $studentId = $_POST['studentId'];
@@ -261,6 +280,8 @@ if (isset($_POST['action'])) {
       $result = $conn->query($sql);
       $output = $result->fetch_assoc();
       echo json_encode($output);
+      addActivity($conn, $myId, $_POST['action']);
+
    } elseif ($_POST['action'] == 'studentProgramList') {
       $sql = "SELECT * from program where program_status='0' order by sp_name";
       $json = getTableRow($conn, $sql, array("program_id", "program_name"));
@@ -282,6 +303,8 @@ if (isset($_POST['action'])) {
          echo '<tr><td>' . $program_name . '</td><td>' . $rowcount . '</td></tr>';
       }
       echo '</table></table>';
+      addActivity($conn, $myId, $_POST['action']);
+
    } elseif ($_POST['action'] == 'updateStudentList') {
       $batch_id = $_POST['batchId'];
       $program_id = $_POST['progId'];
@@ -292,6 +315,8 @@ if (isset($_POST['action'])) {
          $json_array[] = $rowArray;
       }
       echo json_encode($json_array);
+      addActivity($conn, $myId, $_POST['action']);
+
    } elseif ($_POST['action'] == 'dropStudent') {
       $id = $_POST['id'];
       $mn_id = $_POST['mn_id'];
@@ -303,6 +328,8 @@ if (isset($_POST['action'])) {
       $sql = "update student_detail set mn_id='$mn_id' where student_id='$id'";
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
+      addActivity($conn, $myId, $_POST['action']);
+
    } elseif ($_POST['action'] == 'resetStudent') {
       $id = $_POST['id'];
       $sql = "update student set student_status='0' where student_id='$id'";
@@ -312,6 +339,8 @@ if (isset($_POST['action'])) {
       $sql = "update student_detail set mn_id='' where student_id='$id'";
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
+      addActivity($conn, $myId, $_POST['action']);
+
    } elseif ($_POST['action'] == 'updateStatus') {
       $program_id = $_POST['progId'];
       $batchId = $_POST['batchId'];
@@ -332,6 +361,8 @@ if (isset($_POST['action'])) {
             }
          }
       }
+      addActivity($conn, $myId, $_POST['action']);
+
    } elseif ($_POST['action'] == 'changeBranch') {
       $id = $_POST['studentId'];
       $progId = $_POST['progId'];
@@ -339,6 +370,8 @@ if (isset($_POST['action'])) {
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
       else echo " Branch Changed ";
+      addActivity($conn, $myId, $_POST['action']);
+
    } elseif ($_POST['action'] == 'changeAdBatch') {
       $id = $_POST['studentId'];
       $batchId = $_POST['batchId'];
@@ -346,6 +379,8 @@ if (isset($_POST['action'])) {
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
       else echo " Admission Batch Changed ";
+      addActivity($conn, $myId, $_POST['action']);
+
    } elseif ($_POST['action'] == 'changeAcBatch') {
       $id = $_POST['studentId'];
       $batchId = $_POST['batchId'];
@@ -353,6 +388,8 @@ if (isset($_POST['action'])) {
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
       else echo " Academin Batch Changed ";
+      addActivity($conn, $myId, $_POST['action']);
+
    } elseif ($_POST['action'] == 'stateOption') {
       $sql = "select * from states order by state_name ASC";
       $result = $conn->query($sql);

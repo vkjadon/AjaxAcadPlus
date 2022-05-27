@@ -1,6 +1,8 @@
 <?php
 require('../requireSubModule.php');
 $phpFile = "feeReceiptSql.php";
+addActivity($conn, $myId, "Fee Receipt");
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,17 +21,11 @@ $phpFile = "feeReceiptSql.php";
           <h5 class=" text-center pr-2"> Receipt </h5>
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-          <?php
-          if (in_array("9", $myLinks)) echo '<a class="list-group-item list-group-item-action fr" id="list-fr-list" data-toggle="list" href="#list-fr" role="tab" aria-controls="fr"> Fee Receipt</a>';
-
-          if (in_array("10", $myLinks)) echo '<a class="list-group-item list-group-item-action trans" id="list-trans-list" data-toggle="list" href="#list-trans" role="tab" aria-controls="trans"> Transactions </a>';
-
-          if (in_array("11", $myLinks)) echo '<a class="list-group-item list-group-item-action feeConcession" id="list-feeConcession-list" data-toggle="list" href="#feeConcession" role="tab" aria-controls="trans"> Dues/Concession</a>';
-
-          if (in_array("12", $myLinks)) echo '<a class="list-group-item list-group-item-action reverse" data-toggle="list" href="#reverse" role="tab" aria-controls="trans"> Reverse Entry</a>';
-
-          echo '<a class="list-group-item list-group-item-action rer" data-toggle="list" href="#rer" role="tab" aria-controls="trans"> Reverse Entry Reports</a>';
-          ?>
+          <a class="list-group-item list-group-item-action fr" id="list-fr-list" data-toggle="list" href="#list-fr" role="tab" aria-controls="fr"> Fee Receipt</a>
+          <a class="list-group-item list-group-item-action trans" id="list-trans-list" data-toggle="list" href="#list-trans" role="tab" aria-controls="trans"> Transactions </a>
+          <a class="list-group-item list-group-item-action feeConcession" id="list-feeConcession-list" data-toggle="list" href="#feeConcession" role="tab" aria-controls="trans"> Dues/Concession</a>
+          <a class="list-group-item list-group-item-action reverse" data-toggle="list" href="#reverse" role="tab" aria-controls="trans"> Reverse Entry</a>
+          <a class="list-group-item list-group-item-action rer" data-toggle="list" href="#rer" role="tab" aria-controls="trans"> Reverse Entry Reports</a>
         </div>
       </div>
       <div class="col-11 leftLinkBody">
@@ -635,7 +631,7 @@ $phpFile = "feeReceiptSql.php";
         $('#studentAutoList').fadeOut();
         $('#studentAutoList').html("");
       }
-    });
+    })
 
     $(document).on('click', '#searchStudent', function(event) {
       var data = $("#studentSearch").val();
@@ -671,11 +667,11 @@ $phpFile = "feeReceiptSql.php";
       }, "text").fail(function() {
         $.alert("fail in place of error");
       })
-    });
+    })
 
     $(document).on('click', '.feeRecord', function(event) {
       feeBalance();
-    });
+    })
 
     $(document).on('click', '.autoList', function() {
       $('#studentNameSearch').val($(this).text());
@@ -706,7 +702,7 @@ $phpFile = "feeReceiptSql.php";
       }, "text").fail(function() {
         $.alert("fail in place of error");
       })
-    });
+    })
 
     $(document).on("click", "#showTransaction", function() {
       var dateFrom = $("#fr_from").val();
@@ -756,7 +752,7 @@ $phpFile = "feeReceiptSql.php";
       }).fail(function() {
         $.alert("Error !!");
       })
-    });
+    })
 
     function transactionHead() {
       var dateFrom = $("#fr_from").val();
@@ -812,7 +808,7 @@ $phpFile = "feeReceiptSql.php";
           $.alert("fail in place of error");
         })
       }
-    });
+    })
 
     function feeConcessionList() {
       // $.alert("Batch");
@@ -855,7 +851,7 @@ $phpFile = "feeReceiptSql.php";
         $("#tId").prop('disabled', false);
         $("#transaction_date").prop('disabled', false);
       }
-    });
+    })
 
     function feeStructure() {
       var studentId = $("#studentIdHidden").val();
@@ -937,7 +933,7 @@ $phpFile = "feeReceiptSql.php";
         // $.alert(feeAmount);
 
       } else $.alert("Student not Selected !!");
-    });
+    })
 
     function feeReceiptList() {
       // $.alert("Batch");
@@ -1008,11 +1004,9 @@ $phpFile = "feeReceiptSql.php";
         $("#feeDebitList").find("tr:gt(0)").remove();
         $("#feeDebitList").append(card);
         $("#totalDebit").val(totalDebit);
-
       }).fail(function() {
         $.alert("Error in Debit List!!");
       })
-
     }
 
     function feeBalance() {
@@ -1067,6 +1061,7 @@ $phpFile = "feeReceiptSql.php";
       })
 
     }
+
     $(document).on('click', '#reverseSubmit', function(event) {
       var fr_sno = $("#frId").val();
       var frev_desc = $("#fre_desc").val();
@@ -1337,7 +1332,7 @@ $phpFile = "feeReceiptSql.php";
       str = str.replace(/\number+/g, ' ');
       return str.trim();
     }
-  });
+  })
 
   function printDiv(print) {
     // $.alert("In print");
@@ -1382,5 +1377,4 @@ $phpFile = "feeReceiptSql.php";
     }
   }
 </script>
-
 </html>

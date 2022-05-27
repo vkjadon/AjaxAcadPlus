@@ -15,6 +15,12 @@ if (isset($myBatch)) $myBatchName = getField($conn, $myBatch, "batch", "batch_id
 else $myBatchName = "Select Batch";
 if (!isset($myProg)) $myProg = '';
 if (!isset($myBatch)) $myBatch = '';
+$curl = curl_init();
+curl_setopt($curl, CURLOPT_URL, "https://classconnect.in/api/get_portal_menu.php");
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+$output = curl_exec($curl);
+curl_close($curl);
+$group = json_decode($output, true);
 ?>
 <header>
 	<div class="py-2">
@@ -22,7 +28,7 @@ if (!isset($myBatch)) $myBatch = '';
 			<div class="col-md-1 ml-2">
 				<img src="<?php echo $setLogo; // Defined in check_user 
 									?>" height="37px">
-				<?php // echo $myFolder;
+				<?php //echo $setLogo; // Defined in check_user 
 				?>
 			</div>
 			<div class="col-md-2 ml-2 text-center">
@@ -38,135 +44,71 @@ if (!isset($myBatch)) $myBatch = '';
 				//echo "School ".$myScl;
 				?>
 			</div>
-			<div class="col-md-2 float-right">
-				<input type="text" class="form-control form-control-sm" id="indexSearch" name="indexSearch" placeholder="Search Staff" aria-label="Search">
-				<p class='list-group overlapList' id="indexAutoList"></p>
-			</div>
-			<div class="col-md-2"></div>
 			<div class="col-md-2 text-right largeText" id="clock"></div>
-			<div class="col mr-2">
-				<!-- <a href="<?php echo $codePath . '/module/forms/'; ?>" class="float-right">&nbsp; Forms &nbsp;</a> -->
-				<!-- <a href="" class="float-right">&nbsp; Downloads &nbsp;</a> -->
-				<a href="<?php echo $codePath . '/access/admission/'; ?>" class="float-right" target="_blank">&nbsp; Admission &nbsp;</a>
-			</div>
 		</div>
-
 	</div>
-
-	<nav id="navbar_top" class="navbar navbar-expand-lg bg-two">
-		<div class="container-fluid">
-			<a class="navbar-brand" href="<?php echo $codePath . '/module/index.php'; ?>">ClassConnect</a>
-			<!-- Collapse button -->
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav" aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon">Menu</span>
-			</button>
-
-			<!-- Collapsible content -->
-			<div class="collapse navbar-collapse" id="main_nav">
-				<!-- Links -->
-				<ul class="navbar-nav mr-auto">
-					<!-- Dropdown -->
-					<!-- Administration -->
+	<nav id="navbar_top" class="navbar navbar-expand-lg navbar-dark">
+		<a class="navbar-brand" href="<?php echo $codePath . '/module/index.php'; ?>">ClassConnect</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNavDropdown">
+			<ul class="navbar-nav mr-auto">
+				<?php
+				for ($i = 0; $i < count($group["data"]); $i++) {
+					$pm_id = $group["data"][$i]["pm_id"];
+					$curl = curl_init();
+					$url = 'https://classconnect.in/api/get_portal_menuGroup.php?pm=' . $pm_id;
+					curl_setopt($curl, CURLOPT_URL, $url);
+					curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+					$output = curl_exec($curl);
+					$output = json_decode($output, true);
+				?>
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administration</a>
-						<div class="dropdown-menu menuDouble" aria-labelledby="navbarDropdownMenuLink">
+						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $group["data"][$i]["pm_name"]; ?></a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 							<div class="card border">
-								<div class="row">										
-									<div class="col-6 pr-0">
-										<a href="<?php echo $codePath . '/module/eoffice/'; ?>" class="dropdown-item py-0">Office</a>
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0">Status Report</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</li>
-					<!-- Academics -->
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Academics</a>
-						<div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
-							<div class="card myCard border">
 								<div class="row">
-									<div class="col-6 pr-0">
-										<a href="<?php echo $codePath . '/module/lms/'; ?>" class="dropdown-item py-0">LMS</a>
-										<a href="<?php echo $codePath . '/module/acReport/'; ?>" class="dropdown-item py-0">Academic Reports</a>
+									<div class="col-12 pr-0">
+										<?php
+										// echo "sd " . $output["success"];
+										// echo "Count " . count($output["data"]);
+										$linkCount=0;
+										for ($j = 0; $j < count($output["data"]); $j++) {
+											$path = $output["data"][$j]["pg_folder"];
+											$pg_name = $output["data"][$j]["pg_name"];
+											$pg_id = $output["data"][$j]["pg_id"];
+											$sql = "select * from privilege_group where pg_id='$pg_id' and up_code='0'";
+											if ($conn->query($sql)->num_rows > 0) {
+												$linkCount++;
+										?>
+												<a href="<?php echo $codePath . '/module/' . $path . '/'; ?>" class="dropdown-item py-0"><?php echo $pg_name; ?></a>
+										<?php
+											}
+										}
+										if($linkCount==0)echo "No Active Links";
+										?>
 									</div>
 								</div>
 							</div>
 						</div>
 					</li>
-					
-					<!-- Staff -->
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="hr/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Staff</a>
-						<div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
-							<div class="card myCard border">
-								<div class="row">
-									<div class="col-6 pr-0">
-										<a href="<?php echo $codePath . '/module/leave/'; ?>" class="dropdown-item py-0">Leave</a>
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> Support </a>
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> Research </a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</li>
-					<!-- Student -->
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Student</a>
-						<div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
-
-							<div class="card myCard border">
-								<div class="row">
-									<div class="col-6 pr-0">
-										<a href="<?php echo $codePath . '/module/comm/'; ?>" class="dropdown-item py-0"> SMS and Email </a>
-										<a href="<?php echo $codePath . '/module/feedback/'; ?>" class="dropdown-item py-0"> Feedback </a>
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> Mentoring </a>
-									</div>
-									<div class="col-6 pl-0">
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> Hostel </a>
-										<a href="<?php echo $codePath . '/module/alumni/'; ?>" class="dropdown-item py-0"> Transport </a>
-										<a href="<?php echo $codePath . '/module/enrichment/'; ?>" class="dropdown-item py-0">Enrichment</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</li>
-					<!-- OBE -->
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown">OBE</a>
-						<div class="dropdown-menu dropdown-default menuDouble">
-							<div class="card myCard border">
-								<div class="row">
-									<div class=" col-6 pr-0">
-										<a href="<?php echo $codePath . '/module/obaSettings/'; ?>" class="dropdown-item py-0"> OBA Settings </a>
-										<a href="<?php echo $codePath . '/module/attainment/'; ?>" class="dropdown-item py-0"> CO Attainment </a>
-										<a href="<?php echo $codePath . '/module/obeFeedback/'; ?>" class="dropdown-item py-0"> OBE Feedback </a>
-									</div>
-									<div class="col-6 pl-0">
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> -- </a>
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> -- </a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</li>
-				</ul>
-				<!-- Links -->
-
-				<ul class="navbar-nav ml-auto nav-flex-icons">
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<i class="fas fa-user"></i> <?php echo $myName; ?> </a>
-						</a>
-						<div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="navbarDropdownMenuLink-333">
-							<!-- <a class="dropdown-item py-0" href="<?php echo $codePath . '/module/profile/'; ?>">My Account</a> -->
-							<a class="dropdown-item py-0" href="<?php echo $codePath . '/module/profile/'; ?>">Profile</a>
-							<a class="dropdown-item py-0" href="<?php echo $codePath . '/logout.php'; ?>">Logout</a>
-						</div>
-					</li>
-				</ul>
-			</div> <!-- navbar-collapse.// -->
-		</div> <!-- container-fluid.// -->
+				<?php
+				}
+				?>
+			</ul>
+			<ul>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-user"></i> <?php echo $myName; ?> </a>
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+						<a class="dropdown-item py-1" href="<?php echo $codePath . '/module/profile/'; ?>">Profile</a>
+						<a class="dropdown-item py-1" href="<?php echo $codePath . '/logout.php'; ?>">Logout</a>
+					</div>
+				</li>
+			</ul>
+		</div>
 	</nav>
 </header>
 <script>

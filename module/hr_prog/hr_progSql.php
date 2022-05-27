@@ -26,7 +26,7 @@ if (isset($_POST['action'])) {
     else {
       while ($rows = $result->fetch_assoc()) {
         $mn_id = $rows["mn_id"];
-        $sql_insert = "insert into staff_salary (staff_id, mn_id, mn_type, ss_value) values('$id', '$mn_id','0','0')";
+        $sql_insert = "insert into staff_salary (staff_id, mn_id, mn_type, ss_value, ss_percent, ss_daily) values('$id', '$mn_id','0','0','0','1')";
         $result_insert = $conn->query($sql_insert);
       }
     }
@@ -37,7 +37,7 @@ if (isset($_POST['action'])) {
     else {
       while ($rows = $result->fetch_assoc()) {
         $mn_id = $rows["mn_id"];
-        $sql_insert = "insert into staff_salary (staff_id, mn_id, mn_type, ss_value) values('$id', '$mn_id','0','0')";
+        $sql_insert = "insert into staff_salary (staff_id, mn_id, mn_type, ss_value, ss_percent, ss_daily) values('$id', '$mn_id','0','0', '0', '1')";
         $result_insert = $conn->query($sql_insert);
       }
     }
@@ -98,7 +98,25 @@ if (isset($_POST['action'])) {
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     else echo "Updated $tag=$value where staff = $id and mn_id=$mn_id";
-  } elseif($_POST['action'] == 'salRepList'){
+  } elseif ($_POST['action'] == 'percentBasic') {
+    $id = $_POST['userId'];
+    $mn_id = $_POST['mn_id'];
+    $tag = $_POST['tag'];
+    $value = $_POST['value'];
+    $sql = "update staff_salary set $tag='$value' where staff_id='$id' and mn_id='$mn_id'";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+    else echo "Updated $tag=$value where staff = $id and mn_id=$mn_id";
+  }elseif ($_POST['action'] == 'calculatedDaily') {
+    $id = $_POST['userId'];
+    $mn_id = $_POST['mn_id'];
+    $tag = $_POST['tag'];
+    $value = $_POST['value'];
+    $sql = "update staff_salary set $tag='$value' where staff_id='$id' and mn_id='$mn_id'";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+    else echo "Updated $tag=$value where staff = $id and mn_id=$mn_id";
+  }elseif($_POST['action'] == 'salRepList'){
     $sql = "select st.* from staff st where st.staff_id>1 and st.staff_status='0' order by staff_name";
     $result = $conn->query($sql);
     if ($result) {

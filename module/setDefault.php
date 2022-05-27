@@ -72,8 +72,13 @@
 						selectList($conn, 'Batch', array('1', 'batch_id', 'batch', '', 'sel_batch'), $sql);
 					}
 					?>
-
 				</div>
 			</div>
+			Logged in as 
+			<?php if($privilege=="9")echo "Admin"; 
+			elseif($privilege=="1")echo "Staff";
+			elseif($privilege=="0")echo "Faculty";
+			else echo "Not Set";
+			?> 
 		</div>
 	</div>

@@ -1,5 +1,7 @@
 <?php
 require('../requireSubModule.php');
+addActivity($conn, $myId, "Academic Setting");
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -318,7 +320,8 @@ require('../requireSubModule.php');
                           </div>
                           <div class="col">
                             <div class="form-group">
-                              New (new)
+                              <input type="radio" class="headName" id="et" name="headName" value="et">
+                              Event Type (et)
                             </div>
                           </div>
                         </div>
@@ -337,7 +340,8 @@ require('../requireSubModule.php');
                           </div>
                           <div class="col">
                             <div class="form-group">
-                              New (new)
+                            <input type="radio" class="headName" id="ect" name="headName" value="ect">
+                              Event Type (ect)
                             </div>
                           </div>
                         </div>
@@ -431,7 +435,7 @@ require('../requireSubModule.php');
                         </div>
 
                         <div class="col">
-                          <input type="hidden" id="action" name="action" value="addTemplate">
+                          <input type="hidden" id="actionTmp" name="action" value="addTemplate">
                           <button type="submit" class="btn btn-sm atmp">Submit</button>
                         </div>
                       </div>
@@ -629,6 +633,24 @@ require('../requireSubModule.php');
         $.alert("fail in place of error");
       })
     });
+
+    $(document).on('click', '.mnUpdate', function() {
+      var id = $(this).attr('data-id');
+      var tag = $(this).attr('data-tag');
+      // $.alert("Process Id " + id);
+      $.post("aaSql.php", {
+        mn_id: id,
+        tag : tag,
+        action: "mnUpdate"
+      }, function() {}, "text").done(function(data) {
+        $.alert("Updated !");
+        masterNameList();
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+
+    });
+
     $(document).on('submit', '#atmpForm', function(event) {
       event.preventDefault(this);
       var formData = $(this).serialize();
@@ -687,26 +709,15 @@ require('../requireSubModule.php');
           error = "YES";
           error_msg = "Batch is empty";
         }
-      } else if (action == "addPo" || action == "uopdatePo") {
-        if (selBatch === "") {
-          error = "YES";
-          error_msg = "Please Select Batch to Proceed";
-        } else if (poc === "" || poS === "") {
-          error = "YES";
-          error_msg = "Enter PO Code and PO to Proceed !!";
-        }
-      }
-
+      } 
       if (error == "NO") {
         var formData = $(this).serialize();
         $('#firstModal').modal('hide');
-        //$.alert(" Pressed" + formData);
+        // $.alert(" Pressed" + formData);
         $.post("aaSql.php", formData, () => {}, "text").done(function(data) {
           $.alert("List " + data);
           if (action == "addBatch" || action == "updateBatch") {
             batchList();
-          } else if (action == "addPo" || action == "updatePo") {
-            poList();
           } else if (action == "addSession" || action == "updateSession") {
             batchSession(selBatch);
           }
@@ -777,10 +788,7 @@ require('../requireSubModule.php');
       $('#modal_title').text("Add Batch");
       $('#action').val("addBatch");
       $('#firstModal').modal('show');
-      $('.subjectForm').hide();
       $('.batchForm').show();
-      $('.poForm').hide();
-      $('.coForm').hide();
       $('.sessionForm').hide();
     });
     $(document).on('click', '.batch_idD', function() {
@@ -948,36 +956,12 @@ require('../requireSubModule.php');
               </div>
             </div>
           </div>
-
-          <div class="poForm">
-            <div class="row">
-              <div class="col-6">
-                <div class="form-group">
-                  Enter Code
-                  <input type="text" class="form-control form-control-sm" id="poCode" name="poCode" placeholder="PO Code">
-                </div>
-              </div>
-              <div class="col-6">
-                <div class="form-group">
-                  Serial Order of PO
-                  <input type="text" class="form-control form-control-sm" id="poSno" name="poSno" placeholder="Serial Order">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12">
-                PO statement
-                <input type="text" class="form-control form-control-sm" id="poStatement" name="poStatement" placeholder="Enter PO Statement">
-              </div>
-            </div>
-          </div>
         </div> <!-- Modal Body Closed-->
         <!-- Modal footer -->
         <div class="modal-footer">
           <input type="hidden" id="modalId" name="modalId">
           <input type="hidden" id="action" name="action">
           <input type="hidden" id="batchIdModal" name="batchIdModal">
-          <input type="hidden" id="programIdModal" name="programIdModal">
           <button type="submit" class="btn btn-secondary" id="submitModalForm">Submit</button>
           <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
         </div> <!-- Modal Footer Closed-->

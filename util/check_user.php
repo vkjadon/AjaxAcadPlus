@@ -99,7 +99,7 @@ if ($_POST['action'] == 'checkUser') {
     $message = '<html><head><title>HTML email</title></head>
       <body>
       <h4>Password reset is Successful.</h4>
-      <h5>Your password is ' . $password . '</h5>
+      <h5>Your password is *** </h5>
       <h4>Regards</h4>
       </body>
       </html>';

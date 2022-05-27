@@ -54,8 +54,8 @@ session_start();
         var username = $("#username").val();
         var instCode = $("#instCode").val();
         // alert("Code " + instCode.length);
-        if (instCode.length > 2) {
-          // alert("Code " + instCode);
+        if (instCode.length > 2 && username.length > 4) {
+          alert("Code " + instCode);
           $.post("util/check_user.php", {
             username: username,
             instCode: instCode,
@@ -65,7 +65,7 @@ session_start();
           }).fail(function() {
             alert("One or More Credentials are NOT Correct!!");
           })
-        } else alert("Please Enter a Valid Institute Code !!")
+        } else alert("Please Check Institute Code and Username !!")
       });
 
       $(document).on('click', '.login', function(event) {

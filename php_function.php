@@ -14,6 +14,13 @@ function data_clean($data)
   return $data;
 }
 
+function addActivity($conn, $staff_id, $activity)
+{
+    $sql_in = "insert into user_activity (staff_id, ua_name) values('$staff_id', '$activity')";
+    // echo $sql_in;
+    $result = $conn->query($sql_in);
+    if (!$result) echo $conn->error;
+}
 
 function selectList($conn, $selectTitle, $data, $sql)
 {

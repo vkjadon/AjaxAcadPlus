@@ -1,11 +1,19 @@
-<div class="navbar navbar-expand-md navbar-dark bg-two fixed-bottom">
-  <div class="row">
-    <div class="col">
-      <p class="text-white m-0 p-0">Product of EISOFTECH INC</p>
-    </div>
+<nav class="navbar fixed-bottom navbar-expand-lg navbar-light bg-light">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+    <span class="navbar-brand" href="#">A Product of EI Softech Inc</span>
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item">
+        <a href="<?php echo $codePath . '/access/event/'; ?>" class="float-right" target="_blank"> Event </a>
+      </li>
+    </ul>
+    <input type="search" class="form-control mr-sm" id="indexSearch" name="indexSearch" placeholder="Search" aria-label="Search">
+    <p class='list-group overlapList' id="indexAutoList"></p>
   </div>
-</div>
-<?php // echo $codePath; ?>
+</nav>
+
 <script>
   $(document).on("keyup", '#indexSearch', function() {
     var searchString = $(this).val();
@@ -29,8 +37,8 @@
     }
   });
   $(document).on("click", ".indexAutoList", function() {
-      $('#indexSearch').val($(this).text());
-      var id = $(this).attr("data-staff");
-      $('#indexAutoList').fadeOut();
-    });
+    $('#indexSearch').val($(this).text());
+    var id = $(this).attr("data-staff");
+    $('#indexAutoList').fadeOut();
+  });
 </script>

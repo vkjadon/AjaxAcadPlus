@@ -1,6 +1,8 @@
 <?php
 require('../requireSubModule.php');
 $phpFile = "hr_progSql.php";
+addActivity($conn, $myId, "Progression ");
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,10 +21,8 @@ $phpFile = "hr_progSql.php";
           <h5 class=" text-center pr-2"> Progression </h5>
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-          <?php
-          echo '<a class="list-group-item list-group-item-action prog" id="list-prog-list" data-toggle="list" href="#list-prog" role="tab" aria-controls="prog">Progression</a>';
-          echo '<a class="list-group-item list-group-item-action support" id="list-support-list" data-toggle="list" href="#list-support" role="tab" aria-controls="support">Support</a>';
-          ?>
+          <a class="list-group-item active list-group-item-action prog" id="list-prog-list" data-toggle="list" href="#list-prog" role="tab" aria-controls="prog">Progression</a>
+          <a class="list-group-item list-group-item-action support" id="list-support-list" data-toggle="list" href="#list-support" role="tab" aria-controls="support">Support</a>
         </div>
       </div>
       <div class="col-11 leftLinkBody">
@@ -76,7 +76,7 @@ $phpFile = "hr_progSql.php";
               </div>
             </div>
           </div>
-          <div class="tab-pane" id="list-prog" role="tabpanel" aria-labelledby="list-prog-list">
+          <div class="tab-pane show active" id="list-prog" role="tabpanel" aria-labelledby="list-prog-list">
             <div class="row">
               <div class="col-md-12">
                 <div class="card mt-2 p-3 myCard">
@@ -92,16 +92,26 @@ $phpFile = "hr_progSql.php";
                     <div class="tab-pane show active" id="salary" role="tabpanel" aria-labelledby="salary">
                       <input type="hidden" id="staffIdHidden" name="staffIdHidden" value="0">
                       <div class="row">
-                        <div class="col-6 pr-0">
+                        <div class="col-md-6">
                           <div class="form-group">
-                            <label>Components</label>
-                            <p id="salaryComponents"></p>
+                            <label class="largeText">Salary Components</label>
+                            <table class="table list-table-xs mt-3" id="salaryComponents">
+                              <th class="text-center">Salary Heads</th>
+                              <th class="text-center">Basic Percent</th>
+                              <th class="text-center">Amount/Basic %</th>
+                              <th class="text-center">Calculated Daily</th>
+                            </table>
                           </div>
                         </div>
-                        <div class="col-6 pl-1">
+                        <div class="col-md-6">
                           <div class="form-group">
-                            <label>Deduction</label>
-                            <p id="salaryDeductions"></p>
+                            <label class="largeText">Salary Deduction</label>
+                            <table class="table list-table-xs mt-3" id="salaryDeductions">
+                              <th class="text-center">Deduction Heads</th>
+                              <th class="text-center">Basic Percent</th>
+                              <th class="text-center">Amount/Basic %</th>
+                              <th class="text-center">Calculated Daily</th>
+                            </table>
                           </div>
                         </div>
                       </div>
@@ -196,7 +206,7 @@ $phpFile = "hr_progSql.php";
         var mn_id = $(this).attr("data-id")
         var tag = $(this).attr("data-tag")
         var value = $(this).val()
-        // $.alert("Tag " + tag + " Value " + value + " Staff " + staff_id + " mn_id " + mn_id);
+        $.alert("Tag " + tag + " Value " + value + " Staff " + staff_id + " mn_id " + mn_id);
         $.post("hr_progSql.php", {
           userId: staff_id,
           mn_id: mn_id,
@@ -262,24 +272,74 @@ $phpFile = "hr_progSql.php";
       }, function() {}, "json").done(function(data, status) {
         // $.alert(data);
         var list = '';
+        var mn = '';
         var totalSalary = 0;
         $.each(data, function(key, value) {
-          list += '<div class="row m-1"><div class="col-md-5">' + value.mn_name + '</div>';
-          if (value.mn_type == 1) list += '<div class="col-md-3">%<input type="radio" checked="checked" class="salaryUpdateForm" name="' + value.mn_id + '" data-tag="mn_type" data-id="' + value.mn_id + '" value="1">Yes';
-          else list += '<div class="col-md-3">%<input type="radio" class="salaryUpdateForm" name="' + value.mn_id + '" data-tag="mn_type" data-id="' + value.mn_id + '" value="1">Yes';
-          if (value.mn_type == 0) list += '<input type="radio" checked="checked" class="salaryUpdateForm" name="' + value.mn_id + '" data-tag="mn_type" data-id="' + value.mn_id + '" value="0">No</div>';
-          else list += '<input type="radio" class="salaryUpdateForm" name="' + value.mn_id + '" data-tag="mn_type" data-id="' + value.mn_id + '" value="0">No</div>';
-          list += '<div class="col-md-4"><input type="number" class="form-control form-control-sm salaryUpdateForm" data-tag="ss_value" data-id="' + value.mn_id + '" value="' + value.ss_value + '"></div>';
-          list += '</div>';
+          list += '<tr><td>' + value.mn_name + '</div>';
+          if(value.ss_percent=="1")list += '<td class="click text-center"><a href="#" class="percentBasic" data-tag="ss_percent" data-id="' + value.mn_id + '" data-value="0"><span class="ssPercent'+value.mn_id+'""><i class="fa fa-check"></i></span></a></td>';
+          else list += '<td class="click text-center"><a href="#" class="percentBasic" data-tag="ss_percent" data-id="' + value.mn_id + '" data-value="1"><span class="ssPercent'+value.mn_id+'""><i class="fa fa-times"></i></span></a></td>';
+          list += '<td><input type="number" class="form-control form-control-sm salaryUpdateForm" data-tag="ss_value" data-id="' + value.mn_id + '" value="' + value.ss_value + '"></td>';
+          if(value.ss_daily=="1")list += '<td class="click text-center"><a href="#" class="calculatedDaily" data-tag="ss_daily" data-id="' + value.mn_id + '" data-value="0"><span class="ssDaily'+value.mn_id+'""><i class="fa fa-check"></i></span></a></td>';
+          else list += '<td class="click text-center"><a href="#" class="calculatedDaily" data-tag="ss_daily" data-id="' + value.mn_id + '" data-value="1"><span class="ssDaily'+value.mn_id+'""><i class="fa fa-times"></i></span></a></td>';
+          list += '</tr>';
           totalSalary = parseInt(totalSalary) + parseInt(value.ss_value)
         });
         list += '<h4>Total Salary ' + totalSalary + '</h4>';
-        $("#salaryComponents").html(list);
+        $("#salaryComponents").find("tr:gt(0)").remove();
+        $("#salaryComponents").append(list);
       }).fail(function() {
         $.alert("Error !!");
       })
     }
-
+    $(document).on('click', '.percentBasic', function() {
+      var staff_id = $("#staffIdHidden").val();
+      if (staff_id > 0) {
+        var mn_id = $(this).attr("data-id")
+        var tag = $(this).attr("data-tag")
+        var value = $(this).attr("data-value")
+        if(value=="0")$(this).attr("data-value", "1")
+        else $(this).attr("data-value", "0")
+        // $.alert("Tag " + tag + " Value " + value + " Staff " + staff_id + " mn_id " + mn_id);
+        $.post("hr_progSql.php", {
+          userId: staff_id,
+          mn_id: mn_id,
+          tag: tag,
+          value: value,
+          action: "percentBasic"
+        }, function() {}, "text").done(function(data, status) {
+          // $.alert(data);
+          if(value=="0")$(".ssPercent"+mn_id).html('<i class="fa fa-times"></i>')
+          else $(".ssPercent"+mn_id).html('<i class="fa fa-check"></i>')
+        }).fail(function() {
+          $.alert("fail in place of error");
+        })
+      } else $.alert("Please select a Staff !!")
+    });
+    $(document).on('click', '.calculatedDaily', function() {
+      var staff_id = $("#staffIdHidden").val();
+      if (staff_id > 0) {
+        var mn_id = $(this).attr("data-id")
+        var tag = $(this).attr("data-tag")
+        var value = $(this).attr("data-value")
+        if(value=="0")$(this).attr("data-value", "1")
+        else $(this).attr("data-value", "0")
+        // $.alert("Tag " + tag + " Value " + value + " Staff " + staff_id + " mn_id " + mn_id);
+        $.post("hr_progSql.php", {
+          userId: staff_id,
+          mn_id: mn_id,
+          tag: tag,
+          value: value,
+          action: "calculatedDaily"
+        }, function() {}, "text").done(function(data, status) {
+          // $.alert(data);
+          if(value=="0")$(".ssDaily"+mn_id).html('<i class="fa fa-times"></i>')
+          else $(".ssDaily"+mn_id).html('<i class="fa fa-check"></i>')
+        }).fail(function() {
+          $.alert("fail in place of error");
+        })
+      } else $.alert("Please select a Staff !!")
+    });
+    
     function salaryDeductions(id) {
       // $.alert("Department ");
       $.post("hr_progSql.php", {
@@ -288,22 +348,22 @@ $phpFile = "hr_progSql.php";
       }, function() {}, "json").done(function(data, status) {
         // $.alert(data);
         var list = '';
+        var mn = '';
         var totalDeduction = 0;
-
         $.each(data, function(key, value) {
-          list += '<div class="row m-1"><div class="col-md-5">' + value.mn_name + '</div>';
-          if (value.mn_type == 1) list += '<div class="col-md-3">%<input type="radio" checked="checked" class="salaryDeductionForm" name="' + value.mn_id + '" data-tag="mn_type" data-id="' + value.mn_id + '" value="1">Yes';
-          else list += '<div class="col-md-3">%<input type="radio" class="salaryDeductionForm" name="' + value.mn_id + '" data-tag="mn_type" data-id="' + value.mn_id + '" value="1">Yes';
-          if (value.mn_type == 0) list += '<input type="radio" checked="checked" class="salaryDeductionForm" name="' + value.mn_id + '" data-tag="mn_type" data-id="' + value.mn_id + '" value="0">No</div>';
-          else list += '<input type="radio" class="salaryDeductionForm" name="' + value.mn_id + '" data-tag="mn_type" data-id="' + value.mn_id + '" value="0">No</div>';
-          list += '<div class="col-md-4"><input type="number" class="form-control form-control-sm salaryDeductionForm" data-tag="ss_value" data-id="' + value.mn_id + '" value="' + parseInt(value.ss_value) + '"></div>';
-          list += '</div>';
+          list += '<tr><td>' + value.mn_name + '</div>';
+          if(value.ss_percent=="1")list += '<td class="click text-center"><a href="#" class="percentBasic" data-tag="ss_percent" data-id="' + value.mn_id + '" data-value="0"><span class="ssPercent'+value.mn_id+'""><i class="fa fa-check"></i></span></a></td>';
+          else list += '<td class="click text-center"><a href="#" class="percentBasic" data-tag="ss_percent" data-id="' + value.mn_id + '" data-value="1"><span class="ssPercent'+value.mn_id+'""><i class="fa fa-times"></i></span></a></td>';
+          list += '<td><input type="number" class="form-control form-control-sm salaryUpdateForm" data-tag="ss_value" data-id="' + value.mn_id + '" value="' + value.ss_value + '"></td>';
+          if(value.ss_daily=="1")list += '<td class="click text-center"><a href="#" class="calculatedDaily" data-tag="ss_daily" data-id="' + value.mn_id + '" data-value="0"><span class="ssDaily'+value.mn_id+'""><i class="fa fa-check"></i></span></a></td>';
+          else list += '<td class="click text-center"><a href="#" class="calculatedDaily" data-tag="ss_daily" data-id="' + value.mn_id + '" data-value="1"><span class="ssDaily'+value.mn_id+'""><i class="fa fa-times"></i></span></a></td>';
+          list += '</tr>';
           totalDeduction = parseInt(totalDeduction) + parseInt(value.ss_value)
-
         });
+        
         list += '<h4>Total Deduction ' + totalDeduction + '</h4>';
-
-        $("#salaryDeductions").html(list);
+        $("#salaryDeductions").find("tr:gt(0)").remove();
+        $("#salaryDeductions").append(list);
       }).fail(function() {
         $.alert("Error !!");
       })
@@ -378,36 +438,6 @@ $phpFile = "hr_progSql.php";
     document.body.innerHTML = divContent;
     window.print();
     document.body.innerHTML = backup;
-  }
-  document.getElementById('export').onclick = function() {
-    var tableId = document.getElementById('transactionList').id;
-    htmlTableToExcel(tableId, filename = '');
-  }
-  document.getElementById('rerExport').onclick = function() {
-    var tableId = document.getElementById('rerList').id;
-    htmlTableToExcel(tableId, filename = '');
-  }
-  var htmlTableToExcel = function(tableId, fileName = '') {
-    var excelFileName = 'excel_table_data';
-    var TableDataType = 'application/vnd.ms-excel';
-    var selectTable = document.getElementById(tableId);
-    var htmlTable = selectTable.outerHTML.replace(/ /g, '%20');
-
-    filename = filename ? filename + '.xls' : excelFileName + '.xls';
-    var excelFileURL = document.createElement("a");
-    document.body.appendChild(excelFileURL);
-
-    if (navigator.msSaveOrOpenBlob) {
-      var blob = new Blob(['\ufeff', htmlTable], {
-        type: TableDataType
-      });
-      navigator.msSaveOrOpenBlob(blob, fileName);
-    } else {
-
-      excelFileURL.href = 'data:' + TableDataType + ', ' + htmlTable;
-      excelFileURL.download = fileName;
-      excelFileURL.click();
-    }
   }
 </script>
 

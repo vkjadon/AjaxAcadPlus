@@ -1,8 +1,13 @@
 <?php
 require('../requireSubModule.php');
 $phpFile = "userSql.php";
+$curl = curl_init();
+curl_setopt($curl, CURLOPT_URL, "https://classconnect.in/api/get_portal_menu.php");
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+$output = curl_exec($curl);
+curl_close($curl);
+$group = json_decode($output, true);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,11 +25,10 @@ $phpFile = "userSql.php";
           <h5>Manage Users</h5>
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-          <?php
-          if (in_array("17", $myLinks)) echo '<a class="list-group-item active list-group-item-action aru" id="list-aru-list" data-toggle="list" href="#list-aru" role="tab" aria-controls="aru">User</a>';
-          if (in_array("18", $myLinks)) echo '<a class="list-group-item list-group-item-action ml" id="list-ml-list" data-toggle="list" href="#list-ml" role="tab" aria-controls="ml">Responsibility Link</a>';
-          if (in_array("19", $myLinks)) echo '<a class="list-group-item list-group-item-action ulr" id="list-ulr-list" data-toggle="list" href="#list-ulr" role="tab" aria-controls="ulr">User Log Report</a>';
-          ?>
+          <a class="list-group-item active list-group-item-action aru" id="list-aru-list" data-toggle="list" href="#list-aru" role="tab" aria-controls="aru">User</a>
+          <a class="list-group-item list-group-item-action ml" id="list-ml-list" data-toggle="list" href="#list-ml" role="tab" aria-controls="ml">Responsibility Link</a>
+          <a class="list-group-item list-group-item-action ul" data-toggle="list" href="#ul" role="tab" aria-controls="ul">Update Links</a>
+          <a class="list-group-item list-group-item-action ulr" id="list-ulr-list" data-toggle="list" href="#list-ulr" role="tab" aria-controls="ulr">Log Report</a>
         </div>
       </div>
       <div class="col-11 leftLinkBody">
@@ -46,24 +50,21 @@ $phpFile = "userSql.php";
               </div>
             </div>
           </div>
-          <div class="col-4 pl-1 pr-0">
-            <div class="card border-info">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-12 py-1">
-                    <span class="studentInfo">No Student Selected</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-4 pl-1">
+          <div class="col-4 pr-0 pl-1">
             <div class="card border-danger">
               <div class="card-body">
                 <div class="row">
                   <div class="col-12 py-1">
                     <span class="staffInfo">No Staff Selected</span>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-4 pl-1">
+            <div class="card border-primary">
+              <div class="card-body">
+                <div class="row">
                   <div class="col-12 py-1">
                     <div class="form-check-inline">
                       <input type="radio" class="form-check-input upr" id="faculty" name="up_code" value="0">Faculty
@@ -105,20 +106,29 @@ $phpFile = "userSql.php";
                   <div class="card border-info">
                     <div class="card-body text-primary">
                       <?php
-                      $curl = curl_init();
-                      curl_setopt($curl, CURLOPT_URL, "https://classconnect.in/api/get_portal_group.php");
-                      curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-                      $output = curl_exec($curl);
-                      curl_close($curl);
-                      $group = json_decode($output, true);
-                      echo '<select class="form-control form-control-sm" name="sel_pg" id="sel_pg" required title="Select Link Group">';
-                      echo '<option value="0" disabled>Select Group</option>';
-
+                      echo '<select class="form-control form-control-sm" name="sel_pm" id="sel_pm" required title="Select Link Menu">';
+                      echo '<option value="0">Select Menu</option>';
                       for ($i = 0; $i < count($group["data"]); $i++) {
-                        echo '<option value="' . $group["data"][$i]["id"] . '">' . $group["data"][$i]["id"] . '-' . $group["data"][$i]["name"] . '</option>';
+                        echo '<option value="' . $group["data"][$i]["pm_id"] . '">' . $group["data"][$i]["pm_id"] . '-' . $group["data"][$i]["pm_name"] . '</option>';
                       }
                       echo '</select>';
                       ?>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 pl-1">
+                </div>
+                <div class="col-md-2 pl-1 pr-0">
+                  <div class="card border-info">
+                    <div class="card-body text-primary">
+                      <button type="button" class="btn btn-sm btn-block updateMenu">Update Menu</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-2 pl-0">
+                  <div class="card border-info">
+                    <div class="card-body text-primary">
+                      <button type="button" class="btn btn-sm btn-block updateGroup">Update Group</button>
                     </div>
                   </div>
                 </div>
@@ -127,14 +137,18 @@ $phpFile = "userSql.php";
                     <thead>
                       <th>Id</th>
                       <th>Order</th>
-                      <th>Link Name</th>
+                      <th>Group Name</th>
+                      <th>Privilege-Group</th>
                       <th>Default</th>
-                      <th>Responsibility-Link Status</th>
+                      <th>Responsibility-Group Status</th>
                     </thead>
                   </table>
                 </div>
               </div>
             </div>
+          </div>
+          <div class="tab-pane fade" id="ul" role="tabpanel" aria-labelledby="ul">
+
           </div>
           <div class="tab-pane fade" id="list-ulr" role="tabpanel" aria-labelledby="list-ulr-list">
           </div>
@@ -156,30 +170,52 @@ $phpFile = "userSql.php";
 
     staffList();
     $(document).on('click', '.updateRL', function(event) {
-      var pl = $(this).attr("data-pl");
+      var pg = $(this).attr("data-pg");
       var mn = $(this).attr("data-mn");
       var tag = $(this).attr("data-tag");
       // $.alert("pl " + pl + " mn " + mn + " tag " + tag);
       $.post("userSql.php", {
-        pl: pl,
+        pg: pg,
         mn: mn,
         tag: tag,
         action: "updateRL",
       }, () => {}, "text").done(function(data) {
         // $.alert(data);
-        groupLinks();
+        menuGroups();
+        // groupLinks();
 
       }).fail(function() {
         $.alert("fail in place of error");
       })
     });
 
-    $(document).on('change', '#sel_pg', function(event) {
-      groupLinks();
+    $(document).on('click', '.updatePriv', function(event) {
+      var pg = $(this).attr("data-pg");
+      var priv = $(this).attr("data-up");
+      var tag = $(this).attr("data-tag");
+      // $.alert("pg " + pg + " priv " + priv + " tag " + tag);
+      $.post("userSql.php", {
+        pg: pg,
+        priv: priv,
+        tag: tag,
+        action: "updatePriv",
+      }, () => {}, "text").done(function(data) {
+        // $.alert(data);
+        menuGroups();
+        // groupLinks();
+
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
+    $(document).on('change', '#sel_pm', function(event) {
+      // groupLinks();
+      menuGroups();
     });
 
     function groupLinks() {
-      var pg_id = $("#sel_pg").val();
+      var pg_id = $("#sel_pm").val();
       // $.alert(" Group Id " + pg_id);
       $.post("<?php echo $phpFile; ?>", {
         pg_id: pg_id,
@@ -195,6 +231,36 @@ $phpFile = "userSql.php";
           card += '<td>' + value.pl_name + '</td>';
           if (value.pl_type == "0") card += '<td>No</td>';
           else if (value.pl_type == "1") card += '<td class="warning">Yes</td>';
+          else card += '<td>--</td>';
+          card += '<td>' + value.text + '</td>';
+          card += '</tr>';
+        })
+        $("#plList").find("tr:gt(0)").remove();
+        $("#plList").append(card);
+
+      }).fail(function() {
+        $.alert("No Links Found ! Please try Other Group !");
+      })
+    }
+
+    function menuGroups() {
+      var pm_id = $("#sel_pm").val();
+      // $.alert(" Menu Id " + pm_id);
+      $.post("<?php echo $phpFile; ?>", {
+        pm_id: pm_id,
+        action: "menuGroupList",
+      }, function() {}, "json").done(function(data, status) {
+        console.log(data)
+        // $.alert(data);
+        var card = '';
+        $.each(data.link, function(key, value) {
+          card += '<tr>';
+          card += '<td>' + value.pg_id + '</td>';
+          card += '<td>' + value.pg_sno + '</td>';
+          card += '<td>' + value.pg_name + '</td>';
+          card += '<td>' + value.pg + '</td>';
+          if (value.pg_type == "0") card += '<td>No</td>';
+          else if (value.pg_type == "1") card += '<td class="warning">Yes</td>';
           else card += '<td>--</td>';
           card += '<td>' + value.text + '</td>';
           card += '</tr>';
@@ -283,6 +349,7 @@ $phpFile = "userSql.php";
         $.alert("fail in place of error");
       })
     });
+
     function staffList() {
       // $.alert("Batch");
       $.post("userSql.php", {
@@ -297,13 +364,13 @@ $phpFile = "userSql.php";
           card += '<td class="text-center">' + value.user_id + '</td>';
           card += '<td>' + value.staff_name + '</td>';
           card += '<td class="text-center">' + value.staff_mobile + '</td>';
-          if(value.staff_status==0)card += '<td class="text-center">Active</td>';
+          if (value.staff_status == 0) card += '<td class="text-center">Active</td>';
           else card += '<td class="text-center text-danger">Left</td>';
-          if(value.user_status==0)card += '<td class="text-center">User</td>';
+          if (value.user_status == 0) card += '<td class="text-center">User</td>';
           else card += '<td class="text-center text-danger">Not a User</td>';
-          if(value.up_code==0)card += '<td class="text-center">Faculty</td>';
-          else if(value.up_code==1)card += '<td class="text-center">Staff</td>';
-          else if(value.up_code==9)card += '<td class="text-center text-large">Admin</td>';
+          if (value.up_code == 0) card += '<td class="text-center">Faculty</td>';
+          else if (value.up_code == 1) card += '<td class="text-center">Staff</td>';
+          else if (value.up_code == 9) card += '<td class="text-center text-large">Admin</td>';
           else card += '<td class="text-center text-danger">Not Set</td>';
           card += '<td class="text-center">' + value.last_login + '</td>';
           card += '</tr>';
@@ -316,6 +383,28 @@ $phpFile = "userSql.php";
       })
 
     }
+
+    $(document).on('click', '.updateMenu', function(event) {
+      $.alert("Updating Menu ");
+      $.post("userSql.php", {
+        action: "updateMenu",
+      }, () => {}, "text").done(function(data,status) {
+        $.alert(data);
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+    $(document).on('click', '.updateGroup', function(event) {
+      $.alert("Updating Menu ");
+      $.post("userSql.php", {
+        action: "updateGroup",
+      }, () => {}, "text").done(function(data,status) {
+        $.alert(data);
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
     function getFormattedDate(ts, fmt) {
       var a = new Date(ts);
       var day = a.getDate();

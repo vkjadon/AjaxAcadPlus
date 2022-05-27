@@ -1,6 +1,8 @@
 <?php
 require('../requireSubModule.php');
 require('../../phpFunction/teachingLoadFunction.php');
+addActivity($conn, $myId, "Teaching Load");
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

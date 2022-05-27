@@ -198,7 +198,7 @@ if (isset($_POST['action'])) {
 		}
 		echo '</table></table>';
 	} elseif ($_POST["action"] == "deptProgramList") {
-		$sql = "SELECT * from dept_program order by dept_id";
+		$sql = "SELECT dp.* from dept_program dp, program p where p.program_id=dp.program_id and p.program_status='0' order by dept_id";
 		$json = getTableRow($conn, $sql, array("dept_id", "program_id"));
 		$array = json_decode($json, true);
 		//echo count($array);
@@ -206,18 +206,19 @@ if (isset($_POST['action'])) {
 		echo '<table class="list-table-xs">
     	<thead align="center">
     	<table class="list-table-xs">
-    	<thead align="center"><th>Department</th><th>Program</th>
+    	<thead align="center"><th>Department</th><th>Program</th><th>Specialization</th>
     	<th><i class="fa fa-trash"></i></th>
         </thead>';
 		for ($i = 0; $i < count($array["data"]); $i++) {
 			$program_id = $array["data"][$i]["program_id"];
 			$dept_id = $array["data"][$i]["dept_id"];
 			$sql_program = "select * from program where program_id='$program_id'";
-			$value_school = getFieldValue($conn, "sp_name", $sql_program);
+			$pa = getFieldValue($conn, "program_abbri", $sql_program);
+			$sp = getFieldValue($conn, "sp_name", $sql_program);
 			$sql_dept = "select * from department where dept_id='$dept_id'";
 			$value_dept = getFieldValue($conn, "dept_name", $sql_dept);
 
-			echo '<tr><td>' . $value_dept . '</td><td>' . $value_school . '</td>
+			echo '<tr><td>' . $value_dept . '</td><td>' . $pa . '</td><td>' . $sp . '</td>
    <td class="text-center">
    <a href="#" class="fa fa-trash deleteDeptProgram" data-dept="' . $dept_id . '" data-program="' . $program_id . '"></a>
    </td>

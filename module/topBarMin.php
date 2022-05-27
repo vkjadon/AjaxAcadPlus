@@ -42,11 +42,6 @@ if (!isset($myBatch)) $myBatch = '';
 			</div>
 			<div class="col-md-2"></div>
 			<div class="col-md-2 text-right largeText" id="clock"></div>
-			<div class="col mr-2">
-				<!-- <a href="<?php echo $codePath . '/module/forms/'; ?>" class="float-right">&nbsp; Forms &nbsp;</a> -->
-				<!-- <a href="" class="float-right">&nbsp; Downloads &nbsp;</a> -->
-				<a href="<?php echo $codePath . '/access/admission/'; ?>" class="float-right" target="_blank">&nbsp; Admission &nbsp;</a>
-			</div>
 		</div>
 
 	</div>

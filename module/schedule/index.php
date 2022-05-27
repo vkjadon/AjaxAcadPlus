@@ -3,6 +3,7 @@ require('../requireSubModule.php');
 
 $session_start = getField($conn, $mySes, "session", "session_id", "session_start");
 $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
+addActivity($conn, $myId, "Schedule");
 
 ?>
 <!DOCTYPE html>

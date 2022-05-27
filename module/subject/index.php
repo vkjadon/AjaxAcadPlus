@@ -1,5 +1,6 @@
 <?php
 require('../requireSubModule.php');
+addActivity($conn, $myId, "Subjects");
 
 ?>
 <!DOCTYPE html>
@@ -16,8 +17,10 @@ require('../requireSubModule.php');
 
     <div class="container-fluid moduleBody">
       <div class="row">
-        <div class="col-2 p-0 m-0 pl-2 full-height">
-          <h5 class="pt-3">Manage Subjects</h5>
+        <div class="col-1 p-0 m-0 full-height">
+          <div class="mt-3">
+            <h5> Manage Sub </h5>
+          </div>
           <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
             <a class="list-group-item list-group-item-action show active sub" id="list-sub-list" data-toggle="list" href="#list-sub" role="tab" aria-controls="sub"> Courses/Subjects </a>
             <a class="list-group-item list-group-item-action se" id="list-se-list" data-toggle="list" href="#list-se" role="tab" aria-controls="se">Session Electives</a>
@@ -27,7 +30,7 @@ require('../requireSubModule.php');
             <?php require("../searchBar.php"); ?>
           </div>
         </div>
-        <div class="col-10 leftLinkBody">
+        <div class="col-11 leftLinkBody">
           <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="list-sub" role="tabpanel" aria-labelledby="list-sub-list">
               <div class="row">
@@ -42,6 +45,15 @@ require('../requireSubModule.php');
                   </div>
                   <div class="card myCard m-2 p-2">
                     <div id="subShowList"></div>
+                  </div>
+                  <div class="card myCard m-2 p-2">
+                    <span class="smallText warning">In case you are unable to see any subject in the list. Please follow the following points:</span>
+                    <div class="footNote">
+                      <ul>
+                        <li>Select the department from the <i>"Set Default"</i> section of the Home Page .</li>
+                        <li>Change the specializations/batch from select menu at the last of the left menu bar.</li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
                 <div class="col-sm-5">

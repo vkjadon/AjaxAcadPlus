@@ -226,7 +226,8 @@ require('../requireSubModule.php');
                               while ($rows = $result->fetch_assoc()) {
                                 $select_id = $rows['program_id'];
                                 $select_name = $rows['sp_name'];
-                                echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+                                $pa = $rows['program_abbri'];
+                                echo '<option value="' . $select_id . '">['.$pa.'] - ' . $select_name . '</option>';
                               }
                               echo '</select>';
                             } else echo $conn->error;
@@ -725,7 +726,8 @@ require('../requireSubModule.php');
             card += '<td>' + value.dept_name + '</td>';
             card += '<td>' + value.dept_abbri + '</td>';
             if(value.dept_type==0)card += '<td>Teaching</td>';
-            else card += '<td>Non Teaching</td>';
+            else if(value.dept_type==1)card += '<td>Non Teaching</td>';
+            else card += '<td>Not Set</td>';
             if(status==0)card += '<td><a href="#" class="fa fa-trash trashDept" data-id="' + value.dept_id + '"></td>';
             else card += '<td><a href="#" class="fa fa-refresh resetDept" data-id="' + value.dept_id + '"></td>';
             card += '</tr>';

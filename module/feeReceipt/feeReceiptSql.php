@@ -65,16 +65,44 @@ if (isset($_POST['action'])) {
   } elseif ($_POST['action'] == 'addFeeReceipt') {
     // echo " Add Fee ";
     $student_id = $_POST['id'];
+
+    $sql = "select * from student where student_id='$student_id'";
+    $result = $conn->query($sql);
+    $rows = $result->fetch_assoc();
+    $batch_id = $rows['batch_id'];
+    $program_id = $rows['program_id'];
+    $fcg = $rows['student_fee_category'];
+    if ($fcg == null) $fcg = 'Gen';
+
+    $sql = "select mn_id from master_name where mn_abbri='$fcg' and mn_code='fcg' and mn_status='0'";
+    $fee_category = getFieldValue($conn, "mn_id", $sql);
+
+    $ft = $_POST['feeType'];
+    $sem = $_POST['sem'];
+
+    // echo ' prog ' . $program_id. 'batch_id' . $batch_id . 'FCG' . $fee_category . ' FT ' . $ft;
+
+    $fs_amount=0;
+
+    $sql = "select sum(fs_amount) as sum from fee_structure where program_id='$program_id' and batch_id='$batch_id' and fee_category='$fee_category' and fee_type='$ft' and fee_semester='$sem'";
+    $result = $conn->query($sql);
+    if ($result) {
+      $rows = $result->fetch_assoc();
+      $fs_amount = $rows['sum'];
+      // echo 'Amount ' . $fs_amount;
+      $sql_dues="insert into fee_dues (student_id, fee_type, fee_semester, fd_fee, fd_dues, fd_concession, fd_remarks, update_id, fd_status) values('$student_id', '$ft', '$sem', '$fs_amount', '$fs_amount', '0', 'Default Debit', '$myId', '0')";
+      //$conn->query($sql_dues);
+    } else echo $conn->error;
+    
     $t_id = $_POST['tId'];
     $transaction_date = $_POST['transaction_date'];
-    $ft = $_POST['feeType'];
     $fm = $_POST['feeMode'];
-    $sem = $_POST['sem'];
     $fee = $_POST['feeAmount'];
     $fr_bank = $_POST['fr_bank'];
     $feeDesc = data_clean($_POST['feeDesc']);
     $feeDate = $_POST['fr_date'];
     $fr_sno = $_POST['fr_sno'];
+    if ($fr_sno == null) $fr_sno = 0;
     // echo "$student_id $ft";
     $time = gmdate("Y/m/d H:i:s", time());
     if ($myId > 0) {
@@ -276,6 +304,8 @@ if (isset($_POST['action'])) {
     $batch_id = $rows['batch_id'];
     $program_id = $rows['program_id'];
     $fcg = $rows['student_fee_category'];
+    if ($fcg == null) $fcg = 'Gen';
+
     $sql = "select mn_id from master_name where mn_abbri='$fcg' and mn_code='fcg' and mn_status='0'";
     $fee_category = getFieldValue($conn, "mn_id", $sql);
 
@@ -323,6 +353,8 @@ if (isset($_POST['action'])) {
     $program_id = getField($conn, $student_id, "student", "student_id", "program_id");
     $batch_id = getField($conn, $student_id, "student", "student_id", "batch_id");
     $fcg = getField($conn, $student_id, "student", "student_id", "student_fee_category");
+    if ($fcg == null) $fcg = 'Gen';
+
     $sql = "select mn_id from master_name where mn_abbri='$fcg' and mn_code='fcg' and mn_status='0'";
     $fee_category = getFieldValue($conn, "mn_id", $sql);
 
@@ -348,6 +380,8 @@ if (isset($_POST['action'])) {
     $batch_id = $rows['batch_id'];
     $program_id = $rows['program_id'];
     $fcg = $rows['student_fee_category'];
+    if ($fcg == null) $fcg = 'Gen';
+    
     $sql = "select mn_id from master_name where mn_abbri='$fcg' and mn_code='fcg' and mn_status='0'";
     $fee_category = getFieldValue($conn, "mn_id", $sql);
 
@@ -368,7 +402,7 @@ if (isset($_POST['action'])) {
         $subArray["fee_mode"] = 'Direct';
         $subArray["user_id"] = getField($conn, $rowsFee["update_id"], "staff", "staff_id", "user_id");
         $subArray["fr_debit"] = (int)$rowsFee["fd_dues"] - (int)$rowsFee["fd_concession"];
-        $subArray["fr_amount"]="0";
+        $subArray["fr_amount"] = "0";
         $subArray["fr_desc"] = $rowsFee["fd_remarks"] . ' [Dues and Concession]';
         $subArray["fr_date"] = $rowsFee["update_ts"];
         $subArray["fee_bank"] = '--';
@@ -388,7 +422,7 @@ if (isset($_POST['action'])) {
         $subArray["fee_type"] = getField($conn, $rowsFee["fee_type"], "master_name", "mn_id", "mn_name");
         $subArray["fee_mode"] = 'Direct';
         $subArray["user_id"] = getField($conn, $rowsFee["update_id"], "staff", "staff_id", "user_id");
-        $subArray["fr_debit"]="0";
+        $subArray["fr_debit"] = "0";
         $subArray["fr_amount"] = $rowsFee["fr_amount"];
         $subArray["fr_desc"] = $rowsFee["fr_desc"] . ' [Reverse Entry]' . $rowsFee["frev_desc"];
         $subArray["fr_date"] = $rowsFee["update_ts"];
@@ -408,7 +442,7 @@ if (isset($_POST['action'])) {
         $subArray["fee_type"] = getField($conn, $rowsFee["fee_type"], "master_name", "mn_id", "mn_name");
         $subArray["fee_mode"] = getField($conn, $rowsFee["fee_mode"], "master_name", "mn_id", "mn_name");
         $subArray["user_id"] = getField($conn, $rowsFee["update_id"], "staff", "staff_id", "user_id");
-        $subArray["fr_debit"]="0";
+        $subArray["fr_debit"] = "0";
         $subArray["fr_amount"] = $rowsFee["fr_amount"];
         $subArray["fr_desc"] = $rowsFee["fr_desc"];
         $subArray["fr_date"] = $rowsFee["fr_date"];

@@ -15,14 +15,22 @@ if (isset($myBatch)) $myBatchName = getField($conn, $myBatch, "batch", "batch_id
 else $myBatchName = "Select Batch";
 if (!isset($myProg)) $myProg = '';
 if (!isset($myBatch)) $myBatch = '';
+
+$sql_menu="select * from portal_menu where pm_status='0' order by pm_sno";
+$result_menu=$conn->query($sql_menu);
+$pm_idArray = array();
+$pm_nameArray = array();
+while($rowsMenu=$result_menu->fetch_assoc()){
+	$pm_id[]=$rowsMenu["pm_id"];
+	$pm_name[]=$rowsMenu["pm_name"];
+}
 ?>
 <header>
 	<div class="py-2">
 		<div class="row">
 			<div class="col-md-1 ml-2">
-				<img src="<?php echo $setLogo; // Defined in check_user 
-									?>" height="37px">
-				<?php // echo $myFolder;
+				<img src="<?php echo $setLogo; // Defined in check_user ?>" height="37px">
+				<?php //echo $setLogo; // Defined in check_user 
 				?>
 			</div>
 			<div class="col-md-2 ml-2 text-center">
@@ -38,233 +46,91 @@ if (!isset($myBatch)) $myBatch = '';
 				//echo "School ".$myScl;
 				?>
 			</div>
-			<div class="col-md-2 float-right">
-				<input type="text" class="form-control form-control-sm" id="indexSearch" name="indexSearch" placeholder="Search Staff" aria-label="Search">
-				<p class='list-group overlapList' id="indexAutoList"></p>
-			</div>
-			<div class="col-md-2"></div>
-			<div class="col-md-2 text-right largeText" id="clock"></div>
-			<div class="col mr-2">
+			<div class="col-md-2 mr-2">
 				<!-- <a href="<?php echo $codePath . '/module/forms/'; ?>" class="float-right">&nbsp; Forms &nbsp;</a> -->
 				<!-- <a href="" class="float-right">&nbsp; Downloads &nbsp;</a> -->
 				<a href="<?php echo $codePath . '/access/admission/'; ?>" class="float-right" target="_blank">&nbsp; Admission &nbsp;</a>
 			</div>
+			<div class="col-md-2 text-right largeText" id="clock"></div>
 		</div>
-
 	</div>
+	<nav id="navbar_top" class="navbar navbar-expand-lg navbar-dark">
+		<a class="navbar-brand" href="<?php echo $codePath . '/module/index.php'; ?>">ClassConnect</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNavDropdown">
+			<ul class="navbar-nav mr-auto">
 
-	<nav id="navbar_top" class="navbar navbar-expand-lg bg-two">
-		<div class="container-fluid">
-			<a class="navbar-brand" href="<?php echo $codePath . '/module/index.php'; ?>">ClassConnect</a>
-			<!-- Collapse button -->
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav" aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon">Menu</span>
-			</button>
-
-			<!-- Collapsible content -->
-			<div class="collapse navbar-collapse" id="main_nav">
-				<!-- Links -->
-				<ul class="navbar-nav mr-auto">
-					<!-- Dropdown -->
-					<!-- Administration -->
-					<?php
-					if ($myId < 4) {
-					?>
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ERP Admin</a>
-							<div class="dropdown-menu menuDouble" aria-labelledby="navbarDropdownMenuLink">
-								<div class="card border">
-									<div class="row">
-										<div class="col-6 pr-0">
-											<a href="<?php echo $codePath . '/module/setting/'; ?>" class="dropdown-item py-0">Institite Settings</a>
-											<a href="<?php echo $codePath . '/module/aa/'; ?>" class="dropdown-item py-0">Academic Settings </a>
-											<a href="<?php echo $codePath . '/module/user/'; ?>" class="dropdown-item py-0">Users and Links</a>
-										</div>
-										<div class="col-6 pl-0">
-
-										</div>
-									</div>
-								</div>
-							</div>
-						</li>
-
-					<?php
-					}
-					?>
-					<!-- Administration -->
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administration</a>
-						<div class="dropdown-menu menuDouble" aria-labelledby="navbarDropdownMenuLink">
+			<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ERP Admin</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 							<div class="card border">
 								<div class="row">
-									<div class="col-6 pr-0">
-										<a href="<?php echo $codePath . '/module/setting/'; ?>" class="dropdown-item py-0">Institite Settings</a>
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0">Infrastructure</a>
-									</div>
-									<div class="col-6 pl-0">
-										<a href="<?php echo $codePath . '/module/eoffice/'; ?>" class="dropdown-item py-0">Office</a>
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0">Status Report</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</li>
-					<!-- Academics -->
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Academics</a>
-						<div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
-							<div class="card myCard border">
-								<div class="row">
-									<div class="col-6 pr-0">
-										<a href="<?php echo $codePath . '/module/curriculum/'; ?>" class="dropdown-item py-0">Curriculum Design </a>
-										<a href="<?php echo $codePath . '/module/subject/'; ?>" class="dropdown-item py-0">Manage Subjects </a>
-										<a href="<?php echo $codePath . '/module/teachingLoad/'; ?>" class="dropdown-item py-0">Teaching Load</a>
-										<a href="<?php echo $codePath . '/module/schedule/'; ?>" class="dropdown-item py-0">Schedule</a>
-									</div>
-									<div class="col-6 pl-0">
-										<a href="<?php echo $codePath . '/module/registration/'; ?>" class="dropdown-item py-0">Registration</a>
-										<a href="<?php echo $codePath . '/module/lms/'; ?>" class="dropdown-item py-0">LMS</a>
-										<a href="<?php echo $codePath . '/module/acReport/'; ?>" class="dropdown-item py-0">Academic Reports</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</li>
-					<!-- Assessments -->
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Assessment</a>
-						<div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
-							<div class="card myCard border">
-								<div class="row">
-									<div class="col-6 pr-0">
-										<a href="<?php echo $codePath . '/module/assessment/'; ?>" class="dropdown-item py-0">Assessment Design</a>
-										<a href="<?php echo $codePath . '/module/online/'; ?>" class="dropdown-item py-0">Online Assessment</a>
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> Internal Assessment </a>
-									</div>
-									<div class="col-6 pl-0">
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> Exam Setting </a>
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> Conduct </a>
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> Semester Result </a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</li>
-					<!-- Staff -->
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="hr/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Staff</a>
-						<div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
-							<div class="card myCard border">
-								<div class="row">
-									<div class="col-6 pr-0">
-										<a href="<?php echo $codePath . '/module/hr/'; ?>" class="dropdown-item py-0">Manage Staff</a>
-										<a href="<?php echo $codePath . '/module/hr_prog/'; ?>" class="dropdown-item py-0"> Progression </a>
-										<a href="<?php echo $codePath . '/module/leave/'; ?>" class="dropdown-item py-0">Leave</a>
-									</div>
-									<div class="col-6 pl-0">
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> Support </a>
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> Research </a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</li>
-					<!-- Student -->
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Student</a>
-						<div class="dropdown-menu dropdown-primary menuDouble" aria-labelledby="navbarDropdownMenuLink">
-
-							<div class="card myCard border">
-								<div class="row">
-									<div class="col-6 pr-0">
-										<a href="<?php echo $codePath . '/module/admission/'; ?>" class="dropdown-item py-0"> Manage Student </a>
-										<a href="<?php echo $codePath . '/module/comm/'; ?>" class="dropdown-item py-0"> SMS and Email </a>
-										<a href="<?php echo $codePath . '/module/feedback/'; ?>" class="dropdown-item py-0"> Feedback </a>
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> Mentoring </a>
-									</div>
-									<div class="col-6 pl-0">
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> Hostel </a>
-										<a href="<?php echo $codePath . '/module/alumni/'; ?>" class="dropdown-item py-0"> Transport </a>
-										<a href="<?php echo $codePath . '/module/enrichment/'; ?>" class="dropdown-item py-0">Enrichment</a>
+									<div class="col-12 pr-0">
+									<a href="<?php echo $codePath . '/module/setting/'; ?>" class="dropdown-item py-0">Institute Setting</a>
+									<a href="<?php echo $codePath . '/module/aa/'; ?>" class="dropdown-item py-0">Academic Setting</a>
+									<a href="<?php echo $codePath . '/module/user/'; ?>" class="dropdown-item py-0">Users and Links</a>
+									<a href="<?php echo $codePath . '/module/event/'; ?>" class="dropdown-item py-0">Events and Awards</a>
+									<a href="<?php echo $codePath . '/module/ayp/'; ?>" class="dropdown-item py-0">AY Planner</a>
 									</div>
 								</div>
 							</div>
 						</div>
 					</li>
 
-					<!-- Centers -->
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown">Accounts</a>
-						<div class="dropdown-menu dropdown-default menuDouble">
-							<div class="card myCard border">
-								<div class="row">
-									<div class=" col-6 pr-0">
-										<a href="<?php echo $codePath . '/module/fee/'; ?>" class="dropdown-item py-0"> Fee </a>
-										<a href="<?php echo $codePath . '/module/feeReceipt/'; ?>" class="dropdown-item py-0"> Fee Receipt </a>
-									</div>
-									<div class="col-6 pl-0">
-										<a href="<?php echo $codePath . '/module/payment/'; ?>" class="dropdown-item py-0"> Payment Voucher </a>
-										<a href="<?php echo $codePath . '/module/scholarship/'; ?>" class="dropdown-item py-0"> Scholarship </a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</li>
-					<!-- Centers -->
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown">Centers</a>
-						<div class="dropdown-menu dropdown-default menuDouble">
-							<div class="card myCard border">
-								<div class="row">
-									<div class=" col-6 pr-0">
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> TPC </a>
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> Alumni </a>
-									</div>
-									<div class="col-6 pl-0">
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> Store </a>
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> Manintenance </a>
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> Library </a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</li>
-					<!-- OBE -->
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown">OBE</a>
-						<div class="dropdown-menu dropdown-default menuDouble">
-							<div class="card myCard border">
-								<div class="row">
-									<div class=" col-6 pr-0">
-										<a href="<?php echo $codePath . '/module/obaSettings/'; ?>" class="dropdown-item py-0"> OBA Settings </a>
-										<a href="<?php echo $codePath . '/module/attainment/'; ?>" class="dropdown-item py-0"> CO Attainment </a>
-										<a href="<?php echo $codePath . '/module/obeFeedback/'; ?>" class="dropdown-item py-0"> OBE Feedback </a>
-									</div>
-									<div class="col-6 pl-0">
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> -- </a>
-										<a href="<?php echo $codePath . '/module/notsub/'; ?>" class="dropdown-item py-0"> -- </a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</li>
-				</ul>
-				<!-- Links -->
+				<?php
+				for ($i = 1; $i < count($pm_id); $i++) {
+					$pm_id = pm_id"];
+					$curl = curl_init();
+					$url = 'https://classconnect.in/api/get_portal_menuGroup.php?pm=' . $pm_id;
 
-				<ul class="navbar-nav ml-auto nav-flex-icons">
+					curl_setopt($curl, CURLOPT_URL, $url);
+					curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+					$output = curl_exec($curl);
+					$output = json_decode($output, true);
+				?>
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink-333" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							<i class="fas fa-user"></i> <?php echo $myName; ?> </a>
-						</a>
-						<div class="dropdown-menu dropdown-menu-right dropdown-default" aria-labelledby="navbarDropdownMenuLink-333">
-							<!-- <a class="dropdown-item py-0" href="<?php echo $codePath . '/module/profile/'; ?>">My Account</a> -->
-							<a class="dropdown-item py-0" href="<?php echo $codePath . '/module/profile/'; ?>">Profile</a>
-							<a class="dropdown-item py-0" href="<?php echo $codePath . '/logout.php'; ?>">Logout</a>
+						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $group["data"][$i]["pm_name"]; ?></a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+							<div class="card border">
+								<div class="row">
+									<div class="col-12 pr-0">
+										<?php
+										// echo "sd " . $output["success"];
+										for ($j = 0; $j < count($output["data"]); $j++) {
+											$path = $output["data"][$j]["pg_folder"];
+											$pg_name = $output["data"][$j]["pg_name"];
+											$pg_id = $output["data"][$j]["pg_id"];
+											$sql = "select * from privilege_group where pg_id='$pg_id' and up_code='9'";
+											if ($conn->query($sql)->num_rows > 0) {
+										?>
+												<a href="<?php echo $codePath . '/module/' . $path . '/'; ?>" class="dropdown-item py-0"><?php echo $pg_name; ?></a>
+										<?php
+											}
+										}
+										?>
+									</div>
+								</div>
+							</div>
 						</div>
 					</li>
-				</ul>
-			</div> <!-- navbar-collapse.// -->
-		</div> <!-- container-fluid.// -->
+				<?php
+				}
+				?>
+			</ul>
+			<ul>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<i class="fas fa-user"></i> <?php echo $myName; ?> </a>
+					</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+						<a class="dropdown-item py-1" href="<?php echo $codePath . '/module/profile/'; ?>">Profile</a>
+						<a class="dropdown-item py-1" href="<?php echo $codePath . '/logout.php'; ?>">Logout</a>
+					</div>
+				</li>
+			</ul>
+		</div>
 	</nav>
 </header>
 <script>

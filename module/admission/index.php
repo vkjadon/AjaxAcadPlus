@@ -1,6 +1,8 @@
 <?php
 require('../requireSubModule.php');
 $phpFile = "admissionSql.php";
+addActivity($conn, $myId, "Manage Student - Admission");
+
 ?>
 
 <!DOCTYPE html>
@@ -1592,7 +1594,7 @@ $phpFile = "admissionSql.php";
           card += '<td class="dorField">' + getFormattedDate(value.student_admission, "dmY") + '</td>';
           card += '<td class="dobField">' + getFormattedDate(value.student_dob, "dmY") + '</td>';
           card += '<td class="waField">' + value.student_whatsapp + '</td>';
-          card += '<td>' +  + '</td>';
+          card += '<td>' + address + '</td>';
           card += '<td>' + value.city + '</td>';
           card += '<td>' + value.district_name + '</td>';
           card += '<td id="state_id" data-tag="' + value.student_id + '">' + value.state_name + '</td>';
