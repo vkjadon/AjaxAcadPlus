@@ -1,32 +1,41 @@
 <?php
 // required in "module/requireSubModule.php"
+
 require("config_database.php");
-$sql = "select rs.*, rl.* from responsibility_staff rs, responsibility_link rl where rs.staff_id='$myId' and rs.mn_id=rl.mn_id";
+
+// This block fetch the links associated with a [custom: created through master data] responsibility
+
+$sql = "select rs.*, rg.* from responsibility_staff rs, responsibility_group rg where rs.staff_id='$myId' and rs.mn_id=rg.mn_id";
 $result = $conn->query($sql);
 $myLinks = array();
 if ($result) {
   while ($rowsArray = $result->fetch_assoc()) {
-    $myLinks[] = $rowsArray["pl_id"];
+    $myLinks[] = $rowsArray["pg_id"];
   }
 } else echo $conn->error;
 
+// This block fetch the links associated with Portal responsibility: Already Fixed such as HOD, Director etc.
 
-$curl = curl_init();
-$url = 'https://classconnect.in/api/get_portal_link.php?pg=ALL';
-
-curl_setopt($curl, CURLOPT_URL, $url);
-curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-$output = curl_exec($curl);
-$output = json_decode($output, true);
-
-if ($output['success'] == "True") {
-  $links = count($output['data']);
-  $subArray = array();
-  for ($i = 0; $i < $links; $i++) {
-    $id = $output["data"][$i]["pl_id"];
-    $pl_type = $output["data"][$i]["pl_type"];
-    if ($pl_type == '1' || $myId < 4) $myLinks[] = $id;
+$sql = "select rs.*, rg.* from responsibility_staff rs, responsibility_group rg where rs.staff_id='$myId' and rs.rs_code=rg.rs_code and rs.rs_code<>'AA'";
+$result = $conn->query($sql);
+if ($result) {
+  while ($rowsArray = $result->fetch_assoc()) {
+    $myLinks[] = $rowsArray["pg_id"];
   }
-}
+} else echo $conn->error;
 
-//print_r($myLinks);
+// Set Privilege as Staff (up_code=1) in case the
+
+if(!isset($myPriv))$myPriv=1;
+
+$sql = "select * from privilege_group where up_code='$myPriv'";
+$result = $conn->query($sql);
+if ($result) {
+  while ($rowsArray = $result->fetch_assoc()) {
+    $myLinks[] = $rowsArray["pg_id"];
+  }
+} else echo $conn->error;
+
+$myLinks=array_unique($myLinks);
+
+// print_r($myLinks);

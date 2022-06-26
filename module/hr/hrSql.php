@@ -9,7 +9,7 @@ if (isset($_POST["query"])) {
   $output = '<ul class="list-group">';
   if ($result) {
     while ($row = $result->fetch_assoc()) {
-      $output .= '<li class="list-group-item list-group-item-action autoList" data-std="' . $row["staff_id"] . '" >' . $row["staff_name"] . '</li>';
+      $output .= '<li class="list-group-item list-group-item-action autoList" data-staff="' . $row["staff_id"] . '" >' . $row["staff_name"] . '</li>';
     }
   } else {
     $output .= '<li>Staff Not Found</li>';
@@ -20,28 +20,22 @@ if (isset($_POST["query"])) {
 if (isset($_POST['action'])) {
   if ($_POST['action'] == 'staffList') {
     $sql = "SELECT s.* from staff s where s.staff_status='0' order by s.staff_name";
-    $json = getTableRow($conn, $sql, array("staff_id", "staff_name", "staff_mobile", "staff_email", "user_id"));
-    // echo $json;
-    $array = json_decode($json, true);
-    $count = count($array["data"]);
-    //  echo $count;
-    for ($i = 0; $i < count($array["data"]); $i++) {
-      $staff_id = $array["data"][$i]["staff_id"];
-      $staff_name = $array["data"][$i]["staff_name"];
-      $staff_mobile = $array["data"][$i]["staff_mobile"];
-      $staff_email = $array["data"][$i]["staff_email"];
-      $user_id = $array["data"][$i]["user_id"];
-
-      $sql = "SELECT * from user where staff_id='$staff_id'";
-      $result = $conn->query($sql);
-      echo '<div class="card">';
+    $result=$conn->query($sql);
+    // echo $result->num_rows;
+    while ($rowsArray=$result->fetch_assoc()) {
+      $staff_id = $rowsArray["staff_id"];
+      $staff_name = $rowsArray["staff_name"];
+      $staff_mobile = $rowsArray["staff_mobile"];
+      $staff_email = $rowsArray["staff_email"];
+      $user_id = $rowsArray["user_id"];
       echo '<div class="row m-1">';
-      echo '<div class="col-10"><h7 class="card-title">' . $staff_name . '</h7>[<span class="card-subtitle mb-2 text-muted">' . $user_id . '</span>]</div>';
-      echo '<div class="col-1 p-0">';
-      if ($result->num_rows > 0)  echo '<a href="#" class="fa fa-minus removeUser" data-id="' . $staff_id . '"></a></div>';
-      else echo '<a href="#" class="fa fa-plus addUser" data-id="' . $staff_id . '"></a></div>';
-      echo '<div class="col-1 p-0"><a href="#" class="fa fa-edit editStaff" data-staff="' . $staff_id . '"></a></div>';
+      echo '<div class="col-md-10 pl-1 pr-0"><h7 class="card-title">' . $staff_name . '</h7>[<span class="card-subtitle mb-2 text-muted">' . $user_id . '</span>]</div>';
+      $sql_user= "SELECT * from user where staff_id='$staff_id'";
+      echo '<div class="col-md-1 pl-1 pr-0">';
+      if ($conn->query($sql_user)->num_rows > 0)  echo '<a href="#" class="fa fa-minus-circle text-danger removeUser" data-id="' . $staff_id . '" title="This will Remove Staff from the User List"></a>';
+      else echo '<a href="#" class="fa fa-plus-circle addUser" data-id="' . $staff_id . '" title="This will Add Staff in the User List"></a>';
       echo '</div>';
+      echo '<div class="col-md-1 pl-1"><a href="#" class="fa fa-edit editStaff" data-staff="' . $staff_id . '" title="Click to Edit the Staff Details"></a></div>';
       echo '</div>';
     }
   } elseif ($_POST['action'] == 'addStaff') {
@@ -54,6 +48,8 @@ if (isset($_POST['action'])) {
       $user_id = 80000 + $staff_id;
       $user_id = 'AG' . $user_id;
       $sql = "update staff set user_id='$user_id' where staff_id='$staff_id'";
+      $conn->query($sql);
+      $sql = "insert into staff_service (staff_id, school_id, dept_id, ss_status) values('$staff_id', '$myScl', '" . $_POST['sel_dept'] . "','" . $_POST['sel_desig'] . "' ,'" . $_POST['sOrderNo'] . "','" . $_POST['sWef'] . "','1')";
       $result = $conn->query($sql);
     }
   } elseif ($_POST['action'] == 'fetchStaff') {
@@ -70,17 +66,6 @@ if (isset($_POST['action'])) {
     $sql = "update staff set $tag='$value' where $id_name='$id'";
     $conn->query($sql);
     echo $conn->error;
-  } elseif ($_POST['action'] == 'addDetails') {
-    $std_id = $_POST['modalId'];
-    $sql = "insert into student_details (student_id, sd_fname, sd_mname, sd_foccupation, sd_fdesignation, sd_dob, sd_gender, sd_category) values ('$_POST[modalId]', '$_POST[fName]', '$_POST[mName]', '$_POST[fOccupation]', '$_POST[fDes]', '$_POST[sDob]', '$_POST[sGender]', '$_POST[sCategory]')";
-    $result = $conn->query($sql);
-    if (!$result) echo $conn->error;
-    else echo " Success";
-    if (!$result) {
-      $update = "update student_details set sd_fname='$_POST[fName]', sd_mname='$_POST[mName]', sd_foccupation='$_POST[fOccupation]',sd_fdesignation='$_POST[fDes]', sd_dob='$_POST[sDob]', sd_gender='$_POST[sGender]', sd_category='$_POST[sCategory]' where student_id = '$std_id'";
-      $conn->query($update);
-    }
-    echo "New record updated successfully";
   } elseif ($_POST['action'] == 'fetchStaffDetails') {
     $id = $_POST['studentId'];
     $sql = "select * from staff_details where staff_id='$id'";
@@ -184,7 +169,7 @@ if (isset($_POST['action'])) {
   } elseif ($_POST['action'] == 'addUser') {
     $id = $_POST['id'];
     $mail = getField($conn, $id, "staff", "staff_id", "staff_email");
-    $password = $myDb.$id;
+    $password = $myDb . $id;
     $encripted = sha1($password);
     $sql = "insert into user (staff_id, user_password, user_status) values ('$id', '$encripted', '0')";
     $result = $conn->query($sql);

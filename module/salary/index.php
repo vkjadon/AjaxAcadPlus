@@ -11,8 +11,13 @@ $phpFile = "salarySql.php";
 </head>
 
 <body>
-  <?php require("../topBar.php"); ?>
-  <div class="container-fluid moduleBody">
+<?php require("../topBar.php"); 
+	if($myId>3){
+    if (!isset($_GET['tag'])) die("Illegal Attempt !! The token is Missing");
+    elseif (!in_array($_GET['tag'], $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+    elseif (!in_array("45", $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+  }
+	?>  <div class="container-fluid moduleBody">
     <div class="row">
       <div class="col-1 p-0 m-0 full-height">
         <div class="mt-3">
@@ -161,6 +166,9 @@ $phpFile = "salarySql.php";
                       </table>
                     </div>
                     <div class="tab-pane fade" id="monthlySalary" role="tabpanel" aria-labelledby="monthlySalary">
+                      <div class="col-md-12 mt-5 text-right">
+                      <a onclick="export_data()"><i class="fas fa-file-export"></i></a>
+                      </div>
                       <table class="table table-bordered table-striped list-table-xs mt-3" id="monthlySalaryList">
                         <th class="text-center">SNo</th>
                         <th class="text-center">UserId</th>
@@ -594,6 +602,18 @@ $phpFile = "salarySql.php";
     document.body.innerHTML = divContent;
     window.print();
     document.body.innerHTML = backup;
+  }
+
+  function export_data() {
+    let data = document.getElementById('monthlySalaryList');
+    var fp = XLSX.utils.table_to_book(data, {
+      sheet: 'sheet1'
+    });
+    XLSX.write(fp, {
+      bookType: 'xlsx',
+      type: 'base64'
+    });
+    XLSX.writeFile(fp, 'salary.xlsx');
   }
 </script>
 

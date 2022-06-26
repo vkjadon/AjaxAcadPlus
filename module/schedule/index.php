@@ -3,7 +3,8 @@ require('../requireSubModule.php');
 
 $session_start = getField($conn, $mySes, "session", "session_id", "session_start");
 $session_end = getField($conn, $mySes, "session", "session_id", "session_end");
-addActivity($conn, $myId, "Schedule");
+
+addActivity($conn, $myId, "Schedule", $submit_ts);
 
 ?>
 <!DOCTYPE html>
@@ -12,38 +13,39 @@ addActivity($conn, $myId, "Schedule");
 <head>
   <title>Outcome Based Education : ClassConnect</title>
   <?php require("../css.php"); ?>
-
 </head>
 
 <body>
-  <?php require("../topBar.php"); ?>
+  <?php require("../topBar.php");
+  if($myId>3){
+    if (!isset($_GET['tag'])) die("Illegal Attempt !! The token is Missing");
+    elseif (!in_array($_GET['tag'], $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+    elseif (!in_array("38", $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+  }
+  ?>
   <div class="container-fluid moduleBody">
     <div class="row">
-      <div class="col-2 p-0 m-0 pl-2 full-height">
+      <div class="col-1 p-0 m-0 full-height">
         <h5 class="pt-3">Schedule</h5>
-        <span id="panelId"></span>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action show active tt" id="list-tt-list" data-toggle="list" href="#list-tt" role="tab" aria-controls="tt"> Time Table </a>
-          <a class="list-group-item list-group-item-action stt" id="list-stt-list" data-toggle="list" href="#list-stt" role="tab" aria-controls="stt"> Show Time-Table </a>
+          <a class="list-group-item list-group-item-action stt" data-toggle="list" href="#list-stt" role="tab" aria-controls="stt"> Show Time-Table </a>
           <a class="list-group-item list-group-item-action cs" id="list-cs-list" data-toggle="list" href="#list-cs" role="tab" aria-controls="cs"> Create Schedule </a>
         </div>
-        <div class="mr-2">
-          <?php
-          $sql = "select * from class where session_id='$mySes' and program_id='$myProg' order by class_semester";
-          selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql);
-          ?>
-        </div>
+        <hr>
+        <p class="text-center smallText under-process m-0"><?php echo $mySesName; ?></p>
+        <hr>
+        <p class="text-center xsText">Session Class</p>
+        <?php
+        $sql = "select * from class where session_id='$mySes' and dept_id='$myDept' order by program_id, class_semester";
+        selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
+        ?>
       </div>
-      <div class="col-10 leftLinkBody">
+      <div class="col-11 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="list-tt" role="tabpanel" aria-labelledby="list-tt-list">
-            <div class="container card myCard p-2 mb-2">
+            <div class="card myCard p-2">
               <div id="dayList"></div>
-            </div>
-            <div class="container card myCard p-2">
-              <div class="waiting">Please click action button to load...
-                <img src="../../images/wating2.gif" width="40%">
-              </div>
               <div id="mondayList"></div>
               <div id="tuesdayList"></div>
               <div id="wednesdayList"></div>
@@ -54,18 +56,15 @@ addActivity($conn, $myId, "Schedule");
             </div>
           </div>
           <div class="tab-pane fade" id="list-stt" role="tabpanel" aria-labelledby="list-stt-list">
-            <div class="container card myCard p-2 mb-2">
-              <div id="sessionClassListSTT"></div>
+            <div class="card myCard p-2 mb-2">
+              <div id="sessionClassList"></div>
             </div>
-            <div class="container card myCard p-2">
-              <div class="waiting">Please click action button to load...
-                <img src="../../images/wating2.gif" width="40%">
-              </div>
+            <div class="card myCard p-2">
               <p id="showTimeTable"></p>
             </div>
           </div>
           <div class="tab-pane fade" id="list-cs" role="tabpanel" aria-labelledby="list-cs-list">
-            <div class="container card myCard p-2 mb-2" id="showScheduleForm">
+            <div class="card myCard p-2 mb-2" id="showScheduleForm">
               <div class="row">
                 <div class="col-3 pr-0">
                   <div class="form-group">
@@ -93,10 +92,7 @@ addActivity($conn, $myId, "Schedule");
             </div>
             <div class="row">
               <div class="col-12 mt-1 mb-1">
-                <div class="container card myCard p-2 mb-2">
-                  <div id="waiting">Please click action button to load...
-                    <img src="../../images/wating2.gif" width="40%">
-                  </div>
+                <div class="card myCard p-2 mb-2">
                   <p id="createScheduleOutput"></p>
                   <p id="showSchedule"></p>
                 </div>
@@ -115,24 +111,8 @@ addActivity($conn, $myId, "Schedule");
     $("#panelId").hide();
     var classId = $("#sel_class").val();
     ttList();
-
-    $(document).on('click', '.stt', function() {
-      $("#panelId").html("STT");
-      sessionClass();
-    });
-
-    $(document).on('click', '.cs', function() {
-      //$.alert("TL");
-      $("#selectPanelTitle").text("Create Schedule");
-      $("#panelId").html("CS");
-    });
-
-    $(document).on('click', '.tt', function() {
-      $("#panelId").html("TT");
-      var classId = $("#sel_class").val();
-      // $.alert("TL" + classId);
-      ttList();
-    });
+    sessionClass();
+    ttList();
 
     $(document).on('blur', '.periodTime', function() {
       var periodTime = $(this).val();
@@ -152,6 +132,18 @@ addActivity($conn, $myId, "Schedule");
       })
     });
 
+    $(document).on('change', '#sel_class', function() {
+      $.alert("Id ");
+      $('#mondayList').hide();
+      $('#tuesdayList').hide();
+      $('#wednesdayList').hide();
+      $('#thursdayList').hide();
+      $('#fridayList').hide();
+      $('#saturdayList').hide();
+      $('#sundayList').hide();
+      $('.dayName').prop('checked', false);
+    });
+
     $(document).on('click', '.sclSTT', function() {
       var checkboxes_value = [];
       $('.sclSTT').each(function() {
@@ -159,10 +151,11 @@ addActivity($conn, $myId, "Schedule");
           checkboxes_value.push($(this).val());
         }
       });
-      $.alert("Class STT " + checkboxes_value);
+      // $.alert("Class STT " + checkboxes_value);
       if (checkboxes_value == "") {
         $.alert("Please Select atleast One Class");
-        $('#showTimeTable').hide();
+        // $('#showTimeTable').hide();
+        $(this).prop('checked', true);
       } else {
         $.post("createScheduleSql.php", {
           action: "showTimeTable",
@@ -264,9 +257,11 @@ addActivity($conn, $myId, "Schedule");
       });
       $.alert("Register Pressed " + checkboxes_value);
       if (checkboxes_value == "") {
-        $.alert("Please Select atleast One Class");
+        $.alert("Please Select atleast 78 One Class");
         $('#createScheduleForm').hide();
         $('#createScheduleOutput').hide();
+        $(this).prop('checked', true);
+
       } else {
         $.post("createScheduleSql.php", {
           action: "createScheduleForm",
@@ -609,16 +604,12 @@ addActivity($conn, $myId, "Schedule");
     }
 
     function sessionClass() {
-      var panelId = $('#panelId').text();
-      if (panelId == "STT") var actionText = 'sessionClassListSTT';
-      else var actionText = 'sessionClassList';
-      $.alert("In List Function " + actionText + "Panel " + panelId);
+      // $.alert("In List Function " + actionText + "Panel " + panelId);
       $.post("createScheduleSql.php", {
-        action: actionText
+        action: "sessionClassListSTT"
       }, function(data, status) {
         //$.alert("Success " + data);
-        if (panelId == "STT") $("#sessionClassListSTT").html(data);
-        else $("#sessionClassList").html(data);
+        $("#sessionClassList").html(data);
       }, "text").fail(function() {
         $.alert("Error !!");
       })

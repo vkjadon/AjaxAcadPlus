@@ -1,8 +1,8 @@
 <?php
 session_start();
 include('openTestDb.php');
-require('../php_function.php');
-include('../phpFunction/onlineFunction.php');
+require('../../php_function.php');
+include('../../phpFunction/onlineFunction.php');
 $json = get_testListJson($conn, "0");
 //echo $json;
 $array = json_decode($json, true);

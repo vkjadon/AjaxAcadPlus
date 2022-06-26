@@ -10,7 +10,13 @@ require('../../phpFunction/teachingLoadFunction.php');
   <?php require('../css.php'); ?>
 </head>
 <body>
-  <?php require("../topBar.php"); ?>
+  <?php require("../topBar.php"); 
+  if($myId>3){
+    if (!isset($_GET['tag'])) die("Illegal Attempt !! The token is Missing");
+    elseif (!in_array($_GET['tag'], $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+    elseif (!in_array("10", $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+  }
+  ?>
   <div class="content">
 
     <div class="container-fluid moduleBody">

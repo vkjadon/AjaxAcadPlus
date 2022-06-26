@@ -4,6 +4,7 @@ if (isset($_SESSION["myid"])) $myId = $_SESSION['myid'];
 require("../util/config_database.php");
 require('../php_function.php');
 require('../util/config_variable.php');
+require('../util/myLinks.php');
 
 //echo "dsd";
 
@@ -74,7 +75,7 @@ if (!isset($myProg)) {
 	?>
 	<div class="container-fluid moduleBody">
 		<div class="row">
-		<div class="col-md-3">
+			<div class="col-md-3">
 				<?php
 				// echo 'P-'.$privilege;
 				require("setDefault.php");
@@ -92,6 +93,9 @@ if (!isset($myProg)) {
 						<label class="warning">Birthday Reminder</label>
 					</div>
 				</div>
+				<?php 
+				// print_r($myLinks);
+				?>
 			</div>
 			<div class="col-md-6 pl-0 pr-0">
 				<div class="card p-3 myCard">
@@ -143,7 +147,7 @@ if (!isset($myProg)) {
 					<div class="card-body p-1">
 						<p class="largeText userName"> Welcome Guest</p>
 						<div class="row">
-							<div class="col-md-4 pl-3">
+							<div class="col-md-4 pl-1 pr-0">
 								<div class="card myCard">
 									<div class="card-body p-1">
 										<span class="staffImage"><img src="../images/upload.jpg"></span>
@@ -151,10 +155,11 @@ if (!isset($myProg)) {
 									</div>
 								</div>
 							</div>
-							<div class="col-md-8">
-								<p class="smallerText userDesignation"> Not Set</p>
-								<p class="smallerText userEmail"> Not Set</p>
-								<p class="smallerText userMobile"></p>
+							<div class="col-md-8 pl-1">
+								<p class="smallerText m-0 userDesignation text-danger"> Designation Not Set</p>
+								<p class="smallerText m-0 userDepartment text-primary"> Department Not Set</p>
+								<p class="smallerText m-0 userEmail"> Not Set</p>
+								<p class="smallerText m-0 userMobile"></p>
 								<p class="smallerText userDoJ"></p>
 							</div>
 						</div>
@@ -380,6 +385,8 @@ if (!isset($myProg)) {
 				$(".userName").html(data.staff_name);
 				$(".userMobile").html(data.staff_mobile);
 				$(".userEmail").html(data.staff_email);
+				$(".userDesignation").html(data.userDesignation);
+				$(".userDepartment").html(data.userDepartment);
 				$(".userDoJ").html(getFormattedDate(data.staff_doj, "dmY"));
 				if (data.staff_image === null) $(".staffImage").html('<img  src="../images/upload.jpg" width="100%">');
 				else $(".staffImage").html('<img  src="<?php echo '../' . $myFolder . 'staffImages/'; ?>' + data.staff_image + '" width="100%">');
@@ -485,7 +492,6 @@ if (!isset($myProg)) {
 			$("#schedule_time_from").val(displayTime);
 			$("#schedule_time_to").val(displayTime);
 		}
-
 	});
 </script>
 

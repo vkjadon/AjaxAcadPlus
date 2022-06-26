@@ -20,7 +20,7 @@ if (isset($_POST['action'])) {
     $dup = "select * from batch where batch='" . data_check($_POST["newBatch"]) . "'";
     $dup_alert = " Batch already Exists !!";
     addData($conn, 'batch', 'batch_id', $fields, $values, $status, $dup, $dup_alert);
-    addActivity($conn, $myId, "Add Batch");
+    addActivity($conn, $myId, "Add Batch", $submit_ts);
     // echo "dbsj";
   } elseif ($_POST["action"] == "fetchBatch") {
     $id = $_POST['batchId'];
@@ -34,7 +34,7 @@ if (isset($_POST['action'])) {
     $dup = "select * from batch where batch_id='" . $_POST["modalId"] . "'";
     $dup_alert = "Could Not Update - Duplicate Entries";
     updateData($conn, 'batch', $fields, $values, $dup, $dup_alert);
-    addActivity($conn, $myId, "Update Batch");
+    addActivity($conn, $myId, "Update Batch", $submit_ts);
 
     // echo "inside update batch";
   } elseif ($_POST['action'] == 'batchSession') {
@@ -101,11 +101,11 @@ if (isset($_POST['action'])) {
     if ($conn->query($sql)) echo $text;
     else echo $conn->error;
   } elseif ($_POST["action"] == "mnUpdate") {
-    if($_POST["tag"]=="D")$sql="update master_name set mn_status='9' where mn_id='".$_POST["mn_id"]."'";
-    else $sql="update master_name set mn_status='0' where mn_id='".$_POST["mn_id"]."'";
+    if ($_POST["tag"] == "D") $sql = "update master_name set mn_status='9' where mn_id='" . $_POST["mn_id"] . "'";
+    else $sql = "update master_name set mn_status='0' where mn_id='" . $_POST["mn_id"] . "'";
     $conn->query($sql);
     // echo "inside update batch";
-  }elseif ($_POST["action"] == "mnFetch") {
+  } elseif ($_POST["action"] == "mnFetch") {
     $id = $_POST['mn_id'];
     $sql = "select * FROM master_name where mn_id='$id'";
     $result = $conn->query($sql);
@@ -142,7 +142,7 @@ if (isset($_POST['action'])) {
     }
     echo '</div>';
   } elseif ($_POST['action'] == 'selectTemplate') {
-    $sql = "select * from $tn_atmp where atmp_status='0' group by atmp_template order by atmp_template";
+    $sql = "select * from $tn_atmp where atmp_status='0' group by atmp_template order by atmp_template desc";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     $i = 1;
@@ -150,55 +150,125 @@ if (isset($_POST['action'])) {
     //echo '<option>Select a Template</option>';
     while ($rowsArray = $result->fetch_assoc()) {
       $id = $rowsArray["atmp_template"];
-      echo '<option value="' . $id . '">Template-' . $i++ . '</option>';
+      echo '<option value="' . $id . '">Template-' . $id . '</option>';
+      $i++;
     }
     echo '<option value="' . $i . '">New Template</option>';
     echo '</select>';
   } elseif ($_POST['action'] == 'addTemplate') {
-    $sql = "insert into $tn_atmp (am_id, at_id, atmp_template, atmp_weightage, atmp_internal, update_id, atmp_status) values('" . data_check($_POST['sel_am']) . "', '" . data_check($_POST['sel_at']) . "', '" . data_check($_POST['sel_template']) . "', '" . data_check($_POST['weightage']) . "', '" . data_check($_POST['internal']) . "', '$myId','0')";
+    $sql = "insert into $tn_atmp (atmp_template, atmp_weightage, atmp_internal, update_id, atmp_status) values('" . data_check($_POST['sel_template']) . "', '" . data_check($_POST['weightage']) . "', '" . data_check($_POST['internal']) . "', '$myId','0')";
     $result = $conn->query($sql);
     if (!$result) echo $conn->error;
     echo "Added";
   } elseif ($_POST['action'] == 'atmpList') {
     $totalTemplates = getMaxField($conn, $tn_atmp, "atmp_template");
     //echo $totalTemplates;
+    echo '<div class="row">';
     for ($i = 1; $i <= $totalTemplates; $i++) {
       $sql = "select * from $tn_atmp where atmp_template='$i' order by atmp_internal";
       $result = $conn->query($sql);
       if (!$result) echo $conn->error;
-      echo '<div class="row">';
-      echo '<div class="col-12">';
+      echo '<div class="col-md-3 pr-1">';
       echo '<div class="container card mt-2 myCard">';
       echo '<h4">Template-' . $i . '</h4>';
       echo '<table class="table table-striped list-table-xs">';
-      echo '<tr><th></th><th>Tool</th><th>Method</th><th>Component</th><th>Weightage</th><th></th></tr>';
-
+      echo '<tr><th></th><th>Component</th><th>Weightage</th><th></th></tr>';
       while ($rowsArray = $result->fetch_assoc()) {
         $status = $rowsArray["atmp_status"];
         $internal = $rowsArray["atmp_internal"];
-        $at = getField($conn, $rowsArray["at_id"], "master_name", "mn_id", "mn_name");
-        $am = getField($conn, $rowsArray["am_id"], "master_name", "mn_id", "mn_name");
+        $id = $rowsArray["atmp_id"];
         //echo $at.'-'.$am;
         echo '<tr>';
-        echo '<td><a href="#" class="fa fa-pencil-alt float-left rp_idE" data-id="' . $rowsArray["at_id"] . '"></a></td>';
-        echo '<td>' . $at . '</td>';
-        echo '<td>' . $am . '</td>';
-        if ($internal == 'CIE') echo '<td>CIE (Internal)</td>';
+        echo '<td><a href="#" class="fa fa-pencil-alt float-left rp_idE" data-id="' . $rowsArray["atmp_id"] . '"></a></td>';
+        if ($internal == '1') echo '<td>CIE (Internal)</td>';
         else echo '<td>SEE (External)</td>';
         echo '<td>' . $rowsArray["atmp_weightage"] . '</td>';
-        if ($status == "9") echo '<td><a href="#" class="float-right rp_idR" data-id="' . $rowsArray["at_id"] . '"><i class="fa fa-refresh" aria-hidden="true"></i></a></td>';
-        else echo '<td><a href="#" class="float-right rp_idD" data-id="' . $rowsArray["at_id"] . '"><i class="fa fa-trash"></i></a></td>';
+        if ($status == "9") echo '<td><a href="#" class="float-right rp_idR" data-id="' . $rowsArray["atmp_id"] . '"><i class="fa fa-refresh" aria-hidden="true"></i></a></td>';
+        else echo '<td><a href="#" class="float-right rp_idD" data-id="' . $rowsArray["atmp_id"] . '"><i class="fa fa-trash"></i></a></td>';
         echo '</tr>';
       }
       echo '</table>';
       echo '</div>';
       echo '</div>';
-      echo '</div>';
     }
+    echo '</div>';
+  } elseif ($_POST['action'] == "searchStaff") {
+    $output = '';
+    $sql = "select * from staff where staff_name LIKE '%" . $_POST["searchString"] . "%'";
+    $result = $conn->query($sql);
+    if (!$result) echo $conn->error;
+    $output = '<ul class="list-group p-0 m-0">';
+    if ($result) {
+      while ($row = $result->fetch_assoc()) {
+        $output .= '<li class="list-group-item list-group-item-action staffAutoList"  data-staff="' . $row["staff_id"] . '" >' . $row["staff_name"] . ' [' . $row["user_id"] . ']</li>';
+      }
+    } else {
+      $output .= '<li>Staff Not Found</li>';
+    }
+    $output .= '</ul>';
+    echo $output;
+  } elseif ($_POST["action"] == "respName") {
+    $sql = "insert into responsibility_staff (mn_id, staff_id, rs_from_date, rs_to_date, rs_remarks, update_id, rs_status) values('" . $_POST["mn_id"] . "', '" . $_POST["staffId"] . "', '" . $_POST["respFrom"] . "', '" . $_POST["respTo"] . "', '" . $_POST["respRemarks"] . "', '$myId', '0')";
+    $conn->query($sql);
+  } elseif ($_POST["action"] == "respList") {
+    //echo "MyId- $myProg - $myBatch";
+    $sql = "select * from responsibility_staff where mn_id='" . $_POST['mn_id'] . "'";
+    $result = $conn->query($sql);
+    echo '<table class="table list-table-xs">';
+
+    while ($row_mn = $result->fetch_assoc()) {
+      $rs_id = $row_mn["rs_id"];
+      $status = $row_mn["rs_status"];
+      echo '<tr>';
+      echo '<td>';
+      echo '<a href="#" class="po_idE" data-id="' . $rs_id . '"><i class="fa fa-edit"></i></a>';
+      echo ' [' . $rs_id . ']';
+      echo '</td';
+      echo '<td>';
+      echo getField($conn, $row_mn["staff_id"], "staff", "staff_id", "staff_name");
+      echo '</td>';
+      echo '<td>' . $row_mn["rs_from_date"] . '</td>';
+      echo '<td>' . $row_mn["rs_to_date"] . '</td>';
+      echo '<td>';
+      if ($status == "9") echo '<a href="#" class="float-right po_idR" data-id="' . $rs_id . '">Removed</a>';
+      else echo '<a href="#" class="float-right po_idD" data-id="' . $rs_id . '"><i class="fa fa-trash"></i></a>';
+      echo '</td>';
+      echo '</tr>';
+    }
+    echo '</table>';
+  } elseif ($_POST["action"] == "hod" || $_POST["action"] == "dir" || $_POST["action"] == "gd") {
+    $sql = "insert into responsibility_staff (unit_id, rs_code, staff_id, rs_from_date, rs_to_date, rs_remarks, update_id, rs_status) values('" . $_POST["mn_id"] . "', '" . $_POST["action"] . "', '" . $_POST["staffId"] . "', '" . $_POST["respFrom"] . "', '" . $_POST["respTo"] . "', '" . $_POST["respRemarks"] . "', '$myId', '0')";
+    if (!$conn->query($sql)) echo $conn->error;
+    else echo "Added";
+  } elseif ($_POST["action"] == "headList") {
+    //echo "MyId- $myProg - $myBatch";
+    $sql = "select * from responsibility_staff where unit_id='" . $_POST['unit_id'] . "' and rs_code='" . $_POST['head'] . "' ";
+    $result = $conn->query($sql);
+    echo '<table class="table list-table-xs">';
+
+    while ($row_mn = $result->fetch_assoc()) {
+      $rs_id = $row_mn["rs_id"];
+      $status = $row_mn["rs_status"];
+      echo '<tr>';
+      echo '<td>';
+      echo '<a href="#" class="po_idE" data-id="' . $rs_id . '"><i class="fa fa-edit"></i></a>';
+      echo ' [' . $rs_id . ']';
+      echo '</td';
+      echo '<td>';
+      echo getField($conn, $row_mn["staff_id"], "staff", "staff_id", "staff_name");
+      echo '</td>';
+      echo '<td>' . $row_mn["rs_from_date"] . '</td>';
+      echo '<td>' . $row_mn["rs_to_date"] . '</td>';
+      echo '<td>';
+      if ($status == "9") echo '<a href="#" class="float-right po_idR" data-id="' . $rs_id . '">Removed</a>';
+      else echo '<a href="#" class="float-right po_idD" data-id="' . $rs_id . '"><i class="fa fa-trash"></i></a>';
+      echo '</td>';
+      echo '</tr>';
+    }
+    echo '</table>';
   } elseif ($_POST['action'] == 'selectList') {
     $tag = $_POST['tag'];
     $mn_abbri = getField($conn, $tag, "master_name", "mn_id", "mn_abbri");
-
     if ($mn_abbri == 'inst') {
       $sql = "select * from school where school_status='0' order by school_name";
       $tableTag = 'school';
@@ -230,50 +300,31 @@ if (isset($_POST['action'])) {
     }
     echo '<option value="0">ALL</option>';
     echo '</select>';
-  } elseif ($_POST['action'] == "searchStaff") {
-    $output = '';
-    $sql = "select * from staff where staff_name LIKE '%" . $_POST["searchString"] . "%'";
-    $result = $conn->query($sql);
-    if (!$result) echo $conn->error;
-    $output = '<ul class="list-group p-0 m-0">';
-    if ($result) {
-      while ($row = $result->fetch_assoc()) {
-        $output .= '<li class="list-group-item list-group-item-action staffAutoList"  data-staff="' . $row["staff_id"] . '" >' . $row["staff_name"] . ' [' . $row["user_id"] . ']</li>';
-      }
-    } else {
-      $output .= '<li>Staff Not Found</li>';
-    }
-    $output .= '</ul>';
-    echo $output;
-  } elseif ($_POST["action"] == "respName") {
-    $sql = "insert into responsibility_staff (mn_id, rs_code, staff_id, unit_id, rs_from_date, rs_to_date, rs_remarks, update_id, rs_status) values('" . $_POST["mn_id"] . "', '" . $_POST["sel_scope"] . "', '" . $_POST["staffId"] . "', '" . $_POST["selectId"] . "', '" . $_POST["respFrom"] . "', '" . $_POST["respTo"] . "', '" . $_POST["respRemarks"] . "', '$myId', '0')";
-    $conn->query($sql);
-  } elseif ($_POST["action"] == "respList") {
-    //echo "MyId- $myProg - $myBatch";
-    $sql = "select * from responsibility_staff where mn_id='" . $_POST['mn_id'] . "'";
-    $result = $conn->query($sql);
-    echo '<div class="card myCard m-2">';
+  } elseif ($_POST['action'] == 'updateMasterData') {
+    $curl = curl_init();
+    $url = 'https://classconnect.in/api/get_master_data.php';
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+    $output = curl_exec($curl);
+    $output = json_decode($output, true);
 
-    while ($row_mn = $result->fetch_assoc()) {
-      $rs_id = $row_mn["rs_id"];
-      $status = $row_mn["rs_status"];
-      echo '<div class="row m-2">';
-      echo '<div class="col-sm-2 p-0 pl-1">';
-      echo '<a href="#" class="po_idE" data-id="' . $rs_id . '"><i class="fa fa-edit"></i></a>';
-      echo ' [' . $rs_id . ']';
-      echo '</div>';
-      echo '<div class="col-sm-6">';
-      echo '<div class="cardBodyText"><b>' . getField($conn, $row_mn["staff_id"], "staff", "staff_id", "staff_name") . '</b></div>';
-      echo '</div>';
-      echo '<div class="col-sm-3">';
-      echo '<div class="cardBodyText"><b>' . $row_mn["rs_from_date"] . '</b></div>';
-      echo '</div>';
-      echo '<div class="col-sm-1">';
-      if ($status == "9") echo '<a href="#" class="float-right po_idR" data-id="' . $rs_id . '">Removed</a>';
-      else echo '<a href="#" class="float-right po_idD" data-id="' . $rs_id . '"><i class="fa fa-trash"></i></a>';
-      echo '</div>';
-      echo '</div>';
+    echo $output;
+
+    if ($output['success'] == "True") {
+      $masterGroup = count($output['data']);
+      $sql = "select * from master_name";
+      $result = $conn->query($sql);
+      $portalGroup = $result->num_rows;
+      echo $masterGroup . '-' . $portalGroup;
+      if ($masterGroup > $portalGroup) {
+        for ($i = $portalGroup; $i < $masterGroup; $i++) {
+          $sql = "insert into master_name (mn_name, mn_abbri, mn_sno, mn_editable, mn_remarks, mn_status) values('" . $output["data"][$i]["mn_name"] . "','" . $output["data"][$i]["mn_abbri"] . "','" . $output["data"][$i]["mn_sno"] . "','" . $output["data"][$i]["mn_editable"] . "', '" . $output["data"][$i]["mn_remarks"] . "', '" . $output["data"][$i]["mn_status"] . "')";
+          $result = $conn->query($sql);
+          if (!$result) {
+            echo " " . $conn->error;
+          }
+        }
+      }
     }
-    echo '</div>';
   }
 }

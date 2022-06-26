@@ -1,5 +1,6 @@
 <?php
 require('../requireSubModule.php');
+addActivity($conn, $myId, "Registration", $submit_ts)
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -10,14 +11,21 @@ require('../requireSubModule.php');
 </head>
 
 <body>
-  <?php require("../topBar.php"); ?>
+  <?php require("../topBar.php");
+  if($myId>3){
+    if (!isset($_GET['tag'])) die("Illegal Attempt !! The token is Missing");
+    elseif (!in_array($_GET['tag'], $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+    elseif (!in_array("39", $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+  }
+   ?>
   <div class="container-fluid moduleBody">
     <div class="row">
       <div class="col-1 p-0 m-0 pl-1 full-height">
         <h5 class="mt-3">Registration</h5>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active cr" id="list-cr-list" data-toggle="list" href="#list-cr" role="tab"> Class Registration </a>
-          <a class="list-group-item list-group-item-action subReg" id="list-subReg-list" data-toggle="list" href="#list-subReg" role="tab"> Subject Registration </a>
+          <a class="list-group-item list-group-item-action subReg" id="list-subReg-list" data-toggle="list" href="#list-subReg" role="tab"> Subject Reg </a>
+          <a class="list-group-item list-group-item-action regMap" data-toggle="list" href="#regMap" role="tab"> Registration Map</a>
         </div>
         <?php
         $sql = "select * from class where session_id='$mySes' and program_id='$myProg'";
@@ -103,8 +111,12 @@ require('../requireSubModule.php');
               </div>
             </div>
           </div>
-          <div class="tab-pane fade" id="list-sr" role="tabpanel" aria-labelledby="list-sr-list">
-            <div class="col-6 mt-1 mb-1" id="crsList"> </div>
+          <div class="tab-pane fade" id="regMap" role="tabpanel" aria-labelledby="list-regMap-list">
+            <div class="text-center largeText text-secondary">
+              Subject Registration Map for <span class="className"></span>
+            </div>
+            <table class="table table-bordered table-striped list-table-xs mt-4" id="regMapList">
+            </table>
           </div>
         </div>
       </div>
@@ -116,10 +128,87 @@ require('../requireSubModule.php');
 </body>
 <script>
   $(document).ready(function() {
-
+    $(function() {
+      $(document).tooltip();
+    });
     $(".topBarTitle").text("Registration");
     sbpList("25", "0");
     classSubject();
+
+    $(document).on('click', '.regMap', function() {
+      var class_id = $("#sel_class").val()
+      // $.alert("Class " + class_id)
+      var className = $("#sel_class :selected").text()
+      $(".className").html(className)
+      $.post("registrationSql.php", {
+        class_id: class_id,
+        action: "regMapList"
+      }, function() {}, "json").done(function(data, status) {
+        // $.alert(data);
+        console.log(data);
+        var card = '';
+        var count = 1;
+        card += '<tr>'
+        card += '<th>#</th><th>Id</th><th>RollNo</th><th>Name</th><th>UserId</th>'
+        $.each(data.subject, function(key, value) {
+          card += '<th><spam title="'+value.subject_name+'">' + value.subject_code + '<br>[' + value.subject_credit + ']' + value.tlg_type + '-' + value.tl_group + '</spam></th>';
+        })
+        card += '<th>Subject</th>'
+        card += '</tr>'
+        $.each(data.student, function(key, value) {
+          card += '<tr>';
+          card += '<td>' + count++ + '</td>';
+          card += '<td>' + value.student_id + '</td>';
+          card += '<td>' + value.user_id + '</td>';
+          card += '<td>' + value.student_name + '</td>';
+          card += '<td>' + value.student_rollno + '</td>';
+          var registeredSubject = 0;
+          $.each(value.regMap, function(key2, value2) {
+            if (value2.registered == 1) {
+              registeredSubject++
+              card += '<td class="click text-center"><a href="#" class="stdSubReg" data-student="' + value.student_id + '" data-tl="' + value2.tl_id + '" data-value="0"><span class="std' + value.student_id + 'tl' + value2.tl_id + '""><i class="fa fa-check"></i></span></a></td>';
+            } else card += '<td class="click text-center"><a href="#" class="stdSubReg" data-student="' + value.student_id + '" data-tl="' + value2.tl_id + '" data-value="1"><span class="std' + value.student_id + 'tl' + value2.tl_id + '""><i class="fa fa-times"></i></span></a></td>';
+          })
+          card += '<td class="text-center"><span class="subCount' + value.student_id + '">' + registeredSubject + '</span></td>';
+          card += '</tr>';
+        });
+        $("#regMapList").html(card);
+
+      }).fail(function() {
+        $.alert("Error in Map Generation !!");
+      })
+    });
+
+    $(document).on('click', '.stdSubReg', function() {
+      var student_id = $(this).attr("data-student")
+      var tl_id = $(this).attr("data-tl")
+      var value = $(this).attr("data-value")
+      var subCount = $(".subCount" + student_id).text()
+      // $.alert(" Student Subject Registration " + tl_id + "Student " + student_id + " Value " + value + " Count " + subCount);
+
+      $.post("registrationSql.php", {
+        student_id: student_id,
+        tl_id: tl_id,
+        value: value,
+        action: "stdSubReg"
+      }, function() {}, "text").done(function(data, status) {
+        // $.alert(data);
+      }).fail(function() {
+        $.alert("Fail");
+      })
+
+      if (value == "0") {
+        $(".std" + student_id + "tl" + tl_id).html('<i class="fa fa-times"></i>')
+        $(this).attr("data-value", 1)
+        subCount--
+        $(".subCount" + student_id).text(subCount)
+      } else {
+        $(".std" + student_id + "tl" + tl_id).html('<i class="fa fa-check"></i>')
+        $(this).attr("data-value", 0)
+        subCount++
+        $(".subCount" + student_id).text(subCount)
+      }
+    });
 
     $(document).on('change', '#sel_class', function() {
       sbpList("25", "0");
@@ -160,7 +249,7 @@ require('../requireSubModule.php');
       }, function(data, status) {
         $.alert(data);
         sbpList(rpp, startRecord);
-      }, "text").fail(function() {
+      }).fail(function() {
         $.alert("Fail");
       })
     });

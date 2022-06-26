@@ -2,7 +2,7 @@
 require('requireModule.php');
 $string = $_POST["searchString"];
 $output = '';
-$sql = "select * from staff where (staff_name LIKE '%$string%' or staff_mobile LIKE '%$string%' or user_id LIKE '%$string%')";
+$sql = "select s.staff_name, s.user_id, s.staff_mobile, s.staff_id from staff where (staff_name LIKE '%$string%' or staff_mobile LIKE '%$string%' or user_id LIKE '%$string%')";
 $result = $conn->query($sql);
 if (!$result) echo $conn->error;
 $output = '<ul class="list-group p-0 m-0">';
@@ -14,4 +14,5 @@ if ($result) {
   $output .= '<li>Staff Not Found</li>';
 }
 $output .= '</ul>';
+mysqli_free_result($result);
 echo $output;

@@ -1,6 +1,6 @@
 <?php
 require('../requireSubModule.php');
-addActivity($conn, $myId, "Manage Staff - HR");
+addActivity($conn, $myId, "Manage Staff - HR", $submit_ts);
 
 ?>
 <!DOCTYPE html>
@@ -12,44 +12,51 @@ addActivity($conn, $myId, "Manage Staff - HR");
 </head>
 
 <body>
-  <?php require("../topBar.php"); ?>
+  <?php require("../topBar.php");
+  if ($myId > 3) {
+    if (!isset($_GET['tag'])) die("Illegal Attempt !! The token is Missing");
+    elseif (!in_array($_GET['tag'], $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+    elseif (!in_array("4", $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+  }
+  ?>
   <div class="container-fluid moduleBody">
     <div class="row">
       <div class="col-1 p-0 m-0 pl-1 full-height">
-        <h5 class="pt-3">Staff</h5>
+        <h5 class="pt-3 largeText">Staff</h5>
         <div class="list-group list-group-mine" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active as" data-toggle="list" href="#as" role="tab" aria-controls="as"> Add Staff </a>
           <a class="list-group-item list-group-item-action" data-toggle="list" href="#dr" role="tab" aria-controls="dr"> Detail Report </a>
         </div>
       </div>
-      <div class="col-sm-11 leftLinkBody">
+      <div class="col-sm-11 p-0">
+        <div class="row bg-light p-2 m-0">
+          <div class="col-md-3 pr-0" title="Institution/School">
+            <?php require("../selectInstitution.php"); ?>
+          </div>
+          <div class="col-md-3 pr-0" title="Institution/School">
+            <?php require("../selectDepartment.php"); ?>
+          </div>
+          <div class="col-md-2">
+            <input type="text" class="form-control form-control-sm" id="staffSearch" name="staffSearch" placeholder="Search Staff" aria-label="Search">
+            <p class='list-group overlapList' id="staffAutoList"></p>
+          </div>
+          <div class="col-sm-2 pr-0">
+            <button class="btn btn-sm m-0 addStaff">New Staff</button>
+          </div>
+          <div class="col-sm-2 pl-1">
+            <button class="btn btn-sm m-0 uploadStaff">Upload Staff</button>
+          </div>
+        </div>
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane fade show active" id="as" role="tabpanel" aria-labelledby="as">
-            <div class="row">
-              <div class="col-3">
-                <div class="card border-info mb-3">
-                  <div class="card-header">
-                    Enter Staff Name to Search
-                  </div>
-                  <div class="input-group md-form form-sm form-2 mt-1">
-                    <input name="staffSearch" id="staffSearch" class="form-control" type="text" placeholder="Search Staff" aria-label="Search">
-                    <div class="input-group-append">
-                      <span class="input-group-text cyan lighten-3" id="basic-text1"><i class="fas fa-search text-grey" aria-hidden="true"></i></span>
-                    </div>
-                  </div>
-                  <div class='list-group' id="staffAutoList"></div>
+            <div class="row m-1">
+              <div class="col-md-4 pr-0">
+                <div class="card myCard mt-2">
+                  <p class="largeText pl-2">List of Active Staff</p>
+                  <p id="staffList"></p>
                 </div>
-                <div class="row">
-                  <div class="col-sm-6 pr-0">
-                    <button class="btn btn-sm m-0 addStaff">New Staff</button>
-                  </div>
-                  <div class="col-sm-6 pl-1">
-                    <button class="btn btn-sm m-0 uploadStaff">Upload Staff</button>
-                  </div>
-                </div>
-                <p id="staffList"></p>
               </div>
-              <div class="col-9">
+              <div class="col-md-8 pl-1">
                 <div class="container card myCard mt-2">
                   <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
                     <li class="nav-item">
@@ -90,27 +97,27 @@ addActivity($conn, $myId, "Manage Staff - HR");
                                   <table width="100%">
                                     <tr>
                                       <td width="60%"><span class="largeText">Name </span></td>
-                                      <td class="largeText" id="staff_name">---</td>
+                                      <td class="largeText staff_name">---</td>
                                     </tr>
                                     <tr>
                                       <td width="60%"><span class="largeText">Employee Id </span></td>
-                                      <td class="largeText" id="staffIdPill">---</td>
+                                      <td class="largeText staff_userId">---</td>
                                     </tr>
                                     <tr>
                                       <td width="60%"><span class="largeText"> Department </span></td>
-                                      <td class="largeText staff_mobile">---</td>
+                                      <td class="largeText staff_dept">---</td>
                                     </tr>
                                     <tr>
                                       <td><span class="largeText"> Designation </span></td>
-                                      <td class="largeText staff_email">---</td>
+                                      <td class="largeText staff_deignation">---</td>
                                     </tr>
                                     <tr>
                                       <td><span class="largeText">Mobile</span></td>
-                                      <td class="largeText staff_dob">---</td>
+                                      <td class="largeText staff_mobile">---</td>
                                     </tr>
                                     <tr>
                                       <td><span class="largeText">Email </span></td>
-                                      <td class="largeText staff_doj">---</td>
+                                      <td class="largeText staff_email">---</td>
                                     </tr>
                                     <tr>
                                       <td><span class="largeText">DoJ </span></td>
@@ -214,7 +221,7 @@ addActivity($conn, $myId, "Manage Staff - HR");
                               $sel = "select * from department where dept_status='0' order by dept_name, dept_type";
                               $result = $conn->query($sel);
                               if ($result) {
-                                echo '<select class="form-control form-control-sm" name="sel_dept" id="sel_dept">';
+                                echo '<select class="form-control form-control-sm staffForm" name="sel_dept" id="sel_newDept" data-tag="dept_id">';
                                 echo '<option value="0"> Select Departmrnt </option>';
                                 while ($rows = $result->fetch_assoc()) {
                                   $select_id = $rows['dept_id'];
@@ -234,7 +241,7 @@ addActivity($conn, $myId, "Manage Staff - HR");
                               $sel = "select * from master_name where mn_code='dg'";
                               $result = $conn->query($sel);
                               if ($result) {
-                                echo '<select class="form-control form-control-sm" name="sel_des" id="sel_des">';
+                                echo '<select class="form-control form-control-sm staffForm" name="sel_des" id="sel_des" data-tag="mn_id">';
                                 echo '<option value="0"> Select Designation </option>';
                                 while ($rows = $result->fetch_assoc()) {
                                   $select_id = $rows['mn_id'];
@@ -250,20 +257,31 @@ addActivity($conn, $myId, "Manage Staff - HR");
                         </div>
                         <hr>
                         <div class="row">
-                          <div class="col-5">
+                          <div class="col-md-3 pr-0">
                             <div class="form-check-inline">
-                              <input type="radio" class="form-check-input staffForm" checked id="male" name="sGender" value="male" data-tag="staff_gender">Male
+                              <input type="radio" class="form-check-input staffForm" checked id="male" name="sGender" value="M" data-tag="staff_gender">Male
                             </div>
                             <div class="form-check-inline">
-                              <input type="radio" class="form-check-input staffForm" id="female" name="sGender" value="female" data-tag="staff_gender">Female
+                              <input type="radio" class="form-check-input staffForm" id="female" name="sGender" value="F" data-tag="staff_gender">Female
                             </div>
                           </div>
-                          <div class="col-7">
+                          <div class="col-md-5 pl-1 pr-0">
                             <div class="form-check-inline">
-                              <input type="radio" class="form-check-input staffForm" checked id="teaching" name="sTeaching" value="1" data-tag="staff_teaching">Teaching
+                              <input type="radio" class="form-check-input staffForm" checked id="faculty" name="sPrivilege" value="0" data-tag="staff_privilege">Faculty
                             </div>
                             <div class="form-check-inline">
+                              <input type="radio" class="form-check-input staffForm" id="staff" name="sPrivilege" value="1" data-tag="staff_privilege">Staff
+                            </div>
+                            <div class="form-check-inline">
+                              <input type="radio" class="form-check-input staffForm" id="admin" name="sPrivilege" value="9" data-tag="staff_privilege">Admin
+                            </div>
+                          </div>
+                          <div class="col-md-4 pl-1">
+                            <div class="form-check-inline">
                               <input type="radio" class="form-check-input staffForm" id="nonTeaching" name="sTeaching" value="0" data-tag="staff_teaching">Non-Teaching
+                            </div>
+                            <div class="form-check-inline">
+                              <input type="radio" class="form-check-input staffForm" checked id="teaching" name="sTeaching" value="1" data-tag="staff_teaching">Teaching
                             </div>
                           </div>
                         </div>
@@ -411,63 +429,37 @@ addActivity($conn, $myId, "Manage Staff - HR");
             </div>
           </div>
           <div class="tab-pane fade" id="dr" role="tabpanel" aria-labelledby="list-dr-list">
-            <?php
-            $sql = "select s.* from staff s where staff_id>1 order by s.staff_name";
-            $result = $conn->query($sql);
-            ?>
-            <div class="col-md-12 text-right">
-              <a href="export_report.php" class="fas fa-file-export" target="_blank">Export to Excel</a>
+            <div class="row m-2">
+              <div class="col-md-12">
+                <div class="text-right">
+                  <a href="export_report.php" class="fas fa-file-export" target="_blank">Export to Excel</a>
+                </div>
+                <table id="staffListDataTable" width="100%" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>User</th>
+                      <th>Department</th>
+                      <th>Name</th>
+                      <th>DOB</th>
+                      <th>Email</th>
+                      <th>Gender</th>
+                      <th>Mobile</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
             </div>
-            <table id="example" class="display" style="width:100%">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>User Id</th>
-                  <th>Mobile</th>
-                  <th>Email</th>
-                  <th>Father Name</th>
-                  <th>Mother Name</th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php
-                if (!$result) echo $conn->error;
-                else {
-                  while ($rowsStaff = $result->fetch_assoc()) {
-                    echo '<tr>';
-                    echo '<td>' . $rowsStaff["staff_name"] . '</td>';
-                    echo '<td>' . $rowsStaff["user_id"] . '</td>';
-                    echo '<td>' . $rowsStaff["staff_mobile"] . '</td>';
-                    echo '<td>' . $rowsStaff["staff_email"] . '</td>';
-                    echo '<td>' . $rowsStaff["staff_fname"] . '</td>';
-                    echo '<td>' . $rowsStaff["staff_mname"] . '</td>';
-                    echo '</tr>';
-                  }
-                }
-                ?>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <th>Name</th>
-                  <th>User Id</th>
-                  <th>Mobile</th>
-                  <th>Email</th>
-                  <th>Father Name</th>
-                  <th>Mother Name</th>
-                </tr>
-              </tfoot>
-            </table>
           </div>
         </div>
       </div>
     </div>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <?php require("../bottom_bar.php"); ?>
+  </div>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <?php require("../bottom_bar.php"); ?>
   </div>
 </body>
-
-</html>
 
 <script>
   function resetForm() {
@@ -476,11 +468,71 @@ addActivity($conn, $myId, "Manage Staff - HR");
 
   $(document).ready(function() {
 
-    $('#example').DataTable()
+    $(function() {
+      $(document).tooltip();
+    });
 
-    var z = $("#sel_dept").val();
+    // $('#example').DataTable()
+
+    $('#staffListDataTable').DataTable({
+      "lengthMenu": [ [25, 50, 100], [25, 50, 100] ],
+      "pageLength": 25,
+      'processing': true,
+      'serverSide': true,
+      'serverMethod': 'post',
+      'ajax': {
+        'url': 'hrDataTable.php'
+      },
+      'columns': [{
+          data: 'sno'
+        },
+        {
+          data: 'user_id'
+        },
+        {
+          data: 'staff_name'
+        },
+        {
+          data: 'staff_dob'
+        },
+        {
+          data: 'dept_id'
+        },
+        {
+          data: 'staff_email'
+        },
+        {
+          data: 'staff_gender'
+        },
+        {
+          data: 'staff_mobile'
+        },
+      ],
+      dom: 'Blfrtip',
+        buttons: [
+            {
+                extend: 'copyHtml5',
+                exportOptions: {
+                    columns: [ 0, ':visible' ]
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    columns: [ 0, 1, 2, 5 ]
+                }
+            },
+            'colvis'
+        ]
+    });
+
     staffList();
-    $('#deptIdModal').val(z);
 
     $('#staffSearch').keyup(function() {
       var query = $(this).val();
@@ -503,38 +555,6 @@ addActivity($conn, $myId, "Manage Staff - HR");
       }
     });
 
-    $(document).on('click', '.autoList', function() {
-      $('#staffSearch').val($(this).text());
-      var stfId = $(this).attr("data-std");
-      staffQualificationList(stfId);
-      $('#staffAutoList').fadeOut();
-      $.post("hrSql.php", {
-        staffId: stfId,
-        action: "fetchStaff"
-      }, () => {}, "json").done(function(data) {
-        // $.alert("hello" + data.staff_name);
-        $(".staff_email").text(data.staff_email);
-        $(".staff_name").text(data.staff_name);
-        $(".staff_mobile").text(data.staff_mobile);
-        $(".staff_doj").text(data.staff_doj);
-        $("#sEmail").val(data.staff_email);
-        $("#sName").val(data.staff_name);
-        $("#sMobile").val(data.staff_mobile);
-        $("#sDob").val(data.staff_dob);
-        $("#fName").val(data.staff_fname);
-        $("#mName").val(data.staff_mname);
-        $("#sAdhaar").val(data.staff_adhaar);
-        $("#sAddress").val(data.staff_address);
-        $("#sGender").val(data.staff_gender);
-        $("#sTeaching").val(data.staff_teaching);
-        $("#sDoj").val(data.staff_doj);
-        $('.staffProfile').show();
-        $('#accordionStaff').show();
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
     // Show Add Staff Modal
 
     $(document).on('click', '.addStaff', function() {
@@ -546,19 +566,16 @@ addActivity($conn, $myId, "Manage Staff - HR");
     $(document).on('submit', '#modalForm', function(event) {
       event.preventDefault(this);
       var action = $("#action").val();
-      var selDept = $("#sel_dept").val();
       var sName = $("#sName").val();
       var stfId = $("#panelId").val();
       var error = "NO";
       var error_msg = "";
-      if (action == "addStaff" || action == "updateStaff") {
-        if ($('#sName').val() === "") {
-          error = "YES";
-          error_msg = "Staff Name cannot be blank";
-        } else if ($('#sEmail').val() === "") {
-          error = "YES";
-          error_msg = "Staff Email cannot be blank";
-        }
+      if ($('#sName').val() === "") {
+        error = "YES";
+        error_msg = "Staff Name cannot be blank";
+      } else if ($('#sEmail').val() === "") {
+        error = "YES";
+        error_msg = "Staff Email cannot be blank";
       }
       if (error == "NO") {
         var formData = $(this).serialize();
@@ -587,11 +604,11 @@ addActivity($conn, $myId, "Manage Staff - HR");
       $.post("hrSql.php", {
         id: id,
         action: "addUser"
-      }, function(data, status) {
-        $.alert("Data" + data)
+      }, function() {}, "text").done(function(data, status) {
+        $.alert(data)
         staffList();
-      }, "text").fail(function() {
-        $.alert("Error in BatchSession Function");
+      }).fail(function() {
+        $.alert("Error in Add User Function");
       })
     });
 
@@ -610,10 +627,15 @@ addActivity($conn, $myId, "Manage Staff - HR");
     });
 
     $(document).on('click', '.uploadStaff', function() {
-      $('#actionUpload').val('uploadStaff')
-      $('#button_action').show().val('Update Staff');
-      $('#formModal').modal('show');
-      $('#modal_uploadTitle').text('Upload Staff');
+      var dept_id = "<?php if (isset($myDept)) echo $myDept;
+                      else echo "0" ?>"
+      // $.alert("dept_id " + dept_id);
+      if (dept_id > 0) {
+        $('#actionUpload').val('uploadStaff')
+        $('#button_action').show().val('Update Staff');
+        $('#formModal').modal('show');
+        $('#modal_uploadTitle').text('Upload Staff');
+      } else $.alert("Please select the Deprtment !!")
     });
 
     $(document).on('submit', '#upload_csv', function(event) {
@@ -635,12 +657,14 @@ addActivity($conn, $myId, "Manage Staff - HR");
       })
     });
 
-    $(document).on('click', '.editStaff', function() {
-      $('#accordionStaff').show();
+    $(document).on('click', '.editStaff, .autoList', function() {
+
+      $('#staffAutoList').fadeOut();
+      $('#staffSearch').val($(this).text());
+
       var id = $(this).attr("data-staff");
       $('#staffIdHidden').val(id);
       staffQualificationList(id);
-      staffServiceList(id);
       $.post("hrSql.php", {
         staffId: id,
         action: "fetchStaff"
@@ -650,13 +674,22 @@ addActivity($conn, $myId, "Manage Staff - HR");
         $("#sNameAccordian").val(data.staff_name);
         $("#sMobileAccordian").val(data.staff_mobile);
         $("#sDobAccordian").val(data.staff_dob);
+
         $("#fName").val(data.staff_fname);
         $("#mName").val(data.staff_mname);
         $("#sAdhaar").val(data.staff_adhaar);
         $("#sAddress").val(data.staff_address);
-        $("#sGender").val(data.staff_gender);
+
+        if (data.staff_gender == 'M') $("#male").prop("checked", true);
+        else if (data.staff_gender == 'F') $("#female").prop("checked", true);
+
         if (data.staff_teaching == '0') $("#nonTeaching").prop("checked", true);
-        else $("#teaching").prop("checked", true);
+        else if (data.staff_teaching == '1') $("#teaching").prop("checked", true);
+
+        if (data.staff_privilege == '0') $("#Faculty").prop("checked", true);
+        else if (data.staff_privilege == '1') $("#staff").prop("checked", true);
+        else if (data.staff_privilege == '9') $("#admin").prop("checked", true);
+
         $("#sDojAccordian").val(data.staff_doj);
         $("#staff_title").text(data.staff_name);
         $(".staff_email").text(data.staff_email);
@@ -668,13 +701,14 @@ addActivity($conn, $myId, "Manage Staff - HR");
         $("#staff_bank").val(data.staff_bank);
         $("#staff_account").val(data.staff_account);
         $("#staff_ifsc").val(data.staff_ifsc);
-        $("#sel_dept").val(data.dept_id);
+        $("#sel_newDept").val(data.dept_id);
         $("#sel_des").val(data.mn_id);
         $('.staffProfile').show();
-      }, "text").fail(function() {
+      }).fail(function() {
         $.alert("fail in place of error");
       })
     });
+
     $(document).on('blur', '.staffForm', function() {
       var staffId = $("#staffIdHidden").val()
       var tag = $(this).attr("data-tag")
@@ -690,22 +724,6 @@ addActivity($conn, $myId, "Manage Staff - HR");
         // $.alert("List " + data);
       }, "text").fail(function() {
         $.alert("fail in place of error");
-      })
-    });
-
-    $(document).on('submit', '#staffServiceForm', function() {
-      event.preventDefault(this);
-      var staffId = $("#staffIdHidden").val()
-      var deptId = $("#sel_deptSS").val()
-      var desigId = $("#sel_desigSS").val()
-      $("#stfIdService").val(staffId);
-      $("#action").val("addStaffService")
-      var formData = $(this).serialize();
-      $.alert("Form Submitted " + formData)
-      $.post("hrSql.php", formData, function() {}, "text").done(function(data, success) {
-        $.alert(data)
-        $('#staffServiceForm')[0].reset();
-        staffServiceList(staffId, deptId, desigId)
       })
     });
 
@@ -786,23 +804,10 @@ addActivity($conn, $myId, "Manage Staff - HR");
     function staffList() {
       $.post("hrSql.php", {
         action: "staffList"
-      }, function(mydata, mystatus) {
-        $("#staffList").show();
-        //	alert("List ");
-        $("#staffList").html(mydata);
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    }
-
-    function staffServiceList(x) {
-      $.post("hrSql.php", {
-        action: "staffServiceList",
-        staffId: x
-      }, function(mydata, mystatus) {
-        $("#serviceShowList").show();
-        $("#serviceShowList").html(mydata);
-      }, "text").fail(function() {
+      }, function() {}, "text").done(function(data, status) {
+        // $.alert("Staff List ");
+        $("#staffList").html(data);
+      }).fail(function() {
         $.alert("fail in place of error");
       })
     }
@@ -823,10 +828,6 @@ addActivity($conn, $myId, "Manage Staff - HR");
 
     }
   });
-  document.getElementById('export').onclick = function() {
-    var tableId = document.getElementById('example').id;
-    htmlTableToExcel(tableId, filename = '');
-  }
 </script>
 
 <div class="modal" id="firstModal">
@@ -879,7 +880,6 @@ addActivity($conn, $myId, "Manage Staff - HR");
           </div>
           <input type="hidden" id="modalId" name="modalId">
           <input type="hidden" id="action" name="action">
-          <input type="hidden" id="deptIdModal" name="deptIdModal">
           <input type="hidden" id="stfIdModal" name="stfIdModal">
           <button type="submit" class="btn btn-success btn-sm" id="submitModalForm">Submit</button>
           <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal">Close</button>
@@ -902,23 +902,39 @@ addActivity($conn, $myId, "Manage Staff - HR");
 
         <!-- Modal body -->
         <div class="modal-body">
-          <h5>Selected Department</h5>
-          <p class="selectedDepartment"><b><?php echo $myDeptAbbri; ?></b></p>
-          <hr>
-          <h5>Select File to Upload Staff</h5>
           <div class="form-group">
             <div class="row">
-              <div class="col-sm-10">
+              <div class="col-sm-12">
+                <h5>
+                  Selected Department
+                  <span class="selectedDepartment largeText"><?php echo $myDeptAbbri; ?></span>
+                </h5>
+                <hr>
                 <input type="file" name="csv_upload" />
+                <hr>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <p class="warning">Upload Only .csv File<br> First Row is header row<br> Data from Row 2</p>
+              </div>
+              <div class="col-sm-6 smallerText">
+                <ul>
+                  <li>Column A - Staff Name</li>
+                  <li>Column B - Mobile</li>
+                  <li>Column C - Email</li>
+                  <!-- <li>Column G - Batch</li> -->
+                </ul>
               </div>
             </div>
           </div>
+          <hr>
         </div> <!-- Modal Body Closed-->
         <!-- Modal footer -->
         <div class="modal-footer">
           <input type="hidden" name="action" id="actionUpload">
-          <input type="submit" name="button_action" id="button_action" class="btn btn-success btn-sm" />
-          <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">Close</button>
+          <input type="submit" name="button_action" id="button_action" class="btn btn-sm" />
+          <button type="button" class="btn btn-sm" data-dismiss="modal">Close</button>
         </div> <!-- Modal Footer Closed-->
       </div> <!-- Modal Conent Closed-->
     </form>

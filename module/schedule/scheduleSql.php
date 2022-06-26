@@ -24,7 +24,7 @@ if (isset($_POST['action'])) {
     $class_period = $_POST['classPeriod'];
     $dayStatus = $_POST['dayStatus'];
     $dayId = $_POST['dayId'];
-    echo "Class $classId dayId $dayId dayStatus $dayStatus Period $class_period";
+    // echo "Class $classId dayId $dayId dayStatus $dayStatus Period $class_period";
     echo '<table class="table list-table-xs">';
     echo '<tr>';
     echo '<td rowspan="3"><h6>' . $dayId . '</h6></td>';

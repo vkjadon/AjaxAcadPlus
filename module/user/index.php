@@ -1,12 +1,7 @@
 <?php
 require('../requireSubModule.php');
+addActivity($conn, $myId, "User", $submit_ts);
 $phpFile = "userSql.php";
-$curl = curl_init();
-curl_setopt($curl, CURLOPT_URL, "https://classconnect.in/api/get_portal_menu.php");
-curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-$output = curl_exec($curl);
-curl_close($curl);
-$group = json_decode($output, true);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +12,9 @@ $group = json_decode($output, true);
 </head>
 
 <body>
-  <?php require("../topBar.php"); ?>
+  <?php require("../topBar.php");
+  // print_r($myLinks);
+  ?>
   <div class="container-fluid moduleBody">
     <div class="row">
       <div class="col-1 p-0 m-0 pl-1 full-height">
@@ -106,11 +103,14 @@ $group = json_decode($output, true);
                   <div class="card border-info">
                     <div class="card-body text-primary">
                       <?php
+                      $sql = "select * from portal_menu where pm_status='0' order by pm_sno";
+                      $result = $conn->query($sql);
                       echo '<select class="form-control form-control-sm" name="sel_pm" id="sel_pm" required title="Select Link Menu">';
                       echo '<option value="0">Select Menu</option>';
-                      for ($i = 0; $i < count($group["data"]); $i++) {
-                        echo '<option value="' . $group["data"][$i]["pm_id"] . '">' . $group["data"][$i]["pm_id"] . '-' . $group["data"][$i]["pm_name"] . '</option>';
+                      while ($rowsMenu = $result->fetch_assoc()) {
+                        echo '<option value="' . $rowsMenu["pm_id"] . '">' . $rowsMenu["pm_id"] . '-' . $rowsMenu["pm_name"] . '</option>';
                       }
+                      echo '<option value="ALL">All</option>';
                       echo '</select>';
                       ?>
                     </div>
@@ -136,11 +136,12 @@ $group = json_decode($output, true);
                   <table class="table table-bordered list-table-xs mt-2" id="plList">
                     <thead>
                       <th>Id</th>
-                      <th>Order</th>
-                      <th>Group Name</th>
-                      <th>Privilege-Group</th>
                       <th>Default</th>
-                      <th>Responsibility-Group Status</th>
+                      <th>Menu</th>
+                      <th>Group Name</th>
+                      <th>Privileges</th>
+                      <th>Portal Responsibility</th>
+                      <th>Custom Responsibility</th>
                     </thead>
                   </table>
                 </div>
@@ -151,13 +152,42 @@ $group = json_decode($output, true);
 
           </div>
           <div class="tab-pane fade" id="list-ulr" role="tabpanel" aria-labelledby="list-ulr-list">
+            <div class="row mt-3">
+              <div class="col-md-2">
+                <h4>User Activity Log </h4>
+              </div>
+              <div class="col-md-2">
+                <input type="date" class="form-control form-control-sm" id="uaDate" value="<?php echo $today; ?>">
+              </div>
+
+              <div class="col-md-2">
+                <a href="#" class="btn btn-sm previous" href="#">Prev</a>
+                <a href="#" class="btn btn-sm next" href="#">Next</a>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-12">
+
+                <table class="table table-bordered table-striped list-table-xs mt-3" id="uaLog">
+                  <th class="text-center">#</th>
+                  <th class="text-center">Id</th>
+                  <th class="text-center">Name</th>
+                  <th class="text-center">Privilege</th>
+                  <th class="text-center">Activity</th>
+                  <th class="text-center">Date(Local)</th>
+                  <th class="text-center">Time(Local)</th>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <?php require("../bottom_bar.php"); ?>
+  </div>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <?php require("../bottom_bar.php"); ?>
   </div>
 </body>
 
@@ -168,7 +198,60 @@ $group = json_decode($output, true);
       $(document).tooltip();
     });
 
+    var page = 1,
+      page_limit = 20,
+      totalRecord = 0;
+
     staffList();
+    uaLog();
+
+    function uaLog() {
+      // $.alert("Batch");
+      var ua_date = $("#uaDate").val()
+      $.post("userSql.php", {
+        page: page,
+        page_limit: page_limit,
+        ua_date: ua_date,
+        action: "uaLog",
+      }, function() {}, "json").done(function(data, status) {
+        // $.alert(data);
+        console.log(data);
+        totalRecord = data.totalRecord;
+        var card = '';
+        $.each(data.data, function(key, value) {
+          card += '<tr>';
+          card += '<td class="text-center">' + value.count + '</td>';
+          card += '<td class="text-center">' + value.user_id + '</td>';
+          card += '<td>' + value.staff_name + '</td>';
+          card += '<td class="text-center">' + value.staff_mobile + '</td>';
+          card += '<td class="text-center">' + value.ua_name + '</td>';
+          card += '<td class="text-center">' + value.ua_date + '</td>';
+          card += '<td class="text-center">' + value.ua_time + '</td>';
+          card += '</tr>';
+        });
+        $("#uaLog").find("tr:gt(0)").remove();
+        $("#uaLog").append(card);
+      }).fail(function() {
+        $.alert("Error in loading User Activity Log !!");
+      })
+
+    }
+
+    $(document).on('click', '.previous', function(event) {
+      if (page > 1) page--
+      uaLog()
+    });
+
+    $(document).on('click', '.next', function(event) {
+      if (page * page_limit < totalRecord) page++
+      uaLog()
+    });
+
+    $(document).on('change', '#uaDate', function(event) {
+      // $.alert("Changed");
+      uaLog()
+    });
+
     $(document).on('click', '.updateRL', function(event) {
       var pg = $(this).attr("data-pg");
       var mn = $(this).attr("data-mn");
@@ -204,6 +287,24 @@ $group = json_decode($output, true);
         menuGroups();
         // groupLinks();
 
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
+    $(document).on('click', '.updatePR', function(event) {
+      var pg = $(this).attr("data-pg");
+      var pr = $(this).attr("data-pr");
+      var tag = $(this).attr("data-tag");
+      // $.alert("pg " + pg + " pr " + pr + " tag " + tag);
+      $.post("userSql.php", {
+        pg: pg,
+        pr: pr,
+        tag: tag,
+        action: "updatePR",
+      }, "text").done(function(data) {
+        // $.alert(data);
+        menuGroups();
       }).fail(function() {
         $.alert("fail in place of error");
       })
@@ -256,12 +357,13 @@ $group = json_decode($output, true);
         $.each(data.link, function(key, value) {
           card += '<tr>';
           card += '<td>' + value.pg_id + '</td>';
-          card += '<td>' + value.pg_sno + '</td>';
+          if (value.pg_type == "0") card += '<td class="click text-center"><a href="#" class="default" data-pg="' + value.pg_id + '" data-value="1"><i class="fa fa-times"></i></a></td>';
+          else if (value.pg_type == "1") card += '<td class="click text-center"><a href="#" class="default" data-pg="' + value.pg_id + '" data-value="0"><i class="fa fa-check"></i></a></td>';
+          else card += '<td>--</td>';
+          card += '<td>' + value.pm_name + '</td>';
           card += '<td>' + value.pg_name + '</td>';
           card += '<td>' + value.pg + '</td>';
-          if (value.pg_type == "0") card += '<td>No</td>';
-          else if (value.pg_type == "1") card += '<td class="warning">Yes</td>';
-          else card += '<td>--</td>';
+          card += '<td>' + value.portalResponsibility + '</td>';
           card += '<td>' + value.text + '</td>';
           card += '</tr>';
         })
@@ -272,6 +374,22 @@ $group = json_decode($output, true);
         $.alert("No Links Found ! Please try Other Group !");
       })
     }
+
+    $(document).on('click', '.default', function(event) {
+      var pg = $(this).attr("data-pg");
+      var value = $(this).attr("data-value");
+      // $.alert("pg " + pg + " value " + value);
+      $.post("userSql.php", {
+        pg: pg,
+        value: value,
+        action: "updateDefault",
+      }, () => {}, "text").done(function(data) {
+        // $.alert(data);
+        menuGroups();
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
 
     $(document).on('click', '#searchStudent', function(event) {
       var userId = $("#userId").val();
@@ -388,7 +506,7 @@ $group = json_decode($output, true);
       $.alert("Updating Menu ");
       $.post("userSql.php", {
         action: "updateMenu",
-      }, () => {}, "text").done(function(data,status) {
+      }, () => {}, "text").done(function(data, status) {
         $.alert(data);
       }).fail(function() {
         $.alert("fail in place of error");
@@ -398,7 +516,7 @@ $group = json_decode($output, true);
       $.alert("Updating Menu ");
       $.post("userSql.php", {
         action: "updateGroup",
-      }, () => {}, "text").done(function(data,status) {
+      }, () => {}, "text").done(function(data, status) {
         $.alert(data);
       }).fail(function() {
         $.alert("fail in place of error");

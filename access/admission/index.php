@@ -239,7 +239,7 @@ if (!isset($myBatch)) $myBatch = '';
                             $result = $conn->query($sql_caste);
                             if ($result) {
                               echo '<select class="form-control form-control-sm studentUpdateForm" name="sel_caste" id="sel_caste" data-tag="student_category" required>';
-                              echo '<option value="0">Select Caste</option>';
+                              echo '<option value="">Select Caste</option>';
                               while ($rows = $result->fetch_assoc()) {
                                 $select_name = $rows['mn_name'];
                                 $abbri = $rows['mn_abbri'];
@@ -604,7 +604,7 @@ if (!isset($myBatch)) $myBatch = '';
     $('[data-toggle="tooltip"]').tooltip();
     schoolOption();
     stateOption();
-    unsavedStudentList();
+    // unsavedStudentList();
 
     function schoolOption() {
       // $.alert("Department ");
@@ -664,7 +664,7 @@ if (!isset($myBatch)) $myBatch = '';
       }
       if (error == "NO") {
         var formData = $(this).serialize();
-        alert(" Pressed" + formData);
+        // alert(" Pressed" + formData);
         $.post("admissionSql.php", formData, () => {}, "text").done(function(data) {
           // $.alert(data);
           $(".newId").html(data);
@@ -990,7 +990,7 @@ if (!isset($myBatch)) $myBatch = '';
         var error = 'N'
         card += '<h5>Check if the Mandatory Fields are Missing</h5>'
         card += '<table class="table list-table-xs">';
-        if (data.student_name == null) {
+        if (data.student_name == null || data.student_name == "") {
           card += '<tr><td> Name <span class="smallerText warning"> is missing</span></td></tr>';
           error = 'Y';
         }
@@ -998,7 +998,7 @@ if (!isset($myBatch)) $myBatch = '';
           card += '<tr><td> DoB <span class="smallerText warning"> is missing</span></td></tr>';
           error = 'Y';
         }
-        if (data.student_mobile == null) {
+        if (data.student_mobile == null || data.student_mobile == "") {
           card += '<tr><td> Mobile <span class="smallerText warning"> is missing</span></td></tr>';
           error = 'Y';
         }
@@ -1006,7 +1006,7 @@ if (!isset($myBatch)) $myBatch = '';
           card += '<tr><td> WhatsApp <span class="smallerText warning"> is missing</span></td></tr>';
           error = 'Y';
         }
-        if (data.student_category == null) {
+        if (data.student_category == null || data.student_category == "") {
           card += '<tr><td> Category <span class="smallerText warning"> is missing</span></td></tr>';
           error = 'Y';
         }
@@ -1014,7 +1014,7 @@ if (!isset($myBatch)) $myBatch = '';
           card += '<tr><td> Religion <span class="smallerText warning"> is missing</span></td></tr>';
           error = 'Y';
         }
-        if (data.student_fee_category == null) {
+        if (data.student_fee_category == null || data.student_fee_category == "") {
           card += '<tr><td> Fee Category <span class="smallerText warning"> is missing</span></td></tr>';
           error = 'Y';
         }
@@ -1027,7 +1027,7 @@ if (!isset($myBatch)) $myBatch = '';
           error = 'Y';
         }
         if (data.permanent_address == null) {
-          card += '<tr><td> MPermanent Address <span class="smallerText warning"> is missing</span></td></tr>';
+          card += '<tr><td> Permanent Address <span class="smallerText warning"> is missing</span></td></tr>';
           error = 'Y';
         }
         card += '</table>';
@@ -1037,7 +1037,7 @@ if (!isset($myBatch)) $myBatch = '';
             userId: studentId,
             action: "saveStudent"
           }, function() {}, "text").done(function(data, status) {
-            $.alert("Student Saved !!");
+            $.alert("Student Data Saved !!");
           })
         }
       })

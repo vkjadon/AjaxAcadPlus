@@ -17,9 +17,10 @@ if ($_POST['action'] == 'checkUser') {
   $sql_staff = "select * from staff where user_id='$myUn'";
   $result_staff = $conn->query($sql_staff);
   if ($result_staff && $result_staff->num_rows > 0) {
-    $rows_staff = $result_staff->fetch_assoc();
-    $staff_id = $rows_staff['staff_id'];
-    $school_id = $rows_staff['school_id'];
+    $row_staff = $result_staff->fetch_assoc();
+    $staff_id = $row_staff['staff_id'];
+    $school_id = $row_staff['school_id'];
+    $dept_id = $row_staff['dept_id'];
     // $staff_id=getField($conn, $myUn, "staff", "user_id", "staff_id");
     $sql_user = "select * from user where staff_id='$staff_id'";
     $result_user = $conn->query($sql_user);
@@ -33,24 +34,36 @@ if ($_POST['action'] == 'checkUser') {
         $response["user"] = $staff_id;
         $jsonOutput = json_encode($response);
 
-        $last_login = date("Y-m-d h:i:s", time());
+        echo $jsonOutput;
+
+        $_SESSION['myid'] = $staff_id;
+        $_SESSION['mysclid'] = $school_id;
+        $_SESSION['mydeptid'] = $dept_id;
+
+        $sql = "select * from institution where inst_status='0'";
+        $result = $conn->query($sql);
+        $rows = $result->fetch_assoc();
+        $_SESSION["setUrl"] = $rows["inst_url"];
+
+        // Block changed on 06-06-2022
+
+        $inst_timelag = $rows["inst_timelag"];
+        if ($inst_timelag == null) $_SESSION["timeLag"] = 0;
+        else $_SESSION["timeLag"] = $inst_timelag;
+
+        // Block Ended on 06-06-2022
+
+        // Block Updated and Shifted on June 19, 2022
+        // Time Lag added 
+        $last_login = date("Y-m-d H:i:s", time() + $inst_timelag);
         $sql = "update user set last_login='$last_login' where staff_id='$staff_id'";
         $result = $conn->query($sql);
 
         $sql = "insert into user_log (user_id, ul_login) values('$myUn', '$last_login')";
         $result = $conn->query($sql);
 
-        echo $jsonOutput;
+        // Block Ended June 19, 2022
 
-        $_SESSION['myid'] = $staff_id;
-        $_SESSION['mysclid'] = $school_id;
-
-        $sql = "select * from institution where inst_status='0'";
-        $result = $conn->query($sql);
-        $rows = $result->fetch_assoc();
-
-        $_SESSION["setUrl"] = $rows["inst_url"];
-        $_SESSION["timeLag"] = $rows["inst_timelag"];
         $_SESSION["setLogo"] = 'https://erp.classconnect.in/' . $myFolder . $rows["inst_logo"];
 
         $sql = "select * from session where session_status='0' order by session_id desc";
@@ -62,6 +75,19 @@ if ($_POST['action'] == 'checkUser') {
         $result = $conn->query($sql);
         $rows = $result->fetch_assoc();
         $_SESSION['myBatch'] = $rows["batch_id"];
+
+        // Block Added on 28-05-2022 
+
+        $sql = "select * from user_privilege where user_id='$myUn'";
+        $result = $conn->query($sql);
+        if ($result && $result->num_rows > 0) {
+          $rows = $result->fetch_assoc();
+          $privilege = $rows["up_code"];
+        } else $privilege = 1;
+
+        $_SESSION['privilege'] = $privilege;
+
+        // Block Ended 28-05-2022
 
         $_SESSION['mll'] = $last_login;
         $_SESSION['un'] = $myUn;
@@ -86,9 +112,9 @@ if ($_POST['action'] == 'checkUser') {
   $sql_staff = "select * from staff where user_id='$myUn'";
   $result_staff = $conn->query($sql_staff);
   if ($result_staff && $result_staff->num_rows > 0) {
-    $rows_staff = $result_staff->fetch_assoc();
-    $staff_email = $rows_staff['staff_email'];
-    $staff_id = $rows_staff['staff_id'];
+    $row_staff = $result_staff->fetch_assoc();
+    $staff_email = $row_staff['staff_email'];
+    $staff_id = $row_staff['staff_id'];
     $password = random_int(100000, 999999);
     $encripted = sha1($password);
     //echo $staff_email . $staff_id . ':' . $password;

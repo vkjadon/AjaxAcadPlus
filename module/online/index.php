@@ -11,23 +11,60 @@ require('../requireSubModule.php');
 </head>
 
 <body>
-	<?php require("../topBar.php"); ?>
+	<?php require("../topBar.php");
+	if ($myId > 3) {
+		if (!isset($_GET['tag'])) die("Illegal Attempt !! The token is Missing");
+		elseif (!in_array($_GET['tag'], $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+		elseif (!in_array("15", $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+	}
+	?>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-2 p-0 m-0 pl-2 full-height">
-				<h5 class="mt-3">Online Assessment</h5>
+			<div class="col-1 p-0 m-0 pl-1 full-height">
+				<h5 class="mt-3 largeText">Online Assessment</h5>
 				<div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
 					<a class="list-group-item list-group-item-action active mt" id="list-mt-list" data-toggle="list" href="#list-mt" role="tab" aria-controls="mt"> Manage Test </a>
 					<a class="list-group-item list-group-item-action aq" id="list-aq-list" data-toggle="list" href="#list-aq" role="tab" aria-controls="aq"> Add Question </a>
 					<a class="list-group-item list-group-item-action ti" id="list-ti-list" data-toggle="list" href="#list-ti" role="tab" aria-controls="ti"> Instructions/Text </a>
-					<a class="list-group-item list-group-item-action pt" id="list-pt-list" data-toggle="list" href="#list-pt" role="tab" aria-controls="pt"> Publish Test </a>
-					<a class="list-group-item list-group-item-action tr" id="list-tr-list" data-toggle="list" href="#list-tr" role="tab" aria-controls="tr"> Test Report</a>
 				</div>
 			</div>
-			<div class="col-10 leftLinkBody">
+			<div class="col-sm-11 p-0">
 				<div class="tab-content" id="nav-tabContent">
+					<div class="row m-1">
+						<div class="col-md-12">
+							<div class="card myCard p-2">
+								<div class="row">
+									<div class="col-md-4">
+										Test Name : <span id="nameSR"></span> Section : <span id="sectionSR"></span>
+										Questions : <span id="questionSR"></span>
+										Duration : <span id="durationSR"></span>
+									</div>
+									<div class="col-md-4">
+										Marks : <span id="questionMarksSR"></span>
+										NMarks : <span id="questionNMarksSR"></span>
+									</div>
+									<div class="col-md-2">
+									</div>
+									<div class="col-md-2 text-right">
+										Start <span id="from_dateSR"></span> <span id="from_timeSR"></span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-4">
+										Test Created by <span class="smallText" id="staffSR"></span> and Last updated on <span class="smallText" id="updateSR"></span> at <span class="smallText" id="updateTimeSR"></span>
+									</div>
+									<div class="col-md-6">
+										Participants: <span id="participantSR"></span>
+									</div>
+									<div class="col-md-2 text-right">
+										Active <span id="to_dateSR"></span> <span id="to_timeSR"></span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="tab-pane show active" id="list-mt" role="tabpanel" aria-labelledby="list-mt-list">
-						<div class="row">
+						<div class="row m-1">
 							<div class="col-6">
 								<div class="container card myCard p-2">
 									<ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist">
@@ -129,49 +166,11 @@ require('../requireSubModule.php');
 								<div class="col-6 mt-1 mb-1" id="testRight">
 								</div>
 							</div>
-							<div class="col-6">
-								<div class="container card mt-2 myCard">
-									<h5 class="card-title">Test Summary</h5>
-									<div class="container col-12">
-										<table class="table list-table-xs smallText">
-											<tr class="smallText">
-												<td width="20%">Test Name</td>
-												<td id="nameSR" colspan="3"></td>
-												<td width="20%">Section</td>
-												<td><span id="sectionSR"></span></td>
-											</tr>
-											<tr>
-												<td>From </td>
-												<td><span id="from_dateSR"></span> <span id="from_timeSR"></span></td>
-												<td width="15%">To </td>
-												<td><span id="to_dateSR"></span> <span id="to_timeSR"></span></td>
-												<td>Duration </td>
-												<td><span id="durationSR"></span></td>
-											</tr>
-											<tr>
-												<td>Participants</td>
-												<td colspan="5"><span id="participantSR"></span></td>
-											</tr>
-											<tr>
-												<td>Questions</td>
-												<td><span id="questionSR"></span></td>
-												<td>Marks</td>
-												<td><span id="questionMarksSR"></span></td>
-												<td>NMarks</td>
-												<td><span id="questionNMarksSR"></span></td>
-											</tr>
-											<tr>
-												<td colspan="6">Created by <span class="smallText" id="staffSR"></span> and Last updated on <span class="smallText" id="updateSR"></span> at <span class="smallText" id="updateTimeSR"></span> </td>
-											</tr>
-										</table>
-									</div>
-								</div>
-							</div>
 						</div>
 					</div>
 					<div class="tab-pane fade" id="list-aq" role="tabpanel" aria-labelledby="list-aq-list">
-						<div class="row">
-							<div class="col-5 mt-1 mb-1">
+						<div class="row m-1">
+							<div class="col-5">
 								<div class="container card myCard">
 									<h5 class="mt-2">Add New Question Panel</h5>
 									<div class="row mt-1">
@@ -208,15 +207,15 @@ require('../requireSubModule.php');
 								<p class="showActiveQuestion"></p>
 							</div>
 						</div>
-						<div class="row">
+						<div class="row m-1">
 							<div class="col-sm-12">
 								<p class="sectionQuestionList"></p>
 							</div>
 						</div>
 					</div>
 					<div class="tab-pane fade" id="list-ti" role="tabpanel" aria-labelledby="list-ti-list">
-						<div class="row">
-							<div class="col-5 mt-1 mb-1">
+						<div class="row m-1">
+							<div class="col-5">
 								<p id="testHeading"></p>
 							</div>
 							<div class="col-7 mt-1 mb-1">
@@ -232,16 +231,6 @@ require('../requireSubModule.php');
 									<input type="hidden" id="sectionId" name="sectionId">
 									<button class="btn btn-secondary btn-square-sm saveNotice">Save</button>
 								</form>
-
-							</div>
-						</div>
-					</div>
-					<div class="tab-pane fade" id="list-pt" role="tabpanel" aria-labelledby="list-pt-list">
-						<div class="row">
-							<div class="col-8 mt-1 mb-1">
-							</div>
-							<div class="col-4 mt-1 mb-1">
-
 							</div>
 						</div>
 					</div>
@@ -253,7 +242,6 @@ require('../requireSubModule.php');
 		<?php require("../bottom_bar.php"); ?>
 	</div>
 </body>
-<!-- MDB -->
 <script src="https://cdn.tiny.cloud/1/xjvk0d07c7h90fry9yq9z0ljb019ujam91eo2jk8uhlun307/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
 <script>
@@ -268,7 +256,153 @@ require('../requireSubModule.php');
 <script>
 	$(document).ready(function() {
 		testList();
+
+		function testList() {
+			// $.alert('hello');
+			$.post("onlineSql.php", {
+				action: "testList",
+			}, () => {}, "json").done(function(data, status) {
+				var card = '';
+				var count = 1;
+				// $.alert(data);
+				$.each(data, function(key, value) {
+					status = value.test_status;
+					card += '<tr>';
+					if (status == "0") card += '<td><a href="#" class="editTest fa fa-circle" data-test="' + value.test_id + '"></td>';
+					else card += '<td><a href="#" class="editTest fa fa-pencil-alt" data-test="' + value.test_id + '"></td>';
+					card += '<td>' + count++ + '</td>';
+					card += '<td>' + value.test_name + '</td>';
+					card += '<td>' + value.test_section + '</td>';
+					card += '</tr>';
+				});
+				$("#testTable").find("tr:gt(0)").remove()
+				$("#testTable").append(card);
+			}).fail(function() {
+				$.alert("Test List is Not Responding");
+			})
+		}
+
 		testSummary();
+
+		function testSummary() {
+			// $.alert('hello');
+			$.post("onlineSql.php", {
+				action: "testSR",
+			}, () => {}, "json").done(function(data, status) {
+				// $.alert(data);
+				$("#nameSR").html(data.test_name);
+				$("#sectionSR").html(data.test_section);
+				$("#from_dateSR").html(getFormattedDate(data.test_from_date, "dmY"));
+				$("#from_timeSR").html(data.test_from_time);
+				$("#to_dateSR").html(getFormattedDate(data.test_to_date, "dmY"));
+				$("#to_timeSR").html(data.test_to_time);
+				$("#durationSR").html(data.test_duration);
+				$("#participantSR").html(data.participant);
+				$("#questionSR").html(data.question);
+				$("#staffSR").html(data.staff);
+				$("#updateSR").html(getFormattedDate(data.update, "dmY"));
+				$("#updateTimeSR").html(getTime(data.update));
+				$("#questionMarksSR").html(data.marks);
+				$("#questionNMarksSR").html(data.nmarks);
+
+			}).fail(function() {
+				$.alert("Test Summary is Not Responding");
+			})
+		}
+
+		// Add Test Block
+		$(document).on("submit", "#addTestForm", function() {
+			event.preventDefault(this);
+			var formData = $(this).serialize();
+			$.alert("Form Submitted " + formData)
+			$.post("onlineSql.php", formData, function() {}, "text").done(function(data, success) {
+				$.alert(data)
+				$('#addTestForm')[0].reset();
+				testList()
+			})
+		});
+
+		$(document).on("click", ".editTest", function() {
+			var test_id = $(this).attr("data-test")
+			// $().removeClass();
+			$(".editTest").removeClass('fa-circle')
+			$(".editTest").addClass('fa-pencil-alt')
+
+			$(this).removeClass('fa-pencil-alt');
+			$(this).addClass('fa-circle')
+
+			// $.alert("Edit - Fetch " + test_id);
+			$.post("onlineSql.php", {
+				test_id: test_id,
+				action: "fetchTest"
+			}, function() {}, "json").done(function(data, status) {
+				// $.alert(data.test_from_time);
+				$("#test_id").val(data.test_id)
+				$("#test_name").val(data.test_name)
+				$("#test_section").val(data.test_section)
+				$("#from_date").val(data.test_from_date)
+				$("#from_time").val(data.test_from_time)
+				$("#to_date").val(data.test_to_date)
+				$("#to_time").val(data.test_to_time)
+				$("#test_duration").val(data.test_duration)
+				deptClassList();
+				testSummary();
+			})
+		})
+
+		function deptClassList() {
+			// $.alert("Class List ");
+			$.post("onlineSql.php", {
+				action: "deptClassList"
+			}, function() {}, "json").done(function(data, status) {
+				// $.alert(data)
+				var card = '';
+				var count = 1;
+				$.each(data, function(key, value) {
+					var check = value.check;
+					card += '<div class="row m-1">';
+					card += '<div class="col">';
+					if (check == '1') card += '<input type="checkbox" class="participantClass" checked data-class="' + value.class_id + '"> ' + value.class_name;
+					else card += '<input type="checkbox" class="participantClass" data-class="' + value.class_id + '"> ' + value.class_name;
+					card += ' [' + value.class_section + '] ';
+					// card += ' [' + check + '] ';
+					card += '</div>';
+					card += '</div>';
+				})
+				// $("#programClassTable").find("tr:gt(0)").remove();
+				$("#deptClass").html(card);
+			})
+		}
+
+		// Participant Class/Group
+		$(document).on("click", ".participantClass", function() {
+			var classId = $(this).attr("data-class")
+			var status = $(this).is(":checked");
+			// $.alert("Participant Class Id " + classId + status);
+			$.post("onlineSql.php", {
+				classId: classId,
+				status: status,
+				action: "participant"
+			}, function() {}, "text").done(function(data, status) {
+				// $.alert(data)
+				testSummary();
+			})
+		})
+		$(document).on("click", ".participant", function() {
+			deptClassList();
+		})
+
+		// Schedule a Test
+		$(document).on("submit", "#addTestScheduleForm", function() {
+			event.preventDefault(this);
+			var formData = $(this).serialize();
+			$.alert("Form Submitted " + formData)
+			$.post("onlineSql.php", formData, function() {}, "text").done(function(data, success) {
+				// $.alert(data)
+				$('#addTestScheduleForm')[0].reset();
+				testSummary();
+			})
+		});
 
 		// Add Question Block
 
@@ -323,147 +457,6 @@ require('../requireSubModule.php');
 				$(".sectionQuestionList").html(data)
 			}).fail(function() {
 				$.alert("Error !!");
-			})
-		}
-
-		// Add Test Block
-		$(document).on("submit", "#addTestForm", function() {
-			event.preventDefault(this);
-			var formData = $(this).serialize();
-			$.alert("Form Submitted " + formData)
-			$.post("onlineSql.php", formData, function() {}, "text").done(function(data, success) {
-				$.alert(data)
-				$('#addTestForm')[0].reset();
-				testList()
-			})
-		});
-		$(document).on("click", ".editTest", function() {
-			var test_id = $(this).attr("data-test")
-			// $().removeClass();
-			$(".editTest").removeClass('fa-circle')
-			$(".editTest").addClass('fa-pencil-alt')
-
-			$(this).removeClass('fa-pencil-alt');
-			$(this).addClass('fa-circle')
-
-			// $.alert("Edit - Fetch " + test_id);
-			$.post("onlineSql.php", {
-				test_id: test_id,
-				action: "fetchTest"
-			}, function() {}, "json").done(function(data, status) {
-				// $.alert(data.test_from_time);
-				$("#test_id").val(data.test_id)
-				$("#test_name").val(data.test_name)
-				$("#test_section").val(data.test_section)
-				$("#from_date").val(data.test_from_date)
-				$("#from_time").val(data.test_from_time)
-				$("#to_date").val(data.test_to_date)
-				$("#to_time").val(data.test_to_time)
-				$("#test_duration").val(data.test_duration)
-				deptClassList();
-				testSummary();
-			})
-		})
-		$(document).on("click", ".participantClass", function() {
-			var classId = $(this).attr("data-class")
-			var status = $(this).is(":checked");
-			// $.alert("Participant Class Id " + classId + status);
-			$.post("onlineSql.php", {
-				classId: classId,
-				status: status,
-				action: "participant"
-			}, function() {}, "text").done(function(data, status) {
-				// $.alert(data)
-				testSummary();
-			})
-		})
-		$(document).on("click", ".participant", function() {
-			deptClassList();
-		})
-		$(document).on("submit", "#addTestScheduleForm", function() {
-			event.preventDefault(this);
-			var formData = $(this).serialize();
-			$.alert("Form Submitted " + formData)
-			$.post("onlineSql.php", formData, function() {}, "text").done(function(data, success) {
-				// $.alert(data)
-				$('#addTestScheduleForm')[0].reset();
-				testSummary();
-
-			})
-		});
-
-		function deptClassList() {
-			// $.alert("Class List ");
-			$.post("onlineSql.php", {
-				action: "deptClassList"
-			}, function() {}, "json").done(function(data, status) {
-				// $.alert(data)
-				var card = '';
-				var count = 1;
-				$.each(data, function(key, value) {
-					var check = value.check;
-					card += '<div class="row m-1">';
-					card += '<div class="col">';
-					if (check == '1') card += '<input type="checkbox" class="participantClass" checked data-class="' + value.class_id + '"> ' + value.class_name;
-					else card += '<input type="checkbox" class="participantClass" data-class="' + value.class_id + '"> ' + value.class_name;
-					card += ' [' + value.class_section + '] ';
-					// card += ' [' + check + '] ';
-					card += '</div>';
-					card += '</div>';
-				})
-				// $("#programClassTable").find("tr:gt(0)").remove();
-				$("#deptClass").html(card);
-			})
-		}
-
-		function testSummary() {
-			// $.alert('hello');
-			$.post("onlineSql.php", {
-				action: "testSR",
-			}, () => {}, "json").done(function(data, status) {
-				// $.alert(data.participant);
-				$("#nameSR").html(data.test_name);
-				$("#sectionSR").html(data.test_section);
-				$("#from_dateSR").html(getFormattedDate(data.test_from_date, "dmY"));
-				$("#from_timeSR").html(data.test_from_time);
-				$("#to_dateSR").html(getFormattedDate(data.test_to_date, "dmY"));
-				$("#to_timeSR").html(data.test_to_time);
-				$("#durationSR").html(data.test_duration);
-				$("#participantSR").html(data.participant);
-				$("#questionSR").html(data.question);
-				$("#staffSR").html(data.staff);
-				$("#updateSR").html(getFormattedDate(data.update, "dmY"));
-				$("#updateTimeSR").html(getTime(data.update));
-				$("#questionMarksSR").html(data.marks);
-				$("#questionNMarksSR").html(data.nmarks);
-
-			}).fail(function() {
-				$.alert("Test is Not Responding");
-			})
-		}
-
-		function testList() {
-			// $.alert('hello');
-			$.post("onlineSql.php", {
-				action: "testList",
-			}, () => {}, "json").done(function(data, status) {
-				var card = '';
-				var count = 1;
-				// $.alert(data);
-				$.each(data, function(key, value) {
-					status = value.test_status;
-					card += '<tr>';
-					if (status == "0") card += '<td><a href="#" class="editTest fa fa-circle" data-test="' + value.test_id + '"></td>';
-					else card += '<td><a href="#" class="editTest fa fa-pencil-alt" data-test="' + value.test_id + '"></td>';
-					card += '<td>' + count++ + '</td>';
-					card += '<td>' + value.test_name + '</td>';
-					card += '<td>' + value.test_section + '</td>';
-					card += '</tr>';
-				});
-				$("#testTable").find("tr:gt(0)").remove()
-				$("#testTable").append(card);
-			}).fail(function() {
-				$.alert("Test is Not Responding");
 			})
 		}
 

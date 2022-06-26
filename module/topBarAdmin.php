@@ -16,20 +16,23 @@ else $myBatchName = "Select Batch";
 if (!isset($myProg)) $myProg = '';
 if (!isset($myBatch)) $myBatch = '';
 
-$sql_menu="select * from portal_menu where pm_status='0' order by pm_sno";
-$result_menu=$conn->query($sql_menu);
+$sql_menu = "select * from portal_menu where pm_status='0' order by pm_sno";
+$result_menu = $conn->query($sql_menu);
 $pm_idArray = array();
 $pm_nameArray = array();
-while($rowsMenu=$result_menu->fetch_assoc()){
-	$pm_id[]=$rowsMenu["pm_id"];
-	$pm_name[]=$rowsMenu["pm_name"];
+$count = 0;
+while ($rowsMenu = $result_menu->fetch_assoc()) {
+	$pm_idArray[$count] = $rowsMenu["pm_id"];
+	$pm_nameArray[$count] = $rowsMenu["pm_name"];
+	$count++;
 }
 ?>
 <header>
 	<div class="py-2">
 		<div class="row">
 			<div class="col-md-1 ml-2">
-				<img src="<?php echo $setLogo; // Defined in check_user ?>" height="37px">
+				<img src="<?php echo $setLogo; // Defined in check_user 
+									?>" height="37px">
 				<?php //echo $setLogo; // Defined in check_user 
 				?>
 			</div>
@@ -62,50 +65,46 @@ while($rowsMenu=$result_menu->fetch_assoc()){
 		<div class="collapse navbar-collapse" id="navbarNavDropdown">
 			<ul class="navbar-nav mr-auto">
 
-			<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ERP Admin</a>
-						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-							<div class="card border">
-								<div class="row">
-									<div class="col-12 pr-0">
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ERP Admin</a>
+					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+						<div class="card border">
+							<div class="row">
+								<div class="col-12 pr-0">
 									<a href="<?php echo $codePath . '/module/setting/'; ?>" class="dropdown-item py-0">Institute Setting</a>
 									<a href="<?php echo $codePath . '/module/aa/'; ?>" class="dropdown-item py-0">Academic Setting</a>
 									<a href="<?php echo $codePath . '/module/user/'; ?>" class="dropdown-item py-0">Users and Links</a>
 									<a href="<?php echo $codePath . '/module/event/'; ?>" class="dropdown-item py-0">Events and Awards</a>
 									<a href="<?php echo $codePath . '/module/ayp/'; ?>" class="dropdown-item py-0">AY Planner</a>
-									</div>
 								</div>
 							</div>
 						</div>
-					</li>
+					</div>
+				</li>
 
 				<?php
-				for ($i = 1; $i < count($pm_id); $i++) {
-					$pm_id = pm_id"];
-					$curl = curl_init();
-					$url = 'https://classconnect.in/api/get_portal_menuGroup.php?pm=' . $pm_id;
-
-					curl_setopt($curl, CURLOPT_URL, $url);
-					curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-					$output = curl_exec($curl);
-					$output = json_decode($output, true);
+				for ($i = 1; $i < count($pm_idArray); $i++) {
+					$pm_id = $pm_idArray[$i];
+					$sql = "select * from portal_group where pm_id='$pm_id' and pg_status='0' order by pg_sno";
+					$result = $conn->query($sql);
 				?>
 					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $group["data"][$i]["pm_name"]; ?></a>
+						<a class="nav-link dropdown-toggle" href="academics/" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $pm_nameArray[$i]; ?></a>
 						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 							<div class="card border">
 								<div class="row">
 									<div class="col-12 pr-0">
 										<?php
 										// echo "sd " . $output["success"];
-										for ($j = 0; $j < count($output["data"]); $j++) {
-											$path = $output["data"][$j]["pg_folder"];
-											$pg_name = $output["data"][$j]["pg_name"];
-											$pg_id = $output["data"][$j]["pg_id"];
+										while ($pgRows = $result->fetch_assoc()) {
+											$path = $pgRows["pg_folder"];
+											$pg_name = $pgRows["pg_name"];
+											$pg_id = $pgRows["pg_id"];
 											$sql = "select * from privilege_group where pg_id='$pg_id' and up_code='9'";
 											if ($conn->query($sql)->num_rows > 0) {
 										?>
-												<a href="<?php echo $codePath . '/module/' . $path . '/'; ?>" class="dropdown-item py-0"><?php echo $pg_name; ?></a>
+												<!-- <a href="<?php echo $codePath . '/module/' . $path . '/'; ?>" class="dropdown-item py-0 groupLink" data-folder="<?php echo $path?>"><?php echo $pg_name; ?></a> -->
+												<a href="#" class="dropdown-item py-0 groupLink" data-folder="<?php echo $path?>"><?php echo $pg_name; ?></a>
 										<?php
 											}
 										}

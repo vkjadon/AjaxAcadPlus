@@ -14,12 +14,10 @@ function data_clean($data)
   return $data;
 }
 
-function addActivity($conn, $staff_id, $activity)
+function addActivity($conn, $staff_id, $activity, $submit_ts)
 {
-    $sql_in = "insert into user_activity (staff_id, ua_name) values('$staff_id', '$activity')";
-    // echo $sql_in;
-    $result = $conn->query($sql_in);
-    if (!$result) echo $conn->error;
+  $sql = "insert into user_activity (staff_id, ua_name, ua_time) values('$staff_id', '$activity', '$submit_ts')";
+  if (!$conn->query($sql)) echo $conn->error;
 }
 
 function selectList($conn, $selectTitle, $data, $sql)
@@ -38,7 +36,7 @@ function selectList($conn, $selectTitle, $data, $sql)
   //$required>0 The variable need the selection to proceed
   //$required=2 The ALL item does NOT appear in the List
   $result = $conn->query($sql);
-  if ($result) {
+  if ($result) {    
     if ($required == '0') echo '<select class="mdb-select form-control form-control-sm ' . $name . '" name="' . $idName . '" id="' . $idName . '">';
     else echo '<select class="mdb-select form-control form-control-sm ' . $name . '" name="' . $idName . '" id="' . $idName . '" required>';
 
@@ -56,6 +54,7 @@ function selectList($conn, $selectTitle, $data, $sql)
     echo '</select>';
   } else echo $conn->error;
   if ($result->num_rows == 0) echo 'No Data Found';
+  mysqli_free_result($result);
 }
 function selectInput($conn, $selectTitle, $id, $name, $abbri, $idName, $sql)
 {
@@ -76,8 +75,9 @@ function selectInput($conn, $selectTitle, $id, $name, $abbri, $idName, $sql)
     }
     echo '<option value="ALL">ALL</option>';
     echo '</select>';
+    if ($result->num_rows == 0) echo 'No Data Found';
+    mysqli_free_result($result);
   } else echo $conn->error;
-  if ($result->num_rows == 0) echo 'No Data Found';
 }
 function addData($conn, $table, $id, $fields, $values, $status, $dup, $dup_alert)
 {
@@ -192,6 +192,7 @@ function getList($conn, $tableId, $fields, $dataType, $header, $sql, $statusDeco
     }
     echo '</tr>';
   }
+  mysqli_free_result($result);
   echo '</table>';
 }
 function getListCard($conn, $tableId, $fields, $dataType, $sql, $statusDecode, $button)
@@ -240,6 +241,7 @@ function getListCard($conn, $tableId, $fields, $dataType, $sql, $statusDecode, $
     echo '</div>';
     echo '</div>';
   }
+  mysqli_free_result($result);
   echo '</div>';
 }
 function updateField($conn, $table, $fields, $values, $echo)
@@ -286,6 +288,7 @@ function updateData($conn, $table, $fields, $values, $dup, $dup_alert)
         //echo $conn->error;
         die();
       }
+      // mysqli_free_result($result);
     }
   }
 }
@@ -312,6 +315,7 @@ function updateUniqueData($conn, $table, $fields, $values, $dup_alert)
       //echo $conn->error;
       die();
     }
+    mysqli_free_result($result);
   }
   echo "Updated Successfully!";
 }
@@ -322,12 +326,13 @@ function getFieldValue($conn, $fieldName, $sql)
   $result = $conn->query($sql);
   if (!$result) {
     echo $conn->error;
-    echo "<br>".$sql.'<br>';
+    echo "<br>" . $sql . '<br>';
     die("Opps! Some Error occured !! Please contact Administrator !");
   }
   $rows = $result->fetch_assoc();
   $Name = $rows[$fieldName];
   return $Name;
+  mysqli_free_result($result);
 }
 function getField($conn, $getId, $tableName, $id, $name)
 {
@@ -340,7 +345,7 @@ function getField($conn, $getId, $tableName, $id, $name)
   $result = $conn->query($sql);
   if (!$result) {
     echo $conn->error;
-    echo "<br>".$name.'<br>';
+    echo "<br>" . $name . '<br>';
     die("Opps! Some Error occured !! Please contact Administrator !");
   } else {
     $num_rows = $result->num_rows;
@@ -350,6 +355,7 @@ function getField($conn, $getId, $tableName, $id, $name)
     } else $Name = "";
   }
   return $Name;
+  mysqli_free_result($result);
 }
 
 function getFieldArray($conn,  $getId, $tableName, $id, $name)
@@ -362,7 +368,7 @@ function getFieldArray($conn,  $getId, $tableName, $id, $name)
   $i = 0;
   if (!$result) {
     echo $conn->error;
-    echo " <br> ".$name;
+    echo " <br> " . $name;
     die("<br>Opps! Some Error occured !! Please contact Administrator !");
   } else {
     $output = array();
@@ -370,6 +376,7 @@ function getFieldArray($conn,  $getId, $tableName, $id, $name)
       $output[$i] = $rows[$name];
       $i++;
     }
+    mysqli_free_result($result);
   }
   return $output;
 }
@@ -391,17 +398,19 @@ function getTableRow($conn, $sql, $arrayField)
   $output = array(
     "data" => $data
   );
+  mysqli_free_result($result);
   return json_encode($output);
 }
 
 function getMaxField($conn, $table, $field)
 {
   // $sql to have order by DESC
-  $sql="select max($field) as max from $table";
+  $sql = "select max($field) as max from $table";
   $result = $conn->query($sql);
   if ($result) {
     $row = $result->fetch_assoc();
     return $row["max"];
+    mysqli_free_result($result);
   } else return FALSE;
 }
 
@@ -412,6 +421,7 @@ function getMaxValue($conn, $sql)
   if ($result) {
     $row = $result->fetch_assoc();
     return $row["max"];
+    mysqli_free_result($result);
   } else return FALSE;
 }
 function getRowCount($conn, $sql)
@@ -419,6 +429,7 @@ function getRowCount($conn, $sql)
   $result = $conn->query($sql);
   if ($result) {
     return $result->num_rows;
+    mysqli_free_result($result);
   } else return FALSE;
 }
 function status_decode($status)
@@ -510,6 +521,7 @@ function paginationBar($conn, $sqlAll, $rpp, $id, $tag)
   <option value="50">50</option>
   <option value="75">75</option>
   </select></div></div>';
+  mysqli_free_result($result);
 }
 function check_dept_head($url)
 {
@@ -538,7 +550,8 @@ function get_schoolJson($conn)
       "data" => $data
     );
     return json_encode($output);
-  }
+    mysqli_free_result($result);
+}
 }
 function get_departmentJson($conn, $school)
 {
@@ -557,6 +570,7 @@ function get_departmentJson($conn, $school)
     "data" => $data
   );
   return json_encode($output);
+  mysqli_free_result($result);
 }
 function get_batchJson($conn)
 {
@@ -574,6 +588,7 @@ function get_batchJson($conn)
     "data" => $data
   );
   return json_encode($output);
+  mysqli_free_result($result);
 }
 function get_classSubject($conn, $class_id)
 {
@@ -597,6 +612,7 @@ function get_classSubject($conn, $class_id)
     "data" => $data
   );
   return json_encode($output);
+  mysqli_free_result($result);
 }
 function get_tlList($conn, $class_id)
 {
@@ -620,6 +636,7 @@ function get_tlList($conn, $class_id)
     "data" => $data
   );
   return json_encode($output);
+  mysqli_free_result($result);
 }
 function get_sessionClass($conn, $ses, $prog)
 {
@@ -639,6 +656,7 @@ function get_sessionClass($conn, $ses, $prog)
     "data" => $data
   );
   return json_encode($output);
+  mysqli_free_result($result);
 }
 function get_schoolSession($conn, $ay_id)
 {
@@ -662,6 +680,7 @@ function get_schoolSession($conn, $ay_id)
     "data" => $data
   );
   return json_encode($output);
+  mysqli_free_result($result);
 }
 function get_classTimeTableJson($conn, $classId, $tn_tt, $tn_tl, $tn_tlg, $dayofDate)
 {
@@ -687,6 +706,7 @@ function get_classTimeTableJson($conn, $classId, $tn_tt, $tn_tl, $tn_tlg, $dayof
     "data" => $data
   );
   return json_encode($output);
+  mysqli_free_result($result);
 }
 function get_staffClass($conn, $staff_id, $tn_tl, $tn_tlg)
 {
@@ -704,6 +724,7 @@ function get_staffClass($conn, $staff_id, $tn_tl, $tn_tlg)
     "data" => $data
   );
   return json_encode($output);
+  mysqli_free_result($result);
 }
 function get_staffTeachingLoad($conn, $staff_id, $tn_tl, $tn_tlg)
 {
@@ -726,6 +747,7 @@ function get_staffTeachingLoad($conn, $staff_id, $tn_tl, $tn_tlg)
     "data" => $data
   );
   return json_encode($output);
+  mysqli_free_result($result);
 }
 function get_staffTeachingSubject($conn, $staff_id, $tn_tl, $tn_tlg)
 {
@@ -747,6 +769,7 @@ function get_staffTeachingSubject($conn, $staff_id, $tn_tl, $tn_tlg)
     "data" => $data
   );
   return json_encode($output);
+  mysqli_free_result($result);
 }
 function get_subjectAssessmentList($conn, $subjectId, $tn_ad)
 {
@@ -767,11 +790,12 @@ function get_subjectAssessmentList($conn, $subjectId, $tn_ad)
     "data" => $data
   );
   return json_encode($output);
+  mysqli_free_result($result);
 }
 function get_studentClassSubjectList($conn, $tn_rs, $tl_id)
 {
   $sql = "select * from $tn_rs where tl_id='$tl_id'";
-  
+
   $result = $conn->query($sql);
   if (!$result) die(" The script could not be Loadded! Unable to populate Student List !");
   $data = array();
@@ -785,6 +809,7 @@ function get_studentClassSubjectList($conn, $tn_rs, $tl_id)
     "data" => $data
   );
   return json_encode($output);
+  mysqli_free_result($result);
 }
 function get_subjectAttendance($conn, $tn_sa, $tn_sas, $tlId, $studentId)
 {
@@ -799,6 +824,7 @@ function get_subjectAttendance($conn, $tn_sa, $tn_sas, $tlId, $studentId)
 
   $output = array($delivered, $present);
   return $output;
+  mysqli_free_result($result);
 }
 function get_subjectResource($conn, $tn_sr, $subject_id)
 {
@@ -820,6 +846,7 @@ function get_subjectResource($conn, $tn_sr, $subject_id)
     "data" => $data
   );
   return json_encode($output);
+  mysqli_free_result($result);
 }
 function getNotice($conn, $id, $myFolder)
 {
@@ -839,4 +866,5 @@ function getNotice($conn, $id, $myFolder)
     $output["content"] = $content;
   }
   return $output;
+  mysqli_free_result($result);
 }

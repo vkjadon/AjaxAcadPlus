@@ -48,7 +48,7 @@ if (isset($_POST['action'])) {
 		echo $conn->error;
 	} elseif ($_POST["action"] == "programList") {
 		//    echo "MyId- $myId";
-		$sql = "SELECT * from program order by program_start, program_name";
+		$sql = "SELECT * from program order by program_status, program_start, program_name";
 		$result = $conn->query($sql);
 		if (!$result) echo $conn->error;
 		elseif ($result->num_rows > 0) {
@@ -60,6 +60,36 @@ if (isset($_POST['action'])) {
 		} else {
 			$json_array = array("success" => "0");
 			echo json_encode($json_array);
+		}
+	} elseif ($_POST["action"] == "mnList") {
+		//    echo "MyId- $myId";
+		$sql = "SELECT * from master_name where mn_code='doc' and mn_status='0' order by mn_sno";
+		$result = $conn->query($sql);
+		if (!$result) echo $conn->error;
+		elseif ($result->num_rows > 0) {
+			$json_array = array("success" => "1");
+			$subArray = array();
+			while ($rowArray = $result->fetch_assoc()) {
+				$subArray["mn_id"] = $rowArray["mn_id"];
+				$subArray["mn_name"] = $rowArray["mn_name"];
+				$sql_rowCount = "select * from student_document where program_id='" . $_POST["program_id"] . "' and mn_id='" . $rowArray["mn_id"] . "' and batch_id='" . $_POST["batch_id"] . "' ";
+				$subArray["status"] = getRowCount($conn, $sql_rowCount);
+				$json_array[] = $subArray;
+			}
+			echo json_encode($json_array);
+		} else {
+			$json_array = array("success" => "0");
+			echo json_encode($json_array);
+		}
+	} elseif ($_POST["action"] == "updateDocument") {
+		$status = $_POST['status'];
+		// echo $program_id = $_POST['program_id'];
+		if ($status == "add") {
+			$sql = "insert into student_document (mn_id, program_id, batch_id, sd_mandatory, sd_remarks) values('" . $_POST["mn_id"] . "', '" . $_POST["program_id"] . "', '" . $_POST["batch_id"] . "', '1', 'No Remarks')";
+			if (!$conn->query($sql)) echo $conn->error;
+		} else {
+			$sql = "delete from student_document where program_id='" . $_POST["program_id"] . "' and batch_id='" . $_POST["batch_id"] . "' and mn_id='" . $_POST["mn_id"] . "'";
+			if (!$conn->query($sql)) echo $conn->error;
 		}
 	} elseif ($_POST['action'] == 'addSchool') {
 		$school_id = $_POST['modalId'];
@@ -159,7 +189,7 @@ if (isset($_POST['action'])) {
 		$output = $result->fetch_assoc();
 		echo json_encode($output);
 	} elseif ($_POST['action'] == 'updateInst') {
-		$sql = "update institution set inst_logo='" . data_check($_POST['inst_logo']) . "', inst_name='" . data_check($_POST['inst_name']) . "', inst_url='" . data_check($_POST['inst_url']) . "', inst_address='" . data_check($_POST['inst_address']) . "' where inst_id='" . $_POST["modalId"] . "'";
+		$sql = "update institution set inst_logo='" . data_check($_POST['inst_logo']) . "', inst_name='" . data_check($_POST['inst_name']) . "', inst_abbri='" . data_check($_POST['inst_abbri']) . "', inst_url='" . data_check($_POST['inst_url']) . "', inst_address='" . data_check($_POST['inst_address']) . "', inst_city='" . data_check($_POST['inst_city']) . "', inst_state='" . data_check($_POST['inst_state']) . "', inst_pincode='" . data_check($_POST['inst_pincode']) . "', inst_approval='" . data_check($_POST['inst_approval']) . "', inst_affiliation='" . data_check($_POST['inst_affiliation']) . "', inst_timelag='" . data_check($_POST['inst_timelag']) . "' where inst_id='" . $_POST["modalId"] . "'";
 		$result = $conn->query($sql);
 		if (!$result) echo $conn->error;
 	} elseif ($_POST["action"] == "attachSchoolDept") {
@@ -181,8 +211,6 @@ if (isset($_POST['action'])) {
 		//echo count($array);
 		//echo count($array["data"]);
 		echo '<table class="list-table-xs">
-   	 <thead align="center">
-   	 <table class="list-table-xs">
    	 <thead align="center"><th>School</th><th>Department</th>
    	 <th><i class="fa fa-trash"></i></th>
    	 </thead>';
@@ -196,7 +224,7 @@ if (isset($_POST['action'])) {
 
 			echo '<tr><td>' . $value_school . '</td><td>' . $value_dept . '</td><td class="text-center"><a href="#" class="fa fa-trash deleteSchoolDept" data-dept="' . $dept_id . '" data-school="' . $school_id . '"></a></td></tr>';
 		}
-		echo '</table></table>';
+		echo '</table>';
 	} elseif ($_POST["action"] == "deptProgramList") {
 		$sql = "SELECT dp.* from dept_program dp, program p where p.program_id=dp.program_id and p.program_status='0' order by dept_id";
 		$json = getTableRow($conn, $sql, array("dept_id", "program_id"));
@@ -204,8 +232,6 @@ if (isset($_POST['action'])) {
 		//echo count($array);
 		//echo count($array["data"]);
 		echo '<table class="list-table-xs">
-    	<thead align="center">
-    	<table class="list-table-xs">
     	<thead align="center"><th>Department</th><th>Program</th><th>Specialization</th>
     	<th><i class="fa fa-trash"></i></th>
         </thead>';
@@ -224,7 +250,7 @@ if (isset($_POST['action'])) {
    </td>
    </tr>';
 		}
-		echo '</table></table>';
+		echo '</table>';
 	} elseif ($_POST['action'] == 'removeSchoolDept') {
 		$schoolId = $_POST['schoolId'];
 		$deptId = $_POST['deptId'];
@@ -238,5 +264,95 @@ if (isset($_POST['action'])) {
 		$sql = "delete from dept_program where program_id='$progId' and dept_id='$deptId'";
 		$conn->query($sql);
 		echo $conn->error;
+	} elseif ($_POST['action'] == 'updateCom') {
+		if ($_POST['com_id'] == 0) $sql = "insert into committee (com_name, com_scope, com_term, update_ts, update_id, com_status) values('" . data_check($_POST['com_name']) . "','" . data_check($_POST['com_scope']) . "','" . data_check($_POST['com_term']) . "', '$submit_ts','$myId','0')";
+		else $sql = "update committee set com_name='" . data_check($_POST['com_name']) . "', com_scope='" . data_check($_POST['com_scope']) . "', com_term='" . data_check($_POST['com_term']) . "', update_ts='$submit_ts' where com_id='" . $_POST['com_id'] . "'";
+		$result = $conn->query($sql);
+		if (!$result) echo $conn->error;
+		echo "Updated";
+	} elseif ($_POST['action'] == 'comList') {
+		$sql = "select c.* from committee c where c.com_status='0'";
+		$result = $conn->query($sql);
+		$json_array = array();
+		while ($output = $result->fetch_assoc()) {
+			$json_array[] = $output;
+		}
+		echo json_encode($json_array);
+	} elseif ($_POST['action'] == 'comFetch') {
+		$sql = "select c.* from committee c where c.com_id='" . $_POST['com_id'] . "'";
+		$result = $conn->query($sql);
+		if (!$result) echo $conn->error;
+		elseif ($result->num_rows > 0) {
+			$rowArray = $result->fetch_assoc();
+			echo json_encode($rowArray);
+		}
+	} elseif ($_POST['action'] == 'csUpdate') {
+		if ($_POST['cs_id'] == 0) $sql = "insert into committee_structure (com_id, cs_name, cs_scope, cs_number, cs_remarks, update_ts, update_id, cs_status) values('" . data_check($_POST['com_id']) . "','" . data_check($_POST['cs_name']) . "', '" . data_check($_POST['cs_scope']) . "', '" . data_check($_POST['cs_number']) . "', '" . data_check($_POST['cs_remarks']) . "', '$submit_ts', '$myId', '0')";
+		else $sql = "update committee_structure set cs_name='" . data_check($_POST['cs_name']) . "', cs_scope='" . data_check($_POST['cs_scope']) . "', cs_number='" . data_check($_POST['cs_number']) . "', cs_remarks='" . data_check($_POST['cs_remarks']) . "', update_ts='$submit_ts' where cs_id='" . $_POST['cs_id'] . "'";
+		$result = $conn->query($sql);
+		if (!$result) echo $conn->error;
+		echo "Updated";
+	} elseif ($_POST['action'] == 'csList') {
+		// echo $_POST["com_id"];
+		$sql = "select * from committee_structure where com_id='" . $_POST["com_id"] . "' and cs_status='0'";
+		$result = $conn->query($sql);
+		$json_array = array();
+		while ($output = $result->fetch_assoc()) {
+			$json_array[] = $output;
+		}
+		echo json_encode($json_array);
+	} elseif ($_POST['action'] == 'csFetch') {
+		$sql = "select cs.* from committee_structure cs where cs.cs_id='" . $_POST['cs_id'] . "'";
+		$result = $conn->query($sql);
+		if (!$result) echo $conn->error;
+		elseif ($result->num_rows > 0) {
+			$rowArray = $result->fetch_assoc();
+			echo json_encode($rowArray);
+		}
+	} elseif ($_POST['action'] == 'ahUpdate') {
+		if ($_POST['ah_id'] == 0) $sql = "insert into activity_head (ah_name, mn_id, ah_module, ah_start_week, ah_end_week, update_ts, update_id, ah_status) values('" . data_check($_POST['ah_name']) . "','" . data_check($_POST['sel_resp']) . "','" . data_check($_POST['ah_module']) . "', '" . data_check($_POST['ah_start_week']) . "', '" . data_check($_POST['ah_end_week']) . "', '$submit_ts','$myId','0')";
+		else $sql = "update activity_head set ah_name='" . data_check($_POST['ah_name']) . "', mn_id='" . data_check($_POST['sel_resp']) . "', ah_module='" . data_check($_POST['ah_module']) . "', ah_start_week='" . data_check($_POST['ah_start_week']) . "', ah_end_week='" . data_check($_POST['ah_end_week']) . "', update_ts='$submit_ts' where ah_id='" . $_POST['ah_id'] . "'";
+		$result = $conn->query($sql);
+		if (!$result) echo $conn->error;
+		echo "Updated";
+	} elseif ($_POST['action'] == 'ahList') {
+		$sql = "select ah.*, mn.mn_name from activity_head ah, master_name mn where ah.mn_id=mn.mn_id and ah.ah_status='0' order by ah.ah_module, ah.ah_start_week ";
+		$result = $conn->query($sql);
+		$json_array = array();
+		while ($output = $result->fetch_assoc()) {
+			$json_array[] = $output;
+		}
+		echo json_encode($json_array);
+	} elseif ($_POST['action'] == 'ahFetch') {
+		$sql = "select ah.*, mn.mn_name from activity_head ah, master_name mn where ah.mn_id=mn.mn_id and ah.ah_id='" . $_POST['ah_id'] . "'";
+		$result = $conn->query($sql);
+		if (!$result) echo $conn->error;
+		elseif ($result->num_rows > 0) {
+			$rowArray = $result->fetch_assoc();
+			echo json_encode($rowArray);
+		}
+	} elseif ($_POST['action'] == 'ashUpdate') {
+		if ($_POST['ash_id'] == 0) $sql = "insert into activity_sub_head (ah_id, ash_name, ash_spoc, ash_start_week, ash_end_week, ash_remarks, update_ts, update_id, ash_status) values('" . data_check($_POST['ah_id']) . "','" . data_check($_POST['ash_name']) . "', '" . data_check($_POST['ash_spoc']) . "', '" . data_check($_POST['ash_start_week']) . "', '" . data_check($_POST['ash_end_week']) . "', '" . data_check($_POST['ash_remarks']) . "', '$submit_ts', '$myId', '0')";
+		else $sql = "update activity_sub_head set ash_name='" . data_check($_POST['ash_name']) . "', ash_spoc='" . data_check($_POST['ash_spoc']) . "', ash_start_week='" . data_check($_POST['ash_start_week']) . "', ash_end_week='" . data_check($_POST['ash_end_week']) . "', ash_remarks='" . data_check($_POST['ash_remarks']) . "', update_ts='$submit_ts' where ash_id='" . $_POST['ash_id'] . "'";
+		$result = $conn->query($sql);
+		if (!$result) echo $conn->error;
+		echo "Updated";
+	} elseif ($_POST['action'] == 'ashList') {
+		// echo $_POST["com_id"];
+		$sql = "select * from activity_sub_head where ah_id='" . $_POST["ah_id"] . "' and ash_status='0'";
+		$result = $conn->query($sql);
+		$json_array = array();
+		while ($output = $result->fetch_assoc()) {
+			$json_array[] = $output;
+		}
+		echo json_encode($json_array);
+	} elseif ($_POST['action'] == 'ashFetch') {
+		$sql = "select * from activity_sub_head where ash_id='" . $_POST['ash_id'] . "'";
+		$result = $conn->query($sql);
+		if (!$result) echo $conn->error;
+		elseif ($result->num_rows > 0) {
+			$rowArray = $result->fetch_assoc();
+			echo json_encode($rowArray);
+		}
 	}
 }

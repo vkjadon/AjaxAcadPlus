@@ -2,6 +2,7 @@
 require('../requireSubModule.php');
 
 include('../../phpFunction/onlineFunction.php');
+
 //echo $_POST['action'];
 if (isset($_POST['action'])) {
 	if ($_POST['action'] == 'activeQuestion') {
@@ -57,23 +58,32 @@ if (isset($_POST['action'])) {
 				echo '</div>';
 				for ($ipc = 1; $ipc < $portion_count; $ipc++) {
 					$sql = "select * from qb_parameter where qb_id='$id' and qp_sno='$ipc'";
-					$value = getFieldValue($conn, "qp_name", $sql);
+					$result = $conn->query($sql);
+					if ($result->num_rows > 0) {
+						$rowQbp = $result->fetch_assoc();
+						$qp_name = $rowQbp["qp_name"];
+						$qp_min = $rowQbp["qp_min"];
+						$qp_max = $rowQbp["qp_max"];
+						$qp_step = $rowQbp["qp_step"];
+					} else {
+						$qp_name = "";
+						$qp_min = "";
+						$qp_max = "";
+						$qp_step = "";
+						$paramError = "True";
+					}
 					echo '<div class="row">';
 					echo '<div class="col-4 pr-0">';
-					echo '<input type="text" class="form-control form-control-sm parameter" data-qp="' . $ipc . '" data-tag="qp_name" data-qb="' . $id . '" value="' . $value . '">';
+					echo '<input type="text" class="form-control form-control-sm parameter" data-qp="' . $ipc . '" data-tag="qp_name" data-qb="' . $id . '" value="' . $qp_name . '">';
 					echo '</div>';
-					$value = getFieldValue($conn, "qp_min", $sql);
 					echo '<div class="col-2 pl-1 pr-0">';
-					echo '<input type="text" class="form-control form-control-sm parameter" data-qp="' . $ipc . '" data-tag="qp_min" data-qb="' . $id . '" value="' . $value . '">';
+					echo '<input type="text" class="form-control form-control-sm parameter" data-qp="' . $ipc . '" data-tag="qp_min" data-qb="' . $id . '" value="' . $qp_min . '">';
 					echo '</div>';
-					$value = getFieldValue($conn, "qp_max", $sql);
 					echo '<div class="col-2 pl-1 pr-0">';
-					echo '<input type="text" class="form-control form-control-sm parameter" data-qp="' . $ipc . '" data-tag="qp_max" data-qb="' . $id . '" value="' . $value . '">';
+					echo '<input type="text" class="form-control form-control-sm parameter" data-qp="' . $ipc . '" data-tag="qp_max" data-qb="' . $id . '" value="' . $qp_max . '">';
 					echo '</div>';
-					$value = getFieldValue($conn, "qp_step", $sql);
-					if ($value == 0) $paramError = "True";
 					echo '<div class="col-2 pl-1">';
-					echo '<input type="text" class="form-control form-control-sm parameter" data-qp="' . $ipc . '" data-tag="qp_step" data-qb="' . $id . '" value="' . $value . '">';
+					echo '<input type="text" class="form-control form-control-sm parameter" data-qp="' . $ipc . '" data-tag="qp_step" data-qb="' . $id . '" value="' . $qp_step . '">';
 					echo '</div>';
 					echo '</div>';
 				}
@@ -177,8 +187,8 @@ if (isset($_POST['action'])) {
 			}
 			echo '<div class="row mt-2">';
 			echo '<div class="col-1"><h3><a href="#" class="fa fa-arrow-circle-up uploadQuestionImage" data-upload="' . $id . '" data-tag="questionImage" title="Upload Question Image"></a></h3></div>';
-			if ($portion_count > 1)echo '<div class="col-4"><button class="btn btn-sm m-0 uploadKeyFile" data-upload="' . $id . '" data-tag="keyFile">Update Key File</button></div>';
-				
+			if ($portion_count > 1) echo '<div class="col-4"><button class="btn btn-sm m-0 uploadKeyFile" data-upload="' . $id . '" data-tag="keyFile">Update Key File</button></div>';
+
 			if ($tq_status == 1 && $addToTestEroor == "False") echo '<div class="col-3"><button class="btn btn-info btn-sm mt-0 testQuestion" data-test="' . $test_id . '" data-qb="' . $id . '" data-tag="qtt">Add To Test</button></div>';
 
 			if ($tq_status == "1") echo '<div class="col-2"><h6 class="p-1 mb-1 text-center small">Draft</h6></div>';
@@ -198,13 +208,14 @@ if (isset($_POST['action'])) {
 			$test_id = $array["test_id"];
 		}
 		$sectionId = $_POST['sectionId'];
-		// echo "Test Id $test_id Section $sectionId";
+		echo "Test Id $test_id Section $sectionId";
 		$json = get_sectionQuestionListJson($conn, $test_id, $sectionId);
-		//echo $json;
+		// echo $json;
 		$array = json_decode($json, true);
 		$cpError = "False";
 		$paramError = "False";
-		//echo $array;
+		// print_r($array);
+		echo count($array["data"]);
 		for ($i = 0; $i < count($array["data"]); $i++) {
 			$id = $array["data"][$i]["qb_id"];
 			$qb_text = $array["data"][$i]["qb_text"];
@@ -230,10 +241,18 @@ if (isset($_POST['action'])) {
 				echo '<div class="col-9">';
 				for ($ip = 0; $ip < $portion_count; $ip++) {
 					$sno = $ip + 1;
-					$sql = "select * from qb_parameter where qb_id='$id' and qp_sno='$sno'";
-					$abp[$ip] = getFieldValue($conn, "qp_min", $sql);
-					echo '<span class="testQuestionText">' . $portion[$ip] . '</span>';
-					if ($sno < $portion_count) echo $abp[$ip]; //to avoid last print (NULL)
+					// echo "<br> QBID $id QPSNO $sno";
+					if ($sno < $portion_count) {
+						$sql_qbp = "select * from qb_parameter where qb_id='$id' and qp_sno='$sno'";
+						$result_qbp = $conn->query($sql_qbp);
+						if ($result && $result_qbp->num_rows > 0) {
+							// echo "QBP Rows " . $result_qbp->num_rows;
+							$row_qbp = $result_qbp->fetch_assoc();
+							$abp[$ip] = $row_qbp["qp_min"];
+						} else $abp[$ip] = "***";
+						echo '<span class="testQuestionText">' . $portion[$ip] . '</span>';
+						echo $abp[$ip];
+					} else echo '<span class="testQuestionText">' . $portion[$ip] . '</span>';
 				}
 				$solution = 'Y';
 				$fileName = '../../access/olat/cp/cp-' . $id . '.php';
@@ -279,14 +298,14 @@ if (isset($_POST['action'])) {
 		if ($result) echo "Updated Successfully";
 		else echo $conn->error;
 	} elseif ($_POST['action'] == 'questionLibrary') {
-		$test_id='1';
-		$sql="select * from question_bank where update_id='$myId' and qb_status<'9' and qb_id NOT IN (select qb_id from test_question where test_id=".$test_id.") order by qb_id desc";
+		$test_id = '1';
+		$sql = "select * from question_bank where update_id='$myId' and qb_status<'9' and qb_id NOT IN (select qb_id from test_question where test_id=" . $test_id . ") order by qb_id desc";
 		$json = getTableRow($conn, $sql, array("qb_id", "qb_text", "qb_image", "qb_status"));
 		//echo $json;
 		$array = json_decode($json, true);
 		$cpError = "False";
 		$paramError = "False";
-		//echo $array;
+		echo " Question " . $array;
 		for ($i = 0; $i < count($array["data"]); $i++) {
 			$id = $array["data"][$i]["qb_id"];
 			$qb_text = $array["data"][$i]["qb_text"];
@@ -311,7 +330,7 @@ if (isset($_POST['action'])) {
 				if (strlen($qb_image) > 5) echo '<p><img src="../../access/olat/img/' . $qb_image . '"></p>';
 				$solution = 'Y';
 				$fileName = '../../access/olat/cp/cp-' . $id . '.php';
-				if (!file_exists($fileName))echo '<span class="warning"><i class="fa fa-exclamation-triangle"> Key File Missing !! </i></soan>';
+				if (!file_exists($fileName)) echo '<span class="warning"><i class="fa fa-exclamation-triangle"> Key File Missing !! </i></soan>';
 				echo '</div>';
 				echo '<div class="col">';
 				echo '<button class="btn btn-secondary btn-square-sm mt-0 addQuestionToTest" data-qb="' . $id . '">Add to Test</button>';

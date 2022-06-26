@@ -1,7 +1,7 @@
 <?php
 require('../requireSubModule.php');
 $phpFile = "admissionSql.php";
-addActivity($conn, $myId, "Manage Student - Admission");
+addActivity($conn, $myId, "Manage Student - Admission", $submit_ts);
 
 ?>
 
@@ -14,7 +14,13 @@ addActivity($conn, $myId, "Manage Student - Admission");
 </head>
 
 <body>
-  <?php require("../topBar.php"); ?>
+  <?php require("../topBar.php"); 
+  if($myId>3){
+    if (!isset($_GET['tag'])) die("Illegal Attempt !! The token is Missing");
+    elseif (!in_array($_GET['tag'], $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+    elseif (!in_array("6", $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+  }
+  ?>
   <div class="container-fluid moduleBody">
     <div class="row">
       <div class="col-1 p-0 m-0 pl-1 full-height">
@@ -22,19 +28,17 @@ addActivity($conn, $myId, "Manage Student - Admission");
           <h5>Students</h5>
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-          <?php
-          if (in_array("13", $myLinks)) echo '<a class="list-group-item list-group-item-action as" id="list-as-list" data-toggle="list" href="#list-as" role="tab" aria-controls="as"> Update Student </a>';
-          if (in_array("13", $myLinks)) echo '<a class="list-group-item list-group-item-action" data-toggle="list" href="#list-qual" role="tab" aria-controls="qual">Qualification Report</a>';
-          if (in_array("14", $myLinks)) echo '<a class="list-group-item list-group-item-action ss" id="list-ss-list" data-toggle="list" href="#list-ss" role="tab" aria-controls="ss">Student Status</a>';
-          if (in_array("15", $myLinks)) echo '<a class="list-group-item list-group-item-action sr" id="list-sr-list" data-toggle="list" href="#list-sr" role="tab" aria-controls="sr">Student Report</a>';
-          if (in_array("16", $myLinks)) echo '<a class="list-group-item list-group-item-action ssr" id="list-ssr-list" data-toggle="list" href="#list-ssr" role="tab" aria-controls="ssr">Student Strength</a>';
-          ?>
+          <a class="list-group-item list-group-item-action active as" data-toggle="list" href="#list-as" role="tab" aria-controls="as"> Update Student
+            <a class="list-group-item list-group-item-action" data-toggle="list" href="#list-qual" role="tab" aria-controls="qual">Qualification Report</a>
+            <a class="list-group-item list-group-item-action ss" id="list-ss-list" data-toggle="list" href="#list-ss" role="tab" aria-controls="ss">Student Status</a>
+            <a class="list-group-item list-group-item-action sr" id="list-sr-list" data-toggle="list" href="#list-sr" role="tab" aria-controls="sr">Student Report</a>
+            <a class="list-group-item list-group-item-action ssr" id="list-ssr-list" data-toggle="list" href="#list-ssr" role="tab" aria-controls="ssr">Student Strength</a>
         </div>
       </div>
       <div class="col-11 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="row">
-            <div class="col-md-2 pr-0">
+            <div class="col-md-1 pr-0">
               <div class="card border-info">
                 <div class="input-group">
                   <?php
@@ -56,7 +60,7 @@ addActivity($conn, $myId, "Manage Student - Admission");
                 </div>
               </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 pl-1 pr-0">
               <div class="card border-info">
                 <div class="input-group">
                   <?php
@@ -66,8 +70,9 @@ addActivity($conn, $myId, "Manage Student - Admission");
                     echo '<select class="form-control form-control-sm" name="sel_program" id="sel_program" required>';
                     while ($rows = $result->fetch_assoc()) {
                       $select_id = $rows['program_id'];
-                      $select_name = $rows['sp_name'];
-                      echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+                      $program_abbri = $rows['program_abbri'];
+                      $sp_name = $rows['sp_name'];
+                      echo '<option value="' . $select_id . '">[' . $program_abbri . ']' . $sp_name . '</option>';
                     }
                     echo '<option value="ALL">ALL</option>';
                     echo '</select>';
@@ -77,17 +82,7 @@ addActivity($conn, $myId, "Manage Student - Admission");
                 </div>
               </div>
             </div>
-            <div class="col-md-1">
-              <div class="row ml-2">
-                <h3>
-                  <a class="fa fa-arrow-circle-up uploadStudent"></a>
-                </h3>
-              </div>
-            </div>
-            <div class="col-md-2">
-              <p class="smallText"> Students : <span id="totalStudents"></span></p>
-            </div>
-            <div class="col-md-5">
+            <div class="col-md-5 mt-2">
               <input type="checkbox" checked id="ay" name="ay_id" value="1">
               <span class="smallText">AY</span>
               <input type="checkbox" id="leet" name="leet" value="1">
@@ -101,8 +96,22 @@ addActivity($conn, $myId, "Manage Student - Admission");
               <input type="checkbox" checked id="dayScholar" name="dayScholar">
               <span class="smallText">Day Scholar</span>
             </div>
+            <div class="col-md-1">
+              <div class="row ml-2">
+                <h3>
+                  <a class="fa fa-refresh ShowStudentList" style="color:yellowgreen"></a>
+                </h3>
+              </div>
+            </div>
+            <div class="col-md-1">
+              <div class="row ml-2">
+                <h3>
+                  <a class="fa fa-arrow-circle-up uploadStudent"></a>
+                </h3>
+              </div>
+            </div>
           </div>
-          <div class="tab-pane fade" id="list-as" role="tabpanel" aria-labelledby="list-as-list">
+          <div class="tab-pane show active" id="list-as" role="tabpanel" aria-labelledby="list-as-list">
             <div class="row">
               <div class="col-4">
                 <div class="card border-info mt-2">
@@ -206,6 +215,9 @@ addActivity($conn, $myId, "Manage Student - Admission");
                     <li class="nav-item">
                       <a class="nav-link pills_reference" id="pills_tableReference" data-toggle="pill" href="#pills_reference" role="tab" aria-controls="pills_reference" aria-selected="true">Reference</a>
                     </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="pill" href="#document" role="tab" aria-controls="document" aria-selected="true">Documents</a>
+                    </li>
                   </ul>
                   <div class="tab-content" id="pills-tabContent p-3">
                     <div class="tab-pane show active" id="home" role="tabpanel" aria-labelledby="home">
@@ -249,7 +261,9 @@ addActivity($conn, $myId, "Manage Student - Admission");
                                     </tr>
                                     <tr>
                                       <td><span class="largeText"> Current Status </span></td>
-                                      <td class="warning"><h4><span id="status">---</span></h4></td>
+                                      <td class="warning">
+                                        <h4><span id="status">---</span></h4>
+                                      </td>
                                     </tr>
                                     <tr>
                                       <td width="60%"><span class="largeText"> Id </span></td>
@@ -389,9 +403,9 @@ addActivity($conn, $myId, "Manage Student - Admission");
                                 <div class="col">
                                   <div class="form-group">
                                     <select class="form-control form-control-sm studentUpdateForm" name="sel_srs" id="sel_srs" data-tag="student_residential_status">
-                                      <option value="0">Day Scholar</option>
-                                      <option value="1">Hostller</option>
-                                      <option value="2">Transport</option>
+                                      <option value="0">Day Scholar[0]</option>
+                                      <option value="1">Hostller[1]</option>
+                                      <option value="2">Transport[2]</option>
                                     </select>
                                   </div>
                                 </div>
@@ -776,6 +790,76 @@ addActivity($conn, $myId, "Manage Student - Admission");
                         </div>
                       </div>
                     </div>
+                    <div class="tab-pane fade" id="document" role="tabpanel" aria-labelledby="document">
+                      <form class="border p-1" id="docForm">
+                        <div class="row">
+                          <div class="col-2 pr-1">
+                            <div class="form-group">
+                              <label>Document</label>
+                              <div class="row">
+                                <div class="col">
+                                  <?php
+                                  $sql = "select * from master_name where mn_code='doc'";
+                                  $result = $conn->query($sql);
+                                  if ($result) {
+                                    echo '<select class="form-control form-control-sm" name="sel_doc" id="sel_doc">';
+                                    echo '<option selected disabled>Selected Document</option>';
+                                    while ($rows = $result->fetch_assoc()) {
+                                      $select_id = $rows['mn_id'];
+                                      $select_name = $rows['mn_name'];
+                                      echo '<option value="' . $select_id . '">' . $select_name . '</option>';
+                                    }
+                                    echo '</select>';
+                                  } else echo $conn->error;
+                                  if ($result->num_rows == 0) echo 'No Data Found';
+                                  ?>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-2 pl-0 pr-1">
+                            <div class="form-group">
+                              <label>Expected</label>
+                              <input type="date" class="form-control form-control-sm" id="sdd_expected" name="sdd_expected" value="<?php echo $submit_date; ?>">
+                            </div>
+                          </div>
+                          <div class="col-2 pl-0 pr-1">
+                            <div class="form-group">
+                              <label>Submitted</label>
+                              <select class="form-control form-control-sm" name="sel_submitted" id="sel_submitted">
+                                <option value="0">No</option>
+                                <option value="1">Yes</option>
+                                <option value="2">Verified</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-6 pl-0">
+                            <div class="form-group">
+                              <label>Remarks</label>
+                              <input type="text" class="form-control form-control-sm" id="sdd_remarks" name="sdd_remarks" placeholder="Remarks">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+                            <input type="hidden" name="action" value="updateDoc">
+                            <input type="hidden" id="studentIdDoc" name="studentIdDoc">
+                            <button class="btn btn-sm float-right" name="submit_doc" id="submit_doc">Update/Add</button>
+                          </div>
+                        </div>
+                      </form>
+                      <label>List of Required Documents </label>
+                      <table class="table table-bordered table-striped list-table-xs mt-2" id="docShowList">
+                        <tr>
+                          <th>Documents</th>
+                          <th>Doc Remarks</th>
+                          <th>Expected</th>
+                          <th>Submitted</th>
+                          <th>Submission Remarks</th>
+                          <th class="text-center"><i class="fa fa-trash-alt text-danger"></i></th>
+                        </tr>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -814,8 +898,10 @@ addActivity($conn, $myId, "Manage Student - Admission");
                         <th>ID</th>
                         <th>Name</th>
                         <th class="fNameField">Father's Name</th>
+                        <th>Program</th>
                         <th class="courseField">Course</th>
                         <th class="rollnoField">RollNo</th>
+                        <th>Admn Yr</th>
                         <th>Acd Yr</th>
                         <th>LEET</th>
                         <th>Regular</th>
@@ -852,16 +938,6 @@ addActivity($conn, $myId, "Manage Student - Admission");
               </div>
             </div>
           </div>
-          <div class="tab-pane fade" id="list-ssr" role="tabpanel" aria-labelledby="list-ssr-list">
-            <div class="row">
-              <div class="col-4">
-                <p id="studentProgramReport"></p>
-              </div>
-              <div class="col-8">
-                <canvas id="horizontalBar"></canvas>
-              </div>
-            </div>
-          </div>
           <div class="tab-pane fade" id="list-ss" role="tabpanel" aria-labelledby="list-ss-list">
             <div class="row">
               <div class="col-10">
@@ -890,7 +966,7 @@ addActivity($conn, $myId, "Manage Student - Admission");
                       <input type="number" class="form-control form-control-sm" id="ssSemester" name="ssSemester" min="1" value="1">
                     </div>
                     <div class="col-md-2 pl-1">
-                      <button type="button" class="btn btn-sm mt-4" id="showSSList">Refresh List</button>
+                      <button type="button" class="btn btn-sm mt-4 showSSList">Refresh List</button>
                     </div>
                     <div class="col-md-6 text-right">
                       <a onclick="printDiv('printSS')" class="fa fa-print mt-2 xlText"></a>
@@ -951,12 +1027,29 @@ addActivity($conn, $myId, "Manage Student - Admission");
               </div>
             </div>
           </div>
+          <div class="tab-pane fade" id="list-ssr" role="tabpanel" aria-labelledby="list-ssr-list">
+            <div class="row">
+              <div class="col-6">
+                <div class="card m-2 myCard">
+                  <div class="row m-2 mb-0">
+                    <div class="col-md-12">
+                      <div class="text-right">
+                        <a class="fa fa-refresh largeText text-primary stdStrength"></a>
+                      </div>
+                      <p id="studentProgramReport"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    <?php require("../bottom_bar.php"); ?>
+  </div>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <?php require("../bottom_bar.php"); ?>
   </div>
 </body>
 
@@ -973,558 +1066,6 @@ addActivity($conn, $myId, "Manage Student - Admission");
       });
     })
     studentList();
-    studentProgramReport();
-    stateOption()
-    // districtOption()
-
-    function stateOption() {
-      // $.alert(" State ");
-      $.post("admissionSql.php", {
-        action: "stateOption"
-      }, function() {}, "json").done(function(data, status) {
-        // $.alert(data);
-        var list = '';
-        list += '<select class="form-control form-control-sm sAddressForm" name="sel_state" id="sel_state" data-tag="state_id">';
-        list += '<option value="0">Select State</option>'
-        $.each(data, function(key, value) {
-          list += '<option value="' + value.state_id + '" data-state="' + value.state_name + '">' + value.state_name + '</option>';
-        });
-        list += '</select>';
-        $("#stateOption").html(list);
-      }).fail(function() {
-        $.alert("Error in State Options !!");
-      })
-    }
-
-    $(document).on('change', '#sel_state', function() {
-      districtOption();
-    });
-
-    function districtOption() {
-      var stateId = $("#sel_state").val()
-      // $.alert("Dept " + stateId);
-      $.post("admissionSql.php", {
-        stateId: stateId,
-        action: "districtOption"
-      }, function() {}, "json").done(function(data, status) {
-        // $.alert("List " + data);
-        var list = '';
-        list += '<select class="form-control form-control-sm sAddressForm" name="sel_district" id="sel_district" data-tag="district_id">';
-        list += '<option value="0">Select a Distrcit</option>'
-        $.each(data, function(key, value) {
-          list += '<option value=' + value.district_id + '>' + value.district_name + '</option>';
-        });
-        list += '</select>';
-        $("#districtOption").html(list);
-
-      }).fail(function() {
-        $.alert("Error !!");
-      })
-    }
-
-    $(document).on('submit', '#uploadModalForm', function(event) {
-      event.preventDefault();
-      var formData = $(this).serialize();
-      $.alert(formData);
-      // action and test_id are passed as hidden
-      $.ajax({
-        url: "uploadSql.php",
-        method: "POST",
-        data: new FormData(this),
-        contentType: false, // The content type used when sending data to the server.
-        cache: false, // To unable request pages to be cached
-        processData: false, // To send DOMDocument or non processed data file it is set to false
-        success: function(data) {
-          $.alert("List " + data);
-          $('#uploadModal').modal('hide');
-        }
-      })
-    });
-
-    $(document).on('click', '#dropStudent', function(event) {
-      var data = $("#studentIdHidden").val();
-      var mn_id = $("#sel_mn").val();
-      // $.alert(mn_id);
-      if (data > 0 && mn_id > 0) {
-        $.confirm({
-          title: 'Please Confirm !',
-          draggable: true,
-          content: "<b><i>Are you Sure to Remove Student ? </i></b>",
-          buttons: {
-            confirm: {
-              btnClass: 'btn-info',
-              action: function() {
-                $.post("<?php echo $phpFile; ?>", {
-                  action: "dropStudent",
-                  mn_id: mn_id,
-                  id: data,
-                }, () => {}, "text").done(function(data) {
-                  // $.alert(data);
-                }, "text").fail(function() {
-                  $.alert("fail in place of error");
-                })
-              }
-            },
-            cancel: {
-              btnClass: "btn-danger",
-              action: function() {}
-            },
-          }
-        });
-      } else {
-        $.alert("Student or Reason not Selected!!");
-      }
-    });
-
-    $(document).on('click', '#resetStudent', function(event) {
-      var data = $("#studentIdHidden").val();
-      // $.alert(data);
-      if (data > 0) {
-        $.confirm({
-          title: 'Please Confirm !',
-          draggable: true,
-          content: "<b><i>Are you Sure to Re-instate the Student ? </i></b>",
-          buttons: {
-            confirm: {
-              btnClass: 'btn-info',
-              action: function() {
-                $.post("<?php echo $phpFile; ?>", {
-                  action: "resetStudent",
-                  id: data,
-                }, () => {}, "text").done(function(data) {
-                  // $.alert(data);
-                }).fail(function() {
-                  $.alert("fail in place of error");
-                })
-              }
-            },
-            cancel: {
-              btnClass: "btn-danger",
-              action: function() {}
-            },
-          }
-        });
-      } else {
-        $.alert("Student or Reason not Selected!!");
-      }
-    });
-
-    $(document).on('click', '#searchStudent', function(event) {
-      var data = $("#studentSearch").val();
-      // $.alert(data);
-      $.post("<?php echo $phpFile; ?>", {
-        action: "fetchStudent",
-        userId: data,
-      }, () => {}, "json").done(function(data, status) {
-        // $.alert(data);
-        if (data == null) {
-          $.alert("No Student Found!!");
-          $("#studentIdHidden").val(null);
-          $("#studentIdQual").val(null);
-
-        } else {
-          $("#studentIdHidden").val(data.student_id);
-          $("#studentIdQual").val(data.student_id);
-          
-          if (data.student_status == '9') $("#status").html("Deleted");
-          else if (data.student_status == '0') $("#status").html("Active");
-          
-          
-          $("#stdName").val(data.student_name);
-          $("#stdRno").val(data.student_rollno);
-          $("#stdMobile").val(data.student_mobile);
-          $("#stdEmail").val(data.student_email);
-          $("#stdSemester").val(data.student_semester);
-          $("#Dob").val(data.student_dob);
-          $("#stdWaMobile").val(data.student_whatsapp);
-          
-          if (data.student_gender == 'M') $("#male").prop("checked", true);
-          else $("#female").prop("checked", true);
-          if (data.student_lateral == '1') $("#yes_leet").prop("checked", true);
-          else $("#no_leet").prop("checked", true);
-          if (data.student_scholarship == '1') $("#yes_scholarship").prop("checked", true);
-          else $("#no_scholarship").prop("checked", true);
-          if (data.student_regular == '1') $("#yes_regular").prop("checked", true);
-          else $("#no_regular").prop("checked", true);
-          
-          $("#stdAdhaar").val(data.student_adhaar);
-          
-          $("#sel_srs").val(data.student_residential_status);
-          $("#sel_rg").val(data.student_religion);
-          $("#sel_caste").val(data.student_category);
-          $("#sel_bg").val(data.student_bg);
-          $("#sel_fcg").val(data.student_fee_category);
-          $("#sel_adc").val(data.student_admission_category);
-          
-          $("#stdAdmission").val(data.student_admission);
-          $("#fName").val(data.student_fname);
-          $("#mName").val(data.student_mname);
-          $("#fMobile").val(data.student_fmobile);
-          $("#mMobile").val(data.student_mmobile);
-          $("#fEmail").val(data.student_femail);
-          $("#mEmail").val(data.student_memail);
-          $("#sCity").val(data.city);
-          $("#sPincode").val(data.pincode);
-          
-          var address = data.permanent_address;
-          $("#permanent_address").val(address);
-          
-          var state_id = data.state_id;
-          var district_id = data.district_id;
-          
-          $("#mEmail").val(data.student_memail);
-          $("#cName").val(data.reference_name);
-          $("#cNumber").val(data.reference_mobile);
-          $("#refStaff").val(data.reference_staff);
-          $("#cIncentive").val(data.reference_incentive);
-          $("#refDesignation").val(data.reference_designation);
-          $("#refContact").val(data.reference_contact);
-          $("#remarks").val(data.remarks);
-          $("#uploadId").val(data.student_id);
-          $("#studentIdPill").html(data.user_id);
-          if (data.student_image === null) $(".studentImage").html('<img  src="../../images/upload.jpg" width="100%">');
-          else $(".studentImage").html('<img  src="<?php echo '../../' . $myFolder . '/studentImages/'; ?>' + data.student_image + '" width="100%">');
-          $(".progName").html(data.program_name);
-          $(".batchName").html(data.batch);
-          $(".semesterName").html(data.student_semester);
-          $(".homeId").html(data.student_id);
-          $.post("<?php echo $phpFile; ?>", {
-            userId: data.user_id,
-            action: "fetchAcademicBatch"
-          }, () => {}, "json").done(function(data, status) {
-            $(".ayName").html(data.batch);
-          })
-          $.post("<?php echo $phpFile; ?>", {
-            state_id: state_id,
-            action: "fetchState"
-          }, () => {}, "json").done(function(data, status) {
-            $("#stateName").html(data.state_name)
-            // address = address + data.state_name;
-          })
-          $.post("<?php echo $phpFile; ?>", {
-            district: district_id,
-            action: "fetchDistrict"
-          }, () => {}, "json").done(function(data, status) {
-            $("#districtName").html(data.district_name)
-            // address = address + data.district_name;
-          })
-        }
-        studentQualificationList()
-        // $.alert(data);
-      }).fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
-    $(document).on('submit', '#modalForm', function(event) {
-      event.preventDefault();
-      var formData = $(this).serialize();
-      // $.alert(formData);
-      $.post("<?php echo $phpFile; ?>", formData, () => {}, "text").done(function(data) {
-        $.alert(data);
-        studentList()
-      }).fail(function() {
-        $.alert("fail in place of error");
-      })
-      $('#firstModal').modal('hide');
-
-    });
-
-    $(document).on('blur', '.studentUpdateForm', function() {
-      var userId = $("#studentSearch").val();
-      var tag = $(this).attr("data-tag")
-      var value = $(this).val()
-      // $.alert("Changes " + tag + " Value " + value + " Student " + userId);
-      $.post("<?php echo $phpFile; ?>", {
-        id_name: "user_id",
-        id: userId,
-        tag: tag,
-        value: value,
-        action: "updateStudent"
-      }, function(data) {
-        // $.alert("List " + data);
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
-    $(document).on('blur', '.studentDetailForm', function() {
-      var studentId = $("#studentIdHidden").val()
-      var tag = $(this).attr("data-tag")
-      var value = $(this).val()
-      // $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
-      $.post("<?php echo $phpFile; ?>", {
-        id_name: "student_id",
-        id: studentId,
-        tag: tag,
-        value: value,
-        action: "updateDetails"
-      }, function(data) {
-        // $.alert("List " + data);
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
-    $(document).on('blur', '.sAddressForm', function() {
-      var studentId = $("#studentIdHidden").val()
-      var tag = $(this).attr("data-tag")
-      var value = $(this).val()
-      // $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
-      $.post("<?php echo $phpFile; ?>", {
-        id_name: "student_id",
-        id: studentId,
-        tag: tag,
-        value: value,
-        action: "updateAddress"
-      }, function(data) {
-        // $.alert("List " + data);
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
-    $(document).on('blur', '.refForm', function() {
-      var studentId = $("#studentIdHidden").val()
-      var tag = $(this).attr("data-tag")
-      var value = $(this).val()
-      // $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
-      $.post("<?php echo $phpFile; ?>", {
-        id_name: "student_id",
-        id: studentId,
-        tag: tag,
-        value: value,
-        action: "updateReference"
-      }, function(data) {
-        // $.alert("List " + data);
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
-    $(document).on('submit', '#qualForm', function(event) {
-      event.preventDefault();
-      var studentId = $("#studentIdQual").val();
-      var sel_qual = $("#sel_qual").val();
-      if (studentId > 0 && sel_qual > 0) {
-        var formData = $(this).serialize();
-        // $.alert(formData);
-        $.post("<?php echo $phpFile; ?>", formData, () => {}, "text").done(function(data) {
-          // $.alert(data);
-          studentQualificationList()
-        }).fail(function() {
-          $.alert("fail in place of error");
-        })
-      } else $.alert("Please select Student and Qualification !!")
-    });
-
-    function studentQualificationList() {
-      var studentId = $("#studentIdHidden").val()
-      // $.alert("In List Function" + studentId);
-      $.post("<?php echo $phpFile; ?>", {
-        stdId: studentId,
-        action: "studentQualificationList"
-      }, function() {}, "json").done(function(data, status) {
-        // $.alert(data)
-        var card = '';
-        var count = 1;
-        $.each(data, function(key, value) {
-          card += '<tr>';
-          card += '<td><a class="fa fa-pencil-alt editQual" data-sq="' + value.sq_id + '"></a>' + value.sq_id + '</td>';
-          card += '<td>' + value.mn_name + '</td>';
-          card += '<td>' + value.sq_institute + '</td>';
-          card += '<td>' + value.sq_board + '</td>';
-          card += '<td>' + value.sq_mo + '/' + value.sq_mm + '</td>';
-          card += '<td>' + value.sq_percentage + '/' + value.sq_cgpa + '</td>';
-          card += '<td>' + value.sq_year + '</td>';
-          card += '</tr>';
-        });
-        $("#qualificationShowList").find("tr:gt(0)").remove();
-        $("#qualificationShowList").append(card);
-      }).fail(function() {
-        $.alert("Could not Fetch Student Qualification !!");
-      })
-    }
-    $(document).on('click', '.editQual', function() {
-      var mn_id = $(this).attr("data-sq")
-      var studentId = $("#studentIdHidden").val();
-      // $.alert("Change  " + progId + " Student Id " + studentId);
-      if (studentId > 0 && mn_id > 0) {
-        $.post("<?php echo $phpFile; ?>", {
-          mn_id: mn_id,
-          studentId: studentId,
-          action: "fetchStudentQualification",
-        }, function() {}, "json").done(function(data, status) {
-          // $.alert(data.sq_id)
-          $('#sel_qual').val(data.mn_id);
-          $("#sq_mo").val(data.sq_mo)
-          $("#sq_year").val(data.sq_year)
-        }).fail(function() {
-          $.alert("Error in Qualification !!");
-        })
-      } else $.alert("Please select Student and New Programme!!")
-    })
-
-    $(document).on('click', '#changeBranch', function() {
-      var progId = $("#new_prog").val()
-      var studentId = $("#studentIdHidden").val();
-
-      // $.alert("Change  " + progId + " Student Id " + studentId);
-      if (studentId > 0 && progId > 0) {
-        $.post("<?php echo $phpFile; ?>", {
-          progId: progId,
-          studentId: studentId,
-          action: "changeBranch",
-        }, function() {}, "text").done(function(data, status) {
-          $.alert(data)
-        }).fail(function() {
-          $.alert("Error in Change Branch!!");
-        })
-      } else $.alert("Please select Student and New Programme!!")
-    });
-
-    $(document).on('click', '#changeAdBatch', function() {
-      var batchId = $("#new_adBatch").val()
-      var studentId = $("#studentIdHidden").val();
-
-      // $.alert("Change  " + progId + " Student Id " + studentId);
-      if (studentId > 0 && batchId > 0) {
-        $.post("<?php echo $phpFile; ?>", {
-          batchId: batchId,
-          studentId: studentId,
-          action: "changeAdBatch",
-        }, function() {}, "text").done(function(data, status) {
-          $.alert(data)
-        }).fail(function() {
-          $.alert("Error in Change Branch!!");
-        })
-      } else $.alert("Please select Student and New Admission Batch!!")
-    });
-
-    $(document).on('click', '#changeAcBatch', function() {
-      var batchId = $("#new_acBatch").val()
-      var studentId = $("#studentIdHidden").val();
-
-      // $.alert("Change  " + progId + " Student Id " + studentId);
-      if (studentId > 0 && batchId > 0) {
-        $.post("<?php echo $phpFile; ?>", {
-          batchId: batchId,
-          studentId: studentId,
-          action: "changeAcBatch",
-        }, function() {}, "text").done(function(data, status) {
-          $.alert(data)
-        }).fail(function() {
-          $.alert("Error in Change Branch!!");
-        })
-      } else $.alert("Please select Student and New Academic Batch!!")
-    });
-
-
-    $(document).on('click', '#updateStatus', function() {
-      var batchId = $("#sel_batch").val()
-      var progId = $("#sel_program").val()
-      var ssId = $("#sel_ss").val()
-      var ssSemester = $("#ssSemester").val()
-
-      var checkboxes_value = [];
-      $('.checkitem').each(function() {
-        if (this.checked) {
-          checkboxes_value.push($(this).val());
-        }
-      });
-      // $.alert("Batch " + batchId + " Prog " + progId + " ssId " + ssId + " Cheked " + checkboxes_value);
-      $.post("<?php echo $phpFile; ?>", {
-        batchId: batchId,
-        progId: progId,
-        ssId: ssId,
-        ssSemester: ssSemester,
-        checkboxes_value: checkboxes_value,
-        action: "updateStatus"
-      }, function() {}, "text").done(function(data, status) {
-        $.alert("Updated")
-      }).fail(function() {
-        $.alert("Fail");
-      })
-    });
-
-
-    $(document).on('click', '#courseField, #rollnoField, #mobileField, #semField, #dorField, #dobField, #waField, #adhaarField, #catField, #relField, #bgField, #feeField, #genderField, #fDetailsField', function() {
-      if ($('#courseField').is(":checked")) $(".courseField").show();
-      else $(".courseField").hide();
-      if ($('#rollnoField').is(":checked")) $(".rollnoField").show();
-      else $(".rollnoField").hide();
-      if ($('#mobileField').is(":checked")) $(".mobileField").show();
-      else $(".mobileField").hide();
-      if ($('#semField').is(":checked")) $(".semField").show();
-      else $(".semField").hide();
-      if ($('#dorField').is(":checked")) $(".dorField").show();
-      else $(".dorField").hide();
-      if ($('#dobField').is(":checked")) $(".dobField").show();
-      else $(".dobField").hide();
-      if ($('#waField').is(":checked")) $(".waField").show();
-      else $(".waField").hide();
-      if ($('#adhaarField').is(":checked")) $(".adhaarField").show();
-      else $(".adhaarField").hide();
-      if ($('#catField').is(":checked")) $(".catField").show();
-      else $(".catField").hide();
-      if ($('#relField').is(":checked")) $(".relField").show();
-      else $(".relField").hide();
-      if ($('#bgField').is(":checked")) $(".bgField").show();
-      else $(".bgField").hide();
-      if ($('#feeField').is(":checked")) $(".feeField").show();
-      else $(".feeField").hide();
-      if ($('#genderField').is(":checked")) $(".genderField").show();
-      else $(".genderField").hide();
-      if ($('#fDetailsField').is(":checked")) $(".fDetailsField").show();
-      else $(".fDetailsField").hide();
-    });
-
-    $("#checkall").change(function() {
-      $(".checkitem").prop("checked", $(this).prop("checked"))
-    })
-
-    $(document).on('click', '.uploadStudent', function() {
-      // $.alert("Session From");
-      var selected_batch = $("#sel_batch").val()
-      var selected_prog = $("#sel_program").val()
-      // $.alert("Batch Not Selected" + selected_batch + "Prog" + selected_prog)
-      if (selected_batch == null || selected_prog == null) $.alert("Batch or Program Not Selected")
-      else {
-        $(".selectedBatch").text($("#sel_batch option:selected").text());
-        $(".selectedProg").text($("#sel_program option:selected").text());
-        $("#selectedBatch").val(selected_batch)
-        $("#selectedProg").val(selected_prog)
-        $('#formModal').modal('show');
-      }
-    });
-
-    $(document).on('submit', '#upload_csv', function(event) {
-      event.preventDefault();
-      var formData = $(this).serialize();
-      // $.alert(formData);
-      // action and other paramenters are passed as hidden
-      $.ajax({
-        url: "uploadStudentSql.php",
-        method: "POST",
-        data: new FormData(this),
-        contentType: false, // The content type used when sending data to the server.
-        cache: false, // To unable request pages to be cached
-        processData: false, // To send DOMDocument or non processed data file it is set to false
-        success: function(data) {
-          $.alert(data);
-          studentList()
-          $('#formModal').modal('hide');
-        }
-      })
-    });
-
-    $(document).on('change', '#sel_batch, #sel_program, #sel_ss', function() {
-      studentList();
-    });
-
-    $(document).on('click', '#ay, #leet, #deleted, #showSSList, #hostel, #transport, #dayScholar', function() {
-      studentList();
-    });
 
     function studentList() {
       var batchId = $("#sel_batch").val()
@@ -1573,9 +1114,11 @@ addActivity($conn, $myId, "Manage Student - Admission");
           card += '<td>' + value.user_id + '</td>';
           card += '<td>' + value.student_name + '</td>';
           card += '<td class="fnameField">' + value.student_fname + '</td>';
-          card += '<td class="courseField">' + value.program_name + '</td>';
+          card += '<td class="programField">' + value.program_abbri + '</td>';
+          card += '<td class="courseField">' + value.sp_name + '</td>';
           card += '<td class="rollnoField">' + value.student_rollno + '</td>';
 
+          card += '<td>' + value.student_batch + '</td>';
           card += '<td>' + value.student_ay + '</td>';
           if (value.student_lateral == '1') card += '<td>Y</td>';
           else card += '<td>N</td>';
@@ -1586,8 +1129,8 @@ addActivity($conn, $myId, "Manage Student - Admission");
           if (value.student_scholarship == '1') card += '<td>Y</td>';
           else card += '<td>N</td>';
 
-          var address= value.permanent_address;
-          if(address!=null)address=address.replace("#","")
+          var address = value.permanent_address;
+          if (address != null) address = address.replace("#", "")
 
           card += '<td class="mobileField">' + value.student_mobile + '</td>';
           card += '<td class="semField">' + value.student_semester + '</td>';
@@ -1701,22 +1244,618 @@ addActivity($conn, $myId, "Manage Student - Admission");
       }).fail(function() {
         $.alert("Error !!");
       })
-
     }
 
-    function studentProgramReport() {
+    $(document).on('click', ".ShowStudentList, .showSSList", function() {
+      studentList();
+    });
+
+    $(document).on('click', '#searchStudent', function(event) {
+      var data = $("#studentSearch").val();
+      // $.alert(data);
+      $.post("<?php echo $phpFile; ?>", {
+        action: "fetchStudent",
+        userId: data,
+      }, () => {}, "json").done(function(data, status) {
+        // $.alert(data);
+        if (data == null) {
+          $.alert("No Student Found!!");
+          $("#studentIdHidden").val(null);
+          $("#studentIdQual").val(null);
+          $("#studentIdDoc").val(null);
+
+        } else {
+          $("#studentIdHidden").val(data.student_id);
+          $("#studentIdQual").val(data.student_id);
+          $("#studentIdDoc").val(data.student_id);
+
+          if (data.student_status == '9') $("#status").html("Deleted");
+          else if (data.student_status == '0') $("#status").html("Active");
+
+
+          $("#stdName").val(data.student_name);
+          $("#stdRno").val(data.student_rollno);
+          $("#stdMobile").val(data.student_mobile);
+          $("#stdEmail").val(data.student_email);
+          $("#stdSemester").val(data.student_semester);
+          $("#Dob").val(data.student_dob);
+          $("#stdWaMobile").val(data.student_whatsapp);
+
+          if (data.student_gender == 'M') $("#male").prop("checked", true);
+          else if (data.student_gender == 'F') $("#female").prop("checked", true);
+          else {
+            $("#male").prop("checked", false);
+            $("#female").prop("checked", false);
+          }
+          if (data.student_lateral == '1') $("#yes_leet").prop("checked", true);
+          else $("#no_leet").prop("checked", true);
+          if (data.student_scholarship == '1') $("#yes_scholarship").prop("checked", true);
+          else $("#no_scholarship").prop("checked", true);
+          if (data.student_regular == '1') $("#yes_regular").prop("checked", true);
+          else $("#no_regular").prop("checked", true);
+
+          $("#stdAdhaar").val(data.student_adhaar);
+
+          $("#sel_srs").val(data.student_residential_status);
+          $("#sel_rg").val(data.student_religion);
+          $("#sel_caste").val(data.student_category);
+          $("#sel_bg").val(data.student_bg);
+          $("#sel_fcg").val(data.student_fee_category);
+          $("#sel_adc").val(data.student_admission_category);
+
+          $("#stdAdmission").val(data.student_admission);
+          $("#fName").val(data.student_fname);
+          $("#mName").val(data.student_mname);
+          $("#fMobile").val(data.student_fmobile);
+          $("#mMobile").val(data.student_mmobile);
+          $("#fEmail").val(data.student_femail);
+          $("#mEmail").val(data.student_memail);
+          $("#sCity").val(data.city);
+          $("#sPincode").val(data.pincode);
+
+          var address = data.permanent_address;
+          $("#permanent_address").val(address);
+
+          var state_id = data.state_id;
+          var district_id = data.district_id;
+
+          $("#mEmail").val(data.student_memail);
+          $("#cName").val(data.reference_name);
+          $("#cNumber").val(data.reference_mobile);
+          $("#refStaff").val(data.reference_staff);
+          $("#cIncentive").val(data.reference_incentive);
+          $("#refDesignation").val(data.reference_designation);
+          $("#refContact").val(data.reference_contact);
+          $("#remarks").val(data.remarks);
+          $("#uploadId").val(data.student_id);
+          $("#studentIdPill").html(data.user_id);
+          if (data.student_image === null) $(".studentImage").html('<img  src="../../images/upload.jpg" width="100%">');
+          else $(".studentImage").html('<img  src="<?php echo '../../' . $myFolder . '/studentImages/'; ?>' + data.student_image + '" width="100%">');
+          var text = data.program_abbri + " : " + data.sp_abbri
+          $(".progName").html(text);
+
+          $(".batchName").html(data.batch);
+          $(".semesterName").html(data.student_semester);
+          $(".homeId").html(data.student_id);
+          $.post("<?php echo $phpFile; ?>", {
+            userId: data.user_id,
+            action: "fetchAcademicBatch"
+          }, () => {}, "json").done(function(data, status) {
+            $(".ayName").html(data.batch);
+          })
+          $.post("<?php echo $phpFile; ?>", {
+            state_id: state_id,
+            action: "fetchState"
+          }, () => {}, "json").done(function(data, status) {
+            $("#stateName").html(data.state_name)
+            // address = address + data.state_name;
+          })
+          if(district_id>0){
+            $.post("<?php echo $phpFile; ?>", {
+              district: district_id,
+              action: "fetchDistrict"
+            }, () => {}, "json").done(function(data, status) {
+              $("#districtName").html(data.district_name)
+              // address = address + data.district_name;
+            })
+          } else $("#districtName").html("Not Set")
+        }
+        studentQualificationList()
+        docList();
+
+        // $.alert(data);
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
+    $(document).on('click', '#dropStudent', function(event) {
+      var data = $("#studentIdHidden").val();
+      var mn_id = $("#sel_mn").val();
+      // $.alert(mn_id);
+      if (data > 0 && mn_id > 0) {
+        $.confirm({
+          title: 'Please Confirm !',
+          draggable: true,
+          content: "<b><i>Are you Sure to Remove Student ? </i></b>",
+          buttons: {
+            confirm: {
+              btnClass: 'btn-info',
+              action: function() {
+                $.post("<?php echo $phpFile; ?>", {
+                  action: "dropStudent",
+                  mn_id: mn_id,
+                  id: data,
+                }, () => {}, "text").done(function(data) {
+                  // $.alert(data);
+                }, "text").fail(function() {
+                  $.alert("fail in place of error");
+                })
+              }
+            },
+            cancel: {
+              btnClass: "btn-danger",
+              action: function() {}
+            },
+          }
+        });
+      } else {
+        $.alert("Student or Reason not Selected!!");
+      }
+    });
+
+    $(document).on('click', '#resetStudent', function(event) {
+      var data = $("#studentIdHidden").val();
+      // $.alert(data);
+      if (data > 0) {
+        $.confirm({
+          title: 'Please Confirm !',
+          draggable: true,
+          content: "<b><i>Are you Sure to Re-instate the Student ? </i></b>",
+          buttons: {
+            confirm: {
+              btnClass: 'btn-info',
+              action: function() {
+                $.post("<?php echo $phpFile; ?>", {
+                  action: "resetStudent",
+                  id: data,
+                }, () => {}, "text").done(function(data) {
+                  // $.alert(data);
+                }).fail(function() {
+                  $.alert("fail in place of error");
+                })
+              }
+            },
+            cancel: {
+              btnClass: "btn-danger",
+              action: function() {}
+            },
+          }
+        });
+      } else {
+        $.alert("Student or Reason not Selected!!");
+      }
+    });
+
+    $(document).on('click', '#changeBranch', function() {
+      var progId = $("#new_prog").val()
+      var studentId = $("#studentIdHidden").val();
+
+      // $.alert("Change  " + progId + " Student Id " + studentId);
+      if (studentId > 0 && progId > 0) {
+        $.post("<?php echo $phpFile; ?>", {
+          progId: progId,
+          studentId: studentId,
+          action: "changeBranch",
+        }, function() {}, "text").done(function(data, status) {
+          $.alert(data)
+        }).fail(function() {
+          $.alert("Error in Change Branch!!");
+        })
+      } else $.alert("Please select Student and New Programme!!")
+    });
+
+    $(document).on('click', '#changeAdBatch', function() {
+      var batchId = $("#new_adBatch").val()
+      var studentId = $("#studentIdHidden").val();
+
+      // $.alert("Change  " + progId + " Student Id " + studentId);
+      if (studentId > 0 && batchId > 0) {
+        $.post("<?php echo $phpFile; ?>", {
+          batchId: batchId,
+          studentId: studentId,
+          action: "changeAdBatch",
+        }, function() {}, "text").done(function(data, status) {
+          $.alert(data)
+        }).fail(function() {
+          $.alert("Error in Change Branch!!");
+        })
+      } else $.alert("Please select Student and New Admission Batch!!")
+    });
+
+    $(document).on('click', '#changeAcBatch', function() {
+      var batchId = $("#new_acBatch").val()
+      var studentId = $("#studentIdHidden").val();
+
+      // $.alert("Change  " + progId + " Student Id " + studentId);
+      if (studentId > 0 && batchId > 0) {
+        $.post("<?php echo $phpFile; ?>", {
+          batchId: batchId,
+          studentId: studentId,
+          action: "changeAcBatch",
+        }, function() {}, "text").done(function(data, status) {
+          $.alert(data)
+        }).fail(function() {
+          $.alert("Error in Change Branch!!");
+        })
+      } else $.alert("Please select Student and New Academic Batch!!")
+    });
+
+    $(document).on('submit', '#uploadModalForm', function(event) {
+      event.preventDefault();
+      var formData = $(this).serialize();
+      $.alert(formData);
+      // action and test_id are passed as hidden
+      $.ajax({
+        url: "uploadSql.php",
+        method: "POST",
+        data: new FormData(this),
+        contentType: false, // The content type used when sending data to the server.
+        cache: false, // To unable request pages to be cached
+        processData: false, // To send DOMDocument or non processed data file it is set to false
+        success: function(data) {
+          $.alert("List " + data);
+          $('#uploadModal').modal('hide');
+        }
+      })
+    });
+
+    $(document).on('change', '#sel_state', function() {
+      districtOption();
+    });
+
+    stateOption()
+
+    function stateOption() {
+      // $.alert(" State ");
+      $.post("admissionSql.php", {
+        action: "stateOption"
+      }, function() {}, "json").done(function(data, status) {
+        // $.alert(data);
+        var list = '';
+        list += '<select class="form-control form-control-sm sAddressForm" name="sel_state" id="sel_state" data-tag="state_id">';
+        list += '<option value="0">Select State</option>'
+        $.each(data, function(key, value) {
+          list += '<option value="' + value.state_id + '" data-state="' + value.state_name + '">' + value.state_name + '</option>';
+        });
+        list += '</select>';
+        $("#stateOption").html(list);
+      }).fail(function() {
+        $.alert("Error in State Options !!");
+      })
+    }
+
+    function districtOption() {
+      var stateId = $("#sel_state").val()
+      // $.alert(" State " + stateId);
+      $.post("admissionSql.php", {
+        stateId: stateId,
+        action: "districtOption"
+      }, function() {}, "json").done(function(data, status) {
+        // $.alert("List " + data);
+        var list = '';
+        list += '<select class="form-control form-control-sm sAddressForm" name="sel_district" id="sel_district" data-tag="district_id">';
+        list += '<option value="0">Select a District</option>'
+        $.each(data, function(key, value) {
+          list += '<option value=' + value.district_id + '>' + value.district_name + '</option>';
+        });
+        list += '</select>';
+        $("#districtOption").html(list);
+
+      }).fail(function() {
+        $.alert("Error in Loading District !!");
+      })
+    }
+
+    $(document).on('blur', '.studentUpdateForm', function() {
+      var userId = $("#studentSearch").val();
+      var tag = $(this).attr("data-tag")
+      var value = $(this).val()
+      // $.alert("Changes " + tag + " Value " + value + " Student " + userId);
+      $.post("<?php echo $phpFile; ?>", {
+        id_name: "user_id",
+        id: userId,
+        tag: tag,
+        value: value,
+        action: "updateStudent"
+      }, function(data) {
+        // $.alert("List " + data);
+      }, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
+    $(document).on('blur', '.studentDetailForm', function() {
+      var studentId = $("#studentIdHidden").val()
+      var tag = $(this).attr("data-tag")
+      var value = $(this).val()
+      // $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
+      $.post("<?php echo $phpFile; ?>", {
+        id_name: "student_id",
+        id: studentId,
+        tag: tag,
+        value: value,
+        action: "updateDetails"
+      }, function(data) {
+        // $.alert("List " + data);
+      }, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
+    $(document).on('blur', '.sAddressForm', function() {
+      var studentId = $("#studentIdHidden").val()
+      var tag = $(this).attr("data-tag")
+      var value = $(this).val()
+      // $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
+      $.post("<?php echo $phpFile; ?>", {
+        id_name: "student_id",
+        id: studentId,
+        tag: tag,
+        value: value,
+        action: "updateAddress"
+      }, function(data) {
+        // $.alert("List " + data);
+      }, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
+    $(document).on('blur', '.refForm', function() {
+      var studentId = $("#studentIdHidden").val()
+      var tag = $(this).attr("data-tag")
+      var value = $(this).val()
+      // $.alert("Changes " + tag + " Value " + value + " Student " + studentId);
+      $.post("<?php echo $phpFile; ?>", {
+        id_name: "student_id",
+        id: studentId,
+        tag: tag,
+        value: value,
+        action: "updateReference"
+      }, function(data) {
+        // $.alert("List " + data);
+      }, "text").fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
+    $(document).on('click', '#updateStatus', function() {
+      var batchId = $("#sel_batch").val()
+      var progId = $("#sel_program").val()
+      var ssId = $("#sel_ss").val()
+      var ssSemester = $("#ssSemester").val()
+
+      var checkboxes_value = [];
+      $('.checkitem').each(function() {
+        if (this.checked) {
+          checkboxes_value.push($(this).val());
+        }
+      });
+      // $.alert("Batch " + batchId + " Prog " + progId + " ssId " + ssId + " Cheked " + checkboxes_value);
+      $.post("<?php echo $phpFile; ?>", {
+        batchId: batchId,
+        progId: progId,
+        ssId: ssId,
+        ssSemester: ssSemester,
+        checkboxes_value: checkboxes_value,
+        action: "updateStatus"
+      }, function() {}, "text").done(function(data, status) {
+        $.alert("Updated")
+      }).fail(function() {
+        $.alert("Fail");
+      })
+    });
+
+    $(document).on('submit', '#qualForm', function(event) {
+      event.preventDefault();
+      var studentId = $("#studentIdQual").val();
+      var sel_qual = $("#sel_qual").val();
+      if (studentId > 0 && sel_qual > 0) {
+        var formData = $(this).serialize();
+        // $.alert(formData);
+        $.post("<?php echo $phpFile; ?>", formData, () => {}, "text").done(function(data) {
+          // $.alert(data);
+          studentQualificationList()
+        }).fail(function() {
+          $.alert("fail in place of error");
+        })
+      } else $.alert("Please select Student and Qualification !!")
+    });
+
+    function studentQualificationList() {
+      var studentId = $("#studentIdHidden").val()
+      // $.alert("In List Function" + studentId);
+      $.post("<?php echo $phpFile; ?>", {
+        stdId: studentId,
+        action: "studentQualificationList"
+      }, function() {}, "json").done(function(data, status) {
+        // $.alert(data)
+        var card = '';
+        var count = 1;
+        $.each(data, function(key, value) {
+          card += '<tr>';
+          card += '<td><a class="fa fa-pencil-alt editQual" data-mn="' + value.mn_id + '" data-sq="' + value.sq_id + '"></a>' + value.sq_id + '</td>';
+          card += '<td>' + value.mn_name + '</td>';
+          card += '<td>' + value.sq_institute + '</td>';
+          card += '<td>' + value.sq_board + '</td>';
+          card += '<td>' + value.sq_mo + '/' + value.sq_mm + '</td>';
+          card += '<td>' + value.sq_percentage + '/' + value.sq_cgpa + '</td>';
+          card += '<td>' + value.sq_year + '</td>';
+          card += '</tr>';
+        });
+        $("#qualificationShowList").find("tr:gt(0)").remove();
+        $("#qualificationShowList").append(card);
+      }).fail(function() {
+        $.alert("Could not Fetch Student Qualification !!");
+      })
+    }
+
+    $(document).on('click', '.editQual', function() {
+      var sq_id = $(this).attr("data-sq")
+      var mn_id = $(this).attr("data-mn")
+      var studentId = $("#studentIdHidden").val();
+      $.alert("mn_id  " + mn_id + " Student Id " + studentId);
+      if (studentId > 0 && mn_id > 0) {
+        $.post("<?php echo $phpFile; ?>", {
+          mn_id: mn_id,
+          studentId: studentId,
+          action: "fetchStudentQualification",
+        }, function() {}, "json").done(function(data, status) {
+          $.alert(data.sq_id)
+          $('#sel_qual').val(data.mn_id);
+          $("#sq_mo").val(data.sq_mo)
+          $("#sq_institute").val(data.sq_institute)
+          $("#sq_board").val(data.sq_board)
+          $("#sq_mo").val(data.sq_mo)
+          $("#sq_mm").val(data.sq_mm)
+          $("#sq_percentage").val(data.sq_percentage)
+          $("#sq_year").val(data.sq_year)
+        }).fail(function() {
+          $.alert("Error in Qualification !!");
+        })
+      } else $.alert("Please select Student and New Programme!!")
+    })
+
+    function docList() {
+      var studentId = $("#studentIdHidden").val()
+      // $.alert("Student" + studentId);
+      $.post("<?php echo $phpFile; ?>", {
+        stdId: studentId,
+        action: "docList"
+      }, function() {}, "json").done(function(data, status) {
+        // $.alert(data)
+        var card = '';
+        var count = 1;
+        $.each(data, function(key, value) {
+          card += '<tr>';
+          card += '<td>' + value.mn_name + '</td>';
+          card += '<td>' + value.sd_remarks + '</td>';
+          if(value.sdd_expected=="--")card += '<td>--</td>';
+          else card += '<td>' + getFormattedDate(value.sdd_expected, "dmY") + '</td>';
+          if(value.sdd_submitted=="--") card += '<td> <span class="footNote text-danger">--</span></td>';
+          else if(value.sdd_submitted==0) card += '<td> <span class="footNote text-danger">Not submitted</span></td>';
+          else if(value.sdd_submitted==1) card += '<td> <span class="footNote text-primary">Submitted</span></td>';
+          else card += '<td> <span class="footNote text-success">Verified</span></td>';
+          card += '<td>' + value.sdd_remarks + '</td>';
+          card += '<td class="text-center"><a class="fa fa-trash-alt text-danger removeDoc" data-mn="' + value.mn_id + '"></a></td>';
+          card += '</tr>';
+        });
+        $("#docShowList").find("tr:gt(0)").remove();
+        $("#docShowList").append(card);
+      }).fail(function() {
+        $.alert("Could not Fetch Student Documents !!");
+      })
+    }
+
+    $(document).on('submit', '#docForm', function(event) {
+      event.preventDefault();
+      var studentId = $("#studentIdDoc").val()
+      var sel_doc = $("#sel_doc").val();
+      if (studentId > 0 && sel_doc > 0) {
+        var formData = $(this).serialize();
+        // $.alert(formData);
+        $.post("<?php echo $phpFile; ?>", formData, () => {}, "text").done(function(data) {
+          // $.alert(data);
+          docList()
+        }).fail(function() {
+          $.alert("fail in place of error");
+        })
+      } else $.alert("Please select Student and Qualification !!")
+    });
+
+    $(document).on('click', '#courseField, #rollnoField, #mobileField, #semField, #dorField, #dobField, #waField, #adhaarField, #catField, #relField, #bgField, #feeField, #genderField, #fDetailsField', function() {
+      if ($('#courseField').is(":checked")) $(".courseField").show();
+      else $(".courseField").hide();
+      if ($('#rollnoField').is(":checked")) $(".rollnoField").show();
+      else $(".rollnoField").hide();
+      if ($('#mobileField').is(":checked")) $(".mobileField").show();
+      else $(".mobileField").hide();
+      if ($('#semField').is(":checked")) $(".semField").show();
+      else $(".semField").hide();
+      if ($('#dorField').is(":checked")) $(".dorField").show();
+      else $(".dorField").hide();
+      if ($('#dobField').is(":checked")) $(".dobField").show();
+      else $(".dobField").hide();
+      if ($('#waField').is(":checked")) $(".waField").show();
+      else $(".waField").hide();
+      if ($('#adhaarField').is(":checked")) $(".adhaarField").show();
+      else $(".adhaarField").hide();
+      if ($('#catField').is(":checked")) $(".catField").show();
+      else $(".catField").hide();
+      if ($('#relField').is(":checked")) $(".relField").show();
+      else $(".relField").hide();
+      if ($('#bgField').is(":checked")) $(".bgField").show();
+      else $(".bgField").hide();
+      if ($('#feeField').is(":checked")) $(".feeField").show();
+      else $(".feeField").hide();
+      if ($('#genderField').is(":checked")) $(".genderField").show();
+      else $(".genderField").hide();
+      if ($('#fDetailsField').is(":checked")) $(".fDetailsField").show();
+      else $(".fDetailsField").hide();
+    });
+
+    $("#checkall").change(function() {
+      $(".checkitem").prop("checked", $(this).prop("checked"))
+    })
+
+    $(document).on('click', '.uploadStudent', function() {
+      // $.alert("Session From");
+      var selected_batch = $("#sel_batch").val()
+      var selected_prog = $("#sel_program").val()
+      // $.alert("Batch Not Selected" + selected_batch + "Prog" + selected_prog)
+      if (selected_batch == null || selected_prog == null) $.alert("Batch or Program Not Selected")
+      else {
+        $(".selectedBatch").text($("#sel_batch option:selected").text());
+        $(".selectedProg").text($("#sel_program option:selected").text());
+        $("#selectedBatch").val(selected_batch)
+        $("#selectedProg").val(selected_prog)
+        $('#formModal').modal('show');
+      }
+    });
+
+    $(document).on('submit', '#upload_csv', function(event) {
+      event.preventDefault();
+      var formData = $(this).serialize();
+      // $.alert(formData);
+      // action and other paramenters are passed as hidden
+      $.ajax({
+        url: "uploadStudentSql.php",
+        method: "POST",
+        data: new FormData(this),
+        contentType: false, // The content type used when sending data to the server.
+        cache: false, // To unable request pages to be cached
+        processData: false, // To send DOMDocument or non processed data file it is set to false
+        success: function(data) {
+          $.alert(data);
+          studentList()
+          $('#formModal').modal('hide');
+        }
+      })
+    });
+
+    $(document).on('click', '.stdStrength', function() {
+      var batchId = $("#sel_batch").val()
       //  $.alert("In List Function");
       $.post("<?php echo $phpFile; ?>", {
+        batchId: batchId,
         action: "studentProgramList",
       }, function(mydata, mystatus) {
-        $("#studentProgramReport").show();
         // $.alert("List qulai" + mydata);
         $("#studentProgramReport").html(mydata);
       }, "text").fail(function() {
         $.alert("Error !!");
       })
-
-    }
+    });
 
     function getFormattedDate(ts, fmt) {
       var a = new Date(ts);
@@ -1772,7 +1911,6 @@ addActivity($conn, $myId, "Manage Student - Admission");
   <div class="modal-dialog modal-md">
     <form id="upload_csv">
       <div class="modal-content">
-
         <!-- Modal Header -->
         <div class="modal-header">
           <h4 class="modal-title" id="modal_uploadTitle"></h4>

@@ -1,7 +1,7 @@
 <?php
 require('../requireSubModule.php');
 require('../../phpFunction/teachingLoadFunction.php');
-addActivity($conn, $myId, "Teaching Load");
+addActivity($conn, $myId, "Teaching Load", $submit_ts);
 
 ?>
 <!DOCTYPE html>
@@ -13,24 +13,34 @@ addActivity($conn, $myId, "Teaching Load");
 </head>
 
 <body>
-  <?php require("../topBar.php"); ?>
+  <?php require("../topBar.php");
+  if($myId>3){
+    if (!isset($_GET['tag'])) die("Illegal Attempt !! The token is Missing");
+    elseif (!in_array($_GET['tag'], $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+    elseif (!in_array("37", $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+  }
+   ?>
   <div class="container-fluid moduleBody">
     <div class="row">
-      <div class="col-2 p-0 m-0 pl-2 full-height">
-        <h5 class="pt-3">Teaching Load</h5>
+      <div class="col-1 p-0 m-0 full-height">
+        <h5 class="pt-3 smallText">Teaching Load</h5>
         <span id="panelId"></span>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active cc" id="list-cc-list" data-toggle="list" href="#list-cc" role="tab" aria-controls="cc"> Class Groups </a>
           <a class="list-group-item list-group-item-action semLoad" id="list-semLoad-list" data-toggle="list" href="#list-semLoad" role="tab" aria-controls="semLoad"> Semester Load </a>
-          <a class="list-group-item list-group-item-action subChoice" id="list-subChoice-list" data-toggle="list" href="#list-subChoice" role="tab" aria-controls="subChoice"> Subject Choice Filling </a>
-          <a class="list-group-item list-group-item-action tl" id="list-tl-list" data-toggle="list" href="#list-tl" role="tab" aria-controls="tl"> Assign Load </a>
+          <a class="list-group-item list-group-item-action subChoice" id="list-subChoice-list" data-toggle="list" href="#list-subChoice" role="tab" aria-controls="subChoice"> Subject Choice </a>
+          <a class="list-group-item list-group-item-action" id="list-tl-list" data-toggle="list" href="#list-tl" role="tab" aria-controls="tl"> Assign Load </a>
         </div>
+        <hr>
+        <p class="text-center smallText under-process m-0"><?php echo $mySesName; ?></p>
+        <hr>
+        <p class="text-center xsText">Session Class</p>
         <?php
         $sql = "select * from class where session_id='$mySes' and dept_id='$myDept' order by program_id, class_semester";
         selectList($conn, "", array(0, "class_id", "class_name", "class_section", "sel_class"), $sql)
         ?>
       </div>
-      <div class="col-10 leftLinkBody">
+      <div class="col-11 leftLinkBody">
         <div class="tab-content" id="nav-tabContent">
           <div class="tab-pane show active" id="list-cc" role="tabpanel">
             <div class="row">
@@ -133,7 +143,18 @@ addActivity($conn, $myId, "Teaching Load");
           <div class="tab-pane fade" id="list-tl" role="tabpanel" aria-labelledby="list-tl-list">
             <div class="row">
               <div class="col-9 mt-1 mb-1">
-                <h5>Assign Teaching Load</h5>
+                <div class="row">
+                  <div class="col-md-9">
+                    <h3>
+                      <span class="xlText">Assign Teaching Load</span>
+                    </h3>
+                  </div>
+                  <div class="col-md-3 text-right">
+                    <h3>
+                      <a class="fa fa-refresh tl" style="color:yellowgreen"></a>
+                    </h3>
+                  </div>
+                </div>
                 <div class="container card myCard p-2" id="card_tl">
                   <div id="tlList"></div>
                 </div>
@@ -166,16 +187,11 @@ addActivity($conn, $myId, "Teaching Load");
 
     });
 
-    $(".topBarTitle").text("Schedule");
     var x = $("#sel_program").val();
     classList(x);
-    $(".selectClass").hide();
-    //$(".selectPanel").hide();
-    $("#panelId").hide();
+    tlList()
 
     $(document).on('click', '.tl', function() {
-      //$.alert("TL");
-      $("#panelId").html("TL");
       tlList();
     });
 
@@ -197,19 +213,10 @@ addActivity($conn, $myId, "Teaching Load");
       $("#clList").show();
     });
 
-    $(document).on('change', '#sel_class', function() {
-      var classId = $("#sel_class").val();
-      var panelId = $("#panelId").text();
-      //$.alert("Panel Id " + panelId);
-      if (classId > 0 && panelId == "TL") tlList(classId);
-      else if (classId > 0 && panelId == "TT") ttList(classId);
-      else $.alert("Class " + classId);
-    });
-
     $(document).on('click', '.increDecre', function() {
       var id = $(this).attr('id');
       var value = $(this).attr("data-value");
-      $.alert("Id " + id + "Value" + value);
+      // $.alert("Id " + id + "Value" + value);
       $.post('teachingLoadSql.php', {
         id: id,
         value: value,
@@ -260,7 +267,7 @@ addActivity($conn, $myId, "Teaching Load");
 
     $(document).on('click', '.class_idP', function() {
       var id = $(this).attr('id');
-      $.alert("Process Id " + id);
+      // $.alert("Process Id " + id);
       classSubject(id);
     });
 
@@ -283,7 +290,6 @@ addActivity($conn, $myId, "Teaching Load");
       else if (type == "T") $('#loadGroup').html("TG-" + group);
       else $('#loadGroup').html("PG-" + group);
 
-
       $(".classForm").hide()
       $(".updateDeptForm").hide()
       $(".clashForm").hide()
@@ -302,7 +308,7 @@ addActivity($conn, $myId, "Teaching Load");
         action: "fetchClass"
       }, () => {}, "json").done(function(data) {
         //$.alert("List " + data.class_name);
-        console.log("Error ", data);
+        // console.log("Error ", data);
         $('#modal_title').text("Update Class [" + id + "]");
         $('#class_name').val(data.class_name);
         $('#class_section').val(data.class_section);
@@ -332,7 +338,7 @@ addActivity($conn, $myId, "Teaching Load");
         $('.classForm').show();
 
         $('#firstModal').modal('show');
-      }, "text").fail(function() {
+      }).fail(function() {
         $.alert("fail in place of error");
       })
     });
@@ -354,7 +360,7 @@ addActivity($conn, $myId, "Teaching Load");
     });
     $(document).on('click', '.unassign', function() {
       var tl_id = $(this).attr("data-tl")
-      $.alert("Class Modal" + tl_id);
+      // $.alert("Class Modal" + tl_id);
       $.post("teachingLoadSql.php", {
         tl_id: tl_id,
         action: "tlDelete"
@@ -389,7 +395,7 @@ addActivity($conn, $myId, "Teaching Load");
         var formData = $(this).serialize();
         // $.alert(formData);
         $.post("teachingLoadSql.php", formData, () => {}, "text").done(function(data) {
-          $.alert(data);
+          // $.alert(data);
           if (action == "addClass" || action == "updateClass") {
             var x = $("#sel_program").val();
             classList(x);
@@ -398,7 +404,7 @@ addActivity($conn, $myId, "Teaching Load");
             if (classId > 0) tlList(classId);
             else $.alert(" Select Class ");
           } else {
-            $.alert("Updated" + data);
+            // $.alert("Updated" + data);
             $("#dept" + tlg_id).html(data)
           }
           $('#firstModal').modal('hide');
@@ -473,7 +479,7 @@ addActivity($conn, $myId, "Teaching Load");
     }
 
     function subAllChoices(x) {
-      $.alert(" Subject All Choices " + x);
+      // $.alert(" Subject All Choices " + x);
       $.post("teachingLoadSql.php", {
         tlg_id: x,
         action: "subAllChoices"

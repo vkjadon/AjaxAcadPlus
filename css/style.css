@@ -130,12 +130,13 @@ div.minWidth100 {
     font-size: small;
     font-weight: bold;
 }
-.under-process {
+.under-process, .process {
     color: rgba(85, 75, 226, 0.911);
     font-style: italic;
     font-size: small;
     font-weight: bold;
 }
+
 .largeText {
     font-size:large;
     font-weight: bold;
@@ -197,7 +198,6 @@ div.minWidth100 {
 }
 
 .footerNote, .remarks, .footNote {
-    text-align: center;
     font-style: italic;
     font-weight: bold;
     font-size: small;

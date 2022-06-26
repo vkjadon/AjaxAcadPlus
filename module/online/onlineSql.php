@@ -7,7 +7,7 @@ if (isset($_POST['action'])) {
 		if (!$_POST['test_name'] == NULL) {
 			$sql="update test set test_status='1' where update_id='$myId'";
 			$result = $conn->query($sql);
-			if ($_POST['test_id'] == '0') $sql = "insert into test (test_name, test_section, test_status, update_id) values('" . data_check($_POST['test_name']) . "','" . data_check($_POST['test_section']) . "', '1', '$myId')";
+			if ($_POST['test_id'] == '0') $sql = "insert into test (test_name, test_section, test_status, update_ts, update_id) values('" . data_check($_POST['test_name']) . "','" . data_check($_POST['test_section']) . "', '1', '$submit_ts', '$myId')";
 			else $sql = "update test set test_name='" . data_check($_POST['test_name']) . "', test_section='" . data_check($_POST['test_section']) . "', update_ts='$submit_ts' where test_id='" . $_POST['test_id'] . "'";
 			$result = $conn->query($sql);
 			if ($result) echo "Added Successfully";
@@ -56,20 +56,16 @@ if (isset($_POST['action'])) {
 			$test_name = $array["test_name"];
 			$test_section = $array["test_section"];
 			$test_status = $array["test_status"];
-			echo '<div class="col p-0"><button class="btn btn-primary btn-sm studyMaterial"> Study Material</button></div>';
-
-			echo '<div class="card p-2">
-   <div class="card-body p-1">
-				<a href="#" class="atag testInstruction p-0" data-test="' . $id . '"><i class="fa fa-edit"></i></a>
-				<span><b> ' . $test_name . '</b></span>';
-			echo '<div class="row">';
+			echo '<div class="card myCard">';
+			echo '<div class="row m-1">
+   			<div class="col"><a class="btn btn-block testInstruction" data-test="' . $id . '">Test Instructions : ' . $test_name . '</a>';
+				echo '</div></div>';
+			echo '<div class="row m-1">';
 			for ($i = 1; $i <= $test_section; $i++) {
 				$sql = "select sum(tq_marks) as sum from test_question where test_id='$id' and test_section='$i'";
 				$value = getFieldValue($conn, "sum", $sql);
-				//echo '<div class="col-3"><h6 class="text-muted py-1">Marks : ' . $value . '</h6></div>';
-				echo '<div class="col"><button class="btn btn-info btn-square-sm sectionInstruction" data-test="' . $id . '" data-section="' . $i . '">Section : ' . $i . ' Instructions</button></div>';
+				echo '<div class="col"><a class="btn sectionInstruction" data-test="' . $id . '" data-section="' . $i . '">Section : ' . $i . ' Instructions</a></div>';
 			}
-			echo '</div>';
 			echo '</div></div>';
 		}
 	} elseif ($_POST['action'] == 'addQuestion') {
@@ -89,12 +85,12 @@ if (isset($_POST['action'])) {
 		$actionCode = $_POST['actionCode'];
 		echo "Action Code $actionCode";
 		if ($actionCode == "add") {
-			$sql = "insert into question_bank (qb_level, qb_base, qb_text, update_id, qb_status) values('1', '1', '$question', '$myId', '1')";
+			$sql = "insert into question_bank (qb_level, qb_base, qb_text, update_ts, update_id, qb_status) values('1', '1', '$question', '$submit_ts', '$myId', '1')";
 			$result = $conn->query($sql);
 			if ($result) {
 				echo "Added Successfully";
 				$insertId = $conn->insert_id;
-				$sql = "insert into test_question (test_id, test_section, qb_id, tq_marks, tq_nmarks, tq_status) values('$test_id', '$sectionId', '$insertId', '$tq_marks', '$tq_nmarks', '1')";
+				$sql = "insert into test_question (test_id, test_section, qb_id, tq_marks, tq_nmarks, update_ts, tq_status) values('$test_id', '$sectionId', '$insertId', '$tq_marks', '$tq_nmarks', '$submit_ts', '1')";
 				$result = $conn->query($sql);
 				if (!$result) echo $conn->error;
 				$fileName = 'ques-' . $insertId . '.txt';
@@ -350,44 +346,49 @@ if (isset($_POST['action'])) {
 		}
 	} elseif ($_POST['action'] == 'testSR') {
 		$sql = "select * from test where update_id='$myId' and test_status='0'";
-		$test_id = getFieldValue($conn, "test_id", $sql);
-
-		//echo $test_id;
-		$sql = "select * from test where test_id='$test_id'";
-		$result = $conn->query($sql);
-		if (!$result) echo $conn->error;
-		elseif ($result->num_rows > 0) {
-			$data = array();
-			$rowArray = $result->fetch_assoc();
-			$data["test_name"] = $rowArray["test_name"];
-			$data["test_section"] = $rowArray["test_section"];
-			$data["test_from_date"] = $rowArray["test_from_date"];
-			$data["test_from_time"] = $rowArray["test_from_time"];
-			$data["test_to_date"] = $rowArray["test_to_date"];
-			$data["test_to_time"] = $rowArray["test_to_time"];
-			$data["test_duration"] = $rowArray["test_duration"];
-			$data["update"] = $rowArray["update_ts"];
-			$data["staff"] = getField($conn, $rowArray["update_id"], "staff", "staff_id", "staff_name" );
-
-			$text = '';
-			$sql = "select cl.* from class cl, test_participant tp where tp.test_id='$test_id' and tp.participant_code='class' and tp.code_id=cl.class_id order by cl.class_semester";
+		$result=$conn->query($sql);
+		if(!$result)echo $conn->error;
+		else if($result->num_rows>0){
+			$row=$result->fetch_assoc();
+			$test_id =$row["test_id"];
+			// echo "Test Id ".$test_id;
+			$sql = "select * from test where test_id='$test_id'";
 			$result = $conn->query($sql);
-			while ($rowArray = $result->fetch_assoc()) {
-				$text .= $rowArray["class_name"] . '[' . $rowArray["class_section"] . '], ';
-			}
-			$data["participant"] = $text;
-
-			$sql = "select * from test_question where test_id='$test_id'";
-			$result = $conn->query($sql);
-			$data["question"] = $result->num_rows;
-
-			$sql = "select sum(tq_marks) as marks, sum(tq_nmarks) as nmarks from test_question where test_id='$test_id'";
-			$result = $conn->query($sql);
-			$rowArray = $result->fetch_assoc();
-			$data["marks"] = $rowArray["marks"];
-			$data["nmarks"] = $rowArray["nmarks"];
-			echo json_encode($data);
+			if (!$result) echo $conn->error;
+			elseif ($result->num_rows > 0) {
+				$data = array();
+				$rowArray = $result->fetch_assoc();
+				$data["test_name"] = $rowArray["test_name"];
+				$data["test_section"] = $rowArray["test_section"];
+				$data["test_from_date"] = $rowArray["test_from_date"];
+				$data["test_from_time"] = $rowArray["test_from_time"];
+				$data["test_to_date"] = $rowArray["test_to_date"];
+				$data["test_to_time"] = $rowArray["test_to_time"];
+				$data["test_duration"] = $rowArray["test_duration"];
+				$data["update"] = $rowArray["update_ts"];
+				$data["staff"] = getField($conn, $rowArray["update_id"], "staff", "staff_id", "staff_name" );
+	
+				$text = '';
+				$sql = "select cl.* from class cl, test_participant tp where tp.test_id='$test_id' and tp.participant_code='class' and tp.code_id=cl.class_id order by cl.class_semester";
+				$result = $conn->query($sql);
+				while ($rowArray = $result->fetch_assoc()) {
+					$text .= $rowArray["class_name"] . '[' . $rowArray["class_section"] . '], ';
+				}
+				$data["participant"] = $text;
+	
+				$sql = "select * from test_question where test_id='$test_id'";
+				$result = $conn->query($sql);
+				$data["question"] = $result->num_rows;
+	
+				$sql = "select sum(tq_marks) as marks, sum(tq_nmarks) as nmarks from test_question where test_id='$test_id'";
+				$result = $conn->query($sql);
+				$rowArray = $result->fetch_assoc();
+				$data["marks"] = $rowArray["marks"];
+				$data["nmarks"] = $rowArray["nmarks"];
+				echo json_encode($data);
+			}	
 		}
+
 	}
 } elseif ($_POST['instructionId'] == 'T' || $_POST['instructionId'] == 'S') {
 	$test_id = $_POST['testId'];

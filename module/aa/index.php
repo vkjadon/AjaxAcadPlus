@@ -1,6 +1,6 @@
 <?php
 require('../requireSubModule.php');
-addActivity($conn, $myId, "Academic Setting");
+addActivity($conn, $myId, "Academic Setting", $submit_ts);
 
 ?>
 <!DOCTYPE html>
@@ -57,94 +57,197 @@ addActivity($conn, $myId, "Academic Setting");
             </div>
             <div class="tab-pane fade" id="list-responsibility" role="tabpanel">
               <div class="row">
-                <div class="col-7 mt-1 mb-1">
-                  <div class="container card mt-2 myCard">
-                    <h5 class="p-2 mb-2">Assign Responsibilty</h5>
-                    <div class="row">
-                      <div class="col-3 pr-0">
-                        <div class="form-group">
-                          <label>Responsibility</label>
-                          <?php
-                          $sql_batch = "select * from master_name where mn_code='res' and mn_status='0' order by mn_name desc";
-                          $result = $conn->query($sql_batch);
-                          if ($result) {
-                            echo '<select class="form-control form-control-sm" name="sel_resp" id="sel_resp" required>';
-                            echo '<option selected disabled>Select Responsibility</option>';
-                            while ($rows = $result->fetch_assoc()) {
-                              $select_id = $rows['mn_id'];
-                              $select_name = $rows['mn_name'];
-                              echo '<option value="' . $select_id . '">' . $select_name . '[' . $rows['mn_abbri'] . ']</option>';
-                            }
-                            // echo '<option value="ALL">ALL</option>';
-                            echo '</select>';
-                          } else echo $conn->error;
-                          if ($result->num_rows == 0) echo 'No Data Found';
-                          ?>
+                <div class="col-9 mt-1 mb-1">
+                  <div class="container card myCard">
+                    <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab">
+                      <li class="nav-item">
+                        <a class="nav-link active tabLink" data-toggle="pill" href="#resp" data-tag="resp">Responsibility</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link tabLink" data-toggle="pill" href="#hod" data-tag="hod">HOD</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link tabLink" data-toggle="pill" href="#director" data-tag="director">Director</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link tabLink" data-toggle="pill" href="#gd" data-tag="gd">Group Director</a>
+                      </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent p-3">
+                      <div class="row m-1 border">
+                        <div class="col-md-3 pr-0">
+                          <div class="form-group">
+                            <label>Staff</label>
+                            <input type="text" class="form-control form-control-sm" id="staffSearch" name="staffSearch" placeholder="Search Staff" aria-label="Search">
+                            <p class='list-group overlapList' id="staffAutoList"></p>
+                            <input type="hidden" id="staffId" name="staffId">
+                          </div>
+                        </div>
+                        <div class="col-md-2 pl-1 pr-0">
+                          <div class="form-group">
+                            <label>Effective From</label>
+                            <input type="date" class="form-control form-control-sm" id="respFrom" name="respFrom" value="<?php echo $submit_date; ?>">
+                          </div>
+                        </div>
+                        <div class="col-md-2 pl-1 pr-0">
+                          <div class="form-group">
+                            <label>Effective Till</label>
+                            <input type="date" class="form-control form-control-sm" id="respTo" name="respTo" value="<?php echo $submit_date; ?>">
+                          </div>
+                        </div>
+                        <div class="col-md-2 pl-1 pr-0">
+                          <div class="form-group">
+                            <label>Office Order</label>
+                            <input type="text" class="form-control form-control-sm" id="respOrder" name="respOrder">
+                          </div>
+                        </div>
+                        <div class="col-md-3 pl-1">
+                          <div class="form-group">
+                            <label>Remarks</label>
+                            <input type="text" class="form-control form-control-sm" id="respRemarks" name="respRemarks">
+                          </div>
                         </div>
                       </div>
-                      <div class="col-3 pl-1 pr-0">
-                        <div class="form-group">
-                          <label class="selectLabel"></label>
-                          <p class="selectList"></p>
+                      <div class="tab-pane show active" id="resp">
+                        <div class="row m-1 border">
+                          <div class="col-md-4 border">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                  <label>Responsibility</label>
+                                  <?php
+                                  $sql = "select * from master_name where mn_code='res' and mn_status='0' order by mn_name desc";
+                                  $result = $conn->query($sql);
+                                  if ($result) {
+                                    echo '<select class="form-control form-control-sm" name="sel_resp" id="sel_resp" required>';
+                                    echo '<option selected disabled>Select Responsibility</option>';
+                                    while ($rows = $result->fetch_assoc()) {
+                                      $select_id = $rows['mn_id'];
+                                      $select_name = $rows['mn_name'];
+                                      echo '<option value="' . $select_id . '">' . $select_name . '[' . $rows['mn_abbri'] . ']</option>';
+                                    }
+                                    // echo '<option value="ALL">ALL</option>';
+                                    echo '</select>';
+                                  } else echo $conn->error;
+                                  if ($result->num_rows == 0) echo 'No Data Found';
+                                  ?>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col">
+                                <button type="submit" class="btn btn-sm respSubmit" data-tag="respName">Submit</button>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div class="col-3 pl-1 pr-0">
-                        <div class="form-group">
-                          <label>Staff</label>
-                          <input type="text" class="form-control form-control-sm" id="staffSearch" name="staffSearch" placeholder="Search Staff" aria-label="Search">
-                          <p class='list-group overlapList' id="staffAutoList"></p>
+                      <div class="tab-pane fade" id="hod">
+                        <div class="row m-1 border">
+                          <div class="col-md-4 border">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                  <label>Select a Department</label>
+                                  <?php
+                                  $sql = "select * from department where dept_status='0' order by dept_name";
+                                  $result = $conn->query($sql);
+                                  if ($result) {
+                                    echo '<select class="form-control form-control-sm" name="sel_dept" id="sel_dept" required>';
+                                    echo '<option selected disabled>Select Department</option>';
+                                    while ($rows = $result->fetch_assoc()) {
+                                      $select_id = $rows['dept_id'];
+                                      $select_name = $rows['dept_name'];
+                                      echo '<option value="' . $select_id . '">' . $select_name . '[' . $rows['dept_abbri'] . ']</option>';
+                                    }
+                                    // echo '<option value="ALL">ALL</option>';
+                                    echo '</select>';
+                                  } else echo $conn->error;
+                                  if ($result->num_rows == 0) echo 'No Data Found';
+                                  ?>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col">
+                                <button type="submit" class="btn btn-sm respSubmit" data-tag="hod">Submit</button>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div class="col-3 pl-1">
-                        <div class="form-group">
-                          <label>Office Order</label>
-                          <input type="text" class="form-control form-control-sm" id="respOrder" name="respOrder">
+                      <div class="tab-pane fade" id="director">
+                        <div class="row m-1 border">
+                          <div class="col-md-4 border">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                  <label>Select an Institution</label>
+                                  <?php
+                                  $sql = "select * from school where school_status='0' order by school_name";
+                                  $result = $conn->query($sql);
+                                  if ($result) {
+                                    echo '<select class="form-control form-control-sm" name="sel_school" id="sel_school" required>';
+                                    echo '<option selected disabled>Select Institution</option>';
+                                    while ($rows = $result->fetch_assoc()) {
+                                      $select_id = $rows['school_id'];
+                                      $select_name = $rows['school_name'];
+                                      echo '<option value="' . $select_id . '">' . $select_name . '[' . $rows['dept_abbri'] . ']</option>';
+                                    }
+                                    // echo '<option value="ALL">ALL</option>';
+                                    echo '</select>';
+                                  } else echo $conn->error;
+                                  if ($result->num_rows == 0) echo 'No Data Found';
+                                  ?>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col">
+                                <button type="submit" class="btn btn-sm respSubmit" data-tag="dir">Submit</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="tab-pane fade" id="gd">
+                        <div class="row m-1 border">
+                          <div class="col-md-4 border">
+                            <div class="row">
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                  <label>Select Group</label>
+                                  <?php
+                                  $sql = "select * from institution where inst_status='0' order by inst_name";
+                                  $result = $conn->query($sql);
+                                  if ($result) {
+                                    echo '<select class="form-control form-control-sm" name="sel_inst" id="sel_inst" required>';
+                                    while ($rows = $result->fetch_assoc()) {
+                                      $select_id = $rows['inst_id'];
+                                      $select_name = $rows['inst_name'];
+                                      echo '<option value="' . $select_id . '">' . $select_name . '[' . $rows['dept_abbri'] . ']</option>';
+                                    }
+                                    // echo '<option value="ALL">ALL</option>';
+                                    echo '</select>';
+                                  } else echo $conn->error;
+                                  if ($result->num_rows == 0) echo 'No Data Found';
+                                  ?>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col">
+                                <button type="submit" class="btn btn-sm respSubmit" data-tag="gd">Submit</button>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="col-3 pr-0">
-                        <div class="form-group">
-                          <label>Scope</label>
-                          <select class="form-control form-control-sm" name="sel_scope" id="sel_scope" required>
-                            <option selected disabled>Select Scope</option>';
-                            <option value="CLS">Class</option>
-                            <option value="PRG">Programme</option>
-                            <option value="DPT">Department</option>
-                            <option value="INT">Institution</option>
-                            <option value="GRP">Group</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="col-3 pl-1 pr-0">
-                        <div class="form-group">
-                          <label>Effective From</label>
-                          <input type="date" class="form-control form-control-sm" id="respFrom" name="respFrom" value="<?php echo $submit_date; ?>">
-                        </div>
-                      </div>
-                      <div class="col-3 pl-1 pr-0">
-                        <div class="form-group">
-                          <label>Effective Till</label>
-                          <input type="date" class="form-control form-control-sm" id="respTo" name="respTo" value="<?php echo $submit_date; ?>">
-                        </div>
-                      </div>
-                      <div class="col-3 pl-1">
-                        <div class="form-group">
-                          <label>Remarks</label>
-                          <input type="text" class="form-control form-control-sm" id="respRemarks" name="respRemarks">
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col">
-                        <input type="hidden" id="staffId" name="staffId">
-                        <button type="submit" class="btn btn-sm respSubmit">Submit</button>
-                      </div>
+                    <div class="col-md-10 mt-1 mb-1">
+                      <p id="responsibilityList"></p>
                     </div>
                   </div>
-                </div>
-                <div class="col-5 mt-1 mb-1">
-                  <p id="responsibilityList"></p>
                 </div>
               </div>
             </div>
@@ -212,7 +315,7 @@ addActivity($conn, $myId, "Academic Setting");
                           <div class="col">
                             <div class="form-group">
                               <input type="radio" class="headName" id="at" name="headName" value="at">
-                              Assess. Technique(at)
+                              Assess. Tool(at)
                             </div>
                           </div>
                           <div class="col">
@@ -320,8 +423,8 @@ addActivity($conn, $myId, "Academic Setting");
                           </div>
                           <div class="col">
                             <div class="form-group">
-                              <input type="radio" class="headName" id="et" name="headName" value="et">
-                              Event Type (et)
+                              <input type="radio" class="headName" id="doc" name="headName" value="doc">
+                              Documents (doc)
                             </div>
                           </div>
                         </div>
@@ -340,7 +443,7 @@ addActivity($conn, $myId, "Academic Setting");
                           </div>
                           <div class="col">
                             <div class="form-group">
-                            <input type="radio" class="headName" id="ect" name="headName" value="ect">
+                              <input type="radio" class="headName" id="ect" name="headName" value="ect">
                               Event Type (ect)
                             </div>
                           </div>
@@ -380,72 +483,41 @@ addActivity($conn, $myId, "Academic Setting");
                   <p id="masterNameList"></p>
                 </div>
               </div>
-            </div>            
+            </div>
             <div class="tab-pane fade" id="astmp" role="tabpanel">
               <div class="row">
-                <div class="col-7 mt-1 mb-1">
+                <div class="col-md-6 mt-1 mb-1">
                   <div class="container card mt-2 myCard">
                     <h5 class="card-title"> Design Assessment Template </h5>
                     <form class="form-horizontal" id="atmpForm">
                       <div class="row mt-2">
-                        <div class="col-3">
+                        <div class="col-md-3 pr-0">
                           <label> Template </label>
                           <p id="selectTemplate"></p>
                         </div>
-                        <div class="col-3">
-                          <div class="form-group">
-                            <label>Method</label>
-                            <?php
-                            $sql = "select * from master_name where mn_code='am' and mn_status='0' order by mn_name";
-                            $result = $conn->query($sql);
-                            echo '<select class="form-control form-control-sm" name="sel_am">';
-                            while ($rowCCE = $result->fetch_assoc()) {
-                              echo '<option value="' . $rowCCE["mn_id"] . '">' . $rowCCE["mn_name"] . '</option>';
-                            }
-                            echo '</select>';
-                            ?>
-                          </div>
-                        </div>
-                        <div class="col-3">
-                          <div class="form-group">
-                            <label>Tool</label>
-                            <?php
-                            $sql = "select * from master_name where mn_code='at' and mn_status='0' order by mn_name";
-                            $result = $conn->query($sql);
-                            echo '<select class="form-control form-control-sm" name="sel_at">';
-                            while ($rowCCE = $result->fetch_assoc()) {
-                              echo '<option value="' . $rowCCE["mn_id"] . '">' . $rowCCE["mn_name"] . '</option>';
-                            }
-                            echo '</select>';
-                            ?>
-                          </div>
-                        </div>
-
-                        <div class="col-3">
+                        <div class="col-md-2 pl-1 pr-0">
                           <div class="form-group">
                             <label> Weightage</label>
                             <input class="form-control form-control-sm" id="weightage" name="weightage" required>
                           </div>
                         </div>
-                      </div>
-                      <div class="row">
-                        <div class="col">
-                          <input type="radio" id="cie" checked name="internal" value="CIE"> CIE(Internal)
-                          <input type="radio" id="see" name="internal" value="SEE"> SEE(External)
+                        <div class="col-md-5 pl-1 pr-0">
+                          <div class="form-group">
+                            <label> Assessment Component </label><br>
+                            <input type="radio" id="cie" checked name="internal" value="1"> CIE(Internal)
+                            <input type="radio" id="see" name="internal" value="0"> SEE(External)
+                          </div>
                         </div>
-
-                        <div class="col">
-                          <input type="hidden" id="actionTmp" name="action" value="addTemplate">
+                        <div class="col-md-2 pl-1">
+                          <input type="hidden" id="actionTmp" name="action" value="addTemplate"><br>
                           <button type="submit" class="btn btn-sm atmp">Submit</button>
                         </div>
                       </div>
                     </form>
                   </div>
-                  <p id="atmpList"></p>
                 </div>
-                <div class="col-4 mt-1 mb-1" role="tabpanel">
-                  <p id="tabList"></p>
-                </div>
+              </div>
+              <p id="atmpList"></p>
               </div>
             </div>
           </div>
@@ -463,8 +535,22 @@ addActivity($conn, $myId, "Academic Setting");
     batchList();
     masterNameList();
     selectTemplate();
+    atmpList();
     selectList("sch");
     batchSession(<?php echo $myBatch; ?>)
+
+    function selectList(tag) {
+      // $.alert("Select " + tag);
+      $.post("aaSql.php", {
+        tag: tag,
+        action: "selectList"
+      }, function() {}, "text").done(function(data, status) {
+        //$.alert(data);
+        $(".selectList").html(data);
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+    }
     //Auto Search Block
     $('#staffSearch').keyup(function() {
       var searchString = $(this).val();
@@ -496,9 +582,16 @@ addActivity($conn, $myId, "Academic Setting");
       $('#staffAutoList').fadeOut();
     });
 
-    // Left Panel Block
-    $(document).on('click', '.bs', function() {
-      batchList();
+    // Update Master Data
+    $(document).on('click', '.updateMasterData', function(event) {
+      $.alert("Updating Master Data ");
+      $.post("aaSql.php", {
+        action: "updateMasterData",
+      }, () => {}, "text").done(function(data, status) {
+        $.alert(data);
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
     });
 
     $(document).on('change', '#sel_resp', function(event) {
@@ -509,56 +602,9 @@ addActivity($conn, $myId, "Academic Setting");
         action: "respList"
       }, function() {}, "text").done(function(data, status) {
         // respNameList();
-        selectList(mn_id);
+        // selectList(mn_id);
         respList()
         //$.alert("List " + data);
-      }).fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
-    $(document).on('click', '.respName', function(event) {
-      var respName = $("input[name='respName']:checked").val();
-      $(".selectLabel").text(respName);
-      //$.alert(" Pressed" + respName);
-
-      $.post("aaSql.php", {
-        respName: respName,
-        action: "respList"
-      }, function() {}, "text").done(function(data, status) {
-        // respNameList();
-        selectList(respName);
-        respList()
-        //$.alert("List " + data);
-      }).fail(function() {
-        $.alert("fail in place of error");
-      })
-    });
-
-    $(document).on('click', '.respSubmit', function(event) {
-      var mn_id = $("#sel_resp").val();
-      var staffId = $("#staffId").val();
-      var selectId = $("#selectId").val();
-      var sel_scope = $("#sel_scope").val();
-      var respRemarks = $("#respRemarks").val();
-      var respFrom = $("#respFrom").val();
-      var respTo = $("#respTo").val();
-      var respOrder = $("#respOrder").val();
-      // $.alert(" Staff " + staffId + " SelId " + selectId);
-      $.post("aaSql.php", {
-        selectId: selectId,
-        sel_scope: sel_scope,
-        mn_id: mn_id,
-        respFrom: respFrom,
-        respTo: respTo,
-        respOrder: respOrder,
-        respRemarks: respRemarks,
-        staffId: staffId,
-        action: "respName"
-      }, function(data, status) {}, "text").done(function(data) {
-        // $.alert("List " + data);
-        respList()
-
       }).fail(function() {
         $.alert("fail in place of error");
       })
@@ -577,6 +623,62 @@ addActivity($conn, $myId, "Academic Setting");
         $.alert("Error !!");
       })
     }
+
+    $(document).on('click', '.respSubmit', function(event) {
+      var action = $(this).attr("data-tag");
+      if (action == "hod") var mn_id = $("#sel_dept").val();
+      else if (action == "dir") var mn_id = $("#sel_school").val();
+      else if (action == "gd") var mn_id = $("#sel_inst").val();
+      else var mn_id = $("#sel_resp").val();
+      var staffId = $("#staffId").val();
+      var respRemarks = $("#respRemarks").val();
+      var respFrom = $("#respFrom").val();
+      var respTo = $("#respTo").val();
+      var respOrder = $("#respOrder").val();
+      // $.alert(" Staff " + staffId + " action " + action);
+      $.post("aaSql.php", {
+        mn_id: mn_id,
+        respFrom: respFrom,
+        respTo: respTo,
+        respOrder: respOrder,
+        respRemarks: respRemarks,
+        staffId: staffId,
+        action: action
+      }, "text").done(function(data) {
+        // $.alert("List " + data);
+        if (action == "respName") respList()
+        else headList(mn_id, action)
+      }).fail(function() {
+        $.alert("fail in place of error");
+      })
+    });
+
+    $(document).on('change', '#sel_dept', function(event) {
+      var unit_id = $("#sel_dept").val();
+      // $.alert(" Resp " + unit_id);
+      headList(unit_id, "hod")
+    });
+
+    $(document).on('change', '#sel_school', function(event) {
+      var unit_id = $("#sel_school").val();
+      // $.alert(" Schhol " + unit_id);
+      headList(unit_id, "dir")
+    });
+
+    function headList(unit_id, head) {
+      // $.alert(" Pressed" + mn_id);
+      $.post("aaSql.php", {
+        unit_id: unit_id,
+        head: head,
+        action: "headList"
+      }, function() {}, "text").done(function(data, status) {
+        $("#responsibilityList").html(data);
+        //$.alert("Updated");
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+    }
+
     $(document).on('click', '.headName', function(event) {
       var headName = $("input[name='headName']:checked").val();
       // $.alert(" Pressed" + headName);
@@ -640,7 +742,7 @@ addActivity($conn, $myId, "Academic Setting");
       // $.alert("Process Id " + id);
       $.post("aaSql.php", {
         mn_id: id,
-        tag : tag,
+        tag: tag,
         action: "mnUpdate"
       }, function() {}, "text").done(function(data) {
         $.alert("Updated !");
@@ -654,9 +756,9 @@ addActivity($conn, $myId, "Academic Setting");
     $(document).on('submit', '#atmpForm', function(event) {
       event.preventDefault(this);
       var formData = $(this).serialize();
-      //$.alert(formData);
+      // $.alert(formData);
       $.post("aaSql.php", formData, () => {}, "text").done(function(data, status) {
-        //$.alert("List Updtaed" + data);
+        // $.alert("List Updtaed" + data);
         atmpList();
         selectTemplate();
       })
@@ -673,6 +775,7 @@ addActivity($conn, $myId, "Academic Setting");
         $.alert("Error !!");
       })
     }
+
     function masterNameList() {
       var headName = $("input[name='headName']:checked").val();
       //$.alert("Master Name " + headName);
@@ -709,7 +812,7 @@ addActivity($conn, $myId, "Academic Setting");
           error = "YES";
           error_msg = "Batch is empty";
         }
-      } 
+      }
       if (error == "NO") {
         var formData = $(this).serialize();
         $('#firstModal').modal('hide');
@@ -828,19 +931,6 @@ addActivity($conn, $myId, "Academic Setting");
       }, function() {}, "text").done(function(data, status) {
         //$.alert(data);
         $("#selectTemplate").html(data);
-      }).fail(function() {
-        $.alert("Error !!");
-      })
-    }
-
-    function selectList(tag) {
-      // $.alert( "Select " + tag);
-      $.post("aaSql.php", {
-        tag: tag,
-        action: "selectList"
-      }, function() {}, "text").done(function(data, status) {
-        //$.alert(data);
-        $(".selectList").html(data);
       }).fail(function() {
         $.alert("Error !!");
       })

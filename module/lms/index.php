@@ -12,6 +12,11 @@ require('../requireSubModule.php');
 <body>
   <?php 
   require("../topBar.php"); 
+  if($myId>3){
+    if (!isset($_GET['tag'])) die("Illegal Attempt !! The token is Missing");
+    elseif (!in_array($_GET['tag'], $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+    elseif (!in_array("40", $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+  }
   ?>
   <div class="container-fluid moduleBody">
     <div class="row">

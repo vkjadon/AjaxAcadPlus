@@ -1,7 +1,7 @@
 <?php
 require('../requireSubModule.php');
 $phpFile = "feeSql.php";
-addActivity($conn, $myId, "FEE");
+addActivity($conn, $myId, "FEE", $submit_ts);
 
 ?>
 <!DOCTYPE html>
@@ -13,8 +13,14 @@ addActivity($conn, $myId, "FEE");
 </head>
 
 <body>
-  <?php require("../topBar.php"); ?>
-  <div class="container-fluid moduleBody">
+<?php require("../topBar.php"); 
+	if($myId>3){
+    if (!isset($_GET['tag'])) die("Illegal Attempt !! The token is Missing");
+    elseif (!in_array($_GET['tag'], $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+    elseif (!in_array("3", $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+  }
+	?>
+    <div class="container-fluid moduleBody">
     <div class="row">
       <div class="col-1 p-0 m-0 full-height">
         <div class="mt-3 pl-1">

@@ -1,7 +1,30 @@
 <?php
 require('../requireSubModule.php');
 $phpFile = "feeReceiptSql.php";
-addActivity($conn, $myId, "Fee Receipt");
+addActivity($conn, $myId, "Fee Receipt", $submit_ts);
+$instituteName = getField($conn, "1", "institution", "inst_id", "inst_name");
+$instituteAddress = getField($conn, "1", "institution", "inst_id", "inst_address");
+$instituteAddress = getField($conn, "1", "institution", "inst_id", "inst_address");
+$instituteCity = getField($conn, "1", "institution", "inst_id", "inst_city");
+$institutePincode = getField($conn, "1", "institution", "inst_id", "inst_pincode");
+$institutePhone1 = getField($conn, "1", "institution", "inst_id", "inst_phone_1");
+$institutePhone2 = getField($conn, "1", "institution", "inst_id", "inst_phone_2");
+
+// Block added on June 19, 2022 - To be deleted 
+// This updated the school_id in Fee Receipts 
+
+// $sql = "select fr_id, student_id from fee_receipt";
+// $result = $conn->query($sql);
+// while ($rowsFee = $result->fetch_assoc()) {
+//   $fr_id = $rowsFee["fr_id"];
+//   $program_id = getField($conn, $rowsFee["student_id"], "student", "student_id", "program_id");
+//   $dept_id = getField($conn, $program_id, "dept_program", "program_id", "dept_id");
+//   if (isset($dept_id)) $school_id = getField($conn, $dept_id, "school_dept", "dept_id", "school_id");
+//   else $school_id = "";
+//   $sql_update = "update fee_receipt set school_id='$school_id' where fr_id='$fr_id'";
+//   $conn->query($sql_update);
+// }
+// Block Ended June, 19, 2022
 
 ?>
 <!DOCTYPE html>
@@ -13,19 +36,22 @@ addActivity($conn, $myId, "Fee Receipt");
 </head>
 
 <body>
-  <?php require("../topBar.php"); ?>
+  <?php require("../topBar.php");
+  if ($myId > 3) {
+    if (!isset($_GET['tag'])) die("Illegal Attempt !! The token is Missing");
+    elseif (!in_array($_GET['tag'], $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+    elseif (!in_array("5", $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+  }
+  ?>
   <div class="container-fluid moduleBody">
     <div class="row">
       <div class="col-1 p-0 m-0 full-height">
         <div class="mt-3">
           <h5 class=" text-center pr-2"> Receipt </h5>
         </div>
-        <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-          <a class="list-group-item list-group-item-action fr" id="list-fr-list" data-toggle="list" href="#list-fr" role="tab" aria-controls="fr"> Fee Receipt</a>
+        <div class="list-group list-group-mine active mt-2" id="list-tab" role="tablist">
+          <a class="list-group-item list-group-item-action active fr" id="list-fr-list" data-toggle="list" href="#list-fr" role="tab" aria-controls="fr"> Fee Receipt</a>
           <a class="list-group-item list-group-item-action trans" id="list-trans-list" data-toggle="list" href="#list-trans" role="tab" aria-controls="trans"> Transactions </a>
-          <a class="list-group-item list-group-item-action feeConcession" id="list-feeConcession-list" data-toggle="list" href="#feeConcession" role="tab" aria-controls="trans"> Dues/Concession</a>
-          <a class="list-group-item list-group-item-action reverse" data-toggle="list" href="#reverse" role="tab" aria-controls="trans"> Reverse Entry</a>
-          <a class="list-group-item list-group-item-action rer" data-toggle="list" href="#rer" role="tab" aria-controls="trans"> Reverse Entry Reports</a>
         </div>
       </div>
       <div class="col-11 leftLinkBody">
@@ -34,6 +60,35 @@ addActivity($conn, $myId, "Fee Receipt");
             <div class="col-md-2 pr-0">
               <div class="card border-info">
                 <div class="card-body text-primary">
+                  <div class="row">
+                    <div class="col-12 pl-0 pr-0">
+                      <select class="form-control form-control-sm" id="sel_school" name="sel_school">
+                        <option value="0">Select School/Institution</option>
+                        <?php
+                        $sql = "select * from school s where school_status='0' order by school_abbri";
+                        $result = $conn->query($sql);
+                        while ($rows = $result->fetch_assoc()) {
+                          echo '<option value="' . $rows["school_id"] . '">' . $rows["school_abbri"] . '-' . $rows["school_name"] . '</option>';
+                        }
+                        ?>
+                        <option value="ALL">ALL</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2 pl-1 pr-0">
+              <div class="card border-info">
+                <div class="card-body pl-1 pr-1">
+                  <input name="studentNameSearch" id="studentNameSearch" class="form-control form-control-sm" type="text" placeholder="Search Student" aria-label="Search">
+                  <div class='list-group' id="studentAutoList"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-2 pl-1 pr-0">
+              <div class="card border-info">
+                <div class="card-body pl-1 pr-1">
                   <div class="row">
                     <div class="col-9 pr-0">
                       <input name="studentSearch" id="studentSearch" class="form-control form-control-sm" type="text" placeholder="Search User" aria-label="Search">
@@ -47,15 +102,7 @@ addActivity($conn, $myId, "Fee Receipt");
             </div>
             <div class="col-md-2 pl-1 pr-0">
               <div class="card border-info">
-                <div class="card-body text-primary">
-                  <input name="studentNameSearch" id="studentNameSearch" class="form-control form-control-sm" type="text" placeholder="Search Student" aria-label="Search">
-                  <div class='list-group' id="studentAutoList"></div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-2 pl-1 pr-0">
-              <div class="card border-info">
-                <div class="card-body text-primary">
+                <div class="card-body pl-1 pr-1">
                   <div class="row">
                     <div class="col-9 pr-0">
                       <input type="text" class="form-control form-control-sm" id="frId" name="frId" placeholder="Fee Receipt Number" aria-label="frId">
@@ -69,60 +116,51 @@ addActivity($conn, $myId, "Fee Receipt");
             </div>
             <div class="col-md-2 pl-1 pr-0">
               <div class="card border-info">
-                <div class="card-body text-primary">
+                <div class="card-body text-primary pl-1 pr-1">
                   <input type="date" class="form-control form-control-sm" id="fr_from" name="fr_from" value="<?php echo $submit_date; ?>" title="From Date">
                 </div>
               </div>
             </div>
             <div class="col-md-2 pl-1">
               <div class="card border-info">
-                <div class="card-body text-primary">
+                <div class="card-body text-primary pl-1 pr-1">
                   <input type="date" class="form-control form-control-sm" id="fr_to" name="fr_to" value="<?php echo $submit_date; ?>" title="To Date">
                 </div>
               </div>
             </div>
           </div>
           <div class="row mt-1">
-            <div class="col-md-10 student_detail">
-              <div class="container card myCard border-info">
+            <div class="col-md-12 student_detail">
+              <div class="card myCard border-info">
                 <div class="row p-1">
-                  <div class="col-2 m-0 p-0 studentImage">
+                  <div class="col-2 studentImage">
                     <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="30%">
                   </div>
                   <div class="col-10 smallerText">
                     <div class="row mt-1 p-0">
-                      <div class="col-3 m-0 p-0">
-                        <span class="student_name">Not Found</span>
-                      </div>
+                      <div class="col-3 m-0 p-0 student_name">Not Found</div>
+                      <div class="col-3 p-0"> RNo : <span class="student_rollno">--</span></div>
+                      <div class="col-3 p-0 ">Id : <span class="student_id">--</span></div>
+                      <div class="col-3 p-0 user_id">UID : <span class="user_id">--</span></div>
+                    </div>
+                    <div class="row p-0">
                       <div class="col-3 p-0 student_fname">--</div>
-                      <div class="col-3 p-0 student_rollno">--</div>
-                      <div class="col-3 p-0 student_id">--</div>
+                      <div class="col-3 p-0">Adm : <span class="student_batch">--</span></div>
+                      <div class="col-3 p-0">Acad: <span class="student_ay">--</span></div>
+                      <div class="col-3 p-0 ">FeeCat: <span class="student_fcg">--</span></div>
                     </div>
                     <div class="row p-0">
                       <div class="col-3 p-0 student_program">--</div>
-                      <div class="col-3 p-0 student_fcg">--</div>
-                      <div class="col-3 p-0">
-                        Adm : <span class="student_batch">--</span>
-                      </div>
-                      <div class="col-3 p-0">
-                        Acad: <span class="student_ay">--</span>
-                      </div>
-                    </div>
-                    <div class="row p-0">
-                      <div class="col-3 p-0 current_class">--</div>
                       <div class="col-3 p-0 current_semester">--</div>
-                      <div class="col-3 p-0 current_group">--</div>
-                      <div class="col-3 p-0">
-                        <span class="student_mobile">--</span>
-                        <i class="fa fa-phone"></i>
-                      </div>
+                      <div class="col-3 p-0 current_class">--</div>
+                      <div class="col-3 p-0"><span class="student_mobile">--</span><i class="fa fa-phone"></i></div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="tab-pane fade" id="list-fr" role="tabpanel" aria-labelledby="list-fr-list">
+          <div class="tab-pane show active" id="list-fr" role="tabpanel" aria-labelledby="list-fr-list">
             <div class="row">
               <div class="col-12">
                 <div class="card mt-2 p-3 myCard">
@@ -291,9 +329,21 @@ addActivity($conn, $myId, "Fee Receipt");
                                 <div class="row m-3">
                                   <div class="col-1 p-2"><img src="<?php echo $setLogo; ?>" width="70%"></div>
                                   <div class="col-10">
-                                    <span class="xxlText"> Aryans Group of Colleges </span>
-                                    <p class="largeText">Vill. Nepra/Thuha, Chandigarh - Patiala Highway, Tehsil Rajpura, District Patiala, Pincode 140 401</p>
-                                    <span class="largeText">www.aryans.edu.in | +91 9876 29 9888</span>
+                                    <span class="xxlText"><?php echo $instituteName; ?> </span>
+                                    <p class="largeText"><?php echo $instituteAddress; ?>, <?php echo $instituteCity; ?> [<?php echo $institutePincode; ?>] </p>
+                                    <p class="largeText"><?php echo $setUrl; ?> | <?php echo $institutePhone1; ?>, <?php echo $institutePhone2; ?> </p>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td colspan="3">
+                                <div class="row">
+                                  <div class="col-md-6">
+                                    <span class="footNote">Institute </span> : <span class="footNote schoolName"></span>
+                                  </div>
+                                  <div class="col-md-6 text-right">
+                                    <span class="footNote">Department </span> : <span class="footNote deptName"></span>
                                   </div>
                                 </div>
                               </td>
@@ -450,150 +500,6 @@ addActivity($conn, $myId, "Fee Receipt");
 
             </div>
           </div>
-          <div class="tab-pane fade" id="feeConcession" role="tabpanel" aria-labelledby="feeConcession">
-            <div class="row">
-              <div class="col-8 pr-0">
-                <div class="container card mt-2 myCard">
-                  <div class="row">
-                    <div class="col-12">
-                      <div class="row">
-                        <div class="col-2 pr-0">
-                          <div class="form-group">
-                            <label>Type</label>
-                            <p id="feeTypeConcession"></p>
-                          </div>
-                        </div>
-                        <div class="col-1 pl-1 pr-0">
-                          <div class="form-group">
-                            <label>Sem</label>
-                            <input type="number" class="form-control form-control-sm" id="semesterConcession" min="1" name="semester" placeholder="Semester" value="1">
-                          </div>
-                        </div>
-                        <div class="col-2 pl-1 pr-0">
-                          <div class="form-group">
-                            <label>Dues</label>
-                            <input type="number" class="form-control form-control-sm" id="feeAmountConcession" name="feeAmount" min="0" placeholder="Fee Dues" value="0">
-                          </div>
-                        </div>
-                        <div class="col-2 pl-1 pr-0">
-                          <div class="form-group">
-                            <label>Concsn</label>
-                            <input type="number" class="form-control form-control-sm" id="fcAmount" name="fcAmount" min="0" placeholder="Concession" value="0">
-                          </div>
-                        </div>
-                        <div class="col-3 pl-1 pr-0">
-                          <div class="form-group">
-                            <label>Remarks</label>
-                            <input type="text" class="form-control form-control-sm" id="fdRemarks" name="fdRemarks" placeholder="Remarks">
-                          </div>
-                        </div>
-                        <div class="col-2 pl-1 pr-1">
-                          <button class="btn btn-sm mt-4" id="proposeFeeConcession">Update</button>
-                        </div>
-                      </div>
-                      <table class="table table-bordered table-striped list-table-xs mt-3" id="feeConcessionList">
-                        <th class="text-center">Fee Type</th>
-                        <th class="text-center">Semester</th>
-                        <th class="text-center">Fee Dues</th>
-                        <th class="text-center">Concession</th>
-                        <th class="text-center">Remarks</th>
-                        <th class="text-center">StaffId</th>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-4 pl-1">
-                <div class="container card mt-2 myCard">
-                  <div class="row">
-                    <div class="col-12 mt-2">
-                      <h5 class="text-center">Fee Structure</h5>
-                      <table class="table table-bordered table-striped list-table-xs mt-3" id="feeStructureList">
-                        <th>Fee Type</th>
-                        <th>Amount</th>
-                      </table>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="tab-pane fade" id="reverse" role="tabpanel" aria-labelledby="reverse">
-            <div class="row">
-              <div class="col-10">
-                <div class="container card mt-2 myCard">
-                  <div class="row">
-                    <div class="col-12">
-                      <div class="row">
-                        <div class="col-3 pr-1">
-                          <div class="form-group">
-                            <label>Receipt No</label>
-                            <p id="frIdReverse"></p>
-                          </div>
-                        </div>
-                        <div class="col-3 pr-1 pl-1">
-                          <div class="form-group">
-                            <label>Student ID</label>
-                            <p id="receiptUserIdReverse"></p>
-                          </div>
-                        </div>
-                        <div class="col-3 pr-1">
-                          <div class="form-group">
-                            <label>Amount</label>
-                            <p id="receiptAmountReverse"></p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-12">
-                          <div class="form-group">
-                            <label>Reverse Description</label>
-                            <textarea class="form-control form-control-sm" id="fre_desc" name="fre_desc" rows="3" data-tag="fre_desc"></textarea>
-                          </div>
-                        </div>
-                      </div>
-                      <button class="btn btn-sm" id="reverseSubmit">Reverse Transaction</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="tab-pane fade" id="rer" role="tabpanel" aria-labelledby="list-rer-list">
-            <div class="row">
-              <div class="col-10 pr-0">
-                <div class="container card mt-2 myCard" id="print" style="overflow: scroll;">
-                  <div class="row">
-                    <div class="col-md-3 mt-4">
-                      <div class="form-group">
-                        <button class="btn btn-sm btn-block" id="rerShow">Show Reverse Entries</button>
-                      </div>
-                    </div>
-                    <div class="col-md-9 mt-5 text-right">
-                      <a class="fas fa-file-export" id="rerExport"></a>
-                    </div>
-                  </div>
-                  <table class="table table-bordered table-striped list-table-xs mt-3" id="rerList">
-                    <th class="text-center">SNo</th>
-                    <th class="text-center">Receipt Date</th>
-                    <th class="text-center">Reverse Date</th>
-                    <th class="text-center">Receipt ID</th>
-                    <th class="text-center">Student</th>
-                    <th class="text-center">StudentId</th>
-                    <th class="text-center">Fee Type</th>
-                    <th class="text-center">Amount</th>
-                    <th class="text-center">Receipt By</th>
-                    <th class="text-center">Description</th>
-                  </table>
-                </div>
-              </div>
-              <div class="col-md-2 pl-1">
-                <div class="container card mt-2 myCard">
-                </div>
-              </div>
-
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -612,39 +518,63 @@ addActivity($conn, $myId, "Fee Receipt");
     transactionMode();
     transactionFeeType();
 
-    $('#studentNameSearch').keyup(function() {
+    $(document).on('keyup', '#studentNameSearch', function() {
       var query = $(this).val();
-      // alert(query);
-      if (query != '') {
-        $.ajax({
-          url: "feeReceiptSql.php",
-          method: "POST",
-          data: {
-            query: query
-          },
-          success: function(data) {
-            $('#studentAutoList').fadeIn();
-            $('#studentAutoList').html(data);
-          }
-        });
-      } else {
+      var sel_school = $("#sel_school").val();
+      if (sel_school == "0") {
+        $.alert("Please Select an Institution");
         $('#studentAutoList').fadeOut();
         $('#studentAutoList').html("");
+      } else {
+        // alert(query);
+        if (query != '') {
+          $.ajax({
+            url: "feeReceiptSql.php",
+            method: "POST",
+            data: {
+              sel_school: sel_school,
+              query: query
+            },
+            success: function(data) {
+              $('#studentAutoList').fadeIn();
+              $('#studentAutoList').html(data);
+            }
+          });
+        } else {
+          $('#studentAutoList').fadeOut();
+          $('#studentAutoList').html("");
+        }
       }
     })
 
+    $(document).on('click', '.autoList', function() {
+      $('#studentNameSearch').val($(this).text());
+      var id = $(this).attr("data-std");
+      $('#studentAutoList').fadeOut();
+      // $.alert("Student Id " + id);
+      displayStudentData("student_id", id)
+    })
+
     $(document).on('click', '#searchStudent', function(event) {
-      var data = $("#studentSearch").val();
-      // $.alert(data);
+      var id = $("#studentSearch").val();
+      // $.alert("User Id" + data);
+      displayStudentData("user_id", id)
+    })
+
+    function displayStudentData(field_tag, id) {
+      // $.alert(field_tag + " ID " + id);
       $.post("feeReceiptSql.php", {
+        field_tag: field_tag,
+        id: id,
         action: "fetchStudent",
-        userId: data,
       }, () => {}, "json").done(function(data) {
+        // $.alert(data)
         // console.log(data)
         $(".student_id").text(data.student_id);
         $(".student_name").text(data.student_name);
         $(".student_fname").text(data.student_fname);
         $(".student_rollno").text(data.student_rollno);
+        $(".user_id").text(data.user_id);
         $(".student_mobile").text(data.student_mobile);
         $(".student_batch").text(data.batch);
         $(".student_ay").text(data.ay);
@@ -661,47 +591,15 @@ addActivity($conn, $myId, "Fee Receipt");
         feeConcessionList();
         feeReceiptList();
         feeDebitList();
-        feeStructure();
-        feeRecordList();
-        // $.alert(data);
-      }, "text").fail(function() {
+        $("#studentSearch").val(data.user_id)
+
+      }).fail(function() {
         $.alert("fail in place of error");
       })
-    })
+    }
 
     $(document).on('click', '.feeRecord', function(event) {
       feeBalance();
-    })
-
-    $(document).on('click', '.autoList', function() {
-      $('#studentNameSearch').val($(this).text());
-      var stdId = $(this).attr("data-std");
-      $('#studentAutoList').fadeOut();
-      $.alert(stdId);
-      $.post("feeReceiptSql.php", {
-        userId: stdId,
-        action: "fetchStudentAutoList"
-      }, () => {}, "json").done(function(data) {
-        // $.alert(data)
-        $(".student_id").text(data.student_id);
-        $(".student_name").text(data.student_name);
-        $(".student_rollno").text(data.student_rollno);
-        $(".student_mobile").text(data.student_mobile);
-        $(".student_batch").text(data.batch);
-        $(".student_program").text(data.program_name);
-        $("#studentIdHidden").val(data.student_id);
-        if (data.student_gender == 'F') $("#receiptSonDaughter").text(" d/o ");
-        else $("#receiptSonDaughter").text(" s/o ");
-        $("#receiptFatherName").text(data.student_fname);
-        $("#receiptName").text(data.student_name);
-
-        $("#studentSearch").val(data.user_id)
-        feeConcessionList();
-        feeReceiptList();
-        feeDebitList();
-      }, "text").fail(function() {
-        $.alert("fail in place of error");
-      })
     })
 
     $(document).on("click", "#showTransaction", function() {
@@ -709,49 +607,54 @@ addActivity($conn, $myId, "Fee Receipt");
       var dateTo = $("#fr_to").val();
       var mode = $("#sel_tm").val();
       var ft = $("#sel_tft").val();
-      // $.alert("From " + dateFrom + "To " + dateTo + " Mode " + mode + " FT " + ft);
-      $.post("<?php echo $phpFile; ?>", {
-        dateFrom: dateFrom,
-        dateTo: dateTo,
-        mode: mode,
-        ft: ft,
-        action: "transactionList"
-      }, function() {}, "json").done(function(data, status) {
-        // $.alert(data);
-        // console.log(data);
-        var card = '';
-        var count = 1;
-        var total = 0;
-        $.each(data, function(key, value) {
-          card += '<tr>';
-          card += '<td class="text-center">' + count++ + '</td>';
-          card += '<td>' + getFormattedDate(value.fr_date, "dmY") + '</td>';
-          card += '<td class="text-center">' + value.fr_id + '</td>';
-          card += '<td>' + value.student_name + '</td>';
-          card += '<td>' + value.user_id + '</td>';
-          card += '<td>' + value.sp_abbri + '</td>';
-          card += '<td class="text-center">' + value.fee_type + '</td>';
-          card += '<td class="text-center">' + value.fee_mode + '</td>';
-          card += '<td class="text-center">' + value.fee_bank + '</td>';
+      var school_id = $("#sel_school").val();
+      if (school_id == "0") $.alert("Please Select an Institution");
+      else {
+        $.alert("From " + dateFrom + "To " + dateTo + " Mode " + mode + " FT " + ft);
+        $.post("<?php echo $phpFile; ?>", {
+          dateFrom: dateFrom,
+          dateTo: dateTo,
+          mode: mode,
+          ft: ft,
+          school_id: school_id,
+          action: "transactionList"
+        }, function() {}, "json").done(function(data, status) {
+          // $.alert(data);
+          // console.log(data);
+          var card = '';
+          var count = 1;
+          var total = 0;
+          $.each(data, function(key, value) {
+            card += '<tr>';
+            card += '<td class="text-center">' + count++ + '</td>';
+            card += '<td>' + getFormattedDate(value.fr_date, "dmY") + '</td>';
+            card += '<td class="text-center">' + value.fr_id + '</td>';
+            card += '<td>' + value.student_name + '</td>';
+            card += '<td>' + value.user_id + '</td>';
+            card += '<td>' + value.sp_abbri + '</td>';
+            card += '<td class="text-center">' + value.fee_type + '</td>';
+            card += '<td class="text-center">' + value.fee_mode + '</td>';
+            card += '<td class="text-center">' + value.fee_bank + '</td>';
 
-          card += '<td class="text-center">' + value.fr_amount + '</td>';
-          if (value.transaction_id == null) card += '<td class="text-center">--</td>';
-          else card += '<td class="text-center">' + value.transaction_id + '</td>';
-          card += '<td class="text-center">' + value.transaction_date + '</td>';
-          card += '<td class="text-center">' + value.staff_id + '</td>';
-          card += '</tr>';
-          total = total + parseInt(value.fr_amount)
-        });
+            card += '<td class="text-center">' + value.fr_amount + '</td>';
+            if (value.transaction_id == null) card += '<td class="text-center">--</td>';
+            else card += '<td class="text-center">' + value.transaction_id + '</td>';
+            card += '<td class="text-center">' + value.transaction_date + '</td>';
+            card += '<td class="text-center">' + value.staff_id + '</td>';
+            card += '</tr>';
+            total = total + parseInt(value.fr_amount)
+          });
 
-        $("#transactionList").find("tr:gt(0)").remove();
-        totalText = '<span class="text-center"> Total ' + total + '</span>';
-        $("#transactionList").append(card);
-        $("#totalAmount").html(totalText);
-        transactionHead();
+          $("#transactionList").find("tr:gt(0)").remove();
+          totalText = '<span class="text-center"> Total ' + total + '</span>';
+          $("#transactionList").append(card);
+          $("#totalAmount").html(totalText);
+          transactionHead();
 
-      }).fail(function() {
-        $.alert("Error !!");
-      })
+        }).fail(function() {
+          $.alert("Error !!");
+        })
+      }
     })
 
     function transactionHead() {
@@ -928,10 +831,7 @@ addActivity($conn, $myId, "Fee Receipt");
             },
           }
         });
-
-
         // $.alert(feeAmount);
-
       } else $.alert("Student not Selected !!");
     })
 
@@ -1051,7 +951,7 @@ addActivity($conn, $myId, "Fee Receipt");
           card += '<td class="text-center">' + value.user_id + '</td>';
           card += '</tr>';
         });
-        card+='<tr><td colspan="6"></td><td>'+totalDebit+'</td><td>'+totalCredit+'</td><td>'+netBalance+'</td></tr>'
+        card += '<tr><td colspan="6"></td><td>' + totalDebit + '</td><td>' + totalCredit + '</td><td>' + netBalance + '</td></tr>'
         $("#feeRecordList").find("tr:gt(0)").remove();
         $("#feeRecordList").append(card);
         // $("#totalCredit").val(totalCredit);
@@ -1159,6 +1059,8 @@ addActivity($conn, $myId, "Fee Receipt");
         // $.alert(data.fr_id);
         // console.log(data)
         $('#receiptNumber').html(data.fr_id)
+        $('.schoolName').html(data.school_name)
+        $('.deptName').html(data.dept_name)
         if (data.fr_sno == null) $('#frSno').html("----")
         else $('#frSno').html(data.fr_sno)
         $("#receiptDate").html(getFormattedDate(data.fr_date, "dmY"));
@@ -1342,14 +1244,12 @@ addActivity($conn, $myId, "Fee Receipt");
     window.print();
     document.body.innerHTML = backup;
   }
+
   document.getElementById('export').onclick = function() {
     var tableId = document.getElementById('transactionList').id;
     htmlTableToExcel(tableId, filename = '');
   }
-  document.getElementById('rerExport').onclick = function() {
-    var tableId = document.getElementById('rerList').id;
-    htmlTableToExcel(tableId, filename = '');
-  }
+
   document.getElementById('frExport').onclick = function() {
     var tableId = document.getElementById('feeRecordList').id;
     htmlTableToExcel(tableId, filename = '');
@@ -1377,4 +1277,5 @@ addActivity($conn, $myId, "Fee Receipt");
     }
   }
 </script>
+
 </html>

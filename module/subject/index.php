@@ -1,6 +1,6 @@
 <?php
 require('../requireSubModule.php');
-addActivity($conn, $myId, "Subjects");
+addActivity($conn, $myId, "Subjects", $submit_ts);
 
 ?>
 <!DOCTYPE html>
@@ -12,7 +12,13 @@ addActivity($conn, $myId, "Subjects");
 </head>
 
 <body>
-  <?php require("../topBar.php"); ?>
+  <?php require("../topBar.php"); 
+  if($myId>3){
+    if (!isset($_GET['tag'])) die("Illegal Attempt !! The token is Missing");
+    elseif (!in_array($_GET['tag'], $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+    elseif (!in_array("9", $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+  }
+  ?>
   <div class="content">
 
     <div class="container-fluid moduleBody">
@@ -27,25 +33,29 @@ addActivity($conn, $myId, "Subjects");
             <a class="list-group-item list-group-item-action subReport" id="list-subReport-list" data-toggle="list" href="#list-subReport" role="tab" aria-controls="subReport"> Subject Report </a>
           </div>
           <div class="mr-2">
-            <?php require("../searchBar.php"); ?>
+            <?php //require("../searchBar.php"); 
+            ?>
           </div>
         </div>
         <div class="col-11 leftLinkBody">
           <div class="tab-content" id="nav-tabContent">
+            <?php require("../setDefaultModule.php"); ?>
             <div class="tab-pane fade show active" id="list-sub" role="tabpanel" aria-labelledby="list-sub-list">
-              <div class="row">
+              <div class="row mt-2">
                 <div class="col-sm-7">
-                  <div class="mt-1 mb-1">
-                    <h3>
-                      <a class="fa fa-plus-circle p-0 addSubject"></a>
-                      <a class="fa fa-arrow-circle-up p-0 uploadSubject"></a>
-                      <a class="fa fa-copy p-0 copySubject"></a>
-                      Subjects
-                    </h3>
+                  <div class="row">
+                    <div class="col-md-2">
+                      <span class="largeText">Subjects </span>
+                    </div>
+                    <div class="col-md-3">
+                      <h4>
+                        <a class="fa fa-plus-circle p-0 addSubject"></a>
+                        <a class="fa fa-arrow-circle-up p-0 uploadSubject"></a>
+                        <a class="fa fa-copy p-0 copySubject"></a>
+                      </h4>
+                    </div>
                   </div>
-                  <div class="card myCard m-2 p-2">
-                    <div id="subShowList"></div>
-                  </div>
+                  <div id="subShowList"></div>
                   <div class="card myCard m-2 p-2">
                     <span class="smallText warning">In case you are unable to see any subject in the list. Please follow the following points:</span>
                     <div class="footNote">
@@ -113,7 +123,10 @@ addActivity($conn, $myId, "Subjects");
 <script type="text/javascript">
   $(document).ready(function() {
 
-    $('[data-toggle="tooltip"]').tooltip();
+    $(function() {
+      $(document).tooltip();
+    });
+
     $(".topBarTitle").text("Academics");
     subjectList();
     electiveList();
@@ -335,7 +348,7 @@ addActivity($conn, $myId, "Subjects");
       var field = $(this).attr("data-field");
       var action = $(this).attr("data-action");
       var ep = $(this).attr("data-ep");
-      //$.alert("Disabled " + id + " Code " + code + " Action " + action);
+      // $.alert("Disabled " + id + " Code " + code + " Action " + action);
       $.post("subjectSql.php", {
         id: id,
         ep: ep,
@@ -468,29 +481,7 @@ addActivity($conn, $myId, "Subjects");
       if (fmt == "dmY") return date;
       else return dateYmd;
     }
-    $(document).on('change', '#sel_program', function() {
-      var x = $("#sel_program").val();
-      $.post("../../util/session_variable.php", {
-        action: "setProgram",
-        programId: x
-      }, function(mydata, mystatus) {
-        location.reload()
-      }, "text").fail(function() {
-        $.alert("Error in Program!!");
-      })
-    })
 
-    $(document).on('change', '#sel_batch', function() {
-      var x = $("#sel_batch").val();
-      $.post("../../util/session_variable.php", {
-        action: "setBatch",
-        batchId: x
-      }, function(mydata, mystatus) {
-        location.reload()
-      }, "text").fail(function() {
-        $.alert("Error in Natch !!");
-      })
-    })
 
     $(document).on('click', '.uploadSubject', function() {
       //$.alert("Session From");
@@ -531,15 +522,68 @@ addActivity($conn, $myId, "Subjects");
       $("#formModal")[0].reset;
       $('#formModal').modal('hide');
     });
+
+    $(document).on('change', '#sel_program', function() {
+      var x = $("#sel_program").val();
+      // $.alert("Program Changed " + x);
+      $.post("../../util/session_variable.php", {
+        action: "setProgram",
+        programId: x
+      }, function(mydata, mystatus) {
+        // $.alert("- Program Updated -" + mydata);
+        location.reload();
+      }).fail(function() {
+        $.alert("Error in Program!!");
+      })
+    })
+    $(document).on('change', '#sel_batch', function() {
+      var x = $("#sel_batch").val();
+      //$.alert("Batch Changed " + x);
+      $.post("../../util/session_variable.php", {
+        action: "setBatch",
+        batchId: x
+      }, function(mydata, mystatus) {
+        //$.alert("- Batch Updated -" + mydata);
+        location.reload();
+      }, "text").fail(function() {
+        $.alert("Error in Natch !!");
+      })
+    })
+    $(document).on('change', '#sel_dept', function() {
+      var x = $("#sel_dept").val();
+      //$.alert("Session  Changed " + x);
+      $.post("../../util/session_variable.php", {
+        deptId: x,
+        action: "setDept"
+      }, function(mydata, mystatus) {
+        //alert("- Session Updated -" + mydata);
+        location.reload();
+      }, "text").fail(function() {
+        $.alert("Erro Dept !!");
+      })
+    })
+    $(document).on('change', '#sel_school', function() {
+      var x = $("#sel_school").val();
+      //$.alert("Session  Changed " + x);
+      $.post("../../util/session_variable.php", {
+        schoolId: x,
+        action: "setSchool",
+      }, function(mydata, mystatus) {
+        //alert("- School Updated -" + mydata);
+        location.reload();
+        $("#sel_dept").val("0")
+      }, "text").fail(function() {
+        $.alert("Error in School!!");
+      })
+    })
   });
 </script>
 
 <!-- Modal Section-->
 <div class="modal" id="firstModal">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-md">
     <form class="form-horizontal" id="modalForm">
       <div class="modal-content">
-
         <!-- Modal Header -->
         <div class="modal-header">
           <h4 class="modal-title" id="modal_title"></h4>
@@ -607,6 +651,7 @@ addActivity($conn, $myId, "Subjects");
                     <?php
                     $sql = "select * from program where program_status='0' order by sp_name";
                     $result = $conn->query($sql);
+
                     while ($progRows = $result->fetch_assoc()) {
                       echo '<option value="' . $progRows["program_id"] . '">' . $progRows["sp_abbri"] . '</option>';
                     }
@@ -621,6 +666,7 @@ addActivity($conn, $myId, "Subjects");
                     <?php
                     $sql = "select * from batch where batch_status='0' order by batch desc";
                     $result_batch = $conn->query($sql);
+
                     while ($batchRows = $result_batch->fetch_assoc()) {
                       echo '<option value="' . $batchRows["batch_id"] . '">' . $batchRows["batch"] . '</option>';
                     }
@@ -665,8 +711,8 @@ addActivity($conn, $myId, "Subjects");
           <input type="hidden" id="batchIdModal" name="batchIdModal">
           <input type="hidden" id="programIdModal" name="programIdModal">
           <input type="hidden" id="subjectIdModal" name="subjectIdModal">
-          <button type="submit" class="btn btn-secondary" id="submitModalForm">Submit</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-sm" id="submitModalForm">Submit</button>
+          <button type="button" class="btn btn-sm" data-dismiss="modal">Close</button>
         </div> <!-- Modal Footer Closed-->
       </div> <!-- Modal Conent Closed-->
 

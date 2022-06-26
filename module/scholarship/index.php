@@ -1,6 +1,8 @@
 <?php
 require('../requireSubModule.php');
 $phpFile = "scholarshipSql.php";
+addActivity($conn, $myId, "Scholarship", $submit_ts);
+
 ?>
 
 <!DOCTYPE html>
@@ -12,97 +14,53 @@ $phpFile = "scholarshipSql.php";
 </head>
 
 <body>
-  <?php require("../topBar.php"); ?>
-  <div class="container-fluid moduleBody">
+<?php require("../topBar.php"); 
+	if($myId>3){
+    if (!isset($_GET['tag'])) die("Illegal Attempt !! The token is Missing");
+    elseif (!in_array($_GET['tag'], $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+    elseif (!in_array("44", $myLinks)) die("Illegal Attempt !! Incorrect Tocken Found !!");
+  }
+	?>  <div class="container-fluid moduleBody">
     <div class="row">
       <div class="col-1 p-0 m-0 pl-1 full-height">
         <div class="mt-3">
           <h5>Scholarship</h5>
         </div>
         <div class="list-group list-group-mine mt-2" id="list-tab" role="tablist">
-          <?php
-          if (in_array("14", $myLinks)) echo '<a class="list-group-item list-group-item-action ss" id="list-ss-list" data-toggle="list" href="#list-ss" role="tab" aria-controls="ss">Scholarship</a>';
-          if (in_array("14", $myLinks)) echo '<a class="list-group-item list-group-item-action stage" id="list-stage-list" data-toggle="list" href="#list-stage" role="tab" aria-controls="stage">Update Stage</a>';
-          ?>
+          <a class="list-group-item list-group-item-action active" id="list-ss-list" data-toggle="list" href="#list-ss" role="tab" aria-controls="ss">Scholarship</a>
+          <a class="list-group-item list-group-item-action" id="list-stage-list" data-toggle="list" href="#list-stage" role="tab" aria-controls="stage">Update Stage</a>
         </div>
       </div>
       <div class="col-11 p-0">
         <div class="row bg-light p-2 m-0">
-          <div class="col-md-2 pr-0">
-            <div class="card border-info">
-              <div class="input-group">
-                <?php
-                $sql_batch = "select * from batch where batch_status='0' order by batch desc";
-                $result = $conn->query($sql_batch);
-                if ($result) {
-                  echo '<select class="form-control form-control-sm" name="sel_batch" id="sel_batch" required>';
-                  echo '<option selected disabled> Batch</option>';
-                  while ($rows = $result->fetch_assoc()) {
-                    $select_id = $rows['batch_id'];
-                    $select_name = $rows['batch'];
-                    echo '<option value="' . $select_id . '">' . $select_name . '</option>';
-                  }
-                  // echo '<option value="ALL">ALL</option>';
-                  echo '</select>';
-                } else echo $conn->error;
-                if ($result->num_rows == 0) echo 'No Data Found';
-                ?>
-              </div>
-            </div>
+          <div class="col-md-6">
+            <?php require("../setDefaultModule.php"); ?>
           </div>
-          <div class="col-md-2 pl-1 pr-0">
-            <div class="card border-info">
-              <div class="input-group">
-                <?php
-                $sql_program = "select * from program where program_status='0' order by sp_name";
-                $result = $conn->query($sql_program);
-                if ($result) {
-                  echo '<select class="form-control form-control-sm" name="sel_program" id="sel_program" required>';
-                  echo '<option selected disabled> Program-Specialization</option>';
-                  while ($rows = $result->fetch_assoc()) {
-                    $select_id = $rows['program_id'];
-                    $select_name = $rows['sp_name'];
-                    echo '<option value="' . $select_id . '">' . $select_name . '</option>';
-                  }
-                  echo '<option value="ALL">ALL</option>';
-                  echo '</select>';
-                } else echo $conn->error;
-                if ($result->num_rows == 0) echo 'No Data Found';
-                ?>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-1 pl-1 pr-0">
+          <div class="col-md-1">
             <div class="card border-info">
               <div class="input-group">
                 <input type="number" class="form-control form-control-sm" id="ssSemester" name="ssSemester" min="1" value="1" title="Semester">
               </div>
             </div>
           </div>
-          <!-- <div class="col-md-3 pl-3">
-            <input type="checkbox" checked id="ay" name="ay_id" value="1">
-            <span class="smallText">AY</span>
-            <input type="checkbox" id="leet" name="leet" value="1">
-            <span class="smallText">LEET</span>
-            <input type="checkbox" id="deleted" name="deleted" value="1">
-            <span class="smallText">Deleted</span>
-          </div> -->
         </div>
         <div class="tab-content" id="nav-tabContent">
-          <div class="tab-pane fade" id="list-ss" role="tabpanel" aria-labelledby="list-ss-list">
+          <div class="tab-pane show active fade" id="list-ss" role="tabpanel" aria-labelledby="list-ss-list">
             <div class="row">
               <div class="col-10">
                 <div class="container card m-2 myCard">
                   <div class="row mt-2">
-                    <div class="col-md-11">
+                    <div class="col-md-1">
                       <a href="#" class="fa fa-refresh showSSList" id="showSSList" title="Reload the Student List"></a>
+                    </div>
+                    <div class="col-md-10">
+                      <div class="text-center text-primary footNote">Showing all the Students EXCEPT General in Caste Category</div>
                     </div>
                     <div class="col-md-1 text-right">
                       <a onclick="printDiv('printSS')" class="fa fa-print mt-2 largeText"></a>
                       <a onclick="export_data()"><i class="fas fa-file-export"></i></a>
                     </div>
                   </div>
-
                   <div id="printSS">
                     <table class="table table-bordered table-striped list-table-xs mt-4" id="studentStatusTable">
                       <tr>
@@ -111,11 +69,16 @@ $phpFile = "scholarshipSql.php";
                         <th>UserId</th>
                         <th>Name</th>
                         <th>Father Name</th>
-                        <th>Specialization</th>
+                        <th>Prog-Sp</th>
                         <th>Roll No.</th>
                         <th>Mobile</th>
+                        <th>Cat</th>
+                        <th>FeeCat</th>
+                        <th>Religion</th>
+                        <th>Address</th>
+                        <th>State</th>
                         <th>Scholarship</th>
-                        <th>Add</th>
+                        <th>Action</th>
                       </tr>
                     </table>
                   </div>
@@ -147,9 +110,16 @@ $phpFile = "scholarshipSql.php";
                         <th>Roll No.</th>
                         <th>Scholarship</th>
                         <th>Amount</th>
-                        <th>Stage</th>
-                        <th>Update Date</th>
-                        <th>Action</th>
+                        <th><i class="fa fa-clock largeText text-secondary"></i></th>
+                        <th>Applied</th>
+                        <th><i class="fa fa-clock largeText text-warning"></i></th>
+                        <th>Sanctioned</th>
+                        <th><i class="fa fa-clock largeText text-info"></i></th>
+                        <th>Released</th>
+                        <th><i class="fa fa-clock largeText text-primary"></i></th>
+                        <th>Deposited</th>
+                        <th><i class="fa fa-clock largeText text-success"></i></th>
+                        <th><i class="fa fa-edit largeText text-danger"></i></th>
                       </tr>
                     </table>
                   </div>
@@ -173,16 +143,65 @@ $phpFile = "scholarshipSql.php";
       $(document).tooltip();
     });
 
-    $(document).on("click", "#exportQual", function() {
-      // $.alert("ds");
-      $("#qualificationTable").table2excel({
-        filename: "qualification.xls"
-      });
-    })
+    studentList()
+    // scholarshipStageList()
+    function studentList() {
+      var batchId = $("#sel_batch").val()
+      var progId = $("#sel_program").val()
+      var ssSemester = $("#ssSemester").val()
+      // $.alert("leet " + leet + " Batch " + batchId + "Prog" + progId + " SS " + ssId);
+      $.post("<?php echo $phpFile; ?>", {
+        batchId: batchId,
+        progId: progId,
+        ssSemester: ssSemester,
+        action: "studentList"
+      }, function() {}, "json").done(function(data, status) {
+        // $.alert(data);
+        // console.log(data);
+        var card = '';
+        var count = 1;
+        $.each(data, function(key, value) {
+          card += '<tr>';
+          card += '<td>' + count++ + '</td>';
+          card += '<td>' + value.student_id + '</td>';
+          card += '<td>' + value.user_id + '</td>';
+          card += '<td>' + value.student_name + '</td>';
+          card += '<td>' + value.student_fname + '</td>';
+          card += '<td>' + "<?php echo $mySpAbbri; ?>" + '</td>';
+          card += '<td>' + value.student_rollno + '</td>';
+          card += '<td>' + value.student_mobile + '</td>';
+          card += '<td title="Caste Category">' + value.student_category + '</td>';
+          card += '<td title="Fee Category">' + value.student_fee_category + '</td>';
+          card += '<td>' + value.student_religion + '</td>';
+          card += '<td>' + value.permanent_address + '</td>';
+          card += '<td>' + value.state + '</td>';
+          card += '<td>';
+          if (value.scholarship.length == 0) card += '--';
+          else {
+            $.each(value.scholarship, function(key2, value2) {
+              card += value2.mn_name + "[" + value2.scholarship_amount + "]";
+              card += '<a href="#" class="deleteScholarship" data-std="' + value.student_id + '" data-mn="' + value2.mn_id + '"><i class="fa fa-times"></i></a><br>';
+            })
+          }
+          card += '</td>';
 
-    $(document).on("click", ".stage, .showStageList", function() {
+          card += '<td><span class="inputScholarship" id="scl' + value.student_id + '">';
+          card += '<a href="#" class="fa fa-plus-circle largeText setScholarship" data-std="' + value.student_id + '"></a>';
+          card += '</span></td>';
+          card += '</tr>';
+        });
+        $("#studentStatusTable").find("tr:gt(0)").remove();
+        $("#studentStatusTable").append(card);
+
+      }).fail(function() {
+        $.alert("Error !!");
+      })
+    }
+
+    $(document).on("click", ".showSSList, .showStageList", function() {
       // $.alert("ds");
       scholarshipStageList()
+      studentList()
     })
 
     $(document).on("click", ".updateStage", function() {
@@ -232,7 +251,7 @@ $phpFile = "scholarshipSql.php";
         action: "scholarshipStageList"
       }, function() {}, "json").done(function(data, status) {
         // $.alert(data);
-        console.log(data);
+        // console.log(data);
         var card = '';
         var count = 1;
         $.each(data, function(key, value) {
@@ -243,16 +262,17 @@ $phpFile = "scholarshipSql.php";
           card += '<td>' + value.student_fname + '</td>';
           card += '<td>' + value.student_rollno + '</td>';
           card += '<td>' + value.mn_name + '</td>';
-          card += '<td>' + value.sscl_amount + '</td>';
-          if (value.sscl_stage == "1") card += '<td>Scholarship Type</td>';
-          else if (value.sscl_stage == "2") card += '<td class="text-center">Applied</td>';
-          else if (value.sscl_stage == "3") card += '<td class="text-center">Sacntioned</td>';
-          else if (value.sscl_stage == "4") card += '<td class="text-center">Released</td>';
-          else if (value.sscl_stage == "5") card += '<td class="text-center">Deposited</td>';
-          else card += '<td class="text-center">--</td>';
-          card += '<td>' + getFormattedDate(value.sscl_date, "dmY") + '</td>';
-          card += '<td class="text-center"><a href="#" class="fa fa-plus-circle largeText updateStage" data-std="' + value.student_id + '" data-mn="' + value.mn_id + '"></a>';
-          card += '<a href="#" class="largeText warning removeStage" data-std="' + value.student_id + '" data-mn="' + value.mn_id + '" data-stage="' + value.sscl_stage + '"><i class="fa fa-times"></i></a></td>';
+          card += '<td>' + value.scholarship_amount + '</td>';          
+          card += '<td>' + value.scholarship_ts + '</td>';
+          card += '<td>' + value.applied_amount + '</td>';          
+          card += '<td>' + value.applied_ts + '</td>';
+          card += '<td>' + value.sanctioned_amount + '</td>';
+          card += '<td>' + value.sanctioned_ts + '</td>';
+          card += '<td>' + value.released_amount + '</td>';
+          card += '<td>' + value.released_ts + '</td>';
+          card += '<td>' + value.deposited_amount + '</td>';
+          card += '<td>' + value.deposited_ts + '</td>';
+          card += '<td class="text-center"><a href="#" class="fa fa-edit largeText updateStage" data-std="' + value.student_id + '" data-mn="' + value.mn_id + '"></a>';
           card += '</tr>';
         });
         $("#scholarshipStageTable").find("tr:gt(0)").remove();
@@ -263,16 +283,28 @@ $phpFile = "scholarshipSql.php";
       })
     }
 
-    $(document).on("click", ".ss, .showSSList", function() {
-      // $.alert("ds");
-      studentList()
+    $(document).on("click", ".updateData", function() {
+      var batchId = $("#sel_batch").val()
+      var progId = $("#sel_program").val()
+      var ssSemester = $("#ssSemester").val()
+      // $.alert(" Batch " + batchId + "Prog" + progId);
+      $.post("<?php echo $phpFile; ?>", {
+        batchId: batchId,
+        progId: progId,
+        ssSemester: ssSemester,
+        action: "updateData"
+      }, function() {}, "text").done(function(data, status) {
+        $.alert(data);
+      }).fail(function() {
+        $.alert("Error !!");
+      })
     })
 
     $(document).on("click", ".setScholarship", function() {
       var selectScholarship = '';
       var student_id = $(this).attr("data-std");
       var semester = $("#ssSemester").val();
-      $.alert("Set Scholarship " + student_id + " Sem " + semester);
+      // $.alert("Set Scholarship " + student_id + " Sem " + semester);
       $('#firstModalTitle').html("Update Scholarship");
       $('#firstModalAction').val('updateScholarship');
       $('#modalId').val(student_id);
@@ -288,9 +320,9 @@ $phpFile = "scholarshipSql.php";
       // $("#scl" + student_id).html(scholarship)
       event.preventDefault();
       var formData = $(this).serialize();
-      $.alert(formData);
+      // $.alert(formData);
       $.post("scholarshipSql.php", formData, () => {}, "text").done(function(data, status) {
-        // $.alert(data)
+        $.alert(data)
         if (action == "updateScholarship") studentList();
         else if (action == "updateStage") scholarshipStageList();
       })
@@ -324,69 +356,59 @@ $phpFile = "scholarshipSql.php";
       $('#deleteModal').modal('hide');
     })
 
-    function studentList() {
-      var batchId = $("#sel_batch").val()
-      var progId = $("#sel_program").val()
-      var ssId = $("#sel_ss").val()
-      var ssSemester = $("#ssSemester").val()
-      if ($('#leet').is(":checked")) var leet = 1;
-      else var leet = 0;
-      if ($('#ay').is(":checked")) var ay = 1;
-      else var ay = 0;
-      if ($('#deleted').is(":checked")) var deleted = 1;
-      else var deleted = 0;
-      // $.alert("leet " + leet + " Batch " + batchId + "Prog" + progId + " SS " + ssId);
-      $.post("<?php echo $phpFile; ?>", {
-        batchId: batchId,
-        progId: progId,
-        ssSemester: ssSemester,
-        mn_id: ssId,
-        leet: leet,
-        ay: ay,
-        deleted: deleted,
-        action: "studentList"
-      }, function() {}, "json").done(function(data, status) {
-        // $.alert(data);
-        console.log(data);
-        var card = '';
-        var count = 1;
-        $.each(data, function(key, value) {
-          var student_lateral = value.student_lateral;
-          if (leet == '1' && leet != student_lateral) var skip = 'Y'
-          else var skip = 'N'
-          if (skip == 'N') {
-            card += '<tr>';
-            card += '<td>' + count++ + '</td>';
-            card += '<td>' + value.student_id + '</td>';
-            card += '<td>' + value.user_id + '</td>';
-            card += '<td>' + value.student_name + '</td>';
-            card += '<td>' + value.student_fname + '</td>';
-            card += '<td>' + value.sp_abbri + '</td>';
-            card += '<td>' + value.student_rollno + '</td>';
-            card += '<td>' + value.student_mobile + '</td>';
-            card += '<td>';
-            if (value.scholarship.length == 0) card += '--';
-            else {
-              $.each(value.scholarship, function(key2, value2) {
-                card += value2.mn_name + "[" + value2.sscl_amount + "]";
-                card += '<a href="#" class="deleteScholarship" data-std="' + value.student_id + '" data-mn="' + value2.mn_id + '"><i class="fa fa-times"></i></a><br>';
-              })
-            }
-            card += '</td>';
-            card += '<td class="click text-center"><span class="inputScholarship" id="scl' + value.student_id + '">';
-            card += '<a href="#" class="fa fa-plus-circle largeText setScholarship" data-std="' + value.student_id + '"></a>';
-            card += '</span></td>';
-            card += '</tr>';
-          }
-        });
-        $("#studentStatusTable").find("tr:gt(0)").remove();
-        $("#studentStatusTable").append(card);
-
+    $(document).on('change', '#sel_program', function() {
+      var x = $("#sel_program").val();
+      // $.alert("Program Changed " + x);
+      $.post("../../util/session_variable.php", {
+        action: "setProgram",
+        programId: x
+      }, function(mydata, mystatus) {
+        // $.alert("- Program Updated -" + mydata);
+        location.reload();
       }).fail(function() {
-        $.alert("Error !!");
+        $.alert("Error in Program!!");
       })
-
-    }
+    })
+    $(document).on('change', '#sel_batch', function() {
+      var x = $("#sel_batch").val();
+      //$.alert("Batch Changed " + x);
+      $.post("../../util/session_variable.php", {
+        action: "setBatch",
+        batchId: x
+      }, function(mydata, mystatus) {
+        //$.alert("- Batch Updated -" + mydata);
+        location.reload();
+      }, "text").fail(function() {
+        $.alert("Error in Natch !!");
+      })
+    })
+    $(document).on('change', '#sel_dept', function() {
+      var x = $("#sel_dept").val();
+      //$.alert("Session  Changed " + x);
+      $.post("../../util/session_variable.php", {
+        deptId: x,
+        action: "setDept"
+      }, function(mydata, mystatus) {
+        //alert("- Session Updated -" + mydata);
+        location.reload();
+      }, "text").fail(function() {
+        $.alert("Erro Dept !!");
+      })
+    })
+    $(document).on('change', '#sel_school', function() {
+      var x = $("#sel_school").val();
+      //$.alert("Session  Changed " + x);
+      $.post("../../util/session_variable.php", {
+        schoolId: x,
+        action: "setSchool",
+      }, function(mydata, mystatus) {
+        //alert("- School Updated -" + mydata);
+        location.reload();
+        $("#sel_dept").val("0")
+      }, "text").fail(function() {
+        $.alert("Error in School!!");
+      })
+    })
 
     function getFormattedDate(ts, fmt) {
       var a = new Date(ts);
@@ -420,6 +442,7 @@ $phpFile = "scholarshipSql.php";
     });
     XLSX.writeFile(fp, 'studentStatusTable.xlsx');
   }
+
   function export_stage() {
     let data = document.getElementById('scholarshipStageTable');
     var fp = XLSX.utils.table_to_book(data, {
@@ -452,7 +475,6 @@ $phpFile = "scholarshipSql.php";
                 $result = $conn->query($sql);
                 if ($result) {
                   $html = '<select class="form-control form-control-sm" name="sel_ss" id="sel_ss">';
-                  $html .= '<option selected disabled>Scholarship</option>';
                   while ($rows = $result->fetch_assoc()) {
                     $select_id = $rows['mn_id'];
                     $select_name = $rows['mn_name'];
@@ -477,18 +499,11 @@ $phpFile = "scholarshipSql.php";
               <label class="control-label col-6" for="batch">Update Scholarship</label>
               <div class="col-sm-6">
                 <select class="form-control form-control-sm" name="sel_stage" id="sel_stage">';
-                  <option selected disabled>Scholarship Stage</option>
                   <option value="2">Applied</option>
                   <option value="3">Sanctioned</option>
                   <option value="4">Released</option>
                   <option value="5">Deposited</option>
                 </select>
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="control-label col-6" for="batch">Updated On</label>
-              <div class="col-sm-6">
-                <input type="date" class="form-control form-control-sm" id="sscl_date" name="sscl_date" value="<?php echo $submit_date; ?>">
               </div>
             </div>
             <div class="form-group row">

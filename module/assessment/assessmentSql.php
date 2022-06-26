@@ -115,7 +115,7 @@ if (isset($_POST['action'])) {
 
     // Deleting Assessment Components of Previous Template for this Teaching Load
 
-    $sql = "delete from $tn_sbas where  tl_id='$tl_id'";
+    $sql = "delete from $tn_sbas where tl_id='$tl_id'";
     $result = $conn->query($sql);
 
     $sql_atmp = "select atmp.* from $tn_atmp atmp where atmp.atmp_template='" . $_POST['id'] . "'";
